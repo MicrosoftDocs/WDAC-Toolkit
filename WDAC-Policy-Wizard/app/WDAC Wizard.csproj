@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E7BFE11-6999-4855-B151-EAF52F571AAF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WDAC_Wizard</RootNamespace>
+    <AssemblyName>WDAC Wizard</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\jogeurte.REDMOND\Desktop\</PublishUrl>
+    <Install>false</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>wizard-ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeltaCompressionDotNet, Version=1.1.0.0, Culture=neutral, PublicKeyToken=1d14d6e5194e7f4a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.MsDelta, Version=1.1.0.0, Culture=neutral, PublicKeyToken=46b2138a390abf55, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.MsDelta.dll</HintPath>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.PatchApi, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3e8888ee913ed789, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.PatchApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Squirrel, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\squirrel.windows.1.9.0\lib\Net45\NuGet.Squirrel.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+    </Reference>
+    <Reference Include="Squirrel, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\squirrel.windows.1.9.0\lib\Net45\Squirrel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Management.Automation">
+      <HintPath>..\packages\packages\System.Management.Automation.7.0.0-preview.5\runtimes\win\lib\netcoreapp3.1\System.Management.Automation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="src\BuildPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\BuildPage.Designer.cs">
+      <DependentUpon>BuildPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Policy.cs" />
+    <Compile Include="src\ConfigTemplate_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\ConfigTemplate_Control.Designer.cs">
+      <DependentUpon>ConfigTemplate_Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\EditWorkflow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\EditWorkflow.Designer.cs">
+      <DependentUpon>EditWorkflow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Helper.cs" />
+    <Compile Include="src\PolicyType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\PolicyType.Designer.cs">
+      <DependentUpon>PolicyType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Program.cs" />
+    <Compile Include="src\SettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\SettingsPage.Designer.cs">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\SigningRules_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\SigningRules_Control.Designer.cs">
+      <DependentUpon>SigningRules_Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\TemplatePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\TemplatePage.Designer.cs">
+      <DependentUpon>TemplatePage.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.ConfigTemplate_Control.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.MainWindow.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.PolicyType.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.Resource.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.SigningRules_Control.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.ConfigTemplate_Control.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.MainWindow.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.PolicyType.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.Resource.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.SigningRules_Control.resources" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\BuildPage.resx">
+      <DependentUpon>BuildPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\ConfigTemplate_Control.resx">
+      <DependentUpon>ConfigTemplate_Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\EditWorkflow.resx">
+      <DependentUpon>EditWorkflow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\PolicyType.resx">
+      <DependentUpon>PolicyType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\SettingsPage.resx">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\SigningRules_Control.resx">
+      <DependentUpon>SigningRules_Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\TemplatePage.resx">
+      <DependentUpon>TemplatePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="bin\Debug\WDAC Wizard.exe.config" />
+    <None Include="bin\Release\WDAC Wizard.exe.config" />
+    <None Include="obj\Debug\build.force" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\WDAC Wizard.csproj.CopyComplete" />
+    <None Include="obj\Debug\WDAC Wizard.csproj.GenerateResource.cache" />
+    <None Include="obj\Debug\WDAC Wizard.csprojAssemblyReference.cache" />
+    <None Include="obj\Release\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Release\WDAC Wizard.csproj.CopyComplete" />
+    <None Include="obj\Release\WDAC Wizard.csproj.GenerateResource.cache" />
+    <None Include="obj\Release\WDAC Wizard.csprojAssemblyReference.cache" />
+    <None Include="packages.config" />
+    <None Include="product.pbxproj" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="%24this.Icon.ico" />
+    <Content Include="bin\Debug\policies\DefaultWindows_Enforced.xml" />
+    <Content Include="bin\Debug\policies\WinSiPolicy.xml" />
+    <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.dll" />
+    <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.xml" />
+    <Content Include="bin\Debug\testSchema.xml" />
+    <Content Include="bin\Debug\WDAC Wizard.exe" />
+    <Content Include="bin\Debug\WDAC Wizard.pdb" />
+    <Content Include="bin\Release\WDAC Wizard.exe" />
+    <Content Include="bin\Release\WDAC Wizard.pdb" />
+    <Content Include="Resources\imgs\back.png" />
+    <Content Include="Resources\imgs\blank-check-box.png" />
+    <None Include="Resources\imgs\externalLink.png" />
+    <None Include="Resources\imgs\external-link-symbol.png" />
+    <None Include="Resources\imgs\external-link-symbol-highlight.png" />
+    <Content Include="Resources\RulesDict.xml" />
+    <Content Include="wizard-ico.ico" />
+    <None Include="Resources\imgs\blank-check-box_32.png" />
+    <Content Include="Resources\imgs\cancel.png" />
+    <Content Include="Resources\imgs\cctv.png" />
+    <None Include="Resources\imgs\check-box-checked.png" />
+    <None Include="Resources\imgs\check-box-unchecked.png" />
+    <None Include="Resources\imgs\check-box-checked_32.png" />
+    <Content Include="Resources\imgs\circular-shape-silhouette.png" />
+    <Content Include="Resources\imgs\gear.png" />
+    <None Include="Resources\imgs\house.png" />
+    <Content Include="Resources\imgs\locked-padlock.png" />
+    <None Include="Resources\imgs\office.png" />
+    <None Include="Resources\imgs\next.png" />
+    <None Include="Resources\imgs\next_256px.png" />
+    <None Include="Resources\imgs\newPolicy.png" />
+    <None Include="Resources\imgs\merge.png" />
+    <None Include="Resources\imgs\not-extendable.png" />
+    <None Include="Resources\imgs\minus-button.png" />
+    <Content Include="Resources\imgs\question-sign.png" />
+    <None Include="Resources\imgs\radio-on-button.png" />
+    <None Include="Resources\imgs\radio-off-button.png" />
+    <Content Include="Resources\imgs\shield.png" />
+    <Content Include="Resources\imgs\toggle.png" />
+    <Content Include="Resources\imgs\toggle_lg.png" />
+    <None Include="Resources\imgs\tools.png" />
+    <Content Include="Resources\imgs\untoggle.png" />
+    <Content Include="Resources\imgs\untoggle_lg.png" />
+    <None Include="Resources\imgs\verified.png" />
+    <Content Include="Resources\imgs\white-close.png" />
+    <Content Include="Resources\imgs\white-draft.png" />
+    <Content Include="Resources\imgs\white-expand.png" />
+    <Content Include="Resources\imgs\white-merge.png" />
+    <Content Include="Resources\imgs\white-minimize.png" />
+    <Content Include="Resources\imgs\white-right-arrow.png" />
+    <Content Include="Resources\imgs\white_view.png" />
+    <Content Include="Resources\imgs\windows-10s-logo.png" />
+    <Content Include="Resources\imgs\windows-logo.png" />
+    <Content Include="Resources\imgs\wizard-ico.ico" />
+    <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
+    <Content Include="Resources\policyTemplates\DefaultWindows_Enforced.xml" />
+    <EmbeddedResource Include="Resources\policyTemplates\NightsWatch.xml" />
+    <Resource Include="Resources\policyTemplates\WinSiPolicy.xml" />
+    <None Include="Resources\policyTemplates\cipolicy.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="imgs\back.png" />
+    <None Include="imgs\blank-check-box.png" />
+    <None Include="imgs\cancel.png" />
+    <None Include="imgs\cctv.png" />
+    <None Include="imgs\circular-shape-silhouette.png" />
+    <None Include="imgs\gear.png" />
+    <None Include="imgs\locked-padlock.png" />
+    <None Include="imgs\question-sign.png" />
+    <None Include="imgs\shield.png" />
+    <None Include="imgs\toggle.png" />
+    <None Include="imgs\toggle_lg.png" />
+    <None Include="imgs\untoggle.png" />
+    <None Include="imgs\untoggle_lg.png" />
+    <None Include="imgs\white_view.png" />
+    <None Include="imgs\white-close.png" />
+    <None Include="imgs\white-draft.png" />
+    <None Include="imgs\white-expand.png" />
+    <None Include="imgs\white-merge.png" />
+    <None Include="imgs\white-minimize.png" />
+    <None Include="imgs\white-right-arrow.png" />
+    <None Include="imgs\windows-10s-logo.png" />
+    <None Include="imgs\windows-logo.png" />
+    <Content Include="obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
+    <Content Include="obj\Debug\WDAC Wizard.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\WDAC Wizard.exe" />
+    <Content Include="obj\Debug\WDAC Wizard.pdb" />
+    <Content Include="obj\Release\TempPE\Properties.Resources.Designer.cs.dll" />
+    <Content Include="obj\Release\WDAC Wizard.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Release\WDAC Wizard.exe" />
+    <Content Include="obj\Release\WDAC Wizard.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

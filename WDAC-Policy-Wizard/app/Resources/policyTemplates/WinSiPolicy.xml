@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" FriendlyName="Windows 10 S Lockdown Policy" PolicyType="Base Policy">
+  <VersionEx>10.0.15039.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <PolicyID>{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}</PolicyID>
+  <BasePolicyID>{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}</BasePolicyID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:Enforce Store Applications</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Conditional Windows Lockdown Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Update Policy No Reboot</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:WHQL</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Developer Mode Dynamic Code Trust</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Managed Installer</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Intelligent Security Graph Authorization</Option>
+    </Rule>
+  </Rules>
+  <!--EKUS-->
+  <EKUs>
+    <EKU ID="ID_EKU_WINDOWS" Value="010A2B0601040182370A0306" />
+    <EKU ID="ID_EKU_WHQL" Value="010A2B0601040182370A0305" />
+    <EKU ID="ID_EKU_ELAM" Value="010A2B0601040182373D0401" />
+    <EKU ID="ID_EKU_HAL_EXT" Value="010a2b0601040182373d0501" />
+    <EKU ID="ID_EKU_RT_EXT" Value="010a2b0601040182370a0315" />
+    <EKU ID="ID_EKU_STORE" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1 Windows Store" Value="010a2b0601040182374c0301" />
+    <EKU ID="ID_EKU_DCODEGEN" FriendlyName="Dynamic Code Generation EKU - 1.3.6.1.4.1.311.76.5.1" Value="010A2B0601040182374C0501" />
+    <EKU ID="ID_EKU_AM" FriendlyName="AntiMalware EKU -1.3.6.1.4.1.311.76.11.1 " Value="010a2b0601040182374c0b01" />
+  </EKUs>
+  <!--File Rules-->
+  <FileRules>
+    <Deny ID="ID_DENY_CBD" FriendlyName="cdb.exe" FileName="CDB.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_KD" FriendlyName="kd.exe" FileName="kd.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WINDBG" FriendlyName="windbg.exe" FileName="windbg.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_MSBUILD" FriendlyName="MSBuild.exe" FileName="MSBuild.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_CSI" FriendlyName="csi.exe" FileName="csi.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_DNX" FriendlyName="dnx.exe" FileName="dnx.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_RCSI" FriendlyName="rcsi.exe" FileName="rcsi.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_NTSD" FriendlyName="ntsd.exe" FileName="ntsd.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_CMD" FriendlyName="cmd.exe" FileName="cmd.Exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_POWERSHELL" FriendlyName="powershell.exe" FileName="powershell.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_POWERSHELLISE" FriendlyName="powershell_ise.exe" FileName="powershell_ise.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WSCRIPT" FriendlyName="wscript.exe" FileName="wscript.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_CSCRIPT" FriendlyName="cscript.exe" FileName="cscript.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WMIC" FriendlyName="wmic.exe" FileName="wmic.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_REGEDT32" FriendlyName="regedt32.exe" FileName="regedt32.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_REG" FriendlyName="reg.exe" FileName="reg.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_REGEDIT" FriendlyName="regedit.exe" FileName="regedit.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_BASH" FriendlyName="bash.exe" FileName="bash.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WBEMTEST" FriendlyName="wbemtest.exe" FileName="wbemtest.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_FSI" FriendlyName="fsi.exe" FileName="fsi.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_HH_EXE" FriendlyName="hh.exe" FileName="hh.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_MSHTA" FriendlyName="mshta.exe" FileName="mshta.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_REGINI" FriendlyName="regini.exe" FileName="regini.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_SYSKEY" FriendlyName="syskey.exe" FileName="samlock.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WSL" FriendlyName="wsl.exe" FileName="wsl.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WSLCONFIG" FriendlyName="wslconfig.exe" FileName="wslconfig.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_WSLHOST" FriendlyName="wslhost.exe" FileName="wslhost.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_LXSSMGR" FriendlyName="lxssmanager.exe" FileName="lxssmanager.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_LXSSMGRDLL" FriendlyName="lxssmanager.dll" FileName="lxssmanager.dll" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_INFINSTALL" FriendlyName="infdefaultinstall.exe" FileName="infdefaultinstall.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_LXRUN" FriendlyName="lxrun.exe" FileName="lxrun.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_RUNSCRIPTHELPER" FriendlyName="runscripthelper.exe" FileName="runscripthelper.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_PWRSHLCUSTOMHOST" FriendlyName="powershellcustomhost.exe" FileName="powershellcustomhost.exe" MinimumFileVersion="65535.65535.65535.65535" />
+    <Deny ID="ID_DENY_MWFC" FriendlyName="Microsoft.Workflow.Compiler.exe" FileName="Microsoft.Workflow.Compiler.exe" MinimumFileVersion="65535.65535.65535.65535" />
+  </FileRules>
+  <!--Signers-->
+  <Signers>
+    <Signer ID="ID_SIGNER_TEST2010" Name="MincryptKnownRootMicrosoftTestRoot2010">
+      <CertRoot Type="Wellknown" Value="0A" />
+    </Signer>
+    <Signer ID="ID_SIGNER_DRM" Name="MincryptKnownRootMicrosoftDMDRoot2005">
+      <CertRoot Type="Wellknown" Value="0C" />
+    </Signer>
+    <Signer ID="ID_SIGNER_DCODEGEN" Name="MincryptKnownRootMicrosoftProductRoot2010">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_DCODEGEN" />
+    </Signer>
+    <Signer ID="ID_SIGNER_AM" Name="MincryptKnownRootMicrosoftStandardRoot2011">
+      <CertRoot Type="Wellknown" Value="07" />
+      <CertEKU ID="ID_EKU_AM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WINDOWS_PRODUCTION" Name="Microsoft Product Root 2010 Windows EKU">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_WINDOWS" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WINDOWS_PRODUCTION_PCA2011" Name="Microsoft Windows Production PCA 2011">
+      <CertRoot Type="TBS" Value="4E80BE107C860DE896384B3EFF50504DC2D76AC7151DF3102A4450637A032146" />
+      <CertEKU ID="ID_EKU_WINDOWS" />
+    </Signer>
+    <Signer ID="ID_SIGNER_ELAM_PRODUCTION" Name="Microsoft Product Root 2010 ELAM EKU">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_ELAM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_HAL_PRODUCTION" Name="Microsoft Product Root 2010 HAL EKU">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_HAL_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WHQL_SHA2" Name="Microsoft Product Root 2010 WHQL EKU">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_WHQL" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WHQL_SHA1" Name="Microsoft Product Root WHQL EKU SHA1">
+      <CertRoot Type="Wellknown" Value="05" />
+      <CertEKU ID="ID_EKU_WHQL" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WHQL_MD5" Name="Microsoft Product Root WHQL EKU MD5">
+      <CertRoot Type="Wellknown" Value="04" />
+      <CertEKU ID="ID_EKU_WHQL" />
+    </Signer>
+    <!-- Flighting related signers -->
+    <Signer ID="ID_SIGNER_WINDOWS_FLIGHT_ROOT" Name="Microsoft Flighting Root 2014 Windows EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_WINDOWS" />
+    </Signer>
+    <Signer ID="ID_SIGNER_ELAM_FLIGHT" Name="Microsoft Flighting Root 2014 ELAM EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_ELAM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_HAL_FLIGHT" Name="Microsoft Flighting Root 2014 HAL EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_HAL_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WHQL_FLIGHT_SHA2" Name="Microsoft Flighting Root 2014 WHQL EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_WHQL" />
+    </Signer>
+    <Signer ID="ID_SIGNER_STORE" Name="Microsoft MarketPlace PCA 2011">
+      <CertRoot Type="TBS" Value="FC9EDE3DCCA09186B2D3BF9B738A2050CB1A554DA2DCADB55F3F72EE17721378" />
+      <CertEKU ID="ID_EKU_STORE" />
+    </Signer>
+    <Signer ID="ID_SIGNER_RT_PRODUCTION" Name="Microsoft Product Root 2010 RT EKU">
+      <CertRoot Type="Wellknown" Value="06" />
+      <CertEKU ID="ID_EKU_RT_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_RT_FLIGHT" Name="Microsoft Flighting Root 2014 RT EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_RT_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_RT_STANDARD" Name="Microsoft Standard Root 2011 RT EKU">
+      <CertRoot Type="Wellknown" Value="07" />
+      <CertEKU ID="ID_EKU_RT_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_PCA2010_AM" Name="Microsoft Windows PCA 2010 with AM EKU">
+      <CertRoot Type="TBS" Value="90C9669670E75989159E6EEF69625EB6AD17CBA6209ED56F5665D55450A05212" />
+      <CertEKU ID="ID_EKU_AM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_EMPTY" Name="Empty">
+      <CertRoot Type="TBS" Value="0000000000000000000000000000000000000000000000000000000000000000" />
+    </Signer>
+  </Signers>
+  <SigningScenarios>
+    <!--Kernel Mode Signing Scenario-->
+    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_KMCI" FriendlyName="Kernel Mode Signing Scenario">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_WINDOWS_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_ELAM_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_HAL_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_SHA2" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_SHA1" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_MD5" />
+          <AllowedSigner SignerId="ID_SIGNER_WINDOWS_FLIGHT_ROOT" />
+          <AllowedSigner SignerId="ID_SIGNER_ELAM_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_HAL_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_FLIGHT_SHA2" />
+          <AllowedSigner SignerId="ID_SIGNER_PCA2010_AM" />
+          <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
+          <AllowedSigner SignerId="ID_SIGNER_TEST2010" />
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+    <!--User Mode Signing Scenario-->
+    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_UMCI" FriendlyName="User Mode Signing Scenario">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_WINDOWS_PRODUCTION">
+            <ExceptDenyRule DenyRuleID="ID_DENY_CBD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_KD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WINDBG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSBUILD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_DNX" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RCSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_NTSD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CMD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELLISE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WMIC" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDT32" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDIT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_BASH" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WBEMTEST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_FSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_HH_EXE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSHTA" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGINI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_SYSKEY" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLCONFIG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGR" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGRDLL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_INFINSTALL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXRUN" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RUNSCRIPTHELPER" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_PWRSHLCUSTOMHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MWFC" />
+          </AllowedSigner>
+          <AllowedSigner SignerId="ID_SIGNER_ELAM_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_HAL_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_SHA2" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_SHA1" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_MD5" />
+          <AllowedSigner SignerId="ID_SIGNER_WINDOWS_FLIGHT_ROOT">
+            <ExceptDenyRule DenyRuleID="ID_DENY_CBD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_KD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WINDBG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSBUILD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_DNX" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RCSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_NTSD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CMD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELLISE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WMIC" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDT32" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDIT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_BASH" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WBEMTEST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_FSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_HH_EXE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSHTA" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGINI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_SYSKEY" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLCONFIG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGR" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGRDLL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_INFINSTALL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXRUN" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RUNSCRIPTHELPER" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_PWRSHLCUSTOMHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MWFC" />
+          </AllowedSigner>
+          <AllowedSigner SignerId="ID_SIGNER_ELAM_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_HAL_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_FLIGHT_SHA2" />
+          <AllowedSigner SignerId="ID_SIGNER_STORE">
+            <ExceptDenyRule DenyRuleID="ID_DENY_CBD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_KD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WINDBG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSBUILD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_DNX" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RCSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_NTSD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CMD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELLISE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WMIC" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDT32" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDIT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_BASH" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WBEMTEST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_FSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_HH_EXE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSHTA" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGINI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_SYSKEY" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLCONFIG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGR" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGRDLL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_INFINSTALL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXRUN" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RUNSCRIPTHELPER" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_PWRSHLCUSTOMHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MWFC" />
+          </AllowedSigner>
+          <AllowedSigner SignerId="ID_SIGNER_RT_PRODUCTION" />
+          <AllowedSigner SignerId="ID_SIGNER_DRM" />
+          <AllowedSigner SignerId="ID_SIGNER_DCODEGEN" />
+          <AllowedSigner SignerId="ID_SIGNER_AM" />
+          <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_RT_STANDARD" />
+          <AllowedSigner SignerId="ID_SIGNER_PCA2010_AM" />
+          <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
+          <AllowedSigner SignerId="ID_SIGNER_TEST2010">
+            <ExceptDenyRule DenyRuleID="ID_DENY_CBD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_KD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WINDBG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSBUILD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_DNX" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RCSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_NTSD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CMD" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_POWERSHELLISE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_CSCRIPT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WMIC" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDT32" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGEDIT" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_BASH" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WBEMTEST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_FSI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_HH_EXE" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MSHTA" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_REGINI" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_SYSKEY" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLCONFIG" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_WSLHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGR" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXSSMGRDLL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_INFINSTALL" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_LXRUN" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_RUNSCRIPTHELPER" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_PWRSHLCUSTOMHOST" />
+            <ExceptDenyRule DenyRuleID="ID_DENY_MWFC" />
+          </AllowedSigner>
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners>
+    <UpdatePolicySigner SignerId="ID_SIGNER_WINDOWS_PRODUCTION_PCA2011" />
+  </UpdatePolicySigners>
+  <!--
+
+    This is used for compatibility with the 19h1 version of winload.
+    without it, the 19h1 version of winload will reject the 10S policy and
+    as a result, devices will be kicked out of S-Mode if they ever revert
+    to 19h1.
+
+    Authorization is not performed on this signer at all, and this signer
+    will never be considered for this purpose.
+
+   -->
+  <SupplementalPolicySigners>
+    <SupplementalPolicySigner SignerId="ID_SIGNER_EMPTY" />
+  </SupplementalPolicySigners>
+  <!-- 
+
+    CiSigners are signers that ConfigCI asks CI to trust for all builds, include 
+    retail builds.
+    
+    Normally CiSigners is empty or only includes production signers. For enterprise
+    ConfigCI policy, you may need to include enterprise signers. Just make sure it
+    is understood that CiSigners will be trusted by CI for all builds.
+
+-->
+  <CiSigners>
+    <!--
+      Currently Centennial Apps are launched as Win32 Apps and signed by store certificate.
+      We need to allow enterprise signing scenario to trust store certificate.
+    -->
+    <CiSigner SignerId="ID_SIGNER_STORE" />
+  </CiSigners>
+  <HvciOptions>0</HvciOptions>
+  <Settings>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
+      <Value>
+        <String>Windows10S_Lockdown_Policy_Supplementable</String>
+      </Value>
+    </Setting>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
+      <Value>
+        <String>Windows10SPolicySupplementable.10.0.18314.0</String>
+      </Value>
+    </Setting>
+  </Settings>
+</SiPolicy>
