@@ -1,16 +1,14 @@
 | [docs](.) / readme.md |
 |:---|
 
-# WDAC-Policy-Wizard # [](artwork/Squirrel-Logo.png)
+# WDAC Policy Wizard 
+[](artwork/Squirrel-Logo.png)
 
 The WDAC Policy Wizard is a tool developed by the Microsoft [Windows Defender Application Control (WDAC)](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control)
 feature team to enable IT professionals in creating powerful WDAC policies for deployment. 
 
-## Table of Contents
 
-This document provides a table of contents for all of the WDAC Policy Wizard documentation. 
-
-### Using the WDAC Policy Wizard 
+## Using the WDAC Policy Wizard 
 
 * **Installing** - documentation related to the initial installation of the application. 
 
@@ -19,12 +17,13 @@ This document provides a table of contents for all of the WDAC Policy Wizard doc
 
 * **Usage Guide** - documentation related to the authoring, editing and publishing process for WDAC 
 
-  *[Creating New Base Policies](using/base-policy.md) - processes to create a new base WDAC policy from one of the three provided templates. 
-  *[Creating Supplemental Base Policies](using/supplemental-policy.md) - processes to create a new supplemental WDAC policy to extend an exisiting base policy. 
-  *[Editing an Exisiting Base or Supplemental Policy](using/edit-policy.md) - documents how to edit an existing WDAC policy and modify specific components of the policy. 
-  *[Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
+  * [Creating New Base Policies](using/base-policy.md) - processes to create a new base WDAC policy from one of the three provided templates. 
+  * [Creating Supplemental Base Policies](using/supplemental-policy.md) - processes to create a new supplemental WDAC policy to extend an exisiting 
+  base policy. 
+  * [Editing an Exisiting Base or Supplemental Policy](using/edit-policy.md) - documents how to edit an existing WDAC policy and modify specific components of the policy. 
+  * [Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
 
-### Contributing
+## Contributing
 
 The WDAC Policy Wizard team appreciates all feedback provided to make the app better for users. We also appreciate any contributions to the project. 
 Here are some ways to contribute. 
