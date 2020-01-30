@@ -1,0 +1,10 @@
+/obj/Release/*
+/obj/Debug/*
+/bin/Release/*
+/bin/Debug/*
+bin\Debug
+bin/
+*.exe
+*.pdb
+*.cache
+*.suo
