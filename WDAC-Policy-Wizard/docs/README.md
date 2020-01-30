@@ -2,7 +2,7 @@
 |:---|
 
 # WDAC Policy Wizard 
-![](imgs/header-logo.png)
+![](imgs/header-logo.PNG)
 
 The WDAC Policy Wizard is a tool developed by the Microsoft [Windows Defender Application Control (WDAC)](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control)
 feature team to enable IT professionals in creating powerful WDAC policies for deployment. 
