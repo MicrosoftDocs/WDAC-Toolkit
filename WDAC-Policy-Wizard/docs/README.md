@@ -10,18 +10,18 @@ feature team to enable IT professionals in creating powerful WDAC policies for d
 
 ## Using the WDAC Policy Wizard 
 
-* **Installing** - documentation related to the initial installation of the application. 
+**Installing** - documentation related to the initial installation of the application. 
 
-  * [Install Process](getting-started/install-process.md) - overview of the steps required for the initial process. 
-  * [Updating the App](getting-started/update-process.md) - overview of the steps required to update the application.
+* [Install Process](getting-started/install-process.md) - overview of the steps required for the initial process. 
+* [Updating the App](getting-started/update-process.md) - overview of the steps required to update the application.
 
-* **Usage Guide** - documentation related to the authoring, editing and publishing process for WDAC 
+**Usage Guide** - documentation related to the authoring, editing and publishing process for WDAC 
 
-  * [Creating New Base Policies](using/base-policy.md) - processes to create a new base WDAC policy from one of the three provided templates. 
-  * [Creating Supplemental Base Policies](using/supplemental-policy.md) - processes to create a new supplemental WDAC policy to extend an exisiting 
-  base policy. 
-  * [Editing an Exisiting Base or Supplemental Policy](using/edit-policy.md) - documents how to edit an existing WDAC policy and modify specific components of the policy. 
-  * [Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
+* [Creating New Base Policies](using/base-policy.md) - processes to create a new base WDAC policy from one of the three provided templates. 
+* [Creating Supplemental Base Policies](using/supplemental-policy.md) - processes to create a new supplemental WDAC policy to extend an exisiting 
+base policy. 
+* [Editing an Exisiting Base or Supplemental Policy](using/edit-policy.md) - documents how to edit an existing WDAC policy and modify specific components of the policy. 
+* [Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
 
 ## Contributing
 
