@@ -59,14 +59,16 @@ namespace WDAC_Wizard
         public string ID { get; set; }
         public string FriendlyName { get; set; }
 
-        // Allowed signers (string) can have multiple exceptions (array)
-        public Dictionary<string, List<string>> AllowedSigners { get; set; }
+        /// <summary>
+        /// List of string SignerIDs to lookup in Policy.Signers Dict
+        /// </summary>
+        public List<string> Signers { get; set; }
 
         public PolicySigningScenarios()
         {
-            this.AllowedSigners = new Dictionary<string, List<string>>();
+            this.Signers = new List<string>(); 
         }
-
+        /*
         public void AddAllowList(string key, List<string> values)
         {
             if (!this.AllowedSigners.ContainsKey(key)) // Keys are the SignerIds in schema
@@ -91,7 +93,7 @@ namespace WDAC_Wizard
                 exceptions = this.AllowedSigners[key];
             return exceptions;
         }
-
+        */
     }
 
     public class PolicySigners
@@ -101,6 +103,21 @@ namespace WDAC_Wizard
         public string Type { get; set; }
         public string Value { get; set; }
         public string CertID { get; set; }
+        public string CertPub { get; set; }
+
+        /// <summary>
+        /// Signer action: "Allow" or "Deny"
+        /// </summary>
+        public string Action { get; set; }
+        public List<string> Exceptions { get; set; }
+
+        public void AddException(List<string> exceptionList)
+        {
+            if (exceptionList.Count == 0) // New unique exception list 
+                this.Exceptions = new List<string>();
+            else
+                this.Exceptions = exceptionList; 
+        }
     }
 
     public class PolicyEKUs
@@ -112,7 +129,7 @@ namespace WDAC_Wizard
 
     public class PolicyFileRules
     {
-        public string Type { get; set; } //Either Deny or Allow
+        public string Action { get; set; } //Either Deny or Allow
         public string ID { get; set; }
         public string FriendlyName { get; set; }
         public string FileName { get; set; }
@@ -273,8 +290,7 @@ namespace WDAC_Wizard
         public string FileName;
 
         // Singleton pattern here we only allow one instance of the class. 
-        
-        
+       
         public Logger(string _FolderName)
         {
             string fileName = GetLoggerDst();

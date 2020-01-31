@@ -329,7 +329,7 @@ namespace WDAC_Wizard
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = "./AllowMicrosoft.xml";
+                        xmlPathToRead = "./Test_DenyPubs.xml"; //TODO:change this back
                         break;
                 }
             }
