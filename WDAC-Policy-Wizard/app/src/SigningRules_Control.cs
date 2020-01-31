@@ -457,32 +457,38 @@ namespace WDAC_Wizard
         private void displayRules()
         {
             // Process publisher rules first:
-            foreach(var signingScenario in this.Policy.SigningScenarios)
+            foreach (var signingScenario in this.Policy.SigningScenarios)
             {
-                foreach(var signerID in signingScenario.Signers)
+                foreach (var signerID in signingScenario.Signers)
                 {
                     // Get signer attributes
                     string friendlyName = this.Policy.Signers[signerID].Name;
                     string action = this.Policy.Signers[signerID].Action;
 
-                    // Get signer exceptions 
-
-                    List<string> exceptions = this.Policy.Signers[signerID].Exceptions;
-                    string exceptionList = String.Empty; 
-                    if (exceptions.Count > 0)
+                    // Get signer exceptions - if applicable
+                    string exceptionList = String.Empty;
+                    if (this.Policy.Signers[signerID].Exceptions.Count > 0)
                     {
-                        foreach (string exception in exceptions)
+                        // Iterate through all of the exceptions, get the ID and map to filename
+                        foreach (string exceptionID in this.Policy.Signers[signerID].Exceptions)
                         {
-                            string exceptionName = String.Empty;
-                            foreach (var filerule in this.Policy.FileRules) //TODO: tidy this up to create exceptions as a dict - easier lookup
-                            {
-                                if (filerule.ID == exception)
-                                {
-                                    exceptionName = filerule.FriendlyName;
-                                    break;
-                                }
-                            }
+                            string exceptionName = this.Policy.FileRules[exceptionID].FileName;
                             exceptionList += String.Format("{0}, ", exceptionName);
+                        }
+                    }
+
+                    // Get associated/affected files
+                    string fileAttrList = String.Empty;
+                    if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
+                    {
+                        // Iterate through all of the exceptions, get the ID and map to filename
+                        foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
+                        {
+                            string fileAttrName = this.Policy.FileRules[ruleID].FileName;
+                            if (fileAttrName == "*") // applies to all files with ver > min ver
+                                fileAttrName = "All files";
+                            string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
+                            fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
                         }
                     }
 
@@ -490,19 +496,37 @@ namespace WDAC_Wizard
                     var index = rulesDataGrid.Rows.Add();
                     rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
 
-
                     // Write to UI
                     rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
                     rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Publisher";
                     rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
-                    rulesDataGrid.Rows[index].Cells["Column_Exceptions"].Value = exceptionList; 
+                    rulesDataGrid.Rows[index].Cells["Column_Files"].Value = fileAttrList.Substring(0, fileAttrList.Length - 1); //trim trailing comma
+                    rulesDataGrid.Rows[index].Cells["Column_Exceptions"].Value = exceptionList;
                 }
-                
-            } 
+
+            }
 
             // Process path rules next: 
             //foreach(var pathRule in this.PathRules)
             // Process hash rules lastly:
+            foreach (var signingScenario in this.Policy.SigningScenarios)
+            {
+                foreach (var hashID in signingScenario.Hashes)
+                {
+                    // Get signer attributes
+                    string friendlyName = this.Policy.FileRules[hashID].FriendlyName;
+                    string action = this.Policy.FileRules[hashID].Action;
+
+                    // Get row index #, Scroll to new row index
+                    var index = rulesDataGrid.Rows.Add();
+                    rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+
+                    // Write to UI
+                    rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
+                    rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Hash";
+                    rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
+                }
+            }
         }
 
         /// <summary>
@@ -587,7 +611,7 @@ namespace WDAC_Wizard
                                                         policyFileRule.MinimumFileVersion = xmlReader.GetAttribute("MinimumFileVersion");
                                                         policyFileRule.FilePath = xmlReader.GetAttribute("FilePath");
 
-                                                        this.Policy.FileRules.Add(policyFileRule);
+                                                        this.Policy.FileRules[policyFileRule.ID] = policyFileRule; // Add to FileRules dictionary with key set to ruleID
                                                         this.Log.AddInfoMsg(String.Format("Existing File Rule Added - {0} ID: {1}, Friendly Name: {2}," +
                                                             " FileName: {3}, MinVersion: {4}, Path: {5}",
                                                             policyFileRule.Action, policyFileRule.ID, policyFileRule.FriendlyName, policyFileRule.FileName,
@@ -632,13 +656,16 @@ namespace WDAC_Wizard
                                                     }
 
                                                     else if (xmlReader.Name == "CertEKU")
-                                                    {
                                                         policySigner.CertID = xmlReader.GetAttribute("ID");
-                                                    }
-                                                    else if(xmlReader.Name == "CertPublisher")
+
+                                                    else if (xmlReader.Name == "CertPublisher")
                                                         policySigner.CertPub = xmlReader.GetAttribute("Value");
 
+                                                    else if (xmlReader.Name == "FileAttribRef")
+                                                        policySigner.AddFileAttribute(xmlReader.GetAttribute("RuleID"));
+
                                                     break;
+
                                                 case XmlNodeType.EndElement:
                                                     eoeCount++;
                                                     if (eoeCount < 2)
@@ -659,7 +686,8 @@ namespace WDAC_Wizard
                                     {
                                         eoeCount = 0;
                                         List<string> exceptionList = new List<string>();
-                                        string signerID = "";
+                                        string signerID = String.Empty;
+                                        string hashID = String.Empty; 
                                         PolicySigningScenarios signingScenario = new PolicySigningScenarios();
                                         while (xmlReader.Read() && eoeCount < 4)
                                         {
@@ -698,6 +726,12 @@ namespace WDAC_Wizard
                                                             this.Policy.Signers[signerID].AddException(exceptionList);
                                                             break;
 
+                                                        case "FileRuleRef":
+                                                            // This is the case for hash and filepath rules
+                                                            hashID = xmlReader.GetAttribute("RuleID");
+                                                            signingScenario.Hashes.Add(hashID);
+                                                            break; 
+
                                                         case "ExceptDenyRule": // parent = last allowedsigner
                                                             exceptionList.Add(xmlReader.GetAttribute("DenyRuleID"));
                                                             break;
@@ -711,7 +745,8 @@ namespace WDAC_Wizard
 
                                                 case XmlNodeType.EndElement: //1st time - end of parent allowed signer - every time, end of denyList
                                                     eoeCount++;
-                                                    this.Policy.Signers[signerID].AddException(exceptionList);
+                                                    if(!String.IsNullOrEmpty(signerID))
+                                                        this.Policy.Signers[signerID].AddException(exceptionList);
                                                     if (eoeCount == 2)
                                                         this.Policy.SigningScenarios.Add(signingScenario);
                                                     break;
@@ -913,17 +948,14 @@ namespace WDAC_Wizard
         private void deleteButton_Click(object sender, EventArgs e)
         {
             // Get info about the rule user wants to delete: row index and value
-            string rowVal = (String) this.rulesDataGrid.CurrentCell.Value;
-            int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex; 
-            string ruleName = rowVal.Substring(rowVal.IndexOf(";") + 2);
+            int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+            string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;         
             
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
             if (res == DialogResult.Yes)
             {
                 var ruleIDs = new List<string>();
-
                 // Convert ruleName to SignerID to delete from //Signers and //SigningScenarios
                 // Handle both Signer template rules and custom rules
                 Dictionary<string, PolicySigners>.KeyCollection _keys = this.Policy.Signers.Keys;

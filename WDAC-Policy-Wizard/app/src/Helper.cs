@@ -64,36 +64,16 @@ namespace WDAC_Wizard
         /// </summary>
         public List<string> Signers { get; set; }
 
+        /// <summary>
+        /// List of string Hash IDS to lookup in Policy.FileRules Dict
+        /// </summary>
+        public List<string> Hashes { get; set; }
+
         public PolicySigningScenarios()
         {
-            this.Signers = new List<string>(); 
+            this.Signers = new List<string>();
+            this.Hashes = new List<string>(); 
         }
-        /*
-        public void AddAllowList(string key, List<string> values)
-        {
-            if (!this.AllowedSigners.ContainsKey(key)) // Keys are the SignerIds in schema
-                this.AllowedSigners[key] = new List<string>();
-
-            if (values.Count > 0) // New unique deny rule list 
-                this.AllowedSigners[key] = values;
-
-            // skip cases where a deny list is already present - would overwrite
-        }
-
-        public List<string> GetKeys()
-        {
-            List<string> keys = new List<string>(this.AllowedSigners.Keys);
-            return keys;
-        }
-
-        public List<string> GetExceptions(string key)
-        {
-            List<string> exceptions = new List<string>();
-            if (this.AllowedSigners.ContainsKey(key))
-                exceptions = this.AllowedSigners[key];
-            return exceptions;
-        }
-        */
     }
 
     public class PolicySigners
@@ -109,7 +89,16 @@ namespace WDAC_Wizard
         /// Signer action: "Allow" or "Deny"
         /// </summary>
         public string Action { get; set; }
+
+        /// <summary>
+        /// List of IDs in the exception attribute of signers.
+        /// </summary>
         public List<string> Exceptions { get; set; }
+
+        /// <summary>
+        /// List of Rule IDs which reference IDs in FileRules.
+        /// </summary>
+        public List<string> FileAttributes { get; set; }
 
         public void AddException(List<string> exceptionList)
         {
@@ -117,6 +106,14 @@ namespace WDAC_Wizard
                 this.Exceptions = new List<string>();
             else
                 this.Exceptions = exceptionList; 
+        }
+
+        public void AddFileAttribute(string ruleID)
+        {
+            if (this.FileAttributes == null) // New unique exception list 
+                this.FileAttributes = new List<string>();
+            
+            this.FileAttributes.Add(ruleID); // Add ruleID to File Attributes list
         }
     }
 

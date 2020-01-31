@@ -35,10 +35,6 @@ namespace WDAC_Wizard
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rulesDataGrid = new System.Windows.Forms.DataGridView();
-            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Exceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label8 = new System.Windows.Forms.Label();
             this.label_AddCustomRules = new System.Windows.Forms.Label();
             this.button_Create = new System.Windows.Forms.Button();
@@ -69,6 +65,11 @@ namespace WDAC_Wizard
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Files = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Exceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -102,12 +103,14 @@ namespace WDAC_Wizard
             // rulesDataGrid
             // 
             this.rulesDataGrid.AllowUserToAddRows = false;
+            this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.Silver;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rulesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
             this.column_Level,
             this.Column_Name,
+            this.Column_Files,
             this.Column_Exceptions});
             this.rulesDataGrid.Location = new System.Drawing.Point(173, 132);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -120,38 +123,6 @@ namespace WDAC_Wizard
             this.rulesDataGrid.Size = new System.Drawing.Size(449, 422);
             this.rulesDataGrid.TabIndex = 92;
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
-            // 
-            // column_Action
-            // 
-            this.column_Action.HeaderText = "Action";
-            this.column_Action.MinimumWidth = 6;
-            this.column_Action.Name = "column_Action";
-            this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 50;
-            // 
-            // column_Level
-            // 
-            this.column_Level.HeaderText = "Level";
-            this.column_Level.MinimumWidth = 6;
-            this.column_Level.Name = "column_Level";
-            this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 75;
-            // 
-            // Column_Name
-            // 
-            this.Column_Name.HeaderText = "Name";
-            this.Column_Name.MinimumWidth = 6;
-            this.Column_Name.Name = "Column_Name";
-            this.Column_Name.ReadOnly = true;
-            this.Column_Name.Width = 300;
-            // 
-            // Column_Exceptions
-            // 
-            this.Column_Exceptions.HeaderText = "Exceptions";
-            this.Column_Exceptions.MinimumWidth = 6;
-            this.Column_Exceptions.Name = "Column_Exceptions";
-            this.Column_Exceptions.ReadOnly = true;
-            this.Column_Exceptions.Width = 1000;
             // 
             // label8
             // 
@@ -554,6 +525,46 @@ namespace WDAC_Wizard
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
+            // column_Action
+            // 
+            this.column_Action.HeaderText = "Action";
+            this.column_Action.MinimumWidth = 6;
+            this.column_Action.Name = "column_Action";
+            this.column_Action.ReadOnly = true;
+            this.column_Action.Width = 76;
+            // 
+            // column_Level
+            // 
+            this.column_Level.HeaderText = "Level";
+            this.column_Level.MinimumWidth = 6;
+            this.column_Level.Name = "column_Level";
+            this.column_Level.ReadOnly = true;
+            this.column_Level.Width = 71;
+            // 
+            // Column_Name
+            // 
+            this.Column_Name.HeaderText = "Name";
+            this.Column_Name.MinimumWidth = 6;
+            this.Column_Name.Name = "Column_Name";
+            this.Column_Name.ReadOnly = true;
+            this.Column_Name.Width = 74;
+            // 
+            // Column_Files
+            // 
+            this.Column_Files.HeaderText = "Associated Files";
+            this.Column_Files.MinimumWidth = 6;
+            this.Column_Files.Name = "Column_Files";
+            this.Column_Files.ReadOnly = true;
+            this.Column_Files.Width = 127;
+            // 
+            // Column_Exceptions
+            // 
+            this.Column_Exceptions.HeaderText = "Exceptions";
+            this.Column_Exceptions.MinimumWidth = 6;
+            this.Column_Exceptions.Name = "Column_Exceptions";
+            this.Column_Exceptions.ReadOnly = true;
+            this.Column_Exceptions.Width = 105;
+            // 
             // SigningRules_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -622,6 +633,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
     }
 }
