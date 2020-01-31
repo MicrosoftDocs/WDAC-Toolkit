@@ -57,6 +57,14 @@ namespace WDAC_Wizard
             hyperlinkLabel.Text = policyFilePath; 
         }
 
+        public void ShowError()
+        {
+            finishPanel.Visible = true;
+            this.finishLabel.Text = "Error during build"; 
+            //this.FilePath = policyFilePath;
+            //hyperlinkLabel.Text = policyFilePath;
+        }
+
         /// <summary>
         /// Opens the file explorer to the CI policy just built located in the folder path defined in the FilePath param . 
         /// </summary>

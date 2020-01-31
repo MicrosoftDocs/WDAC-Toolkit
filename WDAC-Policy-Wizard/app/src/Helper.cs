@@ -65,14 +65,15 @@ namespace WDAC_Wizard
         public List<string> Signers { get; set; }
 
         /// <summary>
-        /// List of string Hash IDS to lookup in Policy.FileRules Dict
+        /// List of string rule IDS to lookup in Policy.FileRules Dict
         /// </summary>
-        public List<string> Hashes { get; set; }
-
+        public List<string> FileRules { get; set; }
+       
+     
         public PolicySigningScenarios()
         {
             this.Signers = new List<string>();
-            this.Hashes = new List<string>(); 
+            this.FileRules = new List<string>(); 
         }
     }
 
@@ -102,18 +103,18 @@ namespace WDAC_Wizard
 
         public void AddException(List<string> exceptionList)
         {
-            if (exceptionList.Count == 0) // New unique exception list 
-                this.Exceptions = new List<string>();
-            else
-                this.Exceptions = exceptionList; 
+            this.Exceptions = exceptionList; 
         }
 
         public void AddFileAttribute(string ruleID)
         {
-            if (this.FileAttributes == null) // New unique exception list 
-                this.FileAttributes = new List<string>();
-            
             this.FileAttributes.Add(ruleID); // Add ruleID to File Attributes list
+        }
+
+        public PolicySigners()
+        {
+            this.Exceptions = new List<string>();
+            this.FileAttributes = new List<string>(); 
         }
     }
 
@@ -126,12 +127,37 @@ namespace WDAC_Wizard
 
     public class PolicyFileRules
     {
+        public enum RuleType
+        {
+            FileName,   // -Level FileName
+            FilePath,   // -Level FilePath
+            Hash        // -Level Hash
+        }
+
         public string Action { get; set; } //Either Deny or Allow
         public string ID { get; set; }
         public string FriendlyName { get; set; }
         public string FileName { get; set; }
         public string MinimumFileVersion { get; set; }
+        public string Hash { get; set; }
         public string FilePath { get; set; }
+        public RuleType _RuleType { get; set; }
+
+        public void SetRuleType()
+        {
+            if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FilePath))
+                this._RuleType = RuleType.FileName;
+            else if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FileName))
+                this._RuleType = RuleType.FilePath;
+            else
+                this._RuleType = RuleType.Hash;         
+        }
+
+        public RuleType GetRuleType()
+        {
+            return this._RuleType; 
+        }
+
     }
 
     public class PolicyCustomRules

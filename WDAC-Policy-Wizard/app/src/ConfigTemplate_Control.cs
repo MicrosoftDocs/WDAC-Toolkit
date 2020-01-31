@@ -329,7 +329,7 @@ namespace WDAC_Wizard
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = "./Test_Hash.xml"; //TODO:change this back
+                        xmlPathToRead = "./Test_Hash.xml"; //AllowMicrosoft.xml"; //TODO:change this back
                         break;
                 }
             }

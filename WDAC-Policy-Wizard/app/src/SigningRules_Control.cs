@@ -31,7 +31,10 @@ namespace WDAC_Wizard
 
         private Logger Log;
         private MainWindow _MainWindow;
-        private string XmlPath; 
+        private string XmlPath;
+
+        private int RowSelected; // Data grid row number selected by the user 
+
         public SigningRules_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -42,7 +45,7 @@ namespace WDAC_Wizard
             this._MainWindow = pMainWindow;
             this._MainWindow.RedoFlowRequired = false; 
             this.Log = this._MainWindow.Log;
-
+            this.RowSelected = -1; 
         }
 
         /// <summary>
@@ -456,6 +459,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void displayRules()
         {
+            int index = 0; 
             // Process publisher rules first:
             foreach (var signingScenario in this.Policy.SigningScenarios)
             {
@@ -493,40 +497,42 @@ namespace WDAC_Wizard
                     }
 
                     // Get row index #, Scroll to new row index
-                    var index = rulesDataGrid.Rows.Add();
-                    rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+                    index = rulesDataGrid.Rows.Add();
 
                     // Write to UI
                     rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
                     rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Publisher";
                     rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
-                    rulesDataGrid.Rows[index].Cells["Column_Files"].Value = fileAttrList.Substring(0, fileAttrList.Length - 1); //trim trailing comma
+                    rulesDataGrid.Rows[index].Cells["Column_Files"].Value = fileAttrList; //.Substring(0, fileAttrList.Length - 1); //trim trailing comma
                     rulesDataGrid.Rows[index].Cells["Column_Exceptions"].Value = exceptionList;
                 }
 
             }
 
-            // Process path rules next: 
-            //foreach(var pathRule in this.PathRules)
-            // Process hash rules lastly:
+            // Process file rules (hash, file path, file name)
             foreach (var signingScenario in this.Policy.SigningScenarios)
             {
-                foreach (var hashID in signingScenario.Hashes)
+                foreach (var ruleID in signingScenario.FileRules)
                 {
-                    // Get signer attributes
-                    string friendlyName = this.Policy.FileRules[hashID].FriendlyName;
-                    string action = this.Policy.FileRules[hashID].Action;
+                    if(this.Policy.FileRules[ruleID].FriendlyName.Contains("Page") 
+                        || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
+                        continue;
+                    else
+                    {
+                        // Get row index #, Scroll to new row index
+                        index = rulesDataGrid.Rows.Add();
 
-                    // Get row index #, Scroll to new row index
-                    var index = rulesDataGrid.Rows.Add();
-                    rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
-
-                    // Write to UI
-                    rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
-                    rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Hash";
-                    rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
+                        // Write to UI
+                        rulesDataGrid.Rows[index].Cells["Column_Action"].Value = this.Policy.FileRules[ruleID].Action;
+                        rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+                        rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FriendlyName;
+                    } 
                 }
             }
+
+            // Scroll to bottom of table
+            rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+
         }
 
         /// <summary>
@@ -610,7 +616,9 @@ namespace WDAC_Wizard
                                                         policyFileRule.FileName = xmlReader.GetAttribute("FileName");
                                                         policyFileRule.MinimumFileVersion = xmlReader.GetAttribute("MinimumFileVersion");
                                                         policyFileRule.FilePath = xmlReader.GetAttribute("FilePath");
-
+                                                        policyFileRule.Hash = xmlReader.GetAttribute("Hash");
+                                                        policyFileRule.SetRuleType();
+                                                        
                                                         this.Policy.FileRules[policyFileRule.ID] = policyFileRule; // Add to FileRules dictionary with key set to ruleID
                                                         this.Log.AddInfoMsg(String.Format("Existing File Rule Added - {0} ID: {1}, Friendly Name: {2}," +
                                                             " FileName: {3}, MinVersion: {4}, Path: {5}",
@@ -687,7 +695,6 @@ namespace WDAC_Wizard
                                         eoeCount = 0;
                                         List<string> exceptionList = new List<string>();
                                         string signerID = String.Empty;
-                                        string hashID = String.Empty; 
                                         PolicySigningScenarios signingScenario = new PolicySigningScenarios();
                                         while (xmlReader.Read() && eoeCount < 4)
                                         {
@@ -728,8 +735,9 @@ namespace WDAC_Wizard
 
                                                         case "FileRuleRef":
                                                             // This is the case for hash and filepath rules
-                                                            hashID = xmlReader.GetAttribute("RuleID");
-                                                            signingScenario.Hashes.Add(hashID);
+                                                            string ruleID = xmlReader.GetAttribute("RuleID");
+                                                            signingScenario.FileRules.Add(ruleID); 
+
                                                             break; 
 
                                                         case "ExceptDenyRule": // parent = last allowedsigner
@@ -949,28 +957,47 @@ namespace WDAC_Wizard
         {
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
-            string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;         
-            
+            string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
+            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value; 
+
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (res == DialogResult.Yes)
             {
                 var ruleIDs = new List<string>();
+
                 // Convert ruleName to SignerID to delete from //Signers and //SigningScenarios
                 // Handle both Signer template rules and custom rules
                 Dictionary<string, PolicySigners>.KeyCollection _keys = this.Policy.Signers.Keys;
-                foreach(var key in _keys)
+                Dictionary<string, PolicyFileRules>.KeyCollection _fileRulekeys = this.Policy.FileRules.Keys;
+
+                if (ruleType == "Publisher")
                 {
-                    var pSigner = this.Policy.Signers[key]; 
-                    if(pSigner.Name == ruleName)
+                    foreach (var key in _keys)
                     {
-                        // Remove from struct
-                        this.Policy.Signers.Remove(key);
-                        break; 
+                        var pSigner = this.Policy.Signers[key];
+                        if (pSigner.Name == ruleName)
+                            ruleIDs.Add(key);
                     }
                 }
+                
+                else
+                {
+                    // Get list of IDs for related rules. ie. Deleting one hash should delete all four hash values.
+                    if (ruleType == "Hash")
+                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1); 
 
-                for(int i = this.Policy.CustomRules.Count - 1; i>=0; i--)
+                    foreach (var key in _fileRulekeys)
+                    {
+                        var pFileRule = this.Policy.FileRules[key];
+                        if (pFileRule.FriendlyName.Contains(ruleName))
+                            ruleIDs.Add(key);
+                    }
+                }
+                
+
+                // Only structure we have to remove the rule from is the one that is used in writing rules -- custom rules
+                for (int i = this.Policy.CustomRules.Count - 1; i>=0; i--)
                 {
                     if (this.Policy.CustomRules[i].RowNumber == rowIdx)
                         this.Policy.CustomRules.Remove(this.Policy.CustomRules[i]); // Remove from structs
@@ -980,36 +1007,69 @@ namespace WDAC_Wizard
                 XmlDocument doc = new XmlDocument();
                 doc.Load(this.XmlPath); // Reading from the template (either one of the 3 bases or editing)
 
-                XmlNodeList signerNodeList = doc.GetElementsByTagName("Signer");
-                XmlNodeList signingScenarioAllowList = doc.GetElementsByTagName("AllowedSigner");
-                XmlNodeList signingScenarioDenyList = doc.GetElementsByTagName("DeniedSigner");
-
-                // A friendly name can have multiple IDs -- remove each one
+                
+                // A friendly name can have multiple references in the doc -- remove each one
                 // Skips section if custom rule
-                foreach (var ruleID in ruleIDs)
+                if (ruleType == "Publisher")
                 {
-                    for (int i = signerNodeList.Count - 1; i >= 0; i--) // Traverse through xml elements and delete signers == ruleID
+                    // Signer specific
+                    XmlNodeList signerNodeList = doc.GetElementsByTagName("Signer");
+                    XmlNodeList signingScenarioAllowList = doc.GetElementsByTagName("AllowedSigner");
+                    XmlNodeList signingScenarioDenyList = doc.GetElementsByTagName("DeniedSigner");
+                    foreach (var ruleID in ruleIDs)
                     {
-                        if (signerNodeList[i].OuterXml.Contains(ruleID))
-                            signerNodeList[i].ParentNode.RemoveChild(signerNodeList[i]);
-                    }
+                        for (int i = signerNodeList.Count - 1; i >= 0; i--) // Traverse through xml elements and delete signers == ruleID
+                        {
+                            if (signerNodeList[i].OuterXml.Contains(ruleID))
+                                signerNodeList[i].ParentNode.RemoveChild(signerNodeList[i]);
+                        }
 
-                    for(int i = signingScenarioAllowList.Count -1; i >= 0; i--) // Remove from signing scenarios too
+                        for (int i = signingScenarioAllowList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
+                        {
+                            if (signingScenarioAllowList[i].OuterXml.Contains(ruleID))
+                                signingScenarioAllowList[i].ParentNode.RemoveChild(signingScenarioAllowList[i]);
+                        }
+
+                        for (int i = signingScenarioDenyList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
+                        {
+                            if (signingScenarioDenyList[i].OuterXml.Contains(ruleID))
+                                signingScenarioDenyList[i].ParentNode.RemoveChild(signingScenarioDenyList[i]);
+                        }
+
+                    }
+                }
+
+                else
+                {
+                    // Filerule specific
+                    XmlNodeList allowFileRuleNodeList = doc.GetElementsByTagName("Allow"); // in <FileRules>
+                    XmlNodeList denyFileRuleNodeList = doc.GetElementsByTagName("Deny");   // in <FileRules>
+                    XmlNodeList fileAttrNodeList = doc.GetElementsByTagName("FileRuleRef"); // in <SigningScnearios-->FileRulesRef>
+                    foreach (var ruleID in ruleIDs)
                     {
-                        if (signingScenarioAllowList[i].OuterXml.Contains(ruleID))
-                            signingScenarioAllowList[i].ParentNode.RemoveChild(signingScenarioAllowList[i]);
-                    }
+                        for (int i = allowFileRuleNodeList.Count - 1; i >= 0; i--) // Traverse through xml elements and delete signers == ruleID
+                        {
+                            if (allowFileRuleNodeList[i].OuterXml.Contains(ruleID))
+                                allowFileRuleNodeList[i].ParentNode.RemoveChild(allowFileRuleNodeList[i]);
+                        }
 
-                    for (int i = signingScenarioDenyList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
-                    {
-                        if (signingScenarioDenyList[i].OuterXml.Contains(ruleID))
-                            signingScenarioDenyList[i].ParentNode.RemoveChild(signingScenarioDenyList[i]);
-                    }
+                        for (int i = denyFileRuleNodeList.Count - 1; i >= 0; i--) // Remove from file rule
+                        {
+                            if (denyFileRuleNodeList[i].OuterXml.Contains(ruleID))
+                                denyFileRuleNodeList[i].ParentNode.RemoveChild(denyFileRuleNodeList[i]);
+                        }
 
+                        for (int i = fileAttrNodeList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
+                        {
+                            if (fileAttrNodeList[i].OuterXml.Contains(ruleID))
+                                fileAttrNodeList[i].ParentNode.RemoveChild(fileAttrNodeList[i]);
+                        }
+
+                    }
                 }
 
                 // Delete from UI elements:
-                this.rulesDataGrid.Rows.RemoveAt(this.rulesDataGrid.CurrentRow.Index);
+                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
                 doc.Save(this.XmlPath); 
             }
              
@@ -1020,19 +1080,19 @@ namespace WDAC_Wizard
         /// </summary>
         private void DataClicked(object sender, DataGridViewCellEventArgs e)
         {
-            // Remove highlighting form other rows
+            // Remove highlighting from previous selected row
             DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
             defaultCellStyle.BackColor = Color.White;
-            var index = this.rulesDataGrid.Rows.Count;
-            for (int i = 0; i < index; i++)
-                this.rulesDataGrid.Rows[i].DefaultCellStyle = defaultCellStyle; 
+            if(this.RowSelected > 0 && this.RowSelected < this.rulesDataGrid.Rows.Count)
+                this.rulesDataGrid.Rows[this.RowSelected].DefaultCellStyle = defaultCellStyle; 
 
             // Highlight the row to show user feedback
             DataGridViewCellStyle highlightCellStyle = new DataGridViewCellStyle();
-            highlightCellStyle.BackColor = Color.LightBlue;
+            highlightCellStyle.BackColor = Color.FromArgb(0, 120, 215); 
             DataGridViewRow customRow = this.rulesDataGrid.CurrentRow;
             this.rulesDataGrid.Rows[customRow.Index].DefaultCellStyle = highlightCellStyle;
-
+            this.RowSelected = customRow.Index; 
+            
         }
     }
 
