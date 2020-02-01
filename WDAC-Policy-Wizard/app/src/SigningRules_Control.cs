@@ -525,7 +525,11 @@ namespace WDAC_Wizard
                         // Write to UI
                         rulesDataGrid.Rows[index].Cells["Column_Action"].Value = this.Policy.FileRules[ruleID].Action;
                         rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.Policy.FileRules[ruleID].GetRuleType().ToString();
-                        rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FriendlyName;
+                        if(this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
+                            this.Policy.FileRules[ruleID].FileName != null)
+                            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FileName;
+                        else
+                            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FriendlyName;
                     } 
                 }
             }
