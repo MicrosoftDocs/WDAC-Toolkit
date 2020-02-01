@@ -47,8 +47,8 @@ namespace WDAC_Wizard
 
         // Datastructs for signing rules (and exceptions)
         public List<PolicyEKUs> EKUs { get; set; }
-        public List<PolicyFileRules> FileRules { get; set; }
-        public List<PolicySigners> Signers { get; set; }
+        public Dictionary<string, PolicyFileRules> FileRules { get; set; }
+        public Dictionary<string, PolicySigners> Signers { get; set; }
         public List<PolicyUpdateSigners> UpdateSigners { get; set; }
         public List<PolicySupplementalSigners> SupplementalSigners { get; set; }
         public List<PolicyCISigners> CISigners { get; set; }
@@ -67,8 +67,8 @@ namespace WDAC_Wizard
             this.EnableAudit = true;
 
             this.EKUs = new List<PolicyEKUs>();
-            this.FileRules = new List<PolicyFileRules>();
-            this.Signers = new List<PolicySigners>();
+            this.FileRules = new Dictionary<string, PolicyFileRules>();
+            this.Signers = new Dictionary<string, PolicySigners>();//<PolicySigners>();
             this.SigningScenarios = new List<PolicySigningScenarios>();
             this.UpdateSigners = new List<PolicyUpdateSigners>();
             this.SupplementalSigners = new List<PolicySupplementalSigners>();
@@ -76,7 +76,7 @@ namespace WDAC_Wizard
             this.PolicySettings = new List<PolicySettings>();
             this.CustomRules = new List<PolicyCustomRules>();
 
-            this.VersionNumber = "10.0.0.0"; 
+            this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
         }
 
         public string UpdateVersion()

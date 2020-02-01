@@ -729,10 +729,17 @@ namespace WDAC_Wizard
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
+            {
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                this._BuildPage.ShowError(); 
+            }
 
-            this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
-            this._BuildPage.UpdateProgressBar(100, " ");
+            else
+            {
+                this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
+                this._BuildPage.UpdateProgressBar(100, " ");
+            }
+            
         }
 
         /// <summary>

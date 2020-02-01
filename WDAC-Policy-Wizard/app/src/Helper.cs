@@ -59,39 +59,22 @@ namespace WDAC_Wizard
         public string ID { get; set; }
         public string FriendlyName { get; set; }
 
-        // Allowed signers (string) can have multiple exceptions (array)
-        public Dictionary<string, List<string>> AllowedSigners { get; set; }
+        /// <summary>
+        /// List of string SignerIDs to lookup in Policy.Signers Dict
+        /// </summary>
+        public List<string> Signers { get; set; }
 
+        /// <summary>
+        /// List of string rule IDS to lookup in Policy.FileRules Dict
+        /// </summary>
+        public List<string> FileRules { get; set; }
+       
+     
         public PolicySigningScenarios()
         {
-            this.AllowedSigners = new Dictionary<string, List<string>>();
+            this.Signers = new List<string>();
+            this.FileRules = new List<string>(); 
         }
-
-        public void AddAllowList(string key, List<string> values)
-        {
-            if (!this.AllowedSigners.ContainsKey(key)) // Keys are the SignerIds in schema
-                this.AllowedSigners[key] = new List<string>();
-
-            if (values.Count > 0) // New unique deny rule list 
-                this.AllowedSigners[key] = values;
-
-            // skip cases where a deny list is already present - would overwrite
-        }
-
-        public List<string> GetKeys()
-        {
-            List<string> keys = new List<string>(this.AllowedSigners.Keys);
-            return keys;
-        }
-
-        public List<string> GetExceptions(string key)
-        {
-            List<string> exceptions = new List<string>();
-            if (this.AllowedSigners.ContainsKey(key))
-                exceptions = this.AllowedSigners[key];
-            return exceptions;
-        }
-
     }
 
     public class PolicySigners
@@ -101,6 +84,38 @@ namespace WDAC_Wizard
         public string Type { get; set; }
         public string Value { get; set; }
         public string CertID { get; set; }
+        public string CertPub { get; set; }
+
+        /// <summary>
+        /// Signer action: "Allow" or "Deny"
+        /// </summary>
+        public string Action { get; set; }
+
+        /// <summary>
+        /// List of IDs in the exception attribute of signers.
+        /// </summary>
+        public List<string> Exceptions { get; set; }
+
+        /// <summary>
+        /// List of Rule IDs which reference IDs in FileRules.
+        /// </summary>
+        public List<string> FileAttributes { get; set; }
+
+        public void AddException(List<string> exceptionList)
+        {
+            this.Exceptions = exceptionList; 
+        }
+
+        public void AddFileAttribute(string ruleID)
+        {
+            this.FileAttributes.Add(ruleID); // Add ruleID to File Attributes list
+        }
+
+        public PolicySigners()
+        {
+            this.Exceptions = new List<string>();
+            this.FileAttributes = new List<string>(); 
+        }
     }
 
     public class PolicyEKUs
@@ -112,12 +127,37 @@ namespace WDAC_Wizard
 
     public class PolicyFileRules
     {
-        public string Type { get; set; } //Either Deny or Allow
+        public enum RuleType
+        {
+            FileName,   // -Level FileName
+            FilePath,   // -Level FilePath
+            Hash        // -Level Hash
+        }
+
+        public string Action { get; set; } //Either Deny or Allow
         public string ID { get; set; }
         public string FriendlyName { get; set; }
         public string FileName { get; set; }
         public string MinimumFileVersion { get; set; }
+        public string Hash { get; set; }
         public string FilePath { get; set; }
+        public RuleType _RuleType { get; set; }
+
+        public void SetRuleType()
+        {
+            if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FilePath))
+                this._RuleType = RuleType.FileName;
+            else if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FileName))
+                this._RuleType = RuleType.FilePath;
+            else
+                this._RuleType = RuleType.Hash;         
+        }
+
+        public RuleType GetRuleType()
+        {
+            return this._RuleType; 
+        }
+
     }
 
     public class PolicyCustomRules
@@ -273,8 +313,7 @@ namespace WDAC_Wizard
         public string FileName;
 
         // Singleton pattern here we only allow one instance of the class. 
-        
-        
+       
         public Logger(string _FolderName)
         {
             string fileName = GetLoggerDst();

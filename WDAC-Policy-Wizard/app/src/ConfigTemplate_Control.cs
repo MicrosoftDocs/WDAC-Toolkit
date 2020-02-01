@@ -329,7 +329,7 @@ namespace WDAC_Wizard
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = "./AllowMicrosoft.xml";
+                        xmlPathToRead = "./AllowMicrosoft.xml"; 
                         break;
                 }
             }
@@ -414,7 +414,7 @@ namespace WDAC_Wizard
 
             // Copy template to temp folder for reading and writing
             string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
-            File.Copy(xmlPathToRead, xmlTemplateToWrite);
+            File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
             this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite; 
         }
 
