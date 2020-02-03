@@ -20,10 +20,9 @@ Each one of the template policies has a unique set of policy rules and a varying
 
 | Template Policy | Authorizes the  | Security Bar |
 | - | - | - |
-|*Allow Microsoft Mode* |  * Microsoft Office365 Applications | Highest security, most restrictive |
-                        |   * Microsoft Store Applications | |
-|*Windows Works Mode* | |
-|*Signed and Reputable Mode* | |
+|*Allow Microsoft Mode* |  * Microsoft Office365 Applications <br/> Microsoft Store Applications | Highest security, most restrictive |
+|*Windows Works Mode* | | |
+|*Signed and Reputable Mode* | | |
 
 ![](imgs/new-base-template.png)
 
