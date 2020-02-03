@@ -19,9 +19,9 @@ Each one of the template policies has a unique set of policy rules and a varying
 
 | Template Policy | Authorizes the  | Circle of Trust |
 | - | - | - |
-|*Allow Microsoft Mode* | Microsoft Office365 Applications <br/> Microsoft Store Applications | Smallest Circle-of-Trust |
-|*Windows Works Mode* | Microsoft Office365 Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers |  |
-|*Signed and Reputable Mode* | Microsoft Office365 Applications <br/> Microsoft Store Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers <br/> [Files with good reputation, according to the ISG](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/use-windows-defender-application-control-with-intelligent-security-graph) | Largest Circle-of-Trust |
+|**Allow Microsoft Mode** | Microsoft Office365 Applications <br/> Microsoft Store Applications | Smallest Circle-of-Trust |
+|**Windows Works Mode** | Microsoft Office365 Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers |  |
+|**Signed and Reputable Mode** | Microsoft Office365 Applications <br/> Microsoft Store Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers <br/> [Files with good reputation, according to the ISG](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/use-windows-defender-application-control-with-intelligent-security-graph) | Largest Circle-of-Trust |
 
 The policy name and file location will default based on the template policy selected. The policy name and file location can be set be selecting the textbox and typing the desired string. 
 
@@ -43,14 +43,14 @@ page.
 
 Selecting the `+ Advanced Options` button will reveal the advanced policy rule options panel. This grouping of rules contains additional policy rule options which are less common to a majority of users. 
 
-Lastly, *Audit Mode* is enabled by default for all of the templates. We recommend leaving the Audit Mode policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their case. 
+Lastly, **Audit Mode** is enabled by default for all of the templates. We recommend leaving the Audit Mode policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their scenario. 
 Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 
 ## 4. Creating policy signing rules ## 
 
 The Signing Rules List on the left-hand side of the page document the pre-set signing rules of the template as well as the exceptions. 
 
-*Creating Custom Signing Rules*
+#### Creating Custom Signing Rules ####
 
 Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four types of custom rules conditions can be defined. 
 
@@ -61,7 +61,7 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
 | Folder Path | Any folder can be assigned this rule condition; .|
 | File Hash | Any file can be assigned this rule condition; however, the rule must be updated each time a new version of the file is released because the hash value is based in part upon the version.|
 
-  1. *Publisher Rules* - select the Publisher option from the Rule Type combobox. Next choose to Allow or Deny the publisher, and select a reference file signed by the software publisher off which to base the rule. 
+  1. **Publisher Rules** - select the Publisher option from the Rule Type combobox. Next choose to Allow or Deny the publisher, and select a reference file signed by the software publisher off which to base the rule. 
   By default, the publisher is set to apply to all files signed by the publisher, with the specific product name and file name with a version at or above the one specified. The restrictiveness of the rule can be modified using the slider. 
   The text below the slider documents outlines the how the rule will be interpreted. 
   
@@ -69,19 +69,19 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
   
   | Rule Condition | WDAC Rule Level | Description |
   | - | - | - |
-  | *Publisher* | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | *Product name* | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | *File name* | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | *Version* | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
+  | **Publisher** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
+  | **Product name** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
+  | **File name** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
+  | **Version** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
   
   _this section needs to be revised_
   
-  2. *Path Rules* - select the Path option from the Rule Type combobox. Next choose to Allow or Deny the path, and select either a File or Folder rule using the radiobutton below the Browse button. Lastly, select the reference file
+  2. **Path Rules** - select the Path option from the Rule Type combobox. Next choose to Allow or Deny the path, and select either a File or Folder rule using the radiobutton below the Browse button. Lastly, select the reference file
   or folder off which to base the rule. 
   
-  3. *Hash Rules* - select the File Hash option from the Rule Type combobox. Next choose to Allow or Deny the hash, and select the file off which to base the rule. 
+  3. **Hash Rules** - select the File Hash option from the Rule Type combobox. Next choose to Allow or Deny the hash, and select the file off which to base the rule. 
   
-*Deleting Signing Rules*
+#### Deleting Signing Rules ####
   
 Template signing rules and custom rules can be deleted from the policy by selecting the rule from the rules list dataviewer. Once the rule is highlighted, selecting the delete button underneath the table will prompt for additional confirmation. Select `Yes` to remove the rule from the policy and the rules table. 
 
