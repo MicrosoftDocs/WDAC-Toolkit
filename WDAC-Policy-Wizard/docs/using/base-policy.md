@@ -6,26 +6,24 @@
 This document outlines the steps to create a new WDAC code integrity (CI) policy while using one of the three available CI templates
 as a starting point. The tool enables users to configure the policy rules, its signing rules and its attributes. 
 
-1. *Select the New Policy Editor from the start menu*
-
-![](../imgs/new-hover.png)
-
-### 2. *Select the Base Policy option page* ###
+## 1. Select the Policy Creator from the start menu, then Base Policy ##
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, 
 the base policy option will be pre-selected. Otherwise, select the base policy option. 
 
+![](../imgs/new-hover.png)
 ![](imgs/new-base.png)
 
-3. *Select from one of the default templates* - - - -
+## 2. Select from one of the default template policies ##
 
-Each one of the templates has 
+Each one of the template policies has a unique set of policy rules and a varying level of security. 
 
-  * *Allow Microsoft Mode*: 
-  
-  * *Windows Works Mode*:
-  
-  * *Signed and Reputable Mode*:
+| Template Policy | Authorizes the  | Security Bar |
+| - | - | - |
+|*Allow Microsoft Mode* |  * Microsoft Office365 Applications | Highest security, most restrictive |
+                        |   * Microsoft Store Applications | |
+|*Windows Works Mode* | |
+|*Signed and Reputable Mode* | |
 
 ![](imgs/new-base-template.png)
 
