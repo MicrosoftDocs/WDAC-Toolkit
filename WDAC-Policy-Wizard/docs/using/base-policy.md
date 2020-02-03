@@ -8,7 +8,7 @@ as a starting point. The tool enables users to configure the policy rules, its s
 
 1. *Select the New Policy Editor from the start menu*
 
-![](imgs/new-hover.png)
+![](../imgs/new-hover.png)
 
 2. *Select the Base Policy option page*
 
