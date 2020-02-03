@@ -10,7 +10,7 @@ as a starting point. The tool enables users to configure the policy rules, its s
 
 ![](../imgs/new-hover.png)
 
-2. *Select the Base Policy option page*
+## 2. *Select the Base Policy option page* ##
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, 
 the base policy option will be pre-selected. Otherwise, select the base policy option. 
