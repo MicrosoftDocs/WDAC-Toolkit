@@ -17,7 +17,7 @@ the base policy option will be pre-selected. Otherwise, select the base policy o
 
 ![](imgs/new-base.png)
 
-3. *Select from one of the default templates*
+3. *Select from one of the default templates* - - - -
 
 Each one of the templates has 
 
