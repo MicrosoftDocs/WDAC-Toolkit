@@ -8,8 +8,7 @@ as a starting point. The tool enables users to configure the policy rules, its s
 
 ## 1. Select the Policy Creator from the start menu, then Base Policy ##
 
-If the default setting (see [Settings Page](using/settings-page.md)) is enabled, 
-the base policy option will be pre-selected. Otherwise, select the base policy option. 
+If the default setting (see [Settings Page](using/settings-page.md)) is enabled, the base policy option will be pre-selected. Otherwise, select the base policy option. 
 
 ![](../imgs/new-hover.png)
 ![](imgs/new-base.png)
@@ -18,18 +17,22 @@ the base policy option will be pre-selected. Otherwise, select the base policy o
 
 Each one of the template policies has a unique set of policy rules and a varying level of security. 
 
-| Template Policy | Authorizes the  | Security Bar |
+| Template Policy | Authorizes the  | Circle of Trust |
 | - | - | - |
-|*Allow Microsoft Mode* |  * Microsoft Office365 Applications <br/> Microsoft Store Applications | Highest security, most restrictive |
-|*Windows Works Mode* | | |
-|*Signed and Reputable Mode* | | |
+|*Allow Microsoft Mode* | Microsoft Office365 Applications <br/> Microsoft Store Applications | Smallest Circle-of-Trust |
+|*Windows Works Mode* | Microsoft Office365 Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers |  |
+|*Signed and Reputable Mode* | Microsoft Office365 Applications <br/> Microsoft Store Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers <br/> [Files with good reputation, according to the ISG](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/use-windows-defender-application-control-with-intelligent-security-graph) | Largest Circle-of-Trust |
+
+The policy name and file location will default based on the template policy selected. The policy name and file location can be set be selecting the textbox and typing the desired string. 
+
+At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. 
+
+[!NOTE] Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
 
 ![](imgs/new-base-template.png)
 
-At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. *Note:* returning back to the template page will remove the configured policy rule options 
-as well as the custom signing rules.  
-  
-4. *Configure the policy rule options*
+
+## 3. Configure the policy rule options ##
 
 Upon page launch, policy rule options will be automatically enabled/disabled depending on the chosen template from the previous page. Choose to enable or disable the desired policy rule options by pressing the slider button next to 
 the policy rule titles. 
@@ -43,10 +46,9 @@ Selecting the `+ Advanced Options` button will reveal the advanced policy rule o
 Lastly, *Audit Mode* is enabled by default for all of the templates. We recommend leaving the Audit Mode policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their case. 
 Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 
-5. *Creating policy signing rules*
+## 4. Creating policy signing rules ## 
 
 The Signing Rules List on the left-hand side of the page document the pre-set signing rules of the template as well as the exceptions. 
-
 
 *Creating Custom Signing Rules*
 
@@ -54,7 +56,7 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
 
 | Rule Condition | Usage Scenario | 
 | - | - |
-| Publisher | To use a publisher condition, the files must be digitally signed by the software publisher, or you must do so by using an internal certificate. Rules that are specified to the version level might have to be updated when a new version of the file is released.|
+| Publisher | To use a publisher condition, the files must be digitally signed by the software publisher, or you must do so by using an internal certificate. |
 | File Path | Any file can be assigned this rule condition; however, because path rules specify locations within the file system, any subdirectory will also be affected by the rule (unless explicitly exempted).|
 | Folder Path | Any folder can be assigned this rule condition; .|
 | File Hash | Any file can be assigned this rule condition; however, the rule must be updated each time a new version of the file is released because the hash value is based in part upon the version.|
@@ -81,12 +83,11 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
   
 *Deleting Signing Rules*
   
-Template signing rules and custom rules can be deleted from the policy by selecting the rule from the rules list dataviewer. Once the rule is highlighted, selecting the delete button underneath the table will prompt for additional confirmation. 
-Selecting `Yes` will remove the rule from the policy and the rules table. 
+Template signing rules and custom rules can be deleted from the policy by selecting the rule from the rules list dataviewer. Once the rule is highlighted, selecting the delete button underneath the table will prompt for additional confirmation. Select `Yes` to remove the rule from the policy and the rules table. 
 
 
-6. *Building the policy*
+## 5. Building the policy ##
 
 The policy build page will monitor the progress of the WDAC policy creation process. Depending on the number and complexity of the custom signing rules, the build process could take several minutes. 
-Once the build process is complete, selecting the policy path link will open the policy XML file for review. The binary file is also written to the same path for manual deployment. Steps for manual deployment
-can be reviewed here [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
+
+Once the build process is complete, selecting the policy path link will open the policy XML file for review. The binary file is also written to the same path for manual deployment. Steps for manual deployment can be reviewed here [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
