@@ -3,18 +3,21 @@
 
 # Creating a new Base WDAC Policy
 
+This document outlines the steps to create a new WDAC code integrity (CI) policy while using one of the three available CI templates
+as a starting point. The tool enables users to configure the policy rules, its signing rules and its attributes. 
+
 1. *Select the New Policy Editor from the start menu*
 
 ![](imgs/new-hover.png)
 
-1. *Select the Base Policy option page*
+2. *Select the Base Policy option page*
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, 
 the base policy option will be pre-selected. Otherwise, select the base policy option. 
 
 ![](imgs/new-base.png)
 
-1. *Select from one of the default templates*
+3. *Select from one of the default templates*
 
 Each one of the templates has 
 
@@ -29,7 +32,7 @@ Each one of the templates has
 At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. *Note:* returning back to the template page will remove the configured policy rule options 
 as well as the custom signing rules.  
   
-1. *Configure the policy rule options*
+4. *Configure the policy rule options*
 
 Upon page launch, policy rule options will be automatically enabled/disabled depending on the chosen template from the previous page. Choose to enable or disable the desired policy rule options by pressing the slider button next to 
 the policy rule titles. 
@@ -43,7 +46,7 @@ Selecting the `+ Advanced Options` button will reveal the advanced policy rule o
 Lastly, *Audit Mode* is enabled by default for all of the templates. We recommend leaving the Audit Mode policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their case. 
 Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 
-1. *Creating policy signing rules*
+5. *Creating policy signing rules*
 
 The Signing Rules List on the left-hand side of the page document the pre-set signing rules of the template as well as the exceptions. 
 
@@ -74,10 +77,10 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
   
   _this section needs to be revised_
   
-  1. *Path Rules* - select the Path option from the Rule Type combobox. Next choose to Allow or Deny the path, and select either a File or Folder rule using the radiobutton below the Browse button. Lastly, select the reference file
+  2. *Path Rules* - select the Path option from the Rule Type combobox. Next choose to Allow or Deny the path, and select either a File or Folder rule using the radiobutton below the Browse button. Lastly, select the reference file
   or folder off which to base the rule. 
   
-  1. *Hash Rules* - select the File Hash option from the Rule Type combobox. Next choose to Allow or Deny the hash, and select the file off which to base the rule. 
+  3. *Hash Rules* - select the File Hash option from the Rule Type combobox. Next choose to Allow or Deny the hash, and select the file off which to base the rule. 
   
 *Deleting Signing Rules*
   
@@ -85,7 +88,7 @@ Template signing rules and custom rules can be deleted from the policy by select
 Selecting `Yes` will remove the rule from the policy and the rules table. 
 
 
-1. *Building the policy*
+6. *Building the policy*
 
 The policy build page will monitor the progress of the WDAC policy creation process. Depending on the number and complexity of the custom signing rules, the build process could take several minutes. 
 Once the build process is complete, selecting the policy path link will open the policy XML file for review. The binary file is also written to the same path for manual deployment. Steps for manual deployment
