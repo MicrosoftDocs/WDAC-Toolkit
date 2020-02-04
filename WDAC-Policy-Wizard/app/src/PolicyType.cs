@@ -14,11 +14,12 @@ using System.Windows.Forms;
 using WDAC_Wizard.Properties;
 using System.Xml;
 
+
 namespace WDAC_Wizard
 {
     public partial class PolicyType : UserControl
     {
-        public string SupplementalPath { get; set; } // Path to the supplemental policy on disk
+        public string BaseToSupplementPath { get; set; } // Path to the supplemental policy on disk
 
         private MainWindow _MainWindow;
         private WDAC_Policy _Policy;
@@ -59,9 +60,15 @@ namespace WDAC_Wizard
         /// </summary>
         private void SupplementalPolicy_Selected(object sender, EventArgs e)
         {
+            // Require >= 1903 for multiple policy formats - show UI notification 
+            if (this._Policy.GetWinVersion() < 1903)
+                MessageBox.Show("The multiple policy format will not work on pre-1903 systems","Multiple Policy Format Attention", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             // Supplemental policy selected
             if (this._Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
                 this._MainWindow.RedoFlowRequired = true;
+
             this._Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy;
             this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
 
@@ -92,23 +99,23 @@ namespace WDAC_Wizard
             openFileDialog.RestoreDirectory = true;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.SupplementalPath = openFileDialog.FileName;
+                this.BaseToSupplementPath = openFileDialog.FileName;
                 textBoxPolicyPath.Text = openFileDialog.FileName;
                 
             }
             openFileDialog.Dispose();
 
             // User has modified the supplemental policy from original, force restart flow
-            if(this._MainWindow.Policy.SupplementalPath != this.SupplementalPath)
+            if(this._MainWindow.Policy.BaseToSupplementPath != this.BaseToSupplementPath)
                 this._MainWindow.RedoFlowRequired = true;
 
-            this._MainWindow.Policy.SupplementalPath = this.SupplementalPath;
+            this._MainWindow.Policy.BaseToSupplementPath = this.BaseToSupplementPath;
 
             // Verification: does the chosen base policy allow supplemental policies
             this.Verified_Label.Visible = true;
             this.Verified_PictureBox.Visible = true; 
 
-            if(isPolicyExtendable(this.SupplementalPath))
+            if(isPolicyExtendable(this.BaseToSupplementPath))
             {
                 this.Verified_Label.Text = "This base policy allows supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.verified;
@@ -117,7 +124,8 @@ namespace WDAC_Wizard
 
             else
             {
-                this.Verified_Label.Text = "This base policy does not allow supplemental policies. Please select another base policy.";
+                this.Verified_Label.Text = "This base policy does not allow supplemental policies. " +
+                    "Please select another base policy.";
                 this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
                 this._MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies. Choose another base.";
@@ -211,7 +219,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void reset_panel()
        {
-            this.SupplementalPath = null; 
+            this.BaseToSupplementPath = null; 
             this.textBoxPolicyPath.Text = "";
             this.Verified_Label.Visible = false;
             this.Verified_PictureBox.Visible = false;

@@ -42,6 +42,8 @@ namespace WDAC_Wizard
             this.useDefaultStrings_CheckBox = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.createMultiPolicyByDefault_CheckBox = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.allowTelemetry_CheckBox = new System.Windows.Forms.PictureBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -52,6 +54,7 @@ namespace WDAC_Wizard
             this.Update_Label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.createMultiPolicyByDefault_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).BeginInit();
             this.SuspendLayout();
@@ -60,7 +63,7 @@ namespace WDAC_Wizard
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(30, 325);
+            this.label2.Location = new System.Drawing.Point(30, 368);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 29);
             this.label2.TabIndex = 1;
@@ -71,7 +74,7 @@ namespace WDAC_Wizard
             this.appVersion_Label.AutoSize = true;
             this.appVersion_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.appVersion_Label.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.appVersion_Label.Location = new System.Drawing.Point(32, 368);
+            this.appVersion_Label.Location = new System.Drawing.Point(32, 410);
             this.appVersion_Label.Name = "appVersion_Label";
             this.appVersion_Label.Size = new System.Drawing.Size(200, 24);
             this.appVersion_Label.TabIndex = 2;
@@ -82,7 +85,7 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label3.Location = new System.Drawing.Point(32, 402);
+            this.label3.Location = new System.Drawing.Point(32, 445);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(275, 48);
             this.label3.TabIndex = 3;
@@ -96,7 +99,7 @@ namespace WDAC_Wizard
             this.terms_Label.ForeColor = System.Drawing.SystemColors.Highlight;
             this.terms_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.terms_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.terms_Label.Location = new System.Drawing.Point(30, 482);
+            this.terms_Label.Location = new System.Drawing.Point(30, 525);
             this.terms_Label.Name = "terms_Label";
             this.terms_Label.Size = new System.Drawing.Size(152, 24);
             this.terms_Label.TabIndex = 4;
@@ -111,7 +114,7 @@ namespace WDAC_Wizard
             this.privacy_Label.ForeColor = System.Drawing.SystemColors.Highlight;
             this.privacy_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.privacy_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.privacy_Label.Location = new System.Drawing.Point(30, 525);
+            this.privacy_Label.Location = new System.Drawing.Point(30, 568);
             this.privacy_Label.Name = "privacy_Label";
             this.privacy_Label.Size = new System.Drawing.Size(196, 24);
             this.privacy_Label.TabIndex = 5;
@@ -122,7 +125,7 @@ namespace WDAC_Wizard
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(30, 145);
+            this.label4.Location = new System.Drawing.Point(30, 188);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 29);
             this.label4.TabIndex = 6;
@@ -133,7 +136,7 @@ namespace WDAC_Wizard
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(84, 201);
+            this.label5.Location = new System.Drawing.Point(84, 244);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(341, 24);
             this.label5.TabIndex = 7;
@@ -143,7 +146,7 @@ namespace WDAC_Wizard
             // 
             this.useDefaultStrings_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
             this.useDefaultStrings_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.useDefaultStrings_CheckBox.Location = new System.Drawing.Point(46, 196);
+            this.useDefaultStrings_CheckBox.Location = new System.Drawing.Point(46, 239);
             this.useDefaultStrings_CheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.useDefaultStrings_CheckBox.Name = "useDefaultStrings_CheckBox";
             this.useDefaultStrings_CheckBox.Size = new System.Drawing.Size(28, 31);
@@ -152,6 +155,8 @@ namespace WDAC_Wizard
             this.useDefaultStrings_CheckBox.TabStop = false;
             this.useDefaultStrings_CheckBox.Tag = "Checked";
             this.useDefaultStrings_CheckBox.Click += new System.EventHandler(this.SettingCheckBox_Click);
+            this.useDefaultStrings_CheckBox.MouseLeave += new System.EventHandler(this.SettingCheckBox_Leave);
+            this.useDefaultStrings_CheckBox.MouseHover += new System.EventHandler(this.SettingCheckBox_Hover);
             // 
             // label6
             // 
@@ -166,6 +171,8 @@ namespace WDAC_Wizard
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.createMultiPolicyByDefault_CheckBox);
+            this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.allowTelemetry_CheckBox);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
@@ -186,11 +193,38 @@ namespace WDAC_Wizard
             this.panel1.Size = new System.Drawing.Size(1066, 721);
             this.panel1.TabIndex = 12;
             // 
+            // createMultiPolicyByDefault_CheckBox
+            // 
+            this.createMultiPolicyByDefault_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.createMultiPolicyByDefault_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.createMultiPolicyByDefault_CheckBox.Location = new System.Drawing.Point(47, 115);
+            this.createMultiPolicyByDefault_CheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.createMultiPolicyByDefault_CheckBox.Name = "createMultiPolicyByDefault_CheckBox";
+            this.createMultiPolicyByDefault_CheckBox.Size = new System.Drawing.Size(28, 31);
+            this.createMultiPolicyByDefault_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.createMultiPolicyByDefault_CheckBox.TabIndex = 19;
+            this.createMultiPolicyByDefault_CheckBox.TabStop = false;
+            this.createMultiPolicyByDefault_CheckBox.Tag = "Checked";
+            this.createMultiPolicyByDefault_CheckBox.Click += new System.EventHandler(this.SettingCheckBox_Click);
+            this.createMultiPolicyByDefault_CheckBox.MouseLeave += new System.EventHandler(this.SettingCheckBox_Leave);
+            this.createMultiPolicyByDefault_CheckBox.MouseHover += new System.EventHandler(this.SettingCheckBox_Hover);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(86, 120);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(522, 24);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Create new base policies using the Multiple Policy Format";
+            // 
             // allowTelemetry_CheckBox
             // 
             this.allowTelemetry_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
             this.allowTelemetry_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.allowTelemetry_CheckBox.Location = new System.Drawing.Point(46, 241);
+            this.allowTelemetry_CheckBox.Location = new System.Drawing.Point(46, 284);
             this.allowTelemetry_CheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.allowTelemetry_CheckBox.Name = "allowTelemetry_CheckBox";
             this.allowTelemetry_CheckBox.Size = new System.Drawing.Size(28, 31);
@@ -199,13 +233,15 @@ namespace WDAC_Wizard
             this.allowTelemetry_CheckBox.TabStop = false;
             this.allowTelemetry_CheckBox.Tag = "Checked";
             this.allowTelemetry_CheckBox.Click += new System.EventHandler(this.SettingCheckBox_Click);
+            this.allowTelemetry_CheckBox.MouseLeave += new System.EventHandler(this.SettingCheckBox_Leave);
+            this.allowTelemetry_CheckBox.MouseHover += new System.EventHandler(this.SettingCheckBox_Hover);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(84, 245);
+            this.label10.Location = new System.Drawing.Point(84, 288);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(233, 24);
             this.label10.TabIndex = 16;
@@ -234,6 +270,8 @@ namespace WDAC_Wizard
             this.useEnvVars_CheckBox.TabStop = false;
             this.useEnvVars_CheckBox.Tag = "Checked";
             this.useEnvVars_CheckBox.Click += new System.EventHandler(this.SettingCheckBox_Click);
+            this.useEnvVars_CheckBox.MouseLeave += new System.EventHandler(this.SettingCheckBox_Leave);
+            this.useEnvVars_CheckBox.MouseHover += new System.EventHandler(this.SettingCheckBox_Hover);
             // 
             // label8
             // 
@@ -274,7 +312,7 @@ namespace WDAC_Wizard
             this.Update_Label.AutoSize = true;
             this.Update_Label.Font = new System.Drawing.Font("Tahoma", 10F);
             this.Update_Label.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.Update_Label.Location = new System.Drawing.Point(239, 808);
+            this.Update_Label.Location = new System.Drawing.Point(238, 808);
             this.Update_Label.Name = "Update_Label";
             this.Update_Label.Size = new System.Drawing.Size(183, 24);
             this.Update_Label.TabIndex = 15;
@@ -297,6 +335,7 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.createMultiPolicyByDefault_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).EndInit();
             this.ResumeLayout(false);
@@ -323,5 +362,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Label Update_Label;
+        private System.Windows.Forms.PictureBox createMultiPolicyByDefault_CheckBox;
+        private System.Windows.Forms.Label label7;
     }
 }

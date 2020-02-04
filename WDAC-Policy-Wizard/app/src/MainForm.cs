@@ -15,10 +15,9 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Management.Automation;
-using Microsoft.PowerShell.Commands;
+//using Microsoft.PowerShell.Commands;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
-using Squirrel;
 using System.Diagnostics;
 using WDAC_Wizard.Properties;
 
@@ -51,7 +50,7 @@ namespace WDAC_Wizard
             this.Log = new Logger(this.TempFolderPath); 
             
             InitializeComponent();
-            CheckForUpdates();
+            //CheckForUpdates();
 
             // Init MainWindow params
             this.ConfigInProcess = false;
@@ -73,7 +72,6 @@ namespace WDAC_Wizard
         /// 
         private void button_New_Click(object sender, EventArgs e)
         {
-
             if (!this.ConfigInProcess)
             {
                 this.Log.AddInfoMsg("Workflow -- New Policy Selected");
@@ -784,8 +782,10 @@ namespace WDAC_Wizard
                 // Skip the unsupported rules -- they will throw an error when converting to .bin policy files
                 if (this.Policy.ConfigRules[key]["Supported"] == "False")
                     continue; 
+
                 string ruleVal = this.Policy.ConfigRules[key]["CurrentValue"];
                 string allowedText = this.Policy.ConfigRules[key]["AllowedValue"];
+
                 if (ruleVal == allowedText) //Value == xml allowable output - write
                 {
                     string ruleOptNum = this.Policy.ConfigRules[key]["RuleNumber"];
@@ -793,9 +793,16 @@ namespace WDAC_Wizard
                         this.Policy.TemplatePath, ruleOptNum));
                     this.Log.AddInfoMsg(String.Format("Adding rule-option pair: {0}:{1}", key, ruleVal));
                 }
-
                 //else skip - invalid value eg)  Disable:UMCI  so omitting it from setting accomplishes this
             }
+
+            // If multiple policy format setting is enabled, set the Supplemental (rule #17) option
+            if(Settings.Default.createMultiPolicyByDefault)
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17", this.Policy.TemplatePath));
+
+            // Assert supplemental policies cannot have the Supplemental (rule #17) option
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17 -Delete", this.Policy.TemplatePath));
 
             try
             {
@@ -903,18 +910,18 @@ namespace WDAC_Wizard
                     createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFiles $Files_{0}[{2}] " + 
                         "-Fallback Hash", CustomRule.PSVariable, CustomRule.GetRuleLevel(), CustomRule.RuleIndex);
                 
-                string createPolicyScript = ""; 
+                string createPolicyScript = "";
                 // Create new CI Policy from rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicy
-                if (this.Policy.ConfigRules["Allow Supplemental Policies"]["CurrentValue"] 
-                    == this.Policy.ConfigRules["Allow Supplemental Policies"]["AllowedValue"]) // if base allows supplemental, set "multiplepolicy format" switch
+                // If the supplemental rule was configured OR the multipolicyformat setting is enabled, set "multiplepolicy format" switch
+                if (String.Equals(this.Policy.ConfigRules["Allow Supplemental Policies"]["CurrentValue"], this.Policy.ConfigRules["Allow Supplemental Policies"]["AllowedValue"]) ||
+                    Settings.Default.createMultiPolicyByDefault) 
                     createPolicyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath {0} -Rules $Rule_{1}", 
                         tempPolicyPath, CustomRule.PSVariable);
-                
-                else
+                 else
                     createPolicyScript = String.Format("New-CIPolicy -FilePath {0} -Rules $Rule_{1}", tempPolicyPath, CustomRule.PSVariable);
 
-
-                if (CustomRule.GetRuleType() == PolicyCustomRules.RuleType.Deny)  // Deny type rule
+                // Deny type rule
+                if (CustomRule.GetRuleType() == PolicyCustomRules.RuleType.Deny)  
                     createPolicyScript += " -Deny";
 
                 Pipeline pipeline = this.runspace.CreatePipeline();
@@ -978,7 +985,7 @@ namespace WDAC_Wizard
         /// </summary>
         public void MergeTemplatesPolicy(string customRulesMergePath, BackgroundWorker worker)
         {
-            // Template policy @ this.TemplatePath, Supplemental policy @ this.SupplementalPath
+            // Template policy @ this.TemplatePath, Supplemental policy @ this.BaseToSupplementPath
             // Operations: Merge template (always applicable) with suppleme (if applicable) with 
             //             merge results from MergeCustomRulesPolicy (if applicable) into policy 
             //             defined by user: Path: this.SchemaPath
@@ -999,8 +1006,8 @@ namespace WDAC_Wizard
             if (this.Policy.TemplatePath != null)
                 policyPaths.Add(this.Policy.TemplatePath);
 
-            if (this.Policy.SupplementalPath != null)
-                policyPaths.Add(this.Policy.SupplementalPath);
+            if (this.Policy.BaseToSupplementPath != null)
+                policyPaths.Add(this.Policy.BaseToSupplementPath);
 
             if (this.Policy.CustomRules.Count > 0)
                 policyPaths.Add(customRulesMergePath);
@@ -1068,6 +1075,13 @@ namespace WDAC_Wizard
             string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -ResetPolicyID", this.Policy.SchemaPath);
             pipeline.Commands.AddScript(resetGuidsCmd);
 
+            // If supplemental policy, set the Base policy guid
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -BasePolicyToSupplementPath {1}", 
+                    this.Policy.SchemaPath, this.Policy.BaseToSupplementPath);
+                pipeline.Commands.AddScript(setBaseGuidCmd);
+            }
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
             string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath {0} -Version {1}", this.Policy.SchemaPath, this.Policy.VersionNumber);
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
@@ -1234,8 +1248,7 @@ namespace WDAC_Wizard
         public static string RemoveWhitespace(string input)
         {
             return new string(input.ToCharArray()
-                .Where(c => !Char.IsWhiteSpace(c))
-                .ToArray());
+                .Where(c => !Char.IsWhiteSpace(c)).ToArray());
         }
 
         public string GetListSubFolders(string folderPath)
@@ -1531,7 +1544,7 @@ namespace WDAC_Wizard
         //      
         // Returns:
         //     None.
-        private async Task CheckForUpdates()
+        /*private async Task CheckForUpdates()
         {
             this.Log.AddInfoMsg("Checking for Updates -- STARTED"); 
             // TODO: point the update manager to github
@@ -1541,7 +1554,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Checking for Updates -- UPDATING APP");
             }
             this.Log.AddInfoMsg("Checking for Updates -- FINISHED");
-        }
+        }*/
 
 
         //

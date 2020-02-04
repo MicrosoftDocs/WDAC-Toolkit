@@ -18,7 +18,6 @@ using System.Management.Automation;
 using Microsoft.PowerShell.Commands;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
-using Squirrel;
 using System.Diagnostics;
 using System.Resources;
 using System.Reflection;
@@ -26,7 +25,6 @@ using WDAC_Wizard.Properties;
 
 namespace WDAC_Wizard
 {
-
     // Class for Policy xml Settings
     public class PolicySettings
     {

@@ -58,5 +58,17 @@ namespace WDAC_Wizard.Properties {
                 this["allowTelemetry"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool createMultiPolicyByDefault {
+            get {
+                return ((bool)(this["createMultiPolicyByDefault"]));
+            }
+            set {
+                this["createMultiPolicyByDefault"] = value;
+            }
+        }
     }
 }

@@ -52,17 +52,21 @@ namespace WDAC_Wizard
         /// </summary>
         public void ShowFinishMsg(string policyFilePath)
         {
-            finishPanel.Visible = true;
+            this.finishPanel.Visible = true;
             this.FilePath = policyFilePath;
-            hyperlinkLabel.Text = policyFilePath; 
+            this.hyperlinkLabel.Text = policyFilePath;
+            this.hyperlinkLabel.Enabled = true; 
         }
 
+        /// <summary>
+        /// Shows an error message if the CI policy build process throws an error 
+        /// </summary>
         public void ShowError()
         {
             finishPanel.Visible = true;
             this.finishLabel.Text = "Error during build"; 
             //this.FilePath = policyFilePath;
-            //hyperlinkLabel.Text = policyFilePath;
+            this.hyperlinkLabel.Enabled = false;
         }
 
         /// <summary>
@@ -72,7 +76,6 @@ namespace WDAC_Wizard
         {
             
             // open text file in notepad (or another default text editor)
-            
             if (File.Exists(this.FilePath))
             {
                 try
@@ -84,7 +87,6 @@ namespace WDAC_Wizard
                     Console.WriteLine(String.Format("{0} exception caught", excpt));
                 }
             }
-
             else
                 Console.WriteLine(String.Format("Unable to open {0}", this.FilePath));
         }

@@ -151,6 +151,7 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default["useEnvVars"]);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default["useDefaultStrings"]);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default["allowTelemetry"]);
+            this.SettingsDict.Add("createMultiPolicyByDefault", (bool)Properties.Settings.Default["createMultiPolicyByDefault"]); 
 
             this._Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
@@ -186,6 +187,24 @@ namespace WDAC_Wizard
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.Update_Label.Visible = false; 
+        }
+
+        private void SettingCheckBox_Hover(object sender, EventArgs e)
+        {
+            // Change the background color when mouse is hovering above checkbox
+            PictureBox checkBox = ((PictureBox)sender);
+            checkBox.BackColor = Color.FromArgb(190, 230, 253);
+        }
+
+
+        /// <summary>
+        /// Sets the back color to white for the checkbox picturebox when the user is no longer hovering the mouse over a checkbox.  
+        /// </summary>
+        /// <param name="sender">Sender is the picturebox control </param>
+        private void SettingCheckBox_Leave(object sender, EventArgs e)
+        {
+            PictureBox checkBox = ((PictureBox)sender);
+            checkBox.BackColor = Color.White;
         }
     }
 }

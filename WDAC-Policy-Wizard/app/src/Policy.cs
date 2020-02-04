@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
+
 
 namespace WDAC_Wizard
 {
@@ -41,7 +43,7 @@ namespace WDAC_Wizard
         // Paths:
         public string SchemaPath { get; set; }          // Path to final xml file on disk
         public string TemplatePath { get; set; }        // ReadOnly Path to template policy - TODO: make const
-        public string SupplementalPath { get; set; }    // Path to supplemental policy, if applicable
+        public string BaseToSupplementPath { get; set; } // Path to base policy to supplement, if applicable
         public string EditPolicyPath { get; set; }      // Path to the policy we are editing. Used for parsing.
 
 
@@ -102,6 +104,19 @@ namespace WDAC_Wizard
             this.VersionNumber = this.VersionNumber.Substring(0, this.VersionNumber.Length - 1); //remove trailing period
 
             return this.VersionNumber; 
+        }
+
+        public int GetWinVersion()
+        {
+            try
+            {
+                return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
+            } 
+            catch(Exception e)
+            {
+
+            }
+            return -1;  
         }
 
     }

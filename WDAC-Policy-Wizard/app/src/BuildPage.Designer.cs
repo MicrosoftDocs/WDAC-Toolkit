@@ -112,9 +112,9 @@ namespace WDAC_Wizard
             this.hyperlinkLabel.Location = new System.Drawing.Point(261, 58);
             this.hyperlinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.hyperlinkLabel.Name = "hyperlinkLabel";
-            this.hyperlinkLabel.Size = new System.Drawing.Size(361, 23);
+            this.hyperlinkLabel.Size = new System.Drawing.Size(145, 23);
             this.hyperlinkLabel.TabIndex = 85;
-            this.hyperlinkLabel.Text = "C:\\Users\\userName\\Documents\\Policy.xml";
+            this.hyperlinkLabel.Text = "Unable to locate";
             this.hyperlinkLabel.Click += new System.EventHandler(this.hyperlinkLabel_Click);
             // 
             // label2

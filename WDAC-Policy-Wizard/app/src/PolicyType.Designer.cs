@@ -119,9 +119,9 @@ namespace WDAC_Wizard
             // Verified_PictureBox
             // 
             this.Verified_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.verified;
-            this.Verified_PictureBox.Location = new System.Drawing.Point(12, 116);
+            this.Verified_PictureBox.Location = new System.Drawing.Point(17, 120);
             this.Verified_PictureBox.Name = "Verified_PictureBox";
-            this.Verified_PictureBox.Size = new System.Drawing.Size(30, 30);
+            this.Verified_PictureBox.Size = new System.Drawing.Size(25, 25);
             this.Verified_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Verified_PictureBox.TabIndex = 94;
             this.Verified_PictureBox.TabStop = false;
@@ -179,10 +179,10 @@ namespace WDAC_Wizard
             // basePolicy_PictureBox
             // 
             this.basePolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_on_button;
-            this.basePolicy_PictureBox.Location = new System.Drawing.Point(181, 101);
+            this.basePolicy_PictureBox.Location = new System.Drawing.Point(194, 106);
             this.basePolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.basePolicy_PictureBox.Name = "basePolicy_PictureBox";
-            this.basePolicy_PictureBox.Size = new System.Drawing.Size(40, 37);
+            this.basePolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
             this.basePolicy_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.basePolicy_PictureBox.TabIndex = 12;
             this.basePolicy_PictureBox.TabStop = false;
@@ -191,10 +191,10 @@ namespace WDAC_Wizard
             // suppPolicy_PictureBox
             // 
             this.suppPolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_off_button;
-            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(181, 185);
+            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(194, 191);
             this.suppPolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.suppPolicy_PictureBox.Name = "suppPolicy_PictureBox";
-            this.suppPolicy_PictureBox.Size = new System.Drawing.Size(40, 37);
+            this.suppPolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
             this.suppPolicy_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.suppPolicy_PictureBox.TabIndex = 13;
             this.suppPolicy_PictureBox.TabStop = false;
