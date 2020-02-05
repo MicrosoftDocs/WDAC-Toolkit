@@ -34,7 +34,7 @@ namespace WDAC_Wizard
         public bool RedoFlowRequired { get; set; }       // Flag which prohibts user from making changes on page 1 then skipping back to page 4, for instance
 
         public Logger Log { get; set; }
-        private List<string> PageList;
+        public List<string> PageList;
         public WDAC_Policy Policy { get; set; }
         // Runspace param to access all PS Variables and eliminate overhead opening each time
         private Runspace runspace;

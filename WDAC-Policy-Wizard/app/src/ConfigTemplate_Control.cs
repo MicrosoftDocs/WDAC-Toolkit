@@ -32,7 +32,7 @@ namespace WDAC_Wizard
             this.Log = this._MainWindow.Log;
 
             this._MainWindow.ErrorOnPage = false;
-            //this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
+            this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
         }
 
         /// <summary>

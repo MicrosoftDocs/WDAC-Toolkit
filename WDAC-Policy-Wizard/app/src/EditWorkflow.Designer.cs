@@ -101,7 +101,7 @@ namespace WDAC_Wizard
             this.policyInfoPanel.Controls.Add(this.label_policyName);
             this.policyInfoPanel.Controls.Add(this.textBox_PolicyID);
             this.policyInfoPanel.Controls.Add(this.label_fileLocation);
-            this.policyInfoPanel.Location = new System.Drawing.Point(201, 246);
+            this.policyInfoPanel.Location = new System.Drawing.Point(201, 220);
             this.policyInfoPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.policyInfoPanel.Name = "policyInfoPanel";
             this.policyInfoPanel.Size = new System.Drawing.Size(759, 181);
@@ -113,7 +113,7 @@ namespace WDAC_Wizard
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(33, 9);
+            this.label5.Location = new System.Drawing.Point(16, 9);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(447, 25);
@@ -123,7 +123,7 @@ namespace WDAC_Wizard
             // textBox_PolicyName
             // 
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_PolicyName.Location = new System.Drawing.Point(204, 65);
+            this.textBox_PolicyName.Location = new System.Drawing.Point(187, 65);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
             this.textBox_PolicyName.Size = new System.Drawing.Size(522, 29);
@@ -135,7 +135,7 @@ namespace WDAC_Wizard
             this.label_policyName.AutoSize = true;
             this.label_policyName.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_policyName.ForeColor = System.Drawing.Color.Black;
-            this.label_policyName.Location = new System.Drawing.Point(33, 65);
+            this.label_policyName.Location = new System.Drawing.Point(16, 65);
             this.label_policyName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_policyName.Name = "label_policyName";
             this.label_policyName.Size = new System.Drawing.Size(139, 27);
@@ -145,7 +145,7 @@ namespace WDAC_Wizard
             // textBox_PolicyID
             // 
             this.textBox_PolicyID.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_PolicyID.Location = new System.Drawing.Point(204, 119);
+            this.textBox_PolicyID.Location = new System.Drawing.Point(187, 119);
             this.textBox_PolicyID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_PolicyID.Name = "textBox_PolicyID";
             this.textBox_PolicyID.Size = new System.Drawing.Size(522, 29);
@@ -157,7 +157,7 @@ namespace WDAC_Wizard
             this.label_fileLocation.AutoSize = true;
             this.label_fileLocation.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_fileLocation.ForeColor = System.Drawing.Color.Black;
-            this.label_fileLocation.Location = new System.Drawing.Point(33, 120);
+            this.label_fileLocation.Location = new System.Drawing.Point(16, 120);
             this.label_fileLocation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_fileLocation.Name = "label_fileLocation";
             this.label_fileLocation.Size = new System.Drawing.Size(105, 27);
@@ -176,7 +176,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "EditWorkflow";
-            this.Size = new System.Drawing.Size(1346, 750);
+            this.Size = new System.Drawing.Size(1450, 850);
             this.policyInfoPanel.ResumeLayout(false);
             this.policyInfoPanel.PerformLayout();
             this.ResumeLayout(false);

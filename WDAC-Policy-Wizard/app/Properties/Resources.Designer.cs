@@ -715,15 +715,5 @@ namespace WDAC_Wizard.Properties {
                 return ResourceManager.GetString("WinSiPolicy", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap wizard_ico {
-            get {
-                object obj = ResourceManager.GetObject("wizard-ico", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

@@ -70,5 +70,17 @@ namespace WDAC_Wizard.Properties {
                 this["createMultiPolicyByDefault"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string jn {
+            get {
+                return ((string)(this["jn"]));
+            }
+            set {
+                this["jn"] = value;
+            }
+        }
     }
 }

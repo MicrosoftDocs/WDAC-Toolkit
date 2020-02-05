@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wizard-ico.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\imgs\wizard-ico.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DeltaCompressionDotNet, Version=1.1.0.0, Culture=neutral, PublicKeyToken=1d14d6e5194e7f4a, processorArchitecture=MSIL">
@@ -234,7 +234,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="%24this.Icon.ico" />
     <Content Include="bin\Debug\policies\DefaultWindows_Enforced.xml" />
     <Content Include="bin\Debug\policies\WinSiPolicy.xml" />
     <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.dll" />
@@ -250,7 +249,7 @@
     <None Include="Resources\imgs\external-link-symbol.png" />
     <None Include="Resources\imgs\external-link-symbol-highlight.png" />
     <Content Include="Resources\RulesDict.xml" />
-    <Content Include="wizard-ico.ico" />
+    <Content Include="Resources\imgs\wizard-ico.ico" />
     <None Include="Resources\imgs\blank-check-box_32.png" />
     <Content Include="Resources\imgs\cancel.png" />
     <Content Include="Resources\imgs\cctv.png" />
@@ -295,28 +294,6 @@
     <None Include="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="imgs\back.png" />
-    <None Include="imgs\blank-check-box.png" />
-    <None Include="imgs\cancel.png" />
-    <None Include="imgs\cctv.png" />
-    <None Include="imgs\circular-shape-silhouette.png" />
-    <None Include="imgs\gear.png" />
-    <None Include="imgs\locked-padlock.png" />
-    <None Include="imgs\question-sign.png" />
-    <None Include="imgs\shield.png" />
-    <None Include="imgs\toggle.png" />
-    <None Include="imgs\toggle_lg.png" />
-    <None Include="imgs\untoggle.png" />
-    <None Include="imgs\untoggle_lg.png" />
-    <None Include="imgs\white_view.png" />
-    <None Include="imgs\white-close.png" />
-    <None Include="imgs\white-draft.png" />
-    <None Include="imgs\white-expand.png" />
-    <None Include="imgs\white-merge.png" />
-    <None Include="imgs\white-minimize.png" />
-    <None Include="imgs\white-right-arrow.png" />
-    <None Include="imgs\windows-10s-logo.png" />
-    <None Include="imgs\windows-logo.png" />
     <Content Include="obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
     <Content Include="obj\Debug\WDAC Wizard.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\WDAC Wizard.exe" />

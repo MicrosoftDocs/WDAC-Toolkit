@@ -195,7 +195,7 @@ namespace WDAC_Wizard
             // 
             // createMultiPolicyByDefault_CheckBox
             // 
-            this.createMultiPolicyByDefault_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.createMultiPolicyByDefault_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
             this.createMultiPolicyByDefault_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.createMultiPolicyByDefault_CheckBox.Location = new System.Drawing.Point(47, 115);
             this.createMultiPolicyByDefault_CheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
