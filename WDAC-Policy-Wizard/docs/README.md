@@ -13,7 +13,7 @@ feature team to enable IT professionals in creating powerful WDAC policies for d
 
 **Installing** - documentation related to the initial installation of the application. 
 
-* [Install Process](getting-started/install-process.md) - overview of the steps required for the initial process. 
+* [Install Process](getting-started/install-process.md) - overview of the install process. 
 * [Updating the App](getting-started/update-process.md) - overview of the steps required to update the application.
 
 **Usage Guide** - documentation related to the authoring, editing and publishing process for WDAC 
