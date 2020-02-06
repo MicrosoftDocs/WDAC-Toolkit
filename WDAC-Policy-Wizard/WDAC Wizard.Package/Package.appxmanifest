@@ -9,7 +9,7 @@
   <Identity
     Name="2e3fe9bb-e0cd-4ddb-ac71-d5b98c61e021"
     Publisher="CN=jogeurte"
-    Version="1.4.1.0" />
+    Version="1.4.8.0" />
 
   <Properties>
     <DisplayName>WDAC Wizard</DisplayName>

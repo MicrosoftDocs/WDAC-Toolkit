@@ -12,10 +12,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="createMultiPolicyByDefault" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="jn" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
