@@ -27,7 +27,7 @@ to a majority of users.
 We recommend leaving the **Audit Mode** policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their scenario. 
 Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 
-## 4. Creating policy signing rules ## 
+## 3. Creating policy signing rules ## 
 
 The Signing Rules List on the left-hand side of the page show the pre-exisiting signing rules of the existing policy,as well as any associated files and exceptions. At this point, 
 you may choose to add custom rules to the policy and delete select rules. 
@@ -68,7 +68,7 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
 Template signing rules and custom rules can be deleted from the policy by selecting the rule from the rules list dataviewer. Once the rule is highlighted, selecting the delete button underneath the table will prompt for additional confirmation. Select `Yes` to remove the rule from the policy and the rules table. 
 
 
-## 5. Building the policy ##
+## 4. Building the policy ##
 
 The policy build page will monitor the progress of the WDAC policy creation process. Depending on the number and complexity of the custom signing rules, the build process
 could take several minutes. 
