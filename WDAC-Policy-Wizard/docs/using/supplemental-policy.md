@@ -13,10 +13,6 @@ base policy does not, use the [Policy Editor](edit-policy.md) to edit the base p
 [here](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#how-do-base-and-supplemental-policies-interact). 
 
 
-
-![](../imgs/new-hover.png)
-![](imgs/new-base.png)
-
 ## 2. Select from one of the default template policies ##
 
 Select from one of the default policies to use as a template for your new supplemental policy. Each one of the template policies has a unique set of policy
@@ -31,9 +27,7 @@ rules and a varying level of security. More information on each of the template 
 The policy name and file location will default based on the template policy selected. The policy name and file location can be set be selecting the textbox and typing the desired string. 
 At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. 
 
-[!NOTE] Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
-
-![](imgs/new-base-template.png)
+**NOTE:** Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
 
 
 ## 3. Configure the policy rule options ##
@@ -50,6 +44,7 @@ to a majority of users.
 
 Lastly, **Audit Mode** is enabled by default for all of the templates. We recommend leaving the Audit Mode policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their scenario. 
 Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
+
 
 ## 4. Creating policy signing rules ## 
 
@@ -74,12 +69,10 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
   
   | Rule Condition | WDAC Rule Level | Description |
   | - | - | - |
-  | **Publisher** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | **Product name** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | **File name** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  | **Version** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
-  
-  _this section needs to be revised_
+  | **Publisher** | PCACertificate | Highest available certificate is added to the signers. This is typically the PCA certificate, one level below the root certificate. Any file signed by this certificate will be affected. |
+  | **Product name** | Publisher | This rule is a combination of the PCACertificate rule and the common name (CN) of the leaf certificate. Any file signed by a major CA but with a leaf from a specific company, for example a device driver corp, is affected. |
+  | **File name** | SignedVersion | This rule is a combination of PCACertificate, Publisher and a version number. Anything from the specified publisher with a version at or above the one specified is affected. |
+  | **Version** | FilePublisher | Most specific. Combination of the file name, publisher and PCA certificate as well as a minimum version number. Files from the publisher with the specified name and greater or equal to the specified version are affected. |
   
   2. **Path Rules** - select the Path option from the Rule Type combobox. Next choose to Allow or Deny the path, and select either a File or Folder rule using the radiobutton below the Browse button. Lastly, select the reference file
   or folder off which to base the rule. 
