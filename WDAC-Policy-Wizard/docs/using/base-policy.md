@@ -10,8 +10,7 @@ as a starting point. The tool enables users to configure the policy rules, its s
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, the base policy option will be pre-selected. Otherwise, select the base policy option. 
 
-![](../imgs/new-hover.png)
-![](imgs/new-base.png)
+[![Little red ridning hood](../imgs/new-hover.png)](../imgs/wdac-new.mp4)
 
 ## 2. Select from one of the default template policies ##
 
