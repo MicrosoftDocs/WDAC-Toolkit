@@ -8,12 +8,12 @@
 
   <Identity
     Name="2e3fe9bb-e0cd-4ddb-ac71-d5b98c61e021"
-    Publisher="CN=jogeurte"
+    Publisher="CN=Microsoft Corporation"
     Version="1.4.8.0" />
 
   <Properties>
     <DisplayName>WDAC Wizard</DisplayName>
-    <PublisherDisplayName>jogeurte</PublisherDisplayName>
+    <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 

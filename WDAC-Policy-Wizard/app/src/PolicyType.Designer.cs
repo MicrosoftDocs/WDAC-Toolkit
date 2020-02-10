@@ -47,6 +47,7 @@ namespace WDAC_Wizard
             this.suppPolicy_PictureBox = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.SupplementalInfoLabel = new System.Windows.Forms.Label();
             this.panelSupplementalPolicy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Verified_PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.basePolicy_PictureBox)).BeginInit();
@@ -69,7 +70,7 @@ namespace WDAC_Wizard
             this.labelBase.AutoSize = true;
             this.labelBase.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelBase.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.labelBase.Location = new System.Drawing.Point(231, 106);
+            this.labelBase.Location = new System.Drawing.Point(220, 69);
             this.labelBase.Name = "labelBase";
             this.labelBase.Size = new System.Drawing.Size(110, 24);
             this.labelBase.TabIndex = 4;
@@ -81,7 +82,7 @@ namespace WDAC_Wizard
             this.labelSupp.AutoSize = true;
             this.labelSupp.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSupp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.labelSupp.Location = new System.Drawing.Point(231, 191);
+            this.labelSupp.Location = new System.Drawing.Point(220, 154);
             this.labelSupp.Name = "labelSupp";
             this.labelSupp.Size = new System.Drawing.Size(189, 24);
             this.labelSupp.TabIndex = 5;
@@ -97,7 +98,7 @@ namespace WDAC_Wizard
             this.panelSupplementalPolicy.Controls.Add(this.button_Browse);
             this.panelSupplementalPolicy.Controls.Add(this.textBoxPolicyPath);
             this.panelSupplementalPolicy.Controls.Add(this.label_policyName);
-            this.panelSupplementalPolicy.Location = new System.Drawing.Point(225, 279);
+            this.panelSupplementalPolicy.Location = new System.Drawing.Point(214, 255);
             this.panelSupplementalPolicy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelSupplementalPolicy.Name = "panelSupplementalPolicy";
             this.panelSupplementalPolicy.Size = new System.Drawing.Size(865, 206);
@@ -179,7 +180,7 @@ namespace WDAC_Wizard
             // basePolicy_PictureBox
             // 
             this.basePolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_on_button;
-            this.basePolicy_PictureBox.Location = new System.Drawing.Point(194, 106);
+            this.basePolicy_PictureBox.Location = new System.Drawing.Point(183, 69);
             this.basePolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.basePolicy_PictureBox.Name = "basePolicy_PictureBox";
             this.basePolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
@@ -191,7 +192,7 @@ namespace WDAC_Wizard
             // suppPolicy_PictureBox
             // 
             this.suppPolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_off_button;
-            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(194, 191);
+            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(183, 154);
             this.suppPolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.suppPolicy_PictureBox.Name = "suppPolicy_PictureBox";
             this.suppPolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
@@ -205,7 +206,7 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(231, 143);
+            this.label3.Location = new System.Drawing.Point(220, 106);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(757, 19);
             this.label3.TabIndex = 14;
@@ -217,11 +218,25 @@ namespace WDAC_Wizard
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(231, 226);
+            this.label4.Location = new System.Drawing.Point(220, 189);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(490, 19);
             this.label4.TabIndex = 15;
             this.label4.Text = "Creates a code integrity policy to expand a pre-existing base policy. ";
+            // 
+            // SupplementalInfoLabel
+            // 
+            this.SupplementalInfoLabel.AutoSize = true;
+            this.SupplementalInfoLabel.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.SupplementalInfoLabel.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.SupplementalInfoLabel.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.SupplementalInfoLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SupplementalInfoLabel.Location = new System.Drawing.Point(220, 213);
+            this.SupplementalInfoLabel.Name = "SupplementalInfoLabel";
+            this.SupplementalInfoLabel.Size = new System.Drawing.Size(264, 21);
+            this.SupplementalInfoLabel.TabIndex = 98;
+            this.SupplementalInfoLabel.Text = "What is a supplemental policy?     \r\n";
+            this.SupplementalInfoLabel.Click += new System.EventHandler(this.SupplementalInfoLabel_Click);
             // 
             // PolicyType
             // 
@@ -229,6 +244,7 @@ namespace WDAC_Wizard
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.SupplementalInfoLabel);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.suppPolicy_PictureBox);
@@ -268,5 +284,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox Verified_PictureBox;
         private System.Windows.Forms.Label Verified_Label;
+        private System.Windows.Forms.Label SupplementalInfoLabel;
     }
 }

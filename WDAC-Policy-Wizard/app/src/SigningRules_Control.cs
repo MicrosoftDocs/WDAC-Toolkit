@@ -338,7 +338,7 @@ namespace WDAC_Wizard
             {
                 // Version + filename + Prodname + publisher -- FileName
                 trackBar_Conditions.Value = 0;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileName);
+                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
                 textBox_pub_versionNum.Text = this.PolicyCustomRule.FileInfo[3];
                 publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name, \r\n" +
                     "file name with a version at or above the specified version number.";
@@ -348,7 +348,7 @@ namespace WDAC_Wizard
             {
                 // Filename + Prodname + publisher -- FilePublisher
                 trackBar_Conditions.Value = 4;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
+                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
                 textBox_pub_filename.Text = this.PolicyCustomRule.FileInfo[2];
                 textBox_pub_versionNum.Text = "*";
                 publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name \r\n" +

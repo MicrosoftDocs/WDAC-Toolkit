@@ -224,5 +224,23 @@ namespace WDAC_Wizard
             this.Verified_Label.Visible = false;
             this.Verified_PictureBox.Visible = false;
         }
+
+        /// <summary>
+        /// Launches the multi-policy info webpage when the info label is clicked.  
+        /// </summary>
+        private void SupplementalInfoLabel_Click(object sender, EventArgs e)
+        {
+            // multi-policy info label clicked. Launch multi-policy info webpage
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/" +
+                    "deploy-multiple-windows-defender-application-control-policies";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+            }
+        }
     }
 }

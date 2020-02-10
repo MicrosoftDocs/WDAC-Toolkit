@@ -62,7 +62,7 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>E5813742260419E7B12D41A056B6F7F2BF855824</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>B1C53765627A366389D21AFD40339484566C2BE9</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <AppxBundle>Always</AppxBundle>

@@ -804,6 +804,9 @@ namespace WDAC_Wizard
             if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17 -Delete", this.Policy.TemplatePath));
 
+            // Assert unsigned CI policy (rule #6) - fixes issues with converting to binary where the policy is unsigned
+            pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 6", this.Policy.TemplatePath));
+
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
