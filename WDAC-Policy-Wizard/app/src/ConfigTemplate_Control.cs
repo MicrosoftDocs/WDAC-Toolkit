@@ -50,6 +50,9 @@ namespace WDAC_Wizard
             this._Policy.ConfigRules = initRulesDict();
             readSetRules();
 
+            // Enable audit mode by default
+            this._Policy.ConfigRules["Audit Mode"]["CurrentValue"] = "Enabled";
+
             Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this._Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
