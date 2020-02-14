@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
+  <VersionEx>10.0.1.0</VersionEx>
+  <PolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyID>
+  <BasePolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</BasePolicyID>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Inherit Default Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Update Policy No Reboot</Option>
+    </Rule>
+  </Rules>
+  
+  <!--EKUS-->
+  <EKUs>
+    <EKU ID="ID_EKU_STORE" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1 Windows Store" Value="010a2b0601040182374c0301" />
+  </EKUs>
+  
+  <!--Signers-->
+  <Signers>
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_1997" Name="MincryptKnownRootMicrosoftProductRoot1997">
+      <CertRoot Type="Wellknown" Value="04" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_2001" Name="MincryptKnownRootMicrosoftProductRoot2001">
+      <CertRoot Type="Wellknown" Value="05" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_2010" Name="MincryptKnownRootMicrosoftProductRoot2010">
+      <CertRoot Type="Wellknown" Value="06" />
+    </Signer>
+    
+    <Signer ID="ID_SIGNER_MICROSOFT_STANDARD_2011" Name="MincryptKnownRootMicrosoftStandardRoot2011">
+      <CertRoot Type="Wellknown" Value="07" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006" Name="MincryptKnownRootMicrosoftCodeVerificationRoot2006">
+      <CertRoot Type="Wellknown" Value="08" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_TEST2010" Name="MincryptKnownRootMicrosoftTestRoot2010">
+      <CertRoot Type="Wellknown" Value="0A" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_DRM" Name="MincryptKnownRootMicrosoftDMDRoot2005">
+      <CertRoot Type="Wellknown" Value="0C" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_FLIGHT_2014" Name="MincryptKnownRootMicrosoftFlightRoot2014">
+      <CertRoot Type="Wellknown" Value="0E" />
+    </Signer>
+    
+    <!--UMCI Signers-->
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_1997_UMCI" Name="MincryptKnownRootMicrosoftProductRoot1997">
+      <CertRoot Type="Wellknown" Value="04" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_2001_UMCI" Name="MincryptKnownRootMicrosoftProductRoot2001">
+      <CertRoot Type="Wellknown" Value="05" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_2010_UMCI" Name="MincryptKnownRootMicrosoftProductRoot2010">
+      <CertRoot Type="Wellknown" Value="06" />
+    </Signer>
+    
+    <Signer ID="ID_SIGNER_MICROSOFT_STANDARD_2011_UMCI" Name="MincryptKnownRootMicrosoftStandardRoot2011">
+      <CertRoot Type="Wellknown" Value="07" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006_UMCI" Name="MincryptKnownRootMicrosoftCodeVerificationRoot2006">
+      <CertRoot Type="Wellknown" Value="08" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_TEST2010_UMCI" Name="MincryptKnownRootMicrosoftTestRoot2010">
+      <CertRoot Type="Wellknown" Value="0A" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_DRM_UMCI" Name="MincryptKnownRootMicrosoftDMDRoot2005">
+      <CertRoot Type="Wellknown" Value="0C" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_MICROSOFT_FLIGHT_2014_UMCI" Name="MincryptKnownRootMicrosoftFlightRoot2014">
+      <CertRoot Type="Wellknown" Value="0E" />
+    </Signer>
+
+    <Signer ID="ID_SIGNER_STORE" Name="Microsoft MarketPlace PCA 2011">
+      <CertRoot Type="TBS" Value="FC9EDE3DCCA09186B2D3BF9B738A2050CB1A554DA2DCADB55F3F72EE17721378" />
+      <CertEKU ID="ID_EKU_STORE" />
+    </Signer>
+  </Signers>
+  
+  <SigningScenarios>
+    <!--Kernel Mode Signing Scenario-->
+    <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_KMCI" FriendlyName="Kernel Mode Signing Scenario">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_1997" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_2001" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_2010" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_STANDARD_2011" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006" />
+          <AllowedSigner SignerId="ID_SIGNER_DRM" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_FLIGHT_2014" />
+          <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
+          <AllowedSigner SignerId="ID_SIGNER_TEST2010" />
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+    
+    <!--User Mode Signing Scenario-->
+    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_UMCI" FriendlyName="User Mode Signing Scenario">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_1997_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_2001_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_PRODUCT_2010_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_STANDARD_2011_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_DRM_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_FLIGHT_2014_UMCI" />
+          <AllowedSigner SignerId="ID_SIGNER_STORE" />
+          <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
+          <AllowedSigner SignerId="ID_SIGNER_TEST2010_UMCI" />
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners>
+  </UpdatePolicySigners>
+  <!-- 
+
+    CiSigners are signers that ConfigCI asks CI to trust for all builds, include 
+    retail builds.
+    
+    Normally CiSigners is empty or only includes production signers. For enterprise
+    ConfigCI policy, you may need to include enterprise signers. Just make sure it
+    is understood that CiSigners will be trusted by CI for all builds.
+
+-->
+  <CiSigners>
+    <!--
+      Currently Centennial Apps are launched as Win32 Apps and signed by store certificate.
+      We need to allow enterprise signing scenario to trust store certificate.
+    -->
+    <CiSigner SignerId="ID_SIGNER_STORE" />
+  </CiSigners>
+
+  <HvciOptions>0</HvciOptions>
+  <Settings>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
+      <Value>
+        <String>DefaultMicrosoftEnforced</String>
+      </Value>
+    </Setting>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
+      <Value>
+        <String>041317</String>
+      </Value>
+    </Setting>
+  </Settings>
+</SiPolicy>
