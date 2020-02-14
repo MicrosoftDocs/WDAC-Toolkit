@@ -187,11 +187,11 @@ namespace WDAC_Wizard
             string proposedPath;
 
             if(nAttempts ==0)
-                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    + String.Format(@"\{0}{1}.xml", policyTemplate, dateString));
+                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    String.Format("{0}{1}.xml", policyTemplate, dateString));
             else
-                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    + String.Format(@"\{0}{1}_{2}.xml", policyTemplate, dateString, nAttempts));
+                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    String.Format("{0}{1}_{2}.xml", policyTemplate, dateString, nAttempts));
 
             if (File.Exists(proposedPath))
                 return GetDefaultPath(policyTemplate, ++nAttempts);

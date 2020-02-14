@@ -40,6 +40,7 @@ namespace WDAC_Wizard
         private Runspace runspace;
         private int RulesNumber;
         public string TempFolderPath { get; set; }
+        public string ExeFolderPath { get; set; }
 
         // Edit Workflow datastructs
         private BuildPage _BuildPage;
@@ -58,7 +59,8 @@ namespace WDAC_Wizard
             this.RulesNumber = 0;
 
             this.Policy = new WDAC_Policy();
-            this.PageList = new List<string>(); 
+            this.PageList = new List<string>();
+            this.ExeFolderPath = GetExecutablePath(false); 
         }
 
         // ###############
@@ -674,7 +676,7 @@ namespace WDAC_Wizard
         {
             //TODO: change this to program files - temp
             BackgroundWorker worker = sender as BackgroundWorker;
-            string MERGEPATH = this.TempFolderPath + @"\FinalPolicy.xml";
+            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
             // Handle Policy Rule-Options
             CreatePolicyRuleOptions(worker);
 
@@ -1001,7 +1003,7 @@ namespace WDAC_Wizard
                     0,this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
 
             this.Log.AddInfoMsg("--- Merge Templates Policy ---");
-            string DEST_PATH = this.TempFolderPath + @"\OutputSchema.xml";
+            string DEST_PATH = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml"); //this.TempFolderPath + @"\OutputSchema.xml";
 
             List<string> policyPaths = new List<string>();
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
@@ -1295,9 +1297,9 @@ namespace WDAC_Wizard
             }
 
             if (NewestID < 0)
-                newUniquePath = folderPth + "/policy_0.xml"; //first temp policy being created
+                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
             else
-                newUniquePath = folderPth + String.Format("/policy_{0}.xml", NewestID + 1);
+                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("/policy_{0}.xml", NewestID + 1));
 
             this.Log.AddInfoMsg(String.Format("Unique Policy Path returned: {0}", newUniquePath));
             return newUniquePath;
@@ -1587,6 +1589,16 @@ namespace WDAC_Wizard
         {
             this.Log.CloseLogger();// does this belong here? 
             // TODO: add Telemetry
+        }
+
+        private string GetExecutablePath(bool exePath)
+        {
+            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string folderPath = System.IO.Path.GetDirectoryName(executablePath);
+            if (exePath)
+                return executablePath;
+            else
+                return folderPath; 
         }
     }
 

@@ -549,7 +549,6 @@ namespace WDAC_Wizard
                 this.XmlPath = this._MainWindow.Policy.TemplatePath;
             else
                 this.XmlPath = this._MainWindow.Policy.EditPolicyPath;
-
             this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
 
             try

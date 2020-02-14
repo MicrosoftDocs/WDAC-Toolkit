@@ -251,7 +251,7 @@ namespace WDAC_Wizard
         {
             // Wiring the button IDs to the corresponding rules
             // Default values and order can be found @: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
-            string dictPath = "./RulesDict.xml";
+            string dictPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
             Dictionary<string, Dictionary<string, string>> rulesDict = new Dictionary<string, Dictionary<string, string>>();
 
             try
@@ -313,7 +313,7 @@ namespace WDAC_Wizard
 
             string xmlPathToRead = "";
 
-            if(this._Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
+            if (this._Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
             
             else 
@@ -322,17 +322,17 @@ namespace WDAC_Wizard
                 {
                     case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                         // Windows Works Mode 
-                        xmlPathToRead = "./DefaultWindows_Audit.xml";
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "DefaultWindows_Audit.xml");
                         break;
                     
                     case WDAC_Policy.NewPolicyTemplate.NightsWatch:
                         // Signed and Reputable Mode
-                        xmlPathToRead = "./NightsWatch.xml";
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "NightsWatch.xml"); 
                         break;
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = "./AllowMicrosoft.xml"; 
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "AllowMicrosoft.xml"); 
                         break;
                 }
             }
