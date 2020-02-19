@@ -11,7 +11,7 @@ The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard
 
 **2. Permit the browser to begin install** by confirming to download the installer. Click _Open_ on Edge browsers. 
 
-<div style="text-align:middle"><img src="https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/WDAC-Policy-Wizard/docs/imgs/download-instructions-1.png"/></div>
+<img align="center"><img src="https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/WDAC-Policy-Wizard/docs/imgs/download-instructions-1.png"/></div>
 
 **3. Open the MSIX installer file** once the download has completed, if the installer is not automatically launched. 
 
