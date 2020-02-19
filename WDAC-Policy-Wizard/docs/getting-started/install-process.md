@@ -7,13 +7,11 @@ The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard
 
 ### Directions
 
-1. Simply click on the _Install the Windows Defender Application Control (WDAC) Wizard_ link to begin the download. 
+  1. Simply click on the _Install the Windows Defender Application Control (WDAC) Wizard_ link to begin the download. 
 
 **2. Permit the browser to begin install** by confirming to download the installer. Click _Open_ on Edge browsers. 
 
-<img align="center"><img src="https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/WDAC-Policy-Wizard/docs/imgs/download-instructions-1.png"/></div>
-
-<img align="center" src="https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/WDAC-Policy-Wizard/docs/imgs/download-instructions-1.png" alt="...">
+![](../imgs/download-instructions-1.png)
 
 **3. Open the MSIX installer file** once the download has completed, if the installer is not automatically launched. 
 
