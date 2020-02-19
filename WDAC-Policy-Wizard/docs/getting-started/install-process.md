@@ -20,4 +20,4 @@ The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard
 ![](../imgs/download-instructions-2.png)
 
 
-The WDAC Wizard application will be installed and automatically launched after installation. A shortcut will be placed in the Start Menu. 
+The WDAC Wizard application will be installed and automatically launched after installation. A shortcut will be placed in the Start Menu. The application is sandboxed from the rest of the system. The app and its contents are installed to %PROGRAMFILES%\WindowsApps\.
