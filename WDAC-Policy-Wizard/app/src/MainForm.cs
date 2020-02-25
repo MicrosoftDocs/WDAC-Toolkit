@@ -8,18 +8,25 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
+using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using System.IO;
 using System.Management.Automation;
-//using Microsoft.PowerShell.Commands;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
+
+//
+using Windows.UI.Popups;
+using Windows.ApplicationModel;
+using Windows.Management.Deployment;
+using Windows.Foundation; 
+
+//
 using WDAC_Wizard.Properties;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace WDAC_Wizard
 {
@@ -51,7 +58,6 @@ namespace WDAC_Wizard
             this.Log = new Logger(this.TempFolderPath); 
             
             InitializeComponent();
-            //CheckForUpdates();
 
             // Init MainWindow params
             this.ConfigInProcess = false;
@@ -60,7 +66,9 @@ namespace WDAC_Wizard
 
             this.Policy = new WDAC_Policy();
             this.PageList = new List<string>();
-            this.ExeFolderPath = GetExecutablePath(false); 
+            this.ExeFolderPath = GetExecutablePath(false);
+
+            CheckForUpdates().GetAwaiter().GetResult();
         }
 
         // ###############
@@ -1375,7 +1383,7 @@ namespace WDAC_Wizard
             int X_OFFSET = 15;
             int Y_OFFSET = 5; 
             var sideButton = (Button)sender; 
-            controlHighlight_Panel.Location = new Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
+            controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
 
             // Set link text
             switch (this.view)
@@ -1431,7 +1439,7 @@ namespace WDAC_Wizard
                     this.page3_Button.Enabled = false;
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
-                    controlHighlight_Panel.Location = new Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
                     break;
                 case 2:
                     this.page1_Button.Enabled = true;
@@ -1439,7 +1447,7 @@ namespace WDAC_Wizard
                     this.page3_Button.Enabled = false;
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
-                    controlHighlight_Panel.Location = new Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
                     break;
                 case 3:
                     this.page1_Button.Enabled = true;
@@ -1447,7 +1455,7 @@ namespace WDAC_Wizard
                     this.page3_Button.Enabled = true;
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
-                    controlHighlight_Panel.Location = new Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
                     break;
                 case 4:
                     this.page1_Button.Enabled = true;
@@ -1455,7 +1463,7 @@ namespace WDAC_Wizard
                     this.page3_Button.Enabled = true;
                     this.page4_Button.Enabled = true;
                     this.page5_Button.Enabled = false;
-                    controlHighlight_Panel.Location = new Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
                     break;
                 case 5:
                     this.page1_Button.Enabled = true;
@@ -1463,7 +1471,7 @@ namespace WDAC_Wizard
                     this.page3_Button.Enabled = true;
                     this.page4_Button.Enabled = true;
                     this.page5_Button.Enabled = true;
-                    controlHighlight_Panel.Location = new Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
                     break;
             }
 
@@ -1600,6 +1608,59 @@ namespace WDAC_Wizard
             else
                 return folderPath; 
         }
+
+        private async Task CheckForUpdates()
+        {
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("https://wdacwizardstorage.blob.core.windows.net/msix-installers/Version.txt");
+            StreamReader reader = new StreamReader(stream);
+            var newVersion = new Version(await reader.ReadToEndAsync());
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            
+            var currentVersion = new Version(string.Format("{0}.{1}.{2}.{3}", versionInfo.ProductMajorPart, versionInfo.ProductMinorPart, versionInfo.ProductBuildPart, "0"));
+
+            //compare package versions
+            if (newVersion.CompareTo(currentVersion) > 0)
+            {
+                this.Log.AddInfoMsg(String.Format("Found existing newer app v. {0}.", newVersion));
+                DialogResult res = MessageBox.Show("Found a newer version of the WDAC Wizard. Would you like to upgrade?", "WDAC Wizard Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                {
+                    this.Log.AddInfoMsg(String.Format("Updating to Wizard v. {0}.", newVersion));
+                    await this.InstallUpdate(client);
+                }
+            }
+            else
+            {
+                this.Log.AddInfoMsg(String.Format("Found existing app v. {0}. Did not update.", newVersion));
+            }
+
+        }
+
+        private async Task InstallUpdate(WebClient webClient)
+        {
+            string dst = Path.Combine(System.IO.Path.GetTempPath(), "WDACWizard.MSIX");
+            webClient.DownloadFile("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX", dst );
+
+            Process.Start("explorer", dst);
+            Application.Exit(); 
+        }
+
+        // Queue up the update and close the current app instance.
+       /* private async Task CommandInvokedHandler(IUICommand command)
+        {
+            if (command.Label == "Update")
+            {
+                PackageManager packagemanager = new PackageManager();
+                await packagemanager.AddPackageAsync(
+                    new Uri("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX"),
+                    null,
+                    DeploymentOptions.ForceApplicationShutdown
+                );
+            }
+        }*/
     }
 
 }

@@ -132,6 +132,17 @@ namespace WDAC_Wizard
             Hash        // -Level Hash
         }
 
+        public enum FileNameLevel
+        {
+            None,
+            OriginalFileName,
+            InternalName,
+            FileDescription,
+            ProductName,
+            PackageFamilyName,
+            FilePath
+        }
+
         public string Action { get; set; } //Either Deny or Allow
         public string ID { get; set; }
         public string FriendlyName { get; set; }

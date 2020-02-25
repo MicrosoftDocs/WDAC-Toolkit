@@ -21,6 +21,7 @@
   </Dependencies>
   <Capabilities>
     <rescap:Capability Name="runFullTrust"/>
+    <rescap:Capability Name="packageManagement" />
   </Capabilities>
   <Applications>
     <Application Id="WDACWizard" Executable="WDAC Wizard.exe" EntryPoint="Windows.FullTrustApplication">
