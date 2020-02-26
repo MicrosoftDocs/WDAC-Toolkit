@@ -91,21 +91,27 @@ namespace WDAC_Wizard
             switch(selectedOpt)
             {
                 case "Publisher":
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Publisher);
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
                     label_Info.Text = "Creates a rule for a file that is signed by the software publisher. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
 
                 case "Path":
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
                     label_Info.Text = "Creates a rule for a specific file or folder. \r\n" +
                         "Selecting folder will affect all files in the folder.";
                     panel_FileFolder.Visible = true;
                     radioButton_File.Checked = true; // By default, 
                     break;
 
+                case "File Attributes":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
+                        "Select a file to use as reference for your rule.";
+                    break;
+
                 case "File Hash":
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
                         "Select the file for which you wish to create a hash rule.";
                     break;
@@ -145,14 +151,14 @@ namespace WDAC_Wizard
         private void radioButton_Allow_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_Allow.Checked && !radioButton_Deny.Checked)
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Allow);
+                this.PolicyCustomRule.SetRulePermission(PolicyCustomRules.RulePermission.Allow);
 
             else
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Deny);
+                this.PolicyCustomRule.SetRulePermission(PolicyCustomRules.RulePermission.Deny);
 
 
             this.Log.AddInfoMsg(String.Format("Allow Radio Button set to {0}", 
-                this.PolicyCustomRule.GetRuleType() == PolicyCustomRules.RuleType.Allow));
+                this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow));
             
         }
 
@@ -190,36 +196,47 @@ namespace WDAC_Wizard
                 this.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first."); 
                 return;
             }
-            
-            switch (this.PolicyCustomRule.GetRuleLevel())
-            {
-                case PolicyCustomRules.RuleLevel.Publisher:
 
-                    string refPubPath = getFileLocation();
-                    if (refPubPath == String.Empty)
-                        break;
-                    FileVersionInfo pubFileVersionInfo = FileVersionInfo.GetVersionInfo(refPubPath);
-                    
-                    // Set Generic Parameters
-                    PolicyCustomRule.ReferenceFile = pubFileVersionInfo.FileName; 
-                    PolicyCustomRule.FileInfo.Add(pubFileVersionInfo.CompanyName);     
-                    PolicyCustomRule.FileInfo.Add(pubFileVersionInfo.ProductName); 
-                    PolicyCustomRule.FileInfo.Add(pubFileVersionInfo.OriginalFilename);
-                    PolicyCustomRule.FileInfo.Add(pubFileVersionInfo.FileVersion); 
+            if(this.PolicyCustomRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
+            {
+                string refPath = getFileLocation();
+                if (refPath == String.Empty)
+                    return;
+
+                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
+                PolicyCustomRule.ReferenceFile = fileInfo.FileName;
+                PolicyCustomRule.FileInfo.Add("CompanyName", fileInfo.CompanyName);
+                PolicyCustomRule.FileInfo.Add("ProductName", fileInfo.ProductName);
+                PolicyCustomRule.FileInfo.Add("OriginalFilename", fileInfo.OriginalFilename);
+                PolicyCustomRule.FileInfo.Add("FileVersion", fileInfo.FileVersion);
+                PolicyCustomRule.FileInfo.Add("FileName", fileInfo.FileName);
+                PolicyCustomRule.FileInfo.Add("FileDescription", fileInfo.FileDescription);
+                PolicyCustomRule.FileInfo.Add("InternalName", fileInfo.InternalName);
+
+            }
+
+            switch (this.PolicyCustomRule.GetRuleType())
+            {
+                case PolicyCustomRules.RuleType.Publisher:
+
 
                     // UI
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    textBox_pub_pub.Text = PolicyCustomRule.FileInfo[0];
-                    textBox_pub_prodname.Text = PolicyCustomRule.FileInfo[1];
-                    textBox_pub_filename.Text = PolicyCustomRule.FileInfo[2];
-                    textBox_pub_versionNum.Text = PolicyCustomRule.FileInfo[3];
+                    labelSlider_0.Text = @"Publisher:";
+                    labelSlider_1.Text = @"Leaf cert:";
+                    labelSlider_2.Text = @"File version:";
+                    labelSlider_3.Text = @"File name:";
+                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["CompanyName"];
+                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["ProductName"];
+                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
+                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["FileName"];
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true; 
                     break;
 
-                case PolicyCustomRules.RuleLevel.Folder:
+                case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
                     PolicyCustomRule.ReferenceFile = getFolderLocation();
@@ -233,39 +250,41 @@ namespace WDAC_Wizard
                     break; 
 
 
-                case PolicyCustomRules.RuleLevel.FilePath:
+                case PolicyCustomRules.RuleType.FilePath:
                     
                     // FILE LEVEL
-                    string pathObjPath = getFileLocation();
-                    if (pathObjPath == String.Empty)
-                        break; 
-
-                    FileVersionInfo pathVersionInfo = FileVersionInfo.GetVersionInfo(pathObjPath);
-
-                    // Set Generic Parameters
-                    PolicyCustomRule.ReferenceFile = pathVersionInfo.FileName; // pathFileInfo["DOSPath"];             // Filepath
-                    PolicyCustomRule.FileInfo.Add(pathVersionInfo.CompanyName);       // publisher // Publisher <-- this one
-                    PolicyCustomRule.FileInfo.Add(pathVersionInfo.ProductName); //pu
-                    PolicyCustomRule.FileInfo.Add(pathVersionInfo.OriginalFilename); //PolicyCustomRule.VersionNumber = pathFileInfo["FileVersion"];
-
+                    
                     // UI updates
                     radioButton_File.Checked = true;
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
-                case PolicyCustomRules.RuleLevel.Hash:
+                case PolicyCustomRules.RuleType.FileAttributes:
+                    // Creates a rule -Level FileName -SpecificFileNameLevel InternalName, FileDescription
+                    // Set Generic Parameters
+                    string filePath = getFileLocation();
+                    if (filePath == String.Empty)
+                        break;
+                    FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(filePath);
 
-                    string hashObjPath = getFileLocation();
-                    if (hashObjPath == String.Empty)
-                        break; 
-                    FileVersionInfo hashVersionInfo = FileVersionInfo.GetVersionInfo(hashObjPath);
+                    // UI 
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    labelSlider_0.Text = @"Original file name:";
+                    labelSlider_1.Text = @"File description:";
+                    labelSlider_2.Text = @"Product name:";
+                    labelSlider_3.Text = @"Internal name:";
+                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["OriginalFileName"];
+                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["FileDescription"];
+                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["ProductName"];
+                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["InternalName"];
 
-                    // Set CustomRule Parameters
-                    PolicyCustomRule.ReferenceFile = hashVersionInfo.FileName; // pathFileInfo["DOSPath"];             // Filepath
-                    PolicyCustomRule.FileInfo.Add(hashVersionInfo.CompanyName);       // publisher // Publisher <-- this one
-                    PolicyCustomRule.FileInfo.Add(hashVersionInfo.ProductName); //pu
-                    PolicyCustomRule.FileInfo.Add(hashVersionInfo.OriginalFilename); //PolicyCustomRule.VersionNumber = pathFileInfo["FileVersion"];
+                    panel_Publisher_Scroll.Visible = true;
+                    publisherInfoLabel.Visible = true;
+                    publisherInfoLabel.Visible = true;
+                    break; 
+
+                case PolicyCustomRules.RuleType.Hash:
                     
                     // UI updates
                     panel_Publisher_Scroll.Visible = false;
@@ -333,50 +352,132 @@ namespace WDAC_Wizard
         {
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
             
-            // Setting the trackBar values snaps the cursor to one of the four options
-            if (pos <= 2) 
+            switch(this.PolicyCustomRule.GetRuleType())
             {
-                // Version + filename + Prodname + publisher -- FileName
-                trackBar_Conditions.Value = 0;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
-                textBox_pub_versionNum.Text = this.PolicyCustomRule.FileInfo[3];
-                publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name, \r\n" +
-                    "file name with a version at or above the specified version number.";
-                this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
-            }
-            else if (pos > 2 && pos <= 6) // Prodname + publisher -- Publisher
-            {
-                // Filename + Prodname + publisher -- FilePublisher
-                trackBar_Conditions.Value = 4;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
-                textBox_pub_filename.Text = this.PolicyCustomRule.FileInfo[2];
-                textBox_pub_versionNum.Text = "*";
-                publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name \r\n" +
-                    "and this file name.";
-                this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
-            }
-            else if (pos > 6 && pos <= 10 ) // Prodname + publisher -- Publisher
-            {
-                trackBar_Conditions.Value = 8;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Publisher);
-                textBox_pub_prodname.Text = this.PolicyCustomRule.FileInfo[1];
-                textBox_pub_filename.Text = "*";
-                textBox_pub_versionNum.Text = "*";
-                publisherInfoLabel.Text = "Rule applies to all files signed by this publisher and with this product name.";
-                this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
-            }
-            else //publisher only --  PCA certificate 
-            {
-                trackBar_Conditions.Value = 12;
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PcaCertificate);
-                textBox_pub_pub.Text = this.PolicyCustomRule.FileInfo[0];
-                textBox_pub_prodname.Text = "*";
-                textBox_pub_filename.Text = "*";
-                textBox_pub_versionNum.Text = "*";
-                publisherInfoLabel.Text = "Rule applies to all files signed by this publisher.";
-                this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
+                case PolicyCustomRules.RuleType.Publisher:
+                    {
+                        // Setting the trackBar values snaps the cursor to one of the four options
+                        if (pos <= 2)
+                        {
+                            // Version + filename + leaf cert + publisher -- FileName
+                            trackBar_Conditions.Value = 0;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
+                            textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
+                            publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name, \r\n" +
+                                "file name with a version at or above the specified version number.";
+                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
+                        }
+                        else if (pos > 2 && pos <= 6) // Prodname + publisher -- Publisher
+                        {
+                            // Filename + Prodname + publisher -- FilePublisher
+                            trackBar_Conditions.Value = 4;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
+                            textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["Version"];
+                            textBoxSlider_3.Text = "*";
+                            publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name \r\n" +
+                                "and this file name.";
+                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
+                        }
+                        else if (pos > 6 && pos <= 10) // Prodname + publisher -- Publisher
+                        {
+                            trackBar_Conditions.Value = 8;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Publisher);
+                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["ProductName"];
+                            textBoxSlider_2.Text = "*";
+                            textBoxSlider_3.Text = "*";
+                            publisherInfoLabel.Text = "Rule applies to all files signed by this publisher and with this product name.";
+                            this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
+                        }
+                        else //publisher only --  PCA certificate 
+                        {
+                            trackBar_Conditions.Value = 12;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PcaCertificate);
+                            textBoxSlider_0.Text = this.PolicyCustomRule.FileInfo["CompanyName"];
+                            textBoxSlider_1.Text = "*";
+                            textBoxSlider_2.Text = "*";
+                            textBoxSlider_3.Text = "*";
+                            publisherInfoLabel.Text = "Rule applies to all files signed by this publisher.";
+                            this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
 
+                        }
+                    }
+
+                break;
+
+
+                case PolicyCustomRules.RuleType.FileAttributes:
+                    {
+                        // Setting the trackBar values snaps the cursor to one of the four options
+                        textBoxSlider_3.Text = "*"; //@"Internal name:";
+                        textBoxSlider_2.Text = "*"; //@"Product name:";
+                        textBoxSlider_1.Text = "*"; //@"File description
+                        textBoxSlider_0.Text = "*"; //@"Original file name:";
+
+                        if (pos <= 2)
+                        {
+                            // Internal name
+                            trackBar_Conditions.Value = 0;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
+                            textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["InternalName"];
+                            if (String.IsNullOrEmpty(textBoxSlider_3.Text))
+                            {
+                                //If attribute does not exist
+                                textBoxSlider_3.Text = "N/A";
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
+                            }
+                            publisherInfoLabel.Text = "Rule applies to all files with this internal name attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file internal name: {0}", textBoxSlider_3.Text));
+                        }
+                        else if (pos > 2 && pos <= 6) 
+                        {
+                            // Product name
+                            trackBar_Conditions.Value = 4;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
+                            textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["ProductName"];
+                            if (String.IsNullOrEmpty(textBoxSlider_2.Text))
+                            {
+                                //If attribute does not exist
+                                textBoxSlider_2.Text = "N/A";
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
+                            }
+                            publisherInfoLabel.Text = "Rule applies to all files with this product name attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to product name: {0}", textBoxSlider_2.Text));
+                        }
+                        else if (pos > 6 && pos <= 10) 
+                        {
+                            //File description
+                            trackBar_Conditions.Value = 8;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
+                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["FileDescription"];
+                            if (String.IsNullOrEmpty(textBoxSlider_1.Text))
+                            {
+                                //If attribute does not exist
+                                textBoxSlider_1.Text = "N/A";
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
+                            }
+                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_1.Text));
+                        }
+                        else //publisher only --  PCA certificate 
+                        {
+                            trackBar_Conditions.Value = 12;
+                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
+                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["OriginalFileName"];
+                            if (String.IsNullOrEmpty(textBoxSlider_0.Text))
+                            {
+                                //If attribute does not exist
+                                textBoxSlider_0.Text = "N/A";
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
+                            }
+                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_0.Text));
+
+                        }
+                    }
+                break; 
             }
+
+            
         }
 
         /// <summary>
@@ -393,39 +494,51 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // If the selected attribute is not found (UI will show "N/A"), do not allow creation
+            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None)
+            {
+                label_Info.Visible = true;
+                label_Info.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                return;
+            }
+
             // Add rule and exceptions to the table and master list & Scroll to new row index
             var index = rulesDataGrid.Rows.Add();
             rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
 
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
-            if (this.PolicyCustomRule.GetRuleType() == PolicyCustomRules.RuleType.Allow)
+            // Set Action value to Allow or Deny
+            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow)
                 rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Allow";
             else
                 rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Deny";
+
+            // Set Level value to the RuleLevel value//or should this be type for simplicity? 
+            rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.PolicyCustomRule.GetRuleType();
 
             string colnameString = String.Empty; 
 
             switch(this.PolicyCustomRule.GetRuleLevel())
             {
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
-                    colnameString = String.Format("{0}; ", this.PolicyCustomRule.GetRuleLevel());
 
-                    for (int i = 0; i <= 0; i++)
-                        colnameString += String.Format("{0}, ", this.PolicyCustomRule.FileInfo[i]);
+                    colnameString += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["Company"]);
+                    break; 
+                case PolicyCustomRules.RuleLevel.Publisher:
+                    colnameString += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["Company"], 
+                        this.PolicyCustomRule.FileInfo["ProductName"]);
                     break;
 
-                case PolicyCustomRules.RuleLevel.Publisher:
-                    colnameString = String.Format("{0}; ", this.PolicyCustomRule.GetRuleLevel());
-
-                    for (int i = 0; i <= 1; i++)
-                        colnameString += String.Format("{0}, ", this.PolicyCustomRule.FileInfo[i]);
+                case PolicyCustomRules.RuleLevel.SignedVersion:
+                    colnameString += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["Company"],
+                        this.PolicyCustomRule.FileInfo["ProductName"], this.PolicyCustomRule.FileInfo["Version"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FilePublisher:
-                    colnameString = String.Format("{0}; ", this.PolicyCustomRule.GetRuleLevel());
-                    for (int i = 0; i <= 2; i++)
-                        colnameString += String.Format("{0}, ", this.PolicyCustomRule.FileInfo[i]);
+                    colnameString += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["Company"],
+                        this.PolicyCustomRule.FileInfo["ProductName"], this.PolicyCustomRule.FileInfo["Version"], this.PolicyCustomRule.FileInfo["FileName"]);
                     break;
 
                 default:
@@ -437,7 +550,7 @@ namespace WDAC_Wizard
             // Add to data table
             rulesDataGrid.Rows[index].Cells["Column_Name"].Value = colnameString;
 
-            if (this.PolicyCustomRule.GetRuleType() == PolicyCustomRules.RuleType.Allow) 
+            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow) 
                 this.Log.AddInfoMsg(String.Format("ALLOW: {0}", colnameString));
             else
                 this.Log.AddInfoMsg(String.Format("DENY: {0}", colnameString));

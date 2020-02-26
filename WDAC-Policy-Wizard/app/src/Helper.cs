@@ -181,15 +181,33 @@ namespace WDAC_Wizard
             FilePublisher,    // Generate rules that tie filename and minimum version to a PCA/Publisher combo
             SignedVersion,    // [currently not supported] Minimum version tied to PCA Cert and from specific publisher (filename = *)
             FilePath,         // FilePath
-            Folder            // Folder pathrule applied to each PE file in the folder
+            Folder,           // Folder pathrule applied to each PE file in the folder
+            InternalName,
+            ProductName,
+            FileDescription,
+            OriginalFileName
         }
 
-        public enum RuleType { Allow, Deny };
+        public enum RuleType
+        {
+            None,
+            Publisher,
+            FileAttributes,   // RuleLevel set to "FileName", gives way to additional switch "SpecificFileNameLevel"
+            FilePath,
+            Folder,
+            Hash
+        }
 
+        public enum RulePermission { Allow, Deny };
+
+        // enums: 
         public RuleLevel Level { get; set; }
         public RuleType Type { get; set; }
+        public RulePermission Permission { get; set; }
+
+
         public string ReferenceFile { get; set; }
-        public List<string> FileInfo { get; set; } //
+        public Dictionary<string, string> FileInfo { get; set; } //
         public string PSVariable { get; set; }
         public string VersionNumber { get; set; }
         public string RuleIndex { get; set; } // Index of return struct in Get-SystemDriver cmdlet
@@ -199,17 +217,17 @@ namespace WDAC_Wizard
         // Filepath params
         public List<string> FolderContents { get; set; }
 
-
         // Exception Params -- currently not supporting
         public List<RuleException> ExceptionList { get; set; }
 
         // Constructors
         public PolicyCustomRules()
         {
-            this.Type = RuleType.Allow;  // Allow by default to match the default state of the UI
+            this.Type = RuleType.None;  
             this.Level = RuleLevel.None;
+            this.Permission = RulePermission.Allow; // Allow by default to match the default state of the UI
 
-            this.FileInfo = new List<string>();
+            this.FileInfo = new Dictionary<string, string>();
             this.ExceptionList = new List<RuleException>();
             this.FolderContents = new List<string>();
         }
@@ -222,15 +240,15 @@ namespace WDAC_Wizard
         /// <param name="refFile">The document which contains node.</param>
         /// <param name="_Type">is the file a user mode file?</param>
         /// 
-        public PolicyCustomRules(string psVar, string ruleIndex, string refFile, RuleType _Type)
+        public PolicyCustomRules(string psVar, string ruleIndex, string refFile, RulePermission _Permission)
         {
-            this.Type = RuleType.Allow;  // Allow by default to match the default state of the UI
+            this.Permission = RulePermission.Allow;  // Allow by default to match the default state of the UI
             this.Level = RuleLevel.FilePath;
             this.ReferenceFile = refFile;
             this.PSVariable = psVar;
             this.RuleIndex = ruleIndex;
             this.ExceptionList = new List<RuleException>();
-            this.FileInfo = new List<string>();
+            this.FileInfo = new Dictionary<string, string>();
         }
 
         public void SetRuleLevel(RuleLevel ruleLevel)
@@ -241,6 +259,11 @@ namespace WDAC_Wizard
         public void SetRuleType(RuleType ruleType)
         {
             this.Type = ruleType;
+        }
+
+        public void SetRulePermission(RulePermission rulePermission)
+        {
+            this.Permission = rulePermission; 
         }
 
         /// <summary>
@@ -257,6 +280,11 @@ namespace WDAC_Wizard
         public RuleType GetRuleType()
         {
             return this.Type;
+        }
+
+        public RulePermission GetRulePermission()
+        {
+            return this.Permission; 
         }
 
         // Methods

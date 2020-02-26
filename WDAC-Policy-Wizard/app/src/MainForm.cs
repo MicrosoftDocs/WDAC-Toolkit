@@ -862,7 +862,7 @@ namespace WDAC_Wizard
                         // Create a new rule foreach file in folder
                         Dictionary<string, string> SystemFileInfo = GetSystemInfo(filePath);
                         NewFileRule = new PolicyCustomRules(SystemFileInfo["PSVar"], SystemFileInfo["RuleIndex"], 
-                            filePath, CustomRule.GetRuleType());
+                            filePath, CustomRule.GetRulePermission());
                         this.Policy.CustomRules.Add(NewFileRule);
 
                         // Update status:
@@ -934,7 +934,7 @@ namespace WDAC_Wizard
                     createPolicyScript = String.Format("New-CIPolicy -FilePath {0} -Rules $Rule_{1}", tempPolicyPath, CustomRule.PSVariable);
 
                 // Deny type rule
-                if (CustomRule.GetRuleType() == PolicyCustomRules.RuleType.Deny)  
+                if (CustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)  
                     createPolicyScript += " -Deny";
 
                 Pipeline pipeline = this.runspace.CreatePipeline();
