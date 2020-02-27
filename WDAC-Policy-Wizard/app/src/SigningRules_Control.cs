@@ -12,7 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates; 
+using System.Security.Cryptography.X509Certificates;
+using System.ComponentModel; 
 
 namespace WDAC_Wizard
 {
@@ -48,9 +49,22 @@ namespace WDAC_Wizard
         /// </summary>
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
+            // Read the policy and write to the UI in the background
+            if (!backgroundWorker1.IsBusy)
+                backgroundWorker1.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Event handler where the time-consuming work of creating the policies is accomplished. 
+        /// No UI changes should be performed in this method. 
+        /// </summary>
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
             readSetRules();
             displayRules();
         }
+
+        //private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 
@@ -685,6 +699,11 @@ namespace WDAC_Wizard
 
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
 
         }
 

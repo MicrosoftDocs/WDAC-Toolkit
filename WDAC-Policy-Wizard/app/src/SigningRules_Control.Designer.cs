@@ -71,6 +71,7 @@ namespace WDAC_Wizard
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -580,6 +581,10 @@ namespace WDAC_Wizard
             this.label_Error.Text = "Label_Error";
             this.label_Error.Visible = false;
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
             // SigningRules_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -652,5 +657,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
         private System.Windows.Forms.Label label_Error;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

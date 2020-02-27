@@ -62,9 +62,10 @@ namespace WDAC_Wizard
             this.label_Welcome.AutoSize = true;
             this.label_Welcome.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Welcome.ForeColor = System.Drawing.Color.Black;
-            this.label_Welcome.Location = new System.Drawing.Point(167, 9);
+            this.label_Welcome.Location = new System.Drawing.Point(200, 11);
+            this.label_Welcome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_Welcome.Name = "label_Welcome";
-            this.label_Welcome.Size = new System.Drawing.Size(115, 30);
+            this.label_Welcome.Size = new System.Drawing.Size(136, 36);
             this.label_Welcome.TabIndex = 3;
             this.label_Welcome.Text = "Welcome";
             // 
@@ -76,10 +77,10 @@ namespace WDAC_Wizard
             this.button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_New.Image = global::WDAC_Wizard.Properties.Resources.newPolicy;
-            this.button_New.Location = new System.Drawing.Point(328, 225);
-            this.button_New.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button_New.Location = new System.Drawing.Point(394, 270);
+            this.button_New.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button_New.Name = "button_New";
-            this.button_New.Size = new System.Drawing.Size(195, 217);
+            this.button_New.Size = new System.Drawing.Size(234, 260);
             this.button_New.TabIndex = 10;
             this.button_New.Text = "Policy Creator";
             this.button_New.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -91,9 +92,10 @@ namespace WDAC_Wizard
             this.label_Info.AutoSize = true;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label_Info.Location = new System.Drawing.Point(168, 674);
+            this.label_Info.Location = new System.Drawing.Point(202, 809);
+            this.label_Info.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_Info.Name = "label_Info";
-            this.label_Info.Size = new System.Drawing.Size(77, 21);
+            this.label_Info.Size = new System.Drawing.Size(97, 25);
             this.label_Info.TabIndex = 9;
             this.label_Info.Text = "Info Text";
             this.label_Info.Visible = false;
@@ -113,10 +115,10 @@ namespace WDAC_Wizard
             this.button_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Edit.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Edit.Image = global::WDAC_Wizard.Properties.Resources.tools;
-            this.button_Edit.Location = new System.Drawing.Point(567, 225);
-            this.button_Edit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button_Edit.Location = new System.Drawing.Point(680, 270);
+            this.button_Edit.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button_Edit.Name = "button_Edit";
-            this.button_Edit.Size = new System.Drawing.Size(195, 217);
+            this.button_Edit.Size = new System.Drawing.Size(234, 260);
             this.button_Edit.TabIndex = 25;
             this.button_Edit.Text = "Policy Editor";
             this.button_Edit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -131,10 +133,10 @@ namespace WDAC_Wizard
             this.button_Merge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Merge.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Merge.Image = global::WDAC_Wizard.Properties.Resources.merge;
-            this.button_Merge.Location = new System.Drawing.Point(813, 225);
-            this.button_Merge.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button_Merge.Location = new System.Drawing.Point(976, 270);
+            this.button_Merge.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button_Merge.Name = "button_Merge";
-            this.button_Merge.Size = new System.Drawing.Size(195, 217);
+            this.button_Merge.Size = new System.Drawing.Size(234, 260);
             this.button_Merge.TabIndex = 26;
             this.button_Merge.Text = "Policy Merger";
             this.button_Merge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -155,9 +157,9 @@ namespace WDAC_Wizard
             this.control_Panel.Controls.Add(this.settings_Button);
             this.control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.control_Panel.Location = new System.Drawing.Point(0, 0);
-            this.control_Panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.control_Panel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.control_Panel.Name = "control_Panel";
-            this.control_Panel.Size = new System.Drawing.Size(150, 700);
+            this.control_Panel.Size = new System.Drawing.Size(180, 840);
             this.control_Panel.TabIndex = 30;
             // 
             // page5_Button
@@ -171,10 +173,10 @@ namespace WDAC_Wizard
             this.page5_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page5_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page5_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.page5_Button.Location = new System.Drawing.Point(15, 400);
-            this.page5_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page5_Button.Location = new System.Drawing.Point(18, 480);
+            this.page5_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.page5_Button.Name = "page5_Button";
-            this.page5_Button.Size = new System.Drawing.Size(146, 45);
+            this.page5_Button.Size = new System.Drawing.Size(175, 54);
             this.page5_Button.TabIndex = 39;
             this.page5_Button.Text = "Page 5";
             this.page5_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -193,10 +195,10 @@ namespace WDAC_Wizard
             this.page4_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page4_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page4_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.page4_Button.Location = new System.Drawing.Point(15, 350);
-            this.page4_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page4_Button.Location = new System.Drawing.Point(18, 420);
+            this.page4_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.page4_Button.Name = "page4_Button";
-            this.page4_Button.Size = new System.Drawing.Size(146, 45);
+            this.page4_Button.Size = new System.Drawing.Size(175, 54);
             this.page4_Button.TabIndex = 38;
             this.page4_Button.Text = "Page 4";
             this.page4_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -215,10 +217,10 @@ namespace WDAC_Wizard
             this.page3_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page3_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page3_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.page3_Button.Location = new System.Drawing.Point(15, 300);
-            this.page3_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page3_Button.Location = new System.Drawing.Point(18, 360);
+            this.page3_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.page3_Button.Name = "page3_Button";
-            this.page3_Button.Size = new System.Drawing.Size(146, 45);
+            this.page3_Button.Size = new System.Drawing.Size(175, 54);
             this.page3_Button.TabIndex = 37;
             this.page3_Button.Text = "Page 3";
             this.page3_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -237,10 +239,10 @@ namespace WDAC_Wizard
             this.page2_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page2_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.page2_Button.Location = new System.Drawing.Point(15, 250);
-            this.page2_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page2_Button.Location = new System.Drawing.Point(18, 300);
+            this.page2_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.page2_Button.Name = "page2_Button";
-            this.page2_Button.Size = new System.Drawing.Size(146, 45);
+            this.page2_Button.Size = new System.Drawing.Size(175, 54);
             this.page2_Button.TabIndex = 36;
             this.page2_Button.Text = "Page 2";
             this.page2_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -259,10 +261,10 @@ namespace WDAC_Wizard
             this.page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.page1_Button.Location = new System.Drawing.Point(15, 200);
-            this.page1_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page1_Button.Location = new System.Drawing.Point(18, 240);
+            this.page1_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.page1_Button.Name = "page1_Button";
-            this.page1_Button.Size = new System.Drawing.Size(146, 45);
+            this.page1_Button.Size = new System.Drawing.Size(175, 54);
             this.page1_Button.TabIndex = 35;
             this.page1_Button.Text = "Page 1";
             this.page1_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -280,10 +282,10 @@ namespace WDAC_Wizard
             this.workflow_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.workflow_Button.Font = new System.Drawing.Font("Tahoma", 10F);
             this.workflow_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.workflow_Button.Location = new System.Drawing.Point(5, 150);
-            this.workflow_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.workflow_Button.Location = new System.Drawing.Point(6, 180);
+            this.workflow_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.workflow_Button.Name = "workflow_Button";
-            this.workflow_Button.Size = new System.Drawing.Size(130, 45);
+            this.workflow_Button.Size = new System.Drawing.Size(156, 54);
             this.workflow_Button.TabIndex = 34;
             this.workflow_Button.Text = "Workflow";
             this.workflow_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -293,9 +295,10 @@ namespace WDAC_Wizard
             // controlHighlight_Panel
             // 
             this.controlHighlight_Panel.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.controlHighlight_Panel.Location = new System.Drawing.Point(0, 96);
+            this.controlHighlight_Panel.Location = new System.Drawing.Point(0, 115);
+            this.controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
-            this.controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
+            this.controlHighlight_Panel.Size = new System.Drawing.Size(10, 42);
             this.controlHighlight_Panel.TabIndex = 33;
             // 
             // home_Button
@@ -309,10 +312,10 @@ namespace WDAC_Wizard
             this.home_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.home_Button.Image = global::WDAC_Wizard.Properties.Resources.house;
             this.home_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.home_Button.Location = new System.Drawing.Point(15, 92);
-            this.home_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.home_Button.Location = new System.Drawing.Point(18, 110);
+            this.home_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.home_Button.Name = "home_Button";
-            this.home_Button.Size = new System.Drawing.Size(129, 45);
+            this.home_Button.Size = new System.Drawing.Size(155, 54);
             this.home_Button.TabIndex = 32;
             this.home_Button.Text = "     Home";
             this.home_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -330,10 +333,10 @@ namespace WDAC_Wizard
             this.settings_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settings_Button.Image = global::WDAC_Wizard.Properties.Resources.gear;
             this.settings_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.settings_Button.Location = new System.Drawing.Point(15, 647);
-            this.settings_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.settings_Button.Location = new System.Drawing.Point(18, 776);
+            this.settings_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.settings_Button.Name = "settings_Button";
-            this.settings_Button.Size = new System.Drawing.Size(129, 45);
+            this.settings_Button.Size = new System.Drawing.Size(155, 54);
             this.settings_Button.TabIndex = 31;
             this.settings_Button.Text = "     Settings";
             this.settings_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -342,10 +345,10 @@ namespace WDAC_Wizard
             // 
             // button_Next
             // 
-            this.button_Next.Location = new System.Drawing.Point(1134, 663);
-            this.button_Next.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button_Next.Location = new System.Drawing.Point(1361, 796);
+            this.button_Next.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button_Next.Name = "button_Next";
-            this.button_Next.Size = new System.Drawing.Size(93, 33);
+            this.button_Next.Size = new System.Drawing.Size(112, 40);
             this.button_Next.TabIndex = 31;
             this.button_Next.Text = "Next";
             this.button_Next.UseVisualStyleBackColor = true;
@@ -357,9 +360,10 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(167, 49);
+            this.label1.Location = new System.Drawing.Point(200, 59);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(311, 24);
+            this.label1.Size = new System.Drawing.Size(373, 29);
             this.label1.TabIndex = 32;
             this.label1.Text = "Select a task below to get started";
             // 
@@ -367,10 +371,10 @@ namespace WDAC_Wizard
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label2.Location = new System.Drawing.Point(296, 453);
+            this.label2.Location = new System.Drawing.Point(355, 544);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(244, 36);
+            this.label2.Size = new System.Drawing.Size(293, 44);
             this.label2.TabIndex = 33;
             this.label2.Text = "Create a new base or supplemental \r\npolicy";
             // 
@@ -378,10 +382,10 @@ namespace WDAC_Wizard
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label3.Location = new System.Drawing.Point(563, 453);
+            this.label3.Location = new System.Drawing.Point(676, 544);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(195, 18);
+            this.label3.Size = new System.Drawing.Size(245, 22);
             this.label3.TabIndex = 34;
             this.label3.Text = "Edit an existing policy on disk";
             // 
@@ -389,19 +393,19 @@ namespace WDAC_Wizard
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label4.Location = new System.Drawing.Point(802, 453);
+            this.label4.Location = new System.Drawing.Point(962, 544);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(236, 18);
+            this.label4.Size = new System.Drawing.Size(293, 22);
             this.label4.TabIndex = 35;
             this.label4.Text = "Merge two existing policies into one\r\n";
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1232, 703);
+            this.ClientSize = new System.Drawing.Size(1478, 844);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -416,7 +420,7 @@ namespace WDAC_Wizard
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Defender App Control Policy Wizard";
