@@ -49,9 +49,11 @@ namespace WDAC_Wizard
         /// </summary>
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
+            readSetRules();
+            displayRules();
             // Read the policy and write to the UI in the background
-            if (!backgroundWorker1.IsBusy)
-                backgroundWorker1.RunWorkerAsync();
+            //if (!backgroundWorker1.IsBusy)
+            //   backgroundWorker1.RunWorkerAsync();
         }
 
         /// <summary>
@@ -622,7 +624,10 @@ namespace WDAC_Wizard
         /// </summary>
         private void displayRules()
         {
-            int index = 0; 
+            int index = 0;
+            string exceptionList = String.Empty;
+            string fileAttrList = String.Empty;
+
             // Process publisher rules first:
             foreach (var signingScenario in this.Policy.SigningScenarios)
             {
@@ -633,8 +638,7 @@ namespace WDAC_Wizard
                     string action = this.Policy.Signers[signerID].Action;
 
                     // Get signer exceptions - if applicable
-                    string exceptionList = String.Empty;
-                    if (this.Policy.Signers[signerID].Exceptions.Count > 0)
+                    /*if (this.Policy.Signers[signerID].Exceptions.Count > 0)
                     {
                         // Iterate through all of the exceptions, get the ID and map to filename
                         foreach (string exceptionID in this.Policy.Signers[signerID].Exceptions)
@@ -645,7 +649,6 @@ namespace WDAC_Wizard
                     }
 
                     // Get associated/affected files
-                    string fileAttrList = String.Empty;
                     if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
                     {
                         // Iterate through all of the exceptions, get the ID and map to filename
@@ -658,7 +661,7 @@ namespace WDAC_Wizard
                             fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
                         }
                     }
-
+                    */
                     // Get row index #, Scroll to new row index
                     index = rulesDataGrid.Rows.Add();
 
