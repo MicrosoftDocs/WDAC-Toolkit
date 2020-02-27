@@ -125,6 +125,7 @@
     <Compile Include="src\BuildPage.Designer.cs">
       <DependentUpon>BuildPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\cipolicy.cs" />
     <Compile Include="src\Policy.cs" />
     <Compile Include="src\ConfigTemplate_Control.cs">
       <SubType>UserControl</SubType>

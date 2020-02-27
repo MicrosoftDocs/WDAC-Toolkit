@@ -22,7 +22,7 @@
     ButtonMapping="button_8">
   </Rule>
   <Rule
-    Name="Audit Mode"
+    Name="AuditMode"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="3"
@@ -36,14 +36,14 @@
     ButtonMapping="button_15">
   </Rule>
   <Rule
-    Name="Inherit Default Policy"
+    Name="InheritDefaultPolicy"
     AllowedValue="Enabled"
     Supported="False"
     RuleNumber="5"
     ButtonMapping="button_4">
   </Rule>
   <Rule
-    Name="Unsigned System Integrity Policy"
+    Name="UnsignedSystemIntegrityPolicy"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="6"
@@ -57,49 +57,49 @@
     ButtonMapping="button_12">
   </Rule>
   <Rule
-    Name="EV Signers"
+    Name="EVSigners"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="8"
     ButtonMapping="button_19">
   </Rule>
   <Rule
-    Name="Advanced Boot Options Menu"
+    Name="AdvancedBootOptionsMenu"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="9"
     ButtonMapping="button_0">
   </Rule>
   <Rule
-    Name="Boot Audit On Failure"
+    Name="BootAuditOnFailure"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="10"
     ButtonMapping="button_13">
   </Rule>
   <Rule
-    Name="Script Enforcement"
+    Name="ScriptEnforcement"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="11"
     ButtonMapping="button_2">
   </Rule>
   <Rule
-    Name="Enforce Store Applications"
+    Name="EnforceStoreApplications"
     AllowedValue="Required"
     Supported="True"
     RuleNumber="12"
     ButtonMapping="button_3">
   </Rule>
   <Rule
-    Name="Managed Installer"
+    Name="ManagedInstaller"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="13"
     ButtonMapping="button_7">
   </Rule>
   <Rule
-    Name="Intelligent Security Graph Authorization"
+    Name="IntelligentSecurityGraphAuthorization"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="14"
@@ -113,28 +113,28 @@
     ButtonMapping="button_18">
   </Rule>
   <Rule
-    Name="Update Policy No Reboot"
+    Name="UpdatePolicyNoReboot"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="16"
     ButtonMapping="button_9">
   </Rule>
   <Rule
-    Name="Allow Supplemental Policies"
+    Name="Allow SupplementalPolicies"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="17"
     ButtonMapping="button_1">
   </Rule>
   <Rule
-    Name="Runtime FilePath Rule Protection"
+    Name="RuntimeFilePathRuleProtection"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="18"
     ButtonMapping="button_16">
   </Rule>
   <Rule
-    Name="Dynamic Code Security"
+    Name="DynamicCodeSecurity"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="19"

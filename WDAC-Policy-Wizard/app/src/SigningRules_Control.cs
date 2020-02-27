@@ -638,7 +638,7 @@ namespace WDAC_Wizard
                     string action = this.Policy.Signers[signerID].Action;
 
                     // Get signer exceptions - if applicable
-                    /*if (this.Policy.Signers[signerID].Exceptions.Count > 0)
+                    if (this.Policy.Signers[signerID].Exceptions.Count > 0)
                     {
                         // Iterate through all of the exceptions, get the ID and map to filename
                         foreach (string exceptionID in this.Policy.Signers[signerID].Exceptions)
@@ -661,7 +661,7 @@ namespace WDAC_Wizard
                             fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
                         }
                     }
-                    */
+                    
                     // Get row index #, Scroll to new row index
                     index = rulesDataGrid.Rows.Add();
 

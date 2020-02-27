@@ -60,9 +60,12 @@ namespace WDAC_Wizard
 
         public List<PolicyCustomRules> CustomRules { get; set; }
 
+        public SiPolicy siPolicy;
 
         public WDAC_Policy()
         {
+            this.siPolicy = null; 
+
             this._PolicyTemplate = NewPolicyTemplate.None;
             this._PolicyType = PolicyType.BasePolicy;
             this.EnableHVCI = false;

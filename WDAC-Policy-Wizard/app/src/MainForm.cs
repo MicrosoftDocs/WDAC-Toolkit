@@ -12,14 +12,15 @@ using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml.Serialization;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 
-using WDAC_Wizard.Properties;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+
 
 namespace WDAC_Wizard
 {
@@ -800,9 +801,9 @@ namespace WDAC_Wizard
             }
 
             // If multiple policy format setting is enabled, set the Supplemental (rule #17) option
-            if(Settings.Default.createMultiPolicyByDefault)
+            if(Properties.Settings.Default.createMultiPolicyByDefault)
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17", this.Policy.TemplatePath));
-
+            
             // Assert supplemental policies cannot have the Supplemental (rule #17) option
             if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17 -Delete", this.Policy.TemplatePath));
@@ -924,7 +925,7 @@ namespace WDAC_Wizard
                 // Create new CI Policy from rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicy
                 // If the supplemental rule was configured OR the multipolicyformat setting is enabled, set "multiplepolicy format" switch
                 if (String.Equals(this.Policy.ConfigRules["Allow Supplemental Policies"]["CurrentValue"], this.Policy.ConfigRules["Allow Supplemental Policies"]["AllowedValue"]) ||
-                    Settings.Default.createMultiPolicyByDefault) 
+                    Properties.Settings.Default.createMultiPolicyByDefault) 
                     createPolicyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath {0} -Rules $Rule_{1}", 
                         tempPolicyPath, CustomRule.PSVariable);
                  else
