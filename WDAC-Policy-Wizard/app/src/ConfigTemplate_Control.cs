@@ -55,6 +55,10 @@ namespace WDAC_Wizard
             // Enable audit mode by default
             this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
 
+            // Set HVCI option value
+            if (this.Policy.EnableHVCI)
+                this.Policy.ConfigRules["HVCI"]["CurrentValue"] = this.Policy.ConfigRules["HVCI"]["AllowedValue"]; 
+
             Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
@@ -355,7 +359,7 @@ namespace WDAC_Wizard
                 string name = ParseRule(rule.Item.ToString())[1];
 
                 if (this.Policy.ConfigRules.ContainsKey(name))
-                    this.Policy.ConfigRules[name]["CurrentValue"] = value; 
+                    this.Policy.ConfigRules[name]["CurrentValue"] = value;
             }
 
             this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0; 

@@ -8,7 +8,7 @@
     ButtonMapping="button_11">
   </Rule>
   <Rule
-    Name="Boot Menu Protection"
+    Name="BootMenuProtection"
     AllowedValue="Enabled"
     Supported="False"
     RuleNumber="1"
@@ -29,7 +29,7 @@
     ButtonMapping="button_6">
   </Rule>
   <Rule
-    Name="Flight Signing"
+    Name="FlightSigning"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="4"
@@ -50,7 +50,7 @@
     ButtonMapping="button_10">
   </Rule>
   <Rule
-    Name="Debug Policy Augmented"
+    Name="DebugPolicyAugmented"
     AllowedValue="Allowed"
     Supported="False"
     RuleNumber="7"
@@ -58,7 +58,7 @@
   </Rule>
   <Rule
     Name="EVSigners"
-    AllowedValue="Enabled"
+    AllowedValue="Required"
     Supported="True"
     RuleNumber="8"
     ButtonMapping="button_19">
@@ -106,7 +106,7 @@
     ButtonMapping="button_5">
   </Rule>
   <Rule
-    Name="Invalidate EAs on Reboot"
+    Name="InvalidateEAsonReboot"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="15"
@@ -120,7 +120,7 @@
     ButtonMapping="button_9">
   </Rule>
   <Rule
-    Name="Allow SupplementalPolicies"
+    Name="AllowSupplementalPolicies"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="17"

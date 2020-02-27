@@ -196,6 +196,10 @@ public enum OptionType {
     /// <remarks/>
     [System.Xml.Serialization.XmlEnumAttribute("Enabled:Conditional Windows Lockdown Policy")]
     EnabledConditionalWindowsLockdownPolicy,
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlEnumAttribute("Allowed:Debug Policy Augmented")]
+    AllowedDebugPolicyAugmented,
 }
 
 /// <remarks/>
