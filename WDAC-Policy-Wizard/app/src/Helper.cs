@@ -171,23 +171,6 @@ namespace WDAC_Wizard
 
     public class PolicyCustomRules
     {
-        public enum RuleLevel
-        {
-            None,             // Null Value for RuleLevel (used in RulesFromDrivers for signaling no fallback)
-            Hash,             // Use only the file's hash in rules
-            FileName,         // File name and Minimum Version specified
-            PcaCertificate,   // Use the PCA certificate that issued the signer,
-            Publisher,        // PCA+Publisher signer rules
-            FilePublisher,    // Generate rules that tie filename and minimum version to a PCA/Publisher combo
-            SignedVersion,    // [currently not supported] Minimum version tied to PCA Cert and from specific publisher (filename = *)
-            FilePath,         // FilePath
-            Folder,           // Folder pathrule applied to each PE file in the folder
-            InternalName,
-            ProductName,
-            FileDescription,
-            OriginalFileName
-        }
-
         public enum RuleType
         {
             None,
@@ -196,6 +179,23 @@ namespace WDAC_Wizard
             FilePath,
             Folder,
             Hash
+        }
+
+        public enum RuleLevel
+        {
+            None,             // Null Value for RuleLevel (used in RulesFromDrivers for signaling no fallback)
+            Hash,             // Use only the file's hash in rules
+            FileName,         // File name and Minimum Version specified
+            PcaCertificate,   // Use the PCA certificate that issued the signer,
+            Publisher,        // PCA+Publisher signer rules
+            FilePublisher,    // Generate rules that tie filename and minimum version to a PCA/Publisher combo
+            SignedVersion,    // Minimum version tied to PCA Cert and from specific publisher (filename = *)
+            FilePath,         // FilePath
+            Folder,           // Folder pathrule applied to each PE file in the folder
+            InternalName,
+            ProductName,
+            FileDescription,
+            OriginalFileName
         }
 
         public enum RulePermission { Allow, Deny };

@@ -70,6 +70,7 @@ namespace WDAC_Wizard
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.label_Error = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -239,10 +240,10 @@ namespace WDAC_Wizard
             this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.publisherInfoLabel.Location = new System.Drawing.Point(16, 560);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
-            this.publisherInfoLabel.Size = new System.Drawing.Size(567, 44);
+            this.publisherInfoLabel.Size = new System.Drawing.Size(590, 44);
             this.publisherInfoLabel.TabIndex = 106;
-            this.publisherInfoLabel.Text = "Rule applies to all files signed by this publisher with this product name\r\nand th" +
-    "is file name.";
+            this.publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this  \r\nfi" +
+    "le name with a version at or above the specified version number.";
             this.publisherInfoLabel.Visible = false;
             // 
             // panel_FileFolder
@@ -311,17 +312,17 @@ namespace WDAC_Wizard
             this.panel_Publisher_Scroll.Location = new System.Drawing.Point(16, 332);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(490, 225);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(567, 225);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
             // 
             // textBoxSlider_3
             // 
-            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 8F);
             this.textBoxSlider_3.Location = new System.Drawing.Point(191, 175);
             this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_3.Name = "textBoxSlider_3";
-            this.textBoxSlider_3.Size = new System.Drawing.Size(270, 29);
+            this.textBoxSlider_3.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_3.TabIndex = 103;
             // 
             // labelSlider_3
@@ -329,7 +330,7 @@ namespace WDAC_Wizard
             this.labelSlider_3.AutoSize = true;
             this.labelSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_3.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_3.Location = new System.Drawing.Point(50, 176);
+            this.labelSlider_3.Location = new System.Drawing.Point(43, 176);
             this.labelSlider_3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_3.Name = "labelSlider_3";
             this.labelSlider_3.Size = new System.Drawing.Size(91, 22);
@@ -339,11 +340,11 @@ namespace WDAC_Wizard
             // 
             // textBoxSlider_2
             // 
-            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 8F);
             this.textBoxSlider_2.Location = new System.Drawing.Point(191, 125);
             this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_2.Name = "textBoxSlider_2";
-            this.textBoxSlider_2.Size = new System.Drawing.Size(270, 29);
+            this.textBoxSlider_2.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_2.TabIndex = 101;
             // 
             // labelSlider_2
@@ -351,7 +352,7 @@ namespace WDAC_Wizard
             this.labelSlider_2.AutoSize = true;
             this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_2.Location = new System.Drawing.Point(50, 126);
+            this.labelSlider_2.Location = new System.Drawing.Point(43, 126);
             this.labelSlider_2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_2.Name = "labelSlider_2";
             this.labelSlider_2.Size = new System.Drawing.Size(104, 22);
@@ -361,11 +362,11 @@ namespace WDAC_Wizard
             // 
             // textBoxSlider_1
             // 
-            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 8F);
             this.textBoxSlider_1.Location = new System.Drawing.Point(191, 75);
             this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_1.Name = "textBoxSlider_1";
-            this.textBoxSlider_1.Size = new System.Drawing.Size(270, 29);
+            this.textBoxSlider_1.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_1.TabIndex = 99;
             // 
             // labelSlider_1
@@ -373,21 +374,21 @@ namespace WDAC_Wizard
             this.labelSlider_1.AutoSize = true;
             this.labelSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_1.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_1.Location = new System.Drawing.Point(50, 75);
+            this.labelSlider_1.Location = new System.Drawing.Point(43, 75);
             this.labelSlider_1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_1.Name = "labelSlider_1";
-            this.labelSlider_1.Size = new System.Drawing.Size(84, 22);
+            this.labelSlider_1.Size = new System.Drawing.Size(87, 22);
             this.labelSlider_1.TabIndex = 100;
-            this.labelSlider_1.Text = "Leaf cert:";
+            this.labelSlider_1.Text = "Publisher:";
             this.labelSlider_1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // textBoxSlider_0
             // 
-            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 8F);
             this.textBoxSlider_0.Location = new System.Drawing.Point(191, 25);
             this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_0.Name = "textBoxSlider_0";
-            this.textBoxSlider_0.Size = new System.Drawing.Size(270, 29);
+            this.textBoxSlider_0.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_0.TabIndex = 95;
             // 
             // labelSlider_0
@@ -395,12 +396,12 @@ namespace WDAC_Wizard
             this.labelSlider_0.AutoSize = true;
             this.labelSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_0.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_0.Location = new System.Drawing.Point(50, 25);
+            this.labelSlider_0.Location = new System.Drawing.Point(43, 25);
             this.labelSlider_0.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_0.Name = "labelSlider_0";
-            this.labelSlider_0.Size = new System.Drawing.Size(87, 22);
+            this.labelSlider_0.Size = new System.Drawing.Size(101, 22);
             this.labelSlider_0.TabIndex = 98;
-            this.labelSlider_0.Text = "Publisher:";
+            this.labelSlider_0.Text = "Issuing CA:";
             this.labelSlider_0.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // trackBar_Conditions
@@ -567,12 +568,25 @@ namespace WDAC_Wizard
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
+            // label_Error
+            // 
+            this.label_Error.AutoSize = true;
+            this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Error.ForeColor = System.Drawing.Color.Red;
+            this.label_Error.Location = new System.Drawing.Point(191, 752);
+            this.label_Error.Name = "label_Error";
+            this.label_Error.Size = new System.Drawing.Size(99, 22);
+            this.label_Error.TabIndex = 96;
+            this.label_Error.Text = "Label_Error";
+            this.label_Error.Visible = false;
+            // 
             // SigningRules_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Controls.Add(this.label_Error);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.panel_CustomRules);
             this.Controls.Add(this.label_AddCustomRules);
@@ -637,5 +651,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
+        private System.Windows.Forms.Label label_Error;
     }
 }

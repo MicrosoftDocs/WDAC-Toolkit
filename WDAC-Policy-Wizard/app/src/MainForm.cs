@@ -17,13 +17,6 @@ using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 
-//
-using Windows.UI.Popups;
-using Windows.ApplicationModel;
-using Windows.Management.Deployment;
-using Windows.Foundation; 
-
-//
 using WDAC_Wizard.Properties;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
@@ -916,13 +909,17 @@ namespace WDAC_Wizard
                 string createRuleScript;
 
                 // if the rule is type filepath and settings
-                if (CustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.FilePath && 
+                if (CustomRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath && 
                     Properties.Settings.Default.useEnvVars && CustomRule.isEnvVar())
                         createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", CustomRule.PSVariable, CustomRule.GetEnvVar());
-                else
-                    createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFiles $Files_{0}[{2}] " + 
+
+                else if(CustomRule.GetRuleType() == PolicyCustomRules.RuleType.FileAttributes)
+                    createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFiles $Files_{0}[{2}] " + 
                         "-Fallback Hash", CustomRule.PSVariable, CustomRule.GetRuleLevel(), CustomRule.RuleIndex);
-                
+                else
+                    createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFiles $Files_{0}[{2}] " +
+                        "-Fallback Hash", CustomRule.PSVariable, CustomRule.GetRuleLevel(), CustomRule.RuleIndex);
+
                 string createPolicyScript = "";
                 // Create new CI Policy from rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicy
                 // If the supplemental rule was configured OR the multipolicyformat setting is enabled, set "multiplepolicy format" switch
@@ -949,7 +946,7 @@ namespace WDAC_Wizard
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("{0} Exception caught", e);
+                    this.Log.AddErrorMsg("CreatePolicyFileRuleOptions() caught the following exception ", e);
                 }
                 worker.ReportProgress(70 + i / nRules * 10);
             }
@@ -1140,10 +1137,11 @@ namespace WDAC_Wizard
         {
             this.Log.AddInfoMsg("-- Get System Info --");
 
-            // Parse the SystemDriver cmdlet output for the scanPath only
             Dictionary<string, string> systemInfo = new Dictionary<string, string>();
             string scanFolderPath = scanPath.Substring(0, scanPath.LastIndexOf(@"\"));
             string fileName = scanPath.Substring(scanPath.LastIndexOf(@"\"));
+            
+            // Command will omit sub folders (recurssively) to optimize perf
             string sysInfoScript = String.Format("$Files_{0} = Get-SystemDriver -ScanPath '{1}' -UserPEs -PathToCatroot ' ' -OmitPaths {2}", 
                 this.RulesNumber, scanFolderPath, GetListSubFolders(scanFolderPath));
             this.Log.AddInfoMsg(sysInfoScript);
@@ -1160,7 +1158,7 @@ namespace WDAC_Wizard
             foreach (PSObject psObject in results)
                 sBuilder.AppendLine(psObject.ToString());
 
-            // Parse the output string into a dictionary
+            // Parse the SystemDriver cmdlet output for the scanPath only
             string scriptOutput = sBuilder.ToString();
             systemInfo = ParseSystemInfo(scriptOutput, fileName);
             systemInfo.Add("PSVar", this.RulesNumber.ToString());
