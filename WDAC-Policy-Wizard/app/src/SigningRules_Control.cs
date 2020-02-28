@@ -547,81 +547,82 @@ namespace WDAC_Wizard
             }
 
             // Add rule and exceptions to the table and master list & Scroll to new row index
-            var index = rulesDataGrid.Rows.Add();
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+           
+            string action = String.Empty;
+            string level = String.Empty; 
+            string name = String.Empty;
+            string files = String.Empty;
+            string exceptions = String.Empty; 
 
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
             // Set Action value to Allow or Deny
-            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow)
-                rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Allow";
-            else
-                rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Deny";
+            action = this.PolicyCustomRule.GetRulePermission().ToString(); 
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
-            rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.PolicyCustomRule.GetRuleType();
+            level = this.PolicyCustomRule.GetRuleType().ToString();
 
-            string colnameString = String.Empty; 
+             
 
             switch(this.PolicyCustomRule.GetRuleLevel())
             {
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
 
-                    colnameString += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
+                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
                     break; 
                 case PolicyCustomRules.RuleLevel.Publisher:
-                    colnameString += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"], 
+                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"], 
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
-                    colnameString += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FilePublisher:
-                    colnameString += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.InternalName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FileDescription:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.ProductName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
                     break;
 
                 default:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
                     break;
 
             }
 
-            // Add to data table
-            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = colnameString;
-
-            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow) 
-                this.Log.AddInfoMsg(String.Format("ALLOW: {0}", colnameString));
-            else
-                this.Log.AddInfoMsg(String.Format("DENY: {0}", colnameString));
+           
+            this.Log.AddInfoMsg(String.Format("CUSTOM RULE: {0} - {1} - {2} ", action, level, name));
+            
+            // Add to the DisplayObject
+            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
+            this.rulesDataGrid.RowCount += 1;
 
             // Attach the int row number we added it to
-            this.PolicyCustomRule.RowNumber = index; 
+            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount-1;
 
             // Add custom list to RulesList
             this.Policy.CustomRules.Add(this.PolicyCustomRule);
             this.PolicyCustomRule = new PolicyCustomRules();
-            bubbleUp();
 
+            bubbleUp();
+            
             // Reset UI view
             ClearCustomRulesPanel(true);
         }
@@ -633,7 +634,8 @@ namespace WDAC_Wizard
         {
             int index = 0;
             string friendlyName = String.Empty;    //  this.Policy.Signers[signerID].Name;
-            string action = String.Empty; 
+            string action = String.Empty;
+            string level = String.Empty; 
             string exceptionList = String.Empty;
             string fileAttrList = String.Empty;
             string signerID = String.Empty;
@@ -654,7 +656,7 @@ namespace WDAC_Wizard
                     signerID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
                     friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
                     action = "Allow"; // signer.ID; //  this.Policy.Signers[signerID].Action;
-
+                    level = "Publisher"; 
 
                     // Get signer exceptions - if applicable
                      /*if (this.Policy.Signers[signerID].Exceptions.Count > 0)
@@ -681,7 +683,7 @@ namespace WDAC_Wizard
                          }
                      }*/
 
-                    this.displayObjects.Add(new DisplayObject(action, "Publisher", friendlyName, fileAttrList, exceptionList));
+                    this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                     this.rulesDataGrid.RowCount += 1; 
 
                     // Get row index #, Scroll to new row index
@@ -705,34 +707,30 @@ namespace WDAC_Wizard
                             continue;
                         else
                         {
-                            // Get row index #, Scroll to new row index
-                            index = rulesDataGrid.Rows.Add();
-
+                            
                             // Write to UI
-                            rulesDataGrid.Rows[index].Cells["Column_Action"].Value = this.Policy.FileRules[ruleID].Action;
-                            rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+                            action = this.Policy.FileRules[ruleID].Action;
+                            level = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+
                             if (this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
                                 this.Policy.FileRules[ruleID].FileName != null)
-                                rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FileName;
+                                friendlyName = this.Policy.FileRules[ruleID].FileName;
                             else
-                                rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FriendlyName;
+                                friendlyName = this.Policy.FileRules[ruleID].FriendlyName;
                         }
                     }
+
+                    this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
+                    this.rulesDataGrid.RowCount += 1;
+
                 }
 
             }
 
-            
-
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
-
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
 
         /// <summary>
         /// Method to parse either the template or supplemental policy and store into the custom data structures for digestion. 

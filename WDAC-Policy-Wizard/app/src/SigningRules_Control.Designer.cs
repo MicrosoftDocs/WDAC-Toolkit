@@ -35,6 +35,11 @@ namespace WDAC_Wizard
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rulesDataGrid = new System.Windows.Forms.DataGridView();
+            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Files = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Exceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label8 = new System.Windows.Forms.Label();
             this.label_AddCustomRules = new System.Windows.Forms.Label();
             this.button_Create = new System.Windows.Forms.Button();
@@ -67,11 +72,6 @@ namespace WDAC_Wizard
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Files = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Exceptions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -104,7 +104,6 @@ namespace WDAC_Wizard
             // 
             // rulesDataGrid
             // 
-            this.rulesDataGrid.AllowUserToAddRows = false;
             this.rulesDataGrid.AllowUserToDeleteRows = false;
             this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.Silver;
@@ -129,6 +128,46 @@ namespace WDAC_Wizard
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
             this.rulesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.rulesDataGrid_CellValueNeeded);
             this.rulesDataGrid.NewRowNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.rulesDataGrid_NewRowNeeded);
+            // 
+            // column_Action
+            // 
+            this.column_Action.HeaderText = "Action";
+            this.column_Action.MinimumWidth = 6;
+            this.column_Action.Name = "column_Action";
+            this.column_Action.ReadOnly = true;
+            this.column_Action.Width = 76;
+            // 
+            // column_Level
+            // 
+            this.column_Level.HeaderText = "Level";
+            this.column_Level.MinimumWidth = 6;
+            this.column_Level.Name = "column_Level";
+            this.column_Level.ReadOnly = true;
+            this.column_Level.Width = 71;
+            // 
+            // Column_Name
+            // 
+            this.Column_Name.HeaderText = "Name";
+            this.Column_Name.MinimumWidth = 6;
+            this.Column_Name.Name = "Column_Name";
+            this.Column_Name.ReadOnly = true;
+            this.Column_Name.Width = 74;
+            // 
+            // Column_Files
+            // 
+            this.Column_Files.HeaderText = "Associated Files";
+            this.Column_Files.MinimumWidth = 6;
+            this.Column_Files.Name = "Column_Files";
+            this.Column_Files.ReadOnly = true;
+            this.Column_Files.Width = 127;
+            // 
+            // Column_Exceptions
+            // 
+            this.Column_Exceptions.HeaderText = "Exceptions";
+            this.Column_Exceptions.MinimumWidth = 6;
+            this.Column_Exceptions.Name = "Column_Exceptions";
+            this.Column_Exceptions.ReadOnly = true;
+            this.Column_Exceptions.Width = 105;
             // 
             // label8
             // 
@@ -547,46 +586,6 @@ namespace WDAC_Wizard
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
-            // column_Action
-            // 
-            this.column_Action.HeaderText = "Action";
-            this.column_Action.MinimumWidth = 6;
-            this.column_Action.Name = "column_Action";
-            this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 76;
-            // 
-            // column_Level
-            // 
-            this.column_Level.HeaderText = "Level";
-            this.column_Level.MinimumWidth = 6;
-            this.column_Level.Name = "column_Level";
-            this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 71;
-            // 
-            // Column_Name
-            // 
-            this.Column_Name.HeaderText = "Name";
-            this.Column_Name.MinimumWidth = 6;
-            this.Column_Name.Name = "Column_Name";
-            this.Column_Name.ReadOnly = true;
-            this.Column_Name.Width = 74;
-            // 
-            // Column_Files
-            // 
-            this.Column_Files.HeaderText = "Associated Files";
-            this.Column_Files.MinimumWidth = 6;
-            this.Column_Files.Name = "Column_Files";
-            this.Column_Files.ReadOnly = true;
-            this.Column_Files.Width = 127;
-            // 
-            // Column_Exceptions
-            // 
-            this.Column_Exceptions.HeaderText = "Exceptions";
-            this.Column_Exceptions.MinimumWidth = 6;
-            this.Column_Exceptions.Name = "Column_Exceptions";
-            this.Column_Exceptions.ReadOnly = true;
-            this.Column_Exceptions.Width = 105;
             // 
             // SigningRules_Control
             // 
