@@ -71,7 +71,6 @@ namespace WDAC_Wizard
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -127,7 +126,6 @@ namespace WDAC_Wizard
             this.rulesDataGrid.VirtualMode = true;
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
             this.rulesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.rulesDataGrid_CellValueNeeded);
-            this.rulesDataGrid.NewRowNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.rulesDataGrid_NewRowNeeded);
             // 
             // column_Action
             // 
@@ -583,10 +581,6 @@ namespace WDAC_Wizard
             this.label_Error.Text = "Label_Error";
             this.label_Error.Visible = false;
             // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
             // SigningRules_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -654,7 +648,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label labelSlider_3;
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Label label_Error;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;

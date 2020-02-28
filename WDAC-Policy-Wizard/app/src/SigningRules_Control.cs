@@ -63,16 +63,7 @@ namespace WDAC_Wizard
             //   backgroundWorker1.RunWorkerAsync();
         }
 
-        /// <summary>
-        /// Event handler where the time-consuming work of creating the policies is accomplished. 
-        /// No UI changes should be performed in this method. 
-        /// </summary>
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            readSetRules();
-            displayRules();
-        }
-
+        
         //private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 
         /// <summary>
@@ -609,13 +600,14 @@ namespace WDAC_Wizard
 
            
             this.Log.AddInfoMsg(String.Format("CUSTOM RULE: {0} - {1} - {2} ", action, level, name));
-            
+
+            // Attach the int row number we added it to
+            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+
             // Add to the DisplayObject
             this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
             this.rulesDataGrid.RowCount += 1;
 
-            // Attach the int row number we added it to
-            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount-1;
 
             // Add custom list to RulesList
             this.Policy.CustomRules.Add(this.PolicyCustomRule);
@@ -632,7 +624,6 @@ namespace WDAC_Wizard
         /// </summary>
         private void displayRules()
         {
-            int index = 0;
             string friendlyName = String.Empty;    //  this.Policy.Signers[signerID].Name;
             string action = String.Empty;
             string level = String.Empty; 
@@ -641,11 +632,13 @@ namespace WDAC_Wizard
             string signerID = String.Empty;
 
             // Increase efficiency by constructing signers dictionary hint
-            Dictionary<string, string> signersDict = new Dictionary<string, string>(); 
+            Dictionary<string, string> signersDict = new Dictionary<string, string>();
+            Dictionary<string, string> fileRulesDict = new Dictionary<string, string>();
 
-            foreach(var signer in this.Policy.siPolicy.Signers)
-                signersDict.Add(signer.ID, signer.Name); 
-            
+            foreach (var signer in this.Policy.siPolicy.Signers)
+                signersDict.Add(signer.ID, signer.Name);
+
+            //Console.WriteLine(this.Policy.siPolicy.FileRules[0]); 
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
@@ -659,18 +652,18 @@ namespace WDAC_Wizard
                     level = "Publisher"; 
 
                     // Get signer exceptions - if applicable
-                     /*if (this.Policy.Signers[signerID].Exceptions.Count > 0)
+                     if (scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule != null)
                      {
                          // Iterate through all of the exceptions, get the ID and map to filename
-                         foreach (string exceptionID in this.Policy.Signers[signerID].Exceptions)
+                         for(int j = 0; j< scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++ )
                          {
-                             string exceptionName = this.Policy.FileRules[exceptionID].FileName;
-                             exceptionList += String.Format("{0}, ", exceptionName);
+                             exceptionList += String.Format("{0}, ", scenario.ProductSigners.AllowedSigners
+                                 .AllowedSigner[i].ExceptDenyRule[j].DenyRuleID);
                          }
                      }
 
                      // Get associated/affected files
-                     if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
+                     /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
                      {
                          // Iterate through all of the exceptions, get the ID and map to filename
                          foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
@@ -688,13 +681,6 @@ namespace WDAC_Wizard
 
                     // Get row index #, Scroll to new row index
                     //index = rulesDataGrid.Rows.Add();
-
-                    // Write to UI
-                    //rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
-                    //rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Publisher";
-                    //rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
-                    //rulesDataGrid.Rows[index].Cells["Column_Files"].Value = fileAttrList; //.Substring(0, fileAttrList.Length - 1); //trim trailing comma
-                    //rulesDataGrid.Rows[index].Cells["Column_Exceptions"].Value = exceptionList;
                 }
 
                 // Process file rules (hash, file path, file name)
@@ -728,7 +714,7 @@ namespace WDAC_Wizard
             }
 
             // Scroll to bottom of table
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+            rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
         }
 
 
@@ -815,16 +801,19 @@ namespace WDAC_Wizard
         /// </summary>
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            // TODO: remove from DisplayObjects
-
-
+  
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
-            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value; 
+            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
+
+            if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
+                return; 
 
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
             if (res == DialogResult.Yes)
             {
                 var ruleIDs = new List<string>();
@@ -836,31 +825,39 @@ namespace WDAC_Wizard
 
                 if (ruleType == "Publisher")
                 {
-                    foreach (var key in _keys)
+                    foreach (var signer in this.Policy.siPolicy.Signers)
                     {
-                        var pSigner = this.Policy.Signers[key];
-                        if (pSigner.Name == ruleName)
-                            ruleIDs.Add(key);
+                        if (ruleName == signer.Name)
+                            ruleIDs.Add(signer.ID);
                     }
                 }
-                
+
                 else
                 {
                     // Get list of IDs for related rules. ie. Deleting one hash should delete all four hash values.
                     if (ruleType == "Hash")
-                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1); 
+                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1);
 
                     foreach (var key in _fileRulekeys)
                     {
                         var pFileRule = this.Policy.FileRules[key];
                         if (pFileRule.FriendlyName.Contains(ruleName))
                             ruleIDs.Add(key);
+
+                        foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                        {
+                            //if(fileRule.)
+                        }
                     }
                 }
-                
+
+                // Remove from DisplayObject
+                if (rowIdx < this.displayObjects.Count)
+                    this.displayObjects.RemoveAt(rowIdx);
+
 
                 // Only structure we have to remove the rule from is the one that is used in writing rules -- custom rules
-                for (int i = this.Policy.CustomRules.Count - 1; i>=0; i--)
+                for (int i = this.Policy.CustomRules.Count - 1; i >= 0; i--)
                 {
                     if (this.Policy.CustomRules[i].RowNumber == rowIdx)
                         this.Policy.CustomRules.Remove(this.Policy.CustomRules[i]); // Remove from structs
@@ -870,7 +867,7 @@ namespace WDAC_Wizard
                 XmlDocument doc = new XmlDocument();
                 doc.Load(this.XmlPath); // Reading from the template (either one of the 3 bases or editing)
 
-                
+
                 // A friendly name can have multiple references in the doc -- remove each one
                 // Skips section if custom rule
                 if (ruleType == "Publisher")
@@ -933,9 +930,11 @@ namespace WDAC_Wizard
 
                 // Delete from UI elements:
                 this.rulesDataGrid.Rows.RemoveAt(rowIdx);
-                doc.Save(this.XmlPath); 
-            }
-             
+                doc.Save(this.XmlPath);
+
+                // Scroll to bottom of table
+                rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount;
+            } 
         }
 
         /// <summary>
@@ -958,6 +957,9 @@ namespace WDAC_Wizard
             
         }
 
+        /// <summary>
+        /// Called when DataGridView needs to paint data
+        /// </summary>
         private void rulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
@@ -998,11 +1000,6 @@ namespace WDAC_Wizard
                     e.Value = displayObject.Exceptions;
                     break;
             }
-        }
-
-        private void rulesDataGrid_NewRowNeeded(object sender, DataGridViewRowEventArgs e)
-        {
-
         }
     }
 
