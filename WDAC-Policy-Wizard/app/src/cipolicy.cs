@@ -2221,9 +2221,3 @@ public enum PolicyType {
     SupplementalPolicy,
 }
 
-public class Policy
-{
-    [XmlArrayItem(typeof(SiPolicy))]
-    public SiPolicy[] _Policy { get; set; }
-
-}
