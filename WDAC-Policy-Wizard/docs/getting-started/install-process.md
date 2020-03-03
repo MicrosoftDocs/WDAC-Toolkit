@@ -3,7 +3,7 @@
 
 # Installing the WDAC Policy Wizard
 
-The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard App Host Site](https://wdac-wizard-appinstaller.azurewebsites.net) hosted on Azure. 
+The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard App Host Site](https://webapp-wdac-wizard.azurewebsites.net/) hosted on Azure. 
 
 ### Directions
 
