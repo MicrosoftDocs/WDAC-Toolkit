@@ -83,10 +83,10 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(180, 295);
+            this.label7.Location = new System.Drawing.Point(202, 369);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(0, 21);
+            this.label7.Size = new System.Drawing.Size(0, 24);
             this.label7.TabIndex = 57;
             // 
             // label1
@@ -94,10 +94,10 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(168, 10);
+            this.label1.Location = new System.Drawing.Point(189, 12);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(220, 29);
+            this.label1.Size = new System.Drawing.Size(259, 34);
             this.label1.TabIndex = 47;
             this.label1.Text = "Policy Signing Rules";
             // 
@@ -113,7 +113,7 @@ namespace WDAC_Wizard
             this.Column_Name,
             this.Column_Files,
             this.Column_Exceptions});
-            this.rulesDataGrid.Location = new System.Drawing.Point(173, 132);
+            this.rulesDataGrid.Location = new System.Drawing.Point(195, 165);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
@@ -121,7 +121,7 @@ namespace WDAC_Wizard
             this.rulesDataGrid.RowHeadersWidth = 70;
             this.rulesDataGrid.RowTemplate.Height = 24;
             this.rulesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.rulesDataGrid.Size = new System.Drawing.Size(449, 422);
+            this.rulesDataGrid.Size = new System.Drawing.Size(505, 528);
             this.rulesDataGrid.TabIndex = 92;
             this.rulesDataGrid.VirtualMode = true;
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
@@ -133,7 +133,7 @@ namespace WDAC_Wizard
             this.column_Action.MinimumWidth = 6;
             this.column_Action.Name = "column_Action";
             this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 76;
+            this.column_Action.Width = 90;
             // 
             // column_Level
             // 
@@ -141,7 +141,7 @@ namespace WDAC_Wizard
             this.column_Level.MinimumWidth = 6;
             this.column_Level.Name = "column_Level";
             this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 71;
+            this.column_Level.Width = 82;
             // 
             // Column_Name
             // 
@@ -149,7 +149,7 @@ namespace WDAC_Wizard
             this.Column_Name.MinimumWidth = 6;
             this.Column_Name.Name = "Column_Name";
             this.Column_Name.ReadOnly = true;
-            this.Column_Name.Width = 74;
+            this.Column_Name.Width = 87;
             // 
             // Column_Files
             // 
@@ -157,7 +157,7 @@ namespace WDAC_Wizard
             this.Column_Files.MinimumWidth = 6;
             this.Column_Files.Name = "Column_Files";
             this.Column_Files.ReadOnly = true;
-            this.Column_Files.Width = 127;
+            this.Column_Files.Width = 148;
             // 
             // Column_Exceptions
             // 
@@ -165,17 +165,17 @@ namespace WDAC_Wizard
             this.Column_Exceptions.MinimumWidth = 6;
             this.Column_Exceptions.Name = "Column_Exceptions";
             this.Column_Exceptions.ReadOnly = true;
-            this.Column_Exceptions.Width = 105;
+            this.Column_Exceptions.Width = 123;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(174, 102);
+            this.label8.Location = new System.Drawing.Point(196, 128);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(187, 21);
+            this.label8.Size = new System.Drawing.Size(237, 25);
             this.label8.TabIndex = 91;
             this.label8.Text = "Policy Signing Rules List";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -185,10 +185,10 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.AutoSize = true;
             this.label_AddCustomRules.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label_AddCustomRules.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label_AddCustomRules.Location = new System.Drawing.Point(495, 106);
+            this.label_AddCustomRules.Location = new System.Drawing.Point(557, 132);
             this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_AddCustomRules.Name = "label_AddCustomRules";
-            this.label_AddCustomRules.Size = new System.Drawing.Size(113, 18);
+            this.label_AddCustomRules.Size = new System.Drawing.Size(137, 22);
             this.label_AddCustomRules.TabIndex = 92;
             this.label_AddCustomRules.Text = "+ Custom Rules";
             this.label_AddCustomRules.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -202,10 +202,10 @@ namespace WDAC_Wizard
             this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Create.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Create.Location = new System.Drawing.Point(13, 501);
+            this.button_Create.Location = new System.Drawing.Point(15, 626);
             this.button_Create.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Create.Name = "button_Create";
-            this.button_Create.Size = new System.Drawing.Size(129, 32);
+            this.button_Create.Size = new System.Drawing.Size(145, 40);
             this.button_Create.TabIndex = 92;
             this.button_Create.Text = "Create Rule";
             this.button_Create.UseVisualStyleBackColor = false;
@@ -228,10 +228,10 @@ namespace WDAC_Wizard
             this.panel_CustomRules.Controls.Add(this.button_Browse);
             this.panel_CustomRules.Controls.Add(this.label_condition);
             this.panel_CustomRules.Controls.Add(this.label4);
-            this.panel_CustomRules.Location = new System.Drawing.Point(636, 70);
+            this.panel_CustomRules.Location = new System.Drawing.Point(716, 88);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_CustomRules.Name = "panel_CustomRules";
-            this.panel_CustomRules.Size = new System.Drawing.Size(639, 538);
+            this.panel_CustomRules.Size = new System.Drawing.Size(719, 672);
             this.panel_CustomRules.TabIndex = 85;
             this.panel_CustomRules.Visible = false;
             // 
@@ -240,9 +240,9 @@ namespace WDAC_Wizard
             this.publisherInfoLabel.AutoSize = true;
             this.publisherInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(14, 448);
+            this.publisherInfoLabel.Location = new System.Drawing.Point(16, 560);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
-            this.publisherInfoLabel.Size = new System.Drawing.Size(472, 36);
+            this.publisherInfoLabel.Size = new System.Drawing.Size(590, 44);
             this.publisherInfoLabel.TabIndex = 106;
             this.publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this  \r\nfi" +
     "le name with a version at or above the specified version number.";
@@ -252,10 +252,10 @@ namespace WDAC_Wizard
             // 
             this.panel_FileFolder.Controls.Add(this.radioButton_Folder);
             this.panel_FileFolder.Controls.Add(this.radioButton_File);
-            this.panel_FileFolder.Location = new System.Drawing.Point(465, 267);
+            this.panel_FileFolder.Location = new System.Drawing.Point(523, 334);
             this.panel_FileFolder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_FileFolder.Name = "panel_FileFolder";
-            this.panel_FileFolder.Size = new System.Drawing.Size(149, 33);
+            this.panel_FileFolder.Size = new System.Drawing.Size(168, 41);
             this.panel_FileFolder.TabIndex = 104;
             this.panel_FileFolder.Visible = false;
             // 
@@ -264,10 +264,10 @@ namespace WDAC_Wizard
             this.radioButton_Folder.AutoSize = true;
             this.radioButton_Folder.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_Folder.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_Folder.Location = new System.Drawing.Point(69, 6);
+            this.radioButton_Folder.Location = new System.Drawing.Point(78, 8);
             this.radioButton_Folder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton_Folder.Name = "radioButton_Folder";
-            this.radioButton_Folder.Size = new System.Drawing.Size(77, 25);
+            this.radioButton_Folder.Size = new System.Drawing.Size(95, 29);
             this.radioButton_Folder.TabIndex = 96;
             this.radioButton_Folder.TabStop = true;
             this.radioButton_Folder.Text = "Folder";
@@ -278,10 +278,10 @@ namespace WDAC_Wizard
             this.radioButton_File.AutoSize = true;
             this.radioButton_File.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_File.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_File.Location = new System.Drawing.Point(11, 6);
+            this.radioButton_File.Location = new System.Drawing.Point(12, 8);
             this.radioButton_File.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton_File.Name = "radioButton_File";
-            this.radioButton_File.Size = new System.Drawing.Size(57, 25);
+            this.radioButton_File.Size = new System.Drawing.Size(69, 29);
             this.radioButton_File.TabIndex = 95;
             this.radioButton_File.TabStop = true;
             this.radioButton_File.Text = "File";
@@ -293,9 +293,9 @@ namespace WDAC_Wizard
             this.label_Info.AutoSize = true;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label_Info.Location = new System.Drawing.Point(12, 157);
+            this.label_Info.Location = new System.Drawing.Point(14, 196);
             this.label_Info.Name = "label_Info";
-            this.label_Info.Size = new System.Drawing.Size(76, 18);
+            this.label_Info.Size = new System.Drawing.Size(94, 22);
             this.label_Info.TabIndex = 95;
             this.label_Info.Text = "Label_Info";
             this.label_Info.Visible = false;
@@ -311,20 +311,20 @@ namespace WDAC_Wizard
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(14, 266);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(16, 332);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(504, 180);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(567, 225);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
             // 
             // textBoxSlider_3
             // 
             this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_3.Location = new System.Drawing.Point(170, 140);
+            this.textBoxSlider_3.Location = new System.Drawing.Point(191, 175);
             this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_3.Name = "textBoxSlider_3";
-            this.textBoxSlider_3.Size = new System.Drawing.Size(297, 24);
+            this.textBoxSlider_3.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_3.TabIndex = 103;
             // 
             // labelSlider_3
@@ -332,10 +332,10 @@ namespace WDAC_Wizard
             this.labelSlider_3.AutoSize = true;
             this.labelSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_3.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_3.Location = new System.Drawing.Point(38, 141);
+            this.labelSlider_3.Location = new System.Drawing.Point(43, 176);
             this.labelSlider_3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_3.Name = "labelSlider_3";
-            this.labelSlider_3.Size = new System.Drawing.Size(75, 18);
+            this.labelSlider_3.Size = new System.Drawing.Size(91, 22);
             this.labelSlider_3.TabIndex = 104;
             this.labelSlider_3.Text = "File name:";
             this.labelSlider_3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -343,10 +343,10 @@ namespace WDAC_Wizard
             // textBoxSlider_2
             // 
             this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_2.Location = new System.Drawing.Point(170, 100);
+            this.textBoxSlider_2.Location = new System.Drawing.Point(191, 125);
             this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_2.Name = "textBoxSlider_2";
-            this.textBoxSlider_2.Size = new System.Drawing.Size(297, 24);
+            this.textBoxSlider_2.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_2.TabIndex = 101;
             // 
             // labelSlider_2
@@ -354,10 +354,10 @@ namespace WDAC_Wizard
             this.labelSlider_2.AutoSize = true;
             this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_2.Location = new System.Drawing.Point(38, 101);
+            this.labelSlider_2.Location = new System.Drawing.Point(43, 126);
             this.labelSlider_2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_2.Name = "labelSlider_2";
-            this.labelSlider_2.Size = new System.Drawing.Size(84, 18);
+            this.labelSlider_2.Size = new System.Drawing.Size(104, 22);
             this.labelSlider_2.TabIndex = 102;
             this.labelSlider_2.Text = "File version:";
             this.labelSlider_2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -365,10 +365,10 @@ namespace WDAC_Wizard
             // textBoxSlider_1
             // 
             this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_1.Location = new System.Drawing.Point(170, 60);
+            this.textBoxSlider_1.Location = new System.Drawing.Point(191, 75);
             this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_1.Name = "textBoxSlider_1";
-            this.textBoxSlider_1.Size = new System.Drawing.Size(297, 24);
+            this.textBoxSlider_1.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_1.TabIndex = 99;
             // 
             // labelSlider_1
@@ -376,10 +376,10 @@ namespace WDAC_Wizard
             this.labelSlider_1.AutoSize = true;
             this.labelSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_1.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_1.Location = new System.Drawing.Point(38, 60);
+            this.labelSlider_1.Location = new System.Drawing.Point(43, 75);
             this.labelSlider_1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_1.Name = "labelSlider_1";
-            this.labelSlider_1.Size = new System.Drawing.Size(69, 18);
+            this.labelSlider_1.Size = new System.Drawing.Size(87, 22);
             this.labelSlider_1.TabIndex = 100;
             this.labelSlider_1.Text = "Publisher:";
             this.labelSlider_1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -387,10 +387,10 @@ namespace WDAC_Wizard
             // textBoxSlider_0
             // 
             this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_0.Location = new System.Drawing.Point(170, 20);
+            this.textBoxSlider_0.Location = new System.Drawing.Point(191, 25);
             this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSlider_0.Name = "textBoxSlider_0";
-            this.textBoxSlider_0.Size = new System.Drawing.Size(297, 24);
+            this.textBoxSlider_0.Size = new System.Drawing.Size(334, 27);
             this.textBoxSlider_0.TabIndex = 95;
             // 
             // labelSlider_0
@@ -398,10 +398,10 @@ namespace WDAC_Wizard
             this.labelSlider_0.AutoSize = true;
             this.labelSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_0.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_0.Location = new System.Drawing.Point(38, 20);
+            this.labelSlider_0.Location = new System.Drawing.Point(43, 25);
             this.labelSlider_0.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSlider_0.Name = "labelSlider_0";
-            this.labelSlider_0.Size = new System.Drawing.Size(82, 18);
+            this.labelSlider_0.Size = new System.Drawing.Size(101, 22);
             this.labelSlider_0.TabIndex = 98;
             this.labelSlider_0.Text = "Issuing CA:";
             this.labelSlider_0.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -409,12 +409,12 @@ namespace WDAC_Wizard
             // trackBar_Conditions
             // 
             this.trackBar_Conditions.LargeChange = 4;
-            this.trackBar_Conditions.Location = new System.Drawing.Point(3, 13);
+            this.trackBar_Conditions.Location = new System.Drawing.Point(3, 16);
             this.trackBar_Conditions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.trackBar_Conditions.Maximum = 12;
             this.trackBar_Conditions.Name = "trackBar_Conditions";
             this.trackBar_Conditions.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar_Conditions.Size = new System.Drawing.Size(56, 158);
+            this.trackBar_Conditions.Size = new System.Drawing.Size(69, 198);
             this.trackBar_Conditions.SmallChange = 4;
             this.trackBar_Conditions.TabIndex = 96;
             this.trackBar_Conditions.TickFrequency = 4;
@@ -425,10 +425,10 @@ namespace WDAC_Wizard
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(14, 37);
+            this.label10.Location = new System.Drawing.Point(16, 46);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(523, 36);
+            this.label10.Size = new System.Drawing.Size(634, 44);
             this.label10.TabIndex = 94;
             this.label10.Text = "Select the rule type, browse for the reference file and choose whether to allow \r" +
     "\nor deny. ";
@@ -438,10 +438,10 @@ namespace WDAC_Wizard
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.Black;
-            this.label9.Location = new System.Drawing.Point(14, 97);
+            this.label9.Location = new System.Drawing.Point(16, 121);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 18);
+            this.label9.Size = new System.Drawing.Size(95, 22);
             this.label9.TabIndex = 89;
             this.label9.Text = "Rule Type:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -455,10 +455,10 @@ namespace WDAC_Wizard
             "Path",
             "File Attributes",
             "File Hash"});
-            this.comboBox_RuleType.Location = new System.Drawing.Point(17, 116);
+            this.comboBox_RuleType.Location = new System.Drawing.Point(19, 145);
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_RuleType.Name = "comboBox_RuleType";
-            this.comboBox_RuleType.Size = new System.Drawing.Size(200, 26);
+            this.comboBox_RuleType.Size = new System.Drawing.Size(224, 30);
             this.comboBox_RuleType.TabIndex = 89;
             this.comboBox_RuleType.SelectedIndexChanged += new System.EventHandler(this.RuleType_ComboboxChanged);
             // 
@@ -467,10 +467,10 @@ namespace WDAC_Wizard
             this.radioButton_Deny.AutoSize = true;
             this.radioButton_Deny.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_Deny.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_Deny.Location = new System.Drawing.Point(336, 116);
+            this.radioButton_Deny.Location = new System.Drawing.Point(378, 145);
             this.radioButton_Deny.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton_Deny.Name = "radioButton_Deny";
-            this.radioButton_Deny.Size = new System.Drawing.Size(69, 25);
+            this.radioButton_Deny.Size = new System.Drawing.Size(84, 29);
             this.radioButton_Deny.TabIndex = 90;
             this.radioButton_Deny.TabStop = true;
             this.radioButton_Deny.Text = "Deny";
@@ -482,10 +482,10 @@ namespace WDAC_Wizard
             this.radioButton_Allow.Checked = true;
             this.radioButton_Allow.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_Allow.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_Allow.Location = new System.Drawing.Point(247, 116);
+            this.radioButton_Allow.Location = new System.Drawing.Point(278, 145);
             this.radioButton_Allow.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton_Allow.Name = "radioButton_Allow";
-            this.radioButton_Allow.Size = new System.Drawing.Size(72, 25);
+            this.radioButton_Allow.Size = new System.Drawing.Size(87, 29);
             this.radioButton_Allow.TabIndex = 89;
             this.radioButton_Allow.TabStop = true;
             this.radioButton_Allow.Text = "Allow";
@@ -495,10 +495,10 @@ namespace WDAC_Wizard
             // textBox_ReferenceFile
             // 
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(15, 231);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(17, 289);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
-            this.textBox_ReferenceFile.Size = new System.Drawing.Size(435, 26);
+            this.textBox_ReferenceFile.Size = new System.Drawing.Size(489, 29);
             this.textBox_ReferenceFile.TabIndex = 88;
             this.textBox_ReferenceFile.Click += new System.EventHandler(this.button_Browse_Click);
             // 
@@ -509,10 +509,10 @@ namespace WDAC_Wizard
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.Location = new System.Drawing.Point(469, 225);
+            this.button_Browse.Location = new System.Drawing.Point(528, 281);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(89, 32);
+            this.button_Browse.Size = new System.Drawing.Size(100, 40);
             this.button_Browse.TabIndex = 84;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
@@ -523,10 +523,10 @@ namespace WDAC_Wizard
             this.label_condition.AutoSize = true;
             this.label_condition.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_condition.ForeColor = System.Drawing.Color.Black;
-            this.label_condition.Location = new System.Drawing.Point(12, 210);
+            this.label_condition.Location = new System.Drawing.Point(14, 262);
             this.label_condition.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_condition.Name = "label_condition";
-            this.label_condition.Size = new System.Drawing.Size(104, 18);
+            this.label_condition.Size = new System.Drawing.Size(125, 22);
             this.label_condition.TabIndex = 87;
             this.label_condition.Text = "Reference File:";
             this.label_condition.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -536,10 +536,10 @@ namespace WDAC_Wizard
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(13, 2);
+            this.label4.Location = new System.Drawing.Point(15, 2);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(186, 21);
+            this.label4.Size = new System.Drawing.Size(234, 25);
             this.label4.TabIndex = 86;
             this.label4.Text = "Custom Rule Conditions";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -549,10 +549,10 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(170, 44);
+            this.label3.Location = new System.Drawing.Point(191, 55);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(556, 18);
+            this.label3.Size = new System.Drawing.Size(679, 22);
             this.label3.TabIndex = 80;
             this.label3.Text = "Create allow or deny rules for signed files based on its publisher, path or hash " +
     "value.";
@@ -562,9 +562,10 @@ namespace WDAC_Wizard
             this.deleteButton.FlatAppearance.BorderSize = 0;
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Image = global::WDAC_Wizard.Properties.Resources.minus_button;
-            this.deleteButton.Location = new System.Drawing.Point(597, 561);
+            this.deleteButton.Location = new System.Drawing.Point(672, 701);
+            this.deleteButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(25, 25);
+            this.deleteButton.Size = new System.Drawing.Size(28, 31);
             this.deleteButton.TabIndex = 93;
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
@@ -574,16 +575,16 @@ namespace WDAC_Wizard
             this.label_Error.AutoSize = true;
             this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Error.ForeColor = System.Drawing.Color.Red;
-            this.label_Error.Location = new System.Drawing.Point(170, 602);
+            this.label_Error.Location = new System.Drawing.Point(191, 774);
             this.label_Error.Name = "label_Error";
-            this.label_Error.Size = new System.Drawing.Size(80, 18);
+            this.label_Error.Size = new System.Drawing.Size(99, 22);
             this.label_Error.TabIndex = 96;
             this.label_Error.Text = "Label_Error";
             this.label_Error.Visible = false;
             // 
             // SigningRules_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -598,7 +599,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label3);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "SigningRules_Control";
-            this.Size = new System.Drawing.Size(1284, 682);
+            this.Size = new System.Drawing.Size(1444, 870);
             this.Load += new System.EventHandler(this.SigningRules_Control_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).EndInit();
             this.panel_CustomRules.ResumeLayout(false);

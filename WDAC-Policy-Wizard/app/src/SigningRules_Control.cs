@@ -122,7 +122,7 @@ namespace WDAC_Wizard
 
                 case "File Attributes":
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None); // Match UI by default
+                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
@@ -241,17 +241,36 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
 
                 // Get cert chain info to be shown to the user
-                var signer = X509Certificate.CreateFromSignedFile(refPath);
-                var cert = new X509Certificate2(signer);
-                var certChain = new X509Chain();
-                var certChainIsValid = certChain.Build(cert); 
+                string leafCertSubjectName = "";
+                string pcaCertSubjectName = ""; 
+                try
+                {
+                    var signer = X509Certificate.CreateFromSignedFile(refPath);
+                    var cert = new X509Certificate2(signer);
+                    var certChain = new X509Chain();
+                    var certChainIsValid = certChain.Build(cert);
 
-                var leafCertSubjectName = cert.SubjectName.Name;
-                var pcaCertSubjectName = ""; 
-                if(certChain.ChainElements.Count > 1)
-                    pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
-                PolicyCustomRule.FileInfo.Add("LeafCertificate", leafCertSubjectName);
-                PolicyCustomRule.FileInfo.Add("PCACertificate", pcaCertSubjectName);
+                    leafCertSubjectName = cert.SubjectName.Name;
+                    if (certChain.ChainElements.Count > 1)
+                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+
+                }
+                catch(Exception exp)
+                {
+                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
+                        exp, refPath));
+                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
+                    this.label_Error.Visible = true; 
+
+                    Timer settingsUpdateNotificationTimer = new Timer();
+                    settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
+                    settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+                    settingsUpdateNotificationTimer.Start();
+                }
+
+                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? "N/A" : leafCertSubjectName);
+                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? "N/A" : pcaCertSubjectName);
+
             }
 
             switch (this.PolicyCustomRule.GetRuleType())
@@ -402,6 +421,9 @@ namespace WDAC_Wizard
                             trackBar_Conditions.Value = 0;
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
                             textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A"
+                                || textBoxSlider_3.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "and file name with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
@@ -413,6 +435,8 @@ namespace WDAC_Wizard
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
                             textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["FileVersion"];
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
@@ -425,6 +449,8 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["LeafCertificate"];
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher.";
                             this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
                         }
@@ -437,6 +463,8 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = "*";
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this issuing CA subject name.";
                             this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
 
@@ -503,8 +531,8 @@ namespace WDAC_Wizard
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
                             if (textBoxSlider_0.Text == "N/A")
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_0.Text));
+                            publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
 
                         }
                     }
@@ -528,8 +556,10 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // Check to make sure none of the fields are invalid
             // If the selected attribute is not found (UI will show "N/A"), do not allow creation
-            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None)
+            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0 
+                && this.textBoxSlider_3.Text == "N/A"))
             {
                 label_Error.Visible = true;
                 label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
@@ -931,9 +961,6 @@ namespace WDAC_Wizard
                 // Delete from UI elements:
                 this.rulesDataGrid.Rows.RemoveAt(rowIdx);
                 doc.Save(this.XmlPath);
-
-                // Scroll to bottom of table
-                rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount;
             } 
         }
 
@@ -1000,6 +1027,11 @@ namespace WDAC_Wizard
                     e.Value = displayObject.Exceptions;
                     break;
             }
+        }
+
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Error.Visible = false;
         }
     }
 
