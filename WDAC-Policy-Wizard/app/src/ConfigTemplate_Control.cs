@@ -50,7 +50,10 @@ namespace WDAC_Wizard
             this.Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
 
             this.Policy.ConfigRules = initRulesDict();
-            readSetRules();
+
+            // If unable to read the CI policy, fail gracefully and return to the home page
+            if (!this.readSetRules(sender, e))
+                return; 
 
             // Enable audit mode by default
             this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
@@ -312,7 +315,7 @@ namespace WDAC_Wizard
         /// Parses the template or the policy that the user would like to edit. Sets all of the 
         /// CI Policy related fields from the xml document. 
         /// </summary>
-        private void readSetRules()
+        private bool readSetRules(object sender, EventArgs e)
         {
             // Read in the pre-set policy rules and HVCI option from either:
             // Template policy schema file IF NEW policy selected
@@ -347,10 +350,25 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
 
             // Read File
-            XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-            StreamReader reader = new StreamReader(xmlPathToRead);
-            this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
-            reader.Close();
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(xmlPathToRead);
+                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+            }
+            catch(Exception exp)
+            {
+                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (res == DialogResult.OK)
+                    this._MainWindow.ResetWorkflow(sender, e);
+                return false; 
+            }
+            
 
             // Merge with configRules:
             foreach(var rule in this.Policy.siPolicy.Rules)
@@ -371,7 +389,9 @@ namespace WDAC_Wizard
             // Copy template to temp folder for reading and writing
             string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
             File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
-            this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite; 
+            this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
+
+            return true; 
         }
 
         /// <summary>

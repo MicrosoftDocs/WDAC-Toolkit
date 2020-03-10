@@ -287,8 +287,8 @@ namespace WDAC_Wizard
                             {
                                 var _PolicyTypePage = new PolicyType(this);
                                 _PolicyTypePage.Name = pageKey;
-                                this.Controls.Add(_PolicyTypePage);
                                 this.PageList.Add(_PolicyTypePage.Name);
+                                this.Controls.Add(_PolicyTypePage);
                                 _PolicyTypePage.BringToFront();
                                 _PolicyTypePage.Focus();
                             }
@@ -310,8 +310,8 @@ namespace WDAC_Wizard
                             {
                                 var _PolicyTypePage = new PolicyType(this);
                                 _PolicyTypePage.Name = pageKey;
-                                this.Controls.Add(_PolicyTypePage);
                                 this.PageList.Add(_PolicyTypePage.Name);
+                                this.Controls.Add(_PolicyTypePage);
                                 _PolicyTypePage.BringToFront();
                                 _PolicyTypePage.Focus();
                             }
@@ -334,9 +334,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _EditWorkflow = new EditWorkflow(this);
-                                _EditWorkflow.Name = pageKey; 
-                                this.Controls.Add(_EditWorkflow);
+                                _EditWorkflow.Name = pageKey;
                                 this.PageList.Add(_EditWorkflow.Name);
+                                this.Controls.Add(_EditWorkflow);
                                 _EditWorkflow.BringToFront();
                                 _EditWorkflow.Focus();
                             }
@@ -364,8 +364,8 @@ namespace WDAC_Wizard
                             {
                                 var _NewPolicyPage = new TemplatePage(this);
                                 _NewPolicyPage.Name = pageKey;
-                                this.Controls.Add(_NewPolicyPage);
                                 this.PageList.Add(_NewPolicyPage.Name);
+                                this.Controls.Add(_NewPolicyPage);
                                 _NewPolicyPage.BringToFront();
                                 _NewPolicyPage.Focus();
                             }
@@ -387,9 +387,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _NewSupplementalPage = new TemplatePage(this);
-                                _NewSupplementalPage.Name = pageKey; 
-                                this.Controls.Add(_NewSupplementalPage);
+                                _NewSupplementalPage.Name = pageKey;
                                 this.PageList.Add(_NewSupplementalPage.Name);
+                                this.Controls.Add(_NewSupplementalPage);
                                 _NewSupplementalPage.BringToFront();
                                 _NewSupplementalPage.Focus();
                             }
@@ -409,9 +409,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _RulesPage = new ConfigTemplate_Control(this);
-                                _RulesPage.Name = pageKey; 
-                                this.Controls.Add(_RulesPage);
+                                _RulesPage.Name = pageKey;
                                 this.PageList.Add(_RulesPage.Name);
+                                this.Controls.Add(_RulesPage);
                                 _RulesPage.BringToFront();
                                 _RulesPage.Focus();
                             }
@@ -446,8 +446,8 @@ namespace WDAC_Wizard
                             {
                                 var _ConfigTemplateControl = new ConfigTemplate_Control(this);
                                 _ConfigTemplateControl.Name = pageKey; 
-                                this.Controls.Add(_ConfigTemplateControl);
                                 this.PageList.Add(_ConfigTemplateControl.Name);
+                                this.Controls.Add(_ConfigTemplateControl);
                                 _ConfigTemplateControl.BringToFront();
                                 _ConfigTemplateControl.Focus();
                             }
@@ -468,9 +468,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _ConfigTemplate = new ConfigTemplate_Control(this);
-                                _ConfigTemplate.Name = pageKey; 
-                                this.Controls.Add(_ConfigTemplate);
+                                _ConfigTemplate.Name = pageKey;
                                 this.PageList.Add(_ConfigTemplate.Name);
+                                this.Controls.Add(_ConfigTemplate);
                                 _ConfigTemplate.BringToFront();
                                 _ConfigTemplate.Focus();
                             }
@@ -493,8 +493,8 @@ namespace WDAC_Wizard
                             {
                                 var _SigningRules_Control = new SigningRules_Control(this);
                                 _SigningRules_Control.Name = pageKey;
-                                this.Controls.Add(_SigningRules_Control);
                                 this.PageList.Add(_SigningRules_Control.Name);
+                                this.Controls.Add(_SigningRules_Control);
                                 _SigningRules_Control.BringToFront();
                                 _SigningRules_Control.Focus();
                             }
@@ -521,9 +521,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _SigningRules = new SigningRules_Control(this);
-                                _SigningRules.Name = pageKey;
-                                this.Controls.Add(_SigningRules);
+                                _SigningRules.Name = pageKey; 
                                 this.PageList.Add(_SigningRules.Name);
+                                this.Controls.Add(_SigningRules);
                                 _SigningRules.BringToFront();
                                 _SigningRules.Focus();
                             }
@@ -545,9 +545,9 @@ namespace WDAC_Wizard
                             else
                             {
                                 var _SigningSupplementalRules = new SigningRules_Control(this);
-                                _SigningSupplementalRules.Name = pageKey; 
-                                this.Controls.Add(_SigningSupplementalRules);
+                                _SigningSupplementalRules.Name = pageKey;
                                 this.PageList.Add(_SigningSupplementalRules.Name);
+                                this.Controls.Add(_SigningSupplementalRules);
                                 _SigningSupplementalRules.BringToFront();
                                 _SigningSupplementalRules.Focus();
                             }
@@ -572,8 +572,8 @@ namespace WDAC_Wizard
                             {
                                 this._BuildPage = new BuildPage(this);
                                 this._BuildPage.Name = pageKey;
-                                this.Controls.Add(this._BuildPage);
                                 this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
                                 this._BuildPage.BringToFront();
                                 this._BuildPage.Focus();
                             }
@@ -605,8 +605,8 @@ namespace WDAC_Wizard
                             {
                                 this._BuildPage = new BuildPage(this);
                                 this._BuildPage.Name = pageKey;
-                                this.Controls.Add(this._BuildPage);
                                 this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
                                 this._BuildPage.BringToFront();
                                 this._BuildPage.Focus();
                             }
@@ -630,8 +630,8 @@ namespace WDAC_Wizard
                             {
                                 this._BuildPage = new BuildPage(this);
                                 this._BuildPage.Name = pageKey;
-                                this.Controls.Add(this._BuildPage);
                                 this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
                                 this._BuildPage.BringToFront();
                                 this._BuildPage.Focus();
                                 button_Next.Visible = false;
@@ -1380,9 +1380,17 @@ namespace WDAC_Wizard
 
             // Set highlight panel location
             int X_OFFSET = 15;
-            int Y_OFFSET = 5; 
-            var sideButton = (Button)sender; 
-            controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
+            int Y_OFFSET = 5;
+            try
+            {
+                var sideButton = (Button)sender; 
+                controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
+            }
+            catch(Exception exc)
+            {
+                controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
+            }
+            
 
             // Set link text
             switch (this.view)
@@ -1548,6 +1556,11 @@ namespace WDAC_Wizard
             label_Info.Focus();
             label_Info.BringToFront(); 
 
+        }
+
+        public void ResetWorkflow(object sender, EventArgs e)
+        {
+            this.home_Button_Click(sender, e); 
         }
 
         //

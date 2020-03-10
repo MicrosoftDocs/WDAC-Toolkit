@@ -56,11 +56,10 @@ namespace WDAC_Wizard
         /// </summary>
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
-            readSetRules();
+            // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
+            if(!readSetRules(sender, e))
+                return;
             displayRules();
-            // Read the policy and write to the UI in the background
-            //if (!backgroundWorker1.IsBusy)
-            //   backgroundWorker1.RunWorkerAsync();
         }
 
         
@@ -751,7 +750,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Method to parse either the template or supplemental policy and store into the custom data structures for digestion. 
         /// </summary>
-        private void readSetRules()
+        private bool readSetRules(object sender, EventArgs e)
         {
             // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
             if (this._MainWindow.Policy.TemplatePath != null)
@@ -769,13 +768,21 @@ namespace WDAC_Wizard
                 reader.Close();
 
             } 
-            catch (Exception e)
+            catch (Exception exp)
             {
-                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", e);
+                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (res == DialogResult.OK)
+                    this._MainWindow.ResetWorkflow(sender, e);
+                return false; 
             }
             
             bubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
+            return true; 
         }
 
         /// <summary>
