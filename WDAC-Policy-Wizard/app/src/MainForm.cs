@@ -789,10 +789,10 @@ namespace WDAC_Wizard
 
                 string ruleVal = this.Policy.ConfigRules[key]["CurrentValue"];
                 string allowedText = this.Policy.ConfigRules[key]["AllowedValue"];
+                string ruleOptNum = this.Policy.ConfigRules[key]["RuleNumber"];
 
-                if (ruleVal == allowedText) //Value == xml allowable output - write
+                if (ruleVal == allowedText && !String.IsNullOrEmpty(ruleOptNum)) //Value == xml allowable output - write
                 {
-                    string ruleOptNum = this.Policy.ConfigRules[key]["RuleNumber"];
                     pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option {1} ",
                         this.Policy.TemplatePath, ruleOptNum));
                     this.Log.AddInfoMsg(String.Format("Adding rule-option pair: {0}:{1}", key, ruleVal));
@@ -897,6 +897,7 @@ namespace WDAC_Wizard
             int nRules = this.Policy.CustomRules.Count;
             for (int i = 0; i < nRules; i++)
             {
+                
                 var CustomRule = this.Policy.CustomRules[i];
                 // Skip if the Custom Rule is a Folder Fule -- we have already broken these out into individual file rules
                 // at this point. 
