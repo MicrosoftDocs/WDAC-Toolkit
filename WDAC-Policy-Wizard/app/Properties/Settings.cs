@@ -1,4 +1,4 @@
-﻿namespace WDAC_Wizard.Properties {
+﻿namespace WDAC_Wizard {
     
     
     // This class allows you to handle specific events on the settings class:

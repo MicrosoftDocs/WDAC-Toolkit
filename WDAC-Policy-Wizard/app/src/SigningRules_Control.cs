@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
+using System.Xml.Serialization; 
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel; 
@@ -29,6 +30,12 @@ namespace WDAC_Wizard
         private string XmlPath;
 
         private int RowSelected; // Data grid row number selected by the user 
+        private int rowInEdit = -1;
+        private DisplayObject displayObjectInEdit;
+
+        // Declare an ArrayList to serve as the data store. 
+        private System.Collections.ArrayList displayObjects =
+            new System.Collections.ArrayList();
 
         public SigningRules_Control(MainWindow pMainWindow)
         {
@@ -49,21 +56,13 @@ namespace WDAC_Wizard
         /// </summary>
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
-            // Read the policy and write to the UI in the background
-            if (!backgroundWorker1.IsBusy)
-                backgroundWorker1.RunWorkerAsync();
-        }
-
-        /// <summary>
-        /// Event handler where the time-consuming work of creating the policies is accomplished. 
-        /// No UI changes should be performed in this method. 
-        /// </summary>
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            readSetRules();
+            // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
+            if(!readSetRules(sender, e))
+                return;
             displayRules();
         }
 
+        
         //private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace WDAC_Wizard
 
                 case "File Attributes":
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None); // Match UI by default
+                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
@@ -241,17 +240,36 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
 
                 // Get cert chain info to be shown to the user
-                var signer = X509Certificate.CreateFromSignedFile(refPath);
-                var cert = new X509Certificate2(signer);
-                var certChain = new X509Chain();
-                var certChainIsValid = certChain.Build(cert); 
+                string leafCertSubjectName = "";
+                string pcaCertSubjectName = ""; 
+                try
+                {
+                    var signer = X509Certificate.CreateFromSignedFile(refPath);
+                    var cert = new X509Certificate2(signer);
+                    var certChain = new X509Chain();
+                    var certChainIsValid = certChain.Build(cert);
 
-                var leafCertSubjectName = cert.SubjectName.Name;
-                var pcaCertSubjectName = ""; 
-                if(certChain.ChainElements.Count > 1)
-                    pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
-                PolicyCustomRule.FileInfo.Add("LeafCertificate", leafCertSubjectName);
-                PolicyCustomRule.FileInfo.Add("PCACertificate", pcaCertSubjectName);
+                    leafCertSubjectName = cert.SubjectName.Name;
+                    if (certChain.ChainElements.Count > 1)
+                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+
+                }
+                catch(Exception exp)
+                {
+                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
+                        exp, refPath));
+                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
+                    this.label_Error.Visible = true; 
+
+                    Timer settingsUpdateNotificationTimer = new Timer();
+                    settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
+                    settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+                    settingsUpdateNotificationTimer.Start();
+                }
+
+                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? "N/A" : leafCertSubjectName);
+                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? "N/A" : pcaCertSubjectName);
+
             }
 
             switch (this.PolicyCustomRule.GetRuleType())
@@ -402,6 +420,9 @@ namespace WDAC_Wizard
                             trackBar_Conditions.Value = 0;
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
                             textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A"
+                                || textBoxSlider_3.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "and file name with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
@@ -413,6 +434,8 @@ namespace WDAC_Wizard
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
                             textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["FileVersion"];
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
@@ -425,6 +448,8 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["LeafCertificate"];
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher.";
                             this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
                         }
@@ -437,6 +462,8 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = "*";
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
+                            if (textBoxSlider_0.Text == "N/A")
+                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this issuing CA subject name.";
                             this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
 
@@ -503,8 +530,8 @@ namespace WDAC_Wizard
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
                             if (textBoxSlider_0.Text == "N/A")
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_0.Text));
+                            publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
+                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
 
                         }
                     }
@@ -528,8 +555,10 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // Check to make sure none of the fields are invalid
             // If the selected attribute is not found (UI will show "N/A"), do not allow creation
-            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None)
+            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0 
+                && this.textBoxSlider_3.Text == "N/A"))
             {
                 label_Error.Visible = true;
                 label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
@@ -538,81 +567,83 @@ namespace WDAC_Wizard
             }
 
             // Add rule and exceptions to the table and master list & Scroll to new row index
-            var index = rulesDataGrid.Rows.Add();
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
+           
+            string action = String.Empty;
+            string level = String.Empty; 
+            string name = String.Empty;
+            string files = String.Empty;
+            string exceptions = String.Empty; 
 
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
             // Set Action value to Allow or Deny
-            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow)
-                rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Allow";
-            else
-                rulesDataGrid.Rows[index].Cells["Column_Action"].Value = "Deny";
+            action = this.PolicyCustomRule.GetRulePermission().ToString(); 
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
-            rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.PolicyCustomRule.GetRuleType();
+            level = this.PolicyCustomRule.GetRuleType().ToString();
 
-            string colnameString = String.Empty; 
+             
 
             switch(this.PolicyCustomRule.GetRuleLevel())
             {
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
 
-                    colnameString += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
+                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
                     break; 
                 case PolicyCustomRules.RuleLevel.Publisher:
-                    colnameString += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"], 
+                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"], 
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
-                    colnameString += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FilePublisher:
-                    colnameString += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.InternalName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FileDescription:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.ProductName:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
                     break;
 
                 default:
-                    colnameString = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
                     break;
 
             }
 
-            // Add to data table
-            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = colnameString;
-
-            if (this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow) 
-                this.Log.AddInfoMsg(String.Format("ALLOW: {0}", colnameString));
-            else
-                this.Log.AddInfoMsg(String.Format("DENY: {0}", colnameString));
+           
+            this.Log.AddInfoMsg(String.Format("CUSTOM RULE: {0} - {1} - {2} ", action, level, name));
 
             // Attach the int row number we added it to
-            this.PolicyCustomRule.RowNumber = index; 
+            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+
+            // Add to the DisplayObject
+            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
+            this.rulesDataGrid.RowCount += 1;
+
 
             // Add custom list to RulesList
             this.Policy.CustomRules.Add(this.PolicyCustomRule);
             this.PolicyCustomRule = new PolicyCustomRules();
-            bubbleUp();
 
+            bubbleUp();
+            
             // Reset UI view
             ClearCustomRulesPanel(true);
         }
@@ -622,95 +653,104 @@ namespace WDAC_Wizard
         /// </summary>
         private void displayRules()
         {
-            int index = 0; 
+            string friendlyName = String.Empty;    //  this.Policy.Signers[signerID].Name;
+            string action = String.Empty;
+            string level = String.Empty; 
+            string exceptionList = String.Empty;
+            string fileAttrList = String.Empty;
+            string signerID = String.Empty;
+
+            // Increase efficiency by constructing signers dictionary hint
+            Dictionary<string, string> signersDict = new Dictionary<string, string>();
+            Dictionary<string, string> fileRulesDict = new Dictionary<string, string>();
+
+            foreach (var signer in this.Policy.siPolicy.Signers)
+                signersDict.Add(signer.ID, signer.Name);
+
+            //Console.WriteLine(this.Policy.siPolicy.FileRules[0]); 
+
             // Process publisher rules first:
-            foreach (var signingScenario in this.Policy.SigningScenarios)
+            foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
             {
-                foreach (var signerID in signingScenario.Signers)
+                for(int i=0; i< scenario.ProductSigners.AllowedSigners.AllowedSigner.Length; i++)
                 {
                     // Get signer attributes
-                    string friendlyName = this.Policy.Signers[signerID].Name;
-                    string action = this.Policy.Signers[signerID].Action;
+                    signerID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
+                    friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
+                    action = "Allow"; // signer.ID; //  this.Policy.Signers[signerID].Action;
+                    level = "Publisher"; 
 
                     // Get signer exceptions - if applicable
-                    string exceptionList = String.Empty;
-                    if (this.Policy.Signers[signerID].Exceptions.Count > 0)
-                    {
-                        // Iterate through all of the exceptions, get the ID and map to filename
-                        foreach (string exceptionID in this.Policy.Signers[signerID].Exceptions)
-                        {
-                            string exceptionName = this.Policy.FileRules[exceptionID].FileName;
-                            exceptionList += String.Format("{0}, ", exceptionName);
-                        }
-                    }
+                     if (scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule != null)
+                     {
+                         // Iterate through all of the exceptions, get the ID and map to filename
+                         for(int j = 0; j< scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++ )
+                         {
+                             exceptionList += String.Format("{0}, ", scenario.ProductSigners.AllowedSigners
+                                 .AllowedSigner[i].ExceptDenyRule[j].DenyRuleID);
+                         }
+                     }
 
-                    // Get associated/affected files
-                    string fileAttrList = String.Empty;
-                    if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
-                    {
-                        // Iterate through all of the exceptions, get the ID and map to filename
-                        foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
-                        {
-                            string fileAttrName = this.Policy.FileRules[ruleID].FileName;
-                            if (fileAttrName == "*") // applies to all files with ver > min ver
-                                fileAttrName = "All files";
-                            string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
-                            fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
-                        }
-                    }
+                     // Get associated/affected files
+                     /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
+                     {
+                         // Iterate through all of the exceptions, get the ID and map to filename
+                         foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
+                         {
+                             string fileAttrName = this.Policy.FileRules[ruleID].FileName;
+                             if (fileAttrName == "*") // applies to all files with ver > min ver
+                                 fileAttrName = "All files";
+                             string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
+                             fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
+                         }
+                     }*/
+
+                    this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
+                    this.rulesDataGrid.RowCount += 1; 
 
                     // Get row index #, Scroll to new row index
-                    index = rulesDataGrid.Rows.Add();
-
-                    // Write to UI
-                    rulesDataGrid.Rows[index].Cells["Column_Action"].Value = action;
-                    rulesDataGrid.Rows[index].Cells["Column_Level"].Value = "Publisher";
-                    rulesDataGrid.Rows[index].Cells["Column_Name"].Value = friendlyName;
-                    rulesDataGrid.Rows[index].Cells["Column_Files"].Value = fileAttrList; //.Substring(0, fileAttrList.Length - 1); //trim trailing comma
-                    rulesDataGrid.Rows[index].Cells["Column_Exceptions"].Value = exceptionList;
+                    //index = rulesDataGrid.Rows.Add();
                 }
 
-            }
-
-            // Process file rules (hash, file path, file name)
-            foreach (var signingScenario in this.Policy.SigningScenarios)
-            {
-                foreach (var ruleID in signingScenario.FileRules)
+                // Process file rules (hash, file path, file name)
+                foreach (var signingScenario in this.Policy.SigningScenarios)
                 {
-                    if(this.Policy.FileRules[ruleID].FriendlyName.Contains("Page") 
-                        || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
-                        continue;
-                    else
+                    foreach (var ruleID in signingScenario.FileRules)
                     {
-                        // Get row index #, Scroll to new row index
-                        index = rulesDataGrid.Rows.Add();
-
-                        // Write to UI
-                        rulesDataGrid.Rows[index].Cells["Column_Action"].Value = this.Policy.FileRules[ruleID].Action;
-                        rulesDataGrid.Rows[index].Cells["Column_Level"].Value = this.Policy.FileRules[ruleID].GetRuleType().ToString();
-                        if(this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
-                            this.Policy.FileRules[ruleID].FileName != null)
-                            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FileName;
+                        if (this.Policy.FileRules[ruleID].FriendlyName.Contains("Page")
+                            || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
+                            continue;
                         else
-                            rulesDataGrid.Rows[index].Cells["Column_Name"].Value = this.Policy.FileRules[ruleID].FriendlyName;
-                    } 
+                        {
+                            
+                            // Write to UI
+                            action = this.Policy.FileRules[ruleID].Action;
+                            level = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+
+                            if (this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
+                                this.Policy.FileRules[ruleID].FileName != null)
+                                friendlyName = this.Policy.FileRules[ruleID].FileName;
+                            else
+                                friendlyName = this.Policy.FileRules[ruleID].FriendlyName;
+                        }
+                    }
+
+                    this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
+                    this.rulesDataGrid.RowCount += 1;
+
                 }
+
             }
 
             // Scroll to bottom of table
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = index;
-
+            rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
 
         /// <summary>
         /// Method to parse either the template or supplemental policy and store into the custom data structures for digestion. 
         /// </summary>
-        private void readSetRules()
+        private bool readSetRules(object sender, EventArgs e)
         {
             // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
             if (this._MainWindow.Policy.TemplatePath != null)
@@ -721,356 +761,28 @@ namespace WDAC_Wizard
 
             try
             {
-               XmlReader xmlReader = new XmlTextReader(this.XmlPath);
-                // Counter for end of element nodes
-                int eoeCount;
+                // Read File
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(this.XmlPath);
+                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
 
-                while (xmlReader.Read())
-                {
-                    switch (xmlReader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-
-                            if (xmlReader.IsEmptyElement) // Handle empty elements eg. FileRules and UpdatePolicySigners in NightsWatch
-                                break;
-
-                            switch (xmlReader.Name)
-                            {
-                                case "EKUs":
-                                    {
-                                        // Handle EKUs - do not show to user, though
-                                        eoeCount = 0;
-                                        PolicyEKUs policyEKU = new PolicyEKUs();
-                                        while (xmlReader.Read() && eoeCount < 1)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    {
-                                                        eoeCount = 0;
-                                                        policyEKU.ID = xmlReader.GetAttribute("ID");
-                                                        policyEKU.Value = xmlReader.GetAttribute("Value");
-                                                        policyEKU.FriendlyName = xmlReader.GetAttribute("FriendlyName");
-                                                        this.Policy.EKUs.Add(policyEKU);
-
-                                                        this.Log.AddInfoMsg(String.Format("Existing EKU Added - ID: {0}, Value: {1}, Friendly Name: {2}", policyEKU.ID,
-                                                            policyEKU.Value, policyEKU.FriendlyName));
-                                                    }
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    break;
-                                            }
-                                        }
-
-                                    }
-                                    break;
-
-                                case "FileRules":
-                                    {
-                                        // Allow and deny file rules
-                                        eoeCount = 0;
-                                        PolicyFileRules policyFileRule = new PolicyFileRules();
-                                        while (xmlReader.Read() && eoeCount < 1)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    {
-                                                        eoeCount = 0;
-                                                        // Get the EKU ID and value and add to EKUs dict
-                                                        policyFileRule = new PolicyFileRules();
-                                                        policyFileRule.Action = xmlReader.Name; //allow or deny
-                                                        policyFileRule.ID = xmlReader.GetAttribute("ID");
-                                                        policyFileRule.FriendlyName = xmlReader.GetAttribute("FriendlyName");
-                                                        policyFileRule.FileName = xmlReader.GetAttribute("FileName");
-                                                        policyFileRule.MinimumFileVersion = xmlReader.GetAttribute("MinimumFileVersion");
-                                                        policyFileRule.FilePath = xmlReader.GetAttribute("FilePath");
-                                                        policyFileRule.Hash = xmlReader.GetAttribute("Hash");
-                                                        policyFileRule.SetRuleType();
-                                                        
-                                                        this.Policy.FileRules[policyFileRule.ID] = policyFileRule; // Add to FileRules dictionary with key set to ruleID
-                                                        this.Log.AddInfoMsg(String.Format("Existing File Rule Added - {0} ID: {1}, Friendly Name: {2}," +
-                                                            " FileName: {3}, MinVersion: {4}, Path: {5}",
-                                                            policyFileRule.Action, policyFileRule.ID, policyFileRule.FriendlyName, policyFileRule.FileName,
-                                                            policyFileRule.MinimumFileVersion, policyFileRule.FilePath));
-                                                    }
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    break;
-
-                                                case XmlNodeType.Comment:
-                                                    eoeCount++; //break out see the "<!--Signers-->" comment - means we have no filerules
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "Signers":
-                                    {
-                                        // Store the signers in the policy.Signers dict for easy look up at the time of SigningScenarios, CISigners, UpdatePolicySigners, etc
-                                        eoeCount = 0;
-                                        PolicySigners policySigner = new PolicySigners();
-                                        while (xmlReader.Read() && eoeCount < 2) //2 end elements before new section
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-                                                    // Get the EKU ID and value and add to EKUs dict
-                                                    if (xmlReader.Name == "Signer")
-                                                    {
-                                                        policySigner = new PolicySigners();
-                                                        policySigner.ID = xmlReader.GetAttribute("ID");
-                                                        policySigner.Name = xmlReader.GetAttribute("Name");
-                                                    }
-                                                    else if (xmlReader.Name == "CertRoot")
-                                                    {
-                                                        policySigner.Type = xmlReader.GetAttribute("Type");
-                                                        policySigner.Value = xmlReader.GetAttribute("Value");
-                                                    }
-
-                                                    else if (xmlReader.Name == "CertEKU")
-                                                        policySigner.CertID = xmlReader.GetAttribute("ID");
-
-                                                    else if (xmlReader.Name == "CertPublisher")
-                                                        policySigner.CertPub = xmlReader.GetAttribute("Value");
-
-                                                    else if (xmlReader.Name == "FileAttribRef")
-                                                        policySigner.AddFileAttribute(xmlReader.GetAttribute("RuleID"));
-
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    if (eoeCount < 2)
-                                                    {
-                                                        this.Policy.Signers[policySigner.ID] = policySigner;
-                                                        this.Log.AddInfoMsg(String.Format("Existing Policy Signer Added - ID: {0},  Name: {1}, Type: {2}, Value: {3}, CertID: {4}, CertPub: {5}",
-                                                            policySigner.ID, policySigner.Name, policySigner.Type,
-                                                            policySigner.Value, policySigner.CertID, policySigner.CertPub));
-                                                    }
-                                                        
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "SigningScenarios":
-                                    {
-                                        eoeCount = 0;
-                                        List<string> exceptionList = new List<string>();
-                                        string signerID = String.Empty;
-                                        PolicySigningScenarios signingScenario = new PolicySigningScenarios();
-                                        while (xmlReader.Read() && eoeCount < 4)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-
-                                                    switch (xmlReader.Name)
-                                                    {
-                                                        case "SigningScenario":
-                                                            signingScenario = new PolicySigningScenarios();
-                                                            signingScenario.ID = xmlReader.GetAttribute("ID");
-                                                            signingScenario.Value = xmlReader.GetAttribute("Value");
-                                                            signingScenario.FriendlyName = xmlReader.GetAttribute("FriendlyName");
-
-                                                            this.Log.AddInfoMsg(String.Format("Existing Signing Scenario Added - ID: {0}, Value: {1}, FriendlyName: {2}",
-                                                            signingScenario.ID, signingScenario.Value, signingScenario.FriendlyName));
-                                                            break;
-                                                        
-                                                        case "AllowedSigner":
-                                                            //Get signerID && lookup the PolicySigner by ID
-                                                            exceptionList = new List<string>();
-                                                            signerID = xmlReader.GetAttribute("SignerId");
-                                                            signingScenario.Signers.Add(signerID); 
-                                                            this.Policy.Signers[signerID].Action = "Allow";
-                                                            this.Policy.Signers[signerID].AddException(exceptionList);
-                                                            break;
-
-                                                        case "DeniedSigner":
-                                                            //Get signerID
-                                                            exceptionList = new List<string>();
-                                                            signerID = xmlReader.GetAttribute("SignerId");
-                                                            signingScenario.Signers.Add(signerID);
-                                                            this.Policy.Signers[signerID].Action = "Deny";
-                                                            this.Policy.Signers[signerID].AddException(exceptionList);
-                                                            break;
-
-                                                        case "FileRuleRef":
-                                                            // This is the case for hash and filepath rules
-                                                            string ruleID = xmlReader.GetAttribute("RuleID");
-                                                            signingScenario.FileRules.Add(ruleID); 
-
-                                                            break; 
-
-                                                        case "ExceptDenyRule": // parent = last allowedsigner
-                                                            exceptionList.Add(xmlReader.GetAttribute("DenyRuleID"));
-                                                            break;
-
-                                                        case "ExceptAllowRule":
-                                                            exceptionList.Add(xmlReader.GetAttribute("AllowRuleID"));
-                                                            break;
-
-                                                    }
-                                                    break;
-
-                                                case XmlNodeType.EndElement: //1st time - end of parent allowed signer - every time, end of denyList
-                                                    eoeCount++;
-                                                    if(!String.IsNullOrEmpty(signerID))
-                                                        this.Policy.Signers[signerID].AddException(exceptionList);
-                                                    if (eoeCount == 2)
-                                                        this.Policy.SigningScenarios.Add(signingScenario);
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "SupplementalPolicySigners":
-                                    {
-                                        eoeCount = 0;
-                                        PolicySupplementalSigners policySupplementalSigners = new PolicySupplementalSigners();
-                                        while (xmlReader.Read() && eoeCount < 1)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-                                                    policySupplementalSigners.SignerId = xmlReader.GetAttribute("SignerId");
-                                                    this.Policy.SupplementalSigners.Add(policySupplementalSigners);
-                                                    this.Log.AddInfoMsg(String.Format("Existing Supplemental Policy Signer Added: {0}  ", policySupplementalSigners.SignerId));
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "UpdatePolicySigners":
-                                    {
-                                        PolicyUpdateSigners policyUpdateSigners = new PolicyUpdateSigners();
-                                        eoeCount = 0;
-                                        while (eoeCount < 1 && xmlReader.Read())
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-
-                                                    eoeCount = 0;
-                                                    policyUpdateSigners.SignerId = xmlReader.GetAttribute("SignerId");
-                                                    this.Policy.UpdateSigners.Add(policyUpdateSigners);
-                                                    this.Log.AddInfoMsg(String.Format("Existing Update Policy Signer Added: {0}  ", policyUpdateSigners.SignerId));
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "CiSigners":
-                                    {
-                                        PolicyCISigners policyCISigners = new PolicyCISigners();
-                                        eoeCount = 0;
-                                        while (xmlReader.Read() && eoeCount < 1)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-                                                    policyCISigners.SignerId = xmlReader.GetAttribute("SignerId");
-                                                    this.Policy.CISigners.Add(policyCISigners);
-                                                    this.Log.AddInfoMsg(String.Format("Existing CiSigner Added: {0}  ", policyCISigners.SignerId));
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "Settings":
-                                    {
-                                        PolicySettings policySetting = new PolicySettings();
-                                        eoeCount = 0;
-                                        while (xmlReader.Read() && eoeCount < 3)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-                                                    switch (xmlReader.Name)
-                                                    {
-
-                                                        case "Setting":
-
-                                                            policySetting = new PolicySettings();
-                                                            policySetting.Provider = xmlReader.GetAttribute("Provider");
-                                                            policySetting.Key = xmlReader.GetAttribute("Key");
-                                                            policySetting.ValueName = xmlReader.GetAttribute("ValueName");
-                                                            break;
-
-                                                        case "String":
-                                                            policySetting.ValString = xmlReader.ReadElementContentAsString();
-                                                            break;
-
-                                                        case "Boolean":
-                                                            policySetting.ValBool = xmlReader.ReadElementContentAsString() == "true";
-                                                            break;
-                                                    }
-
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    if (eoeCount == 2)
-                                                    {
-                                                        this.Policy.PolicySettings.Add(policySetting);
-                                                        this.Log.AddInfoMsg(String.Format("Existing Setting Added - Provider: {0},  Key: {1}, Value Name: {2}, String: {3}, Bool: {4}",
-                                                            policySetting.Provider, policySetting.Key, policySetting.ValueName,
-                                                            policySetting.ValString, policySetting.ValBool));
-                                                    }
-
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                case "VersionEx":
-                                    this.Policy.VersionNumber = xmlReader.ReadElementContentAsString(); //Read in the version ex and set it in the policy object
-                                    break; 
-                            }
-                            break;
-                    }
-                } //end of while
-
-                xmlReader.Dispose(); 
-            } // end of try
-            catch (Exception e)
+            } 
+            catch (Exception exp)
             {
-                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", e);
-            }
+                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            this.Log.AddInfoMsg("--- Reading Set Signing Rules Ending ---");
+                if (res == DialogResult.OK)
+                    this._MainWindow.ResetWorkflow(sender, e);
+                return false; 
+            }
             
             bubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
+            return true; 
         }
 
         /// <summary>
@@ -1126,13 +838,19 @@ namespace WDAC_Wizard
         /// </summary>
         private void deleteButton_Click(object sender, EventArgs e)
         {
+  
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
-            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value; 
+            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
+
+            if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
+                return; 
 
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
             if (res == DialogResult.Yes)
             {
                 var ruleIDs = new List<string>();
@@ -1144,31 +862,39 @@ namespace WDAC_Wizard
 
                 if (ruleType == "Publisher")
                 {
-                    foreach (var key in _keys)
+                    foreach (var signer in this.Policy.siPolicy.Signers)
                     {
-                        var pSigner = this.Policy.Signers[key];
-                        if (pSigner.Name == ruleName)
-                            ruleIDs.Add(key);
+                        if (ruleName == signer.Name)
+                            ruleIDs.Add(signer.ID);
                     }
                 }
-                
+
                 else
                 {
                     // Get list of IDs for related rules. ie. Deleting one hash should delete all four hash values.
                     if (ruleType == "Hash")
-                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1); 
+                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1);
 
                     foreach (var key in _fileRulekeys)
                     {
                         var pFileRule = this.Policy.FileRules[key];
                         if (pFileRule.FriendlyName.Contains(ruleName))
                             ruleIDs.Add(key);
+
+                        foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                        {
+                            //if(fileRule.)
+                        }
                     }
                 }
-                
+
+                // Remove from DisplayObject
+                if (rowIdx < this.displayObjects.Count)
+                    this.displayObjects.RemoveAt(rowIdx);
+
 
                 // Only structure we have to remove the rule from is the one that is used in writing rules -- custom rules
-                for (int i = this.Policy.CustomRules.Count - 1; i>=0; i--)
+                for (int i = this.Policy.CustomRules.Count - 1; i >= 0; i--)
                 {
                     if (this.Policy.CustomRules[i].RowNumber == rowIdx)
                         this.Policy.CustomRules.Remove(this.Policy.CustomRules[i]); // Remove from structs
@@ -1178,7 +904,7 @@ namespace WDAC_Wizard
                 XmlDocument doc = new XmlDocument();
                 doc.Load(this.XmlPath); // Reading from the template (either one of the 3 bases or editing)
 
-                
+
                 // A friendly name can have multiple references in the doc -- remove each one
                 // Skips section if custom rule
                 if (ruleType == "Publisher")
@@ -1241,9 +967,8 @@ namespace WDAC_Wizard
 
                 // Delete from UI elements:
                 this.rulesDataGrid.Rows.RemoveAt(rowIdx);
-                doc.Save(this.XmlPath); 
-            }
-             
+                doc.Save(this.XmlPath);
+            } 
         }
 
         /// <summary>
@@ -1264,6 +989,84 @@ namespace WDAC_Wizard
             this.rulesDataGrid.Rows[customRow.Index].DefaultCellStyle = highlightCellStyle;
             this.RowSelected = customRow.Index; 
             
+        }
+
+        /// <summary>
+        /// Called when DataGridView needs to paint data
+        /// </summary>
+        private void rulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            // If this is the row for new records, no values are needed.
+            if (e.RowIndex == this.rulesDataGrid.RowCount - 1) return;
+
+            DisplayObject displayObject = null;
+
+            // Store a reference to the Customer object for the row being painted.
+            if (e.RowIndex == rowInEdit)
+            {
+                displayObject = this.displayObjectInEdit;
+            }
+            else
+            {
+                displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
+            }
+
+            // Set the cell value to paint using the Customer object retrieved.
+            switch (this.rulesDataGrid.Columns[e.ColumnIndex].Name)
+            {
+                case "column_Action":
+                    e.Value = displayObject.Action;
+                    break;
+
+                case "column_Level":
+                    e.Value = displayObject.Level;
+                    break;
+
+                case "Column_Name":
+                    e.Value = displayObject.Name;
+                    break;
+
+                case "Column_Files":
+                    e.Value = displayObject.Files;
+                    break;
+
+                case "Column_Exceptions":
+                    e.Value = displayObject.Exceptions;
+                    break;
+            }
+        }
+
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Error.Visible = false;
+        }
+    }
+
+    // Class for the datastore
+    public class DisplayObject
+    {
+        public string Action;
+        public string Level;
+        public string Name;
+        public string Files;
+        public string Exceptions; 
+
+        public DisplayObject()
+        {
+            this.Action = String.Empty;
+            this.Level = String.Empty;
+            this.Name = String.Empty;
+            this.Files = String.Empty;
+            this.Exceptions = String.Empty;
+        }
+
+        public DisplayObject(string action, string level, string name, string files, string exceptions)
+        {
+            this.Action = action;
+            this.Level = level;
+            this.Name = name;
+            this.Files = files;
+            this.Exceptions = exceptions;
         }
     }
 

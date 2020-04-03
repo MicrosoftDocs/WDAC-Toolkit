@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Resources;
 using System.Reflection;
 using WDAC_Wizard.Properties;
+using System.Xml.Serialization;
 
 namespace WDAC_Wizard
 {
@@ -66,13 +67,15 @@ namespace WDAC_Wizard
         /// List of string rule IDS to lookup in Policy.FileRules Dict
         /// </summary>
         public List<string> FileRules { get; set; }
-       
-     
+
+
         public PolicySigningScenarios()
         {
             this.Signers = new List<string>();
-            this.FileRules = new List<string>(); 
+            this.FileRules = new List<string>();
         }
+
+
     }
 
     public class PolicySigners

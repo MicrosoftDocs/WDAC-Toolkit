@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using WDAC_Wizard.Properties;
+using System.Xml.Serialization; 
 
 namespace WDAC_Wizard
 {
@@ -21,18 +22,19 @@ namespace WDAC_Wizard
     {        
         public Logger Log { get; set; }
         public MainWindow _MainWindow;
-        private WDAC_Policy _Policy; 
+        private WDAC_Policy Policy;
 
         public ConfigTemplate_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
 
-            this._Policy = new WDAC_Policy();
+            this.Policy = new WDAC_Policy();
             this._MainWindow = pMainWindow;
             this.Log = this._MainWindow.Log;
 
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
+
         }
 
         /// <summary>
@@ -43,26 +45,33 @@ namespace WDAC_Wizard
         {
             // **** This function is run on UI load  *** //
 
-            this._Policy._PolicyType = this._MainWindow.Policy._PolicyType;
-            this._Policy._PolicyTemplate = this._MainWindow.Policy._PolicyTemplate; 
-            this._Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
+            this.Policy._PolicyType = this._MainWindow.Policy._PolicyType;
+            this.Policy._PolicyTemplate = this._MainWindow.Policy._PolicyTemplate; 
+            this.Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
 
-            this._Policy.ConfigRules = initRulesDict();
-            readSetRules();
+            this.Policy.ConfigRules = initRulesDict();
+
+            // If unable to read the CI policy, fail gracefully and return to the home page
+            if (!this.readSetRules(sender, e))
+                return; 
 
             // Enable audit mode by default
-            this._Policy.ConfigRules["Audit Mode"]["CurrentValue"] = "Enabled";
+            this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
 
-            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this._Policy.ConfigRules.Keys;
+            // Set HVCI option value
+            if (this.Policy.EnableHVCI)
+                this.Policy.ConfigRules["HVCI"]["CurrentValue"] = this.Policy.ConfigRules["HVCI"]["AllowedValue"]; 
+
+            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
                 // If unsupported, skip
-                if (!Convert.ToBoolean(this._Policy.ConfigRules[key]["Supported"]))
+                if (!Convert.ToBoolean(this.Policy.ConfigRules[key]["Supported"]))
                     continue; 
 
                 // If the policy rule current value matches the allowed value, rule has been set
-                string buttonName = this._Policy.ConfigRules[key]["ButtonMapping"];
-                if (this._Policy.ConfigRules[key]["CurrentValue"] == this._Policy.ConfigRules[key]["AllowedValue"]) 
+                string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
+                if (this.Policy.ConfigRules[key]["CurrentValue"] == this.Policy.ConfigRules[key]["AllowedValue"]) 
                 {
                     // Set button to toggled mode
                     this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
@@ -85,10 +94,10 @@ namespace WDAC_Wizard
         private void SetButtonVal(string buttonName)
         {
             // Have to cycle through all of the keys to find the button name value
-            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this._Policy.ConfigRules.Keys;
+            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
-                if (this._Policy.ConfigRules[key]["ButtonMapping"] == buttonName) // button name match
+                if (this.Policy.ConfigRules[key]["ButtonMapping"] == buttonName) // button name match
                 {
                     if (this.Controls.Find(buttonName, true).FirstOrDefault().Tag.ToString() == "untoggle")
                     {
@@ -96,7 +105,7 @@ namespace WDAC_Wizard
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
                         this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
 
-                        this._Policy.ConfigRules[key]["CurrentValue"] = this._Policy.ConfigRules[key]["AllowedValue"]; 
+                        this.Policy.ConfigRules[key]["CurrentValue"] = this.Policy.ConfigRules[key]["AllowedValue"]; 
                     }
                     else
                     {
@@ -104,7 +113,7 @@ namespace WDAC_Wizard
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
                         this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle;
 
-                        this._Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this._Policy.ConfigRules[key]["AllowedValue"]); 
+                        this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }
                 }
             } 
@@ -251,7 +260,8 @@ namespace WDAC_Wizard
         {
             // Wiring the button IDs to the corresponding rules
             // Default values and order can be found @: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
-            string dictPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
+            // TODO : uncomment string dictPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
+            string dictPath =  "RulesDict.xml";
             Dictionary<string, Dictionary<string, string>> rulesDict = new Dictionary<string, Dictionary<string, string>>();
 
             try
@@ -295,9 +305,9 @@ namespace WDAC_Wizard
             string buttonName = ((Button)sender).Name;
             SetButtonVal(buttonName);
 
-            this._MainWindow.Policy.ConfigRules = this._Policy.ConfigRules;
-            this._Policy.EnableHVCI = this._Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
-            this._MainWindow.Policy.EnableHVCI = this._Policy.EnableHVCI; 
+            this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
+            this.Policy.EnableHVCI = this.Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
+            this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
 
         }
 
@@ -305,7 +315,7 @@ namespace WDAC_Wizard
         /// Parses the template or the policy that the user would like to edit. Sets all of the 
         /// CI Policy related fields from the xml document. 
         /// </summary>
-        private void readSetRules()
+        private bool readSetRules(object sender, EventArgs e)
         {
             // Read in the pre-set policy rules and HVCI option from either:
             // Template policy schema file IF NEW policy selected
@@ -313,12 +323,12 @@ namespace WDAC_Wizard
 
             string xmlPathToRead = "";
 
-            if (this._Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
             
             else 
             {
-                switch (this._Policy._PolicyTemplate)
+                switch (this.Policy._PolicyTemplate)
                 {
                     case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                         // Windows Works Mode 
@@ -339,86 +349,49 @@ namespace WDAC_Wizard
                 
             this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
 
-            Dictionary<string, string> policyRules = new Dictionary<string, string>();
-            string hvci_Val = String.Empty;
-
-            // Parsing the xml document
+            // Read File
             try
             {
-                XmlTextReader xmlReader = new XmlTextReader(xmlPathToRead);
-                while (xmlReader.Read())
-                {
-                    switch (xmlReader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            switch (xmlReader.Name)
-                            {
-                                case "Rules":
-                                    // Handle the policy rules - SUCCESS
-                                    int eoeCount = 0;
-                                    while (xmlReader.Read() && eoeCount < 3)
-                                    {
-                                        switch (xmlReader.NodeType)
-                                        {
-                                            case XmlNodeType.Element:
-                                                eoeCount = 0;
-                                                break;
-                                            case XmlNodeType.Text:
-                                                {
-                                                    eoeCount = 0;
-
-                                                    // Rule in this text - add to dictionary
-                                                    string optionLine = xmlReader.Value;
-                                                    string[] polRule = optionLine.Split(':');
-                                                    policyRules[polRule[1]] = polRule[0];
-                                                    this.Log.AddInfoMsg(String.Format("Found Pre-set Rule-Option Pair {0}:{1}", polRule[1], polRule[0]));
-                                                }
-                                                break;
-                                            case XmlNodeType.EndElement:
-                                                eoeCount++;
-                                                break;
-                                        }
-                                    }
-                                    break;
-
-                                case "HvciOptions":
-                                    // HVCI on or off
-                                    hvci_Val = xmlReader.ReadElementContentAsString();
-                                    this.Log.AddInfoMsg(String.Format("Found HVCI Value {0}", hvci_Val));
-                                    break;
-
-                            }
-                            break;
-                    }
-                } //end of while
-
-                xmlReader.Dispose(); 
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(xmlPathToRead);
+                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
             }
-
-            catch(Exception e)
+            catch(Exception exp)
             {
-                this.Log.AddErrorMsg("ReadSetRules() encountered the following Exception: ", e);
-            }
+                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                if (res == DialogResult.OK)
+                    this._MainWindow.ResetWorkflow(sender, e);
+                return false; 
+            }
             
+
             // Merge with configRules:
-            Dictionary<string, string>.KeyCollection prKeys = new Dictionary<string, string>.KeyCollection(policyRules);
-            foreach(string prKey in prKeys)
+            foreach(var rule in this.Policy.siPolicy.Rules)
             {
-                if (this._Policy.ConfigRules.ContainsKey(prKey))
-                    this._Policy.ConfigRules[prKey]["CurrentValue"] = policyRules[prKey]; 
+                string value = ParseRule(rule.Item.ToString())[0]; 
+                string name = ParseRule(rule.Item.ToString())[1];
+
+                if (this.Policy.ConfigRules.ContainsKey(name))
+                    this.Policy.ConfigRules[name]["CurrentValue"] = value;
             }
 
-            if(hvci_Val != String.Empty)
-                this._Policy.EnableHVCI = Convert.ToUInt16(hvci_Val) > 0; // Convert to bool
+            this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0; 
+            this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
+            this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI;
+            this._MainWindow.Policy.siPolicy = this.Policy.siPolicy;
 
-            this._MainWindow.Policy.ConfigRules = this._Policy.ConfigRules;
-            this._MainWindow.Policy.EnableHVCI = this._Policy.EnableHVCI;
 
             // Copy template to temp folder for reading and writing
             string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
             File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
-            this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite; 
+            this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
+
+            return true; 
         }
 
         /// <summary>
@@ -452,6 +425,44 @@ namespace WDAC_Wizard
 
             return oppOption; 
 
+        }
+
+        private List<string> ParseRule(string rule)
+        {
+            List<string> parsedRule = new List<string>(); 
+            if (rule.Contains("Enabled"))
+            {
+                int eop = 7;
+                parsedRule.Add(rule.Substring(0, eop)); 
+                parsedRule.Add(rule.Substring(eop));
+            }
+
+            else if (rule.Contains("Disabled"))
+            {
+                int eop = 8;
+                parsedRule.Add(rule.Substring(0, eop));
+                parsedRule.Add(rule.Substring(eop));
+            }
+
+            else if (rule.Contains("Allowed"))
+            {
+                int eop = 7;
+                parsedRule.Add(rule.Substring(0, eop));
+                parsedRule.Add(rule.Substring(eop));
+            }
+
+            else if (rule.Contains("Required"))
+            {
+                int eop = 8;
+                parsedRule.Add(rule.Substring(0, eop));
+                parsedRule.Add(rule.Substring(eop));
+            }
+
+            else
+            {
+                Log.AddErrorMsg("Rule Value not found for rule " + rule);
+            }
+            return parsedRule; 
         }
 
         /// <summary>

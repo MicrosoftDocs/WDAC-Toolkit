@@ -71,7 +71,6 @@ namespace WDAC_Wizard
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
@@ -104,7 +103,7 @@ namespace WDAC_Wizard
             // 
             // rulesDataGrid
             // 
-            this.rulesDataGrid.AllowUserToAddRows = false;
+            this.rulesDataGrid.AllowUserToDeleteRows = false;
             this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.Silver;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -124,7 +123,9 @@ namespace WDAC_Wizard
             this.rulesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.rulesDataGrid.Size = new System.Drawing.Size(505, 528);
             this.rulesDataGrid.TabIndex = 92;
+            this.rulesDataGrid.VirtualMode = true;
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
+            this.rulesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.rulesDataGrid_CellValueNeeded);
             // 
             // column_Action
             // 
@@ -574,16 +575,12 @@ namespace WDAC_Wizard
             this.label_Error.AutoSize = true;
             this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Error.ForeColor = System.Drawing.Color.Red;
-            this.label_Error.Location = new System.Drawing.Point(191, 752);
+            this.label_Error.Location = new System.Drawing.Point(191, 774);
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(99, 22);
             this.label_Error.TabIndex = 96;
             this.label_Error.Text = "Label_Error";
             this.label_Error.Visible = false;
-            // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // SigningRules_Control
             // 
@@ -602,7 +599,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label3);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "SigningRules_Control";
-            this.Size = new System.Drawing.Size(1444, 852);
+            this.Size = new System.Drawing.Size(1444, 870);
             this.Load += new System.EventHandler(this.SigningRules_Control_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).EndInit();
             this.panel_CustomRules.ResumeLayout(false);
@@ -651,12 +648,11 @@ namespace WDAC_Wizard
         private System.Windows.Forms.TextBox textBoxSlider_3;
         private System.Windows.Forms.Label labelSlider_3;
         private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Label label_Error;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
-        private System.Windows.Forms.Label label_Error;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
