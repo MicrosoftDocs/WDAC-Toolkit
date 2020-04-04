@@ -49,10 +49,10 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(178, 19);
+            this.label1.Location = new System.Drawing.Point(200, 56);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 29);
+            this.label1.Size = new System.Drawing.Size(341, 34);
             this.label1.TabIndex = 48;
             this.label1.Text = "Building your WDAC Policy";
             // 
@@ -61,19 +61,20 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(178, 68);
+            this.label3.Location = new System.Drawing.Point(200, 117);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(605, 18);
+            this.label3.Size = new System.Drawing.Size(738, 22);
             this.label3.TabIndex = 81;
             this.label3.Text = "The wizard is building your WDAC Code Integrity policy. This may take a couple of" +
     " minutes.";
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(246, 152);
+            this.progressBar.Location = new System.Drawing.Point(277, 222);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(386, 27);
+            this.progressBar.Size = new System.Drawing.Size(434, 34);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 82;
             // 
@@ -82,10 +83,10 @@ namespace WDAC_Wizard
             this.finishLabel.AutoSize = true;
             this.finishLabel.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.finishLabel.ForeColor = System.Drawing.Color.Black;
-            this.finishLabel.Location = new System.Drawing.Point(1, 17);
+            this.finishLabel.Location = new System.Drawing.Point(1, 21);
             this.finishLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.finishLabel.Name = "finishLabel";
-            this.finishLabel.Size = new System.Drawing.Size(265, 23);
+            this.finishLabel.Size = new System.Drawing.Size(308, 27);
             this.finishLabel.TabIndex = 83;
             this.finishLabel.Text = "Finished creating CI policy";
             // 
@@ -94,10 +95,10 @@ namespace WDAC_Wizard
             this.progress_Label.AutoSize = true;
             this.progress_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.progress_Label.ForeColor = System.Drawing.Color.Black;
-            this.progress_Label.Location = new System.Drawing.Point(178, 156);
+            this.progress_Label.Location = new System.Drawing.Point(200, 227);
             this.progress_Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.progress_Label.Name = "progress_Label";
-            this.progress_Label.Size = new System.Drawing.Size(45, 21);
+            this.progress_Label.Size = new System.Drawing.Size(52, 24);
             this.progress_Label.TabIndex = 84;
             this.progress_Label.Text = "50%";
             this.progress_Label.Visible = false;
@@ -107,10 +108,10 @@ namespace WDAC_Wizard
             this.hyperlinkLabel.AutoSize = true;
             this.hyperlinkLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.hyperlinkLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.hyperlinkLabel.Location = new System.Drawing.Point(4, 73);
+            this.hyperlinkLabel.Location = new System.Drawing.Point(4, 91);
             this.hyperlinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.hyperlinkLabel.Name = "hyperlinkLabel";
-            this.hyperlinkLabel.Size = new System.Drawing.Size(123, 19);
+            this.hyperlinkLabel.Size = new System.Drawing.Size(145, 23);
             this.hyperlinkLabel.TabIndex = 85;
             this.hyperlinkLabel.Text = "Unable to locate";
             this.hyperlinkLabel.Click += new System.EventHandler(this.hyperlinkLabel_Click);
@@ -120,9 +121,10 @@ namespace WDAC_Wizard
             this.finishPanel.Controls.Add(this.label4);
             this.finishPanel.Controls.Add(this.hyperlinkLabel);
             this.finishPanel.Controls.Add(this.finishLabel);
-            this.finishPanel.Location = new System.Drawing.Point(178, 210);
+            this.finishPanel.Location = new System.Drawing.Point(200, 294);
+            this.finishPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.finishPanel.Name = "finishPanel";
-            this.finishPanel.Size = new System.Drawing.Size(924, 124);
+            this.finishPanel.Size = new System.Drawing.Size(1040, 155);
             this.finishPanel.TabIndex = 87;
             this.finishPanel.Visible = false;
             // 
@@ -131,10 +133,10 @@ namespace WDAC_Wizard
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(1, 46);
+            this.label4.Location = new System.Drawing.Point(1, 58);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(124, 19);
+            this.label4.Size = new System.Drawing.Size(145, 23);
             this.label4.TabIndex = 87;
             this.label4.Text = "Output location:";
             // 
@@ -143,16 +145,16 @@ namespace WDAC_Wizard
             this.progressString_Label.AutoSize = true;
             this.progressString_Label.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.progressString_Label.ForeColor = System.Drawing.Color.Black;
-            this.progressString_Label.Location = new System.Drawing.Point(178, 123);
+            this.progressString_Label.Location = new System.Drawing.Point(200, 186);
             this.progressString_Label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.progressString_Label.Name = "progressString_Label";
-            this.progressString_Label.Size = new System.Drawing.Size(214, 18);
+            this.progressString_Label.Size = new System.Drawing.Size(260, 22);
             this.progressString_Label.TabIndex = 88;
             this.progressString_Label.Text = "Configuring Policy Parameters...";
             // 
             // BuildPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.progressString_Label);
@@ -161,8 +163,9 @@ namespace WDAC_Wizard
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "BuildPage";
-            this.Size = new System.Drawing.Size(1269, 622);
+            this.Size = new System.Drawing.Size(1428, 778);
             this.finishPanel.ResumeLayout(false);
             this.finishPanel.PerformLayout();
             this.ResumeLayout(false);

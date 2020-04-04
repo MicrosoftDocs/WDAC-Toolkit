@@ -83,7 +83,7 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(202, 369);
+            this.label7.Location = new System.Drawing.Point(202, 398);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(0, 24);
@@ -94,7 +94,7 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(189, 12);
+            this.label1.Location = new System.Drawing.Point(189, 40);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(259, 34);
@@ -113,7 +113,7 @@ namespace WDAC_Wizard
             this.Column_Name,
             this.Column_Files,
             this.Column_Exceptions});
-            this.rulesDataGrid.Location = new System.Drawing.Point(195, 165);
+            this.rulesDataGrid.Location = new System.Drawing.Point(195, 194);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
@@ -172,7 +172,7 @@ namespace WDAC_Wizard
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(196, 128);
+            this.label8.Location = new System.Drawing.Point(196, 157);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(237, 25);
@@ -185,7 +185,7 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.AutoSize = true;
             this.label_AddCustomRules.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label_AddCustomRules.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label_AddCustomRules.Location = new System.Drawing.Point(557, 132);
+            this.label_AddCustomRules.Location = new System.Drawing.Point(557, 161);
             this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_AddCustomRules.Name = "label_AddCustomRules";
             this.label_AddCustomRules.Size = new System.Drawing.Size(137, 22);
@@ -228,7 +228,7 @@ namespace WDAC_Wizard
             this.panel_CustomRules.Controls.Add(this.button_Browse);
             this.panel_CustomRules.Controls.Add(this.label_condition);
             this.panel_CustomRules.Controls.Add(this.label4);
-            this.panel_CustomRules.Location = new System.Drawing.Point(716, 88);
+            this.panel_CustomRules.Location = new System.Drawing.Point(716, 117);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(719, 672);
@@ -549,7 +549,7 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(191, 55);
+            this.label3.Location = new System.Drawing.Point(191, 84);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(679, 22);
@@ -562,7 +562,7 @@ namespace WDAC_Wizard
             this.deleteButton.FlatAppearance.BorderSize = 0;
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Image = global::WDAC_Wizard.Properties.Resources.minus_button;
-            this.deleteButton.Location = new System.Drawing.Point(672, 701);
+            this.deleteButton.Location = new System.Drawing.Point(672, 730);
             this.deleteButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(28, 31);

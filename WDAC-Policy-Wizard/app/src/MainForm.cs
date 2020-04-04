@@ -925,7 +925,7 @@ namespace WDAC_Wizard
                 string createPolicyScript = "";
                 // Create new CI Policy from rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicy
                 // If the supplemental rule was configured OR the multipolicyformat setting is enabled, set "multiplepolicy format" switch
-                if (String.Equals(this.Policy.ConfigRules["Allow Supplemental Policies"]["CurrentValue"], this.Policy.ConfigRules["Allow Supplemental Policies"]["AllowedValue"]) ||
+                if (String.Equals(this.Policy.ConfigRules["AllowSupplementalPolicies"]["CurrentValue"], this.Policy.ConfigRules["AllowSupplementalPolicies"]["AllowedValue"]) ||
                     Properties.Settings.Default.createMultiPolicyByDefault) 
                     createPolicyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath {0} -Rules $Rule_{1}", 
                         tempPolicyPath, CustomRule.PSVariable);
@@ -1267,12 +1267,18 @@ namespace WDAC_Wizard
         public string GetListSubFolders(string folderPath)
         {
             var subFolderList = Directory.GetDirectories(folderPath);
-            string subfolders = String.Empty;
-            foreach (var folder in subFolderList)
-                subfolders += String.Format("'{0}', ", folder);
+            if (subFolderList.Length > 0)
+            {
+                string subfolders = String.Empty;
+                foreach (var folder in subFolderList)
+                    subfolders += String.Format("'{0}', ", folder);
 
-            this.Log.AddInfoMsg(String.Format("Found the following subfolders for {0} -- {1}", folderPath, subfolders));
-            return subfolders.Substring(0, subfolders.Length-2); //trim the trailing comma and space
+                this.Log.AddInfoMsg(String.Format("Found the following subfolders for {0} -- {1}", folderPath, subfolders));
+                return subfolders.Substring(0, subfolders.Length - 2); //trim the trailing comma and space
+            }
+            else
+                return "' '"; 
+            
         }
 
         //

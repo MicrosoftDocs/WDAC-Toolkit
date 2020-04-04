@@ -50,7 +50,7 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F);
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(197, 33);
+            this.label1.Location = new System.Drawing.Point(197, 44);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(336, 34);
@@ -62,7 +62,7 @@ namespace WDAC_Wizard
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(198, 80);
+            this.label2.Location = new System.Drawing.Point(198, 91);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(357, 24);
@@ -76,7 +76,7 @@ namespace WDAC_Wizard
             this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Create.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Create.Location = new System.Drawing.Point(798, 148);
+            this.button_Create.Location = new System.Drawing.Point(798, 159);
             this.button_Create.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Create.Name = "button_Create";
             this.button_Create.Size = new System.Drawing.Size(142, 44);
@@ -88,7 +88,7 @@ namespace WDAC_Wizard
             // textBoxPolicyPath
             // 
             this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxPolicyPath.Location = new System.Drawing.Point(206, 152);
+            this.textBoxPolicyPath.Location = new System.Drawing.Point(206, 163);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
             this.textBoxPolicyPath.Size = new System.Drawing.Size(554, 29);
@@ -101,7 +101,7 @@ namespace WDAC_Wizard
             this.policyInfoPanel.Controls.Add(this.label_policyName);
             this.policyInfoPanel.Controls.Add(this.textBox_PolicyID);
             this.policyInfoPanel.Controls.Add(this.label_fileLocation);
-            this.policyInfoPanel.Location = new System.Drawing.Point(201, 220);
+            this.policyInfoPanel.Location = new System.Drawing.Point(201, 231);
             this.policyInfoPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.policyInfoPanel.Name = "policyInfoPanel";
             this.policyInfoPanel.Size = new System.Drawing.Size(759, 181);

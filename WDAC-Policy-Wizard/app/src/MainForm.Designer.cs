@@ -62,7 +62,7 @@ namespace WDAC_Wizard
             this.label_Welcome.AutoSize = true;
             this.label_Welcome.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Welcome.ForeColor = System.Drawing.Color.Black;
-            this.label_Welcome.Location = new System.Drawing.Point(200, 11);
+            this.label_Welcome.Location = new System.Drawing.Point(222, 50);
             this.label_Welcome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_Welcome.Name = "label_Welcome";
             this.label_Welcome.Size = new System.Drawing.Size(136, 36);
@@ -296,7 +296,7 @@ namespace WDAC_Wizard
             // 
             this.controlHighlight_Panel.BackColor = System.Drawing.Color.CornflowerBlue;
             this.controlHighlight_Panel.Location = new System.Drawing.Point(0, 115);
-            this.controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(4);
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
             this.controlHighlight_Panel.Size = new System.Drawing.Size(10, 42);
             this.controlHighlight_Panel.TabIndex = 33;
@@ -360,7 +360,7 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(200, 59);
+            this.label1.Location = new System.Drawing.Point(222, 98);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(373, 29);

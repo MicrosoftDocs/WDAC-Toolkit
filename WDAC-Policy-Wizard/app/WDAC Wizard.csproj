@@ -126,6 +126,12 @@
       <DependentUpon>BuildPage.cs</DependentUpon>
     </Compile>
     <Compile Include="src\cipolicy.cs" />
+    <Compile Include="src\CustomRuleConditionsPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\CustomRuleConditionsPanel.Designer.cs">
+      <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Policy.cs" />
     <Compile Include="src\ConfigTemplate_Control.cs">
       <SubType>UserControl</SubType>
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\ConfigTemplate_Control.resx">
       <DependentUpon>ConfigTemplate_Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\CustomRuleConditionsPanel.resx">
+      <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\EditWorkflow.resx">
       <DependentUpon>EditWorkflow.cs</DependentUpon>
