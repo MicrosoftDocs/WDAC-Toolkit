@@ -420,9 +420,6 @@ namespace WDAC_Wizard
                             trackBar_Conditions.Value = 0;
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
                             textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
-                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A"
-                                || textBoxSlider_3.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "and file name with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
@@ -434,8 +431,6 @@ namespace WDAC_Wizard
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
                             textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["FileVersion"];
                             textBoxSlider_3.Text = "*";
-                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A" || textBoxSlider_2.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
                                 "with a version at or above the specified version number.";
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
@@ -448,8 +443,7 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["LeafCertificate"];
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
-                            if (textBoxSlider_0.Text == "N/A" || textBoxSlider_1.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
+                            
                             publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher.";
                             this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
                         }
@@ -462,8 +456,6 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = "*";
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
-                            if (textBoxSlider_0.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files signed by this issuing CA subject name.";
                             this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
 
