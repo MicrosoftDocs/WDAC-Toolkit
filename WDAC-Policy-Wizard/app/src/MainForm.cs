@@ -1297,23 +1297,32 @@ namespace WDAC_Wizard
 
             foreach (var file in dir.GetFiles("*.xml"))
             {
-                string _fileName = file.FullName;
-                Start = _fileName.IndexOf("policy_") + 7;
-                End = _fileName.IndexOf(".xml");
+                this.Log.AddInfoMsg(String.Format("Found xml file, {0}", file.Name)); 
+                Start = file.Name.IndexOf("policy_") + 7;
+                End = file.Name.IndexOf(".xml");
+
                 // If Start indexof returns -1, 
                 if (Start == 6)
+                {
+                    this.Log.AddInfoMsg("No ID located");
                     continue; 
+                }
 
-                int ID = Convert.ToInt32(_fileName.Substring(Start, End - Start));
+                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
 
                 if (ID > NewestID)
                     NewestID = ID;
             }
 
             if (NewestID < 0)
+            {
+                this.Log.AddInfoMsg(String.Format("No existing temp policy located in {0}", folderPth));
                 newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
+            }
             else
-                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("/policy_{0}.xml", NewestID + 1));
+            {
+                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
+            }
 
             this.Log.AddInfoMsg(String.Format("Unique Policy Path returned: {0}", newUniquePath));
             return newUniquePath;
@@ -1598,10 +1607,10 @@ namespace WDAC_Wizard
         private string CreateTempFolder()
         {
             //AppData + WDAC Temp folder
-            string tempFolderPath = String.Format(@"{0}/WDACWizard/temp/{1}", 
-                Environment.GetEnvironmentVariable("LocalAppData"), formatDate());
-            
-            if(!Directory.Exists(tempFolderPath))
+            string tempFolder = Path.Combine("WDACWizard", "Temp", formatDate()); 
+            string tempFolderPath = Path.Combine(Path.GetTempPath(), tempFolder); 
+
+            if (!Directory.Exists(tempFolderPath))
                 Directory.CreateDirectory(tempFolderPath);
 
             return tempFolderPath; 
