@@ -234,7 +234,7 @@ namespace WDAC_Wizard
             this.label_Info.AutoSize = true;
             this.label_Info.BackColor = System.Drawing.Color.Transparent;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label_Info.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label_Info.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_Info.Location = new System.Drawing.Point(194, 814);
             this.label_Info.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_Info.Name = "label_Info";
@@ -645,7 +645,7 @@ namespace WDAC_Wizard
             // 
             this.label_AdvancedOptions.AutoSize = true;
             this.label_AdvancedOptions.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_AdvancedOptions.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label_AdvancedOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_AdvancedOptions.Location = new System.Drawing.Point(1213, 159);
             this.label_AdvancedOptions.Name = "label_AdvancedOptions";
             this.label_AdvancedOptions.Size = new System.Drawing.Size(172, 22);
@@ -695,7 +695,7 @@ namespace WDAC_Wizard
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label21.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.label21.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label21.Location = new System.Drawing.Point(195, 479);
@@ -711,7 +711,7 @@ namespace WDAC_Wizard
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label4.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label4.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label4.Location = new System.Drawing.Point(197, 178);

@@ -96,7 +96,7 @@ namespace WDAC_Wizard
             this.terms_Label.AutoSize = true;
             this.terms_Label.BackColor = System.Drawing.Color.White;
             this.terms_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.terms_Label.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.terms_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.terms_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.terms_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.terms_Label.Location = new System.Drawing.Point(30, 525);
@@ -111,7 +111,7 @@ namespace WDAC_Wizard
             this.privacy_Label.AutoSize = true;
             this.privacy_Label.BackColor = System.Drawing.Color.White;
             this.privacy_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.privacy_Label.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.privacy_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.privacy_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.privacy_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.privacy_Label.Location = new System.Drawing.Point(30, 568);

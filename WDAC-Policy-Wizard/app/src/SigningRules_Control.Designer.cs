@@ -505,7 +505,7 @@ namespace WDAC_Wizard
             // button_Browse
             // 
             this.button_Browse.BackColor = System.Drawing.Color.Transparent;
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.SystemColors.Highlight;
+            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;

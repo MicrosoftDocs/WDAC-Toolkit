@@ -312,7 +312,7 @@ namespace WDAC_Wizard
             // 
             this.ISGLabel.AutoSize = true;
             this.ISGLabel.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.ISGLabel.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.ISGLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.ISGLabel.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.ISGLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ISGLabel.Location = new System.Drawing.Point(33, 399);

@@ -229,7 +229,7 @@ namespace WDAC_Wizard
             // 
             this.SupplementalInfoLabel.AutoSize = true;
             this.SupplementalInfoLabel.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.SupplementalInfoLabel.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.SupplementalInfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.SupplementalInfoLabel.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.SupplementalInfoLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.SupplementalInfoLabel.Location = new System.Drawing.Point(248, 314);
