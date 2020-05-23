@@ -45,7 +45,8 @@ namespace WDAC_Wizard
             this.AllFilesinFolder = new List<string>(); 
 
             this._MainWindow = pMainWindow;
-            this._MainWindow.RedoFlowRequired = false; 
+            this._MainWindow.RedoFlowRequired = false;
+            this._MainWindow.CustomRuleinProgress = false; 
             this.Log = this._MainWindow.Log;
             this.RowSelected = -1; 
         }
@@ -227,6 +228,9 @@ namespace WDAC_Wizard
                 if (refPath == String.Empty)
                     return;
 
+                // Custom rule in progress
+                this._MainWindow.CustomRuleinProgress = true;
+
                 // Get generic file information to be shown to user
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
@@ -302,6 +306,10 @@ namespace WDAC_Wizard
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                         break;
+
+                    // Custom rule in progress
+                    this._MainWindow.CustomRuleinProgress = true;
+
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
                     //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
@@ -641,6 +649,7 @@ namespace WDAC_Wizard
             
             // Reset UI view
             ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false; 
         }
 
         /// <summary>

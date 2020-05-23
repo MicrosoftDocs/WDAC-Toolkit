@@ -33,6 +33,7 @@ namespace WDAC_Wizard
         public bool ErrorOnPage { get; set; }            // Flag blocking proceeding to next user control. 
         public string ErrorMsg { get; set; }             // Accompanying message error description for ErrorOnPage flag 
         public bool RedoFlowRequired { get; set; }       // Flag which prohibts user from making changes on page 1 then skipping back to page 4, for instance
+        public bool CustomRuleinProgress { get; set; }   // Flag set when user has kicked off the custom rule procedure. Ensures user does not go to build page without accidentally creating the rule
 
         public Logger Log { get; set; }
         public List<string> PageList;
@@ -61,6 +62,8 @@ namespace WDAC_Wizard
             this.Policy = new WDAC_Policy();
             this.PageList = new List<string>();
             this.ExeFolderPath = GetExecutablePath(false);
+
+            this.CustomRuleinProgress = false; 
 
             CheckForUpdates().GetAwaiter().GetResult();
         }
@@ -194,6 +197,7 @@ namespace WDAC_Wizard
 
             // Reset flags
             this.ConfigInProcess = false;
+            this.CustomRuleinProgress = false; 
             this.view = 0;
             this.CurrentPage = 0; 
 
@@ -228,6 +232,16 @@ namespace WDAC_Wizard
         {
             if (!this.ErrorOnPage)
             {
+                // Check that a custom rule is not in progress
+                if(this.CustomRuleinProgress)
+                {
+                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your WDAC policy?", 
+                        "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (res == DialogResult.Yes)
+                        return;
+                }
+
                 this.CurrentPage++;
                 pageController(sender, e);
             }
