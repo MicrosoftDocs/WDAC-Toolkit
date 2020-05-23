@@ -634,6 +634,9 @@ namespace WDAC_Wizard
             this.Policy.CustomRules.Add(this.PolicyCustomRule);
             this.PolicyCustomRule = new PolicyCustomRules();
 
+            // Scroll to bottom to see new rule added to list
+            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
+
             bubbleUp();
             
             // Reset UI view

@@ -713,7 +713,7 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring policy signing rules ...";
+                process = "Configuring custom policy signing rules ...";
             else if (progressPercent <= 80)
                 process = "Building policy signing rules ...";
             else if (progressPercent <= 85)
@@ -927,7 +927,7 @@ namespace WDAC_Wizard
                 {
                     this.Log.AddErrorMsg("CreatePolicyFileRuleOptions() caught the following exception ", e);
                 }
-                worker.ReportProgress(70 + i / nCustomRules * 10);
+                worker.ReportProgress(10 + i / nCustomRules * 70); //Assumes the operations involved with this step take about 70%
             }
 
             //TODO: results check ensuring 
@@ -944,21 +944,22 @@ namespace WDAC_Wizard
             {
                 case PolicyCustomRules.RuleType.Publisher:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"" + 
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
                             " -Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.FilePath:
                     {
-
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
+                            " -Fallback Hash", customRule.PSVariable, customRule.ReferenceFile);
                     }
 
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
                     {
-                        // Check if part of the folder path can be replaced with an env variable eg. %
+                        // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
                         if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath &&
                             Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
                             customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.GetEnvVar());
@@ -971,7 +972,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
                         customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
-                            "-Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.RuleIndex);
+                            "-Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
                     }
 
                     break;
@@ -1356,7 +1357,6 @@ namespace WDAC_Wizard
                 // If Start indexof returns -1, 
                 if (Start == 6)
                 {
-                    this.Log.AddInfoMsg("No ID located");
                     continue; 
                 }
 
@@ -1368,7 +1368,6 @@ namespace WDAC_Wizard
 
             if (NewestID < 0)
             {
-                this.Log.AddInfoMsg(String.Format("No existing temp policy located in {0}", folderPth));
                 newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
             }
             else
