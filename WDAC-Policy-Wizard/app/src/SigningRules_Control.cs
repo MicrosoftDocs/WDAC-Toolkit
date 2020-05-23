@@ -45,7 +45,8 @@ namespace WDAC_Wizard
             this.AllFilesinFolder = new List<string>(); 
 
             this._MainWindow = pMainWindow;
-            this._MainWindow.RedoFlowRequired = false; 
+            this._MainWindow.RedoFlowRequired = false;
+            this._MainWindow.CustomRuleinProgress = false; 
             this.Log = this._MainWindow.Log;
             this.RowSelected = -1; 
         }
@@ -194,10 +195,10 @@ namespace WDAC_Wizard
         private void FileButton_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_File.Checked)
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
+                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
 
             else
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
+                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Folder);
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
             if (this.PolicyCustomRule.ReferenceFile != null)
@@ -226,6 +227,9 @@ namespace WDAC_Wizard
                 string refPath = getFileLocation();
                 if (refPath == String.Empty)
                     return;
+
+                // Custom rule in progress
+                this._MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
@@ -302,9 +306,13 @@ namespace WDAC_Wizard
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                         break;
+
+                    // Custom rule in progress
+                    this._MainWindow.CustomRuleinProgress = true;
+
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    ProcessAllFiles(PolicyCustomRule.ReferenceFile);
-                    PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
+                    //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
+                    //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break; 
 
@@ -614,7 +622,7 @@ namespace WDAC_Wizard
                     break;
 
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
                     break;
 
             }
@@ -634,10 +642,14 @@ namespace WDAC_Wizard
             this.Policy.CustomRules.Add(this.PolicyCustomRule);
             this.PolicyCustomRule = new PolicyCustomRules();
 
+            // Scroll to bottom to see new rule added to list
+            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
+
             bubbleUp();
             
             // Reset UI view
             ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false; 
         }
 
         /// <summary>

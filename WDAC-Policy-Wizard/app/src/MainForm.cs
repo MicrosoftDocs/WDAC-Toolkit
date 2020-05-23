@@ -33,6 +33,7 @@ namespace WDAC_Wizard
         public bool ErrorOnPage { get; set; }            // Flag blocking proceeding to next user control. 
         public string ErrorMsg { get; set; }             // Accompanying message error description for ErrorOnPage flag 
         public bool RedoFlowRequired { get; set; }       // Flag which prohibts user from making changes on page 1 then skipping back to page 4, for instance
+        public bool CustomRuleinProgress { get; set; }   // Flag set when user has kicked off the custom rule procedure. Ensures user does not go to build page without accidentally creating the rule
 
         public Logger Log { get; set; }
         public List<string> PageList;
@@ -61,6 +62,8 @@ namespace WDAC_Wizard
             this.Policy = new WDAC_Policy();
             this.PageList = new List<string>();
             this.ExeFolderPath = GetExecutablePath(false);
+
+            this.CustomRuleinProgress = false; 
 
             CheckForUpdates().GetAwaiter().GetResult();
         }
@@ -194,6 +197,7 @@ namespace WDAC_Wizard
 
             // Reset flags
             this.ConfigInProcess = false;
+            this.CustomRuleinProgress = false; 
             this.view = 0;
             this.CurrentPage = 0; 
 
@@ -228,6 +232,16 @@ namespace WDAC_Wizard
         {
             if (!this.ErrorOnPage)
             {
+                // Check that a custom rule is not in progress
+                if(this.CustomRuleinProgress)
+                {
+                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your WDAC policy?", 
+                        "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (res == DialogResult.Yes)
+                        return;
+                }
+
                 this.CurrentPage++;
                 pageController(sender, e);
             }
@@ -676,27 +690,30 @@ namespace WDAC_Wizard
         /// </summary>
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            //TODO: change this to program files - temp
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
+            
             // Handle Policy Rule-Options
             CreatePolicyRuleOptions(worker);
 
-            // Create the driver files
-            CreateDriverFiles(worker);
+            // Handle custom rules:
+            //  1. Create all of the $Rule objects running New-CIPolicyRule
+            //  2. Create a unique CI policy per custom rule by running New-CIPolicy
+            List<string> customRulesPathList = ProcessCustomRules(worker);
 
-            // Handle custom rules 
-            List<string> customRulesPathList = CreatePolicyFileRules(worker);
 
             // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
             // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
             MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
 
-            // Merge with template and/or base:
+            // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
 
+            // Set additional parameters, for instance, policy name, GUIDs, version, etc
             SetAdditionalParameters(worker);
-            ConvertToBinary();
+
+            // Convert the policy from XML to Bin -- v2 
+            // ConvertToBinary();
         }
 
         /// <summary>
@@ -710,7 +727,7 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring policy signing rules ...";
+                process = "Configuring custom policy signing rules ...";
             else if (progressPercent <= 80)
                 process = "Building policy signing rules ...";
             else if (progressPercent <= 85)
@@ -823,6 +840,11 @@ namespace WDAC_Wizard
             worker.ReportProgress(10);
         }
 
+
+        /// <summary>
+        /// Creates the driver file objects in PowerShell. This should only be run when attempting to bulk add all driver objects, 
+        /// for instance running Get-SystemDrivers 
+        /// </summary>
         public void CreateDriverFiles(BackgroundWorker worker)
         {
             this.Log.AddInfoMsg("--- Create Driver Files ---");
@@ -884,63 +906,32 @@ namespace WDAC_Wizard
             }
         }
 
+
         /// <summary>
-        /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
+        /// Processes all of the custom rules defined by user. 
         /// </summary>
-        public List<string> CreatePolicyFileRules(BackgroundWorker worker, bool auditMode = false)
+        public List<string> ProcessCustomRules(BackgroundWorker worker)
         {
-            // Input: directory path to temp appdata
-            // Output: list<string> of temp policies .xml files written
-
-            // Get the SigningRules_Control runspace which created the rules
             List<string> customRulesPathList = new List<string>();
-            int nRules = this.Policy.CustomRules.Count;
-            for (int i = 0; i < nRules; i++)
+            int nCustomRules = this.Policy.CustomRules.Count;
+
+            // Iterate through all of the custom rules and update the progress bar    
+            for (int i = 0; i < nCustomRules; i++)
             {
-                
-                var CustomRule = this.Policy.CustomRules[i];
-                // Skip if the Custom Rule is a Folder Fule -- we have already broken these out into individual file rules
-                // at this point. 
-                if (CustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.Folder)
-                    continue;
+                var customRule = this.Policy.CustomRules[i];
+                customRule.PSVariable = i.ToString(); 
+                string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
+                customRulesPathList.Add(tmpPolicyPath); 
 
-                String tempPolicyPath = getUniquePolicyPath(this.TempFolderPath);
-                customRulesPathList.Add(tempPolicyPath);
+                string ruleScript = createCustomRuleScript(customRule);
+                string policyScript = createPolicyScript(customRule, tmpPolicyPath); 
 
-                // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
-                string createRuleScript;
-
-                // if the rule is type filepath and settings
-                if (CustomRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath && 
-                    Properties.Settings.Default.useEnvVars && CustomRule.isEnvVar())
-                        createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", CustomRule.PSVariable, CustomRule.GetEnvVar());
-
-                else if(CustomRule.GetRuleType() == PolicyCustomRules.RuleType.FileAttributes)
-                    createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFiles $Files_{0}[{2}] " + 
-                        "-Fallback Hash", CustomRule.PSVariable, CustomRule.GetRuleLevel(), CustomRule.RuleIndex);
-                else
-                    createRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFiles $Files_{0}[{2}] " +
-                        "-Fallback Hash", CustomRule.PSVariable, CustomRule.GetRuleLevel(), CustomRule.RuleIndex);
-
-                string createPolicyScript = "";
-                // Create new CI Policy from rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicy
-                // If the supplemental rule was configured OR the multipolicyformat setting is enabled, set "multiplepolicy format" switch
-                if (String.Equals(this.Policy.ConfigRules["AllowSupplementalPolicies"]["CurrentValue"], this.Policy.ConfigRules["AllowSupplementalPolicies"]["AllowedValue"]) ||
-                    Properties.Settings.Default.createMultiPolicyByDefault) 
-                    createPolicyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath {0} -Rules $Rule_{1}", 
-                        tempPolicyPath, CustomRule.PSVariable);
-                 else
-                    createPolicyScript = String.Format("New-CIPolicy -FilePath {0} -Rules $Rule_{1}", tempPolicyPath, CustomRule.PSVariable);
-
-                // Deny type rule
-                if (CustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)  
-                    createPolicyScript += " -Deny";
-
+                // Add script to pipeline and run PS command
                 Pipeline pipeline = this.runspace.CreatePipeline();
-                pipeline.Commands.AddScript(createRuleScript);
-                pipeline.Commands.AddScript(createPolicyScript);
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", createRuleScript));
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", createPolicyScript));
+                pipeline.Commands.AddScript(ruleScript);
+                pipeline.Commands.AddScript(policyScript);
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", ruleScript));
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript)); 
 
                 try
                 {
@@ -950,13 +941,89 @@ namespace WDAC_Wizard
                 {
                     this.Log.AddErrorMsg("CreatePolicyFileRuleOptions() caught the following exception ", e);
                 }
-                worker.ReportProgress(70 + i / nRules * 10);
+                worker.ReportProgress(10 + i / nCustomRules * 70); //Assumes the operations involved with this step take about 70%
             }
+
             //TODO: results check ensuring 
             runspace.Dispose();
             return customRulesPathList;
         }
 
+        public string createCustomRuleScript(PolicyCustomRules customRule)
+        {
+            string customRuleScript = string.Empty;
+
+            // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
+            switch (customRule.GetRuleType())
+            {
+                case PolicyCustomRules.RuleType.Publisher:
+                    {
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
+                            " -Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleType.FilePath:
+                    {
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
+                            " -Fallback Hash", customRule.PSVariable, customRule.ReferenceFile);
+                    }
+
+                    break;
+
+                case PolicyCustomRules.RuleType.Folder:
+                    {
+                        // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
+                        if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath &&
+                            Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
+                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.GetEnvVar());
+                        else
+                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.ReferenceFile);
+                    }
+
+                    break;
+
+                case PolicyCustomRules.RuleType.FileAttributes:
+                    {
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
+                            "-Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                    }
+
+                    break;
+
+                case PolicyCustomRules.RuleType.Hash:
+                    {
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath {2} ", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                    }
+
+                    break;
+            }
+
+            // If this is a deny rule, append the Deny switch
+            if (customRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)
+                customRuleScript += " -Deny";
+
+            return customRuleScript; 
+        }
+
+        /// <summary>
+        /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
+        /// </summary>
+        public string createPolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
+        {
+            string policyScript = string.Empty;
+
+            if (String.Equals(this.Policy.ConfigRules["AllowSupplementalPolicies"]["CurrentValue"], this.Policy.ConfigRules["AllowSupplementalPolicies"]["AllowedValue"]) ||
+                    Properties.Settings.Default.createMultiPolicyByDefault)
+                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}",
+                    tempPolicyPath, customRule.PSVariable);
+            else
+                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
+
+            return policyScript; 
+        }
+
+        
         /// <summary>
         /// Merges all of the CI Policies created for each custom rule. Writes the merged policy into one OutputFilePath (input)
         /// </summary>
@@ -1304,7 +1371,6 @@ namespace WDAC_Wizard
                 // If Start indexof returns -1, 
                 if (Start == 6)
                 {
-                    this.Log.AddInfoMsg("No ID located");
                     continue; 
                 }
 
@@ -1316,7 +1382,6 @@ namespace WDAC_Wizard
 
             if (NewestID < 0)
             {
-                this.Log.AddInfoMsg(String.Format("No existing temp policy located in {0}", folderPth));
                 newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
             }
             else
