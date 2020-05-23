@@ -194,10 +194,10 @@ namespace WDAC_Wizard
         private void FileButton_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_File.Checked)
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
+                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
 
             else
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
+                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Folder);
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
             if (this.PolicyCustomRule.ReferenceFile != null)
@@ -303,8 +303,8 @@ namespace WDAC_Wizard
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                         break;
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    ProcessAllFiles(PolicyCustomRule.ReferenceFile);
-                    PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
+                    //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
+                    //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break; 
 
@@ -614,7 +614,7 @@ namespace WDAC_Wizard
                     break;
 
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), Path.GetFileName(this.PolicyCustomRule.ReferenceFile));
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
                     break;
 
             }
