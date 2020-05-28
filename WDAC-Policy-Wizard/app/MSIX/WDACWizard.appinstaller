@@ -7,7 +7,7 @@
     <MainBundle
         Name="WDAC Wizard"
         Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
-        Version="1.4.10.0"
+        Version="1.5.5.0"
 		ProcessorArchitecture="x64"
         Uri="https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX" />
 
