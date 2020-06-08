@@ -808,32 +808,35 @@ namespace WDAC_Wizard
                     }
                 }
 
-                // Process file rules (hash, file path, file name)
-                foreach (var signingScenario in this.Policy.SigningScenarios)
-                {
-                    foreach (var ruleID in signingScenario.FileRules)
-                    {
-                        if (this.Policy.FileRules[ruleID].FriendlyName.Contains("Page")
-                            || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
-                            continue;
-                        else
-                        {
-                            
-                            // Write to UI
-                            action = this.Policy.FileRules[ruleID].Action;
-                            level = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+            }
 
-                            if (this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
-                                this.Policy.FileRules[ruleID].FileName != null)
-                                friendlyName = this.Policy.FileRules[ruleID].FileName;
-                            else
-                                friendlyName = this.Policy.FileRules[ruleID].FriendlyName;
-                        }
-                    }
-                    this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
-                    this.rulesDataGrid.RowCount += 1;
+            // Process file rules (hash, file path, file name)
+            if (this.Policy.siPolicy.FileRules.Length > 0)
+            {
+                for(int i=0; i< this.Policy.siPolicy.FileRules.Length; i++)
+                {
+                    /*var ruleID = this.Policy.FileRules[i]; 
+                    if (ruleID.FriendlyName.Contains("Page")
+                        || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
+                        continue;
+                    else
+                    {
+                        // Write to UI
+                        action = this.Policy.FileRules[ruleID].Action;
+                        level = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+
+                        if (this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
+                            this.Policy.FileRules[ruleID].FileName != null)
+                            friendlyName = this.Policy.FileRules[ruleID].FileName;
+                        else
+                            friendlyName = this.Policy.FileRules[ruleID].FriendlyName;
+
+                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
+                        this.rulesDataGrid.RowCount += 1;
+                    }*/
                 }
             }
+
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
         }
