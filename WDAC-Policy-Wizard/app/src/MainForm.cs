@@ -21,6 +21,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
+using Microsoft.Win32;
+
 
 namespace WDAC_Wizard
 {
@@ -66,6 +68,8 @@ namespace WDAC_Wizard
             this.CustomRuleinProgress = false; 
 
             CheckForUpdates().GetAwaiter().GetResult();
+            //LicenseCheck().GetAwaiter().GetResult(); 
+            LicenseCheck(); 
         }
 
         // ###############
@@ -1741,19 +1745,65 @@ namespace WDAC_Wizard
             Application.Exit(); 
         }
 
-        // Queue up the update and close the current app instance.
-       /* private async Task CommandInvokedHandler(IUICommand command)
+        private async Task LicenseCheck()
         {
-            if (command.Label == "Update")
+            // Check that WDAC feature is compatible with system
+            // Cmdlets are available on all builds 1909+. 
+            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability
+
+            int REQUIRED_V = 1909;
+            string REQUIRED_ED = "Enterprise";
+            int supt_flag;
+
+            this.Log.AddInfoMsg("--- Feature Compat Check ---"); 
+
+            string edition = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CompositionEditionID", "").ToString();
+            string prodName = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", "").ToString();
+            int releaseN = Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
+
+            if (releaseN >= REQUIRED_V)
             {
-                PackageManager packagemanager = new PackageManager();
-                await packagemanager.AddPackageAsync(
-                    new Uri("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX"),
-                    null,
-                    DeploymentOptions.ForceApplicationShutdown
-                );
+                supt_flag = 1;
+                this.Log.AddInfoMsg(String.Format("Release Id: {0} meets min build requirements.", releaseN));
             }
-        }*/
+            else if (edition.Contains(REQUIRED_ED) || prodName.Contains(REQUIRED_ED))
+            {
+                supt_flag = 1;
+                this.Log.AddInfoMsg(String.Format("Edition/ProdName:{0}/{1} meets min build requirements.", edition, prodName));
+            }
+            else
+                supt_flag = 0; 
+
+        
+            if (supt_flag == 0) // edition or prod name not found in either reg key, n_ed_sup = 0, throw warn msg
+            {
+                this.Log.AddWarningMsg(String.Format("Incompatible Windows Build Detected!! BuildN={0}", releaseN));
+                this.Log.AddWarningMsg(String.Format("Incompatible Windows Edition/Product Detected!! CompositionEditionID={0} and ProductName={1}", edition, prodName));
+                DialogResult res = MessageBox.Show("The Policy Wizard has detected an incompatible version of Windows. The Wizard may not be able to successfully complete policy creation.",
+                "Incompatible Windows Product", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                if (res == DialogResult.OK)
+                {
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability");
+                }
+            }
+        }
+
+        //}
+
+        // Queue up the update and close the current app instance.
+        /* private async Task CommandInvokedHandler(IUICommand command)
+         {
+             if (command.Label == "Update")
+             {
+                 PackageManager packagemanager = new PackageManager();
+                 await packagemanager.AddPackageAsync(
+                     new Uri("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX"),
+                     null,
+                     DeploymentOptions.ForceApplicationShutdown
+                 );
+             }
+         }*/
     }
 
 }
