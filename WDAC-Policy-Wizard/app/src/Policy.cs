@@ -28,7 +28,7 @@ namespace WDAC_Wizard
             None, 
             AllowMicrosoft,
             WindowsWorks, 
-            NightsWatch, 
+            SignedReputable, 
         }
 
         // Policy Properties

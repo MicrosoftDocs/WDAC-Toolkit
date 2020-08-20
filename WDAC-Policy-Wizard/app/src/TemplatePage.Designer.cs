@@ -33,23 +33,23 @@ namespace WDAC_Wizard
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
+            this.allowMsft_Button = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label_PolicyFour = new System.Windows.Forms.Label();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.windowsWorks_Button = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label_PolicyOne = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.allowMsft_Button = new System.Windows.Forms.PictureBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label_PolicyFour = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
-            this.nightsWatch_Button = new System.Windows.Forms.PictureBox();
+            this.signedReputable_Button = new System.Windows.Forms.PictureBox();
             this.ISGLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
@@ -66,16 +66,16 @@ namespace WDAC_Wizard
             this.policyInfoPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.allowMsft_Button)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.windowsWorks_Button)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.allowMsft_Button)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nightsWatch_Button)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.signedReputable_Button)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.policyInfoPanel.SuspendLayout();
@@ -92,10 +92,98 @@ namespace WDAC_Wizard
             this.panel2.Controls.Add(this.label_PolicyFour);
             this.panel2.Controls.Add(this.pictureBox4);
             this.panel2.Location = new System.Drawing.Point(525, 81);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(350, 423);
             this.panel2.TabIndex = 1;
+            // 
+            // allowMsft_Button
+            // 
+            this.allowMsft_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.allowMsft_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.allowMsft_Button.Location = new System.Drawing.Point(158, 370);
+            this.allowMsft_Button.Name = "allowMsft_Button";
+            this.allowMsft_Button.Size = new System.Drawing.Size(35, 35);
+            this.allowMsft_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.allowMsft_Button.TabIndex = 99;
+            this.allowMsft_Button.TabStop = false;
+            this.allowMsft_Button.Click += new System.EventHandler(this.AllowMsft_Button_Click);
+            this.allowMsft_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
+            this.allowMsft_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.panel4);
+            this.panel1.Location = new System.Drawing.Point(400, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(399, 652);
+            this.panel1.TabIndex = 3;
+            // 
+            // panel4
+            // 
+            this.panel4.Location = new System.Drawing.Point(408, 4);
+            this.panel4.Margin = new System.Windows.Forms.Padding(4);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(400, 652);
+            this.panel4.TabIndex = 2;
+            // 
+            // panel3
+            // 
+            this.panel3.Location = new System.Drawing.Point(408, 4);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(400, 652);
+            this.panel3.TabIndex = 2;
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.Image = global::WDAC_Wizard.Properties.Resources.windows_logo;
+            this.pictureBox6.Location = new System.Drawing.Point(121, 100);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(109, 70);
+            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox6.TabIndex = 14;
+            this.pictureBox6.TabStop = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(35, 192);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(272, 126);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Allow Microsoft Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Of" +
+    "fice365 applications\r\n   - WHQL signed kernel drivers\r\n   - Microsoft Store sign" +
+    "ed apps";
+            // 
+            // label_PolicyFour
+            // 
+            this.label_PolicyFour.AutoSize = true;
+            this.label_PolicyFour.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_PolicyFour.ForeColor = System.Drawing.Color.Black;
+            this.label_PolicyFour.Location = new System.Drawing.Point(73, 63);
+            this.label_PolicyFour.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_PolicyFour.Name = "label_PolicyFour";
+            this.label_PolicyFour.Size = new System.Drawing.Size(218, 23);
+            this.label_PolicyFour.TabIndex = 8;
+            this.label_PolicyFour.Text = "Allow Microsoft Mode";
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = global::WDAC_Wizard.Properties.Resources.question_sign1;
+            this.pictureBox4.Location = new System.Drawing.Point(296, 49);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(19, 23);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 10;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
             // 
             // windowsWorks_Button
             // 
@@ -139,7 +227,7 @@ namespace WDAC_Wizard
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::WDAC_Wizard.Properties.Resources.question_sign1;
             this.pictureBox1.Location = new System.Drawing.Point(293, 50);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(19, 23);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -159,42 +247,6 @@ namespace WDAC_Wizard
             this.label_PolicyOne.TabIndex = 5;
             this.label_PolicyOne.Text = "Windows Works Mode";
             // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.panel4);
-            this.panel1.Location = new System.Drawing.Point(400, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(399, 652);
-            this.panel1.TabIndex = 3;
-            // 
-            // panel4
-            // 
-            this.panel4.Location = new System.Drawing.Point(408, 4);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(400, 652);
-            this.panel4.TabIndex = 2;
-            // 
-            // panel3
-            // 
-            this.panel3.Location = new System.Drawing.Point(408, 4);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(400, 652);
-            this.panel3.TabIndex = 2;
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Image = global::WDAC_Wizard.Properties.Resources.windows_logo;
-            this.pictureBox6.Location = new System.Drawing.Point(121, 100);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(109, 70);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox6.TabIndex = 14;
-            this.pictureBox6.TabStop = false;
-            // 
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -206,67 +258,15 @@ namespace WDAC_Wizard
             this.panel5.Controls.Add(this.pictureBox1);
             this.panel5.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel5.Location = new System.Drawing.Point(175, 81);
-            this.panel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel5.Margin = new System.Windows.Forms.Padding(4);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(350, 423);
             this.panel5.TabIndex = 4;
             // 
-            // allowMsft_Button
-            // 
-            this.allowMsft_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.allowMsft_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.allowMsft_Button.Location = new System.Drawing.Point(158, 370);
-            this.allowMsft_Button.Name = "allowMsft_Button";
-            this.allowMsft_Button.Size = new System.Drawing.Size(35, 35);
-            this.allowMsft_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.allowMsft_Button.TabIndex = 99;
-            this.allowMsft_Button.TabStop = false;
-            this.allowMsft_Button.Click += new System.EventHandler(this.AllowMsft_Button_Click);
-            this.allowMsft_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
-            this.allowMsft_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(35, 192);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(272, 126);
-            this.label7.TabIndex = 17;
-            this.label7.Text = "Allow Microsoft Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Of" +
-    "fice365 applications\r\n   - WHQL signed kernel drivers\r\n   - Microsoft Store sign" +
-    "ed apps";
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = global::WDAC_Wizard.Properties.Resources.question_sign1;
-            this.pictureBox4.Location = new System.Drawing.Point(296, 49);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(19, 23);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 10;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
-            // 
-            // label_PolicyFour
-            // 
-            this.label_PolicyFour.AutoSize = true;
-            this.label_PolicyFour.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_PolicyFour.ForeColor = System.Drawing.Color.Black;
-            this.label_PolicyFour.Location = new System.Drawing.Point(73, 63);
-            this.label_PolicyFour.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label_PolicyFour.Name = "label_PolicyFour";
-            this.label_PolicyFour.Size = new System.Drawing.Size(218, 23);
-            this.label_PolicyFour.TabIndex = 8;
-            this.label_PolicyFour.Text = "Allow Microsoft Mode";
-            // 
             // panel6
             // 
             this.panel6.Location = new System.Drawing.Point(408, 4);
-            this.panel6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel6.Margin = new System.Windows.Forms.Padding(4);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(400, 652);
             this.panel6.TabIndex = 2;
@@ -274,7 +274,7 @@ namespace WDAC_Wizard
             // panel9
             // 
             this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel9.Controls.Add(this.nightsWatch_Button);
+            this.panel9.Controls.Add(this.signedReputable_Button);
             this.panel9.Controls.Add(this.ISGLabel);
             this.panel9.Controls.Add(this.label6);
             this.panel9.Controls.Add(this.pictureBox8);
@@ -283,26 +283,26 @@ namespace WDAC_Wizard
             this.panel9.Controls.Add(this.label_PolicyThree);
             this.panel9.Controls.Add(this.panel10);
             this.panel9.Location = new System.Drawing.Point(875, 81);
-            this.panel9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel9.Margin = new System.Windows.Forms.Padding(4);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(371, 423);
             this.panel9.TabIndex = 5;
             // 
-            // nightsWatch_Button
+            // signedReputable_Button
             // 
-            this.nightsWatch_Button.BackColor = System.Drawing.Color.White;
-            this.nightsWatch_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.nightsWatch_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.nightsWatch_Button.Image = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.nightsWatch_Button.Location = new System.Drawing.Point(158, 370);
-            this.nightsWatch_Button.Name = "nightsWatch_Button";
-            this.nightsWatch_Button.Size = new System.Drawing.Size(35, 35);
-            this.nightsWatch_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.nightsWatch_Button.TabIndex = 96;
-            this.nightsWatch_Button.TabStop = false;
-            this.nightsWatch_Button.Click += new System.EventHandler(this.NightsWatch_Button_Click);
-            this.nightsWatch_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
-            this.nightsWatch_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
+            this.signedReputable_Button.BackColor = System.Drawing.Color.White;
+            this.signedReputable_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.signedReputable_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.signedReputable_Button.Image = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.signedReputable_Button.Location = new System.Drawing.Point(158, 370);
+            this.signedReputable_Button.Name = "signedReputable_Button";
+            this.signedReputable_Button.Size = new System.Drawing.Size(35, 35);
+            this.signedReputable_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.signedReputable_Button.TabIndex = 96;
+            this.signedReputable_Button.TabStop = false;
+            this.signedReputable_Button.Click += new System.EventHandler(this.signedReputable_Button_Click);
+            this.signedReputable_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
+            this.signedReputable_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
             // 
             // ISGLabel
             // 
@@ -357,7 +357,7 @@ namespace WDAC_Wizard
             // 
             this.pictureBox3.Image = global::WDAC_Wizard.Properties.Resources.question_sign1;
             this.pictureBox3.Location = new System.Drawing.Point(336, 50);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(19, 23);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -380,7 +380,7 @@ namespace WDAC_Wizard
             // panel10
             // 
             this.panel10.Location = new System.Drawing.Point(408, 4);
-            this.panel10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel10.Margin = new System.Windows.Forms.Padding(4);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(400, 652);
             this.panel10.TabIndex = 2;
@@ -493,23 +493,23 @@ namespace WDAC_Wizard
             this.Controls.Add(this.panel9);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel5);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "TemplatePage";
             this.Size = new System.Drawing.Size(1250, 750);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.allowMsft_Button)).EndInit();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.windowsWorks_Button)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.allowMsft_Button)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nightsWatch_Button)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.signedReputable_Button)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.policyInfoPanel.ResumeLayout(false);
@@ -550,7 +550,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label ISGLabel;
-        private System.Windows.Forms.PictureBox nightsWatch_Button;
+        private System.Windows.Forms.PictureBox signedReputable_Button;
         private System.Windows.Forms.PictureBox windowsWorks_Button;
         private System.Windows.Forms.PictureBox allowMsft_Button;
     }

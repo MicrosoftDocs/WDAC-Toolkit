@@ -119,7 +119,7 @@ namespace WDAC_Wizard
                     {
                         case XmlNodeType.Element:
 
-                            if (xmlReader.IsEmptyElement) // Handle empty elements eg. FileRules and UpdatePolicySigners in NightsWatch
+                            if (xmlReader.IsEmptyElement) // Handle empty elements eg. FileRules and UpdatePolicySigners in SignedReputable
                                 break;
 
                             switch (xmlReader.Name)

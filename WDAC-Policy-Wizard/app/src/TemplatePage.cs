@@ -71,23 +71,23 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Nights Watch (Signed and Reputable) template policy selected. Least restrictive and lowest level of security.  
+        /// Signed and Reputable template policy selected. Least restrictive and lowest level of security.  
         /// </summary>
         /// 
-        private void NightsWatch_Button_Click(object sender, EventArgs e)
+        private void signedReputable_Button_Click(object sender, EventArgs e)
         {
-            //Policy NightsWatch (certificate & reputation signing)
+            //Policy Signed and Reputable (certificate & reputation signing)
             // User coming back to this page and changing template -- redo flow
             if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
                  && this._MainWindow.Policy.TemplatePath != null)
                 this._MainWindow.RedoFlowRequired = true;
-            this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.NightsWatch;
+            this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.SignedReputable;
             
             // Update UI
             uncheck_all();
             SetDefaultTextValues("SignedReputable");
-            nightsWatch_Button.Tag = "toggle";
-            nightsWatch_Button.BackgroundImage = Properties.Resources.check_box_checked;
+            signedReputable_Button.Tag = "toggle";
+            signedReputable_Button.BackgroundImage = Properties.Resources.check_box_checked;
 
         }
 
@@ -105,11 +105,12 @@ namespace WDAC_Wizard
             // Force other switch buttons off
             this.allowMsft_Button.Tag = "untoggle";
             this.windowsWorks_Button.Tag = "untoggle";
-            this.nightsWatch_Button.Tag = "untoggle";
+            this.signedReputable_Button.Tag = "untoggle";
 
             this.allowMsft_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
             this.windowsWorks_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
-            this.nightsWatch_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
+            this.signedReputable_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
+
             this._MainWindow.ErrorOnPage = false;
         }
 
@@ -239,7 +240,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for Nights Watch template encountered the following error", exp);
+                this.Log.AddErrorMsg("Launching webpage for Signed and Reputable template encountered the following error", exp);
             }
         }
 

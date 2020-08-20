@@ -1605,7 +1605,7 @@ namespace WDAC_Wizard
                     break;
 
                 case 2:
-                    label_Info.Text = "Nights Watch Mode does the following";
+                    label_Info.Text = "Signed and Reputable Mode does the following";
                     break;
 
                 case 3:

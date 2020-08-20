@@ -334,9 +334,9 @@ namespace WDAC_Wizard
                         xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "DefaultWindows_Audit.xml");
                         break;
                     
-                    case WDAC_Policy.NewPolicyTemplate.NightsWatch:
+                    case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                         // Signed and Reputable Mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "NightsWatch.xml"); 
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "SignedReputable.xml"); 
                         break;
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
