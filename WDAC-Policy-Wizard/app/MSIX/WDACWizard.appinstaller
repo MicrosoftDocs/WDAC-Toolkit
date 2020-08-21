@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AppInstaller
-    xmlns="http://schemas.microsoft.com/appx/appinstaller/2017/2"
-    Version="1.4.10.0"
-    Uri="https://wdacwizardstorage.blob.core.windows.net/msix-installers/WDACWizard.appinstaller" >
+	Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard.appinstaller"
+    Version="1.5.6.0"
+    xmlns="http://schemas.microsoft.com/appx/appinstaller/2018">
 
-    <MainBundle
-        Name="WDAC Wizard"
+    <MainPackage
+        Name="Microsoft.WDAC.WDACWizard"
+		    Version="1.5.6.0"
         Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
-        Version="1.5.5.0"
-		ProcessorArchitecture="x64"
-        Uri="https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX" />
-
+        Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard_1.5.6.0_x64_8wekyb3d8bbwe.MSIX"
+		ProcessorArchitecture="x64"/>
 
     <UpdateSettings>
-	<ShowPrompt>true/>
-        <OnLaunch HoursBetweenUpdateChecks="48" />
+        <OnLaunch HoursBetweenUpdateChecks="0" ShowPrompt="true" UpdateBlocksActivation="true"/>
+			<ForceUpdateFromAnyVersion>true</ForceUpdateFromAnyVersion>
     </UpdateSettings>
-
 </AppInstaller>

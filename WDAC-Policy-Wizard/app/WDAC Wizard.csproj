@@ -317,7 +317,6 @@
     <Content Include="MSIX\Mono.Cecil.Mdb.dll" />
     <Content Include="MSIX\Mono.Cecil.Pdb.dll" />
     <Content Include="MSIX\Mono.Cecil.Rocks.dll" />
-    <Content Include="MSIX\NightsWatch.xml" />
     <Content Include="MSIX\NuGet.Squirrel.dll" />
     <Content Include="MSIX\priconfig.xml" />
     <Content Include="MSIX\RulesDict.xml" />

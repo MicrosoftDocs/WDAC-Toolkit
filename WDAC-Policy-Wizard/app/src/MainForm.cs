@@ -67,8 +67,8 @@ namespace WDAC_Wizard
 
             this.CustomRuleinProgress = false; 
 
-            CheckForUpdates().GetAwaiter().GetResult();
             //LicenseCheck().GetAwaiter().GetResult(); 
+            //Removed update check -- offloading to MSIX
             LicenseCheck(); 
         }
 
@@ -1706,45 +1706,7 @@ namespace WDAC_Wizard
                 return folderPath; 
         }
 
-        private async Task CheckForUpdates()
-        {
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead("https://wdacwizardstorage.blob.core.windows.net/msix-installers/Version.txt");
-            StreamReader reader = new StreamReader(stream);
-            var newVersion = new Version(await reader.ReadToEndAsync());
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            
-            var currentVersion = new Version(string.Format("{0}.{1}.{2}.{3}", versionInfo.ProductMajorPart, versionInfo.ProductMinorPart, versionInfo.ProductBuildPart, "0"));
-
-            //compare package versions
-            if (newVersion.CompareTo(currentVersion) > 0)
-            {
-                this.Log.AddInfoMsg(String.Format("Found existing newer app v. {0}.", newVersion));
-                DialogResult res = MessageBox.Show("Found a newer version of the WDAC Wizard. Would you like to upgrade?", "WDAC Wizard Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (res == DialogResult.Yes)
-                {
-                    this.Log.AddInfoMsg(String.Format("Updating to Wizard v. {0}.", newVersion));
-                    await this.InstallUpdate(client);
-                }
-            }
-            else
-            {
-                this.Log.AddInfoMsg(String.Format("Found existing app v. {0}. Did not update.", newVersion));
-            }
-
-        }
-
-        private async Task InstallUpdate(WebClient webClient)
-        {
-            string dst = Path.Combine(System.IO.Path.GetTempPath(), "WDACWizard.MSIX");
-            webClient.DownloadFile("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX", dst );
-
-            Process.Start("explorer", dst);
-            Application.Exit(); 
-        }
-
+              
         private async Task LicenseCheck()
         {
             // Check that WDAC feature is compatible with system
@@ -1789,21 +1751,7 @@ namespace WDAC_Wizard
             }
         }
 
-        //}
-
-        // Queue up the update and close the current app instance.
-        /* private async Task CommandInvokedHandler(IUICommand command)
-         {
-             if (command.Label == "Update")
-             {
-                 PackageManager packagemanager = new PackageManager();
-                 await packagemanager.AddPackageAsync(
-                     new Uri("https://wdacwizardstorage.blob.core.windows.net/msix-installers/MicrosoftCorporation.WDAC.WDACWizard.MSIX"),
-                     null,
-                     DeploymentOptions.ForceApplicationShutdown
-                 );
-             }
-         }*/
+        
     }
 
 }
