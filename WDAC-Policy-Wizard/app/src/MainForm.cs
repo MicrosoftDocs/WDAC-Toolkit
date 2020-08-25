@@ -997,7 +997,7 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath {2} ", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\" ", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
                     }
 
                     break;
