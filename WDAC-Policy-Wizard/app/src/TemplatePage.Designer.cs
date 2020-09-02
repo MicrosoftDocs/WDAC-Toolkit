@@ -155,11 +155,11 @@ namespace WDAC_Wizard
             this.label7.Location = new System.Drawing.Point(35, 192);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(272, 126);
+            this.label7.Size = new System.Drawing.Size(257, 147);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Allow Microsoft Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Of" +
-    "fice365 applications\r\n   - WHQL signed kernel drivers\r\n   - Microsoft Store sign" +
-    "ed apps";
+            this.label7.Text = "Allow Microsoft Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft St" +
+    "ore apps\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers \r\n   - All Micro" +
+    "soft signed apps";
             // 
             // label_PolicyFour
             // 
@@ -217,10 +217,10 @@ namespace WDAC_Wizard
             this.label2.Location = new System.Drawing.Point(41, 192);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(272, 105);
+            this.label2.Size = new System.Drawing.Size(240, 126);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Windows Works authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Office365" +
-    " applications\r\n   - WHQL signed kernel drivers\r\n";
+            this.label2.Text = "Windows Works authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Store app" +
+    "s\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers\r\n";
             // 
             // pictureBox1
             // 
@@ -311,7 +311,7 @@ namespace WDAC_Wizard
             this.ISGLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.ISGLabel.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.ISGLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ISGLabel.Location = new System.Drawing.Point(29, 319);
+            this.ISGLabel.Location = new System.Drawing.Point(29, 340);
             this.ISGLabel.Name = "ISGLabel";
             this.ISGLabel.Size = new System.Drawing.Size(314, 21);
             this.ISGLabel.TabIndex = 97;
@@ -326,11 +326,11 @@ namespace WDAC_Wizard
             this.label6.Location = new System.Drawing.Point(15, 192);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(304, 126);
+            this.label6.Size = new System.Drawing.Size(304, 147);
             this.label6.TabIndex = 16;
             this.label6.Text = "Signed and Reputable Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microso" +
-    "ft Office365 applications\r\n   - WHQL signed kernel drivers\r\n   - Microsoft Store" +
-    " signed apps\r\n";
+    "ft Store apps\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers \r\n   - All " +
+    "Microsoft signed apps\r\n";
             // 
             // pictureBox8
             // 

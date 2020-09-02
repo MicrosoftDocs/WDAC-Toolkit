@@ -1,28 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
   <Identity Name="Microsoft.WDAC.WDACWizard"
             Version="1.5.6.0"
             Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
             ProcessorArchitecture="x64"/>
-  <Properties>
+   <Properties>
     <DisplayName>WDAC Wizard</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
+    <Description>Application to help build powerful WDAC CI policies.</Description>
     <Logo>Assets\Square150x150Logo.scale-100.png</Logo>
   </Properties>
-  <Prerequisites>
-    <OSMinVersion>6.2.1</OSMinVersion>
-    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
-  </Prerequisites>
   <Resources>
     <Resource Language="en-us" />
   </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0"  />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+    <rescap:Capability Name="packageManagement" />
+  </Capabilities>
   <Applications>
-    <Application Id="WDACWizard" Executable="WDAC Wizard.exe" EntryPoint="Windows.App">
-      <VisualElements DisplayName="WDAC Wizard" Description="Application to help build powerful WDAC CI policies."
-           Logo="Assets\LargeTile.scale-100.png" SmallLogo="Assets\SmallTile.scale-100.png"
-           ForegroundText="dark" BackgroundColor="transparent">
-        <SplashScreen Image="Assets\SplashScreen.scale-400.png" />
-      </VisualElements>
+    <Application Id="WDACWizard" Executable="WDAC Wizard.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements DisplayName="WDAC Wizard" Description="Application to help build powerful WDAC CI policies."	Square150x150Logo="Assets\Square150x150Logo.scale-100.png"
+         Square44x44Logo="Assets\Square44x44Logo.scale-400.png" BackgroundColor="transparent" />
     </Application>
   </Applications>
 </Package>
