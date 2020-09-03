@@ -28,7 +28,13 @@ namespace WDAC_Wizard
             None, 
             AllowMicrosoft,
             WindowsWorks, 
-            NightsWatch, 
+            SignedReputable, 
+        }
+
+        public enum Format
+        {
+            Legacy, 
+            MultiPolicy
         }
 
         // Policy Properties

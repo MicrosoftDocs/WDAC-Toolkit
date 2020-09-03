@@ -55,7 +55,9 @@ namespace WDAC_Wizard
             this.finishPanel.Visible = true;
             this.FilePath = policyFilePath;
             this.hyperlinkLabel.Text = policyFilePath;
-            this.hyperlinkLabel.Enabled = true; 
+            this.hyperlinkLabel.Enabled = true;
+
+            this.label_WaitMsg.Visible = false; 
         }
 
         /// <summary>
@@ -64,9 +66,10 @@ namespace WDAC_Wizard
         public void ShowError()
         {
             finishPanel.Visible = true;
-            this.finishLabel.Text = "Error during build"; 
+            this.finishLabel.Text = "Error during build. Please check logs."; 
             //this.FilePath = policyFilePath;
             this.hyperlinkLabel.Enabled = false;
+            this.label_WaitMsg.Visible = false;
         }
 
         /// <summary>

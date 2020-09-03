@@ -811,11 +811,11 @@ namespace WDAC_Wizard
             }
 
             // Process file rules (hash, file path, file name)
-            if (this.Policy.siPolicy.FileRules.Length > 0)
+            /*if (this.Policy.siPolicy.FileRules.Length > 0)
             {
                 for(int i=0; i< this.Policy.siPolicy.FileRules.Length; i++)
                 {
-                    /*var ruleID = this.Policy.FileRules[i]; 
+                    var ruleID = this.Policy.FileRules[i]; 
                     if (ruleID.FriendlyName.Contains("Page")
                         || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
                         continue;
@@ -833,9 +833,9 @@ namespace WDAC_Wizard
 
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
-                    }*/
+                    }
                 }
-            }
+            }*/
 
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
