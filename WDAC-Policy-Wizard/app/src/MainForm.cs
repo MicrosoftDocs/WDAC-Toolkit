@@ -1168,9 +1168,21 @@ namespace WDAC_Wizard
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
             string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath {0} -Version {1}", this.Policy.SchemaPath, this.Policy.VersionNumber);
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
-                pipeline.Commands.AddScript(updateVersionCmd); 
+                pipeline.Commands.AddScript(updateVersionCmd);
 
-            Collection<PSObject> results = pipeline.Invoke();
+            this.Log.AddInfoMsg("Running the following Add Params Commands: ");
+
+            foreach (Command command in pipeline.Commands)
+                this.Log.AddInfoMsg(command.ToString()); 
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(String.Format("Exception encountered: {0}", e));
+            }
 
             runspace.Dispose();
             worker.ReportProgress(100);

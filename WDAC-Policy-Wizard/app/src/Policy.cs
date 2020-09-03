@@ -31,6 +31,12 @@ namespace WDAC_Wizard
             SignedReputable, 
         }
 
+        public enum Format
+        {
+            Legacy, 
+            MultiPolicy
+        }
+
         // Policy Properties
         public PolicyType _PolicyType { get; set; }
         public NewPolicyTemplate _PolicyTemplate { get; set; }
