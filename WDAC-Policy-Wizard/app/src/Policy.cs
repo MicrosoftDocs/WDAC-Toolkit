@@ -33,6 +33,7 @@ namespace WDAC_Wizard
 
         public enum Format
         {
+            None,
             Legacy, 
             MultiPolicy
         }
@@ -40,6 +41,7 @@ namespace WDAC_Wizard
         // Policy Properties
         public PolicyType _PolicyType { get; set; }
         public NewPolicyTemplate _PolicyTemplate { get; set; }
+        public Format _Format { get; set; }
 
         public string PolicyName { get; set; }          // User entered friendly name for policy
         public bool EnableHVCI { get; set; }            // Configure hypervisor code integrity (HVCI)?
@@ -74,6 +76,8 @@ namespace WDAC_Wizard
 
             this._PolicyTemplate = NewPolicyTemplate.None;
             this._PolicyType = PolicyType.BasePolicy;
+            this._Format = Format.None;
+
             this.EnableHVCI = false;
             this.EnableAudit = true;
 
@@ -88,6 +92,7 @@ namespace WDAC_Wizard
             this.CustomRules = new List<PolicyCustomRules>();
 
             this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
+            
         }
 
         public string UpdateVersion()

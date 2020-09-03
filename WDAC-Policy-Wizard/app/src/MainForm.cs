@@ -822,11 +822,17 @@ namespace WDAC_Wizard
             }
 
             // If multiple policy format setting is enabled, set the Supplemental (rule #17) option
-            if(Properties.Settings.Default.createMultiPolicyByDefault)
+            if (Properties.Settings.Default.createMultiPolicyByDefault)
+            {
+                this.Policy._Format = WDAC_Policy.Format.MultiPolicy;
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17", this.Policy.TemplatePath));
-            
-            // Assert supplemental policies cannot have the Supplemental (rule #17) option
-            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            }
+
+            else
+                this.Policy._Format = WDAC_Policy.Format.Legacy;
+
+            // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy || this.Policy._Format == WDAC_Policy.Format.Legacy)
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17 -Delete", this.Policy.TemplatePath));
 
             // Assert unsigned CI policy (rule #6) - fixes issues with converting to binary where the policy is unsigned
@@ -1017,10 +1023,9 @@ namespace WDAC_Wizard
         {
             string policyScript = string.Empty;
 
-            if (String.Equals(this.Policy.ConfigRules["AllowSupplementalPolicies"]["CurrentValue"], this.Policy.ConfigRules["AllowSupplementalPolicies"]["AllowedValue"]) ||
-                    Properties.Settings.Default.createMultiPolicyByDefault)
-                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}",
-                    tempPolicyPath, customRule.PSVariable);
+            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
+
             else
                 policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
 
@@ -1100,11 +1105,11 @@ namespace WDAC_Wizard
                 return;
 
             foreach (var policyPath in policyPaths)
-                mergeScript += String.Format("{0},", policyPath);
+                mergeScript += String.Format("\"{0}\",", policyPath);
 
             // Remove last comma and add outputFilePath
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
-            mergeScript += String.Format(" -OutputFilePath {0}", this.Policy.SchemaPath);
+            mergeScript += String.Format(" -OutputFilePath \"{0}\"", this.Policy.SchemaPath);
 
             this.Log.AddInfoMsg("Running the following Merge Commands: ");
             this.Log.AddInfoMsg(mergeScript); 
@@ -1145,28 +1150,33 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -PolicyID {1} -PolicyName {2}", 
-                this.Policy.SchemaPath, formatDate(), this.Policy.PolicyName);
-            pipeline.Commands.AddScript(setIdInfoCmd);
-
-            // Set the HVCI value at the end of the xml document
-            string setHVCIOptsCmd = String.Format("Set-HVCIOptions -Enabled -FilePath {0}", this.Policy.SchemaPath);
-            if (this.Policy.EnableHVCI)
-                pipeline.Commands.AddScript(setHVCIOptsCmd);
+            // Set policy info - ID, Name
+            string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID {1} -PolicyName {2}", this.Policy.SchemaPath, formatDate(), this.Policy.PolicyName);
 
             // Reset the GUIDs s.t. does not mirror the policy GUID 
             string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -ResetPolicyID", this.Policy.SchemaPath);
-            pipeline.Commands.AddScript(resetGuidsCmd);
+
+            // IF the policy is multi format ONLY
+            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
+                pipeline.Commands.AddScript(setIdInfoCmd);
+                pipeline.Commands.AddScript(resetGuidsCmd);
+            }
+
+            // Set the HVCI value at the end of the xml document
+            string setHVCIOptsCmd = String.Format("Set-HVCIOptions -Enabled -FilePath \"{0}\"", this.Policy.SchemaPath);
+            if (this.Policy.EnableHVCI)
+                pipeline.Commands.AddScript(setHVCIOptsCmd);
 
             // If supplemental policy, set the Base policy guid
             if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -BasePolicyToSupplementPath {1}", 
+                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -BasePolicyToSupplementPath \"{1}\"", 
                     this.Policy.SchemaPath, this.Policy.BaseToSupplementPath);
                 pipeline.Commands.AddScript(setBaseGuidCmd);
             }
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
-            string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath {0} -Version {1}", this.Policy.SchemaPath, this.Policy.VersionNumber);
+            string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version {1}", this.Policy.SchemaPath, this.Policy.VersionNumber);
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 pipeline.Commands.AddScript(updateVersionCmd);
 
@@ -1763,7 +1773,11 @@ namespace WDAC_Wizard
             }
         }
 
-        
+        public int getReleaseId()
+        {
+            return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
+        }
+
     }
 
 }
