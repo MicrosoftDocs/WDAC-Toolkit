@@ -196,10 +196,6 @@ public enum OptionType {
     /// <remarks/>
     [System.Xml.Serialization.XmlEnumAttribute("Enabled:Conditional Windows Lockdown Policy")]
     EnabledConditionalWindowsLockdownPolicy,
-
-    /// <remarks/>
-    [System.Xml.Serialization.XmlEnumAttribute("Allowed:Debug Policy Augmented")]
-    AllowedDebugPolicyAugmented,
 }
 
 /// <remarks/>
@@ -943,7 +939,7 @@ public partial class EKU {
 [System.Xml.Serialization.XmlRootAttribute(Namespace="urn:schemas-microsoft-com:sipolicy", IsNullable=false)]
 public partial class FileRules {
     
-    private object[] itemsField;
+    public object[] itemsField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("Allow", typeof(Allow))]
@@ -1960,6 +1956,10 @@ public partial class SiPolicy {
     private string basePolicyIDField;
     
     private RuleType[] rulesField;
+
+    private Allow[] allowField;
+
+    private Deny[] denyField; 
     
     private EKU[] eKUsField;
     
@@ -2220,4 +2220,3 @@ public enum PolicyType {
     [System.Xml.Serialization.XmlEnumAttribute("Supplemental Policy")]
     SupplementalPolicy,
 }
-

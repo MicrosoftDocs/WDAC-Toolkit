@@ -243,6 +243,9 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? "N/A" : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
 
+                //TODO: only get this if ruletype=publisher, other
+
+
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
                 string pcaCertSubjectName = ""; 
@@ -663,20 +666,14 @@ namespace WDAC_Wizard
             string exceptionList = String.Empty;
             string fileAttrList = String.Empty;
             string signerID = String.Empty;
+            string ruleID = String.Empty; 
 
             // Increase efficiency by constructing signers dictionary hint
             Dictionary<string, string> signersDict = new Dictionary<string, string>();
-            Dictionary<string, string> fileRulesDict = new Dictionary<string, string>();
+            Dictionary<string, string> fileExceptionsDict = new Dictionary<string, string>();
 
             foreach (var signer in this.Policy.siPolicy.Signers)
                 signersDict.Add(signer.ID, signer.Name);
-
-            // TODO: fix implementation to get file rules
-            if(this.Policy.siPolicy.FileRules != null)
-            {
-                var fileRuleList = (object[])this.Policy.siPolicy.FileRules;
-            }
-
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
@@ -691,6 +688,7 @@ namespace WDAC_Wizard
                         friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
                         action = "Allow"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
+                        string exceptionID; 
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule != null)
@@ -698,8 +696,11 @@ namespace WDAC_Wizard
                             // Iterate through all of the exceptions, get the ID and map to filename
                             for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
                             {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.AllowedSigners
-                                    .AllowedSigner[i].ExceptDenyRule[j].DenyRuleID);
+                                exceptionID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID;
+                                exceptionList += String.Format("{0}, ", exceptionID);
+
+                                if(!fileExceptionsDict.ContainsKey(exceptionID))
+                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty); 
                             }
                         }
 
@@ -735,6 +736,7 @@ namespace WDAC_Wizard
                         friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
                         action = "Deny"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
+                        string exceptionID;
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
@@ -742,7 +744,12 @@ namespace WDAC_Wizard
                             // Iterate through all of the exceptions, get the ID and map to filename
                             for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
                             {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID);
+                                exceptionID = scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID;
+                                exceptionList += String.Format("{0}, ", exceptionID);
+
+                                if (!fileExceptionsDict.ContainsKey(exceptionID))
+                                    fileExceptionsDict.Add(scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID, String.Empty);
+
                             }
                         }
 
@@ -763,48 +770,6 @@ namespace WDAC_Wizard
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
 
-                        // Get row index #, Scroll to new row index
-                        //index = rulesDataGrid.Rows.Add();
-                    }
-                }
-
-                // Write all "File Rules" rules
-                if (scenario.ProductSigners.FileRulesRef != null)
-                {
-                    for (int i = 0; i < scenario.ProductSigners.FileRulesRef.FileRuleRef.Length; i++)
-                    {
-                        // Get signer attributes
-                        signerID = scenario.ProductSigners.FileRulesRef.FileRuleRef[i].RuleID;
-                        friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
-                        action = "Deny"; // signer.ID; //  this.Policy.Signers[signerID].Action;
-                        level = "Publisher";
-
-                        // Get signer exceptions - if applicable
-                        if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
-                        {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
-                            {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID);
-                            }
-                        }
-
-                        // Get associated/affected files
-                        /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
-                        {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
-                            {
-                                string fileAttrName = this.Policy.FileRules[ruleID].FileName;
-                                if (fileAttrName == "*") // applies to all files with ver > min ver
-                                    fileAttrName = "All files";
-                                string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
-                                fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
-                            }
-                        }*/
-
-                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
-                        this.rulesDataGrid.RowCount += 1;
                     }
                 }
 
@@ -836,6 +801,42 @@ namespace WDAC_Wizard
                     }
                 }
             }*/
+
+             // Write all "File Rules" rules
+            if (this.Policy.siPolicy.FileRules != null)
+            {
+                var fileRulesList = this.Policy.siPolicy.FileRules;
+                level = "FileRule";
+                string fileRuleID; 
+
+                for (int i = 0; i < fileRulesList.Length; i++)
+                {
+                    var fileRule = fileRulesList[i]; 
+
+                    if(fileRule.GetType() == typeof(Deny))
+                    {
+                        action = "Deny";
+                        fileRuleID = ((Deny)fileRule).ID;
+                        friendlyName = ((Deny)fileRule).FriendlyName;
+                        fileAttrList = ((Deny)fileRule).FileName; 
+                    }
+                    else
+                    {
+                        action = "Allow";
+                        fileRuleID = ((Allow)fileRule).ID;
+                        friendlyName = ((Allow)fileRule).FriendlyName;
+                        fileAttrList = ((Allow)fileRule).FileName;
+                    }
+                    
+                    // Only display if ID not found in the fileExceptionsDict -- in otherwords, this is a file rule NOT an exception
+                    if(!fileExceptionsDict.ContainsKey(fileRuleID))
+                    {
+                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
+                        this.rulesDataGrid.RowCount += 1;
+                    }
+                }
+            }
+
 
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
