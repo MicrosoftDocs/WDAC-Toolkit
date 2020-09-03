@@ -1091,14 +1091,15 @@ namespace WDAC_Wizard
             List<string> policyPaths = new List<string>();
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
 
+            // First merged policy will define the type of the output. eg) if merging a legcy with multi --> output=legacy, vice-versa
+            if (this.Policy.CustomRules.Count > 0)
+                policyPaths.Add(customRulesMergePath);
+
             if (this.Policy.TemplatePath != null)
                 policyPaths.Add(this.Policy.TemplatePath);
 
             if (this.Policy.BaseToSupplementPath != null)
                 policyPaths.Add(this.Policy.BaseToSupplementPath);
-
-            if (this.Policy.CustomRules.Count > 0)
-                policyPaths.Add(customRulesMergePath);
 
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
             if (policyPaths.Count < 1)
