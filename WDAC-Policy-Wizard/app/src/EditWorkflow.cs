@@ -23,7 +23,9 @@ namespace WDAC_Wizard
         public string PolicyName { get; set; }
         public string PolicyID { get; set; }
         public List<PolicySettings> Settings { get; set; }
-        private MainWindow _MainWindow; 
+        private MainWindow _MainWindow;
+        private WDAC_Policy _Policy;
+
 
         public EditWorkflow(MainWindow pMainWindow)
         {
@@ -31,6 +33,7 @@ namespace WDAC_Wizard
             this.PolicyID = "N/A";
             this.PolicyName = "N/A";
             this.Settings = new List<PolicySettings>();
+            pMainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.Edit; 
 
             this._MainWindow = pMainWindow;
             this._MainWindow.ErrorOnPage = false;
