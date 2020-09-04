@@ -965,8 +965,61 @@ namespace WDAC_Wizard
 
                     if (ruleType.Equals("Publisher"))
                     {
+                        // Remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
+                        int numIdex = 0;
+                        List<string> signerIDsToRemove = new List<string>(); 
+                        
+                        foreach (var signer in this.Policy.siPolicy.Signers)
+                        {
+                            if(signer.Name.Equals(ruleName))
+                            {
+                                this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
+                                signerIDsToRemove.Add(signer.ID); 
+                            }
+                            else
+                            {
+                                numIdex++; 
+                            }
+                        }
 
-                    }
+                        // Remove from scenario
+                        foreach(var signerID in signerIDsToRemove)
+                        {
+                            foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
+                            {
+                                numIdex = 0;
+
+                                // Check allowed signers
+                                if (scenario.ProductSigners.AllowedSigners == null)
+                                    continue;
+
+                                foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
+                                {
+                                    if (allowedSigner.SignerId.Equals(signerID))
+                                        scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
+                                            .Where((val, idx) => idx != numIdex).ToArray();
+
+                                    else
+                                        numIdex++;
+                                }
+
+                                // Check disallowed signers
+                                numIdex = 0;
+                                if (scenario.ProductSigners.DeniedSigners == null)
+                                    continue;
+
+                                foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
+                                {
+                                    if (deniedSigner.SignerId.Equals(signerID))
+                                        scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
+                                            .Where((val, idx) => idx != numIdex).ToArray();
+
+                                    else
+                                        numIdex++;
+                                }
+                            }
+                        }
+                    } // end of publisher section
 
                     else
                     {
@@ -1035,10 +1088,7 @@ namespace WDAC_Wizard
                                     }
                                 }
                             }
-
                         }
-
-
 
                         else if (ruleType.Equals("PathRule"))
                         {
@@ -1181,7 +1231,7 @@ namespace WDAC_Wizard
 
 
                 // Delete from UI elements:
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx-1);
+                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
             } 
         }
 
