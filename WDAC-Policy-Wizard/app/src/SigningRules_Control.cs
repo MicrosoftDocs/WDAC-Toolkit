@@ -1101,13 +1101,19 @@ namespace WDAC_Wizard
                         }
                     }
 
-                    
-
                     // Serialize to new policy
                     XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
                     StreamWriter writer = new StreamWriter(this.XmlPath);
                     serializer.Serialize(writer, this.Policy.siPolicy);
-                    writer.Close(); 
+                    writer.Close();
+
+                    // Remove from UI
+                    // Remove from DisplayObject
+                    if (rowIdx < this.displayObjects.Count)
+                    {
+                        this.displayObjects.RemoveAt(rowIdx);
+                        this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                    }
                 }
 
                 // New or supplemental policy 
@@ -1150,7 +1156,10 @@ namespace WDAC_Wizard
 
                     // Remove from DisplayObject
                     if (rowIdx < this.displayObjects.Count)
+                    {
                         this.displayObjects.RemoveAt(rowIdx);
+                        this.rulesDataGrid.Rows.RemoveAt(rowIdx); 
+                    }
 
 
                     // Only structure we have to remove the rule from is the one that is used in writing rules -- custom rules
@@ -1228,10 +1237,6 @@ namespace WDAC_Wizard
                     doc.Save(this.XmlPath);
 
                 }
-
-
-                // Delete from UI elements:
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
             } 
         }
 
