@@ -28,6 +28,7 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
 
+            
             this.Policy = pMainWindow.Policy; 
             this._MainWindow = pMainWindow;
             this.Log = this._MainWindow.Log;
