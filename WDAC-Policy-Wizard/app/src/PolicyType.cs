@@ -29,7 +29,7 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
             this._MainWindow = pMainWindow;
-            this._Policy = new WDAC_Policy();
+            this._Policy = pMainWindow.Policy;
             this.Log = this._MainWindow.Log; 
 
             this._MainWindow.ErrorOnPage = false;
@@ -44,6 +44,7 @@ namespace WDAC_Wizard
             // New base policy selected
             if (this._Policy._PolicyType != WDAC_Policy.PolicyType.BasePolicy)
                 this._MainWindow.RedoFlowRequired = true; 
+
             this._Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
             this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
 

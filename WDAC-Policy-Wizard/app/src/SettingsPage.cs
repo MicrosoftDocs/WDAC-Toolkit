@@ -72,6 +72,23 @@ namespace WDAC_Wizard
                     return;
             }
 
+            // Check if system supports Multi-Policy before enabling
+            int REQ_RELN_MULTI_POL = 1903; 
+            if(settingName == "createMultiPolicyByDefault" && checkBox.Tag.ToString() == "Unchecked")
+            {
+                int releaseN = this._MainWindow.getReleaseId(); 
+                if(releaseN < REQ_RELN_MULTI_POL)
+                {
+                    this._Log.AddWarningMsg(String.Format("Release ID: {0} does not meet multi policy format requirements", releaseN));
+
+                    // Show warn/error message to user
+                    DialogResult res = MessageBox.Show("Your system does not meet the requirements for Multiple Policy Format. Please upgrade to Windows 10 version 1903 or higher.",
+                        "Unmet System Requirements", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                    return;
+                }
+            }
+
             if (checkBox.Tag.ToString() == "Checked")
             {
                 // Set setting --> false and checkbox --> unchecked

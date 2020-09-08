@@ -40,7 +40,7 @@ namespace WDAC_Wizard
         public SigningRules_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this.Policy = new WDAC_Policy();
+            this.Policy = pMainWindow.Policy; 
             this.PolicyCustomRule = new PolicyCustomRules();
             this.AllFilesinFolder = new List<string>(); 
 
@@ -242,6 +242,9 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo.Add("FileName", Path.GetFileName(fileInfo.FileName)); //Get file name without path
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? "N/A" : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
+
+                //TODO: only get this if ruletype=publisher, other
+
 
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
@@ -663,20 +666,14 @@ namespace WDAC_Wizard
             string exceptionList = String.Empty;
             string fileAttrList = String.Empty;
             string signerID = String.Empty;
+            string ruleID = String.Empty; 
 
             // Increase efficiency by constructing signers dictionary hint
             Dictionary<string, string> signersDict = new Dictionary<string, string>();
-            Dictionary<string, string> fileRulesDict = new Dictionary<string, string>();
+            Dictionary<string, string> fileExceptionsDict = new Dictionary<string, string>();
 
             foreach (var signer in this.Policy.siPolicy.Signers)
                 signersDict.Add(signer.ID, signer.Name);
-
-            // TODO: fix implementation to get file rules
-            if(this.Policy.siPolicy.FileRules != null)
-            {
-                var fileRuleList = (object[])this.Policy.siPolicy.FileRules;
-            }
-
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
@@ -691,6 +688,7 @@ namespace WDAC_Wizard
                         friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
                         action = "Allow"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
+                        string exceptionID; 
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule != null)
@@ -698,8 +696,11 @@ namespace WDAC_Wizard
                             // Iterate through all of the exceptions, get the ID and map to filename
                             for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
                             {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.AllowedSigners
-                                    .AllowedSigner[i].ExceptDenyRule[j].DenyRuleID);
+                                exceptionID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID;
+                                exceptionList += String.Format("{0}, ", exceptionID);
+
+                                if(!fileExceptionsDict.ContainsKey(exceptionID))
+                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty); 
                             }
                         }
 
@@ -735,6 +736,7 @@ namespace WDAC_Wizard
                         friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
                         action = "Deny"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
+                        string exceptionID;
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
@@ -742,7 +744,12 @@ namespace WDAC_Wizard
                             // Iterate through all of the exceptions, get the ID and map to filename
                             for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
                             {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID);
+                                exceptionID = scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID;
+                                exceptionList += String.Format("{0}, ", exceptionID);
+
+                                if (!fileExceptionsDict.ContainsKey(exceptionID))
+                                    fileExceptionsDict.Add(scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID, String.Empty);
+
                             }
                         }
 
@@ -763,79 +770,104 @@ namespace WDAC_Wizard
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
 
-                        // Get row index #, Scroll to new row index
-                        //index = rulesDataGrid.Rows.Add();
-                    }
-                }
-
-                // Write all "File Rules" rules
-                if (scenario.ProductSigners.FileRulesRef != null)
-                {
-                    for (int i = 0; i < scenario.ProductSigners.FileRulesRef.FileRuleRef.Length; i++)
-                    {
-                        // Get signer attributes
-                        signerID = scenario.ProductSigners.FileRulesRef.FileRuleRef[i].RuleID;
-                        friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
-                        action = "Deny"; // signer.ID; //  this.Policy.Signers[signerID].Action;
-                        level = "Publisher";
-
-                        // Get signer exceptions - if applicable
-                        if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
-                        {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
-                            {
-                                exceptionList += String.Format("{0}, ", scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID);
-                            }
-                        }
-
-                        // Get associated/affected files
-                        /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
-                        {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
-                            {
-                                string fileAttrName = this.Policy.FileRules[ruleID].FileName;
-                                if (fileAttrName == "*") // applies to all files with ver > min ver
-                                    fileAttrName = "All files";
-                                string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
-                                fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
-                            }
-                        }*/
-
-                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
-                        this.rulesDataGrid.RowCount += 1;
                     }
                 }
 
             }
 
-            // Process file rules (hash, file path, file name)
-            /*if (this.Policy.siPolicy.FileRules.Length > 0)
+           
+             // Write all "File Rules" rules
+            if (this.Policy.siPolicy.FileRules != null)
             {
-                for(int i=0; i< this.Policy.siPolicy.FileRules.Length; i++)
+                var fileRulesList = this.Policy.siPolicy.FileRules;
+                string fileRuleID = String.Empty;
+                string filePath = String.Empty;
+                byte[] hash = new byte[0];
+                string fileName = String.Empty; 
+                string productName = String.Empty;
+                string fileDescription = String.Empty;
+                string internalName = String.Empty; 
+
+                for (int i = 0; i < fileRulesList.Length; i++)
                 {
-                    var ruleID = this.Policy.FileRules[i]; 
-                    if (ruleID.FriendlyName.Contains("Page")
-                        || this.Policy.FileRules[ruleID].FriendlyName.Contains("Sha256")) // Skip the 3 other hash instances -- no need to show to user (saves time)
-                        continue;
+                    var fileRule = fileRulesList[i];
+
+                    if (fileRule.GetType() == typeof(Deny))
+                    {
+                        action = "Deny";
+                        fileRuleID = ((Deny)fileRule).ID;
+                        friendlyName = ((Deny)fileRule).FriendlyName;
+                        fileAttrList = ((Deny)fileRule).FileName;
+
+                        // 
+                        filePath = ((Deny)fileRule).FilePath;
+                        hash = ((Deny)fileRule).Hash;
+                        fileName = ((Deny)fileRule).FileName;
+                        productName = ((Deny)fileRule).ProductName;
+                        fileDescription = ((Deny)fileRule).FileDescription;
+                        internalName = ((Deny)fileRule).InternalName; 
+
+                    }
                     else
                     {
-                        // Write to UI
-                        action = this.Policy.FileRules[ruleID].Action;
-                        level = this.Policy.FileRules[ruleID].GetRuleType().ToString();
+                        action = "Allow";
+                        fileRuleID = ((Allow)fileRule).ID;
+                        friendlyName = ((Allow)fileRule).FriendlyName;
+                        fileAttrList = ((Allow)fileRule).FileName;
 
-                        if (this.Policy.FileRules[ruleID].GetRuleType() == PolicyFileRules.RuleType.FileName &&
-                            this.Policy.FileRules[ruleID].FileName != null)
-                            friendlyName = this.Policy.FileRules[ruleID].FileName;
+                        filePath = ((Allow)fileRule).FilePath;
+                        hash = ((Allow)fileRule).Hash;
+                        fileName = ((Allow)fileRule).FileName;
+                        productName = ((Allow)fileRule).ProductName;
+                        fileDescription = ((Allow)fileRule).FileDescription;
+                        internalName = ((Allow)fileRule).InternalName;
+                    }
+
+                    // Determine the filerule type - Hash, FilePath, FileAttribute (Name, Product Name, Original FileNme)
+
+                    if (hash != null)
+                    {
+                        // If this is a hash rule, only show the one SHA256 Hash to the user. Easier to remove from table if they are to delete the rule
+                        level = "Hash";
+                        if (!friendlyName.Contains("Hash Page Sha256"))
+                            continue; 
+                    }
+
+                    else if (filePath != null)
+                    {
+                        level = "FilePath";
+                    }
+
+                    else
+                    {
+                        level = "FileAttributes";
+
+                        // Precede the friendlyName with the Original FileName sub-level 
+                        if (fileName != null)
+                            friendlyName = String.Format("FileName; {0}", friendlyName);
+
+                        else if (productName != null)
+                            friendlyName = String.Format("ProductName; {0}", friendlyName);
+
+                        else if (fileDescription != null)
+                            friendlyName = String.Format("FileDescription; {0}", friendlyName);
+
+                        else if (internalName != null)
+                            friendlyName = String.Format("InternalName; {0}", friendlyName);
+
                         else
-                            friendlyName = this.Policy.FileRules[ruleID].FriendlyName;
+                            this.Log.AddWarningMsg("DisplayRules() could not detect a sub-level for FileAttributes ");
+                    }
 
+                    // Only display if ID not found in the fileExceptionsDict -- in otherwords, this is a file rule NOT an exception
+                    if (!fileExceptionsDict.ContainsKey(fileRuleID))
+                    {
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
                     }
                 }
-            }*/
+            }
+
 
             // Scroll to bottom of table
             rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
@@ -933,137 +965,299 @@ namespace WDAC_Wizard
         /// </summary>
         private void deleteButton_Click(object sender, EventArgs e)
         {
-  
+            this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
+
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+            int numIdex = 0;
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
 
             if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
-                return; 
+                return;
+
+            this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
 
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (res == DialogResult.Yes)
             {
-                var ruleIDs = new List<string>();
-
-                // Convert ruleName to SignerID to delete from //Signers and //SigningScenarios
-                // Handle both Signer template rules and custom rules
-                Dictionary<string, PolicySigners>.KeyCollection _keys = this.Policy.Signers.Keys;
-                Dictionary<string, PolicyFileRules>.KeyCollection _fileRulekeys = this.Policy.FileRules.Keys;
-
-                if (ruleType == "Publisher")
+                // New base policy Workflow -- check if there is a custom rule we must delete
+                if(!this.Policy._PolicyType.Equals(WDAC_Policy.PolicyType.Edit))
                 {
-                    foreach (var signer in this.Policy.siPolicy.Signers)
+                    if(this.Policy.CustomRules.Count > 0)
                     {
-                        if (ruleName == signer.Name)
-                            ruleIDs.Add(signer.ID);
-                    }
-                }
-
-                else
-                {
-                    // Get list of IDs for related rules. ie. Deleting one hash should delete all four hash values.
-                    if (ruleType == "Hash")
-                        ruleName = ruleName.Substring(0, ruleName.IndexOf("Hash") - 1);
-
-                    foreach (var key in _fileRulekeys)
-                    {
-                        var pFileRule = this.Policy.FileRules[key];
-                        if (pFileRule.FriendlyName.Contains(ruleName))
-                            ruleIDs.Add(key);
-
-                        foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                        foreach(var customRule in this.Policy.CustomRules)
                         {
-                            //if(fileRule.)
+                            if(customRule.RowNumber == rowIdx)
+                            {
+                                this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
+                            }
+                            else
+                            {
+                                numIdex++;
+                            }
                         }
                     }
                 }
 
+                // Remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
+                numIdex = 0;
+                List<string> signerIDsToRemove = new List<string>();
+
+                foreach (var signer in this.Policy.siPolicy.Signers)
+                {
+                    if (signer.Name.Equals(ruleName))
+                    {
+                        this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
+                        signerIDsToRemove.Add(signer.ID);
+
+                        this.Log.AddInfoMsg("Removing from siPolicy.signers");
+                    }
+                    else
+                    {
+                        numIdex++;
+                    }
+                }
+
+                // Remove from scenario
+                foreach (var signerID in signerIDsToRemove)
+                {
+                    foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
+                    {
+                        numIdex = 0;
+
+                        // Check allowed signers
+                        if (scenario.ProductSigners.AllowedSigners == null)
+                            continue;
+
+                        foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
+                        {
+                            if (allowedSigner.SignerId.Equals(signerID))
+                            {
+                                scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
+                                    .Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg("Removing from AllowedSigners");
+                            }
+                            
+                            else
+                                numIdex++;
+                        }
+
+                        // Check disallowed signers
+                        numIdex = 0;
+                        if (scenario.ProductSigners.DeniedSigners == null)
+                            continue;
+
+                        foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
+                        {
+                            if (deniedSigner.SignerId.Equals(signerID))
+                            {
+                                scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
+                                    .Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg("Removing from DeniedSigners");
+                            }
+                            
+                            else
+                                numIdex++;
+                        }
+                    }
+                }
+
+                List<string> ruleIDsToRemove = new List<string>();
+
+                if (ruleType.Equals("Hash"))
+                {
+                    this.Log.AddInfoMsg("Removing Hash Rule");
+
+                    numIdex = 0;
+                    string friendlyName = String.Empty;
+                    string fileRuleID = String.Empty;
+
+                    byte[] hash = new byte[0];
+
+                    // Delete all 4 hash rules (sha1, sha256, page, np) from FileRules area
+                    foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                    {
+                        if (fileRule.GetType() == typeof(Deny))
+                        {
+                            fileRuleID = ((Deny)fileRule).ID;
+                            friendlyName = ((Deny)fileRule).FriendlyName;
+                            hash = ((Deny)fileRule).Hash;
+                        }
+                        else
+                        {
+                            fileRuleID = ((Allow)fileRule).ID;
+                            friendlyName = ((Allow)fileRule).FriendlyName;
+                            hash = ((Allow)fileRule).Hash;
+                        }
+
+                        if (hash != null)
+                            friendlyName = friendlyName.Substring(0, friendlyName.IndexOf("Hash") - 1);
+
+                        if (ruleName.Contains(friendlyName)) // then delete from policy
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID); 
+                        }
+                        else
+                        {
+                            numIdex++;
+                        }
+                    }
+                }
+                
+                // Else, process Level=FilePath 
+                else if (ruleType.Equals("FilePath"))
+                {
+                    this.Log.AddInfoMsg("Removing FilePath Rule");
+
+                    numIdex = 0;
+                    string friendlyName = String.Empty;
+                    string fileRuleID = String.Empty;
+
+                    // Delete all 4 hash rules (sha1, sha256, page, np) from FileRules area
+                    foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                    {
+                        if (fileRule.GetType() == typeof(Deny))
+                        {
+                            fileRuleID = ((Deny)fileRule).ID;
+                            friendlyName = ((Deny)fileRule).FriendlyName;
+                        }
+                        else
+                        {
+                            fileRuleID = ((Allow)fileRule).ID;
+                            friendlyName = ((Allow)fileRule).FriendlyName;
+                        }
+
+                        if (ruleName.Contains(friendlyName)) // then delete from policy
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+                        else
+                        {
+                            numIdex++;
+                        }
+                    }
+                }
+
+                // Else, process Level=FileAttributes
+                else
+                {
+                    this.Log.AddInfoMsg("Removing FileAttributes Rule");
+
+                    numIdex = 0;
+                    string friendlyName = String.Empty;
+                    string fileRuleID = String.Empty;
+
+                    string fileName = String.Empty;
+                    string fileDescription = String.Empty;
+                    string productName = String.Empty;
+                    string internalName = String.Empty; 
+
+                    foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                    {
+                        if (fileRule.GetType() == typeof(Deny))
+                        {
+                            fileRuleID = ((Deny)fileRule).ID;
+                            friendlyName = ((Deny)fileRule).FriendlyName;
+
+                            fileName = ((Deny)fileRule).FileName;
+                            fileDescription = ((Deny)fileRule).FileDescription;
+                            productName = ((Deny)fileRule).ProductName;
+                            internalName = ((Deny)fileRule).InternalName;
+                        }
+                        else
+                        {
+                            fileRuleID = ((Allow)fileRule).ID;
+                            friendlyName = ((Allow)fileRule).FriendlyName;
+
+                            fileName = ((Allow)fileRule).FileName;
+                            fileDescription = ((Allow)fileRule).FileDescription;
+                            productName = ((Allow)fileRule).ProductName;
+                            internalName = ((Allow)fileRule).InternalName;
+                        }
+
+                        if (!ruleName.Contains(friendlyName)) // then delete from policy
+                        {
+                            numIdex++;
+                            continue;
+                        }
+
+                        if (fileName != null && ruleName.Contains("FileName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+
+                        else if (fileDescription != null && ruleName.Contains("FileDescription"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+                        //
+                        else if (productName != null && ruleName.Contains("ProductName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+
+                        else if (internalName != null && ruleName.Contains("InternalName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+  
+                    }
+                }
+
+                // Check to see if rules need to be deleted from signer/scenario field
+                foreach (var ruleIDtoRemove in ruleIDsToRemove)
+                {
+                    if (this.Policy.siPolicy.SigningScenarios == null)
+                        continue;
+
+                    foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
+                    {
+                        numIdex = 0;
+
+                        if (scenario.ProductSigners.FileRulesRef == null)
+                            continue;
+
+                        foreach (var fileRef in scenario.ProductSigners.FileRulesRef.FileRuleRef)
+                        {
+                            if (fileRef.RuleID.Equals(ruleIDtoRemove))
+                            {
+                                scenario.ProductSigners.FileRulesRef.FileRuleRef = scenario.ProductSigners.FileRulesRef.FileRuleRef.
+                                    Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleIDtoRemove)); 
+                            }
+                                
+                            else
+                                numIdex++;
+                        }
+                    }
+                }
+
+
+                // Serialize to new policy
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamWriter writer = new StreamWriter(this.XmlPath);
+                serializer.Serialize(writer, this.Policy.siPolicy);
+                writer.Close();
+
+                // Remove from UI
                 // Remove from DisplayObject
                 if (rowIdx < this.displayObjects.Count)
+                {
                     this.displayObjects.RemoveAt(rowIdx);
-
-
-                // Only structure we have to remove the rule from is the one that is used in writing rules -- custom rules
-                for (int i = this.Policy.CustomRules.Count - 1; i >= 0; i--)
-                {
-                    if (this.Policy.CustomRules[i].RowNumber == rowIdx)
-                        this.Policy.CustomRules.Remove(this.Policy.CustomRules[i]); // Remove from structs
+                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
                 }
-
-                // Try to delete the rule from the doc
-                XmlDocument doc = new XmlDocument();
-                doc.Load(this.XmlPath); // Reading from the template (either one of the 3 bases or editing)
-
-
-                // A friendly name can have multiple references in the doc -- remove each one
-                // Skips section if custom rule
-                if (ruleType == "Publisher")
-                {
-                    // Signer specific
-                    XmlNodeList signerNodeList = doc.GetElementsByTagName("Signer");
-                    XmlNodeList signingScenarioAllowList = doc.GetElementsByTagName("AllowedSigner");
-                    XmlNodeList signingScenarioDenyList = doc.GetElementsByTagName("DeniedSigner");
-                    foreach (var ruleID in ruleIDs)
-                    {
-                        for (int i = signerNodeList.Count - 1; i >= 0; i--) // Traverse through xml elements and delete signers == ruleID
-                        {
-                            if (signerNodeList[i].OuterXml.Contains(ruleID))
-                                signerNodeList[i].ParentNode.RemoveChild(signerNodeList[i]);
-                        }
-
-                        for (int i = signingScenarioAllowList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
-                        {
-                            if (signingScenarioAllowList[i].OuterXml.Contains(ruleID))
-                                signingScenarioAllowList[i].ParentNode.RemoveChild(signingScenarioAllowList[i]);
-                        }
-
-                        for (int i = signingScenarioDenyList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
-                        {
-                            if (signingScenarioDenyList[i].OuterXml.Contains(ruleID))
-                                signingScenarioDenyList[i].ParentNode.RemoveChild(signingScenarioDenyList[i]);
-                        }
-
-                    }
-                }
-
-                else
-                {
-                    // Filerule specific
-                    XmlNodeList allowFileRuleNodeList = doc.GetElementsByTagName("Allow"); // in <FileRules>
-                    XmlNodeList denyFileRuleNodeList = doc.GetElementsByTagName("Deny");   // in <FileRules>
-                    XmlNodeList fileAttrNodeList = doc.GetElementsByTagName("FileRuleRef"); // in <SigningScnearios-->FileRulesRef>
-                    foreach (var ruleID in ruleIDs)
-                    {
-                        for (int i = allowFileRuleNodeList.Count - 1; i >= 0; i--) // Traverse through xml elements and delete signers == ruleID
-                        {
-                            if (allowFileRuleNodeList[i].OuterXml.Contains(ruleID))
-                                allowFileRuleNodeList[i].ParentNode.RemoveChild(allowFileRuleNodeList[i]);
-                        }
-
-                        for (int i = denyFileRuleNodeList.Count - 1; i >= 0; i--) // Remove from file rule
-                        {
-                            if (denyFileRuleNodeList[i].OuterXml.Contains(ruleID))
-                                denyFileRuleNodeList[i].ParentNode.RemoveChild(denyFileRuleNodeList[i]);
-                        }
-
-                        for (int i = fileAttrNodeList.Count - 1; i >= 0; i--) // Remove from signing scenarios too
-                        {
-                            if (fileAttrNodeList[i].OuterXml.Contains(ruleID))
-                                fileAttrNodeList[i].ParentNode.RemoveChild(fileAttrNodeList[i]);
-                        }
-
-                    }
-                }
-
-                // Delete from UI elements:
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
-                doc.Save(this.XmlPath);
-            } 
+            }
         }
 
         /// <summary>
