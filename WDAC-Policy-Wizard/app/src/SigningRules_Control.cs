@@ -784,8 +784,9 @@ namespace WDAC_Wizard
                 string filePath = String.Empty;
                 byte[] hash = new byte[0];
                 string fileName = String.Empty; 
-                string productName = String.Empty; 
-
+                string productName = String.Empty;
+                string fileDescription = String.Empty;
+                string internalName = String.Empty; 
 
                 for (int i = 0; i < fileRulesList.Length; i++)
                 {
@@ -803,7 +804,8 @@ namespace WDAC_Wizard
                         hash = ((Deny)fileRule).Hash;
                         fileName = ((Deny)fileRule).FileName;
                         productName = ((Deny)fileRule).ProductName;
-
+                        fileDescription = ((Deny)fileRule).FileDescription;
+                        internalName = ((Deny)fileRule).InternalName; 
 
                     }
                     else
@@ -817,6 +819,8 @@ namespace WDAC_Wizard
                         hash = ((Allow)fileRule).Hash;
                         fileName = ((Allow)fileRule).FileName;
                         productName = ((Allow)fileRule).ProductName;
+                        fileDescription = ((Allow)fileRule).FileDescription;
+                        internalName = ((Allow)fileRule).InternalName;
                     }
 
                     // Determine the filerule type - Hash, FilePath, FileAttribute (Name, Product Name, Original FileNme)
@@ -830,10 +834,30 @@ namespace WDAC_Wizard
                     }
 
                     else if (filePath != null)
+                    {
                         level = "FilePath";
+                    }
 
                     else
-                        level = "FileAttributes"; 
+                    {
+                        level = "FileAttributes";
+
+                        // Precede the friendlyName with the Original FileName sub-level 
+                        if (fileName != null)
+                            friendlyName = String.Format("FileName; {0}", friendlyName);
+
+                        else if (productName != null)
+                            friendlyName = String.Format("ProductName; {0}", friendlyName);
+
+                        else if (fileDescription != null)
+                            friendlyName = String.Format("FileDescription; {0}", friendlyName);
+
+                        else if (internalName != null)
+                            friendlyName = String.Format("InternalName; {0}", friendlyName);
+
+                        else
+                            this.Log.AddWarningMsg("DisplayRules() could not detect a sub-level for FileAttributes ");
+                    }
 
                     // Only display if ID not found in the fileExceptionsDict -- in otherwords, this is a file rule NOT an exception
                     if (!fileExceptionsDict.ContainsKey(fileRuleID))
@@ -941,9 +965,8 @@ namespace WDAC_Wizard
         /// </summary>
         private void deleteButton_Click(object sender, EventArgs e)
         {
+            this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
-            // TODO: fix the EDIT workflow!
-  
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
             int numIdex = 0;
@@ -952,7 +975,9 @@ namespace WDAC_Wizard
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
 
             if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
-                return; 
+                return;
+
+            this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
 
             // Prompt the user for additional deletion confirmation
             DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -968,7 +993,8 @@ namespace WDAC_Wizard
                         {
                             if(customRule.RowNumber == rowIdx)
                             {
-                                this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
+                                this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
                             }
                             else
                             {
@@ -988,6 +1014,8 @@ namespace WDAC_Wizard
                     {
                         this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
                         signerIDsToRemove.Add(signer.ID);
+
+                        this.Log.AddInfoMsg("Removing from siPolicy.signers");
                     }
                     else
                     {
@@ -1009,9 +1037,12 @@ namespace WDAC_Wizard
                         foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
                         {
                             if (allowedSigner.SignerId.Equals(signerID))
+                            {
                                 scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
                                     .Where((val, idx) => idx != numIdex).ToArray();
-
+                                this.Log.AddInfoMsg("Removing from AllowedSigners");
+                            }
+                            
                             else
                                 numIdex++;
                         }
@@ -1024,9 +1055,12 @@ namespace WDAC_Wizard
                         foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
                         {
                             if (deniedSigner.SignerId.Equals(signerID))
+                            {
                                 scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
                                     .Where((val, idx) => idx != numIdex).ToArray();
-
+                                this.Log.AddInfoMsg("Removing from DeniedSigners");
+                            }
+                            
                             else
                                 numIdex++;
                         }
@@ -1037,6 +1071,8 @@ namespace WDAC_Wizard
 
                 if (ruleType.Equals("Hash"))
                 {
+                    this.Log.AddInfoMsg("Removing Hash Rule");
+
                     numIdex = 0;
                     string friendlyName = String.Empty;
                     string fileRuleID = String.Empty;
@@ -1073,14 +1109,15 @@ namespace WDAC_Wizard
                         }
                     }
                 }
-
-                else if (ruleType.Equals("FilePath"))
+                
+                // Else, process Level=FilePath or FileAttributes
+                else
                 {
+                    this.Log.AddInfoMsg("Removing FilePath/FileAttributes Rule");
+
                     numIdex = 0;
                     string friendlyName = String.Empty;
                     string fileRuleID = String.Empty;
-
-                    string filePath = String.Empty; 
 
                     // Delete all 4 hash rules (sha1, sha256, page, np) from FileRules area
                     foreach (var fileRule in this.Policy.siPolicy.FileRules)
@@ -1089,16 +1126,14 @@ namespace WDAC_Wizard
                         {
                             fileRuleID = ((Deny)fileRule).ID;
                             friendlyName = ((Deny)fileRule).FriendlyName;
-                            filePath = ((Deny)fileRule).FilePath;
                         }
                         else
                         {
                             fileRuleID = ((Allow)fileRule).ID;
                             friendlyName = ((Allow)fileRule).FriendlyName;
-                            filePath = ((Allow)fileRule).FilePath;
 
                         }
-                        if (filePath != null)
+                        //if (filePath != null)
                             //friendlyName = friendlyName.Substring(0, friendlyName.IndexOf("Hash") - 1);
 
                         if (ruleName.Contains(friendlyName)) // then delete from policy
@@ -1111,11 +1146,6 @@ namespace WDAC_Wizard
                             numIdex++;
                         }
                     }
-                }
-
-                else
-                {
-
                 }
 
                 // Check to see if rules need to be deleted from signer/scenario field
@@ -1134,8 +1164,12 @@ namespace WDAC_Wizard
                         foreach (var fileRef in scenario.ProductSigners.FileRulesRef.FileRuleRef)
                         {
                             if (fileRef.RuleID.Equals(ruleIDtoRemove))
+                            {
                                 scenario.ProductSigners.FileRulesRef.FileRuleRef = scenario.ProductSigners.FileRulesRef.FileRuleRef.
                                     Where((val, idx) => idx != numIdex).ToArray();
+                                this.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleIDtoRemove)); 
+                            }
+                                
                             else
                                 numIdex++;
                         }

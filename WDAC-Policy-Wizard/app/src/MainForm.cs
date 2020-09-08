@@ -924,6 +924,7 @@ namespace WDAC_Wizard
         {
             List<string> customRulesPathList = new List<string>();
             int nCustomRules = this.Policy.CustomRules.Count;
+            int progressVal = 0;
 
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
@@ -941,7 +942,11 @@ namespace WDAC_Wizard
                 pipeline.Commands.AddScript(ruleScript);
                 pipeline.Commands.AddScript(policyScript);
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", ruleScript));
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript)); 
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
+
+                progressVal = 10 + i * 70 / nCustomRules; 
+                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70%
+
 
                 try
                 {
@@ -951,7 +956,6 @@ namespace WDAC_Wizard
                 {
                     this.Log.AddErrorMsg("CreatePolicyFileRuleOptions() caught the following exception ", e);
                 }
-                worker.ReportProgress(10 + i / nCustomRules * 70); //Assumes the operations involved with this step take about 70%
             }
 
             //TODO: results check ensuring 
