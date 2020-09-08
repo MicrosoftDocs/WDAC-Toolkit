@@ -944,9 +944,9 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", ruleScript));
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
 
+                // Update progress bar per completion of custom rule created
                 progressVal = 10 + i * 70 / nCustomRules; 
-                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70%
-
+                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
 
                 try
                 {
@@ -982,7 +982,6 @@ namespace WDAC_Wizard
                         customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
                             " -Fallback Hash", customRule.PSVariable, customRule.ReferenceFile);
                     }
-
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
@@ -1002,14 +1001,12 @@ namespace WDAC_Wizard
                         customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
                             "-Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
                     }
-
                     break;
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
                         customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\" ", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
                     }
-
                     break;
             }
 

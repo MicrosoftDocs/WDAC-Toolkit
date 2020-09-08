@@ -1093,8 +1093,8 @@ namespace WDAC_Wizard
                             fileRuleID = ((Allow)fileRule).ID;
                             friendlyName = ((Allow)fileRule).FriendlyName;
                             hash = ((Allow)fileRule).Hash;
-
                         }
+
                         if (hash != null)
                             friendlyName = friendlyName.Substring(0, friendlyName.IndexOf("Hash") - 1);
 
@@ -1110,10 +1110,10 @@ namespace WDAC_Wizard
                     }
                 }
                 
-                // Else, process Level=FilePath or FileAttributes
-                else
+                // Else, process Level=FilePath 
+                else if (ruleType.Equals("FilePath"))
                 {
-                    this.Log.AddInfoMsg("Removing FilePath/FileAttributes Rule");
+                    this.Log.AddInfoMsg("Removing FilePath Rule");
 
                     numIdex = 0;
                     string friendlyName = String.Empty;
@@ -1131,10 +1131,7 @@ namespace WDAC_Wizard
                         {
                             fileRuleID = ((Allow)fileRule).ID;
                             friendlyName = ((Allow)fileRule).FriendlyName;
-
                         }
-                        //if (filePath != null)
-                            //friendlyName = friendlyName.Substring(0, friendlyName.IndexOf("Hash") - 1);
 
                         if (ruleName.Contains(friendlyName)) // then delete from policy
                         {
@@ -1145,6 +1142,76 @@ namespace WDAC_Wizard
                         {
                             numIdex++;
                         }
+                    }
+                }
+
+                // Else, process Level=FileAttributes
+                else
+                {
+                    this.Log.AddInfoMsg("Removing FileAttributes Rule");
+
+                    numIdex = 0;
+                    string friendlyName = String.Empty;
+                    string fileRuleID = String.Empty;
+
+                    string fileName = String.Empty;
+                    string fileDescription = String.Empty;
+                    string productName = String.Empty;
+                    string internalName = String.Empty; 
+
+                    foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                    {
+                        if (fileRule.GetType() == typeof(Deny))
+                        {
+                            fileRuleID = ((Deny)fileRule).ID;
+                            friendlyName = ((Deny)fileRule).FriendlyName;
+
+                            fileName = ((Deny)fileRule).FileName;
+                            fileDescription = ((Deny)fileRule).FileDescription;
+                            productName = ((Deny)fileRule).ProductName;
+                            internalName = ((Deny)fileRule).InternalName;
+                        }
+                        else
+                        {
+                            fileRuleID = ((Allow)fileRule).ID;
+                            friendlyName = ((Allow)fileRule).FriendlyName;
+
+                            fileName = ((Allow)fileRule).FileName;
+                            fileDescription = ((Allow)fileRule).FileDescription;
+                            productName = ((Allow)fileRule).ProductName;
+                            internalName = ((Allow)fileRule).InternalName;
+                        }
+
+                        if (!ruleName.Contains(friendlyName)) // then delete from policy
+                        {
+                            numIdex++;
+                            continue;
+                        }
+
+                        if (fileName != null && ruleName.Contains("FileName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+
+                        else if (fileDescription != null && ruleName.Contains("FileDescription"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+                        //
+                        else if (productName != null && ruleName.Contains("ProductName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+
+                        else if (internalName != null && ruleName.Contains("InternalName"))
+                        {
+                            this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                            ruleIDsToRemove.Add(fileRuleID);
+                        }
+  
                     }
                 }
 
