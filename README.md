@@ -1,7 +1,7 @@
 | [docs](.) / readme.md |
 |:---|
 
-![](imgs/header-logo.PNG)
+![](WDAC-Policy-Wizard/imgs/header-logo.PNG)
 #
 
 
