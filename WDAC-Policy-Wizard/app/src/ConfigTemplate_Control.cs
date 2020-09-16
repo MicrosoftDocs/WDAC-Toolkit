@@ -82,7 +82,7 @@ namespace WDAC_Wizard
                 {
                     // Set button to untoggled mode
                     this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle;
+                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace WDAC_Wizard
                     {
                         // Set button to untoggled mode
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle;
+                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
 
                         this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }

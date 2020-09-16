@@ -158,6 +158,7 @@ namespace WDAC_Wizard
             // 
             this.button_5.BackColor = System.Drawing.Color.Transparent;
             this.button_5.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_5.FlatAppearance.BorderSize = 0;
             this.button_5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_5.Location = new System.Drawing.Point(539, 529);
@@ -173,6 +174,7 @@ namespace WDAC_Wizard
             // 
             this.button_3.BackColor = System.Drawing.Color.Transparent;
             this.button_3.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_3.FlatAppearance.BorderSize = 0;
             this.button_3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_3.Location = new System.Drawing.Point(539, 409);
@@ -188,6 +190,7 @@ namespace WDAC_Wizard
             // 
             this.button_2.BackColor = System.Drawing.Color.Transparent;
             this.button_2.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_2.FlatAppearance.BorderSize = 0;
             this.button_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_2.Location = new System.Drawing.Point(539, 349);
@@ -203,6 +206,7 @@ namespace WDAC_Wizard
             // 
             this.button_1.BackColor = System.Drawing.Color.Transparent;
             this.button_1.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_1.FlatAppearance.BorderSize = 0;
             this.button_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_1.Location = new System.Drawing.Point(539, 289);
@@ -218,6 +222,7 @@ namespace WDAC_Wizard
             // 
             this.button_0.BackColor = System.Drawing.Color.Transparent;
             this.button_0.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_0.FlatAppearance.BorderSize = 0;
             this.button_0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_0.Location = new System.Drawing.Point(539, 229);
@@ -247,6 +252,7 @@ namespace WDAC_Wizard
             // 
             this.button_6.BackColor = System.Drawing.Color.Transparent;
             this.button_6.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_6.FlatAppearance.BorderSize = 0;
             this.button_6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_6.Location = new System.Drawing.Point(536, 731);
@@ -275,6 +281,7 @@ namespace WDAC_Wizard
             // 
             this.button_17.BackColor = System.Drawing.Color.Transparent;
             this.button_17.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_17.FlatAppearance.BorderSize = 0;
             this.button_17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_17.Location = new System.Drawing.Point(325, 215);
@@ -303,6 +310,7 @@ namespace WDAC_Wizard
             // 
             this.button_16.BackColor = System.Drawing.Color.Transparent;
             this.button_16.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_16.FlatAppearance.BorderSize = 0;
             this.button_16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_16.Location = new System.Drawing.Point(325, 155);
@@ -344,6 +352,7 @@ namespace WDAC_Wizard
             // 
             this.button_13.BackColor = System.Drawing.Color.Transparent;
             this.button_13.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_13.FlatAppearance.BorderSize = 0;
             this.button_13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_13.Location = new System.Drawing.Point(325, 35);
@@ -385,6 +394,7 @@ namespace WDAC_Wizard
             // 
             this.button_11.BackColor = System.Drawing.Color.Transparent;
             this.button_11.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_11.FlatAppearance.BorderSize = 0;
             this.button_11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_11.Location = new System.Drawing.Point(940, 469);
@@ -413,6 +423,7 @@ namespace WDAC_Wizard
             // 
             this.button_18.BackColor = System.Drawing.Color.Transparent;
             this.button_18.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_18.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_18.FlatAppearance.BorderSize = 0;
             this.button_18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_18.Location = new System.Drawing.Point(325, 275);
@@ -441,6 +452,7 @@ namespace WDAC_Wizard
             // 
             this.button_15.BackColor = System.Drawing.Color.Transparent;
             this.button_15.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_15.FlatAppearance.BorderSize = 0;
             this.button_15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_15.Location = new System.Drawing.Point(325, 95);
@@ -469,6 +481,7 @@ namespace WDAC_Wizard
             // 
             this.button_10.BackColor = System.Drawing.Color.Transparent;
             this.button_10.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_10.FlatAppearance.BorderSize = 0;
             this.button_10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_10.Location = new System.Drawing.Point(940, 409);
@@ -497,6 +510,7 @@ namespace WDAC_Wizard
             // 
             this.button_8.BackColor = System.Drawing.Color.Transparent;
             this.button_8.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_8.FlatAppearance.BorderSize = 0;
             this.button_8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_8.Location = new System.Drawing.Point(940, 289);
@@ -512,6 +526,7 @@ namespace WDAC_Wizard
             // 
             this.button_7.BackColor = System.Drawing.Color.Transparent;
             this.button_7.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_7.FlatAppearance.BorderSize = 0;
             this.button_7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_7.Location = new System.Drawing.Point(940, 229);
@@ -553,6 +568,7 @@ namespace WDAC_Wizard
             // 
             this.button_9.BackColor = System.Drawing.Color.Transparent;
             this.button_9.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_9.FlatAppearance.BorderSize = 0;
             this.button_9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_9.Location = new System.Drawing.Point(940, 349);
@@ -581,6 +597,7 @@ namespace WDAC_Wizard
             // 
             this.button_HVCI.BackColor = System.Drawing.Color.Transparent;
             this.button_HVCI.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_HVCI.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_HVCI.FlatAppearance.BorderSize = 0;
             this.button_HVCI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_HVCI.Location = new System.Drawing.Point(539, 469);
@@ -617,6 +634,7 @@ namespace WDAC_Wizard
             // 
             this.button_19.BackColor = System.Drawing.Color.Transparent;
             this.button_19.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_19.FlatAppearance.BorderSize = 0;
             this.button_19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_19.Location = new System.Drawing.Point(325, 335);
@@ -694,14 +712,14 @@ namespace WDAC_Wizard
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label21.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.label21.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label21.Location = new System.Drawing.Point(195, 479);
             this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(354, 24);
+            this.label21.Size = new System.Drawing.Size(334, 23);
             this.label21.TabIndex = 42;
             this.label21.Text = "Hypervisor-protected Code Integrity    ";
             this.label21.Click += new System.EventHandler(this.HVCILabel_Click);
@@ -723,8 +741,8 @@ namespace WDAC_Wizard
             // 
             // ConfigTemplate_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label27);

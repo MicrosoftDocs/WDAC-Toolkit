@@ -61,6 +61,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _switch {
+            get {
+                object obj = ResourceManager.GetObject("switch", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The F8 preboot menu is disabled by default. Setting this rule option allows the F8 menu to appear to physically present users..
         /// </summary>
         internal static string AdvancedBootOpts_Info {
@@ -583,6 +593,16 @@ namespace WDAC_Wizard.Properties {
         internal static System.Drawing.Bitmap untoggle_lg {
             get {
                 object obj = ResourceManager.GetObject("untoggle_lg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap untoggle_old {
+            get {
+                object obj = ResourceManager.GetObject("untoggle_old", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
