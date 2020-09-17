@@ -53,9 +53,9 @@ namespace WDAC_Wizard
             this.label1.Location = new System.Drawing.Point(197, 44);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(336, 34);
+            this.label1.Size = new System.Drawing.Size(330, 34);
             this.label1.TabIndex = 48;
-            this.label1.Text = "Edit Exisiting WDAC Policy";
+            this.label1.Text = "Edit Existing WDAC Policy";
             // 
             // label2
             // 
