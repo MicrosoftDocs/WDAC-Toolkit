@@ -338,6 +338,8 @@
     <None Include="Resources\imgs\externalLink.png" />
     <None Include="Resources\imgs\external-link-symbol.png" />
     <None Include="Resources\imgs\external-link-symbol-highlight.png" />
+    <None Include="Resources\radio_on.png" />
+    <None Include="Resources\radio_off.png" />
     <Content Include="Resources\RulesDict.xml" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <None Include="Resources\imgs\blank-check-box_32.png" />

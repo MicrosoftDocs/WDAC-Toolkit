@@ -100,7 +100,7 @@ namespace WDAC_Wizard
             // 
             // allowMsft_Button
             // 
-            this.allowMsft_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.allowMsft_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.radio_off;
             this.allowMsft_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.allowMsft_Button.Location = new System.Drawing.Point(178, 462);
             this.allowMsft_Button.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -188,7 +188,7 @@ namespace WDAC_Wizard
             // 
             // windowsWorks_Button
             // 
-            this.windowsWorks_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.windowsWorks_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.radio_off;
             this.windowsWorks_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.windowsWorks_Button.Location = new System.Drawing.Point(178, 462);
             this.windowsWorks_Button.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -295,9 +295,8 @@ namespace WDAC_Wizard
             // signedReputable_Button
             // 
             this.signedReputable_Button.BackColor = System.Drawing.Color.White;
-            this.signedReputable_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.signedReputable_Button.BackgroundImage = global::WDAC_Wizard.Properties.Resources.radio_off;
             this.signedReputable_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.signedReputable_Button.Image = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
             this.signedReputable_Button.Location = new System.Drawing.Point(178, 462);
             this.signedReputable_Button.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.signedReputable_Button.Name = "signedReputable_Button";

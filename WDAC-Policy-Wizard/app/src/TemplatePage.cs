@@ -49,7 +49,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
-            allowMsft_Button.BackgroundImage = Properties.Resources.check_box_checked_32;
+            allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
-            windowsWorks_Button.BackgroundImage = Properties.Resources.check_box_checked_32;
+            windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
-            signedReputable_Button.BackgroundImage = Properties.Resources.check_box_checked;
+            signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
 
         }
 
@@ -107,9 +107,9 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.Tag = "untoggle";
             this.signedReputable_Button.Tag = "untoggle";
 
-            this.allowMsft_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
-            this.windowsWorks_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
-            this.signedReputable_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
+            this.allowMsft_Button.BackgroundImage = Properties.Resources.radio_off;
+            this.windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
+            this.signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
 
             this._MainWindow.ErrorOnPage = false;
         }

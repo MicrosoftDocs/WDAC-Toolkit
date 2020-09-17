@@ -49,8 +49,8 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
 
             // Update UI to reflect change
-            basePolicy_PictureBox.Image = Properties.Resources.radio_on_button;
-            suppPolicy_PictureBox.Image = Properties.Resources.radio_off_button;
+            basePolicy_PictureBox.Image = Properties.Resources.radio_on;
+            suppPolicy_PictureBox.Image = Properties.Resources.radio_off;
             panelSupplementalPolicy.Visible = false;
             this._MainWindow.ErrorOnPage = false; 
         }
@@ -74,8 +74,8 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
 
             // Update UI to reflect change
-            suppPolicy_PictureBox.Image = Properties.Resources.radio_on_button;
-            basePolicy_PictureBox.Image = Properties.Resources.radio_off_button; 
+            suppPolicy_PictureBox.Image = Properties.Resources.radio_on;
+            basePolicy_PictureBox.Image = Properties.Resources.radio_off; 
             // Show supplemental policy panel to allow user to build against a policy
             reset_panel();
             panelSupplementalPolicy.Visible = true;

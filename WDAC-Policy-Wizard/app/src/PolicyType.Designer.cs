@@ -180,11 +180,11 @@ namespace WDAC_Wizard
             // 
             // basePolicy_PictureBox
             // 
-            this.basePolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_on_button;
-            this.basePolicy_PictureBox.Location = new System.Drawing.Point(206, 134);
+            this.basePolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_on;
+            this.basePolicy_PictureBox.Location = new System.Drawing.Point(206, 135);
             this.basePolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.basePolicy_PictureBox.Name = "basePolicy_PictureBox";
-            this.basePolicy_PictureBox.Size = new System.Drawing.Size(34, 38);
+            this.basePolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
             this.basePolicy_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.basePolicy_PictureBox.TabIndex = 12;
             this.basePolicy_PictureBox.TabStop = false;
@@ -192,11 +192,11 @@ namespace WDAC_Wizard
             // 
             // suppPolicy_PictureBox
             // 
-            this.suppPolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_off_button;
-            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(206, 240);
+            this.suppPolicy_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.radio_off;
+            this.suppPolicy_PictureBox.Location = new System.Drawing.Point(206, 241);
             this.suppPolicy_PictureBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.suppPolicy_PictureBox.Name = "suppPolicy_PictureBox";
-            this.suppPolicy_PictureBox.Size = new System.Drawing.Size(34, 38);
+            this.suppPolicy_PictureBox.Size = new System.Drawing.Size(30, 30);
             this.suppPolicy_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.suppPolicy_PictureBox.TabIndex = 13;
             this.suppPolicy_PictureBox.TabStop = false;

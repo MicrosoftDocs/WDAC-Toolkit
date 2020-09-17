@@ -424,9 +424,29 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap radio_off {
+            get {
+                object obj = ResourceManager.GetObject("radio_off", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap radio_off_button {
             get {
                 object obj = ResourceManager.GetObject("radio-off-button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap radio_on {
+            get {
+                object obj = ResourceManager.GetObject("radio_on", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
