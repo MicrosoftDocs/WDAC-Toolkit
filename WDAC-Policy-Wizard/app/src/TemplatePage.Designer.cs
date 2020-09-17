@@ -167,7 +167,7 @@ namespace WDAC_Wizard
             this.label_PolicyFour.AutoSize = true;
             this.label_PolicyFour.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_PolicyFour.ForeColor = System.Drawing.Color.Black;
-            this.label_PolicyFour.Location = new System.Drawing.Point(82, 79);
+            this.label_PolicyFour.Location = new System.Drawing.Point(62, 79);
             this.label_PolicyFour.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_PolicyFour.Name = "label_PolicyFour";
             this.label_PolicyFour.Size = new System.Drawing.Size(262, 28);
@@ -217,13 +217,14 @@ namespace WDAC_Wizard
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(40, 240);
+            this.label2.Location = new System.Drawing.Point(28, 240);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(316, 150);
+            this.label2.Size = new System.Drawing.Size(336, 150);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Windows Works authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Store app" +
-    "lications\r\n   - Office 365, OneDrive, Teams\r\n   - WHQL signed kernel drivers\r\n";
+            this.label2.Text = "Default Windows Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft St" +
+    "ore applications\r\n   - Office 365, OneDrive, Teams\r\n   - WHQL signed kernel driv" +
+    "ers\r\n";
             // 
             // pictureBox1
             // 
@@ -243,12 +244,12 @@ namespace WDAC_Wizard
             this.label_PolicyOne.AutoSize = true;
             this.label_PolicyOne.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_PolicyOne.ForeColor = System.Drawing.Color.Black;
-            this.label_PolicyOne.Location = new System.Drawing.Point(74, 79);
+            this.label_PolicyOne.Location = new System.Drawing.Point(50, 79);
             this.label_PolicyOne.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_PolicyOne.Name = "label_PolicyOne";
-            this.label_PolicyOne.Size = new System.Drawing.Size(269, 28);
+            this.label_PolicyOne.Size = new System.Drawing.Size(281, 28);
             this.label_PolicyOne.TabIndex = 5;
-            this.label_PolicyOne.Text = "Windows Works Mode";
+            this.label_PolicyOne.Text = "Default Windows Mode";
             // 
             // panel5
             // 
@@ -373,7 +374,7 @@ namespace WDAC_Wizard
             this.label_PolicyThree.AutoSize = true;
             this.label_PolicyThree.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_PolicyThree.ForeColor = System.Drawing.Color.Black;
-            this.label_PolicyThree.Location = new System.Drawing.Point(57, 79);
+            this.label_PolicyThree.Location = new System.Drawing.Point(39, 79);
             this.label_PolicyThree.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_PolicyThree.Name = "label_PolicyThree";
             this.label_PolicyThree.Size = new System.Drawing.Size(338, 28);
