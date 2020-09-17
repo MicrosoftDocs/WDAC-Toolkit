@@ -162,7 +162,8 @@ namespace WDAC_Wizard
             {
                 // Read the exe config file
                 XmlDocument doc = new XmlDocument();
-                doc.Load("WDAC Wizard.exe.config"); // Reading from the xml config file
+                string configPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "WDAC Wizard.exe.config");
+                doc.Load(configPath); // Reading from the xml config file
                 XmlNodeList settingsNodes = doc.GetElementsByTagName("setting");
                 const int START = 15; 
                 foreach(XmlNode settingNode in settingsNodes)
