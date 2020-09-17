@@ -32,6 +32,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TemplatePage));
             this.panel2 = new System.Windows.Forms.Panel();
             this.allowMsft_Button = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -154,14 +155,12 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(39, 240);
+            this.label7.Location = new System.Drawing.Point(22, 240);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(319, 175);
+            this.label7.Size = new System.Drawing.Size(347, 175);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Allow Microsoft Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft St" +
-    "ore apps\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers \r\n   - All Micro" +
-    "soft signed apps";
+            this.label7.Text = resources.GetString("label7.Text");
             // 
             // label_PolicyFour
             // 
@@ -218,13 +217,13 @@ namespace WDAC_Wizard
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(46, 240);
+            this.label2.Location = new System.Drawing.Point(40, 240);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(308, 150);
+            this.label2.Size = new System.Drawing.Size(316, 150);
             this.label2.TabIndex = 8;
             this.label2.Text = "Windows Works authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Store app" +
-    "s\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers\r\n";
+    "lications\r\n   - Office 365, OneDrive, Teams\r\n   - WHQL signed kernel drivers\r\n";
             // 
             // pictureBox1
             // 
@@ -333,9 +332,7 @@ namespace WDAC_Wizard
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(385, 175);
             this.label6.TabIndex = 16;
-            this.label6.Text = "Signed and Reputable Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microso" +
-    "ft Store apps\r\n   - Office 365 apps\r\n   - WHQL signed kernel drivers \r\n   - All " +
-    "Microsoft signed apps\r\n";
+            this.label6.Text = resources.GetString("label6.Text");
             // 
             // pictureBox8
             // 
