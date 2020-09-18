@@ -595,9 +595,9 @@ namespace WDAC_Wizard
                                 this._BuildPage.BringToFront();
                                 this._BuildPage.Focus();
                             }
-
-                            ProcessPolicy();
                             ShowControlPanel(sender, e);
+                            ProcessPolicy();
+
                             break;
                     }
                     break;
@@ -1574,19 +1574,30 @@ namespace WDAC_Wizard
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
                     break;
                 case 4:
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = true;
-                    this.page4_Button.Enabled = true;
-                    this.page5_Button.Enabled = false;
+                    if(this.view == 2)
+                    {
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                    } 
+                    else
+                    {
+                        this.page1_Button.Enabled = true;
+                        this.page2_Button.Enabled = true;
+                        this.page3_Button.Enabled = true;
+                        this.page4_Button.Enabled = true;
+                        this.page5_Button.Enabled = false;
+                    }
+                    
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
                     break;
                 case 5:
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = true;
-                    this.page4_Button.Enabled = true;
-                    this.page5_Button.Enabled = true;
+                    this.page1_Button.Enabled = false;
+                    this.page2_Button.Enabled = false;
+                    this.page3_Button.Enabled = false;
+                    this.page4_Button.Enabled = false;
+                    this.page5_Button.Enabled = false;
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
                     break;
             }
