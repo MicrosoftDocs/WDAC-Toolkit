@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WDAC_Wizard.Properties;
 using System.Xml;
+using System.IO;
 
 
 namespace WDAC_Wizard
@@ -30,7 +31,7 @@ namespace WDAC_Wizard
             InitializeComponent();
             this._MainWindow = pMainWindow;
             this._Policy = pMainWindow.Policy;
-            this.Log = this._MainWindow.Log; 
+            this.Log = this._MainWindow.Log;
 
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false; 
@@ -51,7 +52,7 @@ namespace WDAC_Wizard
             // Update UI to reflect change
             basePolicy_PictureBox.Image = Properties.Resources.radio_on;
             suppPolicy_PictureBox.Image = Properties.Resources.radio_off;
-            panelSupplementalPolicy.Visible = false;
+            panelSupplName.Visible = false;
             this._MainWindow.ErrorOnPage = false; 
         }
 
@@ -76,9 +77,10 @@ namespace WDAC_Wizard
             // Update UI to reflect change
             suppPolicy_PictureBox.Image = Properties.Resources.radio_on;
             basePolicy_PictureBox.Image = Properties.Resources.radio_off; 
+
             // Show supplemental policy panel to allow user to build against a policy
             reset_panel();
-            panelSupplementalPolicy.Visible = true;
+            panelSupplName.Visible = true;
 
             this._MainWindow.ErrorOnPage = true;
             this._MainWindow.ErrorMsg = "Select base policy to extend before continuing."; 
@@ -101,7 +103,7 @@ namespace WDAC_Wizard
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.BaseToSupplementPath = openFileDialog.FileName;
-                textBoxPolicyPath.Text = openFileDialog.FileName;
+                textBoxBasePolicyPath.Text = openFileDialog.FileName;
                 
             }
             openFileDialog.Dispose();
@@ -220,9 +222,28 @@ namespace WDAC_Wizard
         private void reset_panel()
        {
             this.BaseToSupplementPath = null; 
-            this.textBoxPolicyPath.Text = "";
+            this.textBoxBasePolicyPath.Text = "";
             this.Verified_Label.Visible = false;
             this.Verified_PictureBox.Visible = false;
+
+            // Set default paths once, unless explicitly turned off in settings
+            if (Properties.Settings.Default.useDefaultStrings)
+            {
+                string dateString = this._MainWindow.formatDate(false);
+                this._Policy.SchemaPath = GetDefaultPath("Supplemental_Policy", 0);
+                this._Policy.PolicyName = String.Format("{0}_{1}", "My Supplemental Policy", dateString);
+
+                // These will trigger the textChange events
+                this.textBoxSuppPath.Text = this._Policy.SchemaPath;
+                this.textBox_PolicyName.Text = this._Policy.PolicyName;
+                this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+
+                // Once the supp schema path is set, show panel to select base to supplement
+                this.panelSuppl_Base.Visible = true; 
+
+            }
+
+            this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
         }
 
         /// <summary>
@@ -241,6 +262,54 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
             }
+        }
+
+        private string GetDefaultPath(string policyTemplate, int nAttempts)
+        {
+            string dateString = this._MainWindow.formatDate(false);
+            string proposedPath;
+
+            if (nAttempts == 0)
+                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    String.Format("{0}{1}.xml", policyTemplate, dateString));
+            else
+                proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    String.Format("{0}{1}_{2}.xml", policyTemplate, dateString, nAttempts));
+
+            if (File.Exists(proposedPath))
+                return GetDefaultPath(policyTemplate, ++nAttempts);
+            else
+                return proposedPath;
+        }
+
+        private void button_BrowseSupp_Click(object sender, EventArgs e)
+        {
+            String mydoc_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            // Save dialog box pressed
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = mydoc_path;
+            saveFileDialog.Title = "Save Your Supplemental Policy File";
+            saveFileDialog.CheckPathExists = true;
+            saveFileDialog.DefaultExt = "xml";
+            saveFileDialog.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog.RestoreDirectory = true;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                this._MainWindow.Policy.SchemaPath = saveFileDialog.FileName;
+                this.textBoxSuppPath.Text = saveFileDialog.FileName;
+
+                // Show panel if path is set
+                this.panelSuppl_Base.Visible = true; 
+            }
+
+            saveFileDialog.Dispose();
+        }
+
+        private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
+        {
+            // Policy Friend Name
+            this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
     }
 }

@@ -325,7 +325,10 @@ namespace WDAC_Wizard
 
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
-            
+
+            else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "Empty_Supplemental.xml");
+
             else 
             {
                 switch (this.Policy._PolicyTemplate)
@@ -476,7 +479,16 @@ namespace WDAC_Wizard
 
         private void HVCILabel_Click(object sender, EventArgs e)
         {
-
+            // Label for learn more about policy options clicked. Launch msft docs page. 
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+            }
         }
 
         private void LabelPolicyOptions_Click(object sender, EventArgs e)

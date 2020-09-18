@@ -392,10 +392,10 @@ namespace WDAC_Wizard
                             break;
 
                         case WDAC_Policy.PolicyType.SupplementalPolicy:
-                            // New SUPPLEMENTAL policy
-                            pageKey = "TemplatePage";
-                            // Show policy rules UI
-                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
+                            
+                            // New SUPPLEMENTAL policy -> policy rules. Do not present a template page
+                            pageKey = "SupConfigTemplatePage";
+                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                             {
                                 Control[] _Pages = this.Controls.Find(pageKey, true);
                                 _Pages[0].Show();
@@ -404,18 +404,19 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _NewSupplementalPage = new TemplatePage(this);
-                                _NewSupplementalPage.Name = pageKey;
-                                this.PageList.Add(_NewSupplementalPage.Name);
-                                this.Controls.Add(_NewSupplementalPage);
-                                _NewSupplementalPage.BringToFront();
-                                _NewSupplementalPage.Focus();
+                                var _ConfigTemplateControl = new ConfigTemplate_Control(this);
+                                _ConfigTemplateControl.Name = pageKey;
+                                this.PageList.Add(_ConfigTemplateControl.Name);
+                                this.Controls.Add(_ConfigTemplateControl);
+                                _ConfigTemplateControl.BringToFront();
+                                _ConfigTemplateControl.Focus();
                             }
                             ShowControlPanel(sender, e);
                             break;
 
                         case WDAC_Policy.PolicyType.Edit:
-                            // Edit & view mode
+
+                            // Edit Mode
                             pageKey = "EditPolicyRulesPage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
                             {
@@ -475,7 +476,7 @@ namespace WDAC_Wizard
 
                         case WDAC_Policy.PolicyType.SupplementalPolicy: // New SUPPLEMENTAL policy
 
-                            pageKey = "ConfigTemplatePage";
+                            pageKey = "SupSigningRulesPage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                             {
                                 Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -485,12 +486,12 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _ConfigTemplate = new ConfigTemplate_Control(this);
-                                _ConfigTemplate.Name = pageKey;
-                                this.PageList.Add(_ConfigTemplate.Name);
-                                this.Controls.Add(_ConfigTemplate);
-                                _ConfigTemplate.BringToFront();
-                                _ConfigTemplate.Focus();
+                                var _SigningSupplementalRules = new SigningRules_Control(this);
+                                _SigningSupplementalRules.Name = pageKey;
+                                this.PageList.Add(_SigningSupplementalRules.Name);
+                                this.Controls.Add(_SigningSupplementalRules);
+                                _SigningSupplementalRules.BringToFront();
+                                _SigningSupplementalRules.Focus();
                             }
 
                             ShowControlPanel(sender, e);
@@ -550,9 +551,9 @@ namespace WDAC_Wizard
                             break;
 
                         case WDAC_Policy.PolicyType.SupplementalPolicy:
-                            // New SUPPLEMENTAL policy
-                            
-                            pageKey = "SupSigningRulesPage";
+                            // New SUPPLEMENTAL policy -- build out policy
+
+                            pageKey = "BuildPage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                             {
                                 Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -562,15 +563,16 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _SigningSupplementalRules = new SigningRules_Control(this);
-                                _SigningSupplementalRules.Name = pageKey;
-                                this.PageList.Add(_SigningSupplementalRules.Name);
-                                this.Controls.Add(_SigningSupplementalRules);
-                                _SigningSupplementalRules.BringToFront();
-                                _SigningSupplementalRules.Focus();
+                                this._BuildPage.Name = pageKey;
+                                this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
+                                this._BuildPage.BringToFront();
+                                this._BuildPage.Focus();
+                                button_Next.Visible = false;
                             }
-
                             ShowControlPanel(sender, e);
+                            ProcessPolicy();
+
                             break;
 
                         case WDAC_Policy.PolicyType.Edit:
@@ -629,31 +631,6 @@ namespace WDAC_Wizard
                                 this._BuildPage.Focus();
                             }
 
-                            ShowControlPanel(sender, e);
-                            ProcessPolicy();
-                            break;
-
-                        case WDAC_Policy.PolicyType.SupplementalPolicy:
-                            // Build out the policy - begin PS execution
-                            
-                            pageKey = "BuildPage";
-                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
-                            {
-                                Control[] _Pages = this.Controls.Find(pageKey, true);
-                                _Pages[0].Show();
-                                _Pages[0].BringToFront();
-                                _Pages[0].Focus();
-                            }
-                            else
-                            {
-                                this._BuildPage = new BuildPage(this);
-                                this._BuildPage.Name = pageKey;
-                                this.PageList.Add(this._BuildPage.Name);
-                                this.Controls.Add(this._BuildPage);
-                                this._BuildPage.BringToFront();
-                                this._BuildPage.Focus();
-                                button_Next.Visible = false;
-                            }
                             ShowControlPanel(sender, e);
                             ProcessPolicy();
                             break;
@@ -822,7 +799,7 @@ namespace WDAC_Wizard
             }
 
             // If multiple policy format setting is enabled, set the Supplemental (rule #17) option
-            if (Properties.Settings.Default.createMultiPolicyByDefault)
+            if (Properties.Settings.Default.createMultiPolicyByDefault && this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy )
             {
                 this.Policy._Format = WDAC_Policy.Format.MultiPolicy;
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17", this.Policy.TemplatePath));
@@ -1099,12 +1076,15 @@ namespace WDAC_Wizard
             if (this.Policy.TemplatePath != null)
                 policyPaths.Add(this.Policy.TemplatePath);
 
-            if (this.Policy.BaseToSupplementPath != null)
-                policyPaths.Add(this.Policy.BaseToSupplementPath);
+            //if (this.Policy.BaseToSupplementPath != null)
+                //policyPaths.Add(this.Policy.BaseToSupplementPath);
 
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
             if (policyPaths.Count < 1)
-                return;
+            {
+                this.Log.AddErrorMsg("MergeTemplatesPolicy() encountered the following error: Unable to locate any policies to merge");
+            }
+                
 
             foreach (var policyPath in policyPaths)
                 mergeScript += String.Format("\"{0}\",", policyPath);
@@ -1500,11 +1480,10 @@ namespace WDAC_Wizard
                 controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
             }
             
-
             // Set link text
-            switch (this.view)
+            switch (this.Policy._PolicyType)
             {
-                case 1: // Policy creator
+                case WDAC_Policy.PolicyType.BasePolicy: // Policy creator
                     this.workflow_Button.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
@@ -1519,7 +1498,22 @@ namespace WDAC_Wizard
                     this.page5_Button.Text = "Creating Policy"; 
                     break;
 
-                case 2: // policy editor
+                case WDAC_Policy.PolicyType.SupplementalPolicy: // Policy creator
+                    this.workflow_Button.Visible = true;
+                    this.page1_Button.Visible = true;
+                    this.page2_Button.Visible = true;
+                    this.page3_Button.Visible = true;
+                    this.page4_Button.Visible = true;
+                    this.page5_Button.Visible = false;
+
+                    this.workflow_Button.Text = "Policy Creator";
+                    this.page1_Button.Text = "Policy Type";
+                    this.page2_Button.Text = "Policy Rules";
+                    this.page3_Button.Text = "Signing Rules";
+                    this.page4_Button.Text = "Creating Policy";
+                    break;
+
+                case WDAC_Policy.PolicyType.Edit: // policy editor
                     this.workflow_Button.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
@@ -1532,9 +1526,45 @@ namespace WDAC_Wizard
                     this.page4_Button.Text = "Creating Policy";
                     break;
 
-                case 3: // merger
+                case WDAC_Policy.PolicyType.Merge: // merger
 
                     break;
+
+                case WDAC_Policy.PolicyType.None: // not yet set (first page) -- default to view 
+                    
+                    switch(this.view)
+                    {
+                        case 1: // New policy
+                            this.workflow_Button.Visible = true;
+                            this.page1_Button.Visible = true;
+                            this.page2_Button.Visible = false;
+                            this.page3_Button.Visible = false;
+                            this.page4_Button.Visible = false;
+                            this.page5_Button.Visible = false;
+                            this.workflow_Button.Text = "Policy Creator";
+                            this.page1_Button.Text = "Policy Type";
+                            break;
+
+                        case 2: // view policy
+                            this.workflow_Button.Visible = true;
+                            this.page1_Button.Visible = true;
+                            this.page2_Button.Visible = true;
+                            this.page3_Button.Visible = true;
+                            this.page4_Button.Visible = true;
+                            this.workflow_Button.Text = "Policy Editor";
+                            this.page1_Button.Text = "Select Policy";
+                            this.page2_Button.Text = "Policy Rules";
+                            this.page3_Button.Text = "Signing Rules";
+                            this.page4_Button.Text = "Creating Policy";
+                            break;
+
+
+                        case 3: // Merge workflow
+
+                            break; 
+                    }
+                    break; 
+
 
                 default:
                     this.workflow_Button.Visible = false;

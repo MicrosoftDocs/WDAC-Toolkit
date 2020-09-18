@@ -125,7 +125,7 @@ namespace WDAC_Wizard
             // Save dialog box pressed
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = mydoc_path;
-            saveFileDialog.Title = "Save Schema File";
+            saveFileDialog.Title = "Save Your Base Policy File";
             saveFileDialog.CheckPathExists = true;
             saveFileDialog.DefaultExt = "xml";
             saveFileDialog.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
@@ -245,7 +245,7 @@ namespace WDAC_Wizard
         {
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)
