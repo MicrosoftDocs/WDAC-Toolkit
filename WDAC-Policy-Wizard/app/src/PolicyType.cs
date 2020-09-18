@@ -125,11 +125,10 @@ namespace WDAC_Wizard
 
             else
             {
-                this.Verified_Label.Text = "This base policy does not allow supplemental policies. " +
-                    "Please select another base policy.";
+                this.Verified_Label.Text = "This base policy does not allow supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
-                this._MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies. Choose another base.";
+                this._MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies.";
             }
 
         }
