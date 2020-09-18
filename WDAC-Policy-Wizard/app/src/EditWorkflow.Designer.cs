@@ -65,9 +65,9 @@ namespace WDAC_Wizard
             this.label2.Location = new System.Drawing.Point(198, 91);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(357, 24);
+            this.label2.Size = new System.Drawing.Size(282, 24);
             this.label2.TabIndex = 108;
-            this.label2.Text = "Browse for your existing policy on disk.";
+            this.label2.Text = "Browse for your policy on disk.";
             // 
             // button_Create
             // 

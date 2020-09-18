@@ -111,7 +111,7 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
             this.signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
 
-            this._MainWindow.ErrorOnPage = false;
+            // this._MainWindow.ErrorOnPage = false;
         }
 
         /// <summary>
@@ -177,6 +177,8 @@ namespace WDAC_Wizard
                 this.textBoxPolicyPath.Text = this._Policy.SchemaPath;
                 this.textBox_PolicyName.Text = this._Policy.PolicyName;
                 this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+
+                this._MainWindow.ErrorOnPage = false;
             }
 
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate; 
@@ -199,52 +201,7 @@ namespace WDAC_Wizard
             else
                 return proposedPath;
         }
-
-        /// <summary>
-        /// Launches websites if user clicks the additonal info question mark label. 
-        /// </summary>
-        /// 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Allow Msft template encountered the following error", exp); 
-            }
-            
-        }
-        
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
-            }
-        }
-
-        private void pictureBox4_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Signed and Reputable template encountered the following error", exp);
-            }
-        }
-
-        
+                
         private void ISGLabel_Click(object sender, EventArgs e)
         {
             // ISG label clicked. Launch ISG webpage
@@ -281,6 +238,20 @@ namespace WDAC_Wizard
         {
             PictureBox checkBox = ((PictureBox)sender);
             checkBox.BackColor = Color.White;
+        }
+
+        // Learn more about the template policies
+        private void label3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
+            }
         }
     }
 }
