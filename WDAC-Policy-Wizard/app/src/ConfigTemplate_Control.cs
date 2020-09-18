@@ -220,14 +220,14 @@ namespace WDAC_Wizard
             }
 
             // Format the label to fit at the bottom of the page.
-            // Set the cut location at the 75th percentile space location. 
+            // Set the cut location at the 85th percentile space location. 
             if(label_Info.Text.Length > 135)
             {
                 string _tmp = label_Info.Text;
                 var idx = new List<int>();
                 for (int i = _tmp.IndexOf(' '); i > -1; i = _tmp.IndexOf(' ', i + 1))
                     idx.Add(i);
-                int cutLoc = Convert.ToInt32(Math.Round(idx.Count * 0.75)); 
+                int cutLoc = Convert.ToInt32(Math.Round(idx.Count * 0.85)); 
                 label_Info.Text = _tmp.Substring(0,idx[cutLoc]) + "\r\n" + _tmp.Substring(idx[cutLoc]+1);
             }
             
