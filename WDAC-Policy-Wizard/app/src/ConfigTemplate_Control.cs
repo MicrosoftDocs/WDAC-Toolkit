@@ -470,7 +470,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void Display_Audit_Recommendation(object sender, EventArgs e)
         {
-            label_Info.Text = "We recommend that you run all new policies in audit mode before enforcement to determine the impacts of the policies.";
+            label_Info.Text = "It is recommended to run new policies in audit mode before enforcement to determine the impacts of the policy.";
             label_Info.Visible = true; 
         }
 
