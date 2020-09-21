@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>MixedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -326,12 +327,19 @@
     <Content Include="MSIX\System.Runtime.dll" />
     <Content Include="MSIX\WDAC Wizard.exe" />
     <Content Include="MSIX\WinSiPolicy.xml" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\gear.png" />
     <Content Include="Resources\imgs\back.png" />
     <Content Include="Resources\imgs\blank-check-box.png" />
+    <None Include="Resources\untoggle.png" />
+    <None Include="Resources\toggle.png" />
+    <None Include="Resources\switch.png" />
     <None Include="Resources\policyTemplates\SignedReputable.xml" />
     <None Include="Resources\imgs\externalLink.png" />
     <None Include="Resources\imgs\external-link-symbol.png" />
     <None Include="Resources\imgs\external-link-symbol-highlight.png" />
+    <None Include="Resources\radio_on.png" />
+    <None Include="Resources\radio_off.png" />
     <Content Include="Resources\RulesDict.xml" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <None Include="Resources\imgs\blank-check-box_32.png" />

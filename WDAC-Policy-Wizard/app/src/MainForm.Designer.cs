@@ -310,7 +310,7 @@ namespace WDAC_Wizard
             this.home_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
             this.home_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.home_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.home_Button.Image = global::WDAC_Wizard.Properties.Resources.house;
+            this.home_Button.Image = ((System.Drawing.Image)(resources.GetObject("home_Button.Image")));
             this.home_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.home_Button.Location = new System.Drawing.Point(18, 110);
             this.home_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
@@ -331,7 +331,7 @@ namespace WDAC_Wizard
             this.settings_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
             this.settings_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.settings_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settings_Button.Image = global::WDAC_Wizard.Properties.Resources.gear;
+            this.settings_Button.Image = ((System.Drawing.Image)(resources.GetObject("settings_Button.Image")));
             this.settings_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.settings_Button.Location = new System.Drawing.Point(18, 776);
             this.settings_Button.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);

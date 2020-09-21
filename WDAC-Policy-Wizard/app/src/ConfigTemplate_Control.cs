@@ -82,7 +82,7 @@ namespace WDAC_Wizard
                 {
                     // Set button to untoggled mode
                     this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle;
+                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace WDAC_Wizard
                     {
                         // Set button to untoggled mode
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle;
+                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
 
                         this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }
@@ -220,14 +220,14 @@ namespace WDAC_Wizard
             }
 
             // Format the label to fit at the bottom of the page.
-            // Set the cut location at the 75th percentile space location. 
+            // Set the cut location at the 85th percentile space location. 
             if(label_Info.Text.Length > 135)
             {
                 string _tmp = label_Info.Text;
                 var idx = new List<int>();
                 for (int i = _tmp.IndexOf(' '); i > -1; i = _tmp.IndexOf(' ', i + 1))
                     idx.Add(i);
-                int cutLoc = Convert.ToInt32(Math.Round(idx.Count * 0.75)); 
+                int cutLoc = Convert.ToInt32(Math.Round(idx.Count * 0.85)); 
                 label_Info.Text = _tmp.Substring(0,idx[cutLoc]) + "\r\n" + _tmp.Substring(idx[cutLoc]+1);
             }
             
@@ -325,7 +325,10 @@ namespace WDAC_Wizard
 
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
-            
+
+            else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "Empty_Supplemental.xml");
+
             else 
             {
                 switch (this.Policy._PolicyTemplate)
@@ -470,13 +473,22 @@ namespace WDAC_Wizard
         /// </summary>
         private void Display_Audit_Recommendation(object sender, EventArgs e)
         {
-            label_Info.Text = "We recommend that you run all new policies in audit mode before enforcement to determine the impacts of the policies.";
+            label_Info.Text = "It is recommended to run new policies in audit mode before enforcement to determine the impacts of the policy.";
             label_Info.Visible = true; 
         }
 
         private void HVCILabel_Click(object sender, EventArgs e)
         {
-
+            // Label for learn more about policy options clicked. Launch msft docs page. 
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+            }
         }
 
         private void LabelPolicyOptions_Click(object sender, EventArgs e)

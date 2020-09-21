@@ -53,9 +53,9 @@ namespace WDAC_Wizard
             this.label1.Location = new System.Drawing.Point(197, 44);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(336, 34);
+            this.label1.Size = new System.Drawing.Size(330, 34);
             this.label1.TabIndex = 48;
-            this.label1.Text = "Edit Exisiting WDAC Policy";
+            this.label1.Text = "Edit Existing WDAC Policy";
             // 
             // label2
             // 
@@ -65,9 +65,9 @@ namespace WDAC_Wizard
             this.label2.Location = new System.Drawing.Point(198, 91);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(357, 24);
+            this.label2.Size = new System.Drawing.Size(282, 24);
             this.label2.TabIndex = 108;
-            this.label2.Text = "Browse for your existing policy on disk.";
+            this.label2.Text = "Browse for your policy on disk.";
             // 
             // button_Create
             // 
@@ -166,8 +166,8 @@ namespace WDAC_Wizard
             // 
             // EditWorkflow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.policyInfoPanel);
             this.Controls.Add(this.textBoxPolicyPath);

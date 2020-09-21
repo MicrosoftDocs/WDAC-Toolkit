@@ -61,7 +61,17 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The F8 preboot menu is disabled by default. Setting this rule option allows the F8 menu to appear to physically present users..
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _switch {
+            get {
+                object obj = ResourceManager.GetObject("switch", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The F8 preboot menu is disabled by default. This rule option allows the F8 menu to appear to physically present users..
         /// </summary>
         internal static string AdvancedBootOpts_Info {
             get {
@@ -199,7 +209,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In addition to being WHQL signed, this rule requires that drivers must have been submitted by a partner that has an Extended Verification (EV) certificate.
+        ///   Looks up a localized string similar to In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate..
         /// </summary>
         internal static string EVSigners_Info {
             get {
@@ -238,7 +248,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If enabled, WDAC policies will not trust flightroot-signed binaries. This would be used in the scenario in which organizations only want to run released binaries, not flighted builds..
+        ///   Looks up a localized string similar to When enabled, WDAC policies will not trust flight-signed binaries, only production binaries..
         /// </summary>
         internal static string FlightSigning_Info {
             get {
@@ -267,7 +277,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If enabled, the code integrity service runs in a hypervisor-protected container..
+        ///   Looks up a localized string similar to When enabled, code integrity runs in a hypervisor-protected container..
         /// </summary>
         internal static string HVCI_Info {
             get {
@@ -276,7 +286,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turning this off will disable default FilePath rule protection of enforcing user-writeability and only allowing admin-writeable locations..
+        ///   Looks up a localized string similar to When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation..
         /// </summary>
         internal static string InvalidateEAs_Info {
             get {
@@ -285,7 +295,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to automatically allow applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG)..
+        ///   Looks up a localized string similar to When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted..
         /// </summary>
         internal static string ISG_Info {
             get {
@@ -304,7 +314,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to automatically allow applications installed by a software distribution solution, such as SCCM..
+        ///   Looks up a localized string similar to When enabled, applications installed by a software distribution solution, such as SCCM, are allowlisted..
         /// </summary>
         internal static string ManagedInst_Info {
             get {
@@ -373,7 +383,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to allow future WDAC policy updates to apply without requiring a system reboot..
+        ///   Looks up a localized string similar to When enabled, future WDAC policy updates are applied without requiring a system reboot..
         /// </summary>
         internal static string NoReboot_Info {
             get {
@@ -414,9 +424,29 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap radio_off {
+            get {
+                object obj = ResourceManager.GetObject("radio_off", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap radio_off_button {
             get {
                 object obj = ResourceManager.GetObject("radio-off-button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap radio_on {
+            get {
+                object obj = ResourceManager.GetObject("radio_on", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -441,7 +471,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turning this option off will disable script enforcement options. Unsigned PowerShell scripts and interactive PowerShell are no longer restricted to Restricted Language Mode..
+        ///   Looks up a localized string similar to When disabled, unsigned PowerShell scripts and interactive PowerShell are no longer restricted to Restricted Language Mode..
         /// </summary>
         internal static string ScriptEnforcement_Info {
             get {
@@ -541,7 +571,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling this rule option validates user mode executables and scripts..
+        ///   Looks up a localized string similar to When enabled, user-mode executables and scripts are validated, in addition to kernel-mode binaries..
         /// </summary>
         internal static string UMCI_Info {
             get {
@@ -583,6 +613,16 @@ namespace WDAC_Wizard.Properties {
         internal static System.Drawing.Bitmap untoggle_lg {
             get {
                 object obj = ResourceManager.GetObject("untoggle_lg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap untoggle_old {
+            get {
+                object obj = ResourceManager.GetObject("untoggle_old", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -668,7 +708,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling this rule requires that every executed driver is WHQL signed and removes legacy driver support..
+        ///   Looks up a localized string similar to When enabled, kernel-mode drivers must be WHQL-signed. Legacy cross-signed drivers will not be trusted..
         /// </summary>
         internal static string WHQL_Info {
             get {

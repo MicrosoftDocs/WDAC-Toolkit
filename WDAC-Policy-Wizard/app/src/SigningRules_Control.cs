@@ -378,7 +378,9 @@ namespace WDAC_Wizard
             // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
             openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
                 "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
-                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF"; 
+                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|"+
+                "All files (*.*)|*.*"; 
+
             openFileDialog.RestoreDirectory = true;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -669,11 +671,26 @@ namespace WDAC_Wizard
             string ruleID = String.Empty; 
 
             // Increase efficiency by constructing signers dictionary hint
-            Dictionary<string, string> signersDict = new Dictionary<string, string>();
+            Dictionary<string, List<string>> signersDict = new Dictionary<string, List<string>>();
             Dictionary<string, string> fileExceptionsDict = new Dictionary<string, string>();
 
+            // Get the file attributes list per signer
+            List<string> signerFields = new List<string>(); 
+
             foreach (var signer in this.Policy.siPolicy.Signers)
-                signersDict.Add(signer.ID, signer.Name);
+            {
+                signerFields = new List<string>();
+                signerFields.Add(signer.Name);
+                if(signer.FileAttribRef != null)
+                {
+                    foreach(var fileRef in signer.FileAttribRef)
+                        signerFields.Add(fileRef.RuleID);
+                }
+
+                signersDict.Add(signer.ID, signerFields);
+            }
+                
+
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
@@ -685,7 +702,7 @@ namespace WDAC_Wizard
                     {
                         // Get signer attributes
                         signerID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
-                        friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
+                        friendlyName = signersDict[signerID][0];    //  this.Policy.Signers[signerID].Name;
                         action = "Allow"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
                         string exceptionID; 
@@ -705,24 +722,19 @@ namespace WDAC_Wizard
                         }
 
                         // Get associated/affected files
-                        /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
+                        if (signersDict[signerID].Count > 1)
                         {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
+                            string fileRef; 
+
+                            for(int k = 1; k < signersDict[signerID].Count; k++)
                             {
-                                string fileAttrName = this.Policy.FileRules[ruleID].FileName;
-                                if (fileAttrName == "*") // applies to all files with ver > min ver
-                                    fileAttrName = "All files";
-                                string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
-                                fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
+                                fileRef = signersDict[signerID][k]; 
+                                fileAttrList += String.Format("{0}, ", fileRef);
                             }
-                        }*/
+                        }
 
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
-
-                        // Get row index #, Scroll to new row index
-                        //index = rulesDataGrid.Rows.Add();
                     }
                 }
 
@@ -733,7 +745,7 @@ namespace WDAC_Wizard
                     {
                         // Get signer attributes
                         signerID = scenario.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId;
-                        friendlyName = signersDict[signerID];    //  this.Policy.Signers[signerID].Name;
+                        friendlyName = signersDict[signerID][0];    //  this.Policy.Signers[signerID].Name;
                         action = "Deny"; // signer.ID; //  this.Policy.Signers[signerID].Action;
                         level = "Publisher";
                         string exceptionID;
@@ -753,27 +765,23 @@ namespace WDAC_Wizard
                             }
                         }
 
-                        // Get associated/affected files
-                        /*if (this.Policy.Signers[signerID].FileAttributes.Count > 0)
+                        // Get associated/affected files -- FileAttributes
+                        if (signersDict[signerID].Count > 1)
                         {
-                            // Iterate through all of the exceptions, get the ID and map to filename
-                            foreach (string ruleID in this.Policy.Signers[signerID].FileAttributes)
+                            string fileRef;
+
+                            for (int k = 1; k < signersDict[signerID].Count; k++)
                             {
-                                string fileAttrName = this.Policy.FileRules[ruleID].FileName;
-                                if (fileAttrName == "*") // applies to all files with ver > min ver
-                                    fileAttrName = "All files";
-                                string minVersion = this.Policy.FileRules[ruleID].MinimumFileVersion;
-                                fileAttrList += String.Format("{0} (v{1}+), ", fileAttrName, minVersion);
+                                fileRef = signersDict[signerID][k];
+                                fileAttrList += String.Format("{0}, ", fileRef);
                             }
-                        }*/
+                        }
 
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList));
                         this.rulesDataGrid.RowCount += 1;
-
                     }
                 }
-
-            }
+            } // end of scenarios
 
            
              // Write all "File Rules" rules
@@ -808,7 +816,7 @@ namespace WDAC_Wizard
                         internalName = ((Deny)fileRule).InternalName; 
 
                     }
-                    else
+                    else if(fileRule.GetType() == typeof(Allow))
                     {
                         action = "Allow";
                         fileRuleID = ((Allow)fileRule).ID;
@@ -822,6 +830,13 @@ namespace WDAC_Wizard
                         fileDescription = ((Allow)fileRule).FileDescription;
                         internalName = ((Allow)fileRule).InternalName;
                     }
+
+                    else
+                    {
+                        // Do nothing for FileAttribute rows
+                        continue; 
+                    }
+                    
 
                     // Determine the filerule type - Hash, FilePath, FileAttribute (Name, Product Name, Original FileNme)
 
@@ -1171,7 +1186,7 @@ namespace WDAC_Wizard
                             productName = ((Deny)fileRule).ProductName;
                             internalName = ((Deny)fileRule).InternalName;
                         }
-                        else
+                        else if(fileRule.GetType() == typeof(Allow))
                         {
                             fileRuleID = ((Allow)fileRule).ID;
                             friendlyName = ((Allow)fileRule).FriendlyName;
@@ -1180,6 +1195,10 @@ namespace WDAC_Wizard
                             fileDescription = ((Allow)fileRule).FileDescription;
                             productName = ((Allow)fileRule).ProductName;
                             internalName = ((Allow)fileRule).InternalName;
+                        }
+                        else
+                        {
+                            continue; 
                         }
 
                         if (!ruleName.Contains(friendlyName)) // then delete from policy

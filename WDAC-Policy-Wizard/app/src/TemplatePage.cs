@@ -49,7 +49,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
-            allowMsft_Button.BackgroundImage = Properties.Resources.check_box_checked_32;
+            allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
-            windowsWorks_Button.BackgroundImage = Properties.Resources.check_box_checked_32;
+            windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace WDAC_Wizard
             uncheck_all();
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
-            signedReputable_Button.BackgroundImage = Properties.Resources.check_box_checked;
+            signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
 
         }
 
@@ -107,11 +107,11 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.Tag = "untoggle";
             this.signedReputable_Button.Tag = "untoggle";
 
-            this.allowMsft_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
-            this.windowsWorks_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
-            this.signedReputable_Button.BackgroundImage = Properties.Resources.check_box_unchecked;
+            this.allowMsft_Button.BackgroundImage = Properties.Resources.radio_off;
+            this.windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
+            this.signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
 
-            this._MainWindow.ErrorOnPage = false;
+            // this._MainWindow.ErrorOnPage = false;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace WDAC_Wizard
             // Save dialog box pressed
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = mydoc_path;
-            saveFileDialog.Title = "Save Schema File";
+            saveFileDialog.Title = "Save Your Base Policy File";
             saveFileDialog.CheckPathExists = true;
             saveFileDialog.DefaultExt = "xml";
             saveFileDialog.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
@@ -177,6 +177,8 @@ namespace WDAC_Wizard
                 this.textBoxPolicyPath.Text = this._Policy.SchemaPath;
                 this.textBox_PolicyName.Text = this._Policy.PolicyName;
                 this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+
+                this._MainWindow.ErrorOnPage = false;
             }
 
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate; 
@@ -199,52 +201,7 @@ namespace WDAC_Wizard
             else
                 return proposedPath;
         }
-
-        /// <summary>
-        /// Launches websites if user clicks the additonal info question mark label. 
-        /// </summary>
-        /// 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Allow Msft template encountered the following error", exp); 
-            }
-            
-        }
-        
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
-            }
-        }
-
-        private void pictureBox4_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/understand-windows-defender-application-control-policy-design-decisions";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for Signed and Reputable template encountered the following error", exp);
-            }
-        }
-
-        
+                
         private void ISGLabel_Click(object sender, EventArgs e)
         {
             // ISG label clicked. Launch ISG webpage
@@ -281,6 +238,20 @@ namespace WDAC_Wizard
         {
             PictureBox checkBox = ((PictureBox)sender);
             checkBox.BackColor = Color.White;
+        }
+
+        // Learn more about the template policies
+        private void label3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
+            }
         }
     }
 }

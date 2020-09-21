@@ -66,8 +66,9 @@ namespace WDAC_Wizard
         public void ShowError()
         {
             finishPanel.Visible = true;
-            this.finishLabel.Text = "Error during build. Please check logs."; 
-            //this.FilePath = policyFilePath;
+            this.finishLabel.Text = "There was an error building your policy. Press home to begin again.";
+            UpdateProgressBar(0, "Error");
+
             this.hyperlinkLabel.Enabled = false;
             this.label_WaitMsg.Visible = false;
         }

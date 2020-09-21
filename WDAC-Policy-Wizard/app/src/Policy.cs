@@ -75,7 +75,7 @@ namespace WDAC_Wizard
             this.siPolicy = null; 
 
             this._PolicyTemplate = NewPolicyTemplate.None;
-            this._PolicyType = PolicyType.BasePolicy;
+            this._PolicyType = PolicyType.None;
             this._Format = Format.None;
 
             this.EnableHVCI = false;

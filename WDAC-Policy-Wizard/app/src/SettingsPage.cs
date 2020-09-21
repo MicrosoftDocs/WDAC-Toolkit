@@ -21,7 +21,7 @@ namespace WDAC_Wizard
     {
         private Dictionary<string, bool> SettingsDict;
         private MainWindow _MainWindow;
-        private Logger _Log; 
+        private Logger Log; 
 
         public SettingsPage(MainWindow pMainWindow)
         {
@@ -29,7 +29,7 @@ namespace WDAC_Wizard
             ShowVersionNumber();
 
             this._MainWindow = pMainWindow;
-            this._Log = pMainWindow.Log; 
+            this.Log = pMainWindow.Log; 
             this.SettingsDict = new Dictionary<string, bool>(); 
         }
 
@@ -79,7 +79,7 @@ namespace WDAC_Wizard
                 int releaseN = this._MainWindow.getReleaseId(); 
                 if(releaseN < REQ_RELN_MULTI_POL)
                 {
-                    this._Log.AddWarningMsg(String.Format("Release ID: {0} does not meet multi policy format requirements", releaseN));
+                    this.Log.AddWarningMsg(String.Format("Release ID: {0} does not meet multi policy format requirements", releaseN));
 
                     // Show warn/error message to user
                     DialogResult res = MessageBox.Show("Your system does not meet the requirements for Multiple Policy Format. Please upgrade to Windows 10 version 1903 or higher.",
@@ -125,12 +125,30 @@ namespace WDAC_Wizard
         private void terms_Label_Click(object sender, EventArgs e)
         {
             // Launch the terms of use page
+            try
+            {
+                string webpage = "https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/README.md";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+            }
 
         }
 
         private void privacy_Label_Click(object sender, EventArgs e)
         {
             // Launch the privacy agreement page
+            try
+            {
+                string webpage = "https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/PRIVACY.md";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+            }
 
         }
 
@@ -144,7 +162,8 @@ namespace WDAC_Wizard
             {
                 // Read the exe config file
                 XmlDocument doc = new XmlDocument();
-                doc.Load("WDAC Wizard.exe.config"); // Reading from the xml config file
+                string configPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "WDAC Wizard.exe.config");
+                doc.Load(configPath); // Reading from the xml config file
                 XmlNodeList settingsNodes = doc.GetElementsByTagName("setting");
                 const int START = 15; 
                 foreach(XmlNode settingNode in settingsNodes)
@@ -154,7 +173,7 @@ namespace WDAC_Wizard
                     string settingVal = settingNode.InnerText;
                     this.SettingsDict[settingName] = settingVal=="True";
 
-                    this._Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
+                    this.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
                 }
 
                 SetSettingsValues(this.SettingsDict);
@@ -170,9 +189,9 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default["allowTelemetry"]);
             this.SettingsDict.Add("createMultiPolicyByDefault", (bool)Properties.Settings.Default["createMultiPolicyByDefault"]); 
 
-            this._Log.AddInfoMsg("Successfully read in the following Default Settings: ");
+            this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
-                this._Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
+                this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
 
             SetSettingsValues(this.SettingsDict); 
         }
@@ -195,7 +214,7 @@ namespace WDAC_Wizard
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
                 }
 
-                this._Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
+                this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
             }
 
             
