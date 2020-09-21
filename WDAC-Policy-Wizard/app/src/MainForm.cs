@@ -713,18 +713,20 @@ namespace WDAC_Wizard
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
             
-            // Handle Policy Rule-Options
-            CreatePolicyRuleOptions(worker);
+            if(this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
+            {
+                // Handle Policy Rule-Options
+                CreatePolicyRuleOptions(worker);
 
-            // Handle custom rules:
-            //  1. Create all of the $Rule objects running New-CIPolicyRule
-            //  2. Create a unique CI policy per custom rule by running New-CIPolicy
-            List<string> customRulesPathList = ProcessCustomRules(worker);
-
-
-            // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
-            // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
-            MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
+                // Handle custom rules:
+                //  1. Create all of the $Rule objects running New-CIPolicyRule
+                //  2. Create a unique CI policy per custom rule by running New-CIPolicy
+                List<string> customRulesPathList = ProcessCustomRules(worker);
+                // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
+                // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
+                MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
+            }
+                      
 
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
@@ -1115,8 +1117,14 @@ namespace WDAC_Wizard
             if (this.Policy.TemplatePath != null)
                 policyPaths.Add(this.Policy.TemplatePath);
 
-            //if (this.Policy.BaseToSupplementPath != null)
-                //policyPaths.Add(this.Policy.BaseToSupplementPath);
+            if (this.Policy.PoliciesToMerge.Count > 0)
+            {
+                foreach(var path in this.Policy.PoliciesToMerge)
+                {
+                    policyPaths.Add(path);
+                }
+            }
+                
 
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
             if (policyPaths.Count < 1)

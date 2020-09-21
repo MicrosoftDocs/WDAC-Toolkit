@@ -72,8 +72,7 @@ namespace WDAC_Wizard.src
                 this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
                 this.policiesDataGrid.RowCount += 1;
 
-                //updateTable();
-
+                this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge; 
 
                 this.Log.AddInfoMsg(String.Format("Adding to list of policies to remove: {0}", policyPath));
             }
@@ -101,6 +100,10 @@ namespace WDAC_Wizard.src
 
             this.displayObjects.RemoveAt(rowIdx);
             this.policiesDataGrid.Rows.RemoveAt(rowIdx);
+
+            this.policiesToMerge.RemoveAt(rowIdx); 
+            this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
+
             this.nPolicies -= 1; 
 
             // If deleting the last row in the table, trivial deletion operation
@@ -125,17 +128,7 @@ namespace WDAC_Wizard.src
                 }
             }
         }
-
-        private void updateTable()
-        {
-            // Iterate through the policiesToMerge list and write them to the table
-            for(int i=0; i < this.policiesToMerge.Count; i++)
-            {
-                string[] row = { i.ToString(), this.policiesToMerge[i]};
-                this.policiesDataGrid.Rows.Add(row); 
-            }
-        }
-
+        
         private string browseForPolicy(string displayTitle)
         {
             string policyPath = String.Empty;
