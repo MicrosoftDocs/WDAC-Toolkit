@@ -563,6 +563,7 @@ namespace WDAC_Wizard
                             }
                             else
                             {
+                                this._BuildPage = new BuildPage(this);
                                 this._BuildPage.Name = pageKey;
                                 this.PageList.Add(this._BuildPage.Name);
                                 this.Controls.Add(this._BuildPage);

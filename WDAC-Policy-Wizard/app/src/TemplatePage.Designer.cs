@@ -357,6 +357,7 @@ namespace WDAC_Wizard
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
             this.textBoxPolicyPath.Size = new System.Drawing.Size(402, 26);
             this.textBoxPolicyPath.TabIndex = 7;
+            this.textBoxPolicyPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.textBoxPolicyPath.Click += new System.EventHandler(this.textBoxPolicyPath_TextChanged);
             // 
             // label_policyName
@@ -377,7 +378,7 @@ namespace WDAC_Wizard
             this.textBox_PolicyName.Location = new System.Drawing.Point(185, 50);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
-            this.textBox_PolicyName.Size = new System.Drawing.Size(339, 26);
+            this.textBox_PolicyName.Size = new System.Drawing.Size(402, 26);
             this.textBox_PolicyName.TabIndex = 9;
             this.textBox_PolicyName.TextChanged += new System.EventHandler(this.textBoxPolicyName_TextChanged);
             // 
