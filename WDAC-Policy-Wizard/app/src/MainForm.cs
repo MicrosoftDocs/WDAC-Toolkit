@@ -1214,15 +1214,18 @@ namespace WDAC_Wizard
             foreach (Command command in pipeline.Commands)
                 this.Log.AddInfoMsg(command.ToString()); 
 
-            try
+            if(pipeline.Commands.Count > 0)
             {
-                Collection<PSObject> results = pipeline.Invoke();
+                try
+                {
+                    Collection<PSObject> results = pipeline.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(String.Format("Exception encountered: {0}", e));
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(String.Format("Exception encountered: {0}", e));
-            }
-
+            
             runspace.Dispose();
             worker.ReportProgress(100);
 

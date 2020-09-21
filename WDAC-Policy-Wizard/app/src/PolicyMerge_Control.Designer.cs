@@ -38,6 +38,7 @@
             this.Column_Path = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button_AddPolicy = new System.Windows.Forms.Button();
             this.button_RemovePolicy = new System.Windows.Forms.Button();
+            this.label_Error = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.policiesDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,6 +105,7 @@
             // 
             // policiesDataGrid
             // 
+            this.policiesDataGrid.AllowUserToDeleteRows = false;
             this.policiesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.policiesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column_Number,
@@ -135,7 +137,7 @@
             // 
             this.button_AddPolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button_AddPolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_AddPolicy.Location = new System.Drawing.Point(200, 307);
+            this.button_AddPolicy.Location = new System.Drawing.Point(234, 307);
             this.button_AddPolicy.Name = "button_AddPolicy";
             this.button_AddPolicy.Size = new System.Drawing.Size(120, 30);
             this.button_AddPolicy.TabIndex = 96;
@@ -147,7 +149,7 @@
             // 
             this.button_RemovePolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button_RemovePolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_RemovePolicy.Location = new System.Drawing.Point(413, 307);
+            this.button_RemovePolicy.Location = new System.Drawing.Point(447, 307);
             this.button_RemovePolicy.Name = "button_RemovePolicy";
             this.button_RemovePolicy.Size = new System.Drawing.Size(120, 30);
             this.button_RemovePolicy.TabIndex = 97;
@@ -155,10 +157,25 @@
             this.button_RemovePolicy.UseVisualStyleBackColor = true;
             this.button_RemovePolicy.Click += new System.EventHandler(this.button_RemovePolicy_Click);
             // 
+            // label_Error
+            // 
+            this.label_Error.AutoSize = true;
+            this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Error.ForeColor = System.Drawing.Color.Red;
+            this.label_Error.Location = new System.Drawing.Point(166, 600);
+            this.label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_Error.Name = "label_Error";
+            this.label_Error.Size = new System.Drawing.Size(648, 18);
+            this.label_Error.TabIndex = 98;
+            this.label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text tex" +
+    "t text text text";
+            this.label_Error.Visible = false;
+            // 
             // PolicyMerge_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.label_Error);
             this.Controls.Add(this.button_RemovePolicy);
             this.Controls.Add(this.button_AddPolicy);
             this.Controls.Add(this.policiesDataGrid);
@@ -187,5 +204,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Path;
         private System.Windows.Forms.Button button_AddPolicy;
         private System.Windows.Forms.Button button_RemovePolicy;
+        private System.Windows.Forms.Label label_Error;
     }
 }

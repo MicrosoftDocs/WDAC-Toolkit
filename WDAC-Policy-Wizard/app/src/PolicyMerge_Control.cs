@@ -37,6 +37,10 @@ namespace WDAC_Wizard.src
 
             this._MainWindow = pMainWindow;
             this.Log = pMainWindow.Log;
+
+            this._MainWindow.ErrorOnPage = true;
+            this._MainWindow.RedoFlowRequired = false;
+            this._MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
         }
 
         private void button_Browse_Click(object sender, EventArgs e)
@@ -51,11 +55,17 @@ namespace WDAC_Wizard.src
                 this._MainWindow.Policy.SchemaPath = this.mergePolicyPath;
 
                 this.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));
+
+                if(this.nPolicies >= 2)
+                {
+                    this._MainWindow.ErrorOnPage = false; 
+                }
             }
             else
             {
                 this.Log.AddInfoMsg("Final Merge Policy set to: Could Not Resolve Path");
             }
+
         }
 
         private void button_AddPolicy_Click(object sender, EventArgs e)
@@ -65,20 +75,33 @@ namespace WDAC_Wizard.src
 
             if (!String.IsNullOrEmpty(policyPath))
             {
+                // Check that policy to merge is not already in table
+                foreach(string existingPath in this.policiesToMerge)
+                {
+                    if(existingPath.Equals(policyPath))
+                    {
+                        showError("Chosen policy already selected and in table.");
+                        return; 
+                    }
+                }
 
                 this.policiesToMerge.Add(policyPath);
                 this.nPolicies += 1;
-
                 this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
                 this.policiesDataGrid.RowCount += 1;
 
                 this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge; 
 
-                this.Log.AddInfoMsg(String.Format("Adding to list of policies to remove: {0}", policyPath));
+                if(this.nPolicies >= 2 && !String.IsNullOrEmpty(this.mergePolicyPath))
+                {
+                    this._MainWindow.ErrorOnPage = false; 
+                }
+
+                this.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
             }
             else
             {
-                this.Log.AddInfoMsg("Adding to list of policies to remove: Could Not Resolve Path");
+                this.Log.AddInfoMsg("Adding to list of policies to merge: Could Not Resolve Path");
             }
         }
 
@@ -95,8 +118,16 @@ namespace WDAC_Wizard.src
             }
 
             string policyN = (String)this.policiesDataGrid["Column_Number", rowIdx].Value;
-            int policyNumber = int.Parse(policyN); 
             string policyPath = (String)this.policiesDataGrid["Column_Path", rowIdx].Value;
+
+            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to remove policy number {0} from the merge list?", policyN), 
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (res == DialogResult.No)
+            {
+                return;
+            }
+
+            this.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
 
             this.displayObjects.RemoveAt(rowIdx);
             this.policiesDataGrid.Rows.RemoveAt(rowIdx);
@@ -105,6 +136,10 @@ namespace WDAC_Wizard.src
             this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
 
             this.nPolicies -= 1; 
+            if(this.nPolicies < 2)
+            {
+                this._MainWindow.ErrorOnPage = true;
+            }
 
             // If deleting the last row in the table, trivial deletion operation
             if (rowIdx == this.nPolicies)
@@ -169,6 +204,19 @@ namespace WDAC_Wizard.src
             return policyPath;
         }
 
+
+        private void showError(string dspStr)
+        {
+            this.label_Error.Text = dspStr; 
+            this.label_Error.Visible = true;
+
+            Timer settingsUpdateNotificationTimer = new Timer();
+            settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
+            settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+            settingsUpdateNotificationTimer.Start();
+        }
+
+
         ///
         /// Grid View Specific 
         ///
@@ -201,6 +249,12 @@ namespace WDAC_Wizard.src
                     break;
             }
         }
+
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Error.Visible = false;
+        }
+
     }
 
     // Class for the datastore
