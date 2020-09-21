@@ -1726,7 +1726,6 @@ namespace WDAC_Wizard
         public void display_info_text(int infoN)
         {
             label_Info.Visible = true;
-            //pictureBox_Info.Visible = true;
             label_Info.ForeColor = Color.DeepSkyBlue;
 
             switch (infoN)
@@ -1775,7 +1774,12 @@ namespace WDAC_Wizard
             }
 
             label_Info.Focus();
-            label_Info.BringToFront(); 
+            label_Info.BringToFront();             
+            
+            Timer settingsUpdateNotificationTimer = new Timer();
+            settingsUpdateNotificationTimer.Interval = (5000); //3 secs
+            settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+            settingsUpdateNotificationTimer.Start();
 
         }
 
@@ -1892,6 +1896,10 @@ namespace WDAC_Wizard
             return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
         }
 
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Info.Visible = false;
+        }
     }
 
 }
