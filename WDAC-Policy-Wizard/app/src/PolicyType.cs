@@ -94,7 +94,7 @@ namespace WDAC_Wizard
         {
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             openFileDialog.Title = "Please select your exisiting policy XML file.";
             openFileDialog.CheckPathExists = true;
             //openFileDialog.DefaultExt = "xml";

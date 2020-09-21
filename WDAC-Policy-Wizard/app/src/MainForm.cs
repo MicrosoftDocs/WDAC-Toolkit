@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
 using Microsoft.Win32;
-
+using WDAC_Wizard.src;
 
 namespace WDAC_Wizard
 {
@@ -117,7 +117,6 @@ namespace WDAC_Wizard
         {
             // Edit Policy Button:
            
-
             if (!this.ConfigInProcess)
             {
                 this.Log.AddInfoMsg("Workflow -- Edit Policy Selected");
@@ -152,33 +151,24 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_Merge_Click(object sender, EventArgs e)
         {
-            this.Policy.VersionNumber = "10.9.9.9";
-            Console.WriteLine(this.Policy.UpdateVersion());
-
-            this.Policy.VersionNumber = "10.0.0.5";
-            Console.WriteLine(this.Policy.UpdateVersion()); 
-
             if (!this.ConfigInProcess)
             {
+                this.Log.AddInfoMsg("Workflow -- Merge Policies Selected");
+
                 this.view = 3;
+                this.CurrentPage = 1;
                 this.ConfigInProcess = true;
-                this.CurrentPage = 1; 
-                this.Log.AddInfoMsg("Workflow -- Merge Policy Selected");
+                this.Policy._PolicyType = WDAC_Policy.PolicyType.Merge;
 
-                var _EditWorkflow = new EditWorkflow(this);
-                _EditWorkflow.Name = "EditWorkflow";
-                this.Controls.Add(_EditWorkflow);
-                this.PageList.Add(_EditWorkflow.Name); 
-                _EditWorkflow.BringToFront();
-                _EditWorkflow.Focus();
-
-                ShowControlPanel(sender, e);
+                pageController(sender, e);
                 button_Next.Visible = true;
+
             }
 
             else
             {
                 // Working on other workflow - do you want to leave?
+                // If so, set the ConfigInProcess flag to false
                 if (wantToAbandonWork())
                 {
                     display_info_text(0);
@@ -361,8 +351,31 @@ namespace WDAC_Wizard
 
                             ShowControlPanel(sender, e);
                             break;
+
+                        case WDAC_Policy.PolicyType.Merge:
+                            // Merge Mode
+                            pageKey = "MergePage";
+                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
+                            {
+                                Control[] _Pages = this.Controls.Find(pageKey, true);
+                                _Pages[0].Show();
+                                _Pages[0].BringToFront();
+                                _Pages[0].Focus();
+                            }
+                            else
+                            {
+                                var _MergePage = new PolicyMerge_Control(this);
+                                _MergePage.Name = pageKey;
+                                this.PageList.Add(_MergePage.Name);
+                                this.Controls.Add(_MergePage);
+                                _MergePage.BringToFront();
+                                _MergePage.Focus();
+                            }
+
+                            ShowControlPanel(sender, e);
+                            break; 
                     }
-                    break;
+                    break; // end of 1st page
 
                 
                 case 2: // 2nd Page
@@ -437,7 +450,32 @@ namespace WDAC_Wizard
 
                             ShowControlPanel(sender, e);
                             break;
-                    
+
+                        case WDAC_Policy.PolicyType.Merge:
+
+                            button_Next.Visible = false;
+
+                            pageKey = "BuildPage";
+                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
+                            {
+                                Control[] _Pages = this.Controls.Find(pageKey, true);
+                                _Pages[0].Show();
+                                _Pages[0].BringToFront();
+                                _Pages[0].Focus();
+                            }
+                            else
+                            {
+                                this._BuildPage = new BuildPage(this);
+                                this._BuildPage.Name = pageKey;
+                                this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
+                                this._BuildPage.BringToFront();
+                                this._BuildPage.Focus();
+                            }
+                            ShowControlPanel(sender, e);
+                            ProcessPolicy();
+                            break; 
+
 
                         case WDAC_Policy.PolicyType.None:
                             display_info_text(98);
@@ -1528,6 +1566,14 @@ namespace WDAC_Wizard
                     break;
 
                 case WDAC_Policy.PolicyType.Merge: // merger
+                    this.workflow_Button.Visible = true;
+                    this.page1_Button.Visible = true;
+                    this.page2_Button.Visible = true;
+                    this.page3_Button.Visible = false;
+                    this.page4_Button.Visible = false;
+                    this.workflow_Button.Text = "Policy Merger";
+                    this.page1_Button.Text = "Select Policies";
+                    this.page2_Button.Text = "Creating Policy";
 
                     break;
 
@@ -1588,14 +1634,27 @@ namespace WDAC_Wizard
                     this.page5_Button.Enabled = false;
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 2:
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = false;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
+                    if(this.view == 3)
+                    {
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+                    }
+                    else
+                    {
+                        this.page1_Button.Enabled = true;
+                        this.page2_Button.Enabled = true;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+                    }
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 3:
                     this.page1_Button.Enabled = true;
                     this.page2_Button.Enabled = true;
