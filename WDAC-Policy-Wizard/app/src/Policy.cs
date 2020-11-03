@@ -54,6 +54,8 @@ namespace WDAC_Wizard
         public string BaseToSupplementPath { get; set; } // Path to base policy to supplement, if applicable
         public string EditPolicyPath { get; set; }      // Path to the policy we are editing. Used for parsing.
 
+        public List<string> PoliciesToMerge { get; set; }
+
 
         // Datastructs for signing rules (and exceptions)
         public List<PolicyEKUs> EKUs { get; set; }
@@ -90,6 +92,7 @@ namespace WDAC_Wizard
             this.CISigners = new List<PolicyCISigners>();
             this.PolicySettings = new List<PolicySettings>();
             this.CustomRules = new List<PolicyCustomRules>();
+            this.PoliciesToMerge = new List<string>(); 
 
             this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
             

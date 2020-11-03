@@ -153,6 +153,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Helper.cs" />
+    <Compile Include="src\PolicyMerge_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\PolicyMerge_Control.Designer.cs">
+      <DependentUpon>PolicyMerge_Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\PolicyType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\PolicyMerge_Control.resx">
+      <DependentUpon>PolicyMerge_Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\PolicyType.resx">
       <DependentUpon>PolicyType.cs</DependentUpon>
