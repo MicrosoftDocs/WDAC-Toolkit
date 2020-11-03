@@ -100,7 +100,7 @@ namespace WDAC_Wizard
 
         public string UpdateVersion()
         {
-            int[] versionIdx = this.VersionNumber.Split('.').Select(n => Convert.ToInt32(n)).ToArray();
+            int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
             for (int i = versionIdx.Length-1; i > 0; i--)
             {
                 if (versionIdx[i] >= 9)
@@ -134,6 +134,43 @@ namespace WDAC_Wizard
 
             }
             return -1;  
+        }
+
+        public bool EditPathContainsVersionInfo()
+        {
+            int START = 14;
+            int periodCount = 0;
+
+            if (this.EditPolicyPath == null | this.EditPolicyPath.Length < START)
+            {
+                return false;
+            }
+
+            string editPathEnd = this.EditPolicyPath.Substring(this.EditPolicyPath.Length - START); 
+
+            if(editPathEnd.Contains("_v"))
+            {
+                // Must contain _v + 3 periods to denote -- _v10.x.y.z.xml
+                foreach(char _char in editPathEnd)
+                {
+                    if(_char.Equals('.'))
+                    {
+                        periodCount++; 
+                    }
+                }
+
+                if(periodCount == 4)
+                {
+                    return true; 
+                }
+            }
+
+            else
+            {
+                return false; 
+            }
+
+            return false; 
         }
 
     }

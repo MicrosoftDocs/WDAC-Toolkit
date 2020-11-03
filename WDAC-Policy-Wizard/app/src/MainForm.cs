@@ -1100,8 +1100,21 @@ namespace WDAC_Wizard
             // the user would like to edit. Since we don't explicitly prompt the user for a new path. copy the TemplatePath
             // and append '_Edit' to the file path.
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
-                this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
-                    0,this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
+            {
+                // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
+                if(this.Policy.EditPathContainsVersionInfo())
+                {
+                    int sOFFSET = 14;
+                    this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(0,
+                        this.Policy.EditPolicyPath.Length - sOFFSET),this.Policy.UpdateVersion());
+                }
+
+                else
+                {
+                    this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
+                    0, this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
+                }
+            }
 
             this.Log.AddInfoMsg("--- Merge Templates Policy ---");
             string DEST_PATH = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml"); //this.TempFolderPath + @"\OutputSchema.xml";
