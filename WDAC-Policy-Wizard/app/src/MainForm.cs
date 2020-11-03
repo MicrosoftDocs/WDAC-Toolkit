@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
 using Microsoft.Win32;
-
+using WDAC_Wizard.src;
 
 namespace WDAC_Wizard
 {
@@ -117,7 +117,6 @@ namespace WDAC_Wizard
         {
             // Edit Policy Button:
            
-
             if (!this.ConfigInProcess)
             {
                 this.Log.AddInfoMsg("Workflow -- Edit Policy Selected");
@@ -152,33 +151,24 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_Merge_Click(object sender, EventArgs e)
         {
-            this.Policy.VersionNumber = "10.9.9.9";
-            Console.WriteLine(this.Policy.UpdateVersion());
-
-            this.Policy.VersionNumber = "10.0.0.5";
-            Console.WriteLine(this.Policy.UpdateVersion()); 
-
             if (!this.ConfigInProcess)
             {
+                this.Log.AddInfoMsg("Workflow -- Merge Policies Selected");
+
                 this.view = 3;
+                this.CurrentPage = 1;
                 this.ConfigInProcess = true;
-                this.CurrentPage = 1; 
-                this.Log.AddInfoMsg("Workflow -- Merge Policy Selected");
+                this.Policy._PolicyType = WDAC_Policy.PolicyType.Merge;
 
-                var _EditWorkflow = new EditWorkflow(this);
-                _EditWorkflow.Name = "EditWorkflow";
-                this.Controls.Add(_EditWorkflow);
-                this.PageList.Add(_EditWorkflow.Name); 
-                _EditWorkflow.BringToFront();
-                _EditWorkflow.Focus();
-
-                ShowControlPanel(sender, e);
+                pageController(sender, e);
                 button_Next.Visible = true;
+
             }
 
             else
             {
                 // Working on other workflow - do you want to leave?
+                // If so, set the ConfigInProcess flag to false
                 if (wantToAbandonWork())
                 {
                     display_info_text(0);
@@ -361,8 +351,31 @@ namespace WDAC_Wizard
 
                             ShowControlPanel(sender, e);
                             break;
+
+                        case WDAC_Policy.PolicyType.Merge:
+                            // Merge Mode
+                            pageKey = "MergePage";
+                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
+                            {
+                                Control[] _Pages = this.Controls.Find(pageKey, true);
+                                _Pages[0].Show();
+                                _Pages[0].BringToFront();
+                                _Pages[0].Focus();
+                            }
+                            else
+                            {
+                                var _MergePage = new PolicyMerge_Control(this);
+                                _MergePage.Name = pageKey;
+                                this.PageList.Add(_MergePage.Name);
+                                this.Controls.Add(_MergePage);
+                                _MergePage.BringToFront();
+                                _MergePage.Focus();
+                            }
+
+                            ShowControlPanel(sender, e);
+                            break; 
                     }
-                    break;
+                    break; // end of 1st page
 
                 
                 case 2: // 2nd Page
@@ -437,7 +450,32 @@ namespace WDAC_Wizard
 
                             ShowControlPanel(sender, e);
                             break;
-                    
+
+                        case WDAC_Policy.PolicyType.Merge:
+
+                            button_Next.Visible = false;
+
+                            pageKey = "BuildPage";
+                            if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
+                            {
+                                Control[] _Pages = this.Controls.Find(pageKey, true);
+                                _Pages[0].Show();
+                                _Pages[0].BringToFront();
+                                _Pages[0].Focus();
+                            }
+                            else
+                            {
+                                this._BuildPage = new BuildPage(this);
+                                this._BuildPage.Name = pageKey;
+                                this.PageList.Add(this._BuildPage.Name);
+                                this.Controls.Add(this._BuildPage);
+                                this._BuildPage.BringToFront();
+                                this._BuildPage.Focus();
+                            }
+                            ShowControlPanel(sender, e);
+                            ProcessPolicy();
+                            break; 
+
 
                         case WDAC_Policy.PolicyType.None:
                             display_info_text(98);
@@ -675,18 +713,20 @@ namespace WDAC_Wizard
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
             
-            // Handle Policy Rule-Options
-            CreatePolicyRuleOptions(worker);
+            if(this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
+            {
+                // Handle Policy Rule-Options
+                CreatePolicyRuleOptions(worker);
 
-            // Handle custom rules:
-            //  1. Create all of the $Rule objects running New-CIPolicyRule
-            //  2. Create a unique CI policy per custom rule by running New-CIPolicy
-            List<string> customRulesPathList = ProcessCustomRules(worker);
-
-
-            // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
-            // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
-            MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
+                // Handle custom rules:
+                //  1. Create all of the $Rule objects running New-CIPolicyRule
+                //  2. Create a unique CI policy per custom rule by running New-CIPolicy
+                List<string> customRulesPathList = ProcessCustomRules(worker);
+                // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
+                // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
+                MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
+            }
+                      
 
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
@@ -1077,8 +1117,14 @@ namespace WDAC_Wizard
             if (this.Policy.TemplatePath != null)
                 policyPaths.Add(this.Policy.TemplatePath);
 
-            //if (this.Policy.BaseToSupplementPath != null)
-                //policyPaths.Add(this.Policy.BaseToSupplementPath);
+            if (this.Policy.PoliciesToMerge.Count > 0)
+            {
+                foreach(var path in this.Policy.PoliciesToMerge)
+                {
+                    policyPaths.Add(path);
+                }
+            }
+                
 
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
             if (policyPaths.Count < 1)
@@ -1168,15 +1214,18 @@ namespace WDAC_Wizard
             foreach (Command command in pipeline.Commands)
                 this.Log.AddInfoMsg(command.ToString()); 
 
-            try
+            if(pipeline.Commands.Count > 0)
             {
-                Collection<PSObject> results = pipeline.Invoke();
+                try
+                {
+                    Collection<PSObject> results = pipeline.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(String.Format("Exception encountered: {0}", e));
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(String.Format("Exception encountered: {0}", e));
-            }
-
+            
             runspace.Dispose();
             worker.ReportProgress(100);
 
@@ -1528,6 +1577,14 @@ namespace WDAC_Wizard
                     break;
 
                 case WDAC_Policy.PolicyType.Merge: // merger
+                    this.workflow_Button.Visible = true;
+                    this.page1_Button.Visible = true;
+                    this.page2_Button.Visible = true;
+                    this.page3_Button.Visible = false;
+                    this.page4_Button.Visible = false;
+                    this.workflow_Button.Text = "Policy Merger";
+                    this.page1_Button.Text = "Select Policies";
+                    this.page2_Button.Text = "Creating Policy";
 
                     break;
 
@@ -1588,14 +1645,27 @@ namespace WDAC_Wizard
                     this.page5_Button.Enabled = false;
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 2:
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = false;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
+                    if(this.view == 3)
+                    {
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+                    }
+                    else
+                    {
+                        this.page1_Button.Enabled = true;
+                        this.page2_Button.Enabled = true;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+                    }
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 3:
                     this.page1_Button.Enabled = true;
                     this.page2_Button.Enabled = true;
@@ -1656,7 +1726,6 @@ namespace WDAC_Wizard
         public void display_info_text(int infoN)
         {
             label_Info.Visible = true;
-            //pictureBox_Info.Visible = true;
             label_Info.ForeColor = Color.DeepSkyBlue;
 
             switch (infoN)
@@ -1705,7 +1774,12 @@ namespace WDAC_Wizard
             }
 
             label_Info.Focus();
-            label_Info.BringToFront(); 
+            label_Info.BringToFront();             
+            
+            Timer settingsUpdateNotificationTimer = new Timer();
+            settingsUpdateNotificationTimer.Interval = (5000); //3 secs
+            settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+            settingsUpdateNotificationTimer.Start();
 
         }
 
@@ -1822,6 +1896,10 @@ namespace WDAC_Wizard
             return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
         }
 
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Info.Visible = false;
+        }
     }
 
 }
