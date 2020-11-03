@@ -169,10 +169,9 @@ namespace WDAC_Wizard.src
             string policyPath = String.Empty;
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             openFileDialog.Title = displayTitle;
             openFileDialog.CheckPathExists = true;
-            openFileDialog.Filter = "Policy File (*.xml)|*.xml";
+            openFileDialog.Filter = "Policy Files (*.xml)|*.xml";
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -189,10 +188,9 @@ namespace WDAC_Wizard.src
             string policyPath = String.Empty;
             // Open file dialog to get file or folder path
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saveFileDialog.Title = displayTitle;
             saveFileDialog.CheckPathExists = true;
-            saveFileDialog.Filter = "Policy File (*.xml)|*.xml";
+            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
             saveFileDialog.RestoreDirectory = true;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)

@@ -357,7 +357,6 @@ namespace WDAC_Wizard
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
             this.textBoxPolicyPath.Size = new System.Drawing.Size(402, 26);
             this.textBoxPolicyPath.TabIndex = 7;
-            this.textBoxPolicyPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.textBoxPolicyPath.Click += new System.EventHandler(this.textBoxPolicyPath_TextChanged);
             // 
             // label_policyName
