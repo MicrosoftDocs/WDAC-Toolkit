@@ -94,7 +94,6 @@ namespace WDAC_Wizard
         {
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             openFileDialog.Title = "Please select your exisiting policy XML file.";
             openFileDialog.CheckPathExists = true;
             //openFileDialog.DefaultExt = "xml";
@@ -284,15 +283,12 @@ namespace WDAC_Wizard
 
         private void button_BrowseSupp_Click(object sender, EventArgs e)
         {
-            String mydoc_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
             // Save dialog box pressed
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = mydoc_path;
             saveFileDialog.Title = "Save Your Supplemental Policy File";
             saveFileDialog.CheckPathExists = true;
             saveFileDialog.DefaultExt = "xml";
-            saveFileDialog.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml|All files (*.*)|*.*";
             saveFileDialog.RestoreDirectory = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {

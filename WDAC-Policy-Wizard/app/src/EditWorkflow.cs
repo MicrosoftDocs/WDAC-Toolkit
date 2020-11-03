@@ -57,30 +57,24 @@ namespace WDAC_Wizard
                 else
                     return;
             }
-            
-            
-            // Browse for on disk policy
-            String mydoc_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            
+                       
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
 
-
             // Save dialog box pressed
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = mydoc_path;
-            openFileDialog1.Title = "Browse for existing WDAC Policy File";
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.DefaultExt = "xml";
-            openFileDialog1.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog1.RestoreDirectory = true;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Browse for existing WDAC Policy File";
+            openFileDialog.CheckPathExists = true;
+            openFileDialog.DefaultExt = "xml";
+            openFileDialog.Filter = "Policy Files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog.RestoreDirectory = true;
 
             try
             {
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    textBoxPolicyPath.Text = openFileDialog1.FileName;                   
-                    this.EditPath = openFileDialog1.FileName;
+                    textBoxPolicyPath.Text = openFileDialog.FileName;                   
+                    this.EditPath = openFileDialog.FileName;
 
                     // Parse the policy for its information and display it
                     ParsePolicy(this.EditPath);
@@ -97,9 +91,7 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("EditWorkflow Browse() encountered the following error ", exp); 
             }
-
-
-            openFileDialog1.Dispose();
+            openFileDialog.Dispose();
         }
 
         /// <summary>

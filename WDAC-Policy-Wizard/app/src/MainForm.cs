@@ -1011,7 +1011,6 @@ namespace WDAC_Wizard
                         else
                             customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.ReferenceFile);
                     }
-
                     break;
 
                 case PolicyCustomRules.RuleType.FileAttributes:
