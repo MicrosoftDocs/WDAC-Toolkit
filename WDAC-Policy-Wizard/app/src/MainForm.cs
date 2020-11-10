@@ -816,7 +816,7 @@ namespace WDAC_Wizard
             
             int N_Rules = 19; 
             for(int i = 0; i <= N_Rules; i++)
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option {1} -Delete ",
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ",
                     this.Policy.TemplatePath, i));
             
 
@@ -832,7 +832,7 @@ namespace WDAC_Wizard
 
                 if (ruleVal == allowedText && !String.IsNullOrEmpty(ruleOptNum)) //Value == xml allowable output - write
                 {
-                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option {1} ",
+                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} ",
                         this.Policy.TemplatePath, ruleOptNum));
                     this.Log.AddInfoMsg(String.Format("Adding rule-option pair: {0}:{1}", key, ruleVal));
                 }
@@ -843,7 +843,7 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.createMultiPolicyByDefault && this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy )
             {
                 this.Policy._Format = WDAC_Policy.Format.MultiPolicy;
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17", this.Policy.TemplatePath));
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17", this.Policy.TemplatePath));
             }
 
             else
@@ -851,10 +851,10 @@ namespace WDAC_Wizard
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy || this.Policy._Format == WDAC_Policy.Format.Legacy)
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 17 -Delete", this.Policy.TemplatePath));
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17 -Delete", this.Policy.TemplatePath));
 
             // Assert unsigned CI policy (rule #6) - fixes issues with converting to binary where the policy is unsigned
-            pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath {0} -Option 6", this.Policy.TemplatePath));
+            pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 6", this.Policy.TemplatePath));
 
             try
             {
@@ -998,7 +998,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.FilePath:
                     {
                         customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
-                            " -Fallback Hash", customRule.PSVariable, customRule.ReferenceFile);
+                            " -Fallback Hash -UserWriteablePaths", customRule.PSVariable, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
                     }
                     break;
 
@@ -1007,9 +1007,9 @@ namespace WDAC_Wizard
                         // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
                         if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath &&
                             Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
-                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.GetEnvVar());
+                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.GetEnvVar());
                         else
-                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule {1}", customRule.PSVariable, customRule.ReferenceFile);
+                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.ReferenceFile);
                     }
                     break;
 
@@ -1064,11 +1064,11 @@ namespace WDAC_Wizard
                 // Add all the merge paths
                 mergeScript = "Merge-CIPolicy -PolicyPaths ";
                 foreach (string path in customRulesPathList)
-                    mergeScript += String.Format("{0},", path);
+                    mergeScript += String.Format("\"{0}\",", path);
 
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
-                mergeScript += String.Format(" -OutputFilePath {0}", outputFilePath);
+                mergeScript += String.Format(" -OutputFilePath \"{0}\"", outputFilePath);
             }
 
             // Create runspace, pipeline and runscript
@@ -1192,10 +1192,10 @@ namespace WDAC_Wizard
             Pipeline pipeline = runspace.CreatePipeline();
 
             // Set policy info - ID, Name
-            string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID {1} -PolicyName {2}", this.Policy.SchemaPath, formatDate(), this.Policy.PolicyName);
+            string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
 
             // Reset the GUIDs s.t. does not mirror the policy GUID 
-            string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath {0} -ResetPolicyID", this.Policy.SchemaPath);
+            string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
 
             // IF the policy is multi format ONLY
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
@@ -1217,7 +1217,7 @@ namespace WDAC_Wizard
                 pipeline.Commands.AddScript(setBaseGuidCmd);
             }
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
-            string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version {1}", this.Policy.SchemaPath, this.Policy.VersionNumber);
+            string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 pipeline.Commands.AddScript(updateVersionCmd);
 
@@ -1256,7 +1256,7 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
             string binaryFilePath = this.Policy.SchemaPath.Substring(0, this.Policy.SchemaPath.Length - 4) + ".bin"; //remove the .xml --> .bin
-            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath {0} -BinaryFilePath {1}" ,
+            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"",
                 this.Policy.SchemaPath, binaryFilePath);
 
             pipeline.Commands.AddScript(binConvertCmd);
@@ -1281,7 +1281,7 @@ namespace WDAC_Wizard
             string fileName = scanPath.Substring(scanPath.LastIndexOf(@"\"));
             
             // Command will omit sub folders (recurssively) to optimize perf
-            string sysInfoScript = String.Format("$Files_{0} = Get-SystemDriver -ScanPath '{1}' -UserPEs -PathToCatroot ' ' -OmitPaths {2}", 
+            string sysInfoScript = String.Format("$Files_{0} = Get-SystemDriver -ScanPath \"{1}\" -UserPEs -PathToCatroot ' ' -OmitPaths \"{2}\"", 
                 this.RulesNumber, scanFolderPath, GetListSubFolders(scanFolderPath));
             this.Log.AddInfoMsg(sysInfoScript);
 

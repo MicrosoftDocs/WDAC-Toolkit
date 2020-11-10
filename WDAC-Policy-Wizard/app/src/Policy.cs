@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
-
+using Windows.UI.Xaml;
 
 namespace WDAC_Wizard
 {
@@ -44,6 +44,7 @@ namespace WDAC_Wizard
         public Format _Format { get; set; }
 
         public string PolicyName { get; set; }          // User entered friendly name for policy
+        public string PolicyID { get; set; }
         public bool EnableHVCI { get; set; }            // Configure hypervisor code integrity (HVCI)?
         public bool EnableAudit { get; set; }           // Turn on audit mode? 
         public string VersionNumber { get; set; }       // Policy version. By default, 10.0.0.0.
@@ -95,7 +96,18 @@ namespace WDAC_Wizard
             this.PoliciesToMerge = new List<string>(); 
 
             this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
-            
+            this.PolicyID = formatDate(false); 
+        }
+
+        public string formatDate(bool includeTime = true)
+        {
+            DateTime sDate = DateTime.Now;
+            if (includeTime)
+                return String.Format("{0}{1}{2}_{3}{4}", sDate.ToString("MM"), sDate.ToString("dd"),
+                    sDate.ToString("yy"), sDate.ToString("HH"), sDate.ToString("mm"));
+            else
+                return String.Format("{0}{1}{2}", sDate.ToString("MM"), sDate.ToString("dd"),
+                    sDate.ToString("yy"));
         }
 
         public string UpdateVersion()

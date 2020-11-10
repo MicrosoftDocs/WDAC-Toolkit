@@ -227,7 +227,7 @@ namespace WDAC_Wizard
         private void textBox_PolicyID_TextChanged(object sender, EventArgs e)
         {
             this.PolicyID = textBox_PolicyID.Text;
-            this._MainWindow.Policy.PolicyName = this.PolicyName;
+            this._MainWindow.Policy.PolicyID = this.PolicyID;
         }
     }
 }
