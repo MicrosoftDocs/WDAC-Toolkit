@@ -34,7 +34,9 @@ namespace WDAC_Wizard
             this.Log = this._MainWindow.Log;
 
             this._MainWindow.ErrorOnPage = false;
-            this._MainWindow.RedoFlowRequired = false; 
+            this._MainWindow.RedoFlowRequired = false;
+
+            this.Log.AddInfoMsg("==== Policy Type Page Initialized ====");
         }
 
         /// <summary>

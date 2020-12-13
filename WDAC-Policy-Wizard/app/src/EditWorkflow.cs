@@ -38,6 +38,9 @@ namespace WDAC_Wizard
             this._MainWindow = pMainWindow;
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false;
+            
+            this.Log = this._MainWindow.Log;
+            this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
 
         }
 
@@ -58,7 +61,6 @@ namespace WDAC_Wizard
                     return;
             }
                        
-            this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
 
             // Save dialog box pressed

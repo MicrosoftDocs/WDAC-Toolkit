@@ -31,6 +31,7 @@ namespace WDAC_Wizard
             this._MainWindow.ErrorMsg = "Please select a policy template before continuing."; 
             this._Policy = new WDAC_Policy();
             this.Log = this._MainWindow.Log;
+            this.Log.AddInfoMsg("==== Template Page Initialized ===="); 
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
             allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
+            this.Log.AddInfoMsg("New Base Template: Allow Microsoft selected");
         }
 
         /// <summary>
@@ -68,6 +70,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
             windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
+            this.Log.AddInfoMsg("New Base Template: Windows Works selected");
         }
 
         /// <summary>
@@ -88,7 +91,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
             signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
-
+            this.Log.AddInfoMsg("New Base Template: Signed and Reputable selected");
         }
 
         /// <summary>

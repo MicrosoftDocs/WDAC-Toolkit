@@ -36,6 +36,7 @@ namespace WDAC_Wizard
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
 
+            this.Log.AddInfoMsg("==== Configuration Template Page Initialized ====");
         }
 
         /// <summary>
@@ -116,6 +117,11 @@ namespace WDAC_Wizard
 
                         this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }
+
+                    break; // break out of foreach, we found the button
+                    this.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
+
+
                 }
             } 
         }
