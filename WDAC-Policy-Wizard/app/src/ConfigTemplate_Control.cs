@@ -73,6 +73,7 @@ namespace WDAC_Wizard
 
                 // Get the button (UI element) name to modify the state of the button
                 string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
+                string labelName = "label_" + buttonName.Substring(buttonName.IndexOf('_') + 1); 
 
                 // If the policy rule current value matches the allowed value, rule has been set
                 if (this.Policy.ConfigRules[key]["CurrentValue"] == this.Policy.ConfigRules[key]["AllowedValue"]) 
@@ -92,10 +93,14 @@ namespace WDAC_Wizard
                 if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy && !Convert.ToBoolean(this.Policy.ConfigRules[key]["ValidSupplemental"]))
                 {
                     this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                    this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed"; 
+                    this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray; 
                 }
                 else
                 {
                     this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                    this.Controls.Find(labelName, true).FirstOrDefault().Tag = "";
+                    this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
                 }
             }
         }
@@ -130,10 +135,8 @@ namespace WDAC_Wizard
                         this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }
 
-                    break; // break out of foreach, we found the button
                     this.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
-
-
+                    break; // break out of foreach, we found the button
                 }
             } 
         }
@@ -154,6 +157,13 @@ namespace WDAC_Wizard
                 label_Info.Text = "";
                 return;
             }
+
+            if (((Label)sender).Tag == "Grayed")
+            {
+                label_Info.Text = "This rule is not modifiable on supplemental policies.";
+                return; 
+            }
+
             switch (((Label)sender).Text)
             {
                 case "User Mode Code Integrity":
