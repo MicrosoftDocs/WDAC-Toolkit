@@ -70,5 +70,17 @@ namespace WDAC_Wizard.Properties {
                 this["createMultiPolicyByDefault"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("wdac-wizard-logs")]
+        public string BlobContainerString {
+            get {
+                return ((string)(this["BlobContainerString"]));
+            }
+            set {
+                this["BlobContainerString"] = value;
+            }
+        }
     }
 }

@@ -85,7 +85,7 @@ namespace WDAC_Wizard
         {
             if (!this.ConfigInProcess)
             {
-                this.Log.AddInfoMsg("Workflow -- New Policy Selected");
+                this.Log.AddNewSeparationLine("Workflow -- New Policy Selected");
                 this.view = 1; 
                 this.CurrentPage = 1;
                 this.ConfigInProcess = true;
@@ -119,8 +119,7 @@ namespace WDAC_Wizard
            
             if (!this.ConfigInProcess)
             {
-                this.Log.AddInfoMsg("Workflow -- Edit Policy Selected");
-
+                this.Log.AddNewSeparationLine("Workflow -- Edit Policy Selected");
                 this.view = 2;
                 this.CurrentPage = 1; 
                 this.ConfigInProcess = true;
@@ -128,7 +127,6 @@ namespace WDAC_Wizard
 
                 pageController(sender, e);
                 button_Next.Visible = true;
-
             }
 
             else
@@ -153,8 +151,7 @@ namespace WDAC_Wizard
         {
             if (!this.ConfigInProcess)
             {
-                this.Log.AddInfoMsg("Workflow -- Merge Policies Selected");
-
+                this.Log.AddNewSeparationLine("Workflow -- Merge Policies Selected");
                 this.view = 3;
                 this.CurrentPage = 1;
                 this.ConfigInProcess = true;
@@ -162,7 +159,6 @@ namespace WDAC_Wizard
 
                 pageController(sender, e);
                 button_Next.Visible = true;
-
             }
 
             else
@@ -193,7 +189,8 @@ namespace WDAC_Wizard
             this.ConfigInProcess = false;
             this.CustomRuleinProgress = false; 
             this.view = 0;
-            this.CurrentPage = 0; 
+            this.CurrentPage = 0;
+            this.Log = new Logger(this.TempFolderPath);
 
             RemoveControls(); 
             ShowControlPanel(sender, e);
@@ -699,6 +696,8 @@ namespace WDAC_Wizard
             this.runspace = RunspaceFactory.CreateRunspace();
             this.runspace.Open();
 
+            this.Log.AddNewSeparationLine("Workflow -- Building Policy Underway"); 
+
             // Write all policy, file and signer rules to xml files:
             if (!backgroundWorker1.IsBusy)
                 backgroundWorker1.RunWorkerAsync();
@@ -772,15 +771,21 @@ namespace WDAC_Wizard
             if (e.Error != null)
             {
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
-                this._BuildPage.ShowError(); 
+                this._BuildPage.ShowError();
             }
-
             else
             {
                 this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
                 this._BuildPage.UpdateProgressBar(100, " ");
             }
-            
+
+            this.Log.AddNewSeparationLine("Workflow -- DONE"); 
+
+            // Upload log file if customer consents
+            if (Properties.Settings.Default.allowTelemetry)
+            {
+                this.Log.UploadLog();
+            }
         }
 
         /// <summary>
@@ -1219,15 +1224,14 @@ namespace WDAC_Wizard
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
             string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
-                pipeline.Commands.AddScript(updateVersionCmd);
-
-            this.Log.AddInfoMsg("Running the following Add Params Commands: ");
-
-            foreach (Command command in pipeline.Commands)
-                this.Log.AddInfoMsg(command.ToString()); 
+                pipeline.Commands.AddScript(updateVersionCmd); 
 
             if(pipeline.Commands.Count > 0)
             {
+                this.Log.AddInfoMsg("Running the following Add Params Commands: ");
+                foreach (Command command in pipeline.Commands)
+                    this.Log.AddInfoMsg(command.ToString());
+
                 try
                 {
                     Collection<PSObject> results = pipeline.Invoke();
@@ -1240,7 +1244,6 @@ namespace WDAC_Wizard
             
             runspace.Dispose();
             worker.ReportProgress(100);
-
         }
 
         /// <summary>
@@ -1511,7 +1514,6 @@ namespace WDAC_Wizard
                 
         }
 
-
         //
         // Summary:
         //     Displays the left-most control panel with home, settings buttons and progress pages. 
@@ -1661,11 +1663,14 @@ namespace WDAC_Wizard
                 case 2:
                     if(this.view == 3)
                     {
+                        // Building page
                         this.page1_Button.Enabled = false;
                         this.page2_Button.Enabled = false;
                         this.page3_Button.Enabled = false;
                         this.page4_Button.Enabled = false;
                         this.page5_Button.Enabled = false;
+
+                        this.settings_Button.Enabled = false; 
                     }
                     else
                     {
@@ -1689,11 +1694,14 @@ namespace WDAC_Wizard
                 case 4:
                     if(this.view == 2)
                     {
+                        // Building page
                         this.page1_Button.Enabled = false;
                         this.page2_Button.Enabled = false;
                         this.page3_Button.Enabled = false;
                         this.page4_Button.Enabled = false;
-                    } 
+
+                        this.settings_Button.Enabled = false;
+                    }
                     else
                     {
                         this.page1_Button.Enabled = true;
@@ -1706,11 +1714,16 @@ namespace WDAC_Wizard
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
                     break;
                 case 5:
+                    // Building page
+
                     this.page1_Button.Enabled = false;
                     this.page2_Button.Enabled = false;
                     this.page3_Button.Enabled = false;
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
+
+                    this.settings_Button.Enabled = false;
+
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
                     break;
             }

@@ -48,7 +48,10 @@ namespace WDAC_Wizard
             this._MainWindow.RedoFlowRequired = false;
             this._MainWindow.CustomRuleinProgress = false; 
             this.Log = this._MainWindow.Log;
-            this.RowSelected = -1; 
+            this.RowSelected = -1;
+
+            this.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
+
         }
 
         /// <summary>
@@ -635,7 +638,7 @@ namespace WDAC_Wizard
             }
 
            
-            this.Log.AddInfoMsg(String.Format("CUSTOM RULE: {0} - {1} - {2} ", action, level, name));
+            this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
 
             // Attach the int row number we added it to
             this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
