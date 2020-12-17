@@ -158,7 +158,7 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (((Label)sender).Tag == "Grayed")
+            if (((Label)sender).Tag.ToString() == "Grayed")
             {
                 label_Info.Text = "This rule is not modifiable on supplemental policies.";
                 return; 

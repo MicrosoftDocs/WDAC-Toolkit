@@ -436,7 +436,7 @@ namespace WDAC_Wizard
 
         public void CloseLogger()
         {
-            this.Log.Flush();
+            //this.Log.Flush();
             this.Log.Close(); 
         }
 
