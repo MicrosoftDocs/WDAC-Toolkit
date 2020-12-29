@@ -227,7 +227,9 @@ namespace WDAC_Wizard
                 if(this.CustomRuleinProgress)
                 {
                     DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your WDAC policy?", 
-                        "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        "Confirmation", 
+                        MessageBoxButtons.YesNo, 
+                        MessageBoxIcon.Question);
 
                     if (res == DialogResult.Yes)
                         return;
@@ -1494,7 +1496,10 @@ namespace WDAC_Wizard
         private bool wantToAbandonWork()
         {
             this.Log.AddWarningMsg("Abandon Work Entered.");
-            DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", 
+                "Confirmation", 
+                MessageBoxButtons.OKCancel, 
+                MessageBoxIcon.Information);
 
             if (res == DialogResult.OK)
             {
@@ -1906,8 +1911,11 @@ namespace WDAC_Wizard
             {
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Build Detected!! BuildN={0}", releaseN));
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Edition/Product Detected!! CompositionEditionID={0} and ProductName={1}", edition, prodName));
-                DialogResult res = MessageBox.Show("The Policy Wizard has detected an incompatible version of Windows. The Wizard may not be able to successfully complete policy creation.",
-                "Incompatible Windows Product", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DialogResult res = MessageBox.Show("The Policy Wizard has detected an incompatible version of Windows. " +
+                    "The Wizard may not be able to successfully complete policy creation.",
+                    "Incompatible Windows Product", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
 
                 if (res == DialogResult.OK)
                 {

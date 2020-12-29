@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace WDAC_Wizard.src
 {
@@ -70,38 +71,47 @@ namespace WDAC_Wizard.src
 
         private void button_AddPolicy_Click(object sender, EventArgs e)
         {
-            string dspTitle = "Choose a WDAC policy to merge";
-            string policyPath = browseForPolicy(dspTitle);
+            string dspTitle = "Choose WDAC policies to merge";
+            string[] policyPaths = browseForPolicy(dspTitle);
+            List<string> policyPathsList = policyPaths.ToList(); 
 
-            if (!String.IsNullOrEmpty(policyPath))
+            foreach(var policyPath in policyPathsList)
             {
-                // Check that policy to merge is not already in table
-                foreach(string existingPath in this.policiesToMerge)
+                bool isNewPolicy = true; 
+                if (!String.IsNullOrEmpty(policyPath))
                 {
-                    if(existingPath.Equals(policyPath))
+                    // Check that policy to merge is not already in table
+                    foreach (string existingPath in this.policiesToMerge)
                     {
-                        showError("Chosen policy already selected and in table.");
-                        return; 
+                        if (existingPath.Equals(policyPath))
+                        {
+                            showError(String.Format("{0} already selected and in table.", Path.GetFileName(policyPath)));
+                            isNewPolicy = false; 
+                            break;
+                        }
+                    }
+
+                    if(isNewPolicy)
+                    {
+                        this.policiesToMerge.Add(policyPath);
+                        this.nPolicies += 1;
+                        this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
+                        this.policiesDataGrid.RowCount += 1;
+
+                        this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
+
+                        if (this.nPolicies >= 2 && !String.IsNullOrEmpty(this.mergePolicyPath))
+                        {
+                            this._MainWindow.ErrorOnPage = false;
+                        }
+
+                        this.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
+                    }
+                    else
+                    {
+                        this.Log.AddInfoMsg("Adding to list of policies to merge: Could Not Resolve Path");
                     }
                 }
-
-                this.policiesToMerge.Add(policyPath);
-                this.nPolicies += 1;
-                this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
-                this.policiesDataGrid.RowCount += 1;
-
-                this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge; 
-
-                if(this.nPolicies >= 2 && !String.IsNullOrEmpty(this.mergePolicyPath))
-                {
-                    this._MainWindow.ErrorOnPage = false; 
-                }
-
-                this.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
-            }
-            else
-            {
-                this.Log.AddInfoMsg("Adding to list of policies to merge: Could Not Resolve Path");
             }
         }
 
@@ -110,77 +120,94 @@ namespace WDAC_Wizard.src
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
             // Get info about the rule user wants to delete: row index and path
-            int rowIdx = this.policiesDataGrid.CurrentCell.RowIndex;
+            DataGridViewSelectedCellCollection cellCollection = this.policiesDataGrid.SelectedCells; 
 
-            if (this.nPolicies == 0 || rowIdx == this.nPolicies)
+            for(int i=0; i<cellCollection.Count; i++)
             {
-                return; 
-            }
+                int rowIdx = cellCollection[i].RowIndex;
 
-            string policyN = (String)this.policiesDataGrid["Column_Number", rowIdx].Value;
-            string policyPath = (String)this.policiesDataGrid["Column_Path", rowIdx].Value;
-
-            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to remove policy number {0} from the merge list?", policyN), 
-                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (res == DialogResult.No)
-            {
-                return;
-            }
-
-            this.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
-
-            this.displayObjects.RemoveAt(rowIdx);
-            this.policiesDataGrid.Rows.RemoveAt(rowIdx);
-
-            this.policiesToMerge.RemoveAt(rowIdx); 
-            this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
-
-            this.nPolicies -= 1; 
-            if(this.nPolicies < 2)
-            {
-                this._MainWindow.ErrorOnPage = true;
-            }
-
-            // If deleting the last row in the table, trivial deletion operation
-            if (rowIdx == this.nPolicies)
-            {
-
-            }
-
-            // else, have to shift every rule number up one
-            else
-            {
-                int num;
-                DisplayObject displayObject = null;
-
-                for (int i=rowIdx; i<this.displayObjects.Count; i++)
+                // Row index cannot equal nPolicies -- this would be the empty row at bottom of view grid
+                if (this.nPolicies == 0 || rowIdx == this.nPolicies || rowIdx == -1)
                 {
-                    displayObject = (DisplayObject)this.displayObjects[i];
-                    num = int.Parse(displayObject.Number) - 1;
-                    displayObject.Number = num.ToString(); 
+                    continue;
+                }
+                string policyN = (String)this.policiesDataGrid["Column_Number", rowIdx].Value;
+                string policyPath = (String)this.policiesDataGrid["Column_Path", rowIdx].Value;
 
-                    this.displayObjects[i] = displayObject; 
+                DialogResult res = MessageBox.Show(String.Format("Are you sure you want to remove {0} from the merge list?",Path.GetFileName(policyPath)),
+                    "Remove Policy Confirmation", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question);
+
+                if (res == DialogResult.No)
+                {
+                    continue;
+                }
+
+                this.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
+
+                this.displayObjects.RemoveAt(rowIdx);
+                this.policiesDataGrid.Rows.RemoveAt(rowIdx);
+
+                this.policiesToMerge.RemoveAt(rowIdx);
+                this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
+
+                this.nPolicies -= 1;
+
+                if (this.nPolicies < 2)
+                {
+                    this._MainWindow.ErrorOnPage = true;
+                }
+
+                // If deleting the last row in the table, trivial deletion operation
+                if (rowIdx == this.nPolicies)
+                {
+
+                }
+
+                // else, have to shift every rule number up one
+                else
+                {
+                    int num;
+                    DisplayObject displayObject = null;
+
+                    for (int j = rowIdx; j < this.displayObjects.Count; j++)
+                    {
+                        displayObject = (DisplayObject)this.displayObjects[j];
+                        num = int.Parse(displayObject.Number) - 1;
+                        displayObject.Number = num.ToString();
+
+                        this.displayObjects[j] = displayObject;
+                    }
                 }
             }
         }
         
-        private string browseForPolicy(string displayTitle)
+        private string[] browseForPolicy(string displayTitle)
         {
-            string policyPath = String.Empty;
+            string[] policyPaths = new string[] { }; 
+
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = displayTitle;
             openFileDialog.CheckPathExists = true;
             openFileDialog.Filter = "Policy Files (*.xml)|*.xml";
             openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = true; 
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                policyPath = openFileDialog.FileName;
-            }
-            openFileDialog.Dispose();
+                policyPaths = openFileDialog.FileNames;
+                openFileDialog.Dispose();
 
-            return policyPath;
+                return policyPaths;
+            }
+            else
+            {
+                this.Log.AddErrorMsg(String.Format("OpenFileDialog.ShowDialog returned {0} in PolicyMerge_Control.browseForPolicy", 
+                    openFileDialog.ShowDialog().ToString()));
+                return policyPaths; 
+            }
         }
 
         private string savePolicy(string displayTitle)
