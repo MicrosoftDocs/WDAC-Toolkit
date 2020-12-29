@@ -33,7 +33,6 @@ namespace WDAC_Wizard
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.labelBase = new System.Windows.Forms.Label();
             this.labelSupp = new System.Windows.Forms.Label();
             this.panelSupplName = new System.Windows.Forms.Panel();
@@ -54,11 +53,13 @@ namespace WDAC_Wizard
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.SupplementalInfoLabel = new System.Windows.Forms.Label();
+            this.basePolicyValidation_Panel = new System.Windows.Forms.Panel();
             this.panelSupplName.SuspendLayout();
             this.panelSuppl_Base.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Verified_PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.basePolicy_PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.suppPolicy_PictureBox)).BeginInit();
+            this.basePolicyValidation_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -117,16 +118,15 @@ namespace WDAC_Wizard
             // 
             // panelSuppl_Base
             // 
+            this.panelSuppl_Base.Controls.Add(this.basePolicyValidation_Panel);
             this.panelSuppl_Base.Controls.Add(this.label5);
-            this.panelSuppl_Base.Controls.Add(this.Verified_Label);
-            this.panelSuppl_Base.Controls.Add(this.Verified_PictureBox);
             this.panelSuppl_Base.Controls.Add(this.button_Browse);
             this.panelSuppl_Base.Controls.Add(this.textBoxBasePolicyPath);
             this.panelSuppl_Base.Controls.Add(this.label2);
-            this.panelSuppl_Base.Location = new System.Drawing.Point(0, 128);
-            this.panelSuppl_Base.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSuppl_Base.Location = new System.Drawing.Point(0, 177);
+            this.panelSuppl_Base.Margin = new System.Windows.Forms.Padding(4);
             this.panelSuppl_Base.Name = "panelSuppl_Base";
-            this.panelSuppl_Base.Size = new System.Drawing.Size(826, 201);
+            this.panelSuppl_Base.Size = new System.Drawing.Size(826, 172);
             this.panelSuppl_Base.TabIndex = 96;
             this.panelSuppl_Base.Visible = false;
             // 
@@ -147,7 +147,7 @@ namespace WDAC_Wizard
             this.Verified_Label.AutoSize = true;
             this.Verified_Label.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.Verified_Label.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Verified_Label.Location = new System.Drawing.Point(46, 119);
+            this.Verified_Label.Location = new System.Drawing.Point(45, 10);
             this.Verified_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Verified_Label.Name = "Verified_Label";
             this.Verified_Label.Size = new System.Drawing.Size(388, 23);
@@ -158,7 +158,7 @@ namespace WDAC_Wizard
             // Verified_PictureBox
             // 
             this.Verified_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.verified;
-            this.Verified_PictureBox.Location = new System.Drawing.Point(11, 119);
+            this.Verified_PictureBox.Location = new System.Drawing.Point(5, 6);
             this.Verified_PictureBox.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.Verified_PictureBox.Name = "Verified_PictureBox";
             this.Verified_PictureBox.Size = new System.Drawing.Size(28, 31);
@@ -332,6 +332,16 @@ namespace WDAC_Wizard
             this.SupplementalInfoLabel.Text = "What is a supplemental policy?     \r\n";
             this.SupplementalInfoLabel.Click += new System.EventHandler(this.SupplementalInfoLabel_Click);
             // 
+            // basePolicyValidation_Panel
+            // 
+            this.basePolicyValidation_Panel.Controls.Add(this.Verified_PictureBox);
+            this.basePolicyValidation_Panel.Controls.Add(this.Verified_Label);
+            this.basePolicyValidation_Panel.Location = new System.Drawing.Point(12, 105);
+            this.basePolicyValidation_Panel.Name = "basePolicyValidation_Panel";
+            this.basePolicyValidation_Panel.Size = new System.Drawing.Size(539, 42);
+            this.basePolicyValidation_Panel.TabIndex = 99;
+            this.basePolicyValidation_Panel.Visible = false;
+            // 
             // PolicyType
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
@@ -358,6 +368,8 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.Verified_PictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.basePolicy_PictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.suppPolicy_PictureBox)).EndInit();
+            this.basePolicyValidation_Panel.ResumeLayout(false);
+            this.basePolicyValidation_Panel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -366,7 +378,6 @@ namespace WDAC_Wizard
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Label labelBase;
         private System.Windows.Forms.Label labelSupp;
         private System.Windows.Forms.Panel panelSupplName;
@@ -387,5 +398,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label_fileLocation;
         private System.Windows.Forms.Panel panelSuppl_Base;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel basePolicyValidation_Panel;
     }
 }

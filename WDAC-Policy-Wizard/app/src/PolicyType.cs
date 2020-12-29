@@ -89,6 +89,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_Browse_Click(object sender, EventArgs e)
         {
+            // Hide the validation panel
+            basePolicyValidation_Panel.Visible = false; 
+
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "Please select your exisiting policy XML file.";
@@ -129,7 +132,7 @@ namespace WDAC_Wizard
                 if(count == 1)
                 {
                     DialogResult res = MessageBox.Show(String.Format("The Wizard has successfully added the Allow Supplemental Policy rule to {0}.", Path.GetFileName(this.BaseToSupplementPath)),
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }
             else if (isPolicyExtendableCode == 1 && count < 1)
@@ -159,6 +162,8 @@ namespace WDAC_Wizard
                 this._MainWindow.ErrorOnPage = true;
                 this._MainWindow.ErrorMsg = "Selected base policy is not a base policy.";
             }
+
+            basePolicyValidation_Panel.Visible = true; 
         }
 
         /// <summary>
@@ -190,6 +195,13 @@ namespace WDAC_Wizard
             }
 
             this.Log.AddInfoMsg(String.Format("isPolicyExtendable -- Policy Type: {0}", _BasePolicy.siPolicy.PolicyType.ToString()));
+            
+            if(_BasePolicy.siPolicy.PolicyType.ToString().Contains("Supplemental"))
+            {
+                // Policy is not base -- not going to fix this case
+                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 2");
+                return 2;
+            }
 
             foreach(var rule in _BasePolicy.siPolicy.Rules)
             {
@@ -202,22 +214,16 @@ namespace WDAC_Wizard
             }
 
             // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
-            if (_BasePolicy.siPolicy.PolicyType.ToString().Contains("Base") && allowsSupplemental)
+            if (allowsSupplemental)
             {
                 this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 0"); 
                 return 0; 
             }
-            else if(_BasePolicy.siPolicy.PolicyType.ToString().Contains("Base"))
+            else
             {
                 // Policy does not have the supplemental rule option -- can fix this case
                 this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 1");
                 return 1; 
-            }
-            else
-            {
-                // Policy is not base -- not going to fix this case
-                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 2");
-                return 2;
             }
         }
 
@@ -332,6 +338,11 @@ namespace WDAC_Wizard
         {
             // Policy Friend Name
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            // Modify the policy in the DoWork function
         }
     }
 }
