@@ -498,7 +498,6 @@ namespace WDAC_Wizard
                 sb.Append(logHash[i].ToString("x2"));
             }
             return sb.ToString();
-
         }
 
         private void AddBoilerPlate()
@@ -507,9 +506,7 @@ namespace WDAC_Wizard
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             this.AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
         }
-
     }
-
 }
 
 
