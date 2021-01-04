@@ -29,7 +29,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="3"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_6">
   </Rule>
   <Rule
@@ -37,7 +37,7 @@
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="4"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_15">
   </Rule>
   <Rule
@@ -53,7 +53,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="6"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_10">
   </Rule>
   <Rule
@@ -85,7 +85,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="10"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_13">
   </Rule>
   <Rule
@@ -109,7 +109,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="13"
-    ValidSupplemental="False"
+    ValidSupplemental="True"
 	  ButtonMapping="button_7">
   </Rule>
   <Rule
@@ -117,7 +117,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="14"
-    ValidSupplemental="False"
+    ValidSupplemental="True"
 	  ButtonMapping="button_5">
   </Rule>
   <Rule
@@ -125,7 +125,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="15"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_18">
   </Rule>
   <Rule
@@ -141,7 +141,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="17"
-    ValidSupplemental="False"
+    ValidSupplemental="True"
 	  ButtonMapping="button_1">
   </Rule>
   <Rule

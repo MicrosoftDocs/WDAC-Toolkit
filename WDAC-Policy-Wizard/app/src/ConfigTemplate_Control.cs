@@ -58,7 +58,10 @@ namespace WDAC_Wizard
                 return; 
 
             // Enable audit mode by default
-            this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+            {
+                this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
+            }
 
             // Set HVCI option value
             if (this.Policy.EnableHVCI)
@@ -90,17 +93,22 @@ namespace WDAC_Wizard
                 }
 
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy && !Convert.ToBoolean(this.Policy.ConfigRules[key]["ValidSupplemental"]))
-                {
-                    this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                    this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed"; 
-                    this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray; 
-                }
-                else
-                {
-                    this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
-                    this.Controls.Find(labelName, true).FirstOrDefault().Tag = "";
-                    this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                { 
+                    switch(this.Policy.ConfigRules[key]["ValidSupplemental"])
+                    {
+                        case "True":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                            break;
+
+                        case "False":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                            break;
+                    }
                 }
             }
         }
@@ -160,7 +168,7 @@ namespace WDAC_Wizard
 
             if (((Label)sender).Tag.ToString() == "Grayed")
             {
-                label_Info.Text = "This rule is not modifiable on supplemental policies.";
+                label_Info.Text = Resources.InvalidSupplementalRule_Info;
                 return; 
             }
 
