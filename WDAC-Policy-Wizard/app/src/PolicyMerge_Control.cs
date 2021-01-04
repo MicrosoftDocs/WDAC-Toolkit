@@ -85,7 +85,7 @@ namespace WDAC_Wizard.src
                     {
                         if (existingPath.Equals(policyPath))
                         {
-                            showError(String.Format("{0} already selected and in table.", Path.GetFileName(policyPath)));
+                            showError(String.Format("{0} is already selected and in table.", Path.GetFileName(policyPath)));
                             isNewPolicy = false; 
                             break;
                         }
@@ -279,7 +279,6 @@ namespace WDAC_Wizard.src
         {
             this.label_Error.Visible = false;
         }
-
     }
 
     // Class for the datastore
