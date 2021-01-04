@@ -34,9 +34,9 @@ namespace WDAC_Wizard
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.label_11 = new System.Windows.Forms.Label();
+            this.label_8 = new System.Windows.Forms.Label();
+            this.label_6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.button_5 = new System.Windows.Forms.Button();
             this.button_3 = new System.Windows.Forms.Button();
@@ -45,38 +45,38 @@ namespace WDAC_Wizard
             this.button_0 = new System.Windows.Forms.Button();
             this.label_Info = new System.Windows.Forms.Label();
             this.button_6 = new System.Windows.Forms.Button();
-            this.label_HVCI = new System.Windows.Forms.Label();
+            this.label_10 = new System.Windows.Forms.Label();
             this.button_17 = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.label_1 = new System.Windows.Forms.Label();
             this.button_16 = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.label_9 = new System.Windows.Forms.Label();
+            this.label_2 = new System.Windows.Forms.Label();
             this.button_13 = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
+            this.label_7 = new System.Windows.Forms.Label();
+            this.label_3 = new System.Windows.Forms.Label();
             this.button_11 = new System.Windows.Forms.Button();
-            this.label13 = new System.Windows.Forms.Label();
+            this.label_5 = new System.Windows.Forms.Label();
             this.button_18 = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
+            this.label_16 = new System.Windows.Forms.Label();
             this.button_15 = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
+            this.label_18 = new System.Windows.Forms.Label();
             this.button_10 = new System.Windows.Forms.Button();
-            this.label16 = new System.Windows.Forms.Label();
+            this.label_13 = new System.Windows.Forms.Label();
             this.button_8 = new System.Windows.Forms.Button();
             this.button_7 = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
+            this.label_19 = new System.Windows.Forms.Label();
+            this.label_15 = new System.Windows.Forms.Label();
             this.button_9 = new System.Windows.Forms.Button();
-            this.label20 = new System.Windows.Forms.Label();
+            this.label_0 = new System.Windows.Forms.Label();
             this.button_HVCI = new System.Windows.Forms.Button();
             this.panel_AdvancedOptions = new System.Windows.Forms.Panel();
             this.button_19 = new System.Windows.Forms.Button();
-            this.label24 = new System.Windows.Forms.Label();
+            this.label_17 = new System.Windows.Forms.Label();
             this.label_AdvancedOptions = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label_AuditMode = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
+            this.label_HVCI = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel_AdvancedOptions.SuspendLayout();
             this.SuspendLayout();
@@ -105,43 +105,43 @@ namespace WDAC_Wizard
             this.label2.TabIndex = 1;
             this.label2.Text = "Policy Rules";
             // 
-            // label3
+            // label_11
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(615, 455);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(237, 24);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "User Mode Code Integrity";
-            this.label3.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_11.AutoSize = true;
+            this.label_11.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_11.ForeColor = System.Drawing.Color.Black;
+            this.label_11.Location = new System.Drawing.Point(615, 455);
+            this.label_11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_11.Name = "label_11";
+            this.label_11.Size = new System.Drawing.Size(237, 24);
+            this.label_11.TabIndex = 2;
+            this.label_11.Text = "User Mode Code Integrity";
+            this.label_11.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
-            // label5
+            // label_8
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(615, 275);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(140, 24);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Require WHQL";
-            this.label5.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_8.AutoSize = true;
+            this.label_8.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_8.ForeColor = System.Drawing.Color.Black;
+            this.label_8.Location = new System.Drawing.Point(615, 275);
+            this.label_8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_8.Name = "label_8";
+            this.label_8.Size = new System.Drawing.Size(140, 24);
+            this.label_8.TabIndex = 7;
+            this.label_8.Text = "Require WHQL";
+            this.label_8.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
-            // label6
+            // label_6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(195, 717);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 24);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "Audit Mode";
+            this.label_6.AutoSize = true;
+            this.label_6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_6.ForeColor = System.Drawing.Color.Black;
+            this.label_6.Location = new System.Drawing.Point(195, 717);
+            this.label_6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_6.Name = "label_6";
+            this.label_6.Size = new System.Drawing.Size(110, 24);
+            this.label_6.TabIndex = 9;
+            this.label_6.Text = "Audit Mode";
             // 
             // label7
             // 
@@ -264,18 +264,18 @@ namespace WDAC_Wizard
             this.button_6.UseVisualStyleBackColor = false;
             this.button_6.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label_HVCI
+            // label_10
             // 
-            this.label_HVCI.AutoSize = true;
-            this.label_HVCI.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_HVCI.ForeColor = System.Drawing.Color.Black;
-            this.label_HVCI.Location = new System.Drawing.Point(615, 395);
-            this.label_HVCI.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label_HVCI.Name = "label_HVCI";
-            this.label_HVCI.Size = new System.Drawing.Size(302, 24);
-            this.label_HVCI.TabIndex = 14;
-            this.label_HVCI.Text = "Unsigned System Integrity Policy";
-            this.label_HVCI.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_10.AutoSize = true;
+            this.label_10.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_10.ForeColor = System.Drawing.Color.Black;
+            this.label_10.Location = new System.Drawing.Point(615, 395);
+            this.label_10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_10.Name = "label_10";
+            this.label_10.Size = new System.Drawing.Size(302, 24);
+            this.label_10.TabIndex = 14;
+            this.label_10.Text = "Unsigned System Integrity Policy";
+            this.label_10.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_17
             // 
@@ -293,18 +293,18 @@ namespace WDAC_Wizard
             this.button_17.UseVisualStyleBackColor = false;
             this.button_17.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label8
+            // label_1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(195, 275);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(258, 24);
-            this.label8.TabIndex = 26;
-            this.label8.Text = "Allow Supplemental Policies";
-            this.label8.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_1.AutoSize = true;
+            this.label_1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_1.ForeColor = System.Drawing.Color.Black;
+            this.label_1.Location = new System.Drawing.Point(195, 275);
+            this.label_1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_1.Name = "label_1";
+            this.label_1.Size = new System.Drawing.Size(258, 24);
+            this.label_1.TabIndex = 26;
+            this.label_1.Text = "Allow Supplemental Policies";
+            this.label_1.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_16
             // 
@@ -322,31 +322,31 @@ namespace WDAC_Wizard
             this.button_16.UseVisualStyleBackColor = false;
             this.button_16.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label9
+            // label_9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.Black;
-            this.label9.Location = new System.Drawing.Point(615, 335);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(300, 24);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "Update Policy without Rebooting";
-            this.label9.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_9.AutoSize = true;
+            this.label_9.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_9.ForeColor = System.Drawing.Color.Black;
+            this.label_9.Location = new System.Drawing.Point(615, 335);
+            this.label_9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_9.Name = "label_9";
+            this.label_9.Size = new System.Drawing.Size(300, 24);
+            this.label_9.TabIndex = 24;
+            this.label_9.Text = "Update Policy without Rebooting";
+            this.label_9.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
-            // label10
+            // label_2
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(195, 335);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(250, 24);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "Disable Script Enforcement";
-            this.label10.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_2.AutoSize = true;
+            this.label_2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_2.ForeColor = System.Drawing.Color.Black;
+            this.label_2.Location = new System.Drawing.Point(195, 335);
+            this.label_2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_2.Name = "label_2";
+            this.label_2.Size = new System.Drawing.Size(250, 24);
+            this.label_2.TabIndex = 22;
+            this.label_2.Text = "Disable Script Enforcement";
+            this.label_2.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_13
             // 
@@ -364,31 +364,31 @@ namespace WDAC_Wizard
             this.button_13.UseVisualStyleBackColor = false;
             this.button_13.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label11
+            // label_7
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.Black;
-            this.label11.Location = new System.Drawing.Point(615, 215);
-            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(170, 24);
-            this.label11.TabIndex = 20;
-            this.label11.Text = "Managed Installer";
-            this.label11.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_7.AutoSize = true;
+            this.label_7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_7.ForeColor = System.Drawing.Color.Black;
+            this.label_7.Location = new System.Drawing.Point(615, 215);
+            this.label_7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_7.Name = "label_7";
+            this.label_7.Size = new System.Drawing.Size(170, 24);
+            this.label_7.TabIndex = 20;
+            this.label_7.Text = "Managed Installer";
+            this.label_7.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
-            // label12
+            // label_3
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.Black;
-            this.label12.Location = new System.Drawing.Point(195, 395);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(242, 24);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "Enforce Store Applications";
-            this.label12.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_3.AutoSize = true;
+            this.label_3.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_3.ForeColor = System.Drawing.Color.Black;
+            this.label_3.Location = new System.Drawing.Point(195, 395);
+            this.label_3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_3.Name = "label_3";
+            this.label_3.Size = new System.Drawing.Size(242, 24);
+            this.label_3.TabIndex = 18;
+            this.label_3.Text = "Enforce Store Applications";
+            this.label_3.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_11
             // 
@@ -406,18 +406,18 @@ namespace WDAC_Wizard
             this.button_11.UseVisualStyleBackColor = false;
             this.button_11.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label13
+            // label_5
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(195, 515);
-            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(237, 24);
-            this.label13.TabIndex = 16;
-            this.label13.Text = "Intelligent Security Graph";
-            this.label13.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_5.AutoSize = true;
+            this.label_5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_5.ForeColor = System.Drawing.Color.Black;
+            this.label_5.Location = new System.Drawing.Point(195, 515);
+            this.label_5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_5.Name = "label_5";
+            this.label_5.Size = new System.Drawing.Size(237, 24);
+            this.label_5.TabIndex = 16;
+            this.label_5.Text = "Intelligent Security Graph";
+            this.label_5.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_18
             // 
@@ -435,18 +435,18 @@ namespace WDAC_Wizard
             this.button_18.UseVisualStyleBackColor = false;
             this.button_18.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label14
+            // label_16
             // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(15, 165);
-            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(287, 24);
-            this.label14.TabIndex = 38;
-            this.label14.Text = "Disable Runtime Filepath Rules";
-            this.label14.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_16.AutoSize = true;
+            this.label_16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_16.ForeColor = System.Drawing.Color.Black;
+            this.label_16.Location = new System.Drawing.Point(15, 165);
+            this.label_16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_16.Name = "label_16";
+            this.label_16.Size = new System.Drawing.Size(287, 24);
+            this.label_16.TabIndex = 38;
+            this.label_16.Text = "Disable Runtime Filepath Rules";
+            this.label_16.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_15
             // 
@@ -464,18 +464,18 @@ namespace WDAC_Wizard
             this.button_15.UseVisualStyleBackColor = false;
             this.button_15.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label15
+            // label_18
             // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.Black;
-            this.label15.Location = new System.Drawing.Point(14, 285);
-            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(234, 24);
-            this.label15.TabIndex = 36;
-            this.label15.Text = "Invalidate EAs on Reboot";
-            this.label15.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_18.AutoSize = true;
+            this.label_18.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_18.ForeColor = System.Drawing.Color.Black;
+            this.label_18.Location = new System.Drawing.Point(14, 285);
+            this.label_18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_18.Name = "label_18";
+            this.label_18.Size = new System.Drawing.Size(234, 24);
+            this.label_18.TabIndex = 36;
+            this.label_18.Text = "Invalidate EAs on Reboot";
+            this.label_18.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_10
             // 
@@ -493,18 +493,18 @@ namespace WDAC_Wizard
             this.button_10.UseVisualStyleBackColor = false;
             this.button_10.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label16
+            // label_13
             // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.Black;
-            this.label16.Location = new System.Drawing.Point(15, 45);
-            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(197, 24);
-            this.label16.TabIndex = 34;
-            this.label16.Text = "Boot Audit on Failure";
-            this.label16.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_13.AutoSize = true;
+            this.label_13.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_13.ForeColor = System.Drawing.Color.Black;
+            this.label_13.Location = new System.Drawing.Point(15, 45);
+            this.label_13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_13.Name = "label_13";
+            this.label_13.Size = new System.Drawing.Size(197, 24);
+            this.label_13.TabIndex = 34;
+            this.label_13.Text = "Boot Audit on Failure";
+            this.label_13.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_8
             // 
@@ -538,31 +538,31 @@ namespace WDAC_Wizard
             this.button_7.UseVisualStyleBackColor = false;
             this.button_7.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label18
+            // label_19
             // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(16, 345);
-            this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(178, 24);
-            this.label18.TabIndex = 30;
-            this.label18.Text = "Require EV Signers";
-            this.label18.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_19.AutoSize = true;
+            this.label_19.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_19.ForeColor = System.Drawing.Color.Black;
+            this.label_19.Location = new System.Drawing.Point(16, 345);
+            this.label_19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_19.Name = "label_19";
+            this.label_19.Size = new System.Drawing.Size(178, 24);
+            this.label_19.TabIndex = 30;
+            this.label_19.Text = "Require EV Signers";
+            this.label_19.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
-            // label19
+            // label_15
             // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.Black;
-            this.label19.Location = new System.Drawing.Point(15, 105);
-            this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(202, 24);
-            this.label19.TabIndex = 28;
-            this.label19.Text = "Disable Flight Signing";
-            this.label19.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_15.AutoSize = true;
+            this.label_15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_15.ForeColor = System.Drawing.Color.Black;
+            this.label_15.Location = new System.Drawing.Point(15, 105);
+            this.label_15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_15.Name = "label_15";
+            this.label_15.Size = new System.Drawing.Size(202, 24);
+            this.label_15.TabIndex = 28;
+            this.label_15.Text = "Disable Flight Signing";
+            this.label_15.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_9
             // 
@@ -580,18 +580,18 @@ namespace WDAC_Wizard
             this.button_9.UseVisualStyleBackColor = false;
             this.button_9.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label20
+            // label_0
             // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.ForeColor = System.Drawing.Color.Black;
-            this.label20.Location = new System.Drawing.Point(195, 215);
-            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(271, 24);
-            this.label20.TabIndex = 40;
-            this.label20.Text = "Advanced Boot Options Menu";
-            this.label20.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_0.AutoSize = true;
+            this.label_0.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_0.ForeColor = System.Drawing.Color.Black;
+            this.label_0.Location = new System.Drawing.Point(195, 215);
+            this.label_0.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_0.Name = "label_0";
+            this.label_0.Size = new System.Drawing.Size(271, 24);
+            this.label_0.TabIndex = 40;
+            this.label_0.Text = "Advanced Boot Options Menu";
+            this.label_0.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // button_HVCI
             // 
@@ -612,15 +612,15 @@ namespace WDAC_Wizard
             // panel_AdvancedOptions
             // 
             this.panel_AdvancedOptions.Controls.Add(this.button_19);
-            this.panel_AdvancedOptions.Controls.Add(this.label24);
+            this.panel_AdvancedOptions.Controls.Add(this.label_17);
             this.panel_AdvancedOptions.Controls.Add(this.button_18);
-            this.panel_AdvancedOptions.Controls.Add(this.label14);
+            this.panel_AdvancedOptions.Controls.Add(this.label_16);
             this.panel_AdvancedOptions.Controls.Add(this.button_15);
-            this.panel_AdvancedOptions.Controls.Add(this.label15);
-            this.panel_AdvancedOptions.Controls.Add(this.label16);
+            this.panel_AdvancedOptions.Controls.Add(this.label_18);
+            this.panel_AdvancedOptions.Controls.Add(this.label_13);
             this.panel_AdvancedOptions.Controls.Add(this.button_17);
-            this.panel_AdvancedOptions.Controls.Add(this.label18);
-            this.panel_AdvancedOptions.Controls.Add(this.label19);
+            this.panel_AdvancedOptions.Controls.Add(this.label_19);
+            this.panel_AdvancedOptions.Controls.Add(this.label_15);
             this.panel_AdvancedOptions.Controls.Add(this.button_16);
             this.panel_AdvancedOptions.Controls.Add(this.button_13);
             this.panel_AdvancedOptions.Location = new System.Drawing.Point(1012, 170);
@@ -646,18 +646,18 @@ namespace WDAC_Wizard
             this.button_19.UseVisualStyleBackColor = false;
             this.button_19.Click += new System.EventHandler(this.Toggle_Button_Click);
             // 
-            // label24
+            // label_17
             // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.ForeColor = System.Drawing.Color.Black;
-            this.label24.Location = new System.Drawing.Point(15, 225);
-            this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(215, 24);
-            this.label24.TabIndex = 40;
-            this.label24.Text = "Dynamic Code Security";
-            this.label24.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_17.AutoSize = true;
+            this.label_17.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_17.ForeColor = System.Drawing.Color.Black;
+            this.label_17.Location = new System.Drawing.Point(15, 225);
+            this.label_17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_17.Name = "label_17";
+            this.label_17.Size = new System.Drawing.Size(215, 24);
+            this.label_17.TabIndex = 40;
+            this.label_17.Text = "Dynamic Code Security";
+            this.label_17.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // label_AdvancedOptions
             // 
@@ -709,21 +709,21 @@ namespace WDAC_Wizard
             this.label27.TabIndex = 49;
             this.label27.Text = "The policy rules are pre-set based on the template you have chosen. ";
             // 
-            // label21
+            // label_HVCI
             // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.label21.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
-            this.label21.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label21.Location = new System.Drawing.Point(195, 455);
-            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(334, 23);
-            this.label21.TabIndex = 42;
-            this.label21.Text = "Hypervisor-protected Code Integrity    ";
-            this.label21.Click += new System.EventHandler(this.HVCILabel_Click);
-            this.label21.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.label_HVCI.AutoSize = true;
+            this.label_HVCI.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label_HVCI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.label_HVCI.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.label_HVCI.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_HVCI.Location = new System.Drawing.Point(195, 455);
+            this.label_HVCI.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_HVCI.Name = "label_HVCI";
+            this.label_HVCI.Size = new System.Drawing.Size(334, 23);
+            this.label_HVCI.TabIndex = 42;
+            this.label_HVCI.Text = "Hypervisor-protected Code Integrity    ";
+            this.label_HVCI.Click += new System.EventHandler(this.HVCILabel_Click);
+            this.label_HVCI.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
             // label4
             // 
@@ -752,30 +752,30 @@ namespace WDAC_Wizard
             this.Controls.Add(this.panel_AdvancedOptions);
             this.Controls.Add(this.button_10);
             this.Controls.Add(this.button_HVCI);
-            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label_HVCI);
             this.Controls.Add(this.button_8);
             this.Controls.Add(this.button_9);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label_0);
+            this.Controls.Add(this.label_1);
             this.Controls.Add(this.button_7);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label_9);
+            this.Controls.Add(this.label_2);
+            this.Controls.Add(this.label_7);
+            this.Controls.Add(this.label_3);
             this.Controls.Add(this.button_11);
-            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label_5);
             this.Controls.Add(this.button_6);
-            this.Controls.Add(this.label_HVCI);
+            this.Controls.Add(this.label_10);
             this.Controls.Add(this.label_Info);
             this.Controls.Add(this.button_5);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.button_3);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label_6);
             this.Controls.Add(this.button_2);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label_8);
             this.Controls.Add(this.button_1);
             this.Controls.Add(this.button_0);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label_11);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -794,49 +794,49 @@ namespace WDAC_Wizard
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label_11;
         private System.Windows.Forms.Button button_0;
         private System.Windows.Forms.Button button_1;
         private System.Windows.Forms.Button button_2;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label_8;
         private System.Windows.Forms.Button button_3;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label_6;
         private System.Windows.Forms.Button button_5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label_Info;
         private System.Windows.Forms.Button button_6;
-        private System.Windows.Forms.Label label_HVCI;
+        private System.Windows.Forms.Label label_10;
         private System.Windows.Forms.Button button_17;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label_1;
         private System.Windows.Forms.Button button_16;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label_9;
+        private System.Windows.Forms.Label label_2;
         private System.Windows.Forms.Button button_13;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label_7;
+        private System.Windows.Forms.Label label_3;
         private System.Windows.Forms.Button button_11;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label_5;
         private System.Windows.Forms.Button button_18;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label_16;
         private System.Windows.Forms.Button button_15;
-        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label_18;
         private System.Windows.Forms.Button button_10;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label_13;
         private System.Windows.Forms.Button button_8;
         private System.Windows.Forms.Button button_7;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label_19;
+        private System.Windows.Forms.Label label_15;
         private System.Windows.Forms.Button button_9;
-        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label_0;
         private System.Windows.Forms.Button button_HVCI;
         private System.Windows.Forms.Panel panel_AdvancedOptions;
         private System.Windows.Forms.Label label_AdvancedOptions;
         private System.Windows.Forms.Button button_19;
-        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label_17;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label_AuditMode;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label_HVCI;
         private System.Windows.Forms.Label label4;
     }
 }

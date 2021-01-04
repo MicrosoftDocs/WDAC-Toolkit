@@ -295,6 +295,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented..
+        /// </summary>
+        internal static string InvalidSupplementalRule_Info {
+            get {
+                return ResourceManager.GetString("InvalidSupplementalRule_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted..
         /// </summary>
         internal static string ISG_Info {

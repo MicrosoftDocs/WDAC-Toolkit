@@ -3,18 +3,13 @@
 // jogeurte 11/19
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using WDAC_Wizard.Properties;
 using System.Xml;
 using System.IO;
-
+using System.Xml.Serialization;
+using System.Management.Automation;
+using System.Collections.ObjectModel;
+using System.Management.Automation.Runspaces;
 
 namespace WDAC_Wizard
 {
@@ -94,6 +89,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_Browse_Click(object sender, EventArgs e)
         {
+            // Hide the validation panel
+            basePolicyValidation_Panel.Visible = false; 
+
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "Please select your exisiting policy XML file.";
@@ -114,26 +112,58 @@ namespace WDAC_Wizard
                 this._MainWindow.RedoFlowRequired = true;
 
             this._MainWindow.Policy.BaseToSupplementPath = this.BaseToSupplementPath;
+            CheckPolicy_Recur(0); 
+        }
 
+        private void CheckPolicy_Recur(int count)
+        {
             // Verification: does the chosen base policy allow supplemental policies
             this.Verified_Label.Visible = true;
-            this.Verified_PictureBox.Visible = true; 
+            this.Verified_PictureBox.Visible = true;
 
-            if(isPolicyExtendable(this.BaseToSupplementPath))
+            int isPolicyExtendableCode = isPolicyExtendable(this.BaseToSupplementPath);
+
+            if (isPolicyExtendableCode == 0 && count < 2)
             {
                 this.Verified_Label.Text = "This base policy allows supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.verified;
-                this._MainWindow.ErrorOnPage = false; 
-            }
+                this._MainWindow.ErrorOnPage = false;
 
-            else
+                if(count == 1)
+                {
+                    DialogResult res = MessageBox.Show(String.Format("The Wizard has successfully added the Allow Supplemental Policy rule to {0}.", Path.GetFileName(this.BaseToSupplementPath)),
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+                }
+            }
+            else if (isPolicyExtendableCode == 1 && count < 1)
             {
                 this.Verified_Label.Text = "This base policy does not allow supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
                 this._MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies.";
+
+                // Prompt user if the Wizard should add the supplemental policy rule option to base policy
+                DialogResult res = MessageBox.Show(String.Format("The base policy you have selected does not allow supplemental policies.\n\n" +
+                    "Would you like the Wizard to add the Allow Supplemental Policy rule to {0}?", Path.GetFileName(this.BaseToSupplementPath)),
+                    "Base Policy Issue", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                {
+                    // Run command Set-RuleOption -Option 17, check isPolicyExtendable again
+                    this._MainWindow.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
+                    AddSupplementalOption(this.BaseToSupplementPath);
+                    CheckPolicy_Recur(++count); 
+                }
+            }
+            else
+            {
+                this.Verified_Label.Text = "This policy is not a base policy. Please select a base policy to supplement.";
+                this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
+                this._MainWindow.ErrorOnPage = true;
+                this._MainWindow.ErrorMsg = "Selected base policy is not a base policy.";
             }
 
+            basePolicyValidation_Panel.Visible = true; 
         }
 
         /// <summary>
@@ -141,80 +171,60 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="basePolPath">Path to the xml CI policy</param>
         /// <returns>Returns true if the GUID allows supplemental policies</returns>
-        private bool isPolicyExtendable(string basePolPath)
+        private int isPolicyExtendable(string basePolPath)
         {
             // Checks that this policy is 1) a base policy, 2) has the allow supplemental policy rule-option
-            bool isBase =false, allowsSupplemental = false;
-            string basePolicyID = "8283AC0F", policyID = "36924F1C"; // init and assigned different guids so if not set for whatever reason do not get false positive of being a base
+            WDAC_Policy _BasePolicy = new WDAC_Policy();
+            bool allowsSupplemental = false; 
+            // Read File
             try
             {
-                XmlTextReader xmlReader = new XmlTextReader(basePolPath);
-                while (xmlReader.Read())
-                {
-                    switch (xmlReader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            switch (xmlReader.Name)
-                            {
-                                case "Rules":
-                                    int eoeCount = 0;
-                                    while (xmlReader.Read() && eoeCount < 3)
-                                    {
-                                        switch (xmlReader.NodeType)
-                                        {
-                                            case XmlNodeType.Element:
-                                                eoeCount = 0;
-                                                break;
-                                            case XmlNodeType.Text:
-                                                {
-                                                    eoeCount = 0;
-
-                                                    // Rule in this text - add to dictionary
-                                                    string optionLine = xmlReader.Value;
-                                                    string[] polRule = optionLine.Split(':');
-                                                    if (polRule[1] == "Allow Supplemental Policies")
-                                                        allowsSupplemental = true; 
-                                                }
-                                                break;
-                                            case XmlNodeType.EndElement:
-                                                eoeCount++;
-                                                break;
-                                        }
-                                    }
-                                    break;
-
-                                case "BasePolicyID":
-                                    // HVCI on or off
-                                    basePolicyID = xmlReader.ReadElementContentAsString();
-                                    this.Log.AddInfoMsg(String.Format("Found Base Policy ID: {0}", basePolicyID));
-                                    break;
-
-                                case "PolicyID":
-                                    // HVCI on or off
-                                    policyID = xmlReader.ReadElementContentAsString();
-                                    this.Log.AddInfoMsg(String.Format("Found Policy ID: {0}", policyID));
-                                    break;
-
-                            }
-                            break;
-                    }
-                } //end of while
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(basePolPath);
+                _BasePolicy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
             }
-
-            catch (Exception e)
+            catch (Exception exp)
             {
-                this.Log.AddErrorMsg("isPolicyExtendable() encountered the following Exception: ", e);
+                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your base CI policy xml file. The policy XML appears to be corrupted.",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return 99;
             }
 
-            this.Log.AddInfoMsg(String.Format("Policy ID allows supplemental: {0}", allowsSupplemental));
+            this.Log.AddInfoMsg(String.Format("isPolicyExtendable -- Policy Type: {0}", _BasePolicy.siPolicy.PolicyType.ToString()));
+            
+            if(_BasePolicy.siPolicy.PolicyType.ToString().Contains("Supplemental"))
+            {
+                // Policy is not base -- not going to fix this case
+                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 2");
+                return 2;
+            }
 
-            if (basePolicyID == policyID)
-                isBase = true;
+            foreach(var rule in _BasePolicy.siPolicy.Rules)
+            {
+                if(rule.Item.ToString().Contains("Supplemental"))
+                {
+                    allowsSupplemental = true;
+                    this.Log.AddInfoMsg(String.Format("isPolicyExtendable -- {0}: True", rule.ToString())); 
+                    break; 
+                }
+            }
 
-            if (isBase && allowsSupplemental)   // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
-                return true;
+            // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
+            if (allowsSupplemental)
+            {
+                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 0"); 
+                return 0; 
+            }
             else
-                return false; 
+            {
+                // Policy does not have the supplemental rule option -- can fix this case
+                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 1");
+                return 1; 
+            }
         }
 
         /// <summary>
@@ -304,10 +314,35 @@ namespace WDAC_Wizard
             saveFileDialog.Dispose();
         }
 
+        private void AddSupplementalOption(string basePath)
+        {
+            Runspace policyRuleOptsRunspace = RunspaceFactory.CreateRunspace();
+            policyRuleOptsRunspace.Open();
+            Pipeline pipeline = policyRuleOptsRunspace.CreatePipeline();
+
+            // Add Rule 17: Enabled:Allow Supplemental Policies
+            pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17", basePath));
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", e);
+            }
+            policyRuleOptsRunspace.Close();
+        }
+
         private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
             // Policy Friend Name
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            // Modify the policy in the DoWork function
         }
     }
 }

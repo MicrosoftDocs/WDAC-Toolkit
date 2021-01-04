@@ -47,18 +47,21 @@ namespace WDAC_Wizard
         {
             // **** This function is run on UI load  *** //
 
-            this.Policy._PolicyType = this._MainWindow.Policy._PolicyType;
+            this.Policy._PolicyType = this._MainWindow.Policy._PolicyType; 
             this.Policy._PolicyTemplate = this._MainWindow.Policy._PolicyTemplate; 
             this.Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
 
-            this.Policy.ConfigRules = initRulesDict();
+            this.Policy.ConfigRules = initRulesDict(); // If supplemental, need to disable the button
 
             // If unable to read the CI policy, fail gracefully and return to the home page
             if (!this.readSetRules(sender, e))
                 return; 
 
             // Enable audit mode by default
-            this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+            {
+                this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
+            }
 
             // Set HVCI option value
             if (this.Policy.EnableHVCI)
@@ -69,10 +72,13 @@ namespace WDAC_Wizard
             {
                 // If unsupported, skip
                 if (!Convert.ToBoolean(this.Policy.ConfigRules[key]["Supported"]))
-                    continue; 
+                    continue;
+
+                // Get the button (UI element) name to modify the state of the button
+                string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
+                string labelName = "label_" + buttonName.Substring(buttonName.IndexOf('_') + 1); 
 
                 // If the policy rule current value matches the allowed value, rule has been set
-                string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
                 if (this.Policy.ConfigRules[key]["CurrentValue"] == this.Policy.ConfigRules[key]["AllowedValue"]) 
                 {
                     // Set button to toggled mode
@@ -84,6 +90,25 @@ namespace WDAC_Wizard
                     // Set button to untoggled mode
                     this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
                     this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
+                }
+
+                // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                { 
+                    switch(this.Policy.ConfigRules[key]["ValidSupplemental"])
+                    {
+                        case "True":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                            break;
+
+                        case "False":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                            break;
+                    }
                 }
             }
         }
@@ -118,10 +143,8 @@ namespace WDAC_Wizard
                         this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
                     }
 
-                    break; // break out of foreach, we found the button
                     this.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
-
-
+                    break; // break out of foreach, we found the button
                 }
             } 
         }
@@ -142,6 +165,13 @@ namespace WDAC_Wizard
                 label_Info.Text = "";
                 return;
             }
+
+            if (((Label)sender).Tag.ToString() == "Grayed")
+            {
+                label_Info.Text = Resources.InvalidSupplementalRule_Info;
+                return; 
+            }
+
             switch (((Label)sender).Text)
             {
                 case "User Mode Code Integrity":
@@ -275,8 +305,8 @@ namespace WDAC_Wizard
                 XmlTextReader xmlReader = new XmlTextReader(dictPath);
                 while (xmlReader.Read())
                 {
-                   if(xmlReader.Name == "Rules")
-                   {
+                    if(xmlReader.Name == "Rules")
+                    {
                         while(xmlReader.Read())
                         {
                             if(xmlReader.NodeType == XmlNodeType.Element)
@@ -288,17 +318,17 @@ namespace WDAC_Wizard
                                 tempDict.Add("CurrentValue", GetOppositeOption(tempDict["AllowedValue"]));
                                 tempDict.Add("Supported", xmlReader.GetAttribute("Supported"));
                                 tempDict.Add("RuleNumber", xmlReader.GetAttribute("RuleNumber"));
+                                tempDict.Add("ValidSupplemental", xmlReader.GetAttribute("ValidSupplemental")); 
                                 rulesDict.Add(ruleName, tempDict);
                             }
                         }
-                   }         
+                    }         
                 }
             }
             catch(Exception e)
             {
                 this.Log.AddErrorMsg("Reading RulesDict.xml in initRulesDict() encountered the following error: ", e); 
             }
-
             return rulesDict; 
         }
 
@@ -314,7 +344,6 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
             this.Policy.EnableHVCI = this.Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
-
         }
 
         /// <summary>
@@ -332,10 +361,11 @@ namespace WDAC_Wizard
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
 
-            else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-                xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "Empty_Supplemental.xml");
+            // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
+            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath; 
 
-            else 
+            else
             {
                 switch (this.Policy._PolicyTemplate)
                 {
@@ -343,15 +373,15 @@ namespace WDAC_Wizard
                         // Windows Works Mode 
                         xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "DefaultWindows_Audit.xml");
                         break;
-                    
+
                     case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                         // Signed and Reputable Mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "SignedReputable.xml"); 
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "SignedReputable.xml");
                         break;
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "AllowMicrosoft.xml"); 
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "AllowMicrosoft.xml");
                         break;
                 }
             }
@@ -378,7 +408,6 @@ namespace WDAC_Wizard
                 return false; 
             }
             
-
             // Merge with configRules:
             foreach(var rule in this.Policy.siPolicy.Rules)
             {
@@ -393,7 +422,6 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI;
             this._MainWindow.Policy.siPolicy = this.Policy.siPolicy;
-
 
             // Copy template to temp folder for reading and writing
             string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));

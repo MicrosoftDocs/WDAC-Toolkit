@@ -5,6 +5,7 @@
     AllowedValue="Enabled" 
     Supported="True"
     RuleNumber="0"
+	  ValidSupplemental="False"
     ButtonMapping="button_11">
   </Rule>
   <Rule
@@ -12,6 +13,7 @@
     AllowedValue="Enabled"
     Supported="False"
     RuleNumber="1"
+	  ValidSupplemental="False"
     ButtonMapping="button_14">
   </Rule>
   <Rule
@@ -19,132 +21,151 @@
     AllowedValue="Required"
     Supported="True"
     RuleNumber="2"
-    ButtonMapping="button_8">
+    ValidSupplemental="False"
+	  ButtonMapping="button_8">
   </Rule>
   <Rule
     Name="AuditMode"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="3"
-    ButtonMapping="button_6">
+    ValidSupplemental="False"
+	  ButtonMapping="button_6">
   </Rule>
   <Rule
     Name="FlightSigning"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="4"
-    ButtonMapping="button_15">
+    ValidSupplemental="False"
+	  ButtonMapping="button_15">
   </Rule>
   <Rule
     Name="InheritDefaultPolicy"
     AllowedValue="Enabled"
     Supported="False"
     RuleNumber="5"
-    ButtonMapping="button_4">
+    ValidSupplemental="True"
+	  ButtonMapping="button_4">
   </Rule>
   <Rule
     Name="UnsignedSystemIntegrityPolicy"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="6"
-    ButtonMapping="button_10">
+    ValidSupplemental="False"
+	  ButtonMapping="button_10">
   </Rule>
   <Rule
     Name="DebugPolicyAugmented"
     AllowedValue="Allowed"
     Supported="False"
     RuleNumber="7"
-    ButtonMapping="button_12">
+    ValidSupplemental="True"
+	  ButtonMapping="button_12">
   </Rule>
   <Rule
     Name="EVSigners"
     AllowedValue="Required"
     Supported="True"
     RuleNumber="8"
-    ButtonMapping="button_19">
+    ValidSupplemental="False"
+	  ButtonMapping="button_19">
   </Rule>
   <Rule
     Name="AdvancedBootOptionsMenu"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="9"
-    ButtonMapping="button_0">
+    ValidSupplemental="False"
+	  ButtonMapping="button_0">
   </Rule>
   <Rule
     Name="BootAuditOnFailure"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="10"
-    ButtonMapping="button_13">
+    ValidSupplemental="False"
+	  ButtonMapping="button_13">
   </Rule>
   <Rule
     Name="ScriptEnforcement"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="11"
-    ButtonMapping="button_2">
+    ValidSupplemental="False"
+	  ButtonMapping="button_2">
   </Rule>
   <Rule
     Name="EnforceStoreApplications"
     AllowedValue="Required"
     Supported="True"
     RuleNumber="12"
-    ButtonMapping="button_3">
+    ValidSupplemental="False"
+	  ButtonMapping="button_3">
   </Rule>
   <Rule
     Name="ManagedInstaller"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="13"
-    ButtonMapping="button_7">
+    ValidSupplemental="True"
+	  ButtonMapping="button_7">
   </Rule>
   <Rule
     Name="IntelligentSecurityGraphAuthorization"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="14"
-    ButtonMapping="button_5">
+    ValidSupplemental="True"
+	  ButtonMapping="button_5">
   </Rule>
   <Rule
     Name="InvalidateEAsonReboot"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="15"
-    ButtonMapping="button_18">
+    ValidSupplemental="False"
+	  ButtonMapping="button_18">
   </Rule>
   <Rule
     Name="UpdatePolicyNoReboot"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="16"
-    ButtonMapping="button_9">
+    ValidSupplemental="False"
+	  ButtonMapping="button_9">
   </Rule>
   <Rule
     Name="AllowSupplementalPolicies"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="17"
-    ButtonMapping="button_1">
+    ValidSupplemental="True"
+	  ButtonMapping="button_1">
   </Rule>
   <Rule
     Name="RuntimeFilePathRuleProtection"
     AllowedValue="Disabled"
     Supported="True"
     RuleNumber="18"
-    ButtonMapping="button_16">
+    ValidSupplemental="True"
+	  ButtonMapping="button_16">
   </Rule>
   <Rule
     Name="DynamicCodeSecurity"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="19"
-    ButtonMapping="button_17">
+    ValidSupplemental="False"
+	  ButtonMapping="button_17">
   </Rule>
   <Rule
     Name="HVCI"
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="99"
-    ButtonMapping="button_HVCI">
+    ValidSupplemental="False"
+	  ButtonMapping="button_HVCI">
   </Rule>
 </Rules>
