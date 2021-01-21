@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
+using Windows.System.Profile;
 
 namespace WDAC_Wizard
 {
@@ -340,9 +341,27 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void radioButton_MultiPolicy_CheckedChanged(object sender, EventArgs e)
         {
-            // Modify the policy in the DoWork function
+            SetPolicyPage(); 
+        }
+
+        private void radioButton_LegacyFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            SetPolicyPage();
+        }
+
+        private void SetPolicyPage()
+        {
+            if(this.radioButton_MultiPolicy.Checked)
+            {
+                // Show panel
+                this.panel_MultiPolicy.Visible = true; 
+            }
+            else
+            {
+                this.panel_MultiPolicy.Visible = false; 
+            }
         }
     }
 }

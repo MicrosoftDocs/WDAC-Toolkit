@@ -67,9 +67,9 @@ namespace WDAC_Wizard
 
             this.CustomRuleinProgress = false; 
 
-            //LicenseCheck().GetAwaiter().GetResult(); 
-            //Removed update check -- offloading to MSIX
+            // Check for configci cmdlet availability
             LicenseCheck(); 
+
         }
 
         // ###############
@@ -1902,8 +1902,8 @@ namespace WDAC_Wizard
                 return folderPath; 
         }
 
-              
-        private async Task LicenseCheck()
+        // SKU check if cmdlets are available on the device 
+        private void LicenseCheck()
         {
             // Check that WDAC feature is compatible with system
             // Cmdlets are available on all builds 1909+. 
