@@ -1565,7 +1565,10 @@ namespace WDAC_Wizard
             {
                 controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
             }
-            
+
+            // Enable Settings Button -- if on building page, it will be disabled below
+            this.settings_Button.Enabled = true; 
+
             // Set link text
             switch (this.Policy._PolicyType)
             {
@@ -1717,6 +1720,7 @@ namespace WDAC_Wizard
                     this.page5_Button.Enabled = false;
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 4:
                     if(this.view == 2)
                     {
@@ -1739,6 +1743,7 @@ namespace WDAC_Wizard
                     
                     controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
                     break;
+
                 case 5:
                     // Building page
 
