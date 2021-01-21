@@ -73,6 +73,7 @@ namespace WDAC_Wizard
             }
 
             // Check if system supports Multi-Policy before enabling
+            // TODO: move this to new policy page
             int REQ_RELN_MULTI_POL = 1903; 
             if(settingName == "createMultiPolicyByDefault" && checkBox.Tag.ToString() == "Unchecked")
             {
@@ -187,7 +188,7 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default["useEnvVars"]);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default["useDefaultStrings"]);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default["allowTelemetry"]);
-            this.SettingsDict.Add("createMultiPolicyByDefault", (bool)Properties.Settings.Default["createMultiPolicyByDefault"]); 
+            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default["convertPolicyToBinary"]); 
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
