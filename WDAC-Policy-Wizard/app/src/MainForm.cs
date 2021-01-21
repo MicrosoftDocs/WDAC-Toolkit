@@ -1570,13 +1570,13 @@ namespace WDAC_Wizard
             switch (this.Policy._PolicyType)
             {
                 case WDAC_Policy.PolicyType.BasePolicy: // Policy creator
-                    this.workflow_Button.Visible = true;
+                    this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
                     this.page3_Button.Visible = true;
                     this.page4_Button.Visible = true;
                     this.page5_Button.Visible = true;
-                    this.workflow_Button.Text = "Policy Creator";
+                    this.workflow_Label.Text = "Policy Creator";
                     this.page1_Button.Text = "Policy Type"; 
                     this.page2_Button.Text = "Policy Template"; 
                     this.page3_Button.Text = "Policy Rules"; 
@@ -1585,14 +1585,14 @@ namespace WDAC_Wizard
                     break;
 
                 case WDAC_Policy.PolicyType.SupplementalPolicy: // Policy creator
-                    this.workflow_Button.Visible = true;
+                    this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
                     this.page3_Button.Visible = true;
                     this.page4_Button.Visible = true;
                     this.page5_Button.Visible = false;
 
-                    this.workflow_Button.Text = "Policy Creator";
+                    this.workflow_Label.Text = "Policy Creator";
                     this.page1_Button.Text = "Policy Type";
                     this.page2_Button.Text = "Policy Rules";
                     this.page3_Button.Text = "Signing Rules";
@@ -1600,12 +1600,12 @@ namespace WDAC_Wizard
                     break;
 
                 case WDAC_Policy.PolicyType.Edit: // policy editor
-                    this.workflow_Button.Visible = true;
+                    this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
                     this.page3_Button.Visible = true;
                     this.page4_Button.Visible = true;
-                    this.workflow_Button.Text = "Policy Editor";
+                    this.workflow_Label.Text = "Policy Editor";
                     this.page1_Button.Text = "Select Policy";
                     this.page2_Button.Text = "Policy Rules";
                     this.page3_Button.Text = "Signing Rules";
@@ -1613,12 +1613,12 @@ namespace WDAC_Wizard
                     break;
 
                 case WDAC_Policy.PolicyType.Merge: // merger
-                    this.workflow_Button.Visible = true;
+                    this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
                     this.page2_Button.Visible = true;
                     this.page3_Button.Visible = false;
                     this.page4_Button.Visible = false;
-                    this.workflow_Button.Text = "Policy Merger";
+                    this.workflow_Label.Text = "Policy Merger";
                     this.page1_Button.Text = "Select Policies";
                     this.page2_Button.Text = "Creating Policy";
 
@@ -1629,23 +1629,23 @@ namespace WDAC_Wizard
                     switch(this.view)
                     {
                         case 1: // New policy
-                            this.workflow_Button.Visible = true;
+                            this.workflow_Label.Visible = true;
                             this.page1_Button.Visible = true;
                             this.page2_Button.Visible = false;
                             this.page3_Button.Visible = false;
                             this.page4_Button.Visible = false;
                             this.page5_Button.Visible = false;
-                            this.workflow_Button.Text = "Policy Creator";
+                            this.workflow_Label.Text = "Policy Creator";
                             this.page1_Button.Text = "Policy Type";
                             break;
 
                         case 2: // view policy
-                            this.workflow_Button.Visible = true;
+                            this.workflow_Label.Visible = true;
                             this.page1_Button.Visible = true;
                             this.page2_Button.Visible = true;
                             this.page3_Button.Visible = true;
                             this.page4_Button.Visible = true;
-                            this.workflow_Button.Text = "Policy Editor";
+                            this.workflow_Label.Text = "Policy Editor";
                             this.page1_Button.Text = "Select Policy";
                             this.page2_Button.Text = "Policy Rules";
                             this.page3_Button.Text = "Signing Rules";
@@ -1661,7 +1661,7 @@ namespace WDAC_Wizard
 
 
                 default:
-                    this.workflow_Button.Visible = false;
+                    this.workflow_Label.Visible = false;
                     this.page1_Button.Visible = false;
                     this.page2_Button.Visible = false;
                     this.page3_Button.Visible = false;
