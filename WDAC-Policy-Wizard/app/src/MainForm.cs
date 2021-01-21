@@ -736,7 +736,12 @@ namespace WDAC_Wizard
             SetAdditionalParameters(worker);
 
             // Convert the policy from XML to Bin -- v2 
-            // ConvertToBinary();
+            if (Properties.Settings.Default.convertPolicyToBinary)
+            {
+                ConvertPolicyToBinary();
+            }
+
+            worker.ReportProgress(100);
         }
 
         /// <summary>
@@ -847,7 +852,9 @@ namespace WDAC_Wizard
             }
 
             // If multiple policy format setting is enabled, set the Supplemental (rule #17) option
-            if (Properties.Settings.Default.createMultiPolicyByDefault && this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy )
+            // TODO read this setting from policy object instead
+            // Properties.Settings.Default.createMultiPolicyByDefault &&
+            if ( this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy )
             {
                 this.Policy._Format = WDAC_Policy.Format.MultiPolicy;
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17", this.Policy.TemplatePath));
@@ -1240,18 +1247,17 @@ namespace WDAC_Wizard
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(String.Format("Exception encountered: {0}", e));
+                    this.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
                 }
             }
             
             runspace.Dispose();
-            worker.ReportProgress(100);
         }
 
         /// <summary>
         /// Method to convert the xml policy file into a binary CI policy file
         /// </summary>
-        public bool ConvertToBinary()
+        public bool ConvertPolicyToBinary()
         {
             // Operations: Converts the xml schema into a binary policy
             this.Log.AddInfoMsg("-- Converting to Binary --");
@@ -1260,13 +1266,24 @@ namespace WDAC_Wizard
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
-            string binaryFilePath = this.Policy.SchemaPath.Substring(0, this.Policy.SchemaPath.Length - 4) + ".bin"; //remove the .xml --> .bin
+
+            string binaryFilePath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), Path.GetFileNameWithoutExtension(this.Policy.SchemaPath)) + ".bin"; //stripped the path remove the .xml --> .bin
+
             string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"",
                 this.Policy.SchemaPath, binaryFilePath);
 
             pipeline.Commands.AddScript(binConvertCmd);
-            Collection<PSObject> results = pipeline.Invoke();
-            return true; 
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+                return true;
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Exception encountered in ConvertPolicyToBinary(): {0}", exp));
+                return false; 
+            }
         }
 
         //
