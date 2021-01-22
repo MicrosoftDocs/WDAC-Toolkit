@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
   <VersionEx>10.0.0.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
@@ -2127,27 +2127,17 @@
     <CiSigner SignerId="ID_SIGNER_S_316_1_2" />
   </CiSigners>
   <HvciOptions>0</HvciOptions>
-  <BasePolicyID>{8283AC0F-FFF1-49AE-ADA1-8A933130CAD6}</BasePolicyID>
-  <PolicyID>{8283AC0F-FFF1-49AE-ADA1-8A933130CAD6}</PolicyID>
+  <BasePolicyID>{6796CCC4-E1E5-4E20-A2B4-C2A4589CDB96}</BasePolicyID>
+  <PolicyID>{6796CCC4-E1E5-4E20-A2B4-C2A4589CDB96}</PolicyID>
   <Settings>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>
-        <String>NightsWatchSelfhostVAIL</String>
+        <String>SignedAndReputable</String>
       </Value>
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
         <String>080519</String>
-      </Value>
-    </Setting>
-    <Setting Provider="VAILSettings" Key="VAILPolicy" ValueName="Enforced">
-      <Value>
-        <Boolean>true</Boolean>
-      </Value>
-    </Setting>
-    <Setting Provider="AllHostIds" Key="AllKeys" ValueName="EnterpriseDefinedClsId">
-      <Value>
-        <Boolean>true</Boolean>
       </Value>
     </Setting>
   </Settings>

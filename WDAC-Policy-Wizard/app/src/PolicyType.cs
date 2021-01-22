@@ -40,6 +40,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void BasePolicy_Selected(object sender, EventArgs e)
         {
+            this.suppPolicy_PictureBox.Tag = "Unselected";
+            this.basePolicy_PictureBox.Tag = "Selected";
+
             // New base policy selected
             if (this._Policy._PolicyType != WDAC_Policy.PolicyType.BasePolicy)
                 this._MainWindow.RedoFlowRequired = true; 
@@ -60,6 +63,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void SupplementalPolicy_Selected(object sender, EventArgs e)
         {
+            this.suppPolicy_PictureBox.Tag = "Selected";
+            this.basePolicy_PictureBox.Tag = "Unselected"; 
+
             // Require >= 1903 for multiple policy formats - show UI notification 
             if (this._Policy.GetWinVersion() < 1903)
                 MessageBox.Show("The multiple policy format will not work on pre-1903 systems","Multiple Policy Format Attention", 
@@ -341,27 +347,36 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
-        private void radioButton_MultiPolicy_CheckedChanged(object sender, EventArgs e)
-        {
-            SetPolicyPage(); 
-        }
 
-        private void radioButton_LegacyFormat_CheckedChanged(object sender, EventArgs e)
+        private void multipleFormat_ButtonClick(object sender, EventArgs e)
         {
-            SetPolicyPage();
-        }
+            // Show the multi-policy UI panel
+            this.panel_MultiPolicy.Visible = true;
 
-        private void SetPolicyPage()
-        {
-            if(this.radioButton_MultiPolicy.Checked)
+            // Just call into the events to reset the UI
+            if (this.basePolicy_PictureBox.Tag.ToString().Contains("Unselected"))
             {
-                // Show panel
-                this.panel_MultiPolicy.Visible = true; 
+                SupplementalPolicy_Selected(sender, e);
             }
             else
             {
-                this.panel_MultiPolicy.Visible = false; 
+                BasePolicy_Selected(sender, e);
             }
+
+            // Set policy format in Policy object
+            this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+        }
+
+        private void singleFormat_ButtonClick(object sender, EventArgs e)
+        {
+            // UI changes - Hide the panel
+            this.panel_MultiPolicy.Visible = false;
+            this._MainWindow.ErrorOnPage = false;
+
+            // Set policy format in Policy object
+            this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
+            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString()); 
         }
     }
 }

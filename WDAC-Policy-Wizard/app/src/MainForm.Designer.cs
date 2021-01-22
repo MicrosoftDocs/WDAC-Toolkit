@@ -40,6 +40,7 @@ namespace WDAC_Wizard
             this.button_Edit = new System.Windows.Forms.Button();
             this.button_Merge = new System.Windows.Forms.Button();
             this.control_Panel = new System.Windows.Forms.Panel();
+            this.workflow_Label = new System.Windows.Forms.Label();
             this.page5_Button = new System.Windows.Forms.Button();
             this.page4_Button = new System.Windows.Forms.Button();
             this.page3_Button = new System.Windows.Forms.Button();
@@ -53,8 +54,6 @@ namespace WDAC_Wizard
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.workflow_Label = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.control_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -160,6 +159,17 @@ namespace WDAC_Wizard
             this.control_Panel.Name = "control_Panel";
             this.control_Panel.Size = new System.Drawing.Size(150, 700);
             this.control_Panel.TabIndex = 30;
+            // 
+            // workflow_Label
+            // 
+            this.workflow_Label.AutoSize = true;
+            this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.workflow_Label.Location = new System.Drawing.Point(12, 162);
+            this.workflow_Label.Name = "workflow_Label";
+            this.workflow_Label.Size = new System.Drawing.Size(79, 21);
+            this.workflow_Label.TabIndex = 40;
+            this.workflow_Label.Text = "Workflow";
+            this.workflow_Label.Visible = false;
             // 
             // page5_Button
             // 
@@ -377,36 +387,12 @@ namespace WDAC_Wizard
             this.label4.TabIndex = 35;
             this.label4.Text = "Merge two existing policies into one\r\n";
             // 
-            // workflow_Label
-            // 
-            this.workflow_Label.AutoSize = true;
-            this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.workflow_Label.Location = new System.Drawing.Point(12, 162);
-            this.workflow_Label.Name = "workflow_Label";
-            this.workflow_Label.Size = new System.Drawing.Size(79, 21);
-            this.workflow_Label.TabIndex = 40;
-            this.workflow_Label.Text = "Workflow";
-            this.workflow_Label.Visible = false;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Tahoma", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(299, 509);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(129, 18);
-            this.radioButton1.TabIndex = 36;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Multi-Policy Format";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1232, 703);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -456,7 +442,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label workflow_Label;
-        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
 
