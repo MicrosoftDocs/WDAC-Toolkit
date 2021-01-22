@@ -385,7 +385,7 @@ namespace WDAC_Wizard
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(437, 18);
             this.label9.TabIndex = 104;
-            this.label9.Text = "Create a WDAC policy to be deployed on any Windows 10 device.\r\n";
+            this.label9.Text = "Create a WDAC policy to be deployed on any Windows 10 device, including Server 2016 and 2019.\r\n";
             // 
             // radioButton_MultiplePolicy
             // 
