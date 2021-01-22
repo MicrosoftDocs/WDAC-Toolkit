@@ -828,9 +828,10 @@ namespace WDAC_Wizard
             
             int N_Rules = 19; 
             for(int i = 0; i <= N_Rules; i++)
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ",
-                    this.Policy.TemplatePath, i));
-            
+            {
+                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", this.Policy.TemplatePath, i));
+            }
+                            
 
             foreach (string key in keys)
             {

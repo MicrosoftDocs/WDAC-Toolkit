@@ -376,7 +376,10 @@ namespace WDAC_Wizard
 
             // Set policy format in Policy object
             this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
-            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString()); 
+            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+
+            // Set policy type 
+            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
         }
     }
 }
