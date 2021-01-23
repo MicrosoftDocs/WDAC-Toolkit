@@ -110,6 +110,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to wdac-wizard-logs.
+        /// </summary>
+        internal static string BlobContainerString {
+            get {
+                return ResourceManager.GetString("BlobContainerString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Used when the WDAC policy is in enforcement mode. When a driver fails during startup, the WDAC policy will be placed in audit mode so that Windows will load..
         /// </summary>
         internal static string BootAudit_Info {

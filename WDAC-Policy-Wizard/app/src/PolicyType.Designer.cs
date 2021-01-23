@@ -53,7 +53,7 @@ namespace WDAC_Wizard
             this.suppPolicy_PictureBox = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.SupplementalInfoLabel = new System.Windows.Forms.Label();
+            this.label_LearnMore = new System.Windows.Forms.Label();
             this.panel_MultiPolicy = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -115,7 +115,7 @@ namespace WDAC_Wizard
             this.panelSupplName.Controls.Add(this.label6);
             this.panelSupplName.Controls.Add(this.textBoxSuppPath);
             this.panelSupplName.Controls.Add(this.label_fileLocation);
-            this.panelSupplName.Location = new System.Drawing.Point(6, 194);
+            this.panelSupplName.Location = new System.Drawing.Point(6, 165);
             this.panelSupplName.Margin = new System.Windows.Forms.Padding(2);
             this.panelSupplName.Name = "panelSupplName";
             this.panelSupplName.Size = new System.Drawing.Size(811, 262);
@@ -332,24 +332,23 @@ namespace WDAC_Wizard
             this.label4.TabIndex = 15;
             this.label4.Text = "Creates a code integrity policy to expand a pre-existing base policy. ";
             // 
-            // SupplementalInfoLabel
+            // label_LearnMore
             // 
-            this.SupplementalInfoLabel.AutoSize = true;
-            this.SupplementalInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.SupplementalInfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.SupplementalInfoLabel.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
-            this.SupplementalInfoLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.SupplementalInfoLabel.Location = new System.Drawing.Point(41, 148);
-            this.SupplementalInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.SupplementalInfoLabel.Name = "SupplementalInfoLabel";
-            this.SupplementalInfoLabel.Size = new System.Drawing.Size(232, 18);
-            this.SupplementalInfoLabel.TabIndex = 98;
-            this.SupplementalInfoLabel.Text = "What is a supplemental policy?     \r\n";
-            this.SupplementalInfoLabel.Click += new System.EventHandler(this.SupplementalInfoLabel_Click);
+            this.label_LearnMore.AutoSize = true;
+            this.label_LearnMore.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.label_LearnMore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.label_LearnMore.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.label_LearnMore.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_LearnMore.Location = new System.Drawing.Point(198, 193);
+            this.label_LearnMore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_LearnMore.Name = "label_LearnMore";
+            this.label_LearnMore.Size = new System.Drawing.Size(287, 18);
+            this.label_LearnMore.TabIndex = 98;
+            this.label_LearnMore.Text = "Learn more about multiple policy format    ";
+            this.label_LearnMore.Click += new System.EventHandler(this.label_LearnMore_Click);
             // 
             // panel_MultiPolicy
             // 
-            this.panel_MultiPolicy.Controls.Add(this.SupplementalInfoLabel);
             this.panel_MultiPolicy.Controls.Add(this.label4);
             this.panel_MultiPolicy.Controls.Add(this.label3);
             this.panel_MultiPolicy.Controls.Add(this.suppPolicy_PictureBox);
@@ -383,9 +382,10 @@ namespace WDAC_Wizard
             this.label9.Location = new System.Drawing.Point(198, 103);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(437, 18);
+            this.label9.Size = new System.Drawing.Size(650, 18);
             this.label9.TabIndex = 104;
-            this.label9.Text = "Create a WDAC policy to be deployed on any Windows 10 device, including Server 2016 and 2019.\r\n";
+            this.label9.Text = "Create a WDAC policy to be deployed on any Windows 10 device, including Server 20" +
+    "16 and 2019.\r\n";
             // 
             // radioButton_MultiplePolicy
             // 
@@ -419,6 +419,7 @@ namespace WDAC_Wizard
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.label_LearnMore);
             this.Controls.Add(this.radioButton_SinglePolicy);
             this.Controls.Add(this.radioButton_MultiplePolicy);
             this.Controls.Add(this.label9);
@@ -429,6 +430,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PolicyType";
             this.Size = new System.Drawing.Size(1172, 782);
+            this.Load += new System.EventHandler(this.PolicyType_Load);
             this.panelSupplName.ResumeLayout(false);
             this.panelSupplName.PerformLayout();
             this.panelSuppl_Base.ResumeLayout(false);
@@ -468,7 +470,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.PictureBox suppPolicy_PictureBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label SupplementalInfoLabel;
+        private System.Windows.Forms.Label label_LearnMore;
         private System.Windows.Forms.Panel panel_MultiPolicy;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;

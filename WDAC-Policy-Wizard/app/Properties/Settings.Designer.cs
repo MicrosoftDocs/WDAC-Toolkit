@@ -61,18 +61,6 @@ namespace WDAC_Wizard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("wdac-wizard-logs")]
-        public string BlobContainerString {
-            get {
-                return ((string)(this["BlobContainerString"]));
-            }
-            set {
-                this["BlobContainerString"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool convertPolicyToBinary {
             get {
@@ -80,6 +68,18 @@ namespace WDAC_Wizard.Properties {
             }
             set {
                 this["convertPolicyToBinary"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showMultiplePolicyDefault {
+            get {
+                return ((bool)(this["showMultiplePolicyDefault"]));
+            }
+            set {
+                this["showMultiplePolicyDefault"] = value;
             }
         }
     }

@@ -328,4 +328,7 @@
   <data name="InvalidSupplementalRule_Info" xml:space="preserve">
     <value>This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented.</value>
   </data>
+  <data name="BlobContainerString" xml:space="preserve">
+    <value>wdac-wizard-logs</value>
+  </data>
 </root>
