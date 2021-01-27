@@ -199,11 +199,17 @@ namespace WDAC_Wizard
 
         private void SetSettingsValues(Dictionary<string, bool> settingDict)
         {
-           
             // if the setting is set to false, otherwise keep the default UI state of checked
             foreach (var settingName in settingDict.Keys)
             {
+                // Skip this setting, there is no checkbox to update
+                if(settingName.Contains("showMultiplePolicyDefault"))
+                {
+                    continue; 
+                }
+                
                 string checkBoxName = settingName + "_CheckBox"; 
+                
                 if(!settingDict[settingName]) //False case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
@@ -215,6 +221,7 @@ namespace WDAC_Wizard
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
                 }
 
+                Properties.Settings.Default.Reset(); 
                 this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
             }
 

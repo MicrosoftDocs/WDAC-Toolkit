@@ -439,7 +439,6 @@
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Enforced.xml" />
-    <Resource Include="Resources\policyTemplates\WinSiPolicy.xml" />
     <None Include="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
     </None>

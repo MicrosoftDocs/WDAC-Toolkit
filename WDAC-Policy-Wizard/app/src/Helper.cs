@@ -456,7 +456,7 @@ namespace WDAC_Wizard
                 // Create Azure blob and container reference
                 CloudBlobClient blobClient = storageacc.CreateCloudBlobClient();
 
-                String blobContainerName = Properties.Settings.Default.BlobContainerString;
+                String blobContainerName = Properties.Resources.BlobContainerString;
                 CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
                 container.CreateIfNotExists();
 

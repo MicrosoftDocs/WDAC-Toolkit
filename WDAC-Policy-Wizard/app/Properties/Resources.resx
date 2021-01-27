@@ -211,9 +211,6 @@
   <data name="AdvancedBootOpts_Info" xml:space="preserve">
     <value>The F8 preboot menu is disabled by default. This rule option allows the F8 menu to appear to physically present users.</value>
   </data>
-  <data name="WinSiPolicy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\policyTemplates\WinSiPolicy.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="shield" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\shield.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -330,5 +327,8 @@
   </data>
   <data name="InvalidSupplementalRule_Info" xml:space="preserve">
     <value>This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented.</value>
+  </data>
+  <data name="BlobContainerString" xml:space="preserve">
+    <value>wdac-wizard-logs</value>
   </data>
 </root>

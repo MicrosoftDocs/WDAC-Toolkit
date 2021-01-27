@@ -110,6 +110,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to wdac-wizard-logs.
+        /// </summary>
+        internal static string BlobContainerString {
+            get {
+                return ResourceManager.GetString("BlobContainerString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Used when the WDAC policy is in enforcement mode. When a driver fails during startup, the WDAC policy will be placed in audit mode so that Windows will load..
         /// </summary>
         internal static string BootAudit_Info {
@@ -500,7 +509,7 @@ namespace WDAC_Wizard.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; PolicyType=&quot;Base Policy&quot;&gt;
+        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot;&gt;
         ///  &lt;VersionEx&gt;10.0.0.0&lt;/VersionEx&gt;
         ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
         ///  &lt;Rules&gt;
@@ -514,7 +523,8 @@ namespace WDAC_Wizard.Properties {
         ///      &lt;Option&gt;Enabled:UMCI&lt;/Option&gt;
         ///    &lt;/Rule&gt;
         ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Inherit D [rest of string was truncated]&quot;;.
+        ///      &lt;Option&gt;Enabled:Inherit Default Policy&lt;/Option&gt;
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SignedReputable {
             get {
@@ -742,26 +752,6 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("windows_logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; FriendlyName=&quot;Windows 10 S Lockdown Policy&quot; PolicyType=&quot;Base Policy&quot;&gt;
-        ///  &lt;VersionEx&gt;10.0.15039.0&lt;/VersionEx&gt;
-        ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
-        ///  &lt;PolicyID&gt;{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}&lt;/PolicyID&gt;
-        ///  &lt;BasePolicyID&gt;{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}&lt;/BasePolicyID&gt;
-        ///  &lt;Rules&gt;
-        ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Advanced Boot Options Menu&lt;/Option&gt;
-        ///    &lt;/Rule&gt;
-        ///    &lt;Rule&gt;
-        ///  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string WinSiPolicy {
-            get {
-                return ResourceManager.GetString("WinSiPolicy", resourceCulture);
             }
         }
     }

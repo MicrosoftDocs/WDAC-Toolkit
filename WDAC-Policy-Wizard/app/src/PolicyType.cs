@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
+using Windows.System.Profile;
 
 namespace WDAC_Wizard
 {
@@ -39,6 +40,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void BasePolicy_Selected(object sender, EventArgs e)
         {
+            this.suppPolicy_PictureBox.Tag = "Unselected";
+            this.basePolicy_PictureBox.Tag = "Selected";
+
             // New base policy selected
             if (this._Policy._PolicyType != WDAC_Policy.PolicyType.BasePolicy)
                 this._MainWindow.RedoFlowRequired = true; 
@@ -59,6 +63,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void SupplementalPolicy_Selected(object sender, EventArgs e)
         {
+            this.suppPolicy_PictureBox.Tag = "Selected";
+            this.basePolicy_PictureBox.Tag = "Unselected"; 
+
             // Require >= 1903 for multiple policy formats - show UI notification 
             if (this._Policy.GetWinVersion() < 1903)
                 MessageBox.Show("The multiple policy format will not work on pre-1903 systems","Multiple Policy Format Attention", 
@@ -257,24 +264,6 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
         }
 
-        /// <summary>
-        /// Launches the multi-policy info webpage when the info label is clicked.  
-        /// </summary>
-        private void SupplementalInfoLabel_Click(object sender, EventArgs e)
-        {
-            // multi-policy info label clicked. Launch multi-policy info webpage
-            try
-            {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/" +
-                    "deploy-multiple-windows-defender-application-control-policies";
-                System.Diagnostics.Process.Start(webpage);
-            }
-            catch (Exception exp)
-            {
-                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
-            }
-        }
-
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
             string dateString = this._MainWindow.formatDate(false);
@@ -340,9 +329,76 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+
+        private void multipleFormat_ButtonClick(object sender, EventArgs e)
         {
-            // Modify the policy in the DoWork function
+            // Show the multi-policy UI panel
+            this.panel_MultiPolicy.Visible = true;
+
+            // Set the setting to show this radio button selected next page load
+            Properties.Settings.Default.showMultiplePolicyDefault = true; 
+
+
+            // Just call into the events to reset the UI
+            if (this.basePolicy_PictureBox.Tag.ToString().Contains("Unselected"))
+            {
+                SupplementalPolicy_Selected(sender, e);
+            }
+            else
+            {
+                BasePolicy_Selected(sender, e);
+            }
+
+            // Set policy format in Policy object
+            this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+        }
+
+        private void singleFormat_ButtonClick(object sender, EventArgs e)
+        {
+            // UI changes - Hide the panel
+            this.panel_MultiPolicy.Visible = false;
+            this._MainWindow.ErrorOnPage = false;
+
+            // Set the setting to show this radio button selected next page load
+            Properties.Settings.Default.showMultiplePolicyDefault = false;
+
+            // Set policy format in Policy object
+            this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
+            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+
+            // Set policy type 
+            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
+        }
+
+        private void PolicyType_Load(object sender, EventArgs e)
+        {
+            // On page load, check whether multiple or single policy format was chosen last time the page was loaded
+            if(Properties.Settings.Default.showMultiplePolicyDefault)
+            {
+                this.radioButton_MultiplePolicy.Checked = true;
+                this.radioButton_SinglePolicy.Checked = false;
+            }
+            else
+            {
+                this.radioButton_MultiplePolicy.Checked = false;
+                this.radioButton_SinglePolicy.Checked = true; 
+            }
+        }
+
+        private void label_LearnMore_Click(object sender, EventArgs e)
+        {
+            // multi-policy info label clicked. Launch multi-policy info webpage
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/" +
+                    "deploy-multiple-windows-defender-application-control-policies";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+            }
         }
     }
 }
