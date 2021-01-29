@@ -15,6 +15,9 @@
     <Rule>
       <Option>Required:Enforce Store Applications</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs />
