@@ -86,10 +86,9 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(195, 35);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(162, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(336, 34);
+            this.label1.Size = new System.Drawing.Size(288, 29);
             this.label1.TabIndex = 0;
             this.label1.Text = "Configure Policy Template";
             // 
@@ -98,10 +97,9 @@ namespace WDAC_Wizard
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(195, 83);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(162, 69);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(132, 24);
+            this.label2.Size = new System.Drawing.Size(113, 21);
             this.label2.TabIndex = 1;
             this.label2.Text = "Policy Rules";
             // 
@@ -110,11 +108,11 @@ namespace WDAC_Wizard
             this.label_11.AutoSize = true;
             this.label_11.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_11.ForeColor = System.Drawing.Color.Black;
-            this.label_11.Location = new System.Drawing.Point(615, 455);
-            this.label_11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_11.Location = new System.Drawing.Point(512, 379);
             this.label_11.Name = "label_11";
-            this.label_11.Size = new System.Drawing.Size(237, 24);
+            this.label_11.Size = new System.Drawing.Size(199, 21);
             this.label_11.TabIndex = 2;
+            this.label_11.Tag = "Enabled";
             this.label_11.Text = "User Mode Code Integrity";
             this.label_11.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -123,11 +121,11 @@ namespace WDAC_Wizard
             this.label_8.AutoSize = true;
             this.label_8.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_8.ForeColor = System.Drawing.Color.Black;
-            this.label_8.Location = new System.Drawing.Point(615, 275);
-            this.label_8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_8.Location = new System.Drawing.Point(512, 229);
             this.label_8.Name = "label_8";
-            this.label_8.Size = new System.Drawing.Size(140, 24);
+            this.label_8.Size = new System.Drawing.Size(118, 21);
             this.label_8.TabIndex = 7;
+            this.label_8.Tag = "Enabled";
             this.label_8.Text = "Require WHQL";
             this.label_8.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -136,11 +134,11 @@ namespace WDAC_Wizard
             this.label_6.AutoSize = true;
             this.label_6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_6.ForeColor = System.Drawing.Color.Black;
-            this.label_6.Location = new System.Drawing.Point(195, 717);
-            this.label_6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_6.Location = new System.Drawing.Point(162, 597);
             this.label_6.Name = "label_6";
-            this.label_6.Size = new System.Drawing.Size(110, 24);
+            this.label_6.Size = new System.Drawing.Size(94, 21);
             this.label_6.TabIndex = 9;
+            this.label_6.Tag = "Enabled";
             this.label_6.Text = "Audit Mode";
             // 
             // label7
@@ -148,10 +146,9 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(19, 445);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(16, 371);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(0, 24);
+            this.label7.Size = new System.Drawing.Size(0, 21);
             this.label7.TabIndex = 11;
             // 
             // button_5
@@ -161,10 +158,10 @@ namespace WDAC_Wizard
             this.button_5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_5.FlatAppearance.BorderSize = 0;
             this.button_5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_5.Location = new System.Drawing.Point(539, 505);
-            this.button_5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_5.Location = new System.Drawing.Point(449, 421);
+            this.button_5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_5.Name = "button_5";
-            this.button_5.Size = new System.Drawing.Size(48, 49);
+            this.button_5.Size = new System.Drawing.Size(40, 41);
             this.button_5.TabIndex = 12;
             this.button_5.Tag = "untoggle";
             this.button_5.UseVisualStyleBackColor = false;
@@ -177,10 +174,10 @@ namespace WDAC_Wizard
             this.button_3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_3.FlatAppearance.BorderSize = 0;
             this.button_3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_3.Location = new System.Drawing.Point(539, 385);
-            this.button_3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_3.Location = new System.Drawing.Point(449, 321);
+            this.button_3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_3.Name = "button_3";
-            this.button_3.Size = new System.Drawing.Size(48, 49);
+            this.button_3.Size = new System.Drawing.Size(40, 41);
             this.button_3.TabIndex = 10;
             this.button_3.Tag = "untoggle";
             this.button_3.UseVisualStyleBackColor = false;
@@ -193,10 +190,10 @@ namespace WDAC_Wizard
             this.button_2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_2.FlatAppearance.BorderSize = 0;
             this.button_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_2.Location = new System.Drawing.Point(539, 325);
-            this.button_2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_2.Location = new System.Drawing.Point(449, 271);
+            this.button_2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_2.Name = "button_2";
-            this.button_2.Size = new System.Drawing.Size(48, 49);
+            this.button_2.Size = new System.Drawing.Size(40, 41);
             this.button_2.TabIndex = 8;
             this.button_2.Tag = "untoggle";
             this.button_2.UseVisualStyleBackColor = false;
@@ -209,10 +206,10 @@ namespace WDAC_Wizard
             this.button_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_1.FlatAppearance.BorderSize = 0;
             this.button_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_1.Location = new System.Drawing.Point(539, 265);
-            this.button_1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_1.Location = new System.Drawing.Point(449, 221);
+            this.button_1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_1.Name = "button_1";
-            this.button_1.Size = new System.Drawing.Size(48, 49);
+            this.button_1.Size = new System.Drawing.Size(40, 41);
             this.button_1.TabIndex = 6;
             this.button_1.Tag = "untoggle";
             this.button_1.UseVisualStyleBackColor = false;
@@ -225,10 +222,10 @@ namespace WDAC_Wizard
             this.button_0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_0.FlatAppearance.BorderSize = 0;
             this.button_0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_0.Location = new System.Drawing.Point(539, 205);
-            this.button_0.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_0.Location = new System.Drawing.Point(449, 171);
+            this.button_0.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_0.Name = "button_0";
-            this.button_0.Size = new System.Drawing.Size(48, 49);
+            this.button_0.Size = new System.Drawing.Size(40, 41);
             this.button_0.TabIndex = 3;
             this.button_0.Tag = "untoggle";
             this.button_0.UseVisualStyleBackColor = false;
@@ -240,10 +237,9 @@ namespace WDAC_Wizard
             this.label_Info.BackColor = System.Drawing.Color.Transparent;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label_Info.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.label_Info.Location = new System.Drawing.Point(194, 780);
-            this.label_Info.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_Info.Location = new System.Drawing.Point(162, 650);
             this.label_Info.Name = "label_Info";
-            this.label_Info.Size = new System.Drawing.Size(84, 22);
+            this.label_Info.Size = new System.Drawing.Size(71, 18);
             this.label_Info.TabIndex = 13;
             this.label_Info.Text = "Info Text";
             this.label_Info.Visible = false;
@@ -255,10 +251,10 @@ namespace WDAC_Wizard
             this.button_6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_6.FlatAppearance.BorderSize = 0;
             this.button_6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_6.Location = new System.Drawing.Point(536, 707);
-            this.button_6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_6.Location = new System.Drawing.Point(447, 589);
+            this.button_6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_6.Name = "button_6";
-            this.button_6.Size = new System.Drawing.Size(48, 49);
+            this.button_6.Size = new System.Drawing.Size(40, 41);
             this.button_6.TabIndex = 15;
             this.button_6.Tag = "untoggle";
             this.button_6.UseVisualStyleBackColor = false;
@@ -269,11 +265,11 @@ namespace WDAC_Wizard
             this.label_10.AutoSize = true;
             this.label_10.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_10.ForeColor = System.Drawing.Color.Black;
-            this.label_10.Location = new System.Drawing.Point(615, 395);
-            this.label_10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_10.Location = new System.Drawing.Point(512, 329);
             this.label_10.Name = "label_10";
-            this.label_10.Size = new System.Drawing.Size(302, 24);
+            this.label_10.Size = new System.Drawing.Size(252, 21);
             this.label_10.TabIndex = 14;
+            this.label_10.Tag = "Enabled";
             this.label_10.Text = "Unsigned System Integrity Policy";
             this.label_10.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -284,10 +280,10 @@ namespace WDAC_Wizard
             this.button_17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_17.FlatAppearance.BorderSize = 0;
             this.button_17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_17.Location = new System.Drawing.Point(325, 215);
-            this.button_17.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_17.Location = new System.Drawing.Point(271, 179);
+            this.button_17.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_17.Name = "button_17";
-            this.button_17.Size = new System.Drawing.Size(48, 49);
+            this.button_17.Size = new System.Drawing.Size(40, 41);
             this.button_17.TabIndex = 27;
             this.button_17.Tag = "untoggle";
             this.button_17.UseVisualStyleBackColor = false;
@@ -298,11 +294,11 @@ namespace WDAC_Wizard
             this.label_1.AutoSize = true;
             this.label_1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_1.ForeColor = System.Drawing.Color.Black;
-            this.label_1.Location = new System.Drawing.Point(195, 275);
-            this.label_1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_1.Location = new System.Drawing.Point(162, 229);
             this.label_1.Name = "label_1";
-            this.label_1.Size = new System.Drawing.Size(258, 24);
+            this.label_1.Size = new System.Drawing.Size(216, 21);
             this.label_1.TabIndex = 26;
+            this.label_1.Tag = "Enabled";
             this.label_1.Text = "Allow Supplemental Policies";
             this.label_1.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -313,10 +309,10 @@ namespace WDAC_Wizard
             this.button_16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_16.FlatAppearance.BorderSize = 0;
             this.button_16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_16.Location = new System.Drawing.Point(325, 155);
-            this.button_16.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_16.Location = new System.Drawing.Point(271, 129);
+            this.button_16.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_16.Name = "button_16";
-            this.button_16.Size = new System.Drawing.Size(48, 49);
+            this.button_16.Size = new System.Drawing.Size(40, 41);
             this.button_16.TabIndex = 25;
             this.button_16.Tag = "untoggle";
             this.button_16.UseVisualStyleBackColor = false;
@@ -327,11 +323,11 @@ namespace WDAC_Wizard
             this.label_9.AutoSize = true;
             this.label_9.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_9.ForeColor = System.Drawing.Color.Black;
-            this.label_9.Location = new System.Drawing.Point(615, 335);
-            this.label_9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_9.Location = new System.Drawing.Point(512, 279);
             this.label_9.Name = "label_9";
-            this.label_9.Size = new System.Drawing.Size(300, 24);
+            this.label_9.Size = new System.Drawing.Size(251, 21);
             this.label_9.TabIndex = 24;
+            this.label_9.Tag = "Enabled";
             this.label_9.Text = "Update Policy without Rebooting";
             this.label_9.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -340,11 +336,11 @@ namespace WDAC_Wizard
             this.label_2.AutoSize = true;
             this.label_2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_2.ForeColor = System.Drawing.Color.Black;
-            this.label_2.Location = new System.Drawing.Point(195, 335);
-            this.label_2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_2.Location = new System.Drawing.Point(162, 279);
             this.label_2.Name = "label_2";
-            this.label_2.Size = new System.Drawing.Size(250, 24);
+            this.label_2.Size = new System.Drawing.Size(211, 21);
             this.label_2.TabIndex = 22;
+            this.label_2.Tag = "Enabled";
             this.label_2.Text = "Disable Script Enforcement";
             this.label_2.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -355,10 +351,10 @@ namespace WDAC_Wizard
             this.button_13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_13.FlatAppearance.BorderSize = 0;
             this.button_13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_13.Location = new System.Drawing.Point(325, 35);
-            this.button_13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_13.Location = new System.Drawing.Point(271, 29);
+            this.button_13.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_13.Name = "button_13";
-            this.button_13.Size = new System.Drawing.Size(48, 49);
+            this.button_13.Size = new System.Drawing.Size(40, 41);
             this.button_13.TabIndex = 21;
             this.button_13.Tag = "untoggle";
             this.button_13.UseVisualStyleBackColor = false;
@@ -369,11 +365,11 @@ namespace WDAC_Wizard
             this.label_7.AutoSize = true;
             this.label_7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_7.ForeColor = System.Drawing.Color.Black;
-            this.label_7.Location = new System.Drawing.Point(615, 215);
-            this.label_7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_7.Location = new System.Drawing.Point(512, 179);
             this.label_7.Name = "label_7";
-            this.label_7.Size = new System.Drawing.Size(170, 24);
+            this.label_7.Size = new System.Drawing.Size(143, 21);
             this.label_7.TabIndex = 20;
+            this.label_7.Tag = "Enabled";
             this.label_7.Text = "Managed Installer";
             this.label_7.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -382,11 +378,11 @@ namespace WDAC_Wizard
             this.label_3.AutoSize = true;
             this.label_3.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_3.ForeColor = System.Drawing.Color.Black;
-            this.label_3.Location = new System.Drawing.Point(195, 395);
-            this.label_3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_3.Location = new System.Drawing.Point(162, 329);
             this.label_3.Name = "label_3";
-            this.label_3.Size = new System.Drawing.Size(242, 24);
+            this.label_3.Size = new System.Drawing.Size(205, 21);
             this.label_3.TabIndex = 18;
+            this.label_3.Tag = "Enabled";
             this.label_3.Text = "Enforce Store Applications";
             this.label_3.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -397,10 +393,10 @@ namespace WDAC_Wizard
             this.button_11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_11.FlatAppearance.BorderSize = 0;
             this.button_11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_11.Location = new System.Drawing.Point(940, 445);
-            this.button_11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_11.Location = new System.Drawing.Point(783, 371);
+            this.button_11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_11.Name = "button_11";
-            this.button_11.Size = new System.Drawing.Size(48, 49);
+            this.button_11.Size = new System.Drawing.Size(40, 41);
             this.button_11.TabIndex = 17;
             this.button_11.Tag = "untoggle";
             this.button_11.UseVisualStyleBackColor = false;
@@ -411,11 +407,11 @@ namespace WDAC_Wizard
             this.label_5.AutoSize = true;
             this.label_5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_5.ForeColor = System.Drawing.Color.Black;
-            this.label_5.Location = new System.Drawing.Point(195, 515);
-            this.label_5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_5.Location = new System.Drawing.Point(162, 429);
             this.label_5.Name = "label_5";
-            this.label_5.Size = new System.Drawing.Size(237, 24);
+            this.label_5.Size = new System.Drawing.Size(198, 21);
             this.label_5.TabIndex = 16;
+            this.label_5.Tag = "Enabled";
             this.label_5.Text = "Intelligent Security Graph";
             this.label_5.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -426,10 +422,10 @@ namespace WDAC_Wizard
             this.button_18.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_18.FlatAppearance.BorderSize = 0;
             this.button_18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_18.Location = new System.Drawing.Point(325, 275);
-            this.button_18.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_18.Location = new System.Drawing.Point(271, 229);
+            this.button_18.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_18.Name = "button_18";
-            this.button_18.Size = new System.Drawing.Size(48, 49);
+            this.button_18.Size = new System.Drawing.Size(40, 41);
             this.button_18.TabIndex = 39;
             this.button_18.Tag = "untoggle";
             this.button_18.UseVisualStyleBackColor = false;
@@ -440,11 +436,11 @@ namespace WDAC_Wizard
             this.label_16.AutoSize = true;
             this.label_16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_16.ForeColor = System.Drawing.Color.Black;
-            this.label_16.Location = new System.Drawing.Point(15, 165);
-            this.label_16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_16.Location = new System.Drawing.Point(12, 137);
             this.label_16.Name = "label_16";
-            this.label_16.Size = new System.Drawing.Size(287, 24);
+            this.label_16.Size = new System.Drawing.Size(242, 21);
             this.label_16.TabIndex = 38;
+            this.label_16.Tag = "Enabled";
             this.label_16.Text = "Disable Runtime Filepath Rules";
             this.label_16.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -455,10 +451,10 @@ namespace WDAC_Wizard
             this.button_15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_15.FlatAppearance.BorderSize = 0;
             this.button_15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_15.Location = new System.Drawing.Point(325, 95);
-            this.button_15.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_15.Location = new System.Drawing.Point(271, 79);
+            this.button_15.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_15.Name = "button_15";
-            this.button_15.Size = new System.Drawing.Size(48, 49);
+            this.button_15.Size = new System.Drawing.Size(40, 41);
             this.button_15.TabIndex = 37;
             this.button_15.Tag = "untoggle";
             this.button_15.UseVisualStyleBackColor = false;
@@ -469,11 +465,11 @@ namespace WDAC_Wizard
             this.label_18.AutoSize = true;
             this.label_18.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_18.ForeColor = System.Drawing.Color.Black;
-            this.label_18.Location = new System.Drawing.Point(14, 285);
-            this.label_18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_18.Location = new System.Drawing.Point(12, 237);
             this.label_18.Name = "label_18";
-            this.label_18.Size = new System.Drawing.Size(234, 24);
+            this.label_18.Size = new System.Drawing.Size(198, 21);
             this.label_18.TabIndex = 36;
+            this.label_18.Tag = "Enabled";
             this.label_18.Text = "Invalidate EAs on Reboot";
             this.label_18.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -484,10 +480,10 @@ namespace WDAC_Wizard
             this.button_10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_10.FlatAppearance.BorderSize = 0;
             this.button_10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_10.Location = new System.Drawing.Point(940, 385);
-            this.button_10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_10.Location = new System.Drawing.Point(783, 321);
+            this.button_10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_10.Name = "button_10";
-            this.button_10.Size = new System.Drawing.Size(48, 49);
+            this.button_10.Size = new System.Drawing.Size(40, 41);
             this.button_10.TabIndex = 35;
             this.button_10.Tag = "untoggle";
             this.button_10.UseVisualStyleBackColor = false;
@@ -498,11 +494,11 @@ namespace WDAC_Wizard
             this.label_13.AutoSize = true;
             this.label_13.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_13.ForeColor = System.Drawing.Color.Black;
-            this.label_13.Location = new System.Drawing.Point(15, 45);
-            this.label_13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_13.Location = new System.Drawing.Point(12, 37);
             this.label_13.Name = "label_13";
-            this.label_13.Size = new System.Drawing.Size(197, 24);
+            this.label_13.Size = new System.Drawing.Size(166, 21);
             this.label_13.TabIndex = 34;
+            this.label_13.Tag = "Enabled";
             this.label_13.Text = "Boot Audit on Failure";
             this.label_13.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -513,10 +509,10 @@ namespace WDAC_Wizard
             this.button_8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_8.FlatAppearance.BorderSize = 0;
             this.button_8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_8.Location = new System.Drawing.Point(940, 265);
-            this.button_8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_8.Location = new System.Drawing.Point(783, 221);
+            this.button_8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_8.Name = "button_8";
-            this.button_8.Size = new System.Drawing.Size(48, 49);
+            this.button_8.Size = new System.Drawing.Size(40, 41);
             this.button_8.TabIndex = 33;
             this.button_8.Tag = "untoggle";
             this.button_8.UseVisualStyleBackColor = false;
@@ -529,10 +525,10 @@ namespace WDAC_Wizard
             this.button_7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_7.FlatAppearance.BorderSize = 0;
             this.button_7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_7.Location = new System.Drawing.Point(940, 205);
-            this.button_7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_7.Location = new System.Drawing.Point(783, 171);
+            this.button_7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_7.Name = "button_7";
-            this.button_7.Size = new System.Drawing.Size(48, 49);
+            this.button_7.Size = new System.Drawing.Size(40, 41);
             this.button_7.TabIndex = 31;
             this.button_7.Tag = "untoggle";
             this.button_7.UseVisualStyleBackColor = false;
@@ -543,11 +539,11 @@ namespace WDAC_Wizard
             this.label_19.AutoSize = true;
             this.label_19.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_19.ForeColor = System.Drawing.Color.Black;
-            this.label_19.Location = new System.Drawing.Point(16, 345);
-            this.label_19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_19.Location = new System.Drawing.Point(13, 287);
             this.label_19.Name = "label_19";
-            this.label_19.Size = new System.Drawing.Size(178, 24);
+            this.label_19.Size = new System.Drawing.Size(151, 21);
             this.label_19.TabIndex = 30;
+            this.label_19.Tag = "Enabled";
             this.label_19.Text = "Require EV Signers";
             this.label_19.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -556,11 +552,11 @@ namespace WDAC_Wizard
             this.label_15.AutoSize = true;
             this.label_15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_15.ForeColor = System.Drawing.Color.Black;
-            this.label_15.Location = new System.Drawing.Point(15, 105);
-            this.label_15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_15.Location = new System.Drawing.Point(12, 87);
             this.label_15.Name = "label_15";
-            this.label_15.Size = new System.Drawing.Size(202, 24);
+            this.label_15.Size = new System.Drawing.Size(169, 21);
             this.label_15.TabIndex = 28;
+            this.label_15.Tag = "Enabled";
             this.label_15.Text = "Disable Flight Signing";
             this.label_15.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -571,10 +567,10 @@ namespace WDAC_Wizard
             this.button_9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_9.FlatAppearance.BorderSize = 0;
             this.button_9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_9.Location = new System.Drawing.Point(940, 325);
-            this.button_9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_9.Location = new System.Drawing.Point(783, 271);
+            this.button_9.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_9.Name = "button_9";
-            this.button_9.Size = new System.Drawing.Size(48, 49);
+            this.button_9.Size = new System.Drawing.Size(40, 41);
             this.button_9.TabIndex = 41;
             this.button_9.Tag = "untoggle";
             this.button_9.UseVisualStyleBackColor = false;
@@ -585,11 +581,11 @@ namespace WDAC_Wizard
             this.label_0.AutoSize = true;
             this.label_0.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_0.ForeColor = System.Drawing.Color.Black;
-            this.label_0.Location = new System.Drawing.Point(195, 215);
-            this.label_0.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_0.Location = new System.Drawing.Point(162, 179);
             this.label_0.Name = "label_0";
-            this.label_0.Size = new System.Drawing.Size(271, 24);
+            this.label_0.Size = new System.Drawing.Size(228, 21);
             this.label_0.TabIndex = 40;
+            this.label_0.Tag = "Enabled";
             this.label_0.Text = "Advanced Boot Options Menu";
             this.label_0.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -600,10 +596,10 @@ namespace WDAC_Wizard
             this.button_HVCI.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_HVCI.FlatAppearance.BorderSize = 0;
             this.button_HVCI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_HVCI.Location = new System.Drawing.Point(539, 445);
-            this.button_HVCI.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_HVCI.Location = new System.Drawing.Point(449, 371);
+            this.button_HVCI.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_HVCI.Name = "button_HVCI";
-            this.button_HVCI.Size = new System.Drawing.Size(48, 49);
+            this.button_HVCI.Size = new System.Drawing.Size(40, 41);
             this.button_HVCI.TabIndex = 43;
             this.button_HVCI.Tag = "untoggle";
             this.button_HVCI.UseVisualStyleBackColor = false;
@@ -623,10 +619,10 @@ namespace WDAC_Wizard
             this.panel_AdvancedOptions.Controls.Add(this.label_15);
             this.panel_AdvancedOptions.Controls.Add(this.button_16);
             this.panel_AdvancedOptions.Controls.Add(this.button_13);
-            this.panel_AdvancedOptions.Location = new System.Drawing.Point(1012, 170);
-            this.panel_AdvancedOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.panel_AdvancedOptions.Location = new System.Drawing.Point(843, 142);
+            this.panel_AdvancedOptions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel_AdvancedOptions.Name = "panel_AdvancedOptions";
-            this.panel_AdvancedOptions.Size = new System.Drawing.Size(405, 588);
+            this.panel_AdvancedOptions.Size = new System.Drawing.Size(337, 490);
             this.panel_AdvancedOptions.TabIndex = 44;
             this.panel_AdvancedOptions.Visible = false;
             // 
@@ -637,10 +633,10 @@ namespace WDAC_Wizard
             this.button_19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_19.FlatAppearance.BorderSize = 0;
             this.button_19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_19.Location = new System.Drawing.Point(325, 335);
-            this.button_19.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_19.Location = new System.Drawing.Point(271, 279);
+            this.button_19.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_19.Name = "button_19";
-            this.button_19.Size = new System.Drawing.Size(48, 49);
+            this.button_19.Size = new System.Drawing.Size(40, 41);
             this.button_19.TabIndex = 41;
             this.button_19.Tag = "untoggle";
             this.button_19.UseVisualStyleBackColor = false;
@@ -651,11 +647,11 @@ namespace WDAC_Wizard
             this.label_17.AutoSize = true;
             this.label_17.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_17.ForeColor = System.Drawing.Color.Black;
-            this.label_17.Location = new System.Drawing.Point(15, 225);
-            this.label_17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_17.Location = new System.Drawing.Point(12, 187);
             this.label_17.Name = "label_17";
-            this.label_17.Size = new System.Drawing.Size(215, 24);
+            this.label_17.Size = new System.Drawing.Size(180, 21);
             this.label_17.TabIndex = 40;
+            this.label_17.Tag = "Enabled";
             this.label_17.Text = "Dynamic Code Security";
             this.label_17.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             // 
@@ -664,9 +660,10 @@ namespace WDAC_Wizard
             this.label_AdvancedOptions.AutoSize = true;
             this.label_AdvancedOptions.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_AdvancedOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.label_AdvancedOptions.Location = new System.Drawing.Point(1213, 135);
+            this.label_AdvancedOptions.Location = new System.Drawing.Point(1011, 112);
+            this.label_AdvancedOptions.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_AdvancedOptions.Name = "label_AdvancedOptions";
-            this.label_AdvancedOptions.Size = new System.Drawing.Size(172, 22);
+            this.label_AdvancedOptions.Size = new System.Drawing.Size(142, 18);
             this.label_AdvancedOptions.TabIndex = 45;
             this.label_AdvancedOptions.Text = "+ Advanced Options";
             this.label_AdvancedOptions.Click += new System.EventHandler(this.AdvancedOptions_ButtonClick);
@@ -676,10 +673,9 @@ namespace WDAC_Wizard
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label25.ForeColor = System.Drawing.Color.Black;
-            this.label25.Location = new System.Drawing.Point(195, 617);
-            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label25.Location = new System.Drawing.Point(162, 514);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(469, 24);
+            this.label25.Size = new System.Drawing.Size(402, 21);
             this.label25.TabIndex = 47;
             this.label25.Text = "Do you want to run this policy in audit mode?";
             // 
@@ -688,10 +684,9 @@ namespace WDAC_Wizard
             this.label_AuditMode.AutoSize = true;
             this.label_AuditMode.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label_AuditMode.ForeColor = System.Drawing.Color.Black;
-            this.label_AuditMode.Location = new System.Drawing.Point(195, 648);
-            this.label_AuditMode.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_AuditMode.Location = new System.Drawing.Point(162, 540);
             this.label_AuditMode.Name = "label_AuditMode";
-            this.label_AuditMode.Size = new System.Drawing.Size(761, 44);
+            this.label_AuditMode.Size = new System.Drawing.Size(616, 36);
             this.label_AuditMode.TabIndex = 48;
             this.label_AuditMode.Text = "Turning audit mode on will not enforce the policy. We recommend first running pol" +
     "icy in Audit \r\nMode prior to enforcement. ";
@@ -702,10 +697,9 @@ namespace WDAC_Wizard
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.ForeColor = System.Drawing.Color.Black;
-            this.label27.Location = new System.Drawing.Point(195, 125);
-            this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label27.Location = new System.Drawing.Point(162, 104);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(558, 22);
+            this.label27.Size = new System.Drawing.Size(466, 18);
             this.label27.TabIndex = 49;
             this.label27.Text = "The policy rules are pre-set based on the template you have chosen. ";
             // 
@@ -716,11 +710,11 @@ namespace WDAC_Wizard
             this.label_HVCI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_HVCI.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.label_HVCI.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label_HVCI.Location = new System.Drawing.Point(195, 455);
-            this.label_HVCI.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_HVCI.Location = new System.Drawing.Point(162, 379);
             this.label_HVCI.Name = "label_HVCI";
-            this.label_HVCI.Size = new System.Drawing.Size(334, 23);
+            this.label_HVCI.Size = new System.Drawing.Size(283, 19);
             this.label_HVCI.TabIndex = 42;
+            this.label_HVCI.Tag = "Enabled";
             this.label_HVCI.Text = "Hypervisor-protected Code Integrity    ";
             this.label_HVCI.Click += new System.EventHandler(this.HVCILabel_Click);
             this.label_HVCI.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
@@ -732,16 +726,17 @@ namespace WDAC_Wizard
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label4.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label4.Location = new System.Drawing.Point(197, 154);
+            this.label4.Location = new System.Drawing.Point(164, 128);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(295, 22);
+            this.label4.Size = new System.Drawing.Size(241, 18);
             this.label4.TabIndex = 50;
             this.label4.Text = "Learn more about policy options     ";
             this.label4.Click += new System.EventHandler(this.LabelPolicyOptions_Click);
             // 
             // ConfigTemplate_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.label4);
@@ -778,9 +773,9 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label_11);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ConfigTemplate_Control";
-            this.Size = new System.Drawing.Size(1450, 938);
+            this.Size = new System.Drawing.Size(1208, 782);
             this.Load += new System.EventHandler(this.SetDefaultButtonVals);
             this.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
             this.panel_AdvancedOptions.ResumeLayout(false);
