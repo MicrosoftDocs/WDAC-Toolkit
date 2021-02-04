@@ -99,7 +99,7 @@ namespace WDAC_Wizard
                     {
                         case "True":
                             this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "";
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
                             this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
                             break;
 
