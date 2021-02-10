@@ -69,7 +69,15 @@ namespace WDAC_Wizard
                     " debug your case." + Environment.NewLine + "Are you sure you want to disable this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (res == DialogResult.No)
-                    return;
+                {
+                    return; // will exit before Settings.Default[settingName] change
+                }
+                else
+                {
+                    // Final log :(
+                    this.Log.AddNewSeparationLine("Logging Disabled");
+                    this.Log.UploadLog(); 
+                }
             }
 
             // Check if system supports Multi-Policy before enabling
@@ -185,6 +193,8 @@ namespace WDAC_Wizard
         private void SettingsPage_Load(object sender, EventArgs e)
         {
             // On load, configure UI to match the app settings
+            this.Log.AddNewSeparationLine("Settings Page Load"); 
+
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default["useEnvVars"]);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default["useDefaultStrings"]);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default["allowTelemetry"]);
@@ -192,7 +202,9 @@ namespace WDAC_Wizard
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
+            {
                 this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
+            }
 
             SetSettingsValues(this.SettingsDict); 
         }
@@ -223,9 +235,7 @@ namespace WDAC_Wizard
 
                 Properties.Settings.Default.Reset(); 
                 this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
-            }
-
-            
+            }            
         }
 
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
