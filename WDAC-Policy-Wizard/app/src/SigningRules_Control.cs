@@ -582,8 +582,9 @@ namespace WDAC_Wizard
                         label_Error.Visible = true;
                         label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
                         this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                        return; 
                     }
-                    return;
+                    break;
 
                 case PolicyCustomRules.RuleLevel.Publisher:
                     if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A")
