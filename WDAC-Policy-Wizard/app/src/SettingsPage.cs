@@ -76,7 +76,10 @@ namespace WDAC_Wizard
                 {
                     // Final log :(
                     this.Log.AddNewSeparationLine("Logging Disabled");
-                    this.Log.UploadLog(); 
+                    this.Log.UploadLog();
+
+                    // new log object since upload closes and flushes current object
+                    this._MainWindow.Log = new Logger(this._MainWindow.TempFolderPath); 
                 }
             }
 
