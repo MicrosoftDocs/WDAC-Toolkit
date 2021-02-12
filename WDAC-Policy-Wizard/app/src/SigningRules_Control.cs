@@ -14,8 +14,7 @@ using System.Xml;
 using System.Xml.Serialization; 
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.ComponentModel;
-
+using System.ComponentModel; 
 
 namespace WDAC_Wizard
 {
@@ -239,17 +238,16 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
                 PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-                
-                //TODO: match the format in the configci cmdlets
-                VersionInfo versionInfo = new VersionInfo(refPath, "");
-
                 PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName)? "N/A": fileInfo.CompanyName);
                 PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? "N/A" : fileInfo.ProductName);
                 PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? "N/A" : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "N/A" : versionInfo.Version);
+                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "N/A" : fileInfo.FileVersion);
                 PolicyCustomRule.FileInfo.Add("FileName", Path.GetFileName(fileInfo.FileName)); //Get file name without path
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? "N/A" : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
+
+                //TODO: only get this if ruletype=publisher, other
+
 
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
@@ -568,7 +566,7 @@ namespace WDAC_Wizard
             }
 
             // Check to make sure none of the fields are invalid
-            switch(this.PolicyCustomRule.GetRuleLevel())
+            switch (this.PolicyCustomRule.GetRuleLevel())
             {
                 case PolicyCustomRules.RuleLevel.None:
                     label_Error.Visible = true;
@@ -577,12 +575,12 @@ namespace WDAC_Wizard
                     return;
 
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
-                    if(PolicyCustomRule.FileInfo["PCACertificate"] == "N/A")
+                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A")
                     {
                         label_Error.Visible = true;
                         label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
                         this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return; 
+                        return;
                     }
                     break;
 
@@ -604,7 +602,7 @@ namespace WDAC_Wizard
                         label_Error.Visible = true;
                         label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
                         this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return; 
+                        return;
                     }
                     break;
 
@@ -621,9 +619,8 @@ namespace WDAC_Wizard
 
 
                 default:
-                    break; 
+                    break;
             }
-
             // Add rule and exceptions to the table and master list & Scroll to new row index
            
             string action = String.Empty;
@@ -664,11 +661,11 @@ namespace WDAC_Wizard
                     break;
 
                 case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    name = String.Format("{0}: {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.InternalName:
-                    name = String.Format("{0}: {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FileDescription:
@@ -676,11 +673,11 @@ namespace WDAC_Wizard
                     break;
 
                 case PolicyCustomRules.RuleLevel.ProductName:
-                    name = String.Format("{0}: {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
                     break;
 
                 default:
-                    name = String.Format("{0}: {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
                     break;
 
             }
