@@ -10,7 +10,6 @@ using System.Xml.Serialization;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
-using Windows.System.Profile;
 
 namespace WDAC_Wizard
 {
