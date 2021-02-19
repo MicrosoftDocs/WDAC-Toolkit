@@ -24,7 +24,8 @@ namespace WDAC_Wizard
 
         private Logger Log;
         private MainWindow _MainWindow;
-        private SigningRules_Control SigningControl; 
+        private SigningRules_Control SigningControl;
+        private bool RuleInEdit = false; 
 
         public CustomRuleConditionsPanel(SigningRules_Control pControl)
         {
@@ -38,7 +39,8 @@ namespace WDAC_Wizard
             this._MainWindow.CustomRuleinProgress = false;
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
-            this.SigningControl = pControl; 
+            this.SigningControl = pControl;
+            this.RuleInEdit = true; 
         }
 
         /// <summary>
@@ -56,14 +58,72 @@ namespace WDAC_Wizard
             }
 
             // Check to make sure none of the fields are invalid
-            // If the selected attribute is not found (UI will show "N/A"), do not allow creation
+            // If the selected attribute is not found (UI will show Properties.Resources.DefaultFileAttributeString), do not allow creation
             if (this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0
-                && this.textBoxSlider_3.Text == "N/A"))
+                && this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString))
             {
                 label_Error.Visible = true;
                 label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
                 this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
                 return;
+            }
+
+            bool warnUser = false; 
+            switch(this.PolicyCustomRule.GetRuleLevel())
+            {
+                case PolicyCustomRules.RuleLevel.PcaCertificate:
+                    if(this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
+                    {
+                        warnUser = true;
+                        this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.Publisher:
+                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString || 
+                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
+                    {
+                        warnUser = true;
+                        this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.SignedVersion:
+                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString || 
+                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                        this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultVersionString)
+                    {
+                        warnUser = true;
+                        this.Log.AddWarningMsg("RuleLevel.SignedVersion rule attempt with null attribute(s)");
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.FilePublisher:
+                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                        this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultVersionString || 
+                        this.PolicyCustomRule.FileInfo["FileName"] == Properties.Resources.DefaultFileAttributeString)
+                    {
+                        warnUser = true;
+                        this.Log.AddWarningMsg("RuleLevel.FilePublisher rule attempt with null attribute(s)");
+                    }
+                    break;
+            }
+
+            if(warnUser)
+            {
+                DialogResult res = MessageBox.Show("One or more of the file attributes could not be found. Creating this rule may result in a hash rule if unsuccessful. " +
+                    "\n\nWould you like to proceed anyway?", "Proceed with Rule Creation?",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (res == DialogResult.Yes)
+                {
+                    this.Log.AddInfoMsg("Proceeding with Rule Creation anyway. Rule may fallback to hash"); 
+                }
+                else
+                {
+                    return; 
+                }
             }
 
             // Add rule and exceptions to the table and master list & Scroll to new row index
@@ -129,11 +189,13 @@ namespace WDAC_Wizard
             string[] stringArr = new string[5] { action , level, name, files, exceptions};
 
             // Offboard this to signingRules_Condition
-            this.SigningControl.AddRuleToTable(stringArr); 
+            this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser); 
 
             // Reset UI view
             ClearCustomRulesPanel(true);
             this._MainWindow.CustomRuleinProgress = false;
+            this.RuleInEdit = false;
+            this.PolicyCustomRule = new PolicyCustomRules(); 
         }
 
         /// <summary>
@@ -247,16 +309,13 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
                 PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-                PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? "N/A" : fileInfo.CompanyName);
-                PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? "N/A" : fileInfo.ProductName);
-                PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? "N/A" : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "N/A" : fileInfo.FileVersion);
-                PolicyCustomRule.FileInfo.Add("FileName", Path.GetFileName(fileInfo.FileName)); //Get file name without path
-                PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? "N/A" : fileInfo.FileDescription);
-                PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
-
-                //TODO: only get this if ruletype=publisher, other
-
+                PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
+                PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
+                PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
+                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileInfo.FileVersion);
+                PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
+                PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
+                PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
 
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
@@ -286,8 +345,8 @@ namespace WDAC_Wizard
                     settingsUpdateNotificationTimer.Start();
                 }
 
-                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? "N/A" : leafCertSubjectName);
-                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? "N/A" : pcaCertSubjectName);
+                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
+                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
 
             }
 
@@ -409,8 +468,7 @@ namespace WDAC_Wizard
                             trackBar_Conditions.Value = 0;
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
                             textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
-                                "and file name with a version at or above the specified version number.";
+                            publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo;
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
                         }
                         else if (pos > 2 && pos <= 6)
@@ -420,8 +478,7 @@ namespace WDAC_Wizard
                             this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
                             textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["FileVersion"];
                             textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
-                                "with a version at or above the specified version number.";
+                            publisherInfoLabel.Text = Properties.Resources.SignedVersionInfo; 
                             this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
                         }
                         else if (pos > 6 && pos <= 10)
@@ -432,8 +489,7 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["LeafCertificate"];
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
-
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher.";
+                            publisherInfoLabel.Text = Properties.Resources.PublisherInfo;
                             this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
                         }
                         else
@@ -445,12 +501,10 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = "*";
                             textBoxSlider_2.Text = "*";
                             textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this issuing CA subject name.";
+                            publisherInfoLabel.Text = Properties.Resources.PCACertificateInfo; 
                             this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
-
                         }
                     }
-
                     break;
 
 
@@ -470,7 +524,7 @@ namespace WDAC_Wizard
                             textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["InternalName"];
 
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_3.Text == "N/A")
+                            if (textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString)
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files with this internal name attribute.";
                             this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file internal name: {0}", textBoxSlider_3.Text));
@@ -483,7 +537,7 @@ namespace WDAC_Wizard
                             textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["ProductName"];
 
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_2.Text == "N/A")
+                            if (textBoxSlider_2.Text == Properties.Resources.DefaultFileAttributeString)
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files with this product name attribute.";
                             this.Log.AddInfoMsg(String.Format("Publisher file rule level set to product name: {0}", textBoxSlider_2.Text));
@@ -496,7 +550,7 @@ namespace WDAC_Wizard
                             textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["FileDescription"];
 
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_1.Text == "N/A")
+                            if (textBoxSlider_1.Text == Properties.Resources.DefaultFileAttributeString)
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
                             this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_1.Text));
@@ -509,7 +563,7 @@ namespace WDAC_Wizard
                             textBoxSlider_0.Text = this.PolicyCustomRule.FileInfo["OriginalFilename"];
 
                             // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_0.Text == "N/A")
+                            if (textBoxSlider_0.Text == Properties.Resources.DefaultFileAttributeString)
                                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
                             publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
                             this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
@@ -576,6 +630,31 @@ namespace WDAC_Wizard
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.label_Error.Visible = false;
+        }
+
+        private void CustomRulesPanel_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.RuleInEdit)
+            {
+                DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?", "Confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                {
+                    this.SigningControl.CustomRulesPanel_Closing();
+                    e.Cancel = false; 
+                }
+                else
+                {
+                    e.Cancel = true; 
+                }
+            }            
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            base.OnFormClosing(e);
         }
     }   
 }

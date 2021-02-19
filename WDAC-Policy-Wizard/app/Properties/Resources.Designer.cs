@@ -188,6 +188,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        internal static string DefaultFileAttributeString {
+            get {
+                return ResourceManager.GetString("DefaultFileAttributeString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.0.0.0.
+        /// </summary>
+        internal static string DefaultVersionString {
+            get {
+                return ResourceManager.GetString("DefaultVersionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot;&gt;
         ///  &lt;VersionEx&gt;10.0.1.0&lt;/VersionEx&gt;
@@ -253,6 +271,16 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("externalLink", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
+        ///and this original filename with a version at or above the specified version number..
+        /// </summary>
+        internal static string FilePublisherInfo {
+            get {
+                return ResourceManager.GetString("FilePublisherInfo", resourceCulture);
             }
         }
         
@@ -430,6 +458,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
+        /// </summary>
+        internal static string PCACertificateInfo {
+            get {
+                return ResourceManager.GetString("PCACertificateInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher..
+        /// </summary>
+        internal static string PublisherInfo {
+            get {
+                return ResourceManager.GetString("PublisherInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap question_sign1 {
@@ -529,6 +575,16 @@ namespace WDAC_Wizard.Properties {
         internal static string SignedReputable {
             get {
                 return ResourceManager.GetString("SignedReputable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
+        ///with a version at or above this specified version number..
+        /// </summary>
+        internal static string SignedVersionInfo {
+            get {
+                return ResourceManager.GetString("SignedVersionInfo", resourceCulture);
             }
         }
         

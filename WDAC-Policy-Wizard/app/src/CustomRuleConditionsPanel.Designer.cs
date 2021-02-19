@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
             this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.button_Create = new System.Windows.Forms.Button();
@@ -63,7 +64,7 @@
             // 
             // panel_CustomRules
             // 
-            this.panel_CustomRules.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_CustomRules.BackColor = System.Drawing.SystemColors.Control;
             this.panel_CustomRules.Controls.Add(this.publisherInfoLabel);
             this.panel_CustomRules.Controls.Add(this.button_Create);
             this.panel_CustomRules.Controls.Add(this.panel_FileFolder);
@@ -411,6 +412,7 @@
             this.label_Error.Size = new System.Drawing.Size(46, 17);
             this.label_Error.TabIndex = 87;
             this.label_Error.Text = "label1";
+            this.label_Error.Visible = false;
             // 
             // CustomRuleConditionsPanel
             // 
@@ -419,9 +421,11 @@
             this.ClientSize = new System.Drawing.Size(636, 721);
             this.Controls.Add(this.label_Error);
             this.Controls.Add(this.panel_CustomRules);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "CustomRuleConditionsPanel";
             this.Text = "Custom Rules ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
             this.panel_FileFolder.ResumeLayout(false);

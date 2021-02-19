@@ -30,6 +30,7 @@ namespace WDAC_Wizard
         private int RowSelected; // Data grid row number selected by the user 
         private int rowInEdit = -1;
         private DisplayObject displayObjectInEdit;
+        private CustomRuleConditionsPanel customRuleConditionsPanel = null; 
 
         // Declare an ArrayList to serve as the data store. 
         private System.Collections.ArrayList displayObjects =
@@ -73,11 +74,17 @@ namespace WDAC_Wizard
         private void label_AddCustomRules_Click(object sender, EventArgs e)
         {
             // Open the custom rules conditions panel
-            var _CustomRuleConditionsPanel = new CustomRuleConditionsPanel(this);
-            _CustomRuleConditionsPanel.Show(); 
-            _CustomRuleConditionsPanel.BringToFront();
-            _CustomRuleConditionsPanel.Focus();
 
+            if (this.customRuleConditionsPanel == null)
+            {
+                this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
+                this.customRuleConditionsPanel.Show();
+                this.customRuleConditionsPanel.BringToFront();
+                this.customRuleConditionsPanel.Focus();
+
+                this.label_AddCustomRules.Text = "- Custom Rules"; 
+            }
+            
             this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
         }
 
@@ -769,13 +776,13 @@ namespace WDAC_Wizard
             }
         }
 
-        public void AddRuleToTable(string [] displayObjectArray)
+        public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
             this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
             string action = displayObjectArray[0]; 
             string level = displayObjectArray[1];
-            string name = displayObjectArray[2];
+            string name = warnUser ? "*Hash* " + displayObjectArray[2] : displayObjectArray[2];
             string files = displayObjectArray[3];
             string exceptions = displayObjectArray[4];
 
@@ -784,14 +791,20 @@ namespace WDAC_Wizard
             this.rulesDataGrid.RowCount += 1;
 
             // Add custom list to RulesList
-            this.Policy.CustomRules.Add(this.PolicyCustomRule);
-            this.PolicyCustomRule = new PolicyCustomRules();
+            this.Policy.CustomRules.Add(customRule);
 
             // Scroll to bottom to see new rule added to list
             this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
 
             bubbleUp();
 
+        }
+
+        public void CustomRulesPanel_Closing()
+        {
+            // User has closed custom rules panel. Reset panel and text
+            this.customRuleConditionsPanel = null;
+            this.label_AddCustomRules.Text = "+ Custom Rules"; 
         }
 
     }
