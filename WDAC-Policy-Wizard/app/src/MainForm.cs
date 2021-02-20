@@ -961,7 +961,18 @@ namespace WDAC_Wizard
                 string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath); 
 
-                string ruleScript = createCustomRuleScript(customRule);
+                string ruleScript = createCustomRuleScript(customRule, false);
+
+                //  Process all exceptions, if applicable
+                if(customRule.ExceptionList.Count > 0)
+                {
+                    string[] exceptionListScripts = new string[customRule.ExceptionList.Count]; 
+                    for(int j = 0; j < customRule.ExceptionList.Count; j++ )
+                    {
+                        exceptionListScripts[j] = createCustomRuleScript(customRule.ExceptionList[j], true);
+                    }
+                }
+
                 string policyScript = createPolicyScript(customRule, tmpPolicyPath); 
 
                 // Add script to pipeline and run PS command
@@ -990,7 +1001,7 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
-        public string createCustomRuleScript(PolicyCustomRules customRule)
+        public string createCustomRuleScript(PolicyCustomRules customRule, bool isException)
         {
             string customRuleScript = string.Empty;
 
@@ -1037,8 +1048,10 @@ namespace WDAC_Wizard
             }
 
             // If this is a deny rule, append the Deny switch
-            if (customRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)
+            if (!isException && customRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)
+            {
                 customRuleScript += " -Deny";
+            }
 
             return customRuleScript; 
         }

@@ -339,7 +339,7 @@
   </data>
   <data name="FilePublisherInfo" xml:space="preserve">
     <value>This rule applies to all files signed by this issuing CA and publisher, 
-and this original filename with a version at or above the specified version number.</value>
+and this original filename with a version at or above the specified file version number.</value>
   </data>
   <data name="PCACertificateInfo" xml:space="preserve">
     <value>This rule applies to all files signed by a certificate from this issuing CA. </value>
@@ -349,6 +349,6 @@ and this original filename with a version at or above the specified version numb
   </data>
   <data name="SignedVersionInfo" xml:space="preserve">
     <value>This rule applies to all files signed by this issuing CA and publisher, 
-with a version at or above this specified version number.</value>
+with a version at or above this specified file version number.</value>
   </data>
 </root>

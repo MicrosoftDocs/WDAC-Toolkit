@@ -190,11 +190,13 @@
             // 
             // textBoxSlider_3
             // 
-            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_3.Location = new System.Drawing.Point(159, 146);
+            this.textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_3.Location = new System.Drawing.Point(159, 144);
             this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_3.Name = "textBoxSlider_3";
-            this.textBoxSlider_3.Size = new System.Drawing.Size(279, 24);
+            this.textBoxSlider_3.ReadOnly = true;
+            this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_3.TabIndex = 103;
             // 
             // labelSlider_3
@@ -211,11 +213,13 @@
             // 
             // textBoxSlider_2
             // 
-            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_2.Location = new System.Drawing.Point(159, 104);
+            this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_2.Location = new System.Drawing.Point(159, 102);
             this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_2.Name = "textBoxSlider_2";
-            this.textBoxSlider_2.Size = new System.Drawing.Size(279, 24);
+            this.textBoxSlider_2.ReadOnly = true;
+            this.textBoxSlider_2.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_2.TabIndex = 101;
             // 
             // labelSlider_2
@@ -232,11 +236,13 @@
             // 
             // textBoxSlider_1
             // 
-            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_1.Location = new System.Drawing.Point(159, 62);
+            this.textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_1.Location = new System.Drawing.Point(159, 60);
             this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_1.Name = "textBoxSlider_1";
-            this.textBoxSlider_1.Size = new System.Drawing.Size(279, 24);
+            this.textBoxSlider_1.ReadOnly = true;
+            this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_1.TabIndex = 99;
             // 
             // labelSlider_1
@@ -253,11 +259,13 @@
             // 
             // textBoxSlider_0
             // 
-            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxSlider_0.Location = new System.Drawing.Point(159, 21);
+            this.textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_0.Location = new System.Drawing.Point(159, 19);
             this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_0.Name = "textBoxSlider_0";
-            this.textBoxSlider_0.Size = new System.Drawing.Size(279, 24);
+            this.textBoxSlider_0.ReadOnly = true;
+            this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_0.TabIndex = 95;
             // 
             // labelSlider_0

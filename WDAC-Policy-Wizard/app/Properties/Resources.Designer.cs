@@ -276,7 +276,7 @@ namespace WDAC_Wizard.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
-        ///and this original filename with a version at or above the specified version number..
+        ///and this original filename with a version at or above the specified file version number..
         /// </summary>
         internal static string FilePublisherInfo {
             get {
@@ -580,7 +580,7 @@ namespace WDAC_Wizard.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
-        ///with a version at or above this specified version number..
+        ///with a version at or above this specified file version number..
         /// </summary>
         internal static string SignedVersionInfo {
             get {

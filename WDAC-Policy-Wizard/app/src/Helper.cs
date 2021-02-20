@@ -232,7 +232,7 @@ namespace WDAC_Wizard
         public List<string> FolderContents { get; set; }
 
         // Exception Params -- currently not supporting
-        public List<RuleException> ExceptionList { get; set; }
+        public List<PolicyCustomRules> ExceptionList { get; set; }
 
         // Constructors
         public PolicyCustomRules()
@@ -242,7 +242,7 @@ namespace WDAC_Wizard
             this.Permission = RulePermission.Allow; // Allow by default to match the default state of the UI
 
             this.FileInfo = new Dictionary<string, string>();
-            this.ExceptionList = new List<RuleException>();
+            this.ExceptionList = new List<PolicyCustomRules>();
             this.FolderContents = new List<string>();
         }
 
@@ -261,7 +261,7 @@ namespace WDAC_Wizard
             this.ReferenceFile = refFile;
             this.PSVariable = psVar;
             this.RuleIndex = ruleIndex;
-            this.ExceptionList = new List<RuleException>();
+            this.ExceptionList = new List<PolicyCustomRules>();
             this.FileInfo = new Dictionary<string, string>();
         }
 
@@ -302,13 +302,13 @@ namespace WDAC_Wizard
         }
 
         // Methods
-        public void AddException(string type, uint level, string[] fileInfo, string refFile)
+        public void AddException(PolicyCustomRules.RuleType type, PolicyCustomRules.RuleLevel level, Dictionary<string,string> fileInfo, string refFile)
         {
-            RuleException ruleException = new RuleException();
-            ruleException.ExceptionType = type;
-            ruleException.ExceptionLevel = level;
-            ruleException.ExceptionFileInfo = fileInfo;
-            ruleException.ExceptionReferenceFile = refFile;
+            PolicyCustomRules ruleException = new PolicyCustomRules();
+            ruleException.Type = type;
+            ruleException.Level = level;
+            ruleException.FileInfo = fileInfo;
+            ruleException.ReferenceFile = refFile;
 
             this.ExceptionList.Add(ruleException);
         }
@@ -350,7 +350,7 @@ namespace WDAC_Wizard
         }
     }
 
-    public class RuleException
+    public class RuleException : PolicyCustomRules
     {
         public string ExceptionType { get; set; } // Publisher, Path, Hash 
         public uint ExceptionLevel { get; set; } // 0= Publisher, 1=Prod name, 2=Filename

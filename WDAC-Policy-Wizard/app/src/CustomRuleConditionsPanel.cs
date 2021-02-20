@@ -367,6 +367,8 @@ namespace WDAC_Wizard
                     textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
                     textBoxSlider_3.Text = PolicyCustomRule.FileInfo["FileName"];
 
+                    textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); 
+
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true;
