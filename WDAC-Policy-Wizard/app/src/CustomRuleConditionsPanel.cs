@@ -350,6 +350,7 @@ namespace WDAC_Wizard
 
             }
 
+            // Set the landing UI depending on the Rule type
             switch (this.PolicyCustomRule.GetRuleType())
             {
                 case PolicyCustomRules.RuleType.Publisher:
@@ -357,10 +358,10 @@ namespace WDAC_Wizard
 
                     // UI
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    labelSlider_0.Text = @"Issuing CA:";
-                    labelSlider_1.Text = @"Publisher:";
-                    labelSlider_2.Text = @"File version:";
-                    labelSlider_3.Text = @"File name:";
+                    labelSlider_0.Text = "Issuing CA:";
+                    labelSlider_1.Text = "Publisher:";
+                    labelSlider_2.Text = "File version:";
+                    labelSlider_3.Text = "File name:";
                     textBoxSlider_0.Text = PolicyCustomRule.FileInfo["PCACertificate"];
                     textBoxSlider_1.Text = PolicyCustomRule.FileInfo["LeafCertificate"];
                     textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
@@ -369,8 +370,7 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this \r\n" +
-                        "file name with a version at or above the specified version number.";
+                    publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo; 
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
@@ -379,7 +379,9 @@ namespace WDAC_Wizard
                     PolicyCustomRule.ReferenceFile = getFolderLocation();
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
-                        break;
+                    {
+                        break; 
+                    }
 
                     // Custom rule in progress
                     this._MainWindow.CustomRuleinProgress = true;
@@ -406,10 +408,10 @@ namespace WDAC_Wizard
 
                     // UI 
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    labelSlider_0.Text = @"Original filename:";
-                    labelSlider_1.Text = @"File description:";
-                    labelSlider_2.Text = @"Product name:";
-                    labelSlider_3.Text = @"Internal name:";
+                    labelSlider_0.Text = "Original filename:";
+                    labelSlider_1.Text = "File description:";
+                    labelSlider_2.Text = "Product name:";
+                    labelSlider_3.Text = "Internal name:";
                     textBoxSlider_0.Text = PolicyCustomRule.FileInfo["OriginalFilename"];
                     textBoxSlider_1.Text = PolicyCustomRule.FileInfo["FileDescription"];
                     textBoxSlider_2.Text = PolicyCustomRule.FileInfo["ProductName"];

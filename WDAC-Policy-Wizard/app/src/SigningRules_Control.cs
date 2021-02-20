@@ -20,7 +20,6 @@ namespace WDAC_Wizard
     {
         // CI Policy objects
         public WDAC_Policy Policy;
-        private PolicyCustomRules PolicyCustomRule;     // One instance of a custom rule. Appended to Policy.CustomRules
         private List<string> AllFilesinFolder;          // List to track all files in a folder 
 
         private Logger Log;
@@ -40,7 +39,6 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
             this.Policy = pMainWindow.Policy; 
-            this.PolicyCustomRule = new PolicyCustomRules();
             this.AllFilesinFolder = new List<string>(); 
 
             this._MainWindow = pMainWindow;
@@ -427,31 +425,38 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
 
             // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete this rule?\n'{0}'", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (res == DialogResult.Yes)
             {
-                // New base policy Workflow -- check if there is a custom rule we must delete
-                if(!this.Policy._PolicyType.Equals(WDAC_Policy.PolicyType.Edit))
+                // Remove from UI
+                // Remove from DisplayObject
+                if (rowIdx < this.displayObjects.Count)
                 {
-                    if(this.Policy.CustomRules.Count > 0)
+                    this.displayObjects.RemoveAt(rowIdx);
+                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                }
+
+                // If the rule to delete is a new custom rule, we only need to delete it from the CustomRules struct
+                if (this.Policy.CustomRules.Count > 0)
+                {
+                    foreach(var customRule in this.Policy.CustomRules)
                     {
-                        foreach(var customRule in this.Policy.CustomRules)
+                        if(customRule.RowNumber == rowIdx)
                         {
-                            if(customRule.RowNumber == rowIdx)
-                            {
-                                this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
-                                this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
-                            }
-                            else
-                            {
-                                numIdex++;
-                            }
+                            this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
+                            return; 
+                        }
+                        else
+                        {
+                            numIdex++;
                         }
                     }
                 }
+                
 
-                // Remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
+                // Try to remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
                 numIdex = 0;
                 List<string> signerIDsToRemove = new List<string>();
 
@@ -701,13 +706,7 @@ namespace WDAC_Wizard
                 serializer.Serialize(writer, this.Policy.siPolicy);
                 writer.Close();
 
-                // Remove from UI
-                // Remove from DisplayObject
-                if (rowIdx < this.displayObjects.Count)
-                {
-                    this.displayObjects.RemoveAt(rowIdx);
-                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
-                }
+                
             }
         }
 
@@ -779,7 +778,7 @@ namespace WDAC_Wizard
         public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
-            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+            customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
             string action = displayObjectArray[0]; 
             string level = displayObjectArray[1];
             string name = warnUser ? "*Hash* " + displayObjectArray[2] : displayObjectArray[2];
@@ -797,7 +796,6 @@ namespace WDAC_Wizard
             this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
 
             bubbleUp();
-
         }
 
         public void CustomRulesPanel_Closing()
