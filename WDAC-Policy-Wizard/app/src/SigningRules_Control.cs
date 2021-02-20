@@ -456,7 +456,8 @@ namespace WDAC_Wizard
                 }
                 
 
-                // Try to remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
+                // Not a custom rule -- Try to remove from signers -- 
+                // use ID to remove from scenarios (Allowed/Denied signer)
                 numIdex = 0;
                 List<string> signerIDsToRemove = new List<string>();
 
@@ -699,14 +700,11 @@ namespace WDAC_Wizard
                     }
                 }
 
-
                 // Serialize to new policy
                 XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
                 StreamWriter writer = new StreamWriter(this.XmlPath);
                 serializer.Serialize(writer, this.Policy.siPolicy);
                 writer.Close();
-
-                
             }
         }
 
@@ -805,6 +803,21 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.Text = "+ Custom Rules"; 
         }
 
+        /// <summary>
+        /// Sets the back color to "highlight" for the checkbox picturebox when the user hovers the mouse over the label (button).  
+        /// </summary>
+        /// <param name="sender">Sender is the picturebox control </param>
+        private void AddCustomRules_MouseHover(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.WhiteSmoke;
+        }
+
+        private void AddCustomRules_MouseLeave(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.White;
+        }
     }
 
     // Class for the datastore

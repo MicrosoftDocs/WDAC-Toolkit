@@ -658,6 +658,7 @@ namespace WDAC_Wizard
             // label_AdvancedOptions
             // 
             this.label_AdvancedOptions.AutoSize = true;
+            this.label_AdvancedOptions.BackColor = System.Drawing.Color.White;
             this.label_AdvancedOptions.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_AdvancedOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_AdvancedOptions.Location = new System.Drawing.Point(1011, 112);
@@ -667,6 +668,8 @@ namespace WDAC_Wizard
             this.label_AdvancedOptions.TabIndex = 45;
             this.label_AdvancedOptions.Text = "+ Advanced Options";
             this.label_AdvancedOptions.Click += new System.EventHandler(this.AdvancedOptions_ButtonClick);
+            this.label_AdvancedOptions.MouseLeave += new System.EventHandler(this.AdvancedOptions_MouseLeave);
+            this.label_AdvancedOptions.MouseHover += new System.EventHandler(this.AdvancedOptions_MouseHover);
             // 
             // label25
             // 
