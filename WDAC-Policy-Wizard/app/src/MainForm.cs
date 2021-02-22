@@ -17,9 +17,8 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+using System.Security; 
+using System.Security.Permissions; 
 
 using Microsoft.Win32;
 using WDAC_Wizard.src;
@@ -1127,7 +1126,13 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.Log.AddInfoMsg("--- Merge Templates Policy ---");
+            // Check if user-writeable. If it is not, default to MyDocuments
+            if(!WriteAccess(Path.GetDirectoryName(this.Policy.SchemaPath)))
+            {
+                this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
+            }
+
+           this.Log.AddInfoMsg("--- Merge Templates Policy ---");
             string DEST_PATH = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml"); //this.TempFolderPath + @"\OutputSchema.xml";
 
             List<string> policyPaths = new List<string>();
@@ -1167,6 +1172,7 @@ namespace WDAC_Wizard
             }
 
             // Remove last comma and add outputFilePath
+            // TODO: check if this.Policy.SchemaPath is user-writeable
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
             mergeScript += String.Format(" -OutputFilePath \"{0}\"", this.Policy.SchemaPath);
 
@@ -1900,8 +1906,7 @@ namespace WDAC_Wizard
         /// /// </summary>
         private void FormClosing_Event(object sender, FormClosingEventArgs e)
         {
-            this.Log.CloseLogger();// does this belong here? 
-            // TODO: add Telemetry
+            this.Log.CloseLogger();
         }
 
         private string GetExecutablePath(bool exePath)
@@ -1912,6 +1917,32 @@ namespace WDAC_Wizard
                 return executablePath;
             else
                 return folderPath; 
+        }
+
+        /// <summary>
+        /// Check that the given directory is write-accessable by the user.  
+        /// /// </summary>
+        private bool WriteAccess(string folderPath)
+        {
+            // Try to create a subdir in the folderPath. If successful, write access is true. 
+            // If an exception is hit, the path is likely not user-writeable 
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(folderPath); 
+                if(di.Exists)
+                {
+                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(folderPath, "testSubDir"));
+                    dis.Create();
+                    dis.Delete(); 
+                }
+
+                return true; 
+            }
+            catch(Exception e)
+            {
+                this.Log.AddErrorMsg("WriteAccess() encountered the following exception: " + e); 
+                return false; 
+            }
         }
 
         // SKU check if cmdlets are available on the device 
