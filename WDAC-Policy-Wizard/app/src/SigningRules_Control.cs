@@ -59,7 +59,9 @@ namespace WDAC_Wizard
         {
             // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
             if(!readSetRules(sender, e))
-                return;
+            {
+                return; 
+            }
             displayRules();
         }
 
@@ -147,7 +149,9 @@ namespace WDAC_Wizard
                                 exceptionList += String.Format("{0}, ", exceptionID);
 
                                 if(!fileExceptionsDict.ContainsKey(exceptionID))
-                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty); 
+                                {
+                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty);
+                                }
                             }
                         }
 

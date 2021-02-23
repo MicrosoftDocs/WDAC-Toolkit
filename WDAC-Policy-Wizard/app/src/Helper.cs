@@ -313,6 +313,19 @@ namespace WDAC_Wizard
             this.ExceptionList.Add(ruleException);
         }
 
+        public void AddException(PolicyCustomRules ruleException)
+        {
+            if(ruleException.Type != PolicyCustomRules.RuleType.None || ruleException.Level != PolicyCustomRules.RuleLevel.None
+                || ruleException.FileInfo != null || ruleException.ReferenceFile!= null)
+            {
+                this.ExceptionList.Add(ruleException);
+            }
+            else
+            {
+                // Log error or something
+            }
+        }
+
         public bool isEnvVar()
         {
             // if the path contains one of the following environment variables -- return true as the cmdlets can replace it

@@ -59,7 +59,7 @@ namespace WDAC_Wizard
 
             // Check to make sure none of the fields are invalid
             // If the selected attribute is not found (UI will show Properties.Resources.DefaultFileAttributeString), do not allow creation
-            if (this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0
+            if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0
                 && this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString))
             {
                 label_Error.Visible = true;
@@ -69,7 +69,7 @@ namespace WDAC_Wizard
             }
 
             bool warnUser = false; 
-            switch(this.PolicyCustomRule.GetRuleLevel())
+            switch(this.PolicyCustomRule.Level)
             {
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
                     if(this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
@@ -137,50 +137,50 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
             // Set Action value to Allow or Deny
-            action = this.PolicyCustomRule.GetRulePermission().ToString();
+            action = this.PolicyCustomRule.Permission.ToString();
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
-            level = this.PolicyCustomRule.GetRuleType().ToString();
+            level = this.PolicyCustomRule.Type.ToString();
 
-            switch (this.PolicyCustomRule.GetRuleLevel())
+            switch (this.PolicyCustomRule.Level)
             {
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
 
-                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
+                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"]);
                     break;
                 case PolicyCustomRules.RuleLevel.Publisher:
-                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
-                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FilePublisher:
-                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["OriginalFilename"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.InternalName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["InternalName"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.FileDescription:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["FileDescription"]);
                     break;
 
                 case PolicyCustomRules.RuleLevel.ProductName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["ProductName"]);
                     break;
 
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
                     break;
 
             }
@@ -296,7 +296,7 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.PolicyCustomRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
+            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Folder)
             {
                 string refPath = getFileLocation();
                 if (refPath == String.Empty)
@@ -351,7 +351,7 @@ namespace WDAC_Wizard
             }
 
             // Set the landing UI depending on the Rule type
-            switch (this.PolicyCustomRule.GetRuleType())
+            switch (this.PolicyCustomRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
 
@@ -433,8 +433,6 @@ namespace WDAC_Wizard
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     break;
             }
-
-
         }
 
         /// <summary>
@@ -461,7 +459,7 @@ namespace WDAC_Wizard
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
             label_Error.Visible = false; // Clear error label
 
-            switch (this.PolicyCustomRule.GetRuleType())
+            switch (this.PolicyCustomRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
                     {
@@ -659,6 +657,24 @@ namespace WDAC_Wizard
         {
             e.Cancel = true;
             base.OnFormClosing(e);
+        }
+
+        private void button_AddException_Click(object sender, EventArgs e)
+        {
+            // Show the exception UI
+            // var exceptionPath = new Exceptions_Control(this);
+            // this.Controls.Add(exceptionPath);
+            // exceptionPath.BringToFront();
+            // exceptionPath.Focus();
+
+            // Create dumy exception
+            PolicyCustomRules exception = new PolicyCustomRules();
+            exception.SetRuleType(PolicyCustomRules.RuleType.Publisher); 
+            exception.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
+            exception.ReferenceFile = @"C:\Windows\System32\ci.dll";
+            Dictionary<string, string> fileInfo = new Dictionary<string, string>();
+
+            this.PolicyCustomRule.AddException(exception); 
         }
     }   
 }
