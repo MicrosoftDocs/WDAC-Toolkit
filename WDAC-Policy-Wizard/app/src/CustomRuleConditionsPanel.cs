@@ -188,13 +188,14 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
             string[] stringArr = new string[5] { action , level, name, files, exceptions};
 
-            // Offboard this to signingRules_Condition
-            this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser); 
-
             // Reset UI view
             ClearCustomRulesPanel(true);
             this._MainWindow.CustomRuleinProgress = false;
             this.RuleInEdit = false;
+
+            // Offboard this to signingRules_Condition
+            this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser);
+
             this.PolicyCustomRule = new PolicyCustomRules(); 
         }
 
@@ -650,12 +651,16 @@ namespace WDAC_Wizard
                 {
                     e.Cancel = true; 
                 }
-            }            
+            }  
+            else
+            {
+                e.Cancel = false; 
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            e.Cancel = true;
+            // e.Cancel = true;
             base.OnFormClosing(e);
         }
 

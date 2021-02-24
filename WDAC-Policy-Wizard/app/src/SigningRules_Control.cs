@@ -803,6 +803,11 @@ namespace WDAC_Wizard
             this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
 
             bubbleUp();
+
+            // close the custom Rule Conditions Panel
+            this.customRuleConditionsPanel.Close();
+            this.customRuleConditionsPanel = null; 
+
         }
 
         public void CustomRulesPanel_Closing()
