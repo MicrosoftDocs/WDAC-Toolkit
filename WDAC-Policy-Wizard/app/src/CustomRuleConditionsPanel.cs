@@ -667,12 +667,13 @@ namespace WDAC_Wizard
             // exceptionPath.BringToFront();
             // exceptionPath.Focus();
 
-            // Create dumy exception
+            // Create dumy exception need to set the Permission
             PolicyCustomRules exception = new PolicyCustomRules();
             exception.SetRuleType(PolicyCustomRules.RuleType.Publisher); 
-            exception.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
-            exception.ReferenceFile = @"C:\Windows\System32\ci.dll";
+            exception.SetRuleLevel(PolicyCustomRules.RuleLevel.FileName); //FilePublisher does not work ?
+            exception.ReferenceFile = @"C:\Windows\notepad.exe";
             Dictionary<string, string> fileInfo = new Dictionary<string, string>();
+            exception.Permission = PolicyCustomRules.RulePermission.Deny; 
 
             this.PolicyCustomRule.AddException(exception); 
         }

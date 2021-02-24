@@ -330,9 +330,14 @@ namespace WDAC_Wizard
         {
             // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
             if (this._MainWindow.Policy.TemplatePath != null)
+            {
                 this.XmlPath = this._MainWindow.Policy.TemplatePath;
+            }
             else
+            {
                 this.XmlPath = this._MainWindow.Policy.EditPolicyPath;
+            }
+                
             this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
 
             try
