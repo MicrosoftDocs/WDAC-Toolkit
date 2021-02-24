@@ -953,15 +953,14 @@ namespace WDAC_Wizard
             List<string> customRulesPathList = new List<string>();
             List<string> scriptCommands = new List<string>();
             string createRuleScript = string.Empty; 
-            string createVarScript = "$rule = ";
-            int nCustomRules = this.Policy.CustomRules.Count;            
+            int nCustomRules = this.Policy.CustomRules.Count;
             int progressVal = 0;
-            bool twoRuleObjs = false;
-            bool twoExceptObjs = false;
 
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
+                string createVarScript = "$rule = ";
+
                 var customRule = this.Policy.CustomRules[i];
                 customRule.PSVariable = i.ToString(); 
                 string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
