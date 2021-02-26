@@ -32,7 +32,6 @@
             this.panel_CustomRules = new System.Windows.Forms.Panel();
             this.label_Error = new System.Windows.Forms.Label();
             this.publisherInfoLabel = new System.Windows.Forms.Label();
-            this.button_Create = new System.Windows.Forms.Button();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
             this.radioButton_File = new System.Windows.Forms.RadioButton();
@@ -56,11 +55,18 @@
             this.button_Browse = new System.Windows.Forms.Button();
             this.label_condition = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button_Create = new System.Windows.Forms.Button();
             this.button_AddException = new System.Windows.Forms.Button();
+            this.control_Panel = new System.Windows.Forms.Panel();
+            this.workflow_Label = new System.Windows.Forms.Label();
+            this.page2_Button = new System.Windows.Forms.Button();
+            this.page1_Button = new System.Windows.Forms.Button();
+            this.controlHighlight_Panel = new System.Windows.Forms.Panel();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
+            this.control_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_CustomRules
@@ -80,7 +86,7 @@
             this.panel_CustomRules.Controls.Add(this.button_Browse);
             this.panel_CustomRules.Controls.Add(this.label_condition);
             this.panel_CustomRules.Controls.Add(this.label4);
-            this.panel_CustomRules.Location = new System.Drawing.Point(11, 11);
+            this.panel_CustomRules.Location = new System.Drawing.Point(122, 5);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(617, 762);
@@ -89,7 +95,7 @@
             // label_Error
             // 
             this.label_Error.AutoSize = true;
-            this.label_Error.Location = new System.Drawing.Point(7, 668);
+            this.label_Error.Location = new System.Drawing.Point(7, 728);
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(46, 17);
             this.label_Error.TabIndex = 87;
@@ -109,23 +115,6 @@
             this.publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this  \r\nfi" +
     "le name with a version at or above the specified version number.";
             this.publisherInfoLabel.Visible = false;
-            // 
-            // button_Create
-            // 
-            this.button_Create.BackColor = System.Drawing.Color.Transparent;
-            this.button_Create.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_Create.FlatAppearance.BorderSize = 2;
-            this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Create.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Create.Location = new System.Drawing.Point(11, 786);
-            this.button_Create.Margin = new System.Windows.Forms.Padding(2);
-            this.button_Create.Name = "button_Create";
-            this.button_Create.Size = new System.Drawing.Size(121, 33);
-            this.button_Create.TabIndex = 92;
-            this.button_Create.Text = "Create Rule";
-            this.button_Create.UseVisualStyleBackColor = false;
-            this.button_Create.Click += new System.EventHandler(this.button_Create_Click);
             // 
             // panel_FileFolder
             // 
@@ -423,6 +412,23 @@
             this.label4.Text = "Custom Rule Conditions";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // button_Create
+            // 
+            this.button_Create.BackColor = System.Drawing.Color.Transparent;
+            this.button_Create.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button_Create.FlatAppearance.BorderSize = 2;
+            this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Create.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_Create.Location = new System.Drawing.Point(123, 786);
+            this.button_Create.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Create.Name = "button_Create";
+            this.button_Create.Size = new System.Drawing.Size(121, 33);
+            this.button_Create.TabIndex = 92;
+            this.button_Create.Text = "Create Rule";
+            this.button_Create.UseVisualStyleBackColor = false;
+            this.button_Create.Click += new System.EventHandler(this.button_Create_Click);
+            // 
             // button_AddException
             // 
             this.button_AddException.BackColor = System.Drawing.Color.Transparent;
@@ -431,7 +437,7 @@
             this.button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_AddException.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_AddException.ForeColor = System.Drawing.Color.Black;
-            this.button_AddException.Location = new System.Drawing.Point(495, 786);
+            this.button_AddException.Location = new System.Drawing.Point(609, 786);
             this.button_AddException.Margin = new System.Windows.Forms.Padding(2);
             this.button_AddException.Name = "button_AddException";
             this.button_AddException.Size = new System.Drawing.Size(130, 33);
@@ -440,11 +446,87 @@
             this.button_AddException.UseVisualStyleBackColor = false;
             this.button_AddException.Click += new System.EventHandler(this.button_AddException_Click);
             // 
+            // control_Panel
+            // 
+            this.control_Panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.control_Panel.Controls.Add(this.workflow_Label);
+            this.control_Panel.Controls.Add(this.page2_Button);
+            this.control_Panel.Controls.Add(this.page1_Button);
+            this.control_Panel.Controls.Add(this.controlHighlight_Panel);
+            this.control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.control_Panel.Location = new System.Drawing.Point(0, 0);
+            this.control_Panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.control_Panel.Name = "control_Panel";
+            this.control_Panel.Size = new System.Drawing.Size(123, 767);
+            this.control_Panel.TabIndex = 108;
+            // 
+            // workflow_Label
+            // 
+            this.workflow_Label.AutoSize = true;
+            this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.workflow_Label.Location = new System.Drawing.Point(11, 9);
+            this.workflow_Label.Name = "workflow_Label";
+            this.workflow_Label.Size = new System.Drawing.Size(82, 21);
+            this.workflow_Label.TabIndex = 40;
+            this.workflow_Label.Text = "File Rules";
+            this.workflow_Label.Visible = false;
+            // 
+            // page2_Button
+            // 
+            this.page2_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.page2_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page2_Button.Enabled = false;
+            this.page2_Button.FlatAppearance.BorderSize = 0;
+            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page2_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.page2_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.page2_Button.Location = new System.Drawing.Point(12, 150);
+            this.page2_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page2_Button.Name = "page2_Button";
+            this.page2_Button.Size = new System.Drawing.Size(122, 60);
+            this.page2_Button.TabIndex = 36;
+            this.page2_Button.Text = "Rule Exceptions";
+            this.page2_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.page2_Button.UseVisualStyleBackColor = false;
+            this.page2_Button.Visible = false;
+            // 
+            // page1_Button
+            // 
+            this.page1_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.page1_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page1_Button.Enabled = false;
+            this.page1_Button.FlatAppearance.BorderSize = 0;
+            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.page1_Button.Location = new System.Drawing.Point(12, 69);
+            this.page1_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.page1_Button.Name = "page1_Button";
+            this.page1_Button.Size = new System.Drawing.Size(120, 52);
+            this.page1_Button.TabIndex = 35;
+            this.page1_Button.Text = "Rule Conditions";
+            this.page1_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.page1_Button.UseVisualStyleBackColor = false;
+            this.page1_Button.Visible = false;
+            // 
+            // controlHighlight_Panel
+            // 
+            this.controlHighlight_Panel.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.controlHighlight_Panel.Location = new System.Drawing.Point(0, 0);
+            this.controlHighlight_Panel.Name = "controlHighlight_Panel";
+            this.controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
+            this.controlHighlight_Panel.TabIndex = 33;
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 830);
+            this.ClientSize = new System.Drawing.Size(762, 830);
+            this.Controls.Add(this.control_Panel);
             this.Controls.Add(this.button_AddException);
             this.Controls.Add(this.panel_CustomRules);
             this.Controls.Add(this.button_Create);
@@ -460,6 +542,8 @@
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
+            this.control_Panel.ResumeLayout(false);
+            this.control_Panel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -494,5 +578,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label_Error;
         private System.Windows.Forms.Button button_AddException;
+        private System.Windows.Forms.Panel control_Panel;
+        private System.Windows.Forms.Label workflow_Label;
+        private System.Windows.Forms.Button page2_Button;
+        public System.Windows.Forms.Button page1_Button;
+        private System.Windows.Forms.Panel controlHighlight_Panel;
     }
 }

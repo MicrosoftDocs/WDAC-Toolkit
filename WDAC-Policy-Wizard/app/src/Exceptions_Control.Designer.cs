@@ -29,15 +29,10 @@
         private void InitializeComponent()
         {
             this.panel_CustomRules = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Column_Exception = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label_Error = new System.Windows.Forms.Label();
-            this.button_CreateException = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
             this.radioButton_File = new System.Windows.Forms.RadioButton();
-            this.label_Info = new System.Windows.Forms.Label();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
             this.textBoxSlider_3 = new System.Windows.Forms.TextBox();
             this.labelSlider_3 = new System.Windows.Forms.Label();
@@ -48,6 +43,12 @@
             this.textBoxSlider_0 = new System.Windows.Forms.TextBox();
             this.labelSlider_0 = new System.Windows.Forms.Label();
             this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column_Exception = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label_Error = new System.Windows.Forms.Label();
+            this.button_CreateException = new System.Windows.Forms.Button();
+            this.label_Info = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBox_RuleType = new System.Windows.Forms.ComboBox();
@@ -55,13 +56,14 @@
             this.button_Browse = new System.Windows.Forms.Button();
             this.label_condition = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_CustomRules.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
-            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_CustomRules
@@ -84,63 +86,17 @@
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(704, 965);
             this.panel_CustomRules.TabIndex = 87;
-            this.panel_CustomRules.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_CustomRules_Paint);
             // 
-            // dataGridView1
+            // panel1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column_Exception,
-            this.Column_Type});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 207);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(509, 150);
-            this.dataGridView1.TabIndex = 107;
-            // 
-            // Column_Exception
-            // 
-            this.Column_Exception.HeaderText = "Exception";
-            this.Column_Exception.MinimumWidth = 6;
-            this.Column_Exception.Name = "Column_Exception";
-            this.Column_Exception.ReadOnly = true;
-            this.Column_Exception.Width = 125;
-            // 
-            // Column_Type
-            // 
-            this.Column_Type.HeaderText = "Type";
-            this.Column_Type.MinimumWidth = 6;
-            this.Column_Type.Name = "Column_Type";
-            this.Column_Type.ReadOnly = true;
-            this.Column_Type.Width = 125;
-            // 
-            // label_Error
-            // 
-            this.label_Error.AutoSize = true;
-            this.label_Error.Location = new System.Drawing.Point(47, 777);
-            this.label_Error.Name = "label_Error";
-            this.label_Error.Size = new System.Drawing.Size(46, 17);
-            this.label_Error.TabIndex = 87;
-            this.label_Error.Text = "label1";
-            this.label_Error.Visible = false;
-            // 
-            // button_CreateException
-            // 
-            this.button_CreateException.BackColor = System.Drawing.Color.Transparent;
-            this.button_CreateException.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_CreateException.FlatAppearance.BorderSize = 2;
-            this.button_CreateException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_CreateException.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_CreateException.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_CreateException.Location = new System.Drawing.Point(11, 722);
-            this.button_CreateException.Margin = new System.Windows.Forms.Padding(2);
-            this.button_CreateException.Name = "button_CreateException";
-            this.button_CreateException.Size = new System.Drawing.Size(134, 33);
-            this.button_CreateException.TabIndex = 92;
-            this.button_CreateException.Text = "Create Exception";
-            this.button_CreateException.UseVisualStyleBackColor = false;
-            this.button_CreateException.Click += new System.EventHandler(this.button_CreateException_Click);
+            this.panel1.Controls.Add(this.publisherInfoLabel);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.panel_FileFolder);
+            this.panel1.Controls.Add(this.panel_Publisher_Scroll);
+            this.panel1.Location = new System.Drawing.Point(15, 441);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(562, 276);
+            this.panel1.TabIndex = 108;
             // 
             // panel_FileFolder
             // 
@@ -180,19 +136,6 @@
             this.radioButton_File.TabStop = true;
             this.radioButton_File.Text = "File";
             this.radioButton_File.UseVisualStyleBackColor = true;
-            // 
-            // label_Info
-            // 
-            this.label_Info.AutoSize = true;
-            this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label_Info.Location = new System.Drawing.Point(8, 93);
-            this.label_Info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label_Info.Name = "label_Info";
-            this.label_Info.Size = new System.Drawing.Size(103, 18);
-            this.label_Info.TabIndex = 95;
-            this.label_Info.Text = "Rule Condition:";
-            this.label_Info.Visible = false;
             // 
             // panel_Publisher_Scroll
             // 
@@ -317,6 +260,75 @@
             this.trackBar_Conditions.TabIndex = 96;
             this.trackBar_Conditions.TickFrequency = 4;
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column_Exception,
+            this.Column_Type});
+            this.dataGridView1.Location = new System.Drawing.Point(12, 207);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(509, 150);
+            this.dataGridView1.TabIndex = 107;
+            // 
+            // Column_Exception
+            // 
+            this.Column_Exception.HeaderText = "Exception";
+            this.Column_Exception.MinimumWidth = 6;
+            this.Column_Exception.Name = "Column_Exception";
+            this.Column_Exception.ReadOnly = true;
+            this.Column_Exception.Width = 125;
+            // 
+            // Column_Type
+            // 
+            this.Column_Type.HeaderText = "Type";
+            this.Column_Type.MinimumWidth = 6;
+            this.Column_Type.Name = "Column_Type";
+            this.Column_Type.ReadOnly = true;
+            this.Column_Type.Width = 125;
+            // 
+            // label_Error
+            // 
+            this.label_Error.AutoSize = true;
+            this.label_Error.Location = new System.Drawing.Point(47, 777);
+            this.label_Error.Name = "label_Error";
+            this.label_Error.Size = new System.Drawing.Size(46, 17);
+            this.label_Error.TabIndex = 87;
+            this.label_Error.Text = "label1";
+            this.label_Error.Visible = false;
+            // 
+            // button_CreateException
+            // 
+            this.button_CreateException.BackColor = System.Drawing.Color.Transparent;
+            this.button_CreateException.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button_CreateException.FlatAppearance.BorderSize = 2;
+            this.button_CreateException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_CreateException.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_CreateException.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_CreateException.Location = new System.Drawing.Point(11, 722);
+            this.button_CreateException.Margin = new System.Windows.Forms.Padding(2);
+            this.button_CreateException.Name = "button_CreateException";
+            this.button_CreateException.Size = new System.Drawing.Size(134, 33);
+            this.button_CreateException.TabIndex = 92;
+            this.button_CreateException.Text = "Create Exception";
+            this.button_CreateException.UseVisualStyleBackColor = false;
+            this.button_CreateException.Click += new System.EventHandler(this.button_CreateException_Click);
+            // 
+            // label_Info
+            // 
+            this.label_Info.AutoSize = true;
+            this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.label_Info.Location = new System.Drawing.Point(8, 93);
+            this.label_Info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_Info.Name = "label_Info";
+            this.label_Info.Size = new System.Drawing.Size(103, 18);
+            this.label_Info.TabIndex = 95;
+            this.label_Info.Text = "Rule Condition:";
+            this.label_Info.Visible = false;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -407,14 +419,23 @@
             this.label4.Text = "Custom Rule Exceptions";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // panel1
+            // label1
             // 
-            this.panel1.Controls.Add(this.panel_FileFolder);
-            this.panel1.Controls.Add(this.panel_Publisher_Scroll);
-            this.panel1.Location = new System.Drawing.Point(15, 441);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(562, 230);
-            this.panel1.TabIndex = 108;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 17);
+            this.label1.TabIndex = 105;
+            this.label1.Text = "label1";
+            // 
+            // publisherInfoLabel
+            // 
+            this.publisherInfoLabel.AutoSize = true;
+            this.publisherInfoLabel.Location = new System.Drawing.Point(45, 235);
+            this.publisherInfoLabel.Name = "publisherInfoLabel";
+            this.publisherInfoLabel.Size = new System.Drawing.Size(46, 17);
+            this.publisherInfoLabel.TabIndex = 106;
+            this.publisherInfoLabel.Text = "label2";
             // 
             // Exceptions_Control
             // 
@@ -425,13 +446,14 @@
             this.Size = new System.Drawing.Size(812, 988);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel_FileFolder.ResumeLayout(false);
             this.panel_FileFolder.PerformLayout();
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
-            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -466,5 +488,7 @@
         private System.Windows.Forms.Label label_condition;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label publisherInfoLabel;
+        private System.Windows.Forms.Label label1;
     }
 }

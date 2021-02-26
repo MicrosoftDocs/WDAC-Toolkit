@@ -19,10 +19,10 @@ namespace WDAC_Wizard
     {
         // CI Policy objects
         private WDAC_Policy Policy;
-        private PolicyCustomRules PolicyCustomRule;     // One instance of a custom rule. Appended to Policy.CustomRules
+        public PolicyCustomRules PolicyCustomRule;     // One instance of a custom rule. Appended to Policy.CustomRules
         private List<string> AllFilesinFolder;          // List to track all files in a folder 
 
-        private Logger Log;
+        public Logger Log;
         private MainWindow _MainWindow;
         private SigningRules_Control SigningControl;
         private bool RuleInEdit = false; 
@@ -673,14 +673,11 @@ namespace WDAC_Wizard
             // exceptionPath.Focus();
 
             // Create dumy exception need to set the Permission
-            PolicyCustomRules exception = new PolicyCustomRules();
-            exception.SetRuleType(PolicyCustomRules.RuleType.Publisher); 
-            exception.SetRuleLevel(PolicyCustomRules.RuleLevel.FileName); //FilePublisher does not work ?
-            exception.ReferenceFile = @"C:\Windows\notepad.exe";
-            Dictionary<string, string> fileInfo = new Dictionary<string, string>();
-            exception.Permission = PolicyCustomRules.RulePermission.Deny; 
-
-            this.PolicyCustomRule.AddException(exception); 
+            var exceptions_Control = new Exceptions_Control(this);
+            // exceptions_Control.Show();
+            this.Controls.Add(exceptions_Control); 
+            exceptions_Control.BringToFront();
+            exceptions_Control.Focus(); 
         }
     }   
 }

@@ -806,7 +806,8 @@ namespace WDAC_Wizard
 
             // close the custom Rule Conditions Panel
             this.customRuleConditionsPanel.Close();
-            this.customRuleConditionsPanel = null; 
+            this.customRuleConditionsPanel = null;
+            this.label_AddCustomRules.Text = "+ Custom Rules";
 
         }
 

@@ -1636,9 +1636,9 @@ namespace WDAC_Wizard
         //     None. 
         private void ShowControlPanel(object sender, EventArgs e)
         {
-            Controls.Add(control_Panel);
-            control_Panel.BringToFront();
-            control_Panel.Focus();
+            this.Controls.Add(this.control_Panel);
+            this.control_Panel.BringToFront();
+            this.control_Panel.Focus();
 
             this.Controls.Add(button_Next);
             button_Next.BringToFront();

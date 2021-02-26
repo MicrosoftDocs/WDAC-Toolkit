@@ -4,17 +4,25 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
+
 
 namespace WDAC_Wizard
 {
     public partial class Exceptions_Control : UserControl
     {
+        private Logger Log;
+        private PolicyCustomRules ExceptionRule;     // One instance of a custom rule. Appended to Policy.CustomRules
+        private PolicyCustomRules CustomRule; 
+
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
             InitializeComponent();
+            this.ExceptionRule = new PolicyCustomRules();
+            this.Log = pRuleConditionsPanel.Log;
+            this.CustomRule = pRuleConditionsPanel.PolicyCustomRule;  
         }
 
 
@@ -33,34 +41,27 @@ namespace WDAC_Wizard
             switch (selectedOpt)
             {
                 case "Publisher":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
-                    label_Info.Text = "Creates a rule for a file that is signed by the software publisher. \r\n" +
-                        "Select a file to use as reference for your rule.";
+                    this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
+                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
                     break;
 
                 case "Path":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
-                    label_Info.Text = "Creates a rule for a specific file or folder. \r\n" +
-                        "Selecting folder will affect all files in the folder.";
+                    this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
+                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
                     panel_FileFolder.Visible = true;
                     radioButton_File.Checked = true; // By default, 
                     break;
 
                 case "File Attributes":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
-                    label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
-                        "Select a file to use as reference for your rule.";
+                    this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
                     break;
 
                 case "File Hash":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
-                    label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
-                        "Select the file for which you wish to create a hash rule.";
+                    this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
+                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     break;
+
                 default:
                     break;
             }
@@ -86,7 +87,6 @@ namespace WDAC_Wizard
 
             //Other
             textBox_ReferenceFile.Clear();
-            radioButton_Allow.Checked = true;   //default
             label_Info.Visible = false;
 
             // Reset the rule type combobox
@@ -109,26 +109,26 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.PolicyCustomRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
+            if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
             {
                 string refPath = getFileLocation();
                 if (refPath == String.Empty)
                     return;
 
                 // Custom rule in progress
-                this._MainWindow.CustomRuleinProgress = true;
+               // this._MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
-                PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
+                ExceptionRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
-                PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-                PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
-                PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
-                PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileInfo.FileVersion);
-                PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
-                PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
-                PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
+                ExceptionRule.ReferenceFile = fileInfo.FileName; // Returns the file path
+                ExceptionRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
+                ExceptionRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
+                ExceptionRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
+                ExceptionRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileInfo.FileVersion);
+                ExceptionRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
+                ExceptionRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
+                ExceptionRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
 
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
@@ -147,8 +147,8 @@ namespace WDAC_Wizard
                 }
                 catch (Exception exp)
                 {
-                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
-                        exp, refPath));
+                    //this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
+                     //   exp, refPath));
                     this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
                     this.label_Error.Visible = true;
 
@@ -158,53 +158,49 @@ namespace WDAC_Wizard
                     settingsUpdateNotificationTimer.Start();
                 }
 
-                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
-                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
+                ExceptionRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
+                ExceptionRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
 
             }
 
             // Set the landing UI depending on the Rule type
-            switch (this.PolicyCustomRule.GetRuleType())
+            switch (this.ExceptionRule.GetRuleType())
             {
                 case PolicyCustomRules.RuleType.Publisher:
 
 
                     // UI
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     labelSlider_0.Text = "Issuing CA:";
                     labelSlider_1.Text = "Publisher:";
                     labelSlider_2.Text = "File version:";
                     labelSlider_3.Text = "File name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["PCACertificate"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["LeafCertificate"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["FileName"];
+                    textBoxSlider_0.Text = ExceptionRule.FileInfo["PCACertificate"];
+                    textBoxSlider_1.Text = ExceptionRule.FileInfo["LeafCertificate"];
+                    textBoxSlider_2.Text = ExceptionRule.FileInfo["FileVersion"];
+                    textBoxSlider_3.Text = ExceptionRule.FileInfo["FileName"];
 
                     textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240);
 
                     panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo;
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
-                    PolicyCustomRule.ReferenceFile = getFolderLocation();
-                    this.AllFilesinFolder = new List<string>();
-                    if (PolicyCustomRule.ReferenceFile == String.Empty)
+                    ExceptionRule.ReferenceFile = getFolderLocation();
+                    if (ExceptionRule.ReferenceFile == String.Empty)
                     {
                         break;
                     }
 
                     // Custom rule in progress
-                    this._MainWindow.CustomRuleinProgress = true;
+                    //this._MainWindow.CustomRuleinProgress = true;
 
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
-                    //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
+                    textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+                    //ProcessAllFiles(ExceptionRule.ReferenceFile);
+                    //ExceptionRule.FolderContents = this.AllFilesinFolder; 
+                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break;
 
 
@@ -214,7 +210,7 @@ namespace WDAC_Wizard
 
                     // UI updates
                     radioButton_File.Checked = true;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
@@ -222,15 +218,15 @@ namespace WDAC_Wizard
                     // Creates a rule -Level FileName -SpecificFileNameLevel InternalName, FileDescription
 
                     // UI 
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     labelSlider_0.Text = "Original filename:";
                     labelSlider_1.Text = "File description:";
                     labelSlider_2.Text = "Product name:";
                     labelSlider_3.Text = "Internal name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["OriginalFilename"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["FileDescription"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["ProductName"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["InternalName"];
+                    textBoxSlider_0.Text = ExceptionRule.FileInfo["OriginalFilename"];
+                    textBoxSlider_1.Text = ExceptionRule.FileInfo["FileDescription"];
+                    textBoxSlider_2.Text = ExceptionRule.FileInfo["ProductName"];
+                    textBoxSlider_3.Text = ExceptionRule.FileInfo["InternalName"];
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
@@ -243,7 +239,7 @@ namespace WDAC_Wizard
 
                     // UI updates
                     panel_Publisher_Scroll.Visible = false;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     break;
             }
         }
@@ -251,11 +247,68 @@ namespace WDAC_Wizard
         private void button_CreateException_Click(object sender, EventArgs e)
         {
             // Add the exception to the table
+
+            this.CustomRule.AddException(this.ExceptionRule);
+            this.ExceptionRule = null; 
+
         }
 
-        private void panel_CustomRules_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Opens the folder dialog and grabs the folder path. Requires Folder to be toggled when Browse button 
+        /// is selected. 
+        /// </summary>
+        /// <returns>Returns the full path of the folder</returns>
+        private string getFolderLocation()
         {
+            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
+            openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
+
+            if (openFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                openFolderDialog.Dispose();
+                return openFolderDialog.SelectedPath;
+            }
+            else
+                return String.Empty;
 
         }
+
+        /// <summary>
+        /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
+        /// </summary>
+        /// <returns>Returns the full path+name of the file</returns>
+        private string getFileLocation()
+        {
+            //TODO: move these common functions to a separate class
+            // Open file dialog to get file or folder path
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Browse for a signed file to use as a reference for the rule.";
+            openFileDialog.CheckPathExists = true;
+            // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
+            openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
+                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
+                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All files (*.*)|*.*";
+
+            openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
+
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                openFileDialog.Dispose();
+                return openFileDialog.FileName;
+            }
+            else
+                return String.Empty;
+
+        }
+
+        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            this.label_Error.Visible = false;
+        }
+
     }
 }

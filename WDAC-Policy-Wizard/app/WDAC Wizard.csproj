@@ -182,6 +182,12 @@
     <Compile Include="src\CustomRuleConditionsPanel.Designer.cs">
       <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Exceptions_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Exceptions_Control.Designer.cs">
+      <DependentUpon>Exceptions_Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Policy.cs" />
     <Compile Include="src\ConfigTemplate_Control.cs">
       <SubType>UserControl</SubType>
@@ -261,6 +267,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\EditWorkflow.resx">
       <DependentUpon>EditWorkflow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Exceptions_Control.resx">
+      <DependentUpon>Exceptions_Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
