@@ -16,7 +16,10 @@ namespace WDAC_Wizard
         private Logger Log;
         private PolicyCustomRules ExceptionRule;     // One instance of a custom rule. Appended to Policy.CustomRules
         private PolicyCustomRules CustomRule;
-        private CustomRuleConditionsPanel ConditionsPanel; 
+        private CustomRuleConditionsPanel ConditionsPanel;
+        // Declare an ArrayList to serve as the data store. 
+        private System.Collections.ArrayList displayObjects =
+            new System.Collections.ArrayList();
 
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
@@ -98,7 +101,7 @@ namespace WDAC_Wizard
         private void button_Browse_Click(object sender, EventArgs e)
         {
             // Browse button for reference file:
-            if (comboBox_RuleType.SelectedItem == null)
+            if (comboBox_ExceptionType.SelectedItem == null)
             {
                 // Set CustomRule conditios panel need method
                 this.ConditionsPanel.SetLabel_ErrorText("Please set exception rule type first");
@@ -131,27 +134,30 @@ namespace WDAC_Wizard
                 // Get cert chain info to be shown to the user
                 string leafCertSubjectName = "";
                 string pcaCertSubjectName = "";
-                try
+
+                if(this.ExceptionRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    var signer = X509Certificate.CreateFromSignedFile(refPath);
-                    var cert = new X509Certificate2(signer);
-                    var certChain = new X509Chain();
-                    var certChainIsValid = certChain.Build(cert);
+                    try
+                    {
+                        var signer = X509Certificate.CreateFromSignedFile(refPath);
+                        var cert = new X509Certificate2(signer);
+                        var certChain = new X509Chain();
+                        var certChainIsValid = certChain.Build(cert);
 
-                    leafCertSubjectName = cert.SubjectName.Name;
-                    if (certChain.ChainElements.Count > 1)
-                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+                        leafCertSubjectName = cert.SubjectName.Name;
+                        if (certChain.ChainElements.Count > 1)
+                            pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
 
+                    }
+                    catch (Exception exp)
+                    {
+                        // Set labelError text in CustomRuleConditionsPanel
+                        this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.CertificateBuild_Error + fileInfo.FileName);
+                    }
                 }
-                catch (Exception exp)
-                {
-                    // Set labelError text in CustomRuleConditionsPanel
-                    this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.CertificateBuild_Error + fileInfo.FileName); 
-                }
-
+                
                 ExceptionRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
                 ExceptionRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
-
             }
 
             // Set the landing UI depending on the Rule type
@@ -303,6 +309,28 @@ namespace WDAC_Wizard
                 this.ruleCondition_Label.Text = "Rule Condition\n\r" + this.CustomRule.Type.ToString() + " " + this.CustomRule.FileInfo["FileName"];
                 this.ruleCondition_Label.Visible = true; 
             }
+        }
+
+        public void AddException()
+        {
+            // Check that fields are valid, otherwise break and show error msg
+            if(this.ExceptionRule == null || this.ExceptionRule.ReferenceFile == null ||
+                this.ExceptionRule.Level == PolicyCustomRules.RuleLevel.None)
+            {
+                this.ConditionsPanel.SetLabel_ErrorText("Invalid exception selection. Please select a level and reference file");
+                return; 
+            }
+
+            // Add the exception to the custom rule and table
+            this.CustomRule.AddException(this.ExceptionRule);
+
+            // New Display object
+            DisplayObject displayObject = new DisplayObject();
+            displayObject.Level = "Somwthig";
+            displayObject.Name = "somethingelse";
+
+            this.displayObjects.Add(displayObject);
+            this.dataGridView_Exceptions.RowCount += 1;
         }
     }
 }

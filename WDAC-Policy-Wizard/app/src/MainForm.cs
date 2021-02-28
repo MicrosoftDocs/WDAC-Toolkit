@@ -1654,7 +1654,7 @@ namespace WDAC_Wizard
             }
             catch(Exception exc)
             {
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
+                this.controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
             }
 
             // Enable Settings Button -- if on building page, it will be disabled below
@@ -1862,7 +1862,9 @@ namespace WDAC_Wizard
         {
             // Empty this.PageList so that we can start a new workflow after policy build
             foreach (var page in this.PageList)
+            {
                 this.Controls.RemoveByKey(page);
+            }
             this.PageList.Clear(); 
         }
 

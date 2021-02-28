@@ -71,13 +71,13 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dataGridView_Exceptions = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ruleCondition_Label = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox_ExceptionType = new System.Windows.Forms.ComboBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
@@ -92,7 +92,7 @@
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Exceptions)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_CustomRules
@@ -437,11 +437,11 @@
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
             this.panel2.Controls.Add(this.panel3);
-            this.panel2.Controls.Add(this.dataGridView2);
+            this.panel2.Controls.Add(this.dataGridView_Exceptions);
             this.panel2.Controls.Add(this.ruleCondition_Label);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.comboBox1);
+            this.panel2.Controls.Add(this.comboBox_ExceptionType);
             this.panel2.Controls.Add(this.textBox5);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.label11);
@@ -633,18 +633,20 @@
             this.trackBar1.TabIndex = 96;
             this.trackBar1.TickFrequency = 4;
             // 
-            // dataGridView2
+            // dataGridView_Exceptions
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView_Exceptions.AllowUserToAddRows = false;
+            this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
+            this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
-            this.dataGridView2.Location = new System.Drawing.Point(12, 274);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidth = 51;
-            this.dataGridView2.RowTemplate.Height = 24;
-            this.dataGridView2.Size = new System.Drawing.Size(509, 150);
-            this.dataGridView2.TabIndex = 107;
+            this.dataGridView_Exceptions.Location = new System.Drawing.Point(12, 274);
+            this.dataGridView_Exceptions.Name = "dataGridView_Exceptions";
+            this.dataGridView_Exceptions.RowHeadersWidth = 51;
+            this.dataGridView_Exceptions.RowTemplate.Height = 24;
+            this.dataGridView_Exceptions.Size = new System.Drawing.Size(509, 150);
+            this.dataGridView_Exceptions.TabIndex = 107;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -700,21 +702,21 @@
             this.label8.Text = "Exception Type:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // comboBox1
+            // comboBox_ExceptionType
             // 
-            this.comboBox1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox_ExceptionType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox_ExceptionType.FormattingEnabled = true;
+            this.comboBox_ExceptionType.Items.AddRange(new object[] {
             "Publisher",
             "Path",
             "File Attributes",
             "File Hash"});
-            this.comboBox1.Location = new System.Drawing.Point(12, 243);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(187, 26);
-            this.comboBox1.TabIndex = 89;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox_RuleType_SelectedIndexChanged);
+            this.comboBox_ExceptionType.Location = new System.Drawing.Point(12, 243);
+            this.comboBox_ExceptionType.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBox_ExceptionType.Name = "comboBox_ExceptionType";
+            this.comboBox_ExceptionType.Size = new System.Drawing.Size(187, 26);
+            this.comboBox_ExceptionType.TabIndex = 89;
+            this.comboBox_ExceptionType.SelectedIndexChanged += new System.EventHandler(this.comboBox_RuleType_SelectedIndexChanged);
             // 
             // textBox5
             // 
@@ -781,7 +783,7 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Exceptions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -831,13 +833,13 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView dataGridView_Exceptions;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.Label ruleCondition_Label;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox_ExceptionType;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label11;

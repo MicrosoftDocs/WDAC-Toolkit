@@ -374,7 +374,7 @@
             this.button_Browse.Location = new System.Drawing.Point(440, 332);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(83, 33);
+            this.button_Browse.Size = new System.Drawing.Size(90, 33);
             this.button_Browse.TabIndex = 84;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
@@ -542,6 +542,7 @@
             this.button_AddException.TabIndex = 111;
             this.button_AddException.Text = "Add Exception";
             this.button_AddException.UseVisualStyleBackColor = false;
+            this.button_AddException.Click += new System.EventHandler(this.button_AddException_Click);
             // 
             // button_Back
             // 

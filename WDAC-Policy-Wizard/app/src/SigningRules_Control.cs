@@ -48,7 +48,6 @@ namespace WDAC_Wizard
             this.RowSelected = -1;
 
             this.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
-
         }
 
         /// <summary>

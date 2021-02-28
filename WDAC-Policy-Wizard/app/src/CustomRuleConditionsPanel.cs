@@ -26,7 +26,8 @@ namespace WDAC_Wizard
         private MainWindow _MainWindow;
         private SigningRules_Control SigningControl;
         private bool RuleInEdit = false;
-        private UIState state; 
+        private UIState state;
+        private Exceptions_Control exceptionsControl; 
 
         private enum UIState
         {
@@ -48,8 +49,8 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
             this.SigningControl = pControl;
             this.RuleInEdit = true;
-            this.state = UIState.RuleConditions; 
-
+            this.state = UIState.RuleConditions;
+            this.exceptionsControl = null; 
         }
 
         /// <summary>
@@ -695,10 +696,14 @@ namespace WDAC_Wizard
                 this.button_Back.FlatAppearance.BorderColor = Color.Gray;
                 this.button_Next.Enabled = false;
 
-                // Enable Back button
+                // Enable Back & exception button
                 this.button_Back.ForeColor = Color.Black;
                 this.button_Back.FlatAppearance.BorderColor = Color.Black;
-                this.button_Back.Enabled = true; 
+                this.button_Back.Enabled = true;
+
+                this.button_AddException.ForeColor = Color.Black;
+                this.button_AddException.FlatAppearance.BorderColor = Color.Black;
+                this.button_AddException.Enabled = true;
             }
             else
             {
@@ -724,7 +729,11 @@ namespace WDAC_Wizard
 
         private void SetUIState()
         {
-            switch(this.state)
+            // bring info label to front
+            this.label_Error.Focus();
+            this.label_Error.BringToFront();
+
+            switch (this.state)
             {
                 case UIState.RuleConditions:
 
@@ -742,10 +751,10 @@ namespace WDAC_Wizard
 
                 case UIState.RuleExceptions:
                     {
-                        var exceptions_Control = new Exceptions_Control(this);
-                        this.Controls.Add(exceptions_Control);
-                        exceptions_Control.BringToFront();
-                        exceptions_Control.Focus();
+                        this.exceptionsControl = new Exceptions_Control(this);
+                        this.Controls.Add(this.exceptionsControl);
+                        this.exceptionsControl.BringToFront();
+                        this.exceptionsControl.Focus();
 
                         // Set the control highlight rectangle pos
                         this.controlHighlight_Panel.Location = new Point(3, 226);
@@ -788,7 +797,7 @@ namespace WDAC_Wizard
             this.label_Error.Text = errorText; 
             this.label_Error.Visible = true;
 
-            if(!shouldPersist)
+            if (!shouldPersist)
             {
                 Timer settingsUpdateNotificationTimer = new Timer();
                 settingsUpdateNotificationTimer.Interval = (5000);
@@ -801,6 +810,11 @@ namespace WDAC_Wizard
         {
             this.label_Error.Text = "";
             this.label_Error.Visible = false;
+        }
+
+        private void button_AddException_Click(object sender, EventArgs e)
+        {
+            this.exceptionsControl.AddException(); 
         }
     }   
 }
