@@ -15,17 +15,17 @@ namespace WDAC_Wizard
     {
         private Logger Log;
         private PolicyCustomRules ExceptionRule;     // One instance of a custom rule. Appended to Policy.CustomRules
-        private PolicyCustomRules CustomRule; 
+        private PolicyCustomRules CustomRule;
+        private CustomRuleConditionsPanel ConditionsPanel; 
 
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
             InitializeComponent();
             this.ExceptionRule = new PolicyCustomRules();
             this.Log = pRuleConditionsPanel.Log;
-            this.CustomRule = pRuleConditionsPanel.PolicyCustomRule;  
+            this.CustomRule = pRuleConditionsPanel.PolicyCustomRule;
+            this.ConditionsPanel = pRuleConditionsPanel; 
         }
-
-
 
         private void comboBox_RuleType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -36,7 +36,6 @@ namespace WDAC_Wizard
             string selectedOpt = comboBox_RuleType.SelectedItem.ToString();
             ClearCustomRulesPanel(false);
             label_Info.Visible = true;
-            label_Error.Visible = false; // Clear error label
 
             switch (selectedOpt)
             {
@@ -65,7 +64,6 @@ namespace WDAC_Wizard
                 default:
                     break;
             }
-
             this.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
         }
 
@@ -99,12 +97,11 @@ namespace WDAC_Wizard
 
         private void button_Browse_Click(object sender, EventArgs e)
         {
-
             // Browse button for reference file:
             if (comboBox_RuleType.SelectedItem == null)
             {
-                label_Error.Visible = true;
-                label_Error.Text = "Please select a rule type first.";
+                // Set CustomRule conditios panel need method
+                this.ConditionsPanel.SetLabel_ErrorText("Please set exception rule type first");
                 this.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
                 return;
             }
@@ -112,6 +109,7 @@ namespace WDAC_Wizard
             if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
             {
                 string refPath = getFileLocation();
+
                 if (refPath == String.Empty)
                     return;
 
@@ -147,15 +145,8 @@ namespace WDAC_Wizard
                 }
                 catch (Exception exp)
                 {
-                    //this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
-                     //   exp, refPath));
-                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
-                    this.label_Error.Visible = true;
-
-                    Timer settingsUpdateNotificationTimer = new Timer();
-                    settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
-                    settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
-                    settingsUpdateNotificationTimer.Start();
+                    // Set labelError text in CustomRuleConditionsPanel
+                    this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.CertificateBuild_Error + fileInfo.FileName); 
                 }
 
                 ExceptionRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
@@ -247,10 +238,8 @@ namespace WDAC_Wizard
         private void button_CreateException_Click(object sender, EventArgs e)
         {
             // Add the exception to the table
-
             this.CustomRule.AddException(this.ExceptionRule);
             this.ExceptionRule = null; 
-
         }
 
         /// <summary>
@@ -301,14 +290,19 @@ namespace WDAC_Wizard
                 return openFileDialog.FileName;
             }
             else
+            {
                 return String.Empty;
-
+            }
         }
 
-        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        private void Exceptions_Control_Load(object sender, EventArgs e)
         {
-            this.label_Error.Visible = false;
+            // On load, set the rule condition label
+            if(this.CustomRule != null)
+            {
+                this.ruleCondition_Label.Text = "Rule Condition\n\r" + this.CustomRule.Type.ToString() + " " + this.CustomRule.FileInfo["FileName"];
+                this.ruleCondition_Label.Visible = true; 
+            }
         }
-
     }
 }

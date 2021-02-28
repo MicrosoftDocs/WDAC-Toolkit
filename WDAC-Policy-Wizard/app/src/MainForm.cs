@@ -1650,7 +1650,7 @@ namespace WDAC_Wizard
             try
             {
                 var sideButton = (Button)sender; 
-                controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
+                this.controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
             }
             catch(Exception exc)
             {

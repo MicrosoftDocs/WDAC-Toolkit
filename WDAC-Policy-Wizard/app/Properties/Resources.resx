@@ -351,4 +351,10 @@ and this original filename with a version at or above the specified file version
     <value>This rule applies to all files signed by this issuing CA and publisher, 
 with a version at or above this specified file version number.</value>
   </data>
+  <data name="CertificateBuild_Error" xml:space="preserve">
+    <value>Error. Could not build certificate chain for </value>
+  </data>
+  <data name="InvalidCustomRule_Error" xml:space="preserve">
+    <value>Invalid custom rule. Please set the rule type and reference file before proceeding.</value>
+  </data>
 </root>

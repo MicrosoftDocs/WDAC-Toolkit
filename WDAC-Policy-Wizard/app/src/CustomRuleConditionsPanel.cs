@@ -25,7 +25,14 @@ namespace WDAC_Wizard
         public Logger Log;
         private MainWindow _MainWindow;
         private SigningRules_Control SigningControl;
-        private bool RuleInEdit = false; 
+        private bool RuleInEdit = false;
+        private UIState state; 
+
+        private enum UIState
+        {
+            RuleConditions = 0,
+            RuleExceptions = 1
+        }
 
         public CustomRuleConditionsPanel(SigningRules_Control pControl)
         {
@@ -40,19 +47,21 @@ namespace WDAC_Wizard
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
             this.SigningControl = pControl;
-            this.RuleInEdit = true; 
+            this.RuleInEdit = true;
+            this.state = UIState.RuleConditions; 
+
         }
 
         /// <summary>
         /// Appends the custom rule to the bottom of the DataGridView and creates the rule in the CustomRules list. 
         /// </summary>
-        private void button_Create_Click(object sender, EventArgs e)
+        private void button_CreateRule_Click(object sender, EventArgs e)
         {
             // At a minimum, we need  rule level, and pub/hash/file - defult fallback
             if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || this.PolicyCustomRule.ReferenceFile == null)
             {
                 label_Error.Visible = true;
-                label_Error.Text = "Please select a rule type, a file and whether to allow or deny.";
+                label_Error.Text = "Please select a rule type, a file to allow or deny.";
                 this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
                 return;
             }
@@ -127,7 +136,6 @@ namespace WDAC_Wizard
             }
 
             // Add rule and exceptions to the table and master list & Scroll to new row index
-
             string action = String.Empty;
             string level = String.Empty;
             string name = String.Empty;
@@ -182,7 +190,6 @@ namespace WDAC_Wizard
                 default:
                     name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
                     break;
-
             }
 
             this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
@@ -196,6 +203,7 @@ namespace WDAC_Wizard
             // Offboard this to signingRules_Condition
             this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser);
 
+            // Renew the custom rule instance
             this.PolicyCustomRule = new PolicyCustomRules(); 
         }
 
@@ -318,44 +326,47 @@ namespace WDAC_Wizard
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
 
-                // Get cert chain info to be shown to the user
+                // Get cert chain info to be shown to the user if type is publisher. Otherwise, we don't check or try to build the cert chain
                 string leafCertSubjectName = "";
                 string pcaCertSubjectName = "";
-                try
+
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    var signer = X509Certificate.CreateFromSignedFile(refPath);
-                    var cert = new X509Certificate2(signer);
-                    var certChain = new X509Chain();
-                    var certChainIsValid = certChain.Build(cert);
+                    try
+                    {
+                        var signer = X509Certificate.CreateFromSignedFile(refPath);
+                        var cert = new X509Certificate2(signer);
+                        var certChain = new X509Chain();
+                        var certChainIsValid = certChain.Build(cert);
 
-                    leafCertSubjectName = cert.SubjectName.Name;
-                    if (certChain.ChainElements.Count > 1)
-                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+                        leafCertSubjectName = cert.SubjectName.Name;
+                        if (certChain.ChainElements.Count > 1)
+                        {
+                            pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+                        }
+                    }
 
+                    catch (Exception exp)
+                    {
+                        this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
+                        this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
+                        this.label_Error.Visible = true;
+
+                        Timer settingsUpdateNotificationTimer = new Timer();
+                        settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
+                        settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+                        settingsUpdateNotificationTimer.Start();
+                    }
                 }
-                catch (Exception exp)
-                {
-                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
-                        exp, refPath));
-                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
-                    this.label_Error.Visible = true;
-
-                    Timer settingsUpdateNotificationTimer = new Timer();
-                    settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
-                    settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
-                    settingsUpdateNotificationTimer.Start();
-                }
-
+                
                 PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
                 PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
-
             }
 
             // Set the landing UI depending on the Rule type
             switch (this.PolicyCustomRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
-
 
                     // UI
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
@@ -444,15 +455,20 @@ namespace WDAC_Wizard
         private void FileButton_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_File.Checked)
+            {
                 this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-
+            }
+                
             else
+            {
                 this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Folder);
+            }
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
             if (this.PolicyCustomRule.ReferenceFile != null)
+            {
                 button_Browse_Click(sender, e);
-
+            }
         }
 
         private void trackBar_Conditions_Scroll(object sender, EventArgs e)
@@ -509,7 +525,6 @@ namespace WDAC_Wizard
                         }
                     }
                     break;
-
 
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
@@ -577,7 +592,6 @@ namespace WDAC_Wizard
             }
         }
 
-
         /// <summary>
         /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
         /// </summary>
@@ -606,8 +620,9 @@ namespace WDAC_Wizard
                 return openFileDialog.FileName;
             }
             else
+            {
                 return String.Empty;
-
+            }
         }
 
         /// <summary>
@@ -626,8 +641,9 @@ namespace WDAC_Wizard
                 return openFolderDialog.SelectedPath;
             }
             else
+            {
                 return String.Empty;
-
+            }
         }
 
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
@@ -664,20 +680,127 @@ namespace WDAC_Wizard
             base.OnFormClosing(e);
         }
 
-        private void button_AddException_Click(object sender, EventArgs e)
+        private void button_Next_Click(object sender, EventArgs e)
         {
             // Show the exception UI
-            // var exceptionPath = new Exceptions_Control(this);
-            // this.Controls.Add(exceptionPath);
-            // exceptionPath.BringToFront();
-            // exceptionPath.Focus();
+            // Check required fields - that a reference file is selected
+            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
+                && this.PolicyCustomRule.ReferenceFile != null)
+            {
+                this.state = UIState.RuleExceptions; 
+                SetUIState();
 
-            // Create dumy exception need to set the Permission
-            var exceptions_Control = new Exceptions_Control(this);
-            // exceptions_Control.Show();
-            this.Controls.Add(exceptions_Control); 
-            exceptions_Control.BringToFront();
-            exceptions_Control.Focus(); 
+                // Disable next button 
+                this.button_Next.ForeColor = Color.Gray;
+                this.button_Back.FlatAppearance.BorderColor = Color.Gray;
+                this.button_Next.Enabled = false;
+
+                // Enable Back button
+                this.button_Back.ForeColor = Color.Black;
+                this.button_Back.FlatAppearance.BorderColor = Color.Black;
+                this.button_Back.Enabled = true; 
+            }
+            else
+            {
+                SetLabel_ErrorText(Properties.Resources.InvalidCustomRule_Error, false); 
+            }
+        }
+
+        private void button_Back_Click(object sender, EventArgs e)
+        {
+            // Enable next button 
+            this.button_Next.ForeColor = Color.Black;
+            this.button_Back.FlatAppearance.BorderColor = Color.Black;
+            this.button_Next.Enabled = true;
+
+            // Disable Back button
+            this.button_Back.ForeColor = Color.Gray;
+            this.button_Back.FlatAppearance.BorderColor = Color.Gray;
+            this.button_Back.Enabled = false;
+
+            this.state = UIState.RuleConditions;
+            SetUIState();
+        }
+
+        private void SetUIState()
+        {
+            switch(this.state)
+            {
+                case UIState.RuleConditions:
+
+                    // Set the control highlight rectangle pos
+                    this.controlHighlight_Panel.Location = new Point(3, 138);
+
+                    // Show header panel                        
+                    this.headerLabel.Text = "Custom Rule Conditions";
+
+                    // Show control panel
+                    this.Controls.Add(this.control_Panel);
+                    this.control_Panel.BringToFront();
+                    this.control_Panel.Focus();
+                    break;
+
+                case UIState.RuleExceptions:
+                    {
+                        var exceptions_Control = new Exceptions_Control(this);
+                        this.Controls.Add(exceptions_Control);
+                        exceptions_Control.BringToFront();
+                        exceptions_Control.Focus();
+
+                        // Set the control highlight rectangle pos
+                        this.controlHighlight_Panel.Location = new Point(3, 226);
+
+                        // Show control panel
+                        this.Controls.Add(this.control_Panel);
+                        this.control_Panel.BringToFront();
+                        this.control_Panel.Focus();
+
+                        // Show header panel                        
+                        this.headerLabel.Text = "Custom Rule Exceptions";
+                        this.Controls.Add(this.headerLabel);
+                        this.headerLabel.BringToFront();
+                        this.headerLabel.Focus();
+
+                        // Show buttons
+                        this.button_Next.BringToFront();
+                        this.button_Next.Focus();
+
+                        this.button_CreateRule.BringToFront();
+                        this.button_CreateRule.Focus();
+
+                        this.button_Back.BringToFront();
+                        this.button_Back.Focus();
+
+                        this.button_AddException.BringToFront();
+                        this.button_AddException.Focus(); 
+                    }
+
+                    break;
+
+                default:
+
+                    break; 
+            }
+        }
+
+        public void SetLabel_ErrorText(string errorText, bool shouldPersist=false)
+        {
+            this.label_Error.Text = errorText; 
+            this.label_Error.Visible = true;
+
+            if(!shouldPersist)
+            {
+                Timer settingsUpdateNotificationTimer = new Timer();
+                settingsUpdateNotificationTimer.Interval = (5000);
+                settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
+                settingsUpdateNotificationTimer.Start();
+            }
+        }
+
+        public void ClearLabel_ErrorText()
+        {
+            this.label_Error.Text = "";
+            this.label_Error.Visible = false;
         }
     }   
 }

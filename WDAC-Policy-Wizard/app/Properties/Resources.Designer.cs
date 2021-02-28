@@ -148,6 +148,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error. Could not build certificate chain for .
+        /// </summary>
+        internal static string CertificateBuild_Error {
+            get {
+                return ResourceManager.GetString("CertificateBuild_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap check_box_checked {
@@ -328,6 +337,15 @@ namespace WDAC_Wizard.Properties {
         internal static string InvalidateEAs_Info {
             get {
                 return ResourceManager.GetString("InvalidateEAs_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid custom rule. Please set the rule type and reference file before proceeding..
+        /// </summary>
+        internal static string InvalidCustomRule_Error {
+            get {
+                return ResourceManager.GetString("InvalidCustomRule_Error", resourceCulture);
             }
         }
         
