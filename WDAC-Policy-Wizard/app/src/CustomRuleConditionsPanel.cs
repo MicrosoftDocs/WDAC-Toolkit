@@ -730,6 +730,7 @@ namespace WDAC_Wizard
         private void SetUIState()
         {
             // bring info label to front
+            this.Controls.Add(this.label_Error);
             this.label_Error.Focus();
             this.label_Error.BringToFront();
 
@@ -739,6 +740,8 @@ namespace WDAC_Wizard
 
                     // Set the control highlight rectangle pos
                     this.controlHighlight_Panel.Location = new Point(3, 138);
+                    this.controlHighlight_Panel.BringToFront();
+                    this.controlHighlight_Panel.Focus(); 
 
                     // Show header panel                        
                     this.headerLabel.Text = "Custom Rule Conditions";
@@ -758,6 +761,8 @@ namespace WDAC_Wizard
 
                         // Set the control highlight rectangle pos
                         this.controlHighlight_Panel.Location = new Point(3, 226);
+                        this.controlHighlight_Panel.BringToFront();
+                        this.controlHighlight_Panel.Focus();
 
                         // Show control panel
                         this.Controls.Add(this.control_Panel);
@@ -794,6 +799,9 @@ namespace WDAC_Wizard
 
         public void SetLabel_ErrorText(string errorText, bool shouldPersist=false)
         {
+            this.label_Error.Focus();
+            this.label_Error.BringToFront();
+
             this.label_Error.Text = errorText; 
             this.label_Error.Visible = true;
 
