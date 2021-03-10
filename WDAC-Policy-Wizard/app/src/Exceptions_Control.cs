@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
+using System.IO; 
 
 
 namespace WDAC_Wizard
@@ -329,14 +330,19 @@ namespace WDAC_Wizard
 
             // New Display object
             DisplayObject displayObject = new DisplayObject();
-            displayObject.Level = "Somwthig";
-            displayObject.Name = "somethingelse";
+            displayObject.Level = this.ExceptionRule.Level.ToString();
+            displayObject.Name = Path.GetFileName(this.ExceptionRule.ReferenceFile.ToString());
 
             this.displayObjects.Add(displayObject);
             this.dataGridView_Exceptions.RowCount += 1;
 
-            // Reset the UI
+            // Scroll to bottom to see new rule added to list
+            this.dataGridView_Exceptions.FirstDisplayedScrollingRowIndex = this.dataGridView_Exceptions.RowCount - 1;
 
+            this.ExceptionRule = new PolicyCustomRules();
+
+            // Reset the UI
+            ClearCustomRulesPanel(true); 
         }
 
         private void trackBar_Conditions_Scroll(object sender, EventArgs e)

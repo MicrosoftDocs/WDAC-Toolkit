@@ -51,8 +51,8 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -258,8 +258,8 @@
             this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
             this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.column_Name,
-            this.column_Level});
+            this.column_Level,
+            this.column_Name});
             this.dataGridView_Exceptions.Location = new System.Drawing.Point(12, 274);
             this.dataGridView_Exceptions.Name = "dataGridView_Exceptions";
             this.dataGridView_Exceptions.ReadOnly = true;
@@ -361,14 +361,6 @@
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // column_Name
-            // 
-            this.column_Name.HeaderText = "Exception";
-            this.column_Name.MinimumWidth = 6;
-            this.column_Name.Name = "column_Name";
-            this.column_Name.ReadOnly = true;
-            this.column_Name.Width = 125;
-            // 
             // column_Level
             // 
             this.column_Level.HeaderText = "Type";
@@ -376,6 +368,14 @@
             this.column_Level.Name = "column_Level";
             this.column_Level.ReadOnly = true;
             this.column_Level.Width = 125;
+            // 
+            // column_Name
+            // 
+            this.column_Name.HeaderText = "Exception";
+            this.column_Name.MinimumWidth = 6;
+            this.column_Name.Name = "column_Name";
+            this.column_Name.ReadOnly = true;
+            this.column_Name.Width = 125;
             // 
             // Exceptions_Control
             // 
@@ -421,7 +421,7 @@
         private System.Windows.Forms.TextBox textBoxSlider_0;
         private System.Windows.Forms.Label labelSlider_0;
         private System.Windows.Forms.TrackBar trackBar_Conditions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn column_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column_Name;
     }
 }
