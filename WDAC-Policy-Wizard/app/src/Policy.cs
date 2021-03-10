@@ -54,6 +54,7 @@ namespace WDAC_Wizard
         public string TemplatePath { get; set; }        // ReadOnly Path to template policy - TODO: make const
         public string BaseToSupplementPath { get; set; } // Path to base policy to supplement, if applicable
         public string EditPolicyPath { get; set; }      // Path to the policy we are editing. Used for parsing.
+        public string BinPath { get; set;  }
 
         public List<string> PoliciesToMerge { get; set; }
 

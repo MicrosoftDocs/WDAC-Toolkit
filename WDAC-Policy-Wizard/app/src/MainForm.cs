@@ -781,7 +781,15 @@ namespace WDAC_Wizard
             }
             else
             {
-                this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
+                if(this.Policy.BinPath != null)
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + "\r\n" + this.Policy.BinPath);
+                }
+                else
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath); 
+                }
+
                 this._BuildPage.UpdateProgressBar(100, " ");
             }
 
@@ -1310,8 +1318,8 @@ namespace WDAC_Wizard
                 binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) +".bin";
             }
 
-            string binaryFilePath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);  
-            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, binaryFilePath);
+            this.Policy.BinPath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);  
+            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, this.Policy.BinPath);
 
             pipeline.Commands.AddScript(binConvertCmd);
 
