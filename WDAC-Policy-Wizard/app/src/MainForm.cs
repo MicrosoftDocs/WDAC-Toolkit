@@ -781,7 +781,9 @@ namespace WDAC_Wizard
             }
             else
             {
-                if(this.Policy.BinPath != null)
+                this._BuildPage.UpdateProgressBar(100, " ");
+
+                if (this.Policy.BinPath != null)
                 {
                     this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + "\r\n" + this.Policy.BinPath);
                 }
@@ -789,8 +791,6 @@ namespace WDAC_Wizard
                 {
                     this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath); 
                 }
-
-                this._BuildPage.UpdateProgressBar(100, " ");
             }
 
             this.Log.AddNewSeparationLine("Workflow -- DONE"); 
