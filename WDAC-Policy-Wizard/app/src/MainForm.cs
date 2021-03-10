@@ -1074,7 +1074,9 @@ namespace WDAC_Wizard
                 // Since we set the format in ProcessCustomRules(), the customRulesPathList will be the correct format
                 mergeScript = "Merge-CIPolicy -PolicyPaths ";
                 foreach (string path in customRulesPathList)
+                {
                     mergeScript += String.Format("\"{0}\",", path);
+                }
 
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
@@ -1132,7 +1134,7 @@ namespace WDAC_Wizard
                 this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
             }
 
-           this.Log.AddInfoMsg("--- Merge Templates Policy ---");
+            this.Log.AddInfoMsg("--- Merge Templates Policy ---");
             string DEST_PATH = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml"); //this.TempFolderPath + @"\OutputSchema.xml";
 
             List<string> policyPaths = new List<string>();
