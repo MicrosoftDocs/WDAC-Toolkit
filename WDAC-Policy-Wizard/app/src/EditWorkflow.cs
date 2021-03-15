@@ -8,11 +8,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-
+using System.Xml.Serialization;
 
 namespace WDAC_Wizard
 {
@@ -20,28 +20,22 @@ namespace WDAC_Wizard
     {
         public string EditPath { get; set; }
         private Logger Log; 
-        public string PolicyName { get; set; }
-        public string PolicyID { get; set; }
-        public List<PolicySettings> Settings { get; set; }
         private MainWindow _MainWindow;
-        private WDAC_Policy _Policy;
+        private WDAC_Policy Policy;
 
 
         public EditWorkflow(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this.PolicyID = "N/A";
-            this.PolicyName = "N/A";
-            this.Settings = new List<PolicySettings>();
-            pMainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.Edit; 
 
             this._MainWindow = pMainWindow;
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false;
-            
+            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.Edit;
+
+            this.Policy = this._MainWindow.Policy; 
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
-
         }
 
         /// <summary>
@@ -101,107 +95,36 @@ namespace WDAC_Wizard
         /// </summary>
         private void ParsePolicy(string xmlPath)
         {
-            // Parse the 
-            this.Settings = new List<PolicySettings>();
-
+            // Serialize the policy into the policy object
             try
             {
-                XmlReader xmlReader = new XmlTextReader(xmlPath);
-                // Counter for end of element nodes
-                int eoeCount;
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(xmlPath);
+                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+                this._MainWindow.ErrorOnPage = false;
 
-                while (xmlReader.Read())
+                // Set the policy format type for the policy creation step in MainForm.cs
+                if(this.Policy.siPolicy.BasePolicyID != null)
                 {
-                    switch (xmlReader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-
-                            if (xmlReader.IsEmptyElement) // Handle empty elements eg. FileRules and UpdatePolicySigners in SignedReputable
-                                break;
-
-                            switch (xmlReader.Name)
-                            {
-                                    case "Settings":
-                                    {
-                                        PolicySettings policySetting = new PolicySettings();
-                                        eoeCount = 0;
-                                        while (xmlReader.Read() && eoeCount < 3)
-                                        {
-                                            switch (xmlReader.NodeType)
-                                            {
-                                                case XmlNodeType.Element:
-                                                    eoeCount = 0;
-                                                    switch (xmlReader.Name)
-                                                    {
-
-                                                        case "Setting":
-
-                                                            policySetting = new PolicySettings();
-                                                            policySetting.Provider = xmlReader.GetAttribute("Provider");
-                                                            policySetting.Key = xmlReader.GetAttribute("Key");
-                                                            policySetting.ValueName = xmlReader.GetAttribute("ValueName");
-                                                            break;
-
-                                                        case "String":
-                                                            policySetting.ValString = xmlReader.ReadElementContentAsString();
-                                                            break;
-
-                                                        case "Boolean":
-                                                            policySetting.ValBool = xmlReader.ReadElementContentAsString() == "true";
-                                                            break;
-                                                    }
-
-                                                    break;
-
-                                                case XmlNodeType.EndElement:
-                                                    eoeCount++;
-                                                    if (eoeCount == 2)
-                                                    {
-                                                        this.Settings.Add(policySetting);
-                                                        this.Log.AddInfoMsg(String.Format("Existing Setting Added - Provider: {0},  Key: {1}, Value Name: {2}, String: {3}, Bool: {4}",
-                                                            policySetting.Provider, policySetting.Key, policySetting.ValueName,
-                                                            policySetting.ValString, policySetting.ValBool));
-                                                    }
-
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-                            }
-                            break;
-                    }
-                } //end of while
-
-                xmlReader.Close(); 
-
-            } // end of try
-            catch (Exception e)
-            {
-                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", e);
-            }
-
-            // Re-init PolicyName and ID in case one or both are not defined in this.Settings
-            this.PolicyName = @"N/A";
-            this.PolicyID = @"N/A";  
-    
-            foreach(var setting in this.Settings)
-            {
-                switch(setting.ValueName)
+                    this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+                }
+                else
                 {
-                    case "Name":
-                        this.PolicyName = setting.ValString;
-                        break;
-
-                    case "Id":
-                        this.PolicyID = setting.ValString;
-                        break;
-
-                    default:
-                        break; 
+                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy; 
                 }
             }
-            
+
+            catch (Exception e)
+            {
+                // Log eexception error and throw error to user
+                DialogResult res = MessageBox.Show("The base policy you have selected cannot be parsed by the Wizard\n\n" +
+                    "This is typically a result of a malformed policy.",
+                    "Policy Parsing Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                this.Log.AddErrorMsg("ParsePolicy encountered the following error message" + e.ToString()); 
+                this._MainWindow.ErrorOnPage = true;
+            }
         }
 
         /// <summary>
@@ -209,8 +132,31 @@ namespace WDAC_Wizard
         /// </summary>
         private void DisplayPolicyInfo()
         {
-            textBox_PolicyID.Text = this.PolicyID;
-            textBox_PolicyName.Text = this.PolicyName; 
+            // Set the default text fields to N/A. Will overwrite if we find true settings
+            textBox_PolicyID.Text =   "N/A"; 
+            textBox_PolicyName.Text = "N/A"; 
+            if(this.Policy.siPolicy.Settings != null)
+            {
+                foreach (var setting in this.Policy.siPolicy.Settings)
+                {
+                    if (setting.ValueName == "Name")
+                    {
+                        // Found the name of the policy
+                        textBox_PolicyName.Text = setting.Value.Item.ToString();
+                    }
+                    else if (setting.ValueName == "Id")
+                    {
+                        // Found the name of the policy
+                        textBox_PolicyID.Text = setting.Value.Item.ToString();
+                    }
+                    else
+                    {
+                        // Found another setting that we do not show to user
+                        continue;
+                    }
+                }
+            }
+
             policyInfoPanel.Visible = true;
         }
 
@@ -219,8 +165,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
-            this.PolicyName = textBox_PolicyName.Text;
-            this._MainWindow.Policy.PolicyName = this.PolicyName;
+            this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
         /// <summary>
@@ -228,8 +173,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void textBox_PolicyID_TextChanged(object sender, EventArgs e)
         {
-            this.PolicyID = textBox_PolicyID.Text;
-            this._MainWindow.Policy.PolicyID = this.PolicyID;
+            this._MainWindow.Policy.PolicyID = textBox_PolicyID.Text;
         }
     }
 }

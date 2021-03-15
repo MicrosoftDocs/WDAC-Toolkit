@@ -781,8 +781,16 @@ namespace WDAC_Wizard
             }
             else
             {
-                this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
                 this._BuildPage.UpdateProgressBar(100, " ");
+
+                if (this.Policy.BinPath != null)
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + "\r\n" + this.Policy.BinPath);
+                }
+                else
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath); 
+                }
             }
 
             this.Log.AddNewSeparationLine("Workflow -- DONE"); 
@@ -1074,7 +1082,9 @@ namespace WDAC_Wizard
                 // Since we set the format in ProcessCustomRules(), the customRulesPathList will be the correct format
                 mergeScript = "Merge-CIPolicy -PolicyPaths ";
                 foreach (string path in customRulesPathList)
+                {
                     mergeScript += String.Format("\"{0}\",", path);
+                }
 
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
@@ -1132,7 +1142,7 @@ namespace WDAC_Wizard
                 this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
             }
 
-           this.Log.AddInfoMsg("--- Merge Templates Policy ---");
+            this.Log.AddInfoMsg("--- Merge Templates Policy ---");
             string DEST_PATH = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml"); //this.TempFolderPath + @"\OutputSchema.xml";
 
             List<string> policyPaths = new List<string>();
@@ -1285,10 +1295,31 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            string binaryFilePath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), Path.GetFileNameWithoutExtension(this.Policy.SchemaPath)) + ".bin"; //stripped the path remove the .xml --> .bin
+            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
+            string binaryFileName; 
+            if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                    StreamReader reader = new StreamReader(this.Policy.SchemaPath);
+                    SiPolicy finalSiPolicy = (SiPolicy)serializer.Deserialize(reader);
+                    reader.Close();
+                    binaryFileName = String.Format("{0}.cip", finalSiPolicy.BasePolicyID);
+                }
+                catch
+                {
+                    binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) + ".bin";
+                }
+            }
+            else
+            {
+                //stripped the path remove the .xml --> .bin
+                binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) +".bin";
+            }
 
-            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"",
-                this.Policy.SchemaPath, binaryFilePath);
+            this.Policy.BinPath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);  
+            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, this.Policy.BinPath);
 
             pipeline.Commands.AddScript(binConvertCmd);
 
