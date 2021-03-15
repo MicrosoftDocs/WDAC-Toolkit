@@ -566,16 +566,61 @@ namespace WDAC_Wizard
             }
 
             // Check to make sure none of the fields are invalid
-            // If the selected attribute is not found (UI will show "N/A"), do not allow creation
-            if(this.PolicyCustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0 
-                && this.textBoxSlider_3.Text == "N/A"))
+            switch (this.PolicyCustomRule.GetRuleLevel())
             {
-                label_Error.Visible = true;
-                label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                return;
-            }
+                case PolicyCustomRules.RuleLevel.None:
+                    label_Error.Visible = true;
+                    label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                    this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                    return;
 
+                case PolicyCustomRules.RuleLevel.PcaCertificate:
+                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A")
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                        return;
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.Publisher:
+                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A")
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                        return;
+                    }
+                    break;
+
+
+                case PolicyCustomRules.RuleLevel.SignedVersion:
+                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
+                        || PolicyCustomRule.FileInfo["FileVersion"] == "N/A")
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                        return;
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.FilePublisher:
+                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
+                        || PolicyCustomRule.FileInfo["FileVersion"] == "N/A" || PolicyCustomRule.FileInfo["FileName"] == "N/A")
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                        return;
+                    }
+                    break;
+
+
+                default:
+                    break;
+            }
             // Add rule and exceptions to the table and master list & Scroll to new row index
            
             string action = String.Empty;

@@ -711,7 +711,7 @@ namespace WDAC_Wizard
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
+            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
             
             if(this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
             {
@@ -727,7 +727,6 @@ namespace WDAC_Wizard
                 MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
             }
                       
-
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
 
@@ -1075,6 +1074,13 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("--- Merge Custom Rules Policy ---");
 
             string mergeScript = String.Empty;
+
+            // Create runspace, pipeline and runscript
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+
             if (customRulesPathList.Count > 0)
             {
                 // Add all the merge paths
@@ -1089,19 +1095,28 @@ namespace WDAC_Wizard
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
                 mergeScript += String.Format(" -OutputFilePath \"{0}\"", outputFilePath);
+
+                pipeline.Commands.AddScript(mergeScript);
+                pipeline.Commands.Add("Out-String");
+
+                // Remove all of the policy rule-options so the rule-options set in template.xml persist when template.xml and FinalPolicy.xml are merged
+                int N_Rules = 19;
+                for (int i = 0; i <= N_Rules; i++)
+                {
+                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", outputFilePath, i));
+                }
+
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", mergeScript));
+
+                try
+                {
+                    Collection<PSObject> results = pipeline.Invoke();
+                }
+                catch (Exception e)
+                {
+                    this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
+                }
             }
-
-            // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(mergeScript);
-            pipeline.Commands.Add("Out-String");
-
-            this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", mergeScript));
-
-            Collection<PSObject> results = pipeline.Invoke();
-
             runspace.Dispose();
             worker.ReportProgress(85);
         }
@@ -1203,7 +1218,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
-                Console.WriteLine(String.Format("Exception encountered: {0}", e));
+                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeTemplatesPolicy(): {0}", e));
             }
             runspace.Dispose();
 
@@ -2004,10 +2019,13 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Edition/ProdName:{0}/{1} meets min build requirements.", edition, prodName));
             }
             else
-                supt_flag = 0; 
+            {
+                // Device does not meet the versioning or SKU check
+                supt_flag = 0;
+            }
 
-        
-            if (supt_flag == 0) // edition or prod name not found in either reg key, n_ed_sup = 0, throw warn msg
+            // edition or prod name not found in either reg key, n_ed_sup = 0, throw warn msg
+            if (supt_flag == 0) 
             {
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Build Detected!! BuildN={0}", releaseN));
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Edition/Product Detected!! CompositionEditionID={0} and ProductName={1}", edition, prodName));
