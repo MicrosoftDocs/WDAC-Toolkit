@@ -331,4 +331,7 @@
   <data name="BlobContainerString" xml:space="preserve">
     <value>wdac-wizard-logs</value>
   </data>
+  <data name="ResetSettingsString" xml:space="preserve">
+    <value>Are you sure you want to reset settings to their original states?</value>
+  </data>
 </root>
