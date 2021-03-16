@@ -480,6 +480,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset settings to their original states?.
+        /// </summary>
+        internal static string ResetSettingsString {
+            get {
+                return ResourceManager.GetString("ResetSettingsString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Turning this off will disable default FilePath rule protection of enforcing user-writeability and only allowing admin-writeable locations..
         /// </summary>
         internal static string RuntimeRules {
