@@ -577,20 +577,20 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleLevel.PcaCertificate:
                     if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A")
                     {
-                        label_Error.Visible = true;
-                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return;
+                        if(!AddNARuleToTable())
+                        {
+                            return;
+                        }
                     }
                     break;
 
                 case PolicyCustomRules.RuleLevel.Publisher:
                     if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A")
                     {
-                        label_Error.Visible = true;
-                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return;
+                        if (!AddNARuleToTable())
+                        {
+                            return;
+                        }
                     }
                     break;
 
@@ -599,10 +599,10 @@ namespace WDAC_Wizard
                     if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
                         || PolicyCustomRule.FileInfo["FileVersion"] == "N/A")
                     {
-                        label_Error.Visible = true;
-                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return;
+                        if (!AddNARuleToTable())
+                        {
+                            return;
+                        }
                     }
                     break;
 
@@ -610,10 +610,10 @@ namespace WDAC_Wizard
                     if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
                         || PolicyCustomRule.FileInfo["FileVersion"] == "N/A" || PolicyCustomRule.FileInfo["FileName"] == "N/A")
                     {
-                        label_Error.Visible = true;
-                        label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                        this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                        return;
+                        if (!AddNARuleToTable())
+                        {
+                            return;
+                        }
                     }
                     break;
 
@@ -705,6 +705,26 @@ namespace WDAC_Wizard
             // Reset UI view
             ClearCustomRulesPanel(true);
             this._MainWindow.CustomRuleinProgress = false; 
+        }
+
+        private bool AddNARuleToTable()
+        {
+            // Warn user that the presence of an N/A attribute may result in a hash rule
+            // Prompt user for additional confirmation
+            this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+            DialogResult res = MessageBox.Show(Properties.Resources.NAField_String, 
+                "Are you sure you want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (res == DialogResult.Yes)
+            {
+                this.Log.AddWarningMsg("Rule added to rules table."); 
+                return true; 
+            }
+            else
+            {
+                this.Log.AddInfoMsg("Rule not added to rules table.");
+                return false; 
+            }
         }
 
         /// <summary>
@@ -1035,6 +1055,7 @@ namespace WDAC_Wizard
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
             int numIdex = 0;
+            int customRuleIdx = -1; 
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
@@ -1049,23 +1070,37 @@ namespace WDAC_Wizard
 
             if (res == DialogResult.Yes)
             {
-                // New base policy Workflow -- check if there is a custom rule we must delete
-                if(!this.Policy._PolicyType.Equals(WDAC_Policy.PolicyType.Edit))
+                // Remove from UI
+                // Remove from DisplayObject
+                if (rowIdx < this.displayObjects.Count)
                 {
-                    if(this.Policy.CustomRules.Count > 0)
+                    this.displayObjects.RemoveAt(rowIdx);
+                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                }
+
+                // New base policy Workflow -- check if there is a custom rule we must delete
+                //if (!this.Policy._PolicyType.Equals(WDAC_Policy.PolicyType.Edit))
+                if(this.Policy.CustomRules.Count > 0)
+                {
+                    foreach(var customRule in this.Policy.CustomRules)
                     {
-                        foreach(var customRule in this.Policy.CustomRules)
+                        if(customRule.RowNumber == rowIdx)
                         {
-                            if(customRule.RowNumber == rowIdx)
-                            {
-                                this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
-                                this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
-                            }
-                            else
-                            {
-                                numIdex++;
-                            }
+                            customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
+                            break; 
                         }
+                        else
+                        {
+                            numIdex++;
+                        }
+                    }
+
+                    // Check if we assigned a value to custom rule indx to remove
+                    if(customRuleIdx != -1)
+                    {
+                        this.Policy.CustomRules.RemoveAt(customRuleIdx);
+                        return; 
                     }
                 }
 
@@ -1318,14 +1353,6 @@ namespace WDAC_Wizard
                 StreamWriter writer = new StreamWriter(this.XmlPath);
                 serializer.Serialize(writer, this.Policy.siPolicy);
                 writer.Close();
-
-                // Remove from UI
-                // Remove from DisplayObject
-                if (rowIdx < this.displayObjects.Count)
-                {
-                    this.displayObjects.RemoveAt(rowIdx);
-                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
-                }
             }
         }
 

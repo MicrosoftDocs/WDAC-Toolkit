@@ -334,4 +334,8 @@
   <data name="ResetSettingsString" xml:space="preserve">
     <value>Are you sure you want to reset settings to their original states?</value>
   </data>
+  <data name="NAField_String" xml:space="preserve">
+    <value>One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
+Do you want to continue by adding this rule to the policy?</value>
+  </data>
 </root>
