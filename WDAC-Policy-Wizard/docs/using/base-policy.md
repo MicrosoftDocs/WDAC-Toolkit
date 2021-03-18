@@ -6,6 +6,8 @@
 This document outlines the steps to create a new WDAC code integrity (CI) policy while using one of the three available CI templates
 as a starting point. The tool enables users to configure the policy rules, its signing rules and its attributes. 
 
+The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-create-base-policy) outlines the base policy creation steps. 
+
 ## 1. Select the Policy Creator from the start menu, then Base Policy ##
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, the base policy option will be pre-selected. Otherwise, select the base policy option. 
