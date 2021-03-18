@@ -361,6 +361,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
+        ///Do you want to continue by adding this rule to the policy?.
+        /// </summary>
+        internal static string NAField_String {
+            get {
+                return ResourceManager.GetString("NAField_String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap newPolicy {

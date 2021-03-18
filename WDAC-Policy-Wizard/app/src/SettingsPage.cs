@@ -147,6 +147,7 @@ namespace WDAC_Wizard
 
                     // new log object since upload closes and flushes current object
                     this._MainWindow.Log = new Logger(this._MainWindow.TempFolderPath);
+                    this.Log = this._MainWindow.Log; 
                 }
 
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
@@ -239,6 +240,11 @@ namespace WDAC_Wizard
 
                 SetSettingsValues(this.SettingsDict);
                 Properties.Settings.Default.Reset();
+
+
+                // if(this.Log.isClosed)
+                
+
             }
         }
 
