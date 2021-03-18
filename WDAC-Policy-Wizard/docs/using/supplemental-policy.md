@@ -5,7 +5,7 @@
 
 This document outlines the steps to create a new supplemental WDAC code integrity (CI) policy while using one of the three available CI templates as a starting point. The tool enables users to configure the policy rules, its signing rules and its attributes. 
 
-The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-create-supplemental-policy) outlines the base policy creation steps. 
+The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-create-supplemental-policy) outlines the supplemental policy creation steps. 
 
 ## 1. Select the Policy Creator from the start menu, then Supplemental Policy ##
 

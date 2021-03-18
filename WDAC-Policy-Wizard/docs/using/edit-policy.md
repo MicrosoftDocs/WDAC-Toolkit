@@ -6,7 +6,7 @@
 This document outlines the steps to edit an exisiting base or supplemental WDAC code integrity (CI) policy. This tool enables users to edit the policy rules, 
 its signing rules and its attributes. 
 
-The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-editing-policy) outlines the base policy creation steps. 
+The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-editing-policy) outlines the edit policy steps. 
 
 ## 1. Select the Policy Editor from the start menu ##
 
