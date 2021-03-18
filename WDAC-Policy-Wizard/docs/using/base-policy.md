@@ -30,7 +30,7 @@ The policy name and file location will default based on the template policy sele
 
 **NOTE:** Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
 
-![](imgs/new-base-template.png)
+![](../imgs/new-base-template.png)
 
 
 ## 3. Configure the policy rule options ##
