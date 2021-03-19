@@ -6,31 +6,28 @@
 This document outlines the steps to create a new WDAC code integrity (CI) policy while using one of the three available CI templates
 as a starting point. The tool enables users to configure the policy rules, its signing rules and its attributes. 
 
-The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-create-base-policy) outlines the base policy creation steps. 
-
 ## 1. Select the Policy Creator from the start menu, then Base Policy ##
 
 If the default setting (see [Settings Page](using/settings-page.md)) is enabled, the base policy option will be pre-selected. Otherwise, select the base policy option. 
 
 ## 2. Select from one of the default template policies ##
 
+Each one of the template policies has a unique set of policy rules and a varying level of security. 
 
-Each of the template policies has a unique set of policy allow list rules that will affect the circle-of-trust and security model of the policy. The following table lists the policies in increasing order of trust and freedom. For instance, the Default Windows mode policy trusts fewer application publishers and signers than the Signed and Reputable mode policy. The Default Windows policy will have a smaller circle-of-trust with better security than the Signed and Reputable policy, but at the expense of compatibility.  
+| Template Policy | Authorizes the  | Circle of Trust |
+| - | - | - |
+|**Allow Microsoft Mode** | Microsoft Office365 Applications <br/> Microsoft Store Applications | Smallest Circle-of-Trust |
+|**Windows Works Mode** | Microsoft Office365 Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers |  |
+|**Signed and Reputable Mode** | Microsoft Office365 Applications <br/> Microsoft Store Applications <br/> Windows-signed Applications <br/> WHQL Kernel Drivers <br/> [Files with good reputation, according to the ISG](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/use-windows-defender-application-control-with-intelligent-security-graph) | Largest Circle-of-Trust |
 
+The policy name and file location will default based on the template policy selected. The policy name and file location can be set be selecting the textbox and typing the desired string. 
 
-| Template Base Policy | Description | 
-|---------------------------------|-------------------------------------------------------------------|
-| **Default Windows Mode**      | Default Windows mode will authorize the following components: </br><ul><li>Windows operating components - any binary installed by a fresh install of Windows</li><li>Apps installed from the Microsoft Store</li><li>Microsoft Office365 apps, OneDrive, and Microsoft Teams</li><li>Third-party [Windows Hardware Compatible drivers](https://docs.microsoft.com/windows-hardware/drivers/install/whql-release-signature)</li></ul>|
-| **Allow Microsoft Mode**      | Allow mode will authorize the following components: </br><ul><li>Windows operating components - any binary installed by a fresh install of Windows</li><li>Apps installed from the Microsoft Store</li><li>Microsoft Office365 apps, OneDrive, and Microsoft Teams</li><li>Third-party [Windows Hardware Compatible drivers](https://docs.microsoft.com/windows-hardware/drivers/install/whql-release-signature)</li><li>*All Microsoft-signed software*</li></ul>|
-| **Signed and Reputable Mode** | Signed and Reputable mode will authorize the following components: </br><ul><li>Windows operating components - any binary installed by a fresh install of Windows</li><li>Apps installed from the Microsoft Store</li><li>Microsoft Office365 apps, OneDrive, and Microsoft Teams</li><li>Third-party [Windows Hardware Compatible drivers](https://docs.microsoft.com/windows-hardware/drivers/install/whql-release-signature)</li><li>All Microsoft-signed software</li><li>*Files with good reputation per [Microsoft Defender's Intelligent Security Graph technology](use-windows-defender-application-control-with-intelligent-security-graph.md)*</li></ul>|
-
-*Italicized content denotes the changes in the current policy with respect to the policy prior.*
-
-The policy name and file location will default based on the template policy selected. The policy name and file location can be set be selecting the textbox and typing the desired string. At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. 
+At any time during the workflow, you can choose to return to the default template page by selecting the `Policy Template` button on the left-hand menu. 
 
 **NOTE:** Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
 
-<div style="text-align:center"><img src="../imgs/new-base-template.png" /></div>
+![](imgs/new-base-template.png)
+
 
 ## 3. Configure the policy rule options ##
 
