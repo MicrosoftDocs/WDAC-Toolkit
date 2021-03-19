@@ -1,4 +1,4 @@
-![](WDAC-Policy-Wizard/docs/imgs/header-logo.PNG)
+<div style="text-align:center"><img src="WDAC-Policy-Wizard/docs/imgs/header-logo.PNG" /></div>
 #
 
 
