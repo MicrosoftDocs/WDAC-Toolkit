@@ -26,7 +26,7 @@ At any time during the workflow, you can choose to return to the default templat
 
 **NOTE:** Returning to the template page will remove the configured policy rule options as well as the custom signing rules.  
 
-![](imgs/new-base-template.png)
+![](../imgs/new-base-template.png)
 
 
 ## 3. Configure the policy rule options ##
