@@ -261,6 +261,41 @@ namespace WDAC_Wizard
             return newUniquePath;
         }
 
+        public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
+        {
+            SiPolicy siPolicy; 
+            if(xmlPath == null)
+            {
+                return null; 
+            }
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(xmlPath);
+                siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+            }
+            catch(Exception exp)
+            {
+                return null; 
+            }
+
+            return siPolicy; 
+        }
+
+        public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
+        {
+            if(siPolicy == null || xmlPath == null)
+            {
+                return; 
+            }
+
+            // Serialize policy to XML file
+            XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+            StreamWriter writer = new StreamWriter(xmlPath);
+            serializer.Serialize(writer, siPolicy);
+            writer.Close();
+        }
     }
 
     public class packedInfo

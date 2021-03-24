@@ -228,6 +228,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conversion of the Code Integrity Event Log to a WDAC Policy XML file was successful. .
+        /// </summary>
+        internal static string EventLogConversionSuccess {
+            get {
+                return ResourceManager.GetString("EventLogConversionSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate..
         /// </summary>
         internal static string EVSigners_Info {

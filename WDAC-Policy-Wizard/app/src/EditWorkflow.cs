@@ -26,7 +26,12 @@ namespace WDAC_Wizard
         private MainWindow _MainWindow;
         private WDAC_Policy Policy;
         private Runspace runspace;
-        private List<DriverFile> DriverFiles; 
+        private List<DriverFile> DriverFiles;
+
+        const int PAD_X = 3;
+        const int PAD_Y = 3;
+
+        const string EVENT_LOG_POLICY_PATH = "EventLog_ConvertedTo_WDAC.xml"; 
 
         public EditWorkflow(MainWindow pMainWindow)
         {
@@ -39,6 +44,7 @@ namespace WDAC_Wizard
             this.Policy = this._MainWindow.Policy; 
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
+
         }
 
         /// <summary>
@@ -53,9 +59,13 @@ namespace WDAC_Wizard
                 DialogResult res = MessageBox.Show("Modifying the current schema to edit will cause you to lose your progress." +
                     "Are you sure you want to do this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res == DialogResult.Yes)
+                {
                     this._MainWindow.RedoFlowRequired = true;
+                }
                 else
+                {
                     return;
+                }
             }
                        
             this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
@@ -101,10 +111,7 @@ namespace WDAC_Wizard
             // Serialize the policy into the policy object
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(xmlPath);
-                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(xmlPath); 
                 this._MainWindow.ErrorOnPage = false;
 
                 // Set the policy format type for the policy creation step in MainForm.cs
@@ -205,7 +212,27 @@ namespace WDAC_Wizard
 
         private void button_ParseEventLog_Click(object sender, EventArgs e)
         {
+            // Serialize the siPolicy to xml and display the name and ID to user. 
+            // Afterwards, set the editPath to the temp location of the xml
+
+            string tempPath = "C:\\Users\\jogeurte.REDMOND\\AppData\\Local\\Temp\\WDACWizard\\Temp\\032421_1542";
+            string fullPath = "C:\\Users\\jogeurte.REDMOND\\AppData\\Local\\Temp\\WDACWizard\\Temp\\032421_1542\\EventLog_ConvertedTo_WDAC.xml"; 
+
+            if(fullPath.Contains(tempPath))
+            {
+                Console.WriteLine("Continue because we did the right thiong"); 
+            }
+
+
             SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath);
+
+            string xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
+            Helper.SerializePolicytoXML(siPolicy, xmlPath);
+            
+
+            // Set paths correctly so policy rules page can parse the policy
+            this.EditPath = xmlPath;
+            this._MainWindow.Policy.EditPolicyPath = this.EditPath;
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -234,18 +261,15 @@ namespace WDAC_Wizard
             else
             {
                 // Remove GIF // Update UI 
-                this.panel_Progress.Visible = false; 
-
+                this.panel_Progress.Visible = false;
+                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log to WDAC Policy Conversion Success", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             this.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
 
         }
 
-        private void Button_ParseEventLog_Click(object sender, EventArgs e)
-        {
-            SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath, "Publisher"); 
-        }
 
         public string CreateCustomRuleScript(PolicyCustomRules customRule)
         {
@@ -307,21 +331,24 @@ namespace WDAC_Wizard
         /// </summary>
         public string CreatePolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
         {
-            string policyScript = string.Empty;
+            string policyScript;
 
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
                 policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
-
+            }
+                
             else
+            {
                 policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
-
+            }
+                
             return policyScript;
         }
 
         private bool ConvertDriverFilestoXml(List<DriverFile> driverFiles)
         {
             bool wasSuccessful = true;
-            int progressVal = 0; 
             List<string> policyPaths = new List<string>();
 
             for (int i = 0; i < 5; i++)// driverFiles.Count(); i++)
@@ -363,7 +390,8 @@ namespace WDAC_Wizard
 
 
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
-            string outputFilePath = Path.Combine(this._MainWindow.TempFolderPath, "Audit_Merge_Policy.xml");
+            string xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
+            
             foreach (var path in policyPaths)
             {
                 mergeScript += String.Format("\"{0}\",", path);
@@ -371,7 +399,7 @@ namespace WDAC_Wizard
 
             // Remove last comma and add outputFilePath
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
-            mergeScript += String.Format(" -OutputFilePath \"{0}\"", outputFilePath);
+            mergeScript += String.Format(" -OutputFilePath \"{0}\"", xmlPath);
             Pipeline mergePipeline = this.runspace.CreatePipeline();
 
             mergePipeline.Commands.AddScript(mergeScript);
@@ -379,7 +407,48 @@ namespace WDAC_Wizard
             mergePipeline.Invoke();
             mergePipeline.Dispose();
 
+            // Set the reference to the newly written event log policy xml file
+            this.EditPath = xmlPath;
+            this._MainWindow.Policy.EditPolicyPath = this.EditPath;
+
             return wasSuccessful; 
+        }
+
+        private void Label_LearnMore_Click(object sender, EventArgs e)
+        {
+            // multi-policy info label clicked. Launch multi-policy info webpage
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control"
+                    + "/audit-windows-defender-application-control-policies#create-a-windows-defender-application-control-policy-that-captures-audit-information-from-the-event-log";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+            }
+        }
+
+        private void EditXML_RadioButton_Click(object sender, EventArgs e)
+        {
+            // User wants to edit xml file of an existing policy. Prepare the UI accordingly
+            this.panel_Edit_XML.Visible = true;
+            this.panel_EventLog_Conversion.Visible = false;
+
+            // Bring edit xml panel to upper-right corner of page panel
+            Point urPoint = new Point(PAD_X, PAD_Y);
+            this.panel_Edit_XML.Location = urPoint; 
+        }
+
+        private void EventConversion_RadioButton_Click(object sender, EventArgs e)
+        {
+            // User wants to convert an event log to a WDAC policy. Prepare the UI accordingly
+            this.panel_Edit_XML.Visible = false;
+            this.panel_EventLog_Conversion.Visible = true;
+
+            // Bring edit xml panel to upper-right corner of page panel
+            Point urPoint = new Point(PAD_X, PAD_Y);
+            this.panel_EventLog_Conversion.Location = urPoint;
         }
     }
 }
