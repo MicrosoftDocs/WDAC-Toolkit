@@ -54,6 +54,7 @@ namespace WDAC_Wizard
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button_ConvertEventLog_Policy = new System.Windows.Forms.Button();
             this.control_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -387,12 +388,23 @@ namespace WDAC_Wizard
             this.label4.TabIndex = 35;
             this.label4.Text = "Merge two existing policies into one\r\n";
             // 
+            // button_ConvertEventLog_Policy
+            // 
+            this.button_ConvertEventLog_Policy.Location = new System.Drawing.Point(576, 606);
+            this.button_ConvertEventLog_Policy.Name = "button_ConvertEventLog_Policy";
+            this.button_ConvertEventLog_Policy.Size = new System.Drawing.Size(173, 23);
+            this.button_ConvertEventLog_Policy.TabIndex = 36;
+            this.button_ConvertEventLog_Policy.Text = "Convert Event Log";
+            this.button_ConvertEventLog_Policy.UseVisualStyleBackColor = true;
+            this.button_ConvertEventLog_Policy.Click += new System.EventHandler(this.button_ConvertEventLog_Policy_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1232, 703);
+            this.Controls.Add(this.button_ConvertEventLog_Policy);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -412,6 +424,7 @@ namespace WDAC_Wizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Defender App Control Policy Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClosing_Event);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.control_Panel.ResumeLayout(false);
             this.control_Panel.PerformLayout();
             this.ResumeLayout(false);
@@ -442,6 +455,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label workflow_Label;
+        private System.Windows.Forms.Button button_ConvertEventLog_Policy;
     }
 }
 

@@ -2051,6 +2051,32 @@ namespace WDAC_Wizard
         {
             this.label_Info.Visible = false;
         }
+
+        private void button_ConvertEventLog_Policy_Click(object sender, EventArgs e)
+        {
+            string dspTitle = "Choose event logs to convert to policy";
+            List<string> policyPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
+
+            List<DriverFile> driverFiles = Helper.ReadArbitraryEventLogs(policyPaths); 
+
+            foreach(var file in driverFiles)
+            {
+                PolicyCustomRules customRule = new PolicyCustomRules();
+                customRule.ReferenceFile = file.Path;
+                customRule.Level = PolicyCustomRules.RuleLevel.Publisher;
+                customRule.Permission = PolicyCustomRules.RulePermission.Allow;
+
+                createCustomRuleScript(customRule); 
+                
+            }
+
+            SiPolicy siPolicy = Helper.ReadMachineEventLogs(this.TempFolderPath); 
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

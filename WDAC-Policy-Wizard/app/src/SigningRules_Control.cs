@@ -12,9 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization; 
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.ComponentModel; 
 
 namespace WDAC_Wizard
 {
