@@ -216,6 +216,51 @@ namespace WDAC_Wizard
             }
         }
 
+        //
+        // Summary:
+        //     Scans the input string folderPth and finds the filepath with the greatest _ID. 
+        //      
+        // Returns:
+        //     String with the newest _ID filename. example) policy_44.xml 
+        public static string GetUniquePolicyPath(string folderPth)
+        {
+            string newUniquePath = "";
+            int NewestID = -1;
+            int Start, End;
+
+            DirectoryInfo dir = new DirectoryInfo(folderPth);
+
+            foreach (var file in dir.GetFiles("*.xml"))
+            {
+                Start = file.Name.IndexOf("policy_") + 7;
+                End = file.Name.IndexOf(".xml");
+
+                // If Start indexof returns -1, 
+                if (Start == 6)
+                {
+                    continue;
+                }
+
+                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
+
+                if (ID > NewestID)
+                {
+                    NewestID = ID;
+                }
+            }
+
+            if (NewestID < 0)
+            {
+                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
+            }
+            else
+            {
+                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
+            }
+
+            return newUniquePath;
+        }
+
     }
 
     public class packedInfo

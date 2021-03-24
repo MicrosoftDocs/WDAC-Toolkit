@@ -964,11 +964,11 @@ namespace WDAC_Wizard
             {
                 var customRule = this.Policy.CustomRules[i];
                 customRule.PSVariable = i.ToString(); 
-                string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
+                string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath); 
 
-                string ruleScript = createCustomRuleScript(customRule);
-                string policyScript = createPolicyScript(customRule, tmpPolicyPath); 
+                string ruleScript = CreateCustomRuleScript(customRule);
+                string policyScript = CreatePolicyScript(customRule, tmpPolicyPath); 
 
                 // Add script to pipeline and run PS command
                 Pipeline pipeline = this.runspace.CreatePipeline();
@@ -996,7 +996,7 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
-        public string createCustomRuleScript(PolicyCustomRules customRule)
+        public string CreateCustomRuleScript(PolicyCustomRules customRule)
         {
             string customRuleScript = string.Empty;
 
@@ -1052,7 +1052,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
         /// </summary>
-        public string createPolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
+        public string CreatePolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
         {
             string policyScript = string.Empty;
 
@@ -1504,52 +1504,7 @@ namespace WDAC_Wizard
             
         }
 
-        //
-        // Summary:
-        //     Scans the input string folderPth and finds the filepath with the greatest _ID. 
-        //      
-        // Returns:
-        //     String with the newest _ID filename. example) policy_44.xml 
-        private string getUniquePolicyPath(string folderPth)
-        {
-            string newUniquePath = "";
-            int NewestID = -1;
-            int Start, End;
-
-            DirectoryInfo dir = new DirectoryInfo(folderPth);
-
-            foreach (var file in dir.GetFiles("*.xml"))
-            {
-                this.Log.AddInfoMsg(String.Format("Found xml file, {0}", file.Name)); 
-                Start = file.Name.IndexOf("policy_") + 7;
-                End = file.Name.IndexOf(".xml");
-
-                // If Start indexof returns -1, 
-                if (Start == 6)
-                {
-                    continue; 
-                }
-
-                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
-
-                if (ID > NewestID)
-                    NewestID = ID;
-            }
-
-            if (NewestID < 0)
-            {
-                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
-            }
-            else
-            {
-                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
-            }
-
-            this.Log.AddInfoMsg(String.Format("Unique Policy Path returned: {0}", newUniquePath));
-            return newUniquePath;
-        }
-
-        
+                
         /// <summary>
         /// Retrieves the current date and formats it in descending order.
         /// </summary>
@@ -2052,26 +2007,6 @@ namespace WDAC_Wizard
             this.label_Info.Visible = false;
         }
 
-        private void button_ConvertEventLog_Policy_Click(object sender, EventArgs e)
-        {
-            string dspTitle = "Choose event logs to convert to policy";
-            List<string> policyPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
-
-            List<DriverFile> driverFiles = Helper.ReadArbitraryEventLogs(policyPaths); 
-
-            foreach(var file in driverFiles)
-            {
-                PolicyCustomRules customRule = new PolicyCustomRules();
-                customRule.ReferenceFile = file.Path;
-                customRule.Level = PolicyCustomRules.RuleLevel.Publisher;
-                customRule.Permission = PolicyCustomRules.RulePermission.Allow;
-
-                createCustomRuleScript(customRule); 
-                
-            }
-
-            SiPolicy siPolicy = Helper.ReadMachineEventLogs(this.TempFolderPath); 
-        }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {

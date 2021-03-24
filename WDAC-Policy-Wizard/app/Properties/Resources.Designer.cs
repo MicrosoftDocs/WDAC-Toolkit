@@ -218,6 +218,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap eventlog_progress {
+            get {
+                object obj = ResourceManager.GetObject("eventlog_progress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate..
         /// </summary>
         internal static string EVSigners_Info {
