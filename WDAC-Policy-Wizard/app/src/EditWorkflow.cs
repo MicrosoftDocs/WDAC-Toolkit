@@ -27,11 +27,18 @@ namespace WDAC_Wizard
         private WDAC_Policy Policy;
         private Runspace runspace;
         private List<DriverFile> DriverFiles;
-
+        private WorkflowType Workflow; 
         const int PAD_X = 3;
         const int PAD_Y = 3;
 
         const string EVENT_LOG_POLICY_PATH = "EventLog_ConvertedTo_WDAC.xml"; 
+
+        private enum WorkflowType
+        {
+            Edit = 0, 
+            DeviceEventLog = 1, 
+            ArbitraryEventLog = 2
+        }
 
         public EditWorkflow(MainWindow pMainWindow)
         {
@@ -44,7 +51,7 @@ namespace WDAC_Wizard
             this.Policy = this._MainWindow.Policy; 
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
-
+            this.Workflow = WorkflowType.Edit; // Edit xml is default in the UI
         }
 
         /// <summary>
@@ -215,31 +222,43 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
 
-            string tempPath = "C:\\Users\\jogeurte.REDMOND\\AppData\\Local\\Temp\\WDACWizard\\Temp\\032421_1542";
-            string fullPath = "C:\\Users\\jogeurte.REDMOND\\AppData\\Local\\Temp\\WDACWizard\\Temp\\032421_1542\\EventLog_ConvertedTo_WDAC.xml"; 
+            this.panel_Progress.Visible = true;
+            this.label_Progress.Text = "Event Log Conversion in Progress ...";
+            this.Workflow = WorkflowType.DeviceEventLog; 
 
-            if(fullPath.Contains(tempPath))
+            // Create background worker to display updates to UI
+            if (!this.backgroundWorker.IsBusy)
             {
-                Console.WriteLine("Continue because we did the right thiong"); 
+                this.backgroundWorker.RunWorkerAsync();
             }
 
-
-            SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath);
-
-            string xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
-            Helper.SerializePolicytoXML(siPolicy, xmlPath);
-            
-
-            // Set paths correctly so policy rules page can parse the policy
-            this.EditPath = xmlPath;
-            this._MainWindow.Policy.EditPolicyPath = this.EditPath;
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             this.backgroundWorker = sender as BackgroundWorker;
+            string xmlPath = String.Empty; 
+            if(this.Workflow == WorkflowType.ArbitraryEventLog)
+            {
+                List<string> policyPaths = ConvertDriverFilestoXml(this.DriverFiles);
+                xmlPath = MergeAllPolicies(policyPaths); 
+            }
+            
+            else if(this.Workflow == WorkflowType.DeviceEventLog)
+            {
+                SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath);
 
-            bool success = ConvertDriverFilestoXml(this.DriverFiles);
+                xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
+                Helper.SerializePolicytoXML(siPolicy, xmlPath);
+            }
+            else
+            {
+
+            }
+
+            // Set paths correctly so policy rules page can parse the policy
+            this.EditPath = xmlPath;
+            this._MainWindow.Policy.EditPolicyPath = this.EditPath;
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -346,9 +365,8 @@ namespace WDAC_Wizard
             return policyScript;
         }
 
-        private bool ConvertDriverFilestoXml(List<DriverFile> driverFiles)
+        private List<string> ConvertDriverFilestoXml(List<DriverFile> driverFiles)
         {
-            bool wasSuccessful = true;
             List<string> policyPaths = new List<string>();
 
             for (int i = 0; i < 5; i++)// driverFiles.Count(); i++)
@@ -388,10 +406,14 @@ namespace WDAC_Wizard
                 pipeline.Dispose(); 
             }
 
+            return policyPaths; 
+        }
 
+        private string MergeAllPolicies(List<string> policyPaths)
+        {
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
             string xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
-            
+
             foreach (var path in policyPaths)
             {
                 mergeScript += String.Format("\"{0}\",", path);
@@ -407,11 +429,7 @@ namespace WDAC_Wizard
             mergePipeline.Invoke();
             mergePipeline.Dispose();
 
-            // Set the reference to the newly written event log policy xml file
-            this.EditPath = xmlPath;
-            this._MainWindow.Policy.EditPolicyPath = this.EditPath;
-
-            return wasSuccessful; 
+            return xmlPath;
         }
 
         private void Label_LearnMore_Click(object sender, EventArgs e)
