@@ -348,6 +348,7 @@ Do you want to continue by adding this rule to the policy?</value>
     <value>Conversion of the event log to a WDAC Policy XML file was successful. </value>
   </data>
   <data name="UnsuccessfulEventLogConversion" xml:space="preserve">
-    <value>Conversion of the event log to a WDAC policy was unsuccessful. Please try a different log file.</value>
+    <value>Conversion of the event log to a WDAC policy was unsuccessful. 
+Please try a different log file.</value>
   </data>
 </root>

@@ -655,7 +655,8 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conversion of the event log to a WDAC policy was unsuccessful. Please try a different log file..
+        ///   Looks up a localized string similar to Conversion of the event log to a WDAC policy was unsuccessful. 
+        ///Please try a different log file..
         /// </summary>
         internal static string UnsuccessfulEventLogConversion {
             get {

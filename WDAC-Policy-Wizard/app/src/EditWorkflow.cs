@@ -266,7 +266,7 @@ namespace WDAC_Wizard
 
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
-            this.label_Progress.Text = "Event Log Conversion in Progress ...";
+            this.label_Progress.Text = "Event Viewer Log Conversion in Progress";
             this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
             this.Workflow = WorkflowType.DeviceEventLog; 
 
@@ -421,7 +421,7 @@ namespace WDAC_Wizard
         {
             List<string> policyPaths = new List<string>();
 
-            for (int i = 0; i < 5; i++)// driverFiles.Count(); i++)
+            for (int i = 0; i < driverFiles.Count(); i++)
             {
                 var file = driverFiles[i];
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this._MainWindow.TempFolderPath);
