@@ -267,6 +267,7 @@ namespace WDAC_Wizard
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.label_Progress.Text = "Event Log Conversion in Progress ...";
+            this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
             this.Workflow = WorkflowType.DeviceEventLog; 
 
             // Create background worker to display updates to UI
@@ -316,16 +317,24 @@ namespace WDAC_Wizard
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Remove GIF // Update UI 
+            this.panel_Progress.Visible = false;
+            this.eventLogParsing_Result_Panel.Visible = true;
+            this.eventLogParsing_Result_Panel.BringToFront(); 
+
+            // Unsuccessful conversion
             if (e.Error != null)
             {
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
+                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable; 
             }
             else
             {
-                // Remove GIF // Update UI 
-                this.panel_Progress.Visible = false;
+                this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
+                this.parseresult_PictureBox.Image = Properties.Resources.verified;
                 DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log to WDAC Policy Conversion Success", 
-                    MessageBoxButtons.OK, MessageBoxIcon.None);
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             this.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");

@@ -54,20 +54,26 @@ namespace WDAC_Wizard
             this.label9 = new System.Windows.Forms.Label();
             this.panel_Page = new System.Windows.Forms.Panel();
             this.panel_EventLog_Conversion = new System.Windows.Forms.Panel();
+            this.textBox_EventLog = new System.Windows.Forms.TextBox();
+            this.eventLogParsing_Result_Panel = new System.Windows.Forms.Panel();
+            this.parseresult_PictureBox = new System.Windows.Forms.PictureBox();
+            this.parseResults_Label = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBox_Level = new System.Windows.Forms.ComboBox();
+            this.textBox_EventLogFilePath = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox_EventLogFilePath = new System.Windows.Forms.TextBox();
-            this.comboBox_Level = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label_Error = new System.Windows.Forms.Label();
             this.policyInfoPanel.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.panel_Page.SuspendLayout();
             this.panel_EventLog_Conversion.SuspendLayout();
+            this.eventLogParsing_Result_Panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.parseresult_PictureBox)).BeginInit();
             this.panel_Edit_XML.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -187,9 +193,11 @@ namespace WDAC_Wizard
             // 
             // button_ParseEventLog
             // 
-            this.button_ParseEventLog.Location = new System.Drawing.Point(24, 144);
+            this.button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_ParseEventLog.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 163);
             this.button_ParseEventLog.Name = "button_ParseEventLog";
-            this.button_ParseEventLog.Size = new System.Drawing.Size(145, 25);
+            this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
             this.button_ParseEventLog.TabIndex = 112;
             this.button_ParseEventLog.Text = "Parse Event Log";
             this.button_ParseEventLog.UseVisualStyleBackColor = true;
@@ -307,11 +315,13 @@ namespace WDAC_Wizard
             this.panel_Page.Controls.Add(this.panel_Edit_XML);
             this.panel_Page.Location = new System.Drawing.Point(156, 254);
             this.panel_Page.Name = "panel_Page";
-            this.panel_Page.Size = new System.Drawing.Size(950, 525);
+            this.panel_Page.Size = new System.Drawing.Size(950, 605);
             this.panel_Page.TabIndex = 115;
             // 
             // panel_EventLog_Conversion
             // 
+            this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLog);
+            this.panel_EventLog_Conversion.Controls.Add(this.eventLogParsing_Result_Panel);
             this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_LogFile);
             this.panel_EventLog_Conversion.Controls.Add(this.label8);
             this.panel_EventLog_Conversion.Controls.Add(this.label7);
@@ -323,9 +333,127 @@ namespace WDAC_Wizard
             this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
             this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 214);
             this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
-            this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 308);
+            this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 388);
             this.panel_EventLog_Conversion.TabIndex = 1;
             this.panel_EventLog_Conversion.Visible = false;
+            // 
+            // textBox_EventLog
+            // 
+            this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_EventLog.Location = new System.Drawing.Point(23, 133);
+            this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox_EventLog.Name = "textBox_EventLog";
+            this.textBox_EventLog.ReadOnly = true;
+            this.textBox_EventLog.Size = new System.Drawing.Size(453, 24);
+            this.textBox_EventLog.TabIndex = 123;
+            // 
+            // eventLogParsing_Result_Panel
+            // 
+            this.eventLogParsing_Result_Panel.Controls.Add(this.parseresult_PictureBox);
+            this.eventLogParsing_Result_Panel.Controls.Add(this.parseResults_Label);
+            this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(20, 311);
+            this.eventLogParsing_Result_Panel.Margin = new System.Windows.Forms.Padding(2);
+            this.eventLogParsing_Result_Panel.Name = "eventLogParsing_Result_Panel";
+            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(526, 35);
+            this.eventLogParsing_Result_Panel.TabIndex = 122;
+            this.eventLogParsing_Result_Panel.Visible = false;
+            // 
+            // parseresult_PictureBox
+            // 
+            this.parseresult_PictureBox.Image = global::WDAC_Wizard.Properties.Resources.verified;
+            this.parseresult_PictureBox.Location = new System.Drawing.Point(4, 5);
+            this.parseresult_PictureBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.parseresult_PictureBox.Name = "parseresult_PictureBox";
+            this.parseresult_PictureBox.Size = new System.Drawing.Size(23, 26);
+            this.parseresult_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.parseresult_PictureBox.TabIndex = 94;
+            this.parseresult_PictureBox.TabStop = false;
+            // 
+            // parseResults_Label
+            // 
+            this.parseResults_Label.AutoSize = true;
+            this.parseResults_Label.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.parseResults_Label.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.parseResults_Label.Location = new System.Drawing.Point(37, 8);
+            this.parseResults_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.parseResults_Label.Name = "parseResults_Label";
+            this.parseResults_Label.Size = new System.Drawing.Size(223, 18);
+            this.parseResults_Label.TabIndex = 16;
+            this.parseResults_Label.Text = "Policy conversion was successful.";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(19, 44);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(470, 17);
+            this.label8.TabIndex = 121;
+            this.label8.Text = "The Wizard will try to create file rules with this level and fallback to hash rul" +
+    "es";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(19, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(116, 19);
+            this.label7.TabIndex = 120;
+            this.label7.Text = "File Rule Level:";
+            // 
+            // comboBox_Level
+            // 
+            this.comboBox_Level.FormattingEnabled = true;
+            this.comboBox_Level.Items.AddRange(new object[] {
+            "Root CA Certificate",
+            "PCA Certificate",
+            "Publisher",
+            "Signed Version",
+            "File Publisher",
+            "File Name",
+            "Hash"});
+            this.comboBox_Level.Location = new System.Drawing.Point(140, 13);
+            this.comboBox_Level.Name = "comboBox_Level";
+            this.comboBox_Level.Size = new System.Drawing.Size(135, 24);
+            this.comboBox_Level.TabIndex = 119;
+            this.comboBox_Level.Text = "Select Level";
+            this.comboBox_Level.SelectedIndexChanged += new System.EventHandler(this.comboBox_Level_SelectedIndexChanged);
+            // 
+            // textBox_EventLogFilePath
+            // 
+            this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 239);
+            this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
+            this.textBox_EventLogFilePath.ReadOnly = true;
+            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 24);
+            this.textBox_EventLogFilePath.TabIndex = 118;
+            this.textBox_EventLogFilePath.Text = "Select Event Log File";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(16, 217);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(238, 19);
+            this.label4.TabIndex = 117;
+            this.label4.Text = "Parse an Event Log File to Policy";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label6.ForeColor = System.Drawing.Color.Black;
+            this.label6.Location = new System.Drawing.Point(17, 112);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(493, 18);
+            this.label6.TabIndex = 116;
+            this.label6.Text = "Parse Event Log from the Event Viewer to Policy (Recommended)";
             // 
             // panel_Edit_XML
             // 
@@ -348,80 +476,6 @@ namespace WDAC_Wizard
             this.label3.Size = new System.Drawing.Size(143, 19);
             this.label3.TabIndex = 12;
             this.label3.Text = "Policy Path to Edit:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(17, 112);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(408, 18);
-            this.label6.TabIndex = 116;
-            this.label6.Text = "Parse on-device Event Logs to Policy (Recommended)";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(16, 217);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(306, 19);
-            this.label4.TabIndex = 117;
-            this.label4.Text = "Parse an Arbitrary Event Log File to Policy";
-            // 
-            // textBox_EventLogFilePath
-            // 
-            this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 239);
-            this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
-            this.textBox_EventLogFilePath.ReadOnly = true;
-            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 24);
-            this.textBox_EventLogFilePath.TabIndex = 118;
-            this.textBox_EventLogFilePath.Text = "Select Event Log File";
-            // 
-            // comboBox_Level
-            // 
-            this.comboBox_Level.FormattingEnabled = true;
-            this.comboBox_Level.Items.AddRange(new object[] {
-            "Root CA Certificate",
-            "PCA Certificate",
-            "Publisher",
-            "Signed Version",
-            "File Publisher",
-            "File Name",
-            "Hash"});
-            this.comboBox_Level.Location = new System.Drawing.Point(140, 13);
-            this.comboBox_Level.Name = "comboBox_Level";
-            this.comboBox_Level.Size = new System.Drawing.Size(135, 24);
-            this.comboBox_Level.TabIndex = 119;
-            this.comboBox_Level.Text = "Select Level";
-            this.comboBox_Level.SelectedIndexChanged += new System.EventHandler(this.comboBox_Level_SelectedIndexChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(19, 16);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(116, 19);
-            this.label7.TabIndex = 120;
-            this.label7.Text = "File Rule Level:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(19, 44);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(470, 17);
-            this.label8.TabIndex = 121;
-            this.label8.Text = "The Wizard will try to create file rules with this level and fallback to hash rul" +
-    "es";
             // 
             // label_Error
             // 
@@ -452,7 +506,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label_Error);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EditWorkflow";
-            this.Size = new System.Drawing.Size(1208, 782);
+            this.Size = new System.Drawing.Size(1208, 894);
             this.policyInfoPanel.ResumeLayout(false);
             this.policyInfoPanel.PerformLayout();
             this.panel_Progress.ResumeLayout(false);
@@ -461,6 +515,9 @@ namespace WDAC_Wizard
             this.panel_Page.ResumeLayout(false);
             this.panel_EventLog_Conversion.ResumeLayout(false);
             this.panel_EventLog_Conversion.PerformLayout();
+            this.eventLogParsing_Result_Panel.ResumeLayout(false);
+            this.eventLogParsing_Result_Panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.parseresult_PictureBox)).EndInit();
             this.panel_Edit_XML.ResumeLayout(false);
             this.panel_Edit_XML.PerformLayout();
             this.ResumeLayout(false);
@@ -501,5 +558,9 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label_Error;
+        private System.Windows.Forms.Panel eventLogParsing_Result_Panel;
+        private System.Windows.Forms.PictureBox parseresult_PictureBox;
+        private System.Windows.Forms.Label parseResults_Label;
+        private System.Windows.Forms.TextBox textBox_EventLog;
     }
 }
