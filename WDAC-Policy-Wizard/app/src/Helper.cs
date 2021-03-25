@@ -148,7 +148,7 @@ namespace WDAC_Wizard
             return driverPaths;
         }
 
-        public static SiPolicy ReadMachineEventLogs(string tempPath, string level = "Publisher")
+        public static SiPolicy ReadMachineEventLogs(string tempPath, string level)
         {
             // If path is not specified, the event logs to read are the on-machine CodeIntegrity/Operational, and AppLocker/MSI and Script
             // Simply call the New-CIPolicy -Audit cmdlet, and serialize the policy
@@ -504,6 +504,7 @@ namespace WDAC_Wizard
             None,             // Null Value for RuleLevel (used in RulesFromDrivers for signaling no fallback)
             Hash,             // Use only the file's hash in rules
             FileName,         // File name and Minimum Version specified
+            RootCertificate,  // Use the Root CA certificate (top-level)
             PcaCertificate,   // Use the PCA certificate that issued the signer,
             Publisher,        // PCA+Publisher signer rules
             FilePublisher,    // Generate rules that tie filename and minimum version to a PCA/Publisher combo

@@ -53,16 +53,22 @@ namespace WDAC_Wizard
             this.radioButton_EditXML = new System.Windows.Forms.RadioButton();
             this.label9 = new System.Windows.Forms.Label();
             this.panel_Page = new System.Windows.Forms.Panel();
-            this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.panel_EventLog_Conversion = new System.Windows.Forms.Panel();
+            this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.textBox_EventLogFilePath = new System.Windows.Forms.TextBox();
+            this.comboBox_Level = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label_Error = new System.Windows.Forms.Label();
             this.policyInfoPanel.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.panel_Page.SuspendLayout();
-            this.panel_Edit_XML.SuspendLayout();
             this.panel_EventLog_Conversion.SuspendLayout();
+            this.panel_Edit_XML.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -91,7 +97,7 @@ namespace WDAC_Wizard
             // 
             this.button_Create.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
             this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Create.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.button_Create.Font = new System.Drawing.Font("Tahoma", 9F);
             this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Create.Location = new System.Drawing.Point(501, 25);
             this.button_Create.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -181,7 +187,7 @@ namespace WDAC_Wizard
             // 
             // button_ParseEventLog
             // 
-            this.button_ParseEventLog.Location = new System.Drawing.Point(7, 55);
+            this.button_ParseEventLog.Location = new System.Drawing.Point(24, 144);
             this.button_ParseEventLog.Name = "button_ParseEventLog";
             this.button_ParseEventLog.Size = new System.Drawing.Size(145, 25);
             this.button_ParseEventLog.TabIndex = 112;
@@ -191,9 +197,13 @@ namespace WDAC_Wizard
             // 
             // button_Parse_LogFile
             // 
-            this.button_Parse_LogFile.Location = new System.Drawing.Point(7, 84);
+            this.button_Parse_LogFile.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Parse_LogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.button_Parse_LogFile.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 269);
             this.button_Parse_LogFile.Name = "button_Parse_LogFile";
-            this.button_Parse_LogFile.Size = new System.Drawing.Size(145, 25);
+            this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
             this.button_Parse_LogFile.TabIndex = 113;
             this.button_Parse_LogFile.Text = "Parse Log File";
             this.button_Parse_LogFile.UseVisualStyleBackColor = true;
@@ -210,7 +220,7 @@ namespace WDAC_Wizard
             // 
             this.panel_Progress.Controls.Add(this.label_Progress);
             this.panel_Progress.Controls.Add(this.pictureBox_Progress);
-            this.panel_Progress.Location = new System.Drawing.Point(550, 16);
+            this.panel_Progress.Location = new System.Drawing.Point(537, 112);
             this.panel_Progress.Name = "panel_Progress";
             this.panel_Progress.Size = new System.Drawing.Size(280, 179);
             this.panel_Progress.TabIndex = 114;
@@ -219,17 +229,18 @@ namespace WDAC_Wizard
             // label_Progress
             // 
             this.label_Progress.AutoSize = true;
-            this.label_Progress.Location = new System.Drawing.Point(59, 10);
+            this.label_Progress.Location = new System.Drawing.Point(14, 18);
             this.label_Progress.Name = "label_Progress";
-            this.label_Progress.Size = new System.Drawing.Size(154, 17);
+            this.label_Progress.Size = new System.Drawing.Size(254, 17);
             this.label_Progress.TabIndex = 1;
-            this.label_Progress.Text = "23 / 137 Rules Created";
+            this.label_Progress.Text = "23 / 137 Rules from Event Log Created";
+            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pictureBox_Progress
             // 
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
-            this.pictureBox_Progress.Location = new System.Drawing.Point(35, 51);
+            this.pictureBox_Progress.Location = new System.Drawing.Point(40, 51);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(202, 114);
             this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -294,10 +305,27 @@ namespace WDAC_Wizard
             // 
             this.panel_Page.Controls.Add(this.panel_EventLog_Conversion);
             this.panel_Page.Controls.Add(this.panel_Edit_XML);
-            this.panel_Page.Location = new System.Drawing.Point(169, 254);
+            this.panel_Page.Location = new System.Drawing.Point(156, 254);
             this.panel_Page.Name = "panel_Page";
-            this.panel_Page.Size = new System.Drawing.Size(950, 441);
+            this.panel_Page.Size = new System.Drawing.Size(950, 525);
             this.panel_Page.TabIndex = 115;
+            // 
+            // panel_EventLog_Conversion
+            // 
+            this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_LogFile);
+            this.panel_EventLog_Conversion.Controls.Add(this.label8);
+            this.panel_EventLog_Conversion.Controls.Add(this.label7);
+            this.panel_EventLog_Conversion.Controls.Add(this.comboBox_Level);
+            this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLogFilePath);
+            this.panel_EventLog_Conversion.Controls.Add(this.label4);
+            this.panel_EventLog_Conversion.Controls.Add(this.label6);
+            this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
+            this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
+            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 214);
+            this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
+            this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 308);
+            this.panel_EventLog_Conversion.TabIndex = 1;
+            this.panel_EventLog_Conversion.Visible = false;
             // 
             // panel_Edit_XML
             // 
@@ -310,18 +338,6 @@ namespace WDAC_Wizard
             this.panel_Edit_XML.Size = new System.Drawing.Size(857, 198);
             this.panel_Edit_XML.TabIndex = 0;
             // 
-            // panel_EventLog_Conversion
-            // 
-            this.panel_EventLog_Conversion.Controls.Add(this.label4);
-            this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
-            this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
-            this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_LogFile);
-            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 225);
-            this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
-            this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 198);
-            this.panel_EventLog_Conversion.TabIndex = 1;
-            this.panel_EventLog_Conversion.Visible = false;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -333,16 +349,93 @@ namespace WDAC_Wizard
             this.label3.TabIndex = 12;
             this.label3.Text = "Policy Path to Edit:";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label6.ForeColor = System.Drawing.Color.Black;
+            this.label6.Location = new System.Drawing.Point(17, 112);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(408, 18);
+            this.label6.TabIndex = 116;
+            this.label6.Text = "Parse on-device Event Logs to Policy (Recommended)";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(3, 6);
+            this.label4.Location = new System.Drawing.Point(16, 217);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(306, 19);
-            this.label4.TabIndex = 115;
-            this.label4.Text = "Convert Device Event Log to WDAC Policy";
+            this.label4.TabIndex = 117;
+            this.label4.Text = "Parse an Arbitrary Event Log File to Policy";
+            // 
+            // textBox_EventLogFilePath
+            // 
+            this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 239);
+            this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
+            this.textBox_EventLogFilePath.ReadOnly = true;
+            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 24);
+            this.textBox_EventLogFilePath.TabIndex = 118;
+            this.textBox_EventLogFilePath.Text = "Select Event Log File";
+            // 
+            // comboBox_Level
+            // 
+            this.comboBox_Level.FormattingEnabled = true;
+            this.comboBox_Level.Items.AddRange(new object[] {
+            "Root CA Certificate",
+            "PCA Certificate",
+            "Publisher",
+            "Signed Version",
+            "File Publisher",
+            "File Name",
+            "Hash"});
+            this.comboBox_Level.Location = new System.Drawing.Point(140, 13);
+            this.comboBox_Level.Name = "comboBox_Level";
+            this.comboBox_Level.Size = new System.Drawing.Size(135, 24);
+            this.comboBox_Level.TabIndex = 119;
+            this.comboBox_Level.Text = "Select Level";
+            this.comboBox_Level.SelectedIndexChanged += new System.EventHandler(this.comboBox_Level_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(19, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(116, 19);
+            this.label7.TabIndex = 120;
+            this.label7.Text = "File Rule Level:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(19, 44);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(470, 17);
+            this.label8.TabIndex = 121;
+            this.label8.Text = "The Wizard will try to create file rules with this level and fallback to hash rul" +
+    "es";
+            // 
+            // label_Error
+            // 
+            this.label_Error.AutoSize = true;
+            this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Error.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label_Error.Location = new System.Drawing.Point(163, 640);
+            this.label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_Error.Name = "label_Error";
+            this.label_Error.Size = new System.Drawing.Size(620, 18);
+            this.label_Error.TabIndex = 116;
+            this.label_Error.Text = "Convert the device\'s Code Integrity event log or an arbitrary log file to a WDAC " +
+    "policy XML file";
+            this.label_Error.Visible = false;
             // 
             // EditWorkflow
             // 
@@ -356,19 +449,20 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel_Page);
+            this.Controls.Add(this.label_Error);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EditWorkflow";
-            this.Size = new System.Drawing.Size(1208, 708);
+            this.Size = new System.Drawing.Size(1208, 782);
             this.policyInfoPanel.ResumeLayout(false);
             this.policyInfoPanel.PerformLayout();
             this.panel_Progress.ResumeLayout(false);
             this.panel_Progress.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).EndInit();
             this.panel_Page.ResumeLayout(false);
-            this.panel_Edit_XML.ResumeLayout(false);
-            this.panel_Edit_XML.PerformLayout();
             this.panel_EventLog_Conversion.ResumeLayout(false);
             this.panel_EventLog_Conversion.PerformLayout();
+            this.panel_Edit_XML.ResumeLayout(false);
+            this.panel_Edit_XML.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -400,6 +494,12 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Panel panel_EventLog_Conversion;
         private System.Windows.Forms.Panel panel_Edit_XML;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBox_Level;
+        private System.Windows.Forms.TextBox textBox_EventLogFilePath;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label_Error;
     }
 }

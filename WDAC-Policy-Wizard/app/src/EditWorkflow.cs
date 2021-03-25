@@ -27,7 +27,8 @@ namespace WDAC_Wizard
         private WDAC_Policy Policy;
         private Runspace runspace;
         private List<DriverFile> DriverFiles;
-        private WorkflowType Workflow; 
+        private WorkflowType Workflow;
+        private RuleLevel SelectedLevel; 
         const int PAD_X = 3;
         const int PAD_Y = 3;
 
@@ -38,6 +39,18 @@ namespace WDAC_Wizard
             Edit = 0, 
             DeviceEventLog = 1, 
             ArbitraryEventLog = 2
+        }
+
+        private enum RuleLevel
+        {
+            None = -1,
+            RootCertificate = 0, 
+            PCACertificate = 1, 
+            Publisher = 2, 
+            SignedVersion = 3, 
+            FilePublisher = 4, 
+            FileName = 5, 
+            Hash = 6 
         }
 
         public EditWorkflow(MainWindow pMainWindow)
@@ -52,6 +65,7 @@ namespace WDAC_Wizard
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
             this.Workflow = WorkflowType.Edit; // Edit xml is default in the UI
+            this.SelectedLevel = RuleLevel.None; 
         }
 
         /// <summary>
@@ -196,6 +210,16 @@ namespace WDAC_Wizard
 
         private void button_Parse_LogFile_Click(object sender, EventArgs e)
         {
+
+            if (this.SelectedLevel == RuleLevel.None)
+            {
+                this.Log.AddWarningMsg("Selected Level is null. Level must be selected before Parse_LogEvent_Click");
+                this.label_Error.Text = "Rule level must be selected before event log file parsing can begin";
+                this.label_Error.Visible = true;
+                this.label_Error.BringToFront();
+                return; 
+            }
+
             if (this.runspace == null)
             {
                 this.runspace = RunspaceFactory.CreateRunspace();
@@ -205,10 +229,19 @@ namespace WDAC_Wizard
             string dspTitle = "Choose event logs to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
 
-            this.DriverFiles = Helper.ReadArbitraryEventLogs(eventLogPaths);
+            // Prep UI
+            this.textBox_EventLogFilePath.Text = eventLogPaths[0]; 
             this.panel_Progress.Visible = true;
+            this.label_Error.Visible = false;
+            this.Workflow = WorkflowType.ArbitraryEventLog;
+
+
+            this.DriverFiles = Helper.ReadArbitraryEventLogs(eventLogPaths);
+                     
             // TODO: handle 0 case
             this.NumberRules = this.DriverFiles.Count;
+            this.label_Progress.Text = String.Format("0 / {0} Rules from Event Log Created", this.NumberRules); 
+
 
             // Create background worker to display updates to UI
             if (!this.backgroundWorker.IsBusy)
@@ -222,7 +255,17 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
 
+            if(this.SelectedLevel == RuleLevel.None)
+            {
+                this.Log.AddWarningMsg("Selected Level is null. Level must be selected before ParseEventLog_Click");
+                this.label_Error.Text = "Rule level must be selected before event log parsing can begin";
+                this.label_Error.Visible = true;
+                this.label_Error.BringToFront(); 
+                return; 
+            }
+
             this.panel_Progress.Visible = true;
+            this.label_Error.Visible = false;
             this.label_Progress.Text = "Event Log Conversion in Progress ...";
             this.Workflow = WorkflowType.DeviceEventLog; 
 
@@ -246,7 +289,7 @@ namespace WDAC_Wizard
             
             else if(this.Workflow == WorkflowType.DeviceEventLog)
             {
-                SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath);
+                SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath, this.SelectedLevel.ToString());
 
                 xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
                 Helper.SerializePolicytoXML(siPolicy, xmlPath);
@@ -265,7 +308,7 @@ namespace WDAC_Wizard
         {
             int progressPercent = e.ProgressPercentage;
             double completedRules = Math.Ceiling((double)progressPercent / (double)100 * (double)this.NumberRules); 
-            string progress = String.Format("{0} / {1} Rules Created", (int) completedRules, this.NumberRules); 
+            string progress = String.Format("{0} / {1} Rules from Event Log Created", (int) completedRules, this.NumberRules); 
 
             label_Progress.Text = progress; 
 
@@ -282,7 +325,7 @@ namespace WDAC_Wizard
                 // Remove GIF // Update UI 
                 this.panel_Progress.Visible = false;
                 DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log to WDAC Policy Conversion Success", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxButtons.OK, MessageBoxIcon.None);
             }
 
             this.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
@@ -375,12 +418,48 @@ namespace WDAC_Wizard
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this._MainWindow.TempFolderPath);
                 PolicyCustomRules customRule = new PolicyCustomRules();
                 customRule.ReferenceFile = file.Path;
-                customRule.Type = PolicyCustomRules.RuleType.Publisher;
-                customRule.Level = PolicyCustomRules.RuleLevel.Publisher;
+
+                switch ((int)this.SelectedLevel)
+                {
+                    case 0:
+                        customRule.Type = PolicyCustomRules.RuleType.Publisher;
+                        customRule.Level = PolicyCustomRules.RuleLevel.RootCertificate;
+                        break;
+
+                    case 1:
+                        customRule.Type = PolicyCustomRules.RuleType.Publisher;
+                        customRule.Level = PolicyCustomRules.RuleLevel.PcaCertificate;
+                        break;
+
+                    case 2:
+                        customRule.Type = PolicyCustomRules.RuleType.Publisher;
+                        customRule.Level = PolicyCustomRules.RuleLevel.Publisher;
+                        break;
+
+                    case 3:
+                        customRule.Type = PolicyCustomRules.RuleType.Publisher;
+                        customRule.Level = PolicyCustomRules.RuleLevel.SignedVersion;
+                        break;
+
+                    case 4:
+                        customRule.Type = PolicyCustomRules.RuleType.Publisher;
+                        customRule.Level = PolicyCustomRules.RuleLevel.FilePublisher;
+                        break;
+
+                    case 5:
+                        customRule.Type = PolicyCustomRules.RuleType.FilePath;
+                        customRule.Level = PolicyCustomRules.RuleLevel.FilePath;
+                        break;
+
+                    case 6:
+                        customRule.Type = PolicyCustomRules.RuleType.Hash;
+                        customRule.Level = PolicyCustomRules.RuleLevel.Hash;
+                        break;
+                }
+                
+                
                 customRule.Permission = PolicyCustomRules.RulePermission.Allow;
                 customRule.PSVariable = i.ToString();
-
-
                 string ruleScript = CreateCustomRuleScript(customRule);
                 string policyScript = CreatePolicyScript(customRule, tmpPolicyPath);
 
@@ -467,6 +546,41 @@ namespace WDAC_Wizard
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
             this.panel_EventLog_Conversion.Location = urPoint;
+        }
+
+        private void comboBox_Level_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Convert selected index to this.SelectedLevel
+            switch(this.comboBox_Level.SelectedIndex)
+            {
+                case 0:
+                    this.SelectedLevel = RuleLevel.RootCertificate;
+                    break;
+
+                case 1:
+                    this.SelectedLevel = RuleLevel.PCACertificate;
+                    break;
+
+                case 2:
+                    this.SelectedLevel = RuleLevel.Publisher;
+                    break;
+
+                case 3:
+                    this.SelectedLevel = RuleLevel.SignedVersion;
+                    break;
+
+                case 4:
+                    this.SelectedLevel = RuleLevel.FilePublisher;
+                    break;
+
+                case 5:
+                    this.SelectedLevel = RuleLevel.FileName;
+                    break;
+
+                case 6:
+                    this.SelectedLevel = RuleLevel.Hash;
+                    break;
+            }
         }
     }
 }
