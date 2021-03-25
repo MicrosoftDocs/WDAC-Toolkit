@@ -237,7 +237,7 @@ namespace WDAC_Wizard
             // label_Progress
             // 
             this.label_Progress.AutoSize = true;
-            this.label_Progress.Location = new System.Drawing.Point(14, 18);
+            this.label_Progress.Location = new System.Drawing.Point(15, 18);
             this.label_Progress.Name = "label_Progress";
             this.label_Progress.Size = new System.Drawing.Size(254, 17);
             this.label_Progress.TabIndex = 1;
@@ -246,12 +246,12 @@ namespace WDAC_Wizard
             // 
             // pictureBox_Progress
             // 
-            this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
+            this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
-            this.pictureBox_Progress.Location = new System.Drawing.Point(40, 51);
+            this.pictureBox_Progress.Location = new System.Drawing.Point(78, 48);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
-            this.pictureBox_Progress.Size = new System.Drawing.Size(202, 114);
-            this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
+            this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox_Progress.TabIndex = 0;
             this.pictureBox_Progress.TabStop = false;
             // 
@@ -354,7 +354,7 @@ namespace WDAC_Wizard
             this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(20, 311);
             this.eventLogParsing_Result_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.eventLogParsing_Result_Panel.Name = "eventLogParsing_Result_Panel";
-            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(526, 35);
+            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(526, 63);
             this.eventLogParsing_Result_Panel.TabIndex = 122;
             this.eventLogParsing_Result_Panel.Visible = false;
             // 

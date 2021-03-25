@@ -233,6 +233,7 @@ namespace WDAC_Wizard
             this.textBox_EventLogFilePath.Text = eventLogPaths[0]; 
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
+            this.eventLogParsing_Result_Panel.Visible = false;
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
 
@@ -266,6 +267,7 @@ namespace WDAC_Wizard
 
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
+            this.eventLogParsing_Result_Panel.Visible = false; 
             this.label_Progress.Text = "Event Viewer Log Conversion in Progress";
             this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
             this.Workflow = WorkflowType.DeviceEventLog; 
