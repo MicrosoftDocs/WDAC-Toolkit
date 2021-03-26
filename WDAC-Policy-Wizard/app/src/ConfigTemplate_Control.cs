@@ -451,8 +451,6 @@ namespace WDAC_Wizard
                         this.Policy.ConfigRules[name]["CurrentValue"] = value;
                     }
                 }
-
-
             }
 
             this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0; 
@@ -498,7 +496,6 @@ namespace WDAC_Wizard
             }
 
             return oppOption; 
-
         }
 
         private List<string> ParseRule(string rule)
