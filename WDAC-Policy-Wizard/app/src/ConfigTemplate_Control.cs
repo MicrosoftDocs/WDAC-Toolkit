@@ -108,6 +108,12 @@ namespace WDAC_Wizard
                             this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
                             this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
                             break;
+
+                        case "False-NoInherit":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed-NoInherit";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                            break; 
                     }
                 }
             }
@@ -170,6 +176,12 @@ namespace WDAC_Wizard
             {
                 label_Info.Text = Resources.InvalidSupplementalRule_Info;
                 return; 
+            }
+
+            if (((Label)sender).Tag.ToString() == "Grayed-NoInherit")
+            {
+                label_Info.Text = Resources.InvalidSupplementalRule_NoInherit_Info;
+                return;
             }
 
             switch (((Label)sender).Text)
@@ -415,7 +427,27 @@ namespace WDAC_Wizard
                 string name = ParseRule(rule.Item.ToString())[1];
 
                 if (this.Policy.ConfigRules.ContainsKey(name))
-                    this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                {
+                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                    {
+                        // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
+                        // Set the value to not enabled (Get Opposite Value)
+                        if(this.Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
+                        }
+                        else
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                        }
+                    }
+                    else
+                    {
+                        this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                    }
+                }
+
+
             }
 
             this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0; 

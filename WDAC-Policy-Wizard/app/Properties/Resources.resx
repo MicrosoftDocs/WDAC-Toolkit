@@ -338,4 +338,7 @@
     <value>One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
 Do you want to continue by adding this rule to the policy?</value>
   </data>
+  <data name="InvalidSupplementalRule_NoInherit_Info" xml:space="preserve">
+    <value>This rule is not valid or modifiable on supplemental policies.</value>
+  </data>
 </root>
