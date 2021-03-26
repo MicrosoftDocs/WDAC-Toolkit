@@ -313,6 +313,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule is not valid or modifiable on supplemental policies..
+        /// </summary>
+        internal static string InvalidSupplementalRule_NoInherit_Info {
+            get {
+                return ResourceManager.GetString("InvalidSupplementalRule_NoInherit_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted..
         /// </summary>
         internal static string ISG_Info {
