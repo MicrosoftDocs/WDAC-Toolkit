@@ -93,7 +93,7 @@ namespace WDAC_Wizard
                 }
 
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy ||  this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                 { 
                     switch(this.Policy.ConfigRules[key]["ValidSupplemental"])
                     {
@@ -370,13 +370,18 @@ namespace WDAC_Wizard
 
             string xmlPathToRead = "";
 
+            // If we are editing a policy, read the EditPolicyPath
+            // We need to know whether we are editing a base or supplemental policy
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
+            {
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
-
+            }
+                
             // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
             else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath; 
-
+            {
+                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
+            }
             else
             {
                 switch (this.Policy._PolicyTemplate)
@@ -428,7 +433,7 @@ namespace WDAC_Wizard
 
                 if (this.Policy.ConfigRules.ContainsKey(name))
                 {
-                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy  ||  this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                     {
                         // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
                         // Set the value to not enabled (Get Opposite Value)

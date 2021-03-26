@@ -104,6 +104,7 @@ namespace WDAC_Wizard
                 reader.Close();
                 this._MainWindow.ErrorOnPage = false;
 
+                // Set the policy type (base, supplemental) to know which policy rule-options to set on ConfigTemplate_Control
                 // Set the policy format type for the policy creation step in MainForm.cs
                 if(this.Policy.siPolicy.BasePolicyID != null)
                 {
@@ -111,7 +112,7 @@ namespace WDAC_Wizard
                 }
                 else
                 {
-                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy; 
+                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
                 }
             }
 
