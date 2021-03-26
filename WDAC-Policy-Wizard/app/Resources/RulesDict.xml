@@ -141,7 +141,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="17"
-    ValidSupplemental="True"
+    ValidSupplemental="False"
 	  ButtonMapping="button_1">
   </Rule>
   <Rule
