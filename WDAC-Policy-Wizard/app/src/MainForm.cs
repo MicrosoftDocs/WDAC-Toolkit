@@ -1240,17 +1240,21 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // IF the policy is multi format ONLY, set policy info, and reset the guids
+            // IF the policy is multi format ONLY AND NOT supplemental set policy info, and reset the guids
+            // Setting these will revert policy under edit to BasePolicy
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+                if (this.Policy.siPolicy.PolicyType != global::PolicyType.SupplementalPolicy)
+                {
+                    // Set policy info - ID, Name
+                    string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
 
-                // Reset the GUIDs s.t. does not mirror the policy GUID 
-                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
+                    // Reset the GUIDs s.t. does not mirror the policy GUID 
+                    string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
 
-                pipeline.Commands.AddScript(setIdInfoCmd);
-                pipeline.Commands.AddScript(resetGuidsCmd);
+                    pipeline.Commands.AddScript(setIdInfoCmd);
+                    pipeline.Commands.AddScript(resetGuidsCmd);
+                }
             }
 
             

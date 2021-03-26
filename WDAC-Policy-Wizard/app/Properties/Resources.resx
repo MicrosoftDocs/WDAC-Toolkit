@@ -341,4 +341,7 @@ Do you want to continue by adding this rule to the policy?</value>
   <data name="InvalidSupplementalRule_NoInherit_Info" xml:space="preserve">
     <value>This rule is not valid or modifiable on supplemental policies.</value>
   </data>
+  <data name="LegacyPolicyID_GUID" xml:space="preserve">
+    <value>{A244370E-44C9-4C06-B551-F6016E563076}</value>
+  </data>
 </root>

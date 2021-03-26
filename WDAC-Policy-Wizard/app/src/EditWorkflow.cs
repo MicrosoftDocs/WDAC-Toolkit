@@ -106,13 +106,13 @@ namespace WDAC_Wizard
 
                 // Set the policy type (base, supplemental) to know which policy rule-options to set on ConfigTemplate_Control
                 // Set the policy format type for the policy creation step in MainForm.cs
-                if(this.Policy.siPolicy.BasePolicyID != null)
+                if(this.Policy.siPolicy.PolicyTypeID == Properties.Resources.LegacyPolicyID_GUID)
                 {
-                    this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
                 }
                 else
                 {
-                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
+                    this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
                 }
             }
 
