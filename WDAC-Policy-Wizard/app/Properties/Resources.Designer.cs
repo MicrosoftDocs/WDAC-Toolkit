@@ -331,6 +331,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {A244370E-44C9-4C06-B551-F6016E563076}.
+        /// </summary>
+        internal static string LegacyPolicyID_GUID {
+            get {
+                return ResourceManager.GetString("LegacyPolicyID_GUID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap locked_padlock {
