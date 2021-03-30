@@ -75,7 +75,7 @@
             // 
             // panel_CustomRules
             // 
-            this.panel_CustomRules.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_CustomRules.BackColor = System.Drawing.Color.White;
             this.panel_CustomRules.Controls.Add(this.label1);
             this.panel_CustomRules.Controls.Add(this.publisherInfoLabel);
             this.panel_CustomRules.Controls.Add(this.panel_FileFolder);
@@ -364,7 +364,7 @@
             // textBox_ReferenceFile
             // 
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(14, 402);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(14, 403);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
             this.textBox_ReferenceFile.Size = new System.Drawing.Size(489, 29);
@@ -377,10 +377,10 @@
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.Location = new System.Drawing.Point(528, 402);
+            this.button_Browse.Location = new System.Drawing.Point(528, 400);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(110, 28);
+            this.button_Browse.Size = new System.Drawing.Size(119, 35);
             this.button_Browse.TabIndex = 84;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
@@ -511,7 +511,7 @@
             // 
             this.controlHighlight_Panel.BackColor = System.Drawing.Color.CornflowerBlue;
             this.controlHighlight_Panel.Location = new System.Drawing.Point(4, 168);
-            this.controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(4);
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
             this.controlHighlight_Panel.Size = new System.Drawing.Size(10, 42);
             this.controlHighlight_Panel.TabIndex = 33;
@@ -534,9 +534,9 @@
             this.headerPanel.BackColor = System.Drawing.Color.White;
             this.headerPanel.Controls.Add(this.headerLabel);
             this.headerPanel.Location = new System.Drawing.Point(0, 0);
-            this.headerPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.headerPanel.Margin = new System.Windows.Forms.Padding(4);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(914, 74);
+            this.headerPanel.Size = new System.Drawing.Size(882, 74);
             this.headerPanel.TabIndex = 109;
             // 
             // button_AddException
@@ -564,7 +564,7 @@
             this.button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Back.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Back.ForeColor = System.Drawing.Color.Gray;
-            this.button_Back.Location = new System.Drawing.Point(379, 944);
+            this.button_Back.Location = new System.Drawing.Point(379, 943);
             this.button_Back.Margin = new System.Windows.Forms.Padding(2);
             this.button_Back.Name = "button_Back";
             this.button_Back.Size = new System.Drawing.Size(119, 36);
@@ -577,6 +577,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(919, 992);
             this.Controls.Add(this.button_AddException);
             this.Controls.Add(this.button_Back);

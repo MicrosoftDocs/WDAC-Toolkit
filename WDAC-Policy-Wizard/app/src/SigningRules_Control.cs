@@ -81,7 +81,7 @@ namespace WDAC_Wizard
                 this.customRuleConditionsPanel.BringToFront();
                 this.customRuleConditionsPanel.Focus();
 
-                this.label_AddCustomRules.Text = "- Custom Rules"; 
+                // this.label_AddCustomRules.Text = "- Custom Rules"; 
             }
             
             this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
@@ -318,7 +318,8 @@ namespace WDAC_Wizard
 
 
             // Scroll to bottom of table
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
+            // Removed this since the first row is highlighted. Confusing. 
+            // rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
         }
 
 
@@ -806,7 +807,7 @@ namespace WDAC_Wizard
             // close the custom Rule Conditions Panel
             this.customRuleConditionsPanel.Close();
             this.customRuleConditionsPanel = null;
-            this.label_AddCustomRules.Text = "+ Custom Rules";
+            // this.label_AddCustomRules.Text = "+ Custom Rules";
 
         }
 
@@ -814,7 +815,7 @@ namespace WDAC_Wizard
         {
             // User has closed custom rules panel. Reset panel and text
             this.customRuleConditionsPanel = null;
-            this.label_AddCustomRules.Text = "+ Custom Rules"; 
+            // this.label_AddCustomRules.Text = "+ Custom Rules"; 
         }
 
         /// <summary>

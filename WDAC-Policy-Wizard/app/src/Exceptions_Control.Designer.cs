@@ -44,8 +44,6 @@
             this.labelSlider_0 = new System.Windows.Forms.Label();
             this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
             this.dataGridView_Exceptions = new System.Windows.Forms.DataGridView();
-            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ruleCondition_Label = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -53,6 +51,9 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
+            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -63,7 +64,7 @@
             // publisherInfoLabel
             // 
             this.publisherInfoLabel.AutoSize = true;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(16, 879);
+            this.publisherInfoLabel.Location = new System.Drawing.Point(16, 925);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
             this.publisherInfoLabel.Size = new System.Drawing.Size(140, 20);
             this.publisherInfoLabel.TabIndex = 106;
@@ -72,7 +73,7 @@
             // 
             // panel_ExceptionRule
             // 
-            this.panel_ExceptionRule.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_ExceptionRule.BackColor = System.Drawing.Color.White;
             this.panel_ExceptionRule.Controls.Add(this.panel_FileFolder);
             this.panel_ExceptionRule.Controls.Add(this.publisherInfoLabel);
             this.panel_ExceptionRule.Controls.Add(this.panel_Publisher_Scroll);
@@ -94,7 +95,7 @@
             // 
             this.panel_FileFolder.Controls.Add(this.radioButton_Folder);
             this.panel_FileFolder.Controls.Add(this.radioButton_File);
-            this.panel_FileFolder.Location = new System.Drawing.Point(495, 624);
+            this.panel_FileFolder.Location = new System.Drawing.Point(565, 637);
             this.panel_FileFolder.Margin = new System.Windows.Forms.Padding(2);
             this.panel_FileFolder.Name = "panel_FileFolder";
             this.panel_FileFolder.Size = new System.Drawing.Size(158, 42);
@@ -140,7 +141,7 @@
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(17, 629);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(18, 661);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
             this.panel_Publisher_Scroll.Size = new System.Drawing.Size(556, 234);
@@ -256,43 +257,29 @@
             // dataGridView_Exceptions
             // 
             this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
+            this.dataGridView_Exceptions.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.column_Action,
             this.column_Level,
             this.column_Name});
-            this.dataGridView_Exceptions.Location = new System.Drawing.Point(14, 342);
+            this.dataGridView_Exceptions.Location = new System.Drawing.Point(18, 337);
             this.dataGridView_Exceptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView_Exceptions.Name = "dataGridView_Exceptions";
             this.dataGridView_Exceptions.ReadOnly = true;
             this.dataGridView_Exceptions.RowHeadersWidth = 51;
             this.dataGridView_Exceptions.RowTemplate.Height = 24;
-            this.dataGridView_Exceptions.Size = new System.Drawing.Size(573, 188);
+            this.dataGridView_Exceptions.Size = new System.Drawing.Size(716, 188);
             this.dataGridView_Exceptions.TabIndex = 107;
             this.dataGridView_Exceptions.VirtualMode = true;
             this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_Exceptions_CellValueNeeded);
-            // 
-            // column_Level
-            // 
-            this.column_Level.HeaderText = "Type";
-            this.column_Level.MinimumWidth = 6;
-            this.column_Level.Name = "column_Level";
-            this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 125;
-            // 
-            // column_Name
-            // 
-            this.column_Name.HeaderText = "Exception";
-            this.column_Name.MinimumWidth = 6;
-            this.column_Name.Name = "column_Name";
-            this.column_Name.ReadOnly = true;
-            this.column_Name.Width = 125;
             // 
             // ruleCondition_Label
             // 
             this.ruleCondition_Label.AutoSize = true;
             this.ruleCondition_Label.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ruleCondition_Label.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.ruleCondition_Label.Location = new System.Drawing.Point(9, 164);
+            this.ruleCondition_Label.ForeColor = System.Drawing.Color.Black;
+            this.ruleCondition_Label.Location = new System.Drawing.Point(18, 156);
             this.ruleCondition_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ruleCondition_Label.Name = "ruleCondition_Label";
             this.ruleCondition_Label.Size = new System.Drawing.Size(131, 22);
@@ -305,7 +292,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(9, 90);
+            this.label7.Location = new System.Drawing.Point(18, 75);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(746, 44);
             this.label7.TabIndex = 94;
@@ -318,7 +305,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(12, 268);
+            this.label8.Location = new System.Drawing.Point(18, 263);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(137, 22);
             this.label8.TabIndex = 89;
@@ -330,11 +317,10 @@
             this.comboBox_ExceptionType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox_ExceptionType.FormattingEnabled = true;
             this.comboBox_ExceptionType.Items.AddRange(new object[] {
-            "Publisher",
-            "Path",
+            "File Path",
             "File Attributes",
             "File Hash"});
-            this.comboBox_ExceptionType.Location = new System.Drawing.Point(14, 304);
+            this.comboBox_ExceptionType.Location = new System.Drawing.Point(18, 299);
             this.comboBox_ExceptionType.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox_ExceptionType.Name = "comboBox_ExceptionType";
             this.comboBox_ExceptionType.Size = new System.Drawing.Size(210, 30);
@@ -344,10 +330,10 @@
             // textBox_ReferenceFile
             // 
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(14, 581);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(18, 597);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
-            this.textBox_ReferenceFile.Size = new System.Drawing.Size(458, 29);
+            this.textBox_ReferenceFile.Size = new System.Drawing.Size(525, 29);
             this.textBox_ReferenceFile.TabIndex = 88;
             // 
             // button_Browse
@@ -357,10 +343,10 @@
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.Location = new System.Drawing.Point(495, 581);
+            this.button_Browse.Location = new System.Drawing.Point(565, 594);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(110, 28);
+            this.button_Browse.Size = new System.Drawing.Size(120, 35);
             this.button_Browse.TabIndex = 84;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
@@ -371,17 +357,45 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.Black;
-            this.label11.Location = new System.Drawing.Point(14, 544);
+            this.label11.Location = new System.Drawing.Point(18, 563);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(125, 22);
             this.label11.TabIndex = 87;
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // column_Action
+            // 
+            this.column_Action.Frozen = true;
+            this.column_Action.HeaderText = "Action";
+            this.column_Action.MinimumWidth = 8;
+            this.column_Action.Name = "column_Action";
+            this.column_Action.ReadOnly = true;
+            this.column_Action.Width = 150;
+            // 
+            // column_Level
+            // 
+            this.column_Level.Frozen = true;
+            this.column_Level.HeaderText = "Type";
+            this.column_Level.MinimumWidth = 6;
+            this.column_Level.Name = "column_Level";
+            this.column_Level.ReadOnly = true;
+            this.column_Level.Width = 150;
+            // 
+            // column_Name
+            // 
+            this.column_Name.Frozen = true;
+            this.column_Name.HeaderText = "Exception";
+            this.column_Name.MinimumWidth = 6;
+            this.column_Name.Name = "column_Name";
+            this.column_Name.ReadOnly = true;
+            this.column_Name.Width = 115;
+            // 
             // Exceptions_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panel_ExceptionRule);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Exceptions_Control";
@@ -423,6 +437,7 @@
         private System.Windows.Forms.TextBox textBoxSlider_0;
         private System.Windows.Forms.Label labelSlider_0;
         private System.Windows.Forms.TrackBar trackBar_Conditions;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Name;
     }

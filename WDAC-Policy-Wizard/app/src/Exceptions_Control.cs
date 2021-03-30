@@ -75,11 +75,12 @@ namespace WDAC_Wizard
             switch (selectedOpt)
             {
                 case "Publisher":
+                    // TODO: figure out why publisher exceptions are not compatible with publisher rules
                     this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
                     break;
 
-                case "Path":
+                case "File Path":
                     this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
                     panel_FileFolder.Visible = true;
@@ -310,7 +311,68 @@ namespace WDAC_Wizard
             // On load, set the rule condition label
             if(this.CustomRule != null)
             {
-                this.ruleCondition_Label.Text = "Rule Condition:\n\r" + this.CustomRule.Type.ToString() + " " + this.CustomRule.FileInfo["FileName"];
+                string ruleConditionString = "Rule Condition: " + Environment.NewLine + this.CustomRule.Permission.ToString() + " "; // e.g. "Allow " or "Deny "
+
+                switch (this.CustomRule.Level)
+                {
+                    case PolicyCustomRules.RuleLevel.PcaCertificate:
+                        ruleConditionString += "Publisher - CA Certificate:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["PCACertificate"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.Publisher:
+                        ruleConditionString += "Publisher - Leaf Certificate:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.SignedVersion:
+                        ruleConditionString += "Publisher - Signed Version:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["Publisher"] + " + " + this.CustomRule.FileInfo["FileVersion"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.FilePublisher:
+                        ruleConditionString += "Publisher - File Publisher:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["FileName"] + " + " + this.CustomRule.FileInfo["FileVersion"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.FileName:
+                        ruleConditionString += "File Attribute - File Name:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["FileName"]; 
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.FileDescription:
+                        ruleConditionString += "File Attribute - File Description:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["FileDescription"];
+                        break;
+
+
+                    case PolicyCustomRules.RuleLevel.InternalName:
+                        ruleConditionString += "File Attribute - Internal Name:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["InternalName"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.OriginalFileName:
+                        ruleConditionString += "File Attribute - Original File Name:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["FileName"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.ProductName:
+                        ruleConditionString += "File Attribute - Product Name:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["ProductName"];
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.FilePath:
+                        ruleConditionString += "File Path:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.ReferenceFile; //Full file path
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.Hash:
+                        ruleConditionString += "File Hash:" + Environment.NewLine;
+                        ruleConditionString += this.CustomRule.FileInfo["FileName"];
+                        break;
+                }
+
+                this.ruleCondition_Label.Text = ruleConditionString; // "Rule Condition:\n\r" + this.CustomRule.Level.ToString() + " " + this.CustomRule.FileInfo["FileName"];
                 this.ruleCondition_Label.Visible = true; 
             }
         }
@@ -342,6 +404,7 @@ namespace WDAC_Wizard
 
             // New Display object
             DisplayObject displayObject = new DisplayObject();
+            displayObject.Action = this.ExceptionRule.Permission.ToString();
             displayObject.Level = this.ExceptionRule.Level.ToString();
             displayObject.Name = Path.GetFileName(this.ExceptionRule.ReferenceFile.ToString());
 
