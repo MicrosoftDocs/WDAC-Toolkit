@@ -193,6 +193,20 @@ namespace WDAC_Wizard
                     break;
             }
 
+            // Handle exceptions
+            if(this.PolicyCustomRule.ExceptionList.Count > 0)
+            {
+                foreach(var exception in this.PolicyCustomRule.ExceptionList)
+                {
+                    string exceptionString = String.Format("{0}: {1} {2}; ", exception.Permission, exception.Level,
+                        exception.ReferenceFile);
+                    exceptions += exceptionString; 
+                }
+
+                // Remove trailing semi-colon
+                exceptions.Trim(';');
+            }
+
             this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
             string[] stringArr = new string[5] { action , level, name, files, exceptions};
 
@@ -820,6 +834,7 @@ namespace WDAC_Wizard
             this.label_Error.Visible = false;
         }
 
+        // Add exception button clicked. 
         private void button_AddException_Click(object sender, EventArgs e)
         {
             this.exceptionsControl.AddException(); 

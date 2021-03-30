@@ -984,10 +984,11 @@ namespace WDAC_Wizard
                         scriptCommands.Add(createCustomRuleScript(exceptionRule, true, customRule.PSVariable));
 
                         // Add required exceptions IDs and FileException = 1
-                        scriptCommands.Add(String.Format("foreach($i in $Rule_{0}) {{ $i.Exceptions = $Exception_{1}_Rule_{2}.ID }}", customRule.PSVariable, exceptionRule.PSVariable, customRule.PSVariable));
-                        scriptCommands.Add(String.Format("foreach($j in $Exception_{0}_Rule_{1}) {{ $j.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
+                        scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
+                        scriptCommands.Add(String.Format("foreach($j in $Rule_{0}) {{ $j.Exceptions += $Exception_{1}_Rule_{2}.ID }}", customRule.PSVariable, exceptionRule.PSVariable, customRule.PSVariable));
 
-                        createVarScript += String.Format("$Exception_{0}_Rule_{1} + ", customRule.PSVariable, exceptionRule.PSVariable);
+
+                        createVarScript += String.Format("$Exception_{0}_Rule_{1} + ", exceptionRule.PSVariable, customRule.PSVariable);
                     }
                 }
 
@@ -1091,6 +1092,7 @@ namespace WDAC_Wizard
             }
 
             // If this is a deny rule, append the Deny switch
+            // TODO: exception rule not having the level set currently
             if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
             {
                 customRuleScript += " -Deny";

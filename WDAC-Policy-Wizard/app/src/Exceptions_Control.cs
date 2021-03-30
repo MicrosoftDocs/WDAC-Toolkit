@@ -315,8 +315,20 @@ namespace WDAC_Wizard
             }
         }
 
+        // Triggered by Add Exception button click on custom rule conditions panel. 
+        // Add exception to the exception table
         public void AddException()
         {
+            //Set ExceptionRule.Level to opposite of the PolicyCustomRule.Level
+            if(this.CustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
+            {
+                this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Deny; 
+            }
+            else
+            {
+                this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Allow; 
+            }
+
             // Check that fields are valid, otherwise break and show error msg
             if(this.ExceptionRule == null || this.ExceptionRule.ReferenceFile == null ||
                 this.ExceptionRule.Level == PolicyCustomRules.RuleLevel.None)
