@@ -316,58 +316,59 @@ namespace WDAC_Wizard
                 switch (this.CustomRule.Level)
                 {
                     case PolicyCustomRules.RuleLevel.PcaCertificate:
-                        ruleConditionString += "Publisher - CA Certificate:" + Environment.NewLine;
+                        ruleConditionString += "files signed by CA certificate: ";
                         ruleConditionString += this.CustomRule.FileInfo["PCACertificate"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.Publisher:
-                        ruleConditionString += "Publisher - Leaf Certificate:" + Environment.NewLine;
+                        ruleConditionString += "files signed by leaf certificate: ";
                         ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.SignedVersion:
-                        ruleConditionString += "Publisher - Signed Version:" + Environment.NewLine;
-                        ruleConditionString += this.CustomRule.FileInfo["Publisher"] + " + " + this.CustomRule.FileInfo["FileVersion"];
+                        ruleConditionString += "files signed by: ";
+                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"] + Environment.NewLine; 
+                        ruleConditionString += "With version " + this.CustomRule.FileInfo["FileVersion"] + " or greater";
                         break;
 
                     case PolicyCustomRules.RuleLevel.FilePublisher:
-                        ruleConditionString += "Publisher - File Publisher:" + Environment.NewLine;
-                        ruleConditionString += this.CustomRule.FileInfo["FileName"] + " + " + this.CustomRule.FileInfo["FileVersion"];
+                        ruleConditionString += "files signed by: ";
+                        ruleConditionString += this.CustomRule.FileInfo["FileName"] + Environment.NewLine; 
+                        ruleConditionString += "With filename " + this.CustomRule.FileInfo["FileVersion"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.FileName:
-                        ruleConditionString += "File Attribute - File Name:" + Environment.NewLine;
+                        ruleConditionString += "files with file name: ";
                         ruleConditionString += this.CustomRule.FileInfo["FileName"]; 
                         break;
 
                     case PolicyCustomRules.RuleLevel.FileDescription:
-                        ruleConditionString += "File Attribute - File Description:" + Environment.NewLine;
+                        ruleConditionString += "files with file description: ";
                         ruleConditionString += this.CustomRule.FileInfo["FileDescription"];
                         break;
 
-
                     case PolicyCustomRules.RuleLevel.InternalName:
-                        ruleConditionString += "File Attribute - Internal Name:" + Environment.NewLine;
+                        ruleConditionString += "files with internal name: "; 
                         ruleConditionString += this.CustomRule.FileInfo["InternalName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.OriginalFileName:
-                        ruleConditionString += "File Attribute - Original File Name:" + Environment.NewLine;
-                        ruleConditionString += this.CustomRule.FileInfo["FileName"];
+                        ruleConditionString += "files with original file name: ";
+                        ruleConditionString += this.CustomRule.FileInfo["OriginalFileName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.ProductName:
-                        ruleConditionString += "File Attribute - Product Name:" + Environment.NewLine;
+                        ruleConditionString += "files with product name:"; 
                         ruleConditionString += this.CustomRule.FileInfo["ProductName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.FilePath:
-                        ruleConditionString += "File Path:" + Environment.NewLine;
+                        ruleConditionString += "files with path:";
                         ruleConditionString += this.CustomRule.ReferenceFile; //Full file path
                         break;
 
                     case PolicyCustomRules.RuleLevel.Hash:
-                        ruleConditionString += "File Hash:" + Environment.NewLine;
+                        ruleConditionString += "hash defined by: "; 
                         ruleConditionString += this.CustomRule.FileInfo["FileName"];
                         break;
                 }

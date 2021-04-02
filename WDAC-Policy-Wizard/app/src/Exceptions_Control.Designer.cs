@@ -269,7 +269,7 @@
             this.dataGridView_Exceptions.ReadOnly = true;
             this.dataGridView_Exceptions.RowHeadersWidth = 51;
             this.dataGridView_Exceptions.RowTemplate.Height = 24;
-            this.dataGridView_Exceptions.Size = new System.Drawing.Size(716, 188);
+            this.dataGridView_Exceptions.Size = new System.Drawing.Size(699, 188);
             this.dataGridView_Exceptions.TabIndex = 107;
             this.dataGridView_Exceptions.VirtualMode = true;
             this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_Exceptions_CellValueNeeded);

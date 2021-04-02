@@ -170,10 +170,10 @@ namespace WDAC_Wizard
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deleteButton.Image = global::WDAC_Wizard.Properties.Resources.minus_button;
-            this.deleteButton.Location = new System.Drawing.Point(1094, 728);
+            this.deleteButton.Location = new System.Drawing.Point(1084, 728);
             this.deleteButton.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(157, 31);
+            this.deleteButton.Size = new System.Drawing.Size(185, 31);
             this.deleteButton.TabIndex = 93;
             this.deleteButton.Text = "   Remove Rule";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -201,10 +201,10 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label_AddCustomRules.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_AddCustomRules.Image = ((System.Drawing.Image)(resources.GetObject("label_AddCustomRules.Image")));
-            this.label_AddCustomRules.Location = new System.Drawing.Point(1062, 158);
+            this.label_AddCustomRules.Location = new System.Drawing.Point(1057, 158);
             this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label_AddCustomRules.Name = "label_AddCustomRules";
-            this.label_AddCustomRules.Size = new System.Drawing.Size(189, 31);
+            this.label_AddCustomRules.Size = new System.Drawing.Size(209, 31);
             this.label_AddCustomRules.TabIndex = 97;
             this.label_AddCustomRules.Text = "   Add Custom Rule";
             this.label_AddCustomRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
