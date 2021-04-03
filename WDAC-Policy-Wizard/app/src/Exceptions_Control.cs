@@ -411,16 +411,25 @@ namespace WDAC_Wizard
                 }
                 else if (this.CustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
-
+                    // Last space before max length
+                    int split_idx = ruleConditionString.Substring(0, MAX_LEN).LastIndexOf(" ");
+                    if (split_idx > 1)
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, split_idx) + Environment.NewLine + ruleConditionString.Substring(split_idx);
+                    }
+                    else
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, MAX_LEN) + Environment.NewLine + ruleConditionString.Substring(MAX_LEN);
+                    }
                 }
                 else if(this.CustomRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
-
+                    ruleConditionString = ruleConditionString.Substring(0, MAX_LEN) + Environment.NewLine + ruleConditionString.Substring(MAX_LEN);
                 }
                 else //folder or file path
                 {
                     // Last back slash before max length
-                    int split_idx = ruleConditionString.Substring(0, MAX_LEN).LastIndexOf("/"); 
+                    int split_idx = ruleConditionString.Substring(0, MAX_LEN).LastIndexOf("\\"); 
                     if(split_idx > 1)
                     {
                         ruleConditionString = ruleConditionString.Substring(0, split_idx) + Environment.NewLine + ruleConditionString.Substring(split_idx); 
