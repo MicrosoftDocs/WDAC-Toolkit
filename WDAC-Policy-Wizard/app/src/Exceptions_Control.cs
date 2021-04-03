@@ -311,7 +311,7 @@ namespace WDAC_Wizard
             // On load, set the rule condition label
             if(this.CustomRule != null)
             {
-                string ruleConditionString = "Rule Condition: " + Environment.NewLine + this.CustomRule.Permission.ToString() + " "; // e.g. "Allow " or "Deny "
+                string ruleConditionString = this.CustomRule.Permission.ToString() + " "; // e.g. "Allow " or "Deny " ...
 
                 switch (this.CustomRule.Level)
                 {
@@ -333,8 +333,8 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleLevel.FilePublisher:
                         ruleConditionString += "files signed by: ";
-                        ruleConditionString += this.CustomRule.FileInfo["FileName"] + Environment.NewLine; 
-                        ruleConditionString += "With filename " + this.CustomRule.FileInfo["FileVersion"];
+                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"] + Environment.NewLine; 
+                        ruleConditionString += "with filename " + this.CustomRule.FileInfo["FileName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.FileName:
@@ -358,13 +358,18 @@ namespace WDAC_Wizard
                         break;
 
                     case PolicyCustomRules.RuleLevel.ProductName:
-                        ruleConditionString += "files with product name:"; 
+                        ruleConditionString += "files with product name: "; 
                         ruleConditionString += this.CustomRule.FileInfo["ProductName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.FilePath:
-                        ruleConditionString += "files with path:";
+                        ruleConditionString += "files with path: ";
                         ruleConditionString += this.CustomRule.ReferenceFile; //Full file path
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.Folder:
+                        ruleConditionString += "files under folder path: ";
+                        ruleConditionString += this.CustomRule.ReferenceFile; //Full folder path
                         break;
 
                     case PolicyCustomRules.RuleLevel.Hash:
@@ -373,9 +378,15 @@ namespace WDAC_Wizard
                         break;
                 }
 
-                this.ruleCondition_Label.Text = ruleConditionString; // "Rule Condition:\n\r" + this.CustomRule.Level.ToString() + " " + this.CustomRule.FileInfo["FileName"];
+                this.ruleCondition_Label.Text = FormatText(ruleConditionString); // "Rule Condition:\n\r" + this.CustomRule.Level.ToString() + " " + this.CustomRule.FileInfo["FileName"];
                 this.ruleCondition_Label.Visible = true; 
             }
+        }
+
+        public string FormatText(string ruleConditionString)
+        {
+            int MAX_LEN = 100;
+            return ruleConditionString; 
         }
 
         // Triggered by Add Exception button click on custom rule conditions panel. 

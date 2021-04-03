@@ -27,7 +27,8 @@ namespace WDAC_Wizard
         private SigningRules_Control SigningControl;
         private bool RuleInEdit = false;
         private UIState state;
-        private Exceptions_Control exceptionsControl; 
+        private Exceptions_Control exceptionsControl;
+        private bool redoRequired; 
 
         private enum UIState
         {
@@ -50,7 +51,9 @@ namespace WDAC_Wizard
             this.SigningControl = pControl;
             this.RuleInEdit = true;
             this.state = UIState.RuleConditions;
+            this.redoRequired = false; 
             this.exceptionsControl = null; 
+
         }
 
         /// <summary>
@@ -273,6 +276,12 @@ namespace WDAC_Wizard
             }
 
             this.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
+
+            // Returned back from exceptions to change Rule Type - Redo is required
+            if(this.exceptionsControl != null)
+            {
+                this.redoRequired = true; 
+            }
         }
 
         /// <summary>
@@ -416,9 +425,6 @@ namespace WDAC_Wizard
                     this._MainWindow.CustomRuleinProgress = true;
 
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
-                    //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break;
 
 
@@ -460,6 +466,12 @@ namespace WDAC_Wizard
                     textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     break;
             }
+
+            // Returned from exceptions user control to modify the reference path
+            if(this.exceptionsControl != null)
+            {
+                this.redoRequired = true; 
+            }
         }
 
         /// <summary>
@@ -471,12 +483,13 @@ namespace WDAC_Wizard
         {
             if (radioButton_File.Checked)
             {
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-            }
-                
+                this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.FilePath; 
+                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.FilePath;
+            } 
             else
             {
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Folder);
+                this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.Folder;
+                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.Folder;
             }
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
@@ -605,6 +618,12 @@ namespace WDAC_Wizard
                     }
                     break;
             }
+
+            // Returned from exceptions user control to modify the level of the publisher rule
+            if (this.exceptionsControl != null)
+            {
+                this.redoRequired = true;
+            }
         }
 
         /// <summary>
@@ -706,8 +725,8 @@ namespace WDAC_Wizard
                 SetUIState();
 
                 // Disable next button 
-                this.button_Next.ForeColor = Color.Gray;
-                this.button_Back.FlatAppearance.BorderColor = Color.Gray;
+                //this.button_Next.ForeColor = Color.Gray;
+                //this.button_Back.FlatAppearance.BorderColor = Color.Gray;
                 this.button_Next.Enabled = false;
 
                 // Enable Back & exception button
@@ -733,8 +752,8 @@ namespace WDAC_Wizard
             this.button_Next.Enabled = true;
 
             // Disable Back button
-            this.button_Back.ForeColor = Color.Gray;
-            this.button_Back.FlatAppearance.BorderColor = Color.Gray;
+            //this.button_Back.ForeColor = Color.Gray;
+            //this.button_Back.FlatAppearance.BorderColor = Color.Gray;
             this.button_Back.Enabled = false;
 
             this.state = UIState.RuleConditions;
@@ -754,6 +773,7 @@ namespace WDAC_Wizard
 
                     // Set the control highlight rectangle pos
                     this.controlHighlight_Panel.Location = new Point(3, 138);
+                    // this.Controls.Add(this.controlHighlight_Panel);
                     this.controlHighlight_Panel.BringToFront();
                     this.controlHighlight_Panel.Focus(); 
 
@@ -764,24 +784,56 @@ namespace WDAC_Wizard
                     this.Controls.Add(this.control_Panel);
                     this.control_Panel.BringToFront();
                     this.control_Panel.Focus();
+
+                    // Show buttons
+                    this.button_Next.BringToFront();
+                    this.button_Next.Focus();
+
+                    this.button_CreateRule.BringToFront();
+                    this.button_CreateRule.Focus();
+
+                    this.button_Back.BringToFront();
+                    this.button_Back.Focus();
+
+                    this.button_AddException.BringToFront();
+                    this.button_AddException.Focus();
+
+                    // Hide the Exceptions User Control 
+                    this.exceptionsControl.Hide();
+                    this.exceptionsControl.SendToBack();
+                    this.redoRequired = false; // Reset flag as returning back to rule conditions user control should not auto trigger a redo
+
                     break;
 
                 case UIState.RuleExceptions:
                     {
-                        this.exceptionsControl = new Exceptions_Control(this);
-                        this.Controls.Add(this.exceptionsControl);
+                        //TODO: check if create new exceptions_control or show existing one
+                        if (this.exceptionsControl == null || this.redoRequired == true)
+                        {
+                            this.exceptionsControl = new Exceptions_Control(this);
+                            this.Controls.Add(this.exceptionsControl);
+                        }
+                        else
+                        {
+                            // show existing one
+                        }
+
+                        this.exceptionsControl.Show();
                         this.exceptionsControl.BringToFront();
                         this.exceptionsControl.Focus();
 
-                        // Set the control highlight rectangle pos
-                        this.controlHighlight_Panel.Location = new Point(3, 226);
-                        this.controlHighlight_Panel.BringToFront();
-                        this.controlHighlight_Panel.Focus();
-
+                        // Enable side panel
                         // Show control panel
                         this.Controls.Add(this.control_Panel);
                         this.control_Panel.BringToFront();
                         this.control_Panel.Focus();
+
+                        // Set the control highlight rectangle pos
+                        this.controlHighlight_Panel.Location = new Point(3, 226);
+                        // this.Controls.Add(this.controlHighlight_Panel); 
+                        this.controlHighlight_Panel.BringToFront();
+                        this.controlHighlight_Panel.Focus();
+
 
                         // Show header panel                        
                         this.headerLabel.Text = "Custom Rule Exceptions";
@@ -807,7 +859,7 @@ namespace WDAC_Wizard
 
                 default:
 
-                    break; 
+                    break;
             }
         }
 
@@ -838,6 +890,32 @@ namespace WDAC_Wizard
         private void button_AddException_Click(object sender, EventArgs e)
         {
             this.exceptionsControl.AddException(); 
+        }
+
+        // Custom Rule is Deny Rule
+        private void radioButton_Deny_Click(object sender, EventArgs e)
+        {
+            this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
+            this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+
+            // Returned back from exceptions to change Rule Type - Redo is required
+            if (this.exceptionsControl != null)
+            {
+                this.redoRequired = true; 
+            }
+        }
+
+        // Custom Rule is an Allow Rule
+        private void radioButton_Allow_Click(object sender, EventArgs e)
+        {
+            this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Allow;
+            this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+
+            // Returned back from exceptions to change Rule Type - Redo is required
+            if (this.exceptionsControl != null)
+            {
+                this.redoRequired = true;
+            }
         }
     }   
 }
