@@ -316,25 +316,25 @@ namespace WDAC_Wizard
                 switch (this.CustomRule.Level)
                 {
                     case PolicyCustomRules.RuleLevel.PcaCertificate:
-                        ruleConditionString += "files signed by CA certificate: ";
+                        ruleConditionString += "files signed by CA: ";
                         ruleConditionString += this.CustomRule.FileInfo["PCACertificate"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.Publisher:
-                        ruleConditionString += "files signed by leaf certificate: ";
+                        ruleConditionString += "files signed by: ";
                         ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.SignedVersion:
                         ruleConditionString += "files signed by: ";
-                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"] + Environment.NewLine; 
-                        ruleConditionString += "With version " + this.CustomRule.FileInfo["FileVersion"] + " or greater";
+                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"]; 
+                        ruleConditionString += " with version " + this.CustomRule.FileInfo["FileVersion"] + " or greater";
                         break;
 
                     case PolicyCustomRules.RuleLevel.FilePublisher:
                         ruleConditionString += "files signed by: ";
-                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"] + Environment.NewLine; 
-                        ruleConditionString += "with filename " + this.CustomRule.FileInfo["FileName"];
+                        ruleConditionString += this.CustomRule.FileInfo["LeafCertificate"]; 
+                        ruleConditionString += " with filename " + this.CustomRule.FileInfo["FileName"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.FileName:
@@ -386,6 +386,51 @@ namespace WDAC_Wizard
         public string FormatText(string ruleConditionString)
         {
             int MAX_LEN = 100;
+
+            // Need to check that in between /r/n's that length !> MAX_LEN
+            if(ruleConditionString.Length > MAX_LEN )
+            {
+                if(this.CustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                {
+                    // Publisher formatting split between O= and L=
+                    int split_idx = ruleConditionString.IndexOf("L=");
+                    int split_idx_backup = ruleConditionString.IndexOf("O=");
+                    if (split_idx > 1 && split_idx < MAX_LEN) // found
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, split_idx) + Environment.NewLine + ruleConditionString.Substring(split_idx);
+                    }
+                    else if(split_idx_backup > 1 && split_idx_backup < MAX_LEN)
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, split_idx_backup) + Environment.NewLine + ruleConditionString.Substring(split_idx_backup);
+                    }
+                    else
+                    {
+                        int mid_pt = ruleConditionString.Length / 2;
+                        ruleConditionString = ruleConditionString.Substring(0, mid_pt) + Environment.NewLine + ruleConditionString.Substring(mid_pt);
+                    }
+                }
+                else if (this.CustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+
+                }
+                else if(this.CustomRule.Type == PolicyCustomRules.RuleType.Hash)
+                {
+
+                }
+                else //folder or file path
+                {
+                    // Last back slash before max length
+                    int split_idx = ruleConditionString.Substring(0, MAX_LEN).LastIndexOf("/"); 
+                    if(split_idx > 1)
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, split_idx) + Environment.NewLine + ruleConditionString.Substring(split_idx); 
+                    }
+                    else
+                    {
+                        ruleConditionString = ruleConditionString.Substring(0, MAX_LEN) + Environment.NewLine + ruleConditionString.Substring(MAX_LEN);
+                    }
+                }
+            }
             return ruleConditionString; 
         }
 

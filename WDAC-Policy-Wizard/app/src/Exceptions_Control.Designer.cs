@@ -87,7 +87,7 @@
             this.panel_ExceptionRule.Controls.Add(this.textBox_ReferenceFile);
             this.panel_ExceptionRule.Controls.Add(this.button_Browse);
             this.panel_ExceptionRule.Controls.Add(this.label11);
-            this.panel_ExceptionRule.Location = new System.Drawing.Point(120, 0);
+            this.panel_ExceptionRule.Location = new System.Drawing.Point(130, 0);
             this.panel_ExceptionRule.Margin = new System.Windows.Forms.Padding(2);
             this.panel_ExceptionRule.Name = "panel_ExceptionRule";
             this.panel_ExceptionRule.Size = new System.Drawing.Size(704, 965);
@@ -394,7 +394,7 @@
             // ruleCondition_Label
             // 
             this.ruleCondition_Label.AutoSize = true;
-            this.ruleCondition_Label.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ruleCondition_Label.Font = new System.Drawing.Font("Tahoma", 8.7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ruleCondition_Label.ForeColor = System.Drawing.Color.Black;
             this.ruleCondition_Label.Location = new System.Drawing.Point(7, 143);
             this.ruleCondition_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);

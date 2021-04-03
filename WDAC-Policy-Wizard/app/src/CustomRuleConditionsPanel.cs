@@ -364,9 +364,13 @@ namespace WDAC_Wizard
                         var certChainIsValid = certChain.Build(cert);
 
                         leafCertSubjectName = cert.SubjectName.Name;
+                        leafCertSubjectName = FormatSubjectName(leafCertSubjectName);
+
                         if (certChain.ChainElements.Count > 1)
                         {
                             pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+                            // Remove everything past C=..
+                            pcaCertSubjectName = FormatSubjectName(pcaCertSubjectName);
                         }
                     }
 
@@ -916,6 +920,22 @@ namespace WDAC_Wizard
             {
                 this.redoRequired = true;
             }
+        }
+
+        private string FormatSubjectName(string certSubjectName)
+        {
+            // Remove unwanted info from the subject name (C= onwards)
+            int country_idx = certSubjectName.IndexOf("C=");
+            if (country_idx > 1)
+            {
+                int comma_idx = certSubjectName.IndexOf(',', country_idx);
+                if (comma_idx > 1)
+                {
+                    certSubjectName = certSubjectName.Substring(0, comma_idx);
+                }
+            }
+
+            return certSubjectName;
         }
     }   
 }
