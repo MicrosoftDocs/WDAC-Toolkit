@@ -354,7 +354,7 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleLevel.OriginalFileName:
                         ruleConditionString += "files with original file name: ";
-                        ruleConditionString += this.CustomRule.FileInfo["OriginalFileName"];
+                        ruleConditionString += this.CustomRule.FileInfo["OriginalFilename"];
                         break;
 
                     case PolicyCustomRules.RuleLevel.ProductName:

@@ -30,6 +30,7 @@
         {
             this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_ExceptionRule = new System.Windows.Forms.Panel();
+            this.ruleCondition_Label = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
             this.radioButton_File = new System.Windows.Forms.RadioButton();
@@ -44,9 +45,6 @@
             this.labelSlider_0 = new System.Windows.Forms.Label();
             this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
             this.dataGridView_Exceptions = new System.Windows.Forms.DataGridView();
-            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ruleCondition_static_Label = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -54,7 +52,9 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.ruleCondition_Label = new System.Windows.Forms.Label();
+            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -65,7 +65,7 @@
             // publisherInfoLabel
             // 
             this.publisherInfoLabel.AutoSize = true;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(5, 740);
+            this.publisherInfoLabel.Location = new System.Drawing.Point(4, 701);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
             this.publisherInfoLabel.Size = new System.Drawing.Size(124, 17);
             this.publisherInfoLabel.TabIndex = 106;
@@ -92,6 +92,19 @@
             this.panel_ExceptionRule.Name = "panel_ExceptionRule";
             this.panel_ExceptionRule.Size = new System.Drawing.Size(704, 965);
             this.panel_ExceptionRule.TabIndex = 87;
+            // 
+            // ruleCondition_Label
+            // 
+            this.ruleCondition_Label.AutoSize = true;
+            this.ruleCondition_Label.Font = new System.Drawing.Font("Tahoma", 8.7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ruleCondition_Label.ForeColor = System.Drawing.Color.Black;
+            this.ruleCondition_Label.Location = new System.Drawing.Point(7, 143);
+            this.ruleCondition_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.ruleCondition_Label.Name = "ruleCondition_Label";
+            this.ruleCondition_Label.Size = new System.Drawing.Size(103, 18);
+            this.ruleCondition_Label.TabIndex = 109;
+            this.ruleCondition_Label.Text = "Rule Condition:";
+            this.ruleCondition_Label.Visible = false;
             // 
             // panel_FileFolder
             // 
@@ -143,7 +156,7 @@
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(7, 529);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(8, 512);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
             this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 187);
@@ -259,6 +272,7 @@
             // dataGridView_Exceptions
             // 
             this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
+            this.dataGridView_Exceptions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView_Exceptions.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -274,33 +288,6 @@
             this.dataGridView_Exceptions.TabIndex = 107;
             this.dataGridView_Exceptions.VirtualMode = true;
             this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_Exceptions_CellValueNeeded);
-            // 
-            // column_Action
-            // 
-            this.column_Action.Frozen = true;
-            this.column_Action.HeaderText = "Action";
-            this.column_Action.MinimumWidth = 8;
-            this.column_Action.Name = "column_Action";
-            this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 150;
-            // 
-            // column_Level
-            // 
-            this.column_Level.Frozen = true;
-            this.column_Level.HeaderText = "Type";
-            this.column_Level.MinimumWidth = 6;
-            this.column_Level.Name = "column_Level";
-            this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 150;
-            // 
-            // column_Name
-            // 
-            this.column_Name.Frozen = true;
-            this.column_Name.HeaderText = "Exception";
-            this.column_Name.MinimumWidth = 6;
-            this.column_Name.Name = "column_Name";
-            this.column_Name.ReadOnly = true;
-            this.column_Name.Width = 115;
             // 
             // ruleCondition_static_Label
             // 
@@ -357,7 +344,7 @@
             // textBox_ReferenceFile
             // 
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(7, 478);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(7, 476);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
             this.textBox_ReferenceFile.Size = new System.Drawing.Size(467, 26);
@@ -391,18 +378,29 @@
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // ruleCondition_Label
+            // column_Action
             // 
-            this.ruleCondition_Label.AutoSize = true;
-            this.ruleCondition_Label.Font = new System.Drawing.Font("Tahoma", 8.7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ruleCondition_Label.ForeColor = System.Drawing.Color.Black;
-            this.ruleCondition_Label.Location = new System.Drawing.Point(7, 143);
-            this.ruleCondition_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.ruleCondition_Label.Name = "ruleCondition_Label";
-            this.ruleCondition_Label.Size = new System.Drawing.Size(103, 18);
-            this.ruleCondition_Label.TabIndex = 109;
-            this.ruleCondition_Label.Text = "Rule Condition:";
-            this.ruleCondition_Label.Visible = false;
+            this.column_Action.HeaderText = "Action";
+            this.column_Action.MinimumWidth = 8;
+            this.column_Action.Name = "column_Action";
+            this.column_Action.ReadOnly = true;
+            this.column_Action.Width = 76;
+            // 
+            // column_Level
+            // 
+            this.column_Level.HeaderText = "Type";
+            this.column_Level.MinimumWidth = 6;
+            this.column_Level.Name = "column_Level";
+            this.column_Level.ReadOnly = true;
+            this.column_Level.Width = 69;
+            // 
+            // column_Name
+            // 
+            this.column_Name.HeaderText = "Exception";
+            this.column_Name.MinimumWidth = 6;
+            this.column_Name.Name = "column_Name";
+            this.column_Name.ReadOnly = true;
+            this.column_Name.Width = 98;
             // 
             // Exceptions_Control
             // 
@@ -449,9 +447,9 @@
         private System.Windows.Forms.TextBox textBoxSlider_0;
         private System.Windows.Forms.Label labelSlider_0;
         private System.Windows.Forms.TrackBar trackBar_Conditions;
+        private System.Windows.Forms.Label ruleCondition_Label;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Name;
-        private System.Windows.Forms.Label ruleCondition_Label;
     }
 }

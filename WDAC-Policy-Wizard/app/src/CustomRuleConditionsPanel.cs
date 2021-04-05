@@ -750,6 +750,9 @@ namespace WDAC_Wizard
 
         private void button_Back_Click(object sender, EventArgs e)
         {
+            this.state = UIState.RuleConditions;
+            SetUIState();
+
             // Enable next button 
             this.button_Next.ForeColor = Color.Black;
             this.button_Back.FlatAppearance.BorderColor = Color.Black;
@@ -759,9 +762,6 @@ namespace WDAC_Wizard
             //this.button_Back.ForeColor = Color.Gray;
             //this.button_Back.FlatAppearance.BorderColor = Color.Gray;
             this.button_Back.Enabled = false;
-
-            this.state = UIState.RuleConditions;
-            SetUIState();
         }
 
         private void SetUIState()
@@ -775,37 +775,24 @@ namespace WDAC_Wizard
             {
                 case UIState.RuleConditions:
 
-                    // Set the control highlight rectangle pos
-                    this.controlHighlight_Panel.Location = new Point(3, 138);
-                    // this.Controls.Add(this.controlHighlight_Panel);
-                    this.controlHighlight_Panel.BringToFront();
-                    this.controlHighlight_Panel.Focus(); 
+                    // Hide the Exceptions User Control 
+                    this.exceptionsControl.Hide();
+                    this.exceptionsControl.SendToBack();
+                    this.redoRequired = false; // Reset flag as returning back to rule conditions user control should not auto trigger a redo
 
-                    // Show header panel                        
-                    this.headerLabel.Text = "Custom Rule Conditions";
-
+                    // Enable side panel
                     // Show control panel
                     this.Controls.Add(this.control_Panel);
                     this.control_Panel.BringToFront();
                     this.control_Panel.Focus();
 
-                    // Show buttons
-                    this.button_Next.BringToFront();
-                    this.button_Next.Focus();
+                    // Set the control highlight rectangle pos
+                    this.controlHighlight_Panel.Location = new Point(3, 138);
+                    this.controlHighlight_Panel.BringToFront();
+                    this.controlHighlight_Panel.Focus(); 
 
-                    this.button_CreateRule.BringToFront();
-                    this.button_CreateRule.Focus();
-
-                    this.button_Back.BringToFront();
-                    this.button_Back.Focus();
-
-                    this.button_AddException.BringToFront();
-                    this.button_AddException.Focus();
-
-                    // Hide the Exceptions User Control 
-                    this.exceptionsControl.Hide();
-                    this.exceptionsControl.SendToBack();
-                    this.redoRequired = false; // Reset flag as returning back to rule conditions user control should not auto trigger a redo
+                    // Show header panel                        
+                    this.headerLabel.Text = "Custom Rule Conditions";
 
                     break;
 
@@ -822,6 +809,7 @@ namespace WDAC_Wizard
                             // show existing one
                         }
 
+                        // Show the exceptions control
                         this.exceptionsControl.Show();
                         this.exceptionsControl.BringToFront();
                         this.exceptionsControl.Focus();
@@ -834,29 +822,14 @@ namespace WDAC_Wizard
 
                         // Set the control highlight rectangle pos
                         this.controlHighlight_Panel.Location = new Point(3, 226);
-                        // this.Controls.Add(this.controlHighlight_Panel); 
                         this.controlHighlight_Panel.BringToFront();
                         this.controlHighlight_Panel.Focus();
-
 
                         // Show header panel                        
                         this.headerLabel.Text = "Custom Rule Exceptions";
                         this.Controls.Add(this.headerLabel);
                         this.headerLabel.BringToFront();
-                        this.headerLabel.Focus();
-
-                        // Show buttons
-                        this.button_Next.BringToFront();
-                        this.button_Next.Focus();
-
-                        this.button_CreateRule.BringToFront();
-                        this.button_CreateRule.Focus();
-
-                        this.button_Back.BringToFront();
-                        this.button_Back.Focus();
-
-                        this.button_AddException.BringToFront();
-                        this.button_AddException.Focus(); 
+                        this.headerLabel.Focus(); 
                     }
 
                     break;
@@ -865,6 +838,19 @@ namespace WDAC_Wizard
 
                     break;
             }
+
+            // Show buttons
+            this.button_Next.BringToFront();
+            this.button_Next.Focus();
+
+            this.button_CreateRule.BringToFront();
+            this.button_CreateRule.Focus();
+
+            this.button_Back.BringToFront();
+            this.button_Back.Focus();
+
+            this.button_AddException.BringToFront();
+            this.button_AddException.Focus();
         }
 
         public void SetLabel_ErrorText(string errorText, bool shouldPersist=false)

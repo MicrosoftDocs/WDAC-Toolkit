@@ -360,7 +360,7 @@
             // textBox_ReferenceFile
             // 
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(12, 336);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(12, 334);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
             this.textBox_ReferenceFile.Size = new System.Drawing.Size(408, 26);

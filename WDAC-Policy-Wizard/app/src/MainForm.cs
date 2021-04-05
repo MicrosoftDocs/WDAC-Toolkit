@@ -959,7 +959,7 @@ namespace WDAC_Wizard
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
-                string createVarScript = "$rule = ";
+                string createVarScript = "$Rules = ";
 
                 var customRule = this.Policy.CustomRules[i];
                 customRule.PSVariable = i.ToString(); 
@@ -1130,12 +1130,12 @@ namespace WDAC_Wizard
 
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $rule", tempPolicyPath);
+                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
             }
 
             else
             {
-                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $rule", tempPolicyPath);
+                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
             }
 
             return policyScript;
