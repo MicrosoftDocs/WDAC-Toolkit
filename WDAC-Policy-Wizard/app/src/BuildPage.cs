@@ -22,7 +22,7 @@ namespace WDAC_Wizard
         public string FilePath { get; set; }
         private MainWindow _MainWindow;
 
-        const int PATH_LENGTH_LIMIT = 80; 
+        const int PATH_LENGTH_LIMIT = 100; 
 
         public BuildPage(MainWindow pMainWindow)
         {
@@ -60,28 +60,44 @@ namespace WDAC_Wizard
             if(policyFilePath.Contains(Environment.NewLine))
             {
                 var eol = policyFilePath.IndexOf(Environment.NewLine);
-                this.FilePath = policyFilePath.Substring(0, eol); 
+                this.FilePath = policyFilePath.Substring(0, eol);
+
+                string xmlString = policyFilePath.Substring(0, eol);
+                string binString = policyFilePath.Substring(eol);
+
+                policyFilePath = FormatText(xmlString) + FormatText(binString); 
             }
             else
             {
+                policyFilePath = FormatText(policyFilePath);
                 this.FilePath = policyFilePath;
             }
 
-            // If the path is too long, split and add newline
-            if(policyFilePath.Length > PATH_LENGTH_LIMIT)
-            {
-                int splitLoc = policyFilePath.LastIndexOf("\\"); 
-                this.hyperlinkLabel.Text = policyFilePath.Substring(0, splitLoc) + Environment.NewLine + 
-                    policyFilePath.Substring(splitLoc);
-            }
-            else
-            {
-                this.hyperlinkLabel.Text = policyFilePath;
-            }
-            
+            this.hyperlinkLabel.Text = policyFilePath;
             this.hyperlinkLabel.Enabled = true;
             this.finishPanel.Visible = true;
             this.label_WaitMsg.Visible = false; 
+        }
+
+        public string FormatText(string longstring)
+        {
+            if(longstring.Length > PATH_LENGTH_LIMIT)
+            {
+                // Get the last instance of the \ between the start and the path limit (80)
+                int splitLoc = longstring.Substring(0, PATH_LENGTH_LIMIT).LastIndexOf("\\");
+                if(splitLoc > 1)
+                {
+                    longstring = longstring.Substring(0, splitLoc) + Environment.NewLine + longstring.Substring(splitLoc);
+                }
+                else
+                {
+                    // Split midway through
+                    int mid_pt = longstring.Length / 2; 
+                    longstring = longstring.Substring(0, mid_pt) + Environment.NewLine + longstring.Substring(mid_pt);
+                }
+            }
+
+            return longstring; 
         }
 
         /// <summary>

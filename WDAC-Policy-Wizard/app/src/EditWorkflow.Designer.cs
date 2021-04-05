@@ -247,7 +247,7 @@ namespace WDAC_Wizard
             // pictureBox_Progress
             // 
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
-            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
+            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.Location = new System.Drawing.Point(78, 48);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);

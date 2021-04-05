@@ -129,8 +129,6 @@
   </data>
   <data name="InvalidateEAs_Info" xml:space="preserve">
     <value>When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation.</value>
-  <data name="CertificateBuild_Error" xml:space="preserve">
-    <value>Error. Could not build certificate chain for </value>
   </data>
   <data name="blank-check-box_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\blank-check-box_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -156,7 +154,6 @@
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>
   </data>
-
   <data name="locked_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\locked-padlock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -246,7 +243,6 @@ with a version at or above this specified file version number.</value>
   <data name="newPolicy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\newPolicy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-
   <data name="PublisherInfo" xml:space="preserve">
     <value>This rule applies to all files signed by this issuing CA and publisher.</value>
   </data>
@@ -277,7 +273,6 @@ with a version at or above this specified file version number.</value>
   <data name="EVSigners_Info" xml:space="preserve">
     <value>In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate.</value>
   </data>
-
   <data name="radio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -323,9 +318,6 @@ with a version at or above this specified file version number.</value>
   <data name="InvalidSupplementalRule_Info" xml:space="preserve">
     <value>This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented.</value>
   </data>
-  <data name="BlobContainerString" xml:space="preserve">
-    <value>wdac-wizard-logs</value>
-  </data>
   <data name="circular_shape_silhouette" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\circular-shape-silhouette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -368,12 +360,6 @@ with a version at or above this specified file version number.</value>
   <data name="add-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\add-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="externalLink" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imgs\externalLink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="wizard-ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imgs\wizard-ico.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -382,5 +368,14 @@ with a version at or above this specified file version number.</value>
   </data>
   <data name="LegacyPolicyID_GUID" xml:space="preserve">
     <value>{A244370E-44C9-4C06-B551-F6016E563076}</value>
+  </data>
+  <data name="CertificateBuild_Error" xml:space="preserve">
+    <value>Error. Could not build certificate chain for</value>
+  </data>
+  <data name="ResetSettingsString" xml:space="preserve">
+    <value>Are you sure you want to reset all settings to their original state?</value>
+  </data>
+  <data name="UnsuccessfulEventLogConversion" xml:space="preserve">
+    <value>Conversion of the event log to a WDAC Policy XML file was unsuccessful. Please try another file. </value>
   </data>
 </root>

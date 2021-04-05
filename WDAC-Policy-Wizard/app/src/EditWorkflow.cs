@@ -270,7 +270,6 @@ namespace WDAC_Wizard
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false; 
             this.label_Progress.Text = "Event Viewer Log Conversion in Progress";
-            this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
             this.Workflow = WorkflowType.DeviceEventLog; 
 
             // Create background worker to display updates to UI
@@ -554,6 +553,8 @@ namespace WDAC_Wizard
             // User wants to convert an event log to a WDAC policy. Prepare the UI accordingly
             this.panel_Edit_XML.Visible = false;
             this.panel_EventLog_Conversion.Visible = true;
+            this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
+
 
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
