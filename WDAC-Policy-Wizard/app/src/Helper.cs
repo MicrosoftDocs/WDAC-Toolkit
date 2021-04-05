@@ -10,7 +10,8 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Microsoft.Azure; 
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob; 
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Win32;
 
 namespace WDAC_Wizard
 {
@@ -169,11 +170,17 @@ namespace WDAC_Wizard
         public void SetRuleType()
         {
             if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FilePath))
+            {
                 this._RuleType = RuleType.FileName;
+            }
             else if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FileName))
+            {
                 this._RuleType = RuleType.FilePath;
+            }
             else
-                this._RuleType = RuleType.Hash;         
+            {
+                this._RuleType = RuleType.Hash;
+            }
         }
 
         public RuleType GetRuleType()
@@ -385,7 +392,9 @@ namespace WDAC_Wizard
             this.FileName = _FolderName + fileName;
 
             if (!File.Exists(this.FileName))
+            {
                 this.Log = new StreamWriter(this.FileName);
+            }
 
             this.Log.AutoFlush = true;
             this.AddBoilerPlate(); 
@@ -518,6 +527,27 @@ namespace WDAC_Wizard
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             this.AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
+            this.AddInfoMsg(String.Format("Session ID: {0}-{1}", this.getInstallTime(), DateTime.Now)); 
+        }
+
+        private string getInstallTime()
+        {
+            RegistryHive rootNode = RegistryHive.LocalMachine;
+            RegistryView registryView = RegistryView.Registry64;
+            RegistryKey root = RegistryKey.OpenBaseKey(rootNode, registryView);
+            RegistryKey registryKey = root.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+
+            RegistryValueKind subKeyValueKind = registryKey.GetValueKind("InstallTime");
+            object subKeyValue = null;
+            subKeyValue = registryKey.GetValue("InstallTime");
+
+            return subKeyValue.ToString(); /*
+
+            int dword = (int)subKeyValue;
+            string valueAsStr = true ? Convert.ToString(dword, 16).ToUpper() : dword.ToString();
+
+            string inst =  Convert.ToString(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "BuildLab", ""));
+            return valueAsStr; */
         }
     }
 }

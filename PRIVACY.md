@@ -14,4 +14,4 @@ as your consent to these practices.
 ### Disabling Telemetry
 
 To disable telemetry, users must navigate to the settings pane of the application main window (represented by the Gear icon) and unchecking
-the 'Diagnostic information' setting.
+the 'Share logs with Microsoft' setting.

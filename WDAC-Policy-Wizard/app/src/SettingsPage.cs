@@ -54,68 +54,129 @@ namespace WDAC_Wizard
         //      
         // Returns:
         //     None.
-        private void SettingCheckBox_Click(object sender, EventArgs e)
+
+        private void EnvVar_CheckBox_Click(object sender, EventArgs e)
         {
-            // Map the checkbox [really a picturebox] to the setting
-            // Names of the checkbox are always <setting_name>_CheckBox
-            int CHAR_OFFSET = 9;
+            // Toggle the UI and set the setting
+            // Currently true, set to false
             PictureBox checkBox = ((PictureBox)sender);
-            string settingName = checkBox.Name.Substring(0, checkBox.Name.Length - CHAR_OFFSET);
 
-            // Prompt user for additional confirmation before disabling telemetry
-            if(settingName == "allowTelemetry" && checkBox.Tag.ToString() == "Checked")
+            if (Properties.Settings.Default.useEnvVars)
             {
-                DialogResult res = MessageBox.Show("Turning this off will not allow developers to improve this tool or help" +
-                    " debug your case." + Environment.NewLine + "Are you sure you want to disable this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (res == DialogResult.No)
-                    return;
-            }
-
-            // Check if system supports Multi-Policy before enabling
-            // TODO: move this to new policy page
-            int REQ_RELN_MULTI_POL = 1903; 
-            if(settingName == "createMultiPolicyByDefault" && checkBox.Tag.ToString() == "Unchecked")
-            {
-                int releaseN = this._MainWindow.getReleaseId(); 
-                if(releaseN < REQ_RELN_MULTI_POL)
-                {
-                    this.Log.AddWarningMsg(String.Format("Release ID: {0} does not meet multi policy format requirements", releaseN));
-
-                    // Show warn/error message to user
-                    DialogResult res = MessageBox.Show("Your system does not meet the requirements for Multiple Policy Format. Please upgrade to Windows 10 version 1903 or higher.",
-                        "Unmet System Requirements", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                    return;
-                }
-            }
-
-            if (checkBox.Tag.ToString() == "Checked")
-            {
-                // Set setting --> false and checkbox --> unchecked
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
-                Properties.Settings.Default[settingName] = false;
+                Properties.Settings.Default.useEnvVars = false; 
             }
-            else
+            else // false, set to true
             {
-                // Set setting --> true and checkbox --> checked
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
-                Properties.Settings.Default[settingName] = true;
+                Properties.Settings.Default.useEnvVars = true;
             }
 
+            // Save setting and show update message to user
+            SaveSetting(); 
+        }
+
+        private void ConvertPolicy_CheckBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.convertPolicyToBinary)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.convertPolicyToBinary = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.convertPolicyToBinary = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        private void DefaultString_CheckBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDefaultStrings)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useDefaultStrings = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useDefaultStrings = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        private void Telemetry_CheckBox_Click(object sender, EventArgs e)
+        {
+            PictureBox checkBox = ((PictureBox)sender);
+
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            if (Properties.Settings.Default.allowTelemetry)
+            {
+                DialogResult res = MessageBox.Show("Turning this off will not allow developers to improve this tool or help debug your case."
+                + "\r\nAre you sure you want to disable this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (res == DialogResult.No)
+                {
+                    return; // will exit before Settings.Default[settingName] change
+                }
+                else
+                {
+                    // Final log :(
+                    this.Log.AddNewSeparationLine("Logging Disabled");
+                    this.Log.UploadLog();
+
+                    // new log object since upload closes and flushes current object
+                    this._MainWindow.Log = new Logger(this._MainWindow.TempFolderPath);
+                    this.Log = this._MainWindow.Log; 
+                }
+
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.allowTelemetry = false;
+
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.allowTelemetry = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        private void SaveSetting()
+        {
             // Save settings and show settings update to user
             Properties.Settings.Default.Save();
-            this.Update_Label.Visible = true; 
+            this.Update_Label.Visible = true;
 
             Timer settingsUpdateNotificationTimer = new Timer();
             settingsUpdateNotificationTimer.Interval = (1500); // 1.5 secs
             settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
             settingsUpdateNotificationTimer.Start();
-            
         }
-
 
         //
         // Summary:
@@ -123,7 +184,7 @@ namespace WDAC_Wizard
         //      
         // Returns:
         //     None.
-        private void terms_Label_Click(object sender, EventArgs e)
+        private void Terms_Label_Click(object sender, EventArgs e)
         {
             // Launch the terms of use page
             try
@@ -138,7 +199,7 @@ namespace WDAC_Wizard
 
         }
 
-        private void privacy_Label_Click(object sender, EventArgs e)
+        private void Privacy_Label_Click(object sender, EventArgs e)
         {
             // Launch the privacy agreement page
             try
@@ -153,10 +214,10 @@ namespace WDAC_Wizard
 
         }
 
-        private void resetButton_Click(object sender, EventArgs e)
+        private void ResetButton_Click(object sender, EventArgs e)
         {
             // Prompt user for additional confirmation
-            DialogResult res = MessageBox.Show("Are you sure you want to reset settings to their original state?",
+            DialogResult res = MessageBox.Show(Properties.Resources.ResetSettingsString,
                 "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (res == DialogResult.Yes)
@@ -178,6 +239,12 @@ namespace WDAC_Wizard
                 }
 
                 SetSettingsValues(this.SettingsDict);
+                Properties.Settings.Default.Reset();
+
+
+                // if(this.Log.isClosed)
+                
+
             }
         }
 
@@ -185,14 +252,18 @@ namespace WDAC_Wizard
         private void SettingsPage_Load(object sender, EventArgs e)
         {
             // On load, configure UI to match the app settings
-            this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default["useEnvVars"]);
-            this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default["useDefaultStrings"]);
-            this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default["allowTelemetry"]);
-            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default["convertPolicyToBinary"]); 
+            this.Log.AddNewSeparationLine("Settings Page Load"); 
+
+            this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
+            this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
+            this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default.allowTelemetry);
+            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary); 
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
+            {
                 this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
+            }
 
             SetSettingsValues(this.SettingsDict); 
         }
@@ -221,11 +292,8 @@ namespace WDAC_Wizard
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
                 }
 
-                Properties.Settings.Default.Reset(); 
                 this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
-            }
-
-            
+            }            
         }
 
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
@@ -250,5 +318,6 @@ namespace WDAC_Wizard
             PictureBox checkBox = ((PictureBox)sender);
             checkBox.BackColor = Color.White;
         }
+
     }
 }

@@ -360,4 +360,17 @@ with a version at or above this specified file version number.</value>
   <data name="add-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\add-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ResetSettingsString" xml:space="preserve">
+    <value>Are you sure you want to reset settings to their original states?</value>
+  </data>
+  <data name="NAField_String" xml:space="preserve">
+    <value>One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
+Do you want to continue by adding this rule to the policy?</value>
+  </data>
+  <data name="InvalidSupplementalRule_NoInherit_Info" xml:space="preserve">
+    <value>This rule is not valid or modifiable on supplemental policies.</value>
+  </data>
+  <data name="LegacyPolicyID_GUID" xml:space="preserve">
+    <value>{A244370E-44C9-4C06-B551-F6016E563076}</value>
+  </data>
 </root>

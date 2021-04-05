@@ -424,6 +424,7 @@ namespace WDAC_Wizard
             // Get info about the rule user wants to delete: row index and value
             int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
             int numIdex = 0;
+            int customRuleIdx = -1; 
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
@@ -441,26 +442,36 @@ namespace WDAC_Wizard
                 // Remove from UI
                 // Remove from DisplayObject
                 if (rowIdx < this.displayObjects.Count)
+
                 {
                     this.displayObjects.RemoveAt(rowIdx);
                     this.rulesDataGrid.Rows.RemoveAt(rowIdx);
                 }
 
-                // If the rule to delete is a new custom rule, we only need to delete it from the CustomRules struct
-                if (this.Policy.CustomRules.Count > 0)
+                // New base policy Workflow -- check if there is a custom rule we must delete
+                //if (!this.Policy._PolicyType.Equals(WDAC_Policy.PolicyType.Edit))
+                if(this.Policy.CustomRules.Count > 0)
                 {
                     foreach(var customRule in this.Policy.CustomRules)
                     {
                         if(customRule.RowNumber == rowIdx)
                         {
-                            this.Policy.CustomRules.RemoveAt(numIdex); // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+
+                            customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
                             this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
-                            return; 
+                            break; 
                         }
                         else
                         {
                             numIdex++;
                         }
+                    }
+
+                    // Check if we assigned a value to custom rule indx to remove
+                    if(customRuleIdx != -1)
+                    {
+                        this.Policy.CustomRules.RemoveAt(customRuleIdx);
+                        return; 
                     }
                 }
                 
@@ -608,7 +619,7 @@ namespace WDAC_Wizard
                 }
 
                 // Else, process Level=FileAttributes
-                else
+                else if(ruleType.Equals("File Attributes"))
                 {
                     this.Log.AddInfoMsg("Removing FileAttributes Rule");
 

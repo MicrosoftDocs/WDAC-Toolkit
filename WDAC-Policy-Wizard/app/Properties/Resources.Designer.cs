@@ -369,11 +369,29 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule is not valid or modifiable on supplemental policies..
+        /// </summary>
+        internal static string InvalidSupplementalRule_NoInherit_Info {
+            get {
+                return ResourceManager.GetString("InvalidSupplementalRule_NoInherit_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted..
         /// </summary>
         internal static string ISG_Info {
             get {
                 return ResourceManager.GetString("ISG_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {A244370E-44C9-4C06-B551-F6016E563076}.
+        /// </summary>
+        internal static string LegacyPolicyID_GUID {
+            get {
+                return ResourceManager.GetString("LegacyPolicyID_GUID", resourceCulture);
             }
         }
         
@@ -413,6 +431,16 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("minus-button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
+        ///Do you want to continue by adding this rule to the policy?.
+        /// </summary>
+        internal static string NAField_String {
+            get {
+                return ResourceManager.GetString("NAField_String", resourceCulture);
             }
         }
         
@@ -550,6 +578,15 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("radio-on-button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset settings to their original states?.
+        /// </summary>
+        internal static string ResetSettingsString {
+            get {
+                return ResourceManager.GetString("ResetSettingsString", resourceCulture);
             }
         }
         

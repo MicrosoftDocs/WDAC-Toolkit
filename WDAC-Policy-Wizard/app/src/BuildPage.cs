@@ -52,11 +52,22 @@ namespace WDAC_Wizard
         /// </summary>
         public void ShowFinishMsg(string policyFilePath)
         {
-            this.finishPanel.Visible = true;
-            this.FilePath = policyFilePath;
+            // Check if the policyFilePath contains a .bin/.cip file too
+            // Parse for the xml file only to add to this.FilePath
+            if(policyFilePath.Contains(Environment.NewLine))
+            {
+                var eol = policyFilePath.IndexOf(Environment.NewLine);
+                this.FilePath = policyFilePath.Substring(0, eol); 
+            }
+            else
+            {
+                this.FilePath = policyFilePath;
+            }
+
             this.hyperlinkLabel.Text = policyFilePath;
             this.hyperlinkLabel.Enabled = true;
 
+            this.finishPanel.Visible = true;
             this.label_WaitMsg.Visible = false; 
         }
 
@@ -88,11 +99,14 @@ namespace WDAC_Wizard
                 }
                 catch (Exception excpt)
                 {
+                    // Log file already closed/uploaded
                     Console.WriteLine(String.Format("{0} exception caught", excpt));
                 }
             }
             else
+            {
                 Console.WriteLine(String.Format("Unable to open {0}", this.FilePath));
+            }
         }
     }
 }

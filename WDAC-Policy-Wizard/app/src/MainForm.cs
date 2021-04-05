@@ -17,9 +17,8 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+using System.Security; 
+using System.Security.Permissions; 
 
 using Microsoft.Win32;
 using WDAC_Wizard.src;
@@ -713,7 +712,7 @@ namespace WDAC_Wizard
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "FinalPolicy.xml");
+            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
             
             if(this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
             {
@@ -729,7 +728,6 @@ namespace WDAC_Wizard
                 MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
             }
                       
-
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
 
@@ -783,8 +781,16 @@ namespace WDAC_Wizard
             }
             else
             {
-                this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
                 this._BuildPage.UpdateProgressBar(100, " ");
+
+                if (this.Policy.BinPath != null)
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + "\r\n" + this.Policy.BinPath);
+                }
+                else
+                {
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath); 
+                }
             }
 
             this.Log.AddNewSeparationLine("Workflow -- DONE"); 
@@ -1149,6 +1155,13 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("--- Merge Custom Rules Policy ---");
 
             string mergeScript = String.Empty;
+
+            // Create runspace, pipeline and runscript
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+
             if (customRulesPathList.Count > 0)
             {
                 // Add all the merge paths
@@ -1156,24 +1169,35 @@ namespace WDAC_Wizard
                 // Since we set the format in ProcessCustomRules(), the customRulesPathList will be the correct format
                 mergeScript = "Merge-CIPolicy -PolicyPaths ";
                 foreach (string path in customRulesPathList)
+                {
                     mergeScript += String.Format("\"{0}\",", path);
+                }
 
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
                 mergeScript += String.Format(" -OutputFilePath \"{0}\"", outputFilePath);
+
+                pipeline.Commands.AddScript(mergeScript);
+                pipeline.Commands.Add("Out-String");
+
+                // Remove all of the policy rule-options so the rule-options set in template.xml persist when template.xml and FinalPolicy.xml are merged
+                int N_Rules = 19;
+                for (int i = 0; i <= N_Rules; i++)
+                {
+                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", outputFilePath, i));
+                }
+
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", mergeScript));
+
+                try
+                {
+                    Collection<PSObject> results = pipeline.Invoke();
+                }
+                catch (Exception e)
+                {
+                    this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
+                }
             }
-
-            // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(mergeScript);
-            pipeline.Commands.Add("Out-String");
-
-            this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", mergeScript));
-
-            Collection<PSObject> results = pipeline.Invoke();
-
             runspace.Dispose();
             worker.ReportProgress(85);
         }
@@ -1206,6 +1230,12 @@ namespace WDAC_Wizard
                     this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
                     0, this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
                 }
+            }
+
+            // Check if user-writeable. If it is not, default to MyDocuments
+            if(!WriteAccess(Path.GetDirectoryName(this.Policy.SchemaPath)))
+            {
+                this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
             }
 
             this.Log.AddInfoMsg("--- Merge Templates Policy ---");
@@ -1248,6 +1278,7 @@ namespace WDAC_Wizard
             }
 
             // Remove last comma and add outputFilePath
+            // TODO: check if this.Policy.SchemaPath is user-writeable
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
             mergeScript += String.Format(" -OutputFilePath \"{0}\"", this.Policy.SchemaPath);
 
@@ -1268,7 +1299,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
-                Console.WriteLine(String.Format("Exception encountered: {0}", e));
+                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeTemplatesPolicy(): {0}", e));
             }
             runspace.Dispose();
 
@@ -1290,17 +1321,21 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // IF the policy is multi format ONLY, set policy info, and reset the guids
+            // IF the policy is multi format ONLY AND NOT supplemental set policy info, and reset the guids
+            // Setting these will revert policy under edit to BasePolicy
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+                if (this.Policy.siPolicy.PolicyType != global::PolicyType.SupplementalPolicy)
+                {
+                    // Set policy info - ID, Name
+                    string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
 
-                // Reset the GUIDs s.t. does not mirror the policy GUID 
-                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
+                    // Reset the GUIDs s.t. does not mirror the policy GUID 
+                    string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
 
-                pipeline.Commands.AddScript(setIdInfoCmd);
-                pipeline.Commands.AddScript(resetGuidsCmd);
+                    pipeline.Commands.AddScript(setIdInfoCmd);
+                    pipeline.Commands.AddScript(resetGuidsCmd);
+                }
             }
 
             
@@ -1360,10 +1395,31 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            string binaryFilePath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), Path.GetFileNameWithoutExtension(this.Policy.SchemaPath)) + ".bin"; //stripped the path remove the .xml --> .bin
+            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
+            string binaryFileName; 
+            if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                    StreamReader reader = new StreamReader(this.Policy.SchemaPath);
+                    SiPolicy finalSiPolicy = (SiPolicy)serializer.Deserialize(reader);
+                    reader.Close();
+                    binaryFileName = String.Format("{0}.cip", finalSiPolicy.BasePolicyID);
+                }
+                catch
+                {
+                    binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) + ".bin";
+                }
+            }
+            else
+            {
+                //stripped the path remove the .xml --> .bin
+                binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) +".bin";
+            }
 
-            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"",
-                this.Policy.SchemaPath, binaryFilePath);
+            this.Policy.BinPath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);  
+            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, this.Policy.BinPath);
 
             pipeline.Commands.AddScript(binConvertCmd);
 
@@ -1983,8 +2039,7 @@ namespace WDAC_Wizard
         /// /// </summary>
         private void FormClosing_Event(object sender, FormClosingEventArgs e)
         {
-            this.Log.CloseLogger();// does this belong here? 
-            // TODO: add Telemetry
+            this.Log.CloseLogger();
         }
 
         private string GetExecutablePath(bool exePath)
@@ -1995,6 +2050,32 @@ namespace WDAC_Wizard
                 return executablePath;
             else
                 return folderPath; 
+        }
+
+        /// <summary>
+        /// Check that the given directory is write-accessable by the user.  
+        /// /// </summary>
+        private bool WriteAccess(string folderPath)
+        {
+            // Try to create a subdir in the folderPath. If successful, write access is true. 
+            // If an exception is hit, the path is likely not user-writeable 
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(folderPath); 
+                if(di.Exists)
+                {
+                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(folderPath, "testSubDir"));
+                    dis.Create();
+                    dis.Delete(); 
+                }
+
+                return true; 
+            }
+            catch(Exception e)
+            {
+                this.Log.AddErrorMsg("WriteAccess() encountered the following exception: " + e); 
+                return false; 
+            }
         }
 
         // SKU check if cmdlets are available on the device 
@@ -2025,10 +2106,13 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Edition/ProdName:{0}/{1} meets min build requirements.", edition, prodName));
             }
             else
-                supt_flag = 0; 
+            {
+                // Device does not meet the versioning or SKU check
+                supt_flag = 0;
+            }
 
-        
-            if (supt_flag == 0) // edition or prod name not found in either reg key, n_ed_sup = 0, throw warn msg
+            // edition or prod name not found in either reg key, n_ed_sup = 0, throw warn msg
+            if (supt_flag == 0) 
             {
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Build Detected!! BuildN={0}", releaseN));
                 this.Log.AddWarningMsg(String.Format("Incompatible Windows Edition/Product Detected!! CompositionEditionID={0} and ProductName={1}", edition, prodName));
