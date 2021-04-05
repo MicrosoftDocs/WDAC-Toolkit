@@ -93,6 +93,7 @@ namespace WDAC_Wizard
 
                 pageController(sender, e); 
                 button_Next.Visible = true; 
+
             }
 
             else
@@ -902,7 +903,7 @@ namespace WDAC_Wizard
 
             foreach (var CustomRule in CustomRulesCopy)
             {
-                if (CustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.Folder)
+                if (CustomRule.Level == PolicyCustomRules.RuleLevel.Folder)
                     nOps += CustomRule.FolderContents.Count;
                 else
                     nOps++;
@@ -914,7 +915,7 @@ namespace WDAC_Wizard
             for (int i = 0; i < nRules; i++)
             {
                 var CustomRule = this.Policy.CustomRules[i];
-                if (CustomRule.GetRuleLevel() == PolicyCustomRules.RuleLevel.Folder)
+                if (CustomRule.Level == PolicyCustomRules.RuleLevel.Folder)
                 {
                     foreach (string filePath in CustomRule.FolderContents)
                     {
@@ -956,31 +957,70 @@ namespace WDAC_Wizard
         public List<string> ProcessCustomRules(BackgroundWorker worker)
         {
             List<string> customRulesPathList = new List<string>();
+            List<string> scriptCommands = new List<string>();
+            string createRuleScript = string.Empty; 
             int nCustomRules = this.Policy.CustomRules.Count;
             int progressVal = 0;
 
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
+                string createVarScript = "$Rules = ";
+
                 var customRule = this.Policy.CustomRules[i];
                 customRule.PSVariable = i.ToString(); 
                 string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
-                customRulesPathList.Add(tmpPolicyPath); 
+                customRulesPathList.Add(tmpPolicyPath);
 
-                string ruleScript = createCustomRuleScript(customRule);
-                string policyScript = createPolicyScript(customRule, tmpPolicyPath); 
+                createRuleScript = createCustomRuleScript(customRule, false);
+                scriptCommands.Add(createRuleScript);
+                createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
 
-                // Add script to pipeline and run PS command
+                //  Process all exceptions, if applicable
+                if (customRule.ExceptionList.Count > 0)
+                {
+                    // Determine if rule is UMCI and KMCI by attempting to access Rule_0[1].Exceptions = ''
+                    // If error, there is only 1 index to update
+                    
+                    for(int j = 0; j < customRule.ExceptionList.Count; j++ )
+                    {
+                        var exceptionRule = customRule.ExceptionList[j];
+                        exceptionRule.PSVariable = j.ToString();
+
+                        scriptCommands.Add(createCustomRuleScript(exceptionRule, true, customRule.PSVariable));
+
+                        // Add required exceptions IDs and FileException = 1
+                        scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
+                        scriptCommands.Add(String.Format("foreach($j in $Rule_{0}) {{ $j.Exceptions += $Exception_{1}_Rule_{2}.ID }}", customRule.PSVariable, exceptionRule.PSVariable, customRule.PSVariable));
+
+
+                        createVarScript += String.Format("$Exception_{0}_Rule_{1} + ", exceptionRule.PSVariable, customRule.PSVariable);
+                    }
+                }
+
+                // Create the real pipeline
                 Pipeline pipeline = this.runspace.CreatePipeline();
-                pipeline.Commands.AddScript(ruleScript);
-                pipeline.Commands.AddScript(policyScript);
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", ruleScript));
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
 
+                // Run the rule creation commands
+                foreach (var script in scriptCommands)
+                {
+                    pipeline.Commands.AddScript(script);
+                    this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", script));
+                }
+
+                // Generic $rule var creation to ensure exceptions get bundled into policy
+                createVarScript = createVarScript.Substring(0, createVarScript.Length - 3);
+                pipeline.Commands.AddScript(createVarScript);
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", createVarScript));
+
+                // Run the policy creation script
+                string policyScript = createPolicyScript(tmpPolicyPath); 
+                pipeline.Commands.AddScript(policyScript);
+                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
+                               
                 // Update progress bar per completion of custom rule created
                 progressVal = 10 + i * 70 / nCustomRules; 
                 worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
-
                 try
                 {
                     Collection<PSObject> results = pipeline.Invoke();
@@ -996,55 +1036,73 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
-        public string createCustomRuleScript(PolicyCustomRules customRule)
+        public string createCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
             string customRuleScript = string.Empty;
+            string rulePrefix = string.Empty;
+
+            if (isException)
+            {
+                rulePrefix = String.Format("$Exception_{0}_Rule_{1}", customRule.PSVariable, ruleIdx); 
+            }
+            else
+            {
+                rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
+            }
 
             // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
-            switch (customRule.GetRuleType())
+            switch (customRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
-                            " -Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
+                            " -Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.FilePath:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
-                            " -Fallback Hash -UserWriteablePaths", customRule.PSVariable, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
+                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
+                            " -Fallback Hash -UserWriteablePaths", rulePrefix, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
                     {
                         // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                        if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath &&
+                        if (customRule.Type == PolicyCustomRules.RuleType.FilePath &&
                             Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
-                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.GetEnvVar());
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.GetEnvVar());
+                        }
                         else
-                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.ReferenceFile);
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix,  customRule.ReferenceFile);
+                        }
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
-                            "-Fallback Hash", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
+                            "-Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
-                        customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\" ", customRule.PSVariable, customRule.GetRuleLevel(), customRule.ReferenceFile);
+                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level, 
+                            customRule.ReferenceFile);
                     }
                     break;
             }
 
             // If this is a deny rule, append the Deny switch
-            if (customRule.GetRulePermission() == PolicyCustomRules.RulePermission.Deny)
+            // TODO: exception rule not having the level set currently
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
                 customRuleScript += " -Deny";
+            }
 
             return customRuleScript; 
         }
@@ -1057,15 +1115,38 @@ namespace WDAC_Wizard
             string policyScript = string.Empty;
 
             if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
                 policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
+            }
 
             else
+            {
                 policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
-
+            }
+                
             return policyScript; 
         }
 
-        
+        /// <summary>
+        /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
+        /// </summary>
+        public string createPolicyScript(string tempPolicyPath)
+        {
+            string policyScript = string.Empty;
+
+            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            {
+                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
+            }
+
+            else
+            {
+                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
+            }
+
+            return policyScript;
+        }
+
         /// <summary>
         /// Merges all of the CI Policies created for each custom rule. Writes the merged policy into one OutputFilePath (input)
         /// </summary>
@@ -1613,9 +1694,9 @@ namespace WDAC_Wizard
         //     None. 
         private void ShowControlPanel(object sender, EventArgs e)
         {
-            Controls.Add(control_Panel);
-            control_Panel.BringToFront();
-            control_Panel.Focus();
+            this.Controls.Add(this.control_Panel);
+            this.control_Panel.BringToFront();
+            this.control_Panel.Focus();
 
             this.Controls.Add(button_Next);
             button_Next.BringToFront();
@@ -1627,11 +1708,11 @@ namespace WDAC_Wizard
             try
             {
                 var sideButton = (Button)sender; 
-                controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
+                this.controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
             }
             catch(Exception exc)
             {
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
+                this.controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
             }
 
             // Enable Settings Button -- if on building page, it will be disabled below
@@ -1839,7 +1920,9 @@ namespace WDAC_Wizard
         {
             // Empty this.PageList so that we can start a new workflow after policy build
             foreach (var page in this.PageList)
+            {
                 this.Controls.RemoveByKey(page);
+            }
             this.PageList.Clear(); 
         }
 

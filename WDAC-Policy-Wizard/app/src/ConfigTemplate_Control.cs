@@ -573,5 +573,17 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
             }
         }
+
+        private void AdvancedOptions_MouseHover(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.WhiteSmoke;
+        }
+
+        private void AdvancedOptions_MouseLeave(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.White;
+        }
     }
 }
