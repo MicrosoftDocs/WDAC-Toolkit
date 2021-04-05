@@ -124,9 +124,11 @@
   <data name="next" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\next.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CILogEvtPath" xml:space="preserve">
+    <value>Microsoft-Windows-CodeIntegrity/Operational</value>
+  </data>
   <data name="InvalidateEAs_Info" xml:space="preserve">
     <value>When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation.</value>
-  </data>
   <data name="CertificateBuild_Error" xml:space="preserve">
     <value>Error. Could not build certificate chain for </value>
   </data>
@@ -148,9 +150,13 @@
   <data name="NoReboot_Info" xml:space="preserve">
     <value>When enabled, future WDAC policy updates are applied without requiring a system reboot.</value>
   </data>
+  <data name="EventLogConversionSuccess" xml:space="preserve">
+    <value>Conversion of the event log to a WDAC Policy XML file was successful. </value>
+  </data>
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>
   </data>
+
   <data name="locked_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\locked-padlock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -240,6 +246,7 @@ with a version at or above this specified file version number.</value>
   <data name="newPolicy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\newPolicy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+
   <data name="PublisherInfo" xml:space="preserve">
     <value>This rule applies to all files signed by this issuing CA and publisher.</value>
   </data>
@@ -270,6 +277,7 @@ with a version at or above this specified file version number.</value>
   <data name="EVSigners_Info" xml:space="preserve">
     <value>In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate.</value>
   </data>
+
   <data name="radio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -315,8 +323,8 @@ with a version at or above this specified file version number.</value>
   <data name="InvalidSupplementalRule_Info" xml:space="preserve">
     <value>This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented.</value>
   </data>
-  <data name="DefaultWindows_Enforced" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\policyTemplates\DefaultWindows_Enforced.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="BlobContainerString" xml:space="preserve">
+    <value>wdac-wizard-logs</value>
   </data>
   <data name="circular_shape_silhouette" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\circular-shape-silhouette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -360,12 +368,14 @@ with a version at or above this specified file version number.</value>
   <data name="add-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\add-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ResetSettingsString" xml:space="preserve">
-    <value>Are you sure you want to reset settings to their original states?</value>
+  <data name="externalLink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\externalLink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="NAField_String" xml:space="preserve">
-    <value>One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
-Do you want to continue by adding this rule to the policy?</value>
+  <data name="wizard-ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\wizard-ico.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="InvalidSupplementalRule_NoInherit_Info" xml:space="preserve">
     <value>This rule is not valid or modifiable on supplemental policies.</value>

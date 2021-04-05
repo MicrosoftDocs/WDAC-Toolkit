@@ -20,7 +20,10 @@ namespace WDAC_Wizard
     public partial class BuildPage : UserControl
     {
         public string FilePath { get; set; }
-        private MainWindow _MainWindow; 
+        private MainWindow _MainWindow;
+
+        const int PATH_LENGTH_LIMIT = 80; 
+
         public BuildPage(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -64,9 +67,19 @@ namespace WDAC_Wizard
                 this.FilePath = policyFilePath;
             }
 
-            this.hyperlinkLabel.Text = policyFilePath;
+            // If the path is too long, split and add newline
+            if(policyFilePath.Length > PATH_LENGTH_LIMIT)
+            {
+                int splitLoc = policyFilePath.LastIndexOf("\\"); 
+                this.hyperlinkLabel.Text = policyFilePath.Substring(0, splitLoc) + Environment.NewLine + 
+                    policyFilePath.Substring(splitLoc);
+            }
+            else
+            {
+                this.hyperlinkLabel.Text = policyFilePath;
+            }
+            
             this.hyperlinkLabel.Enabled = true;
-
             this.finishPanel.Visible = true;
             this.label_WaitMsg.Visible = false; 
         }

@@ -1110,7 +1110,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
         /// </summary>
-        public string createPolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
+        public string CreatePolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
         {
             string policyScript = string.Empty;
 
@@ -1589,52 +1589,7 @@ namespace WDAC_Wizard
             
         }
 
-        //
-        // Summary:
-        //     Scans the input string folderPth and finds the filepath with the greatest _ID. 
-        //      
-        // Returns:
-        //     String with the newest _ID filename. example) policy_44.xml 
-        private string getUniquePolicyPath(string folderPth)
-        {
-            string newUniquePath = "";
-            int NewestID = -1;
-            int Start, End;
-
-            DirectoryInfo dir = new DirectoryInfo(folderPth);
-
-            foreach (var file in dir.GetFiles("*.xml"))
-            {
-                this.Log.AddInfoMsg(String.Format("Found xml file, {0}", file.Name)); 
-                Start = file.Name.IndexOf("policy_") + 7;
-                End = file.Name.IndexOf(".xml");
-
-                // If Start indexof returns -1, 
-                if (Start == 6)
-                {
-                    continue; 
-                }
-
-                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
-
-                if (ID > NewestID)
-                    NewestID = ID;
-            }
-
-            if (NewestID < 0)
-            {
-                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
-            }
-            else
-            {
-                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
-            }
-
-            this.Log.AddInfoMsg(String.Format("Unique Policy Path returned: {0}", newUniquePath));
-            return newUniquePath;
-        }
-
-        
+                
         /// <summary>
         /// Retrieves the current date and formats it in descending order.
         /// </summary>
@@ -2137,6 +2092,12 @@ namespace WDAC_Wizard
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.label_Info.Visible = false;
+        }
+
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

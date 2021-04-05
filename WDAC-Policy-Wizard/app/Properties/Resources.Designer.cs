@@ -197,6 +197,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft-Windows-CodeIntegrity/Operational.
+        /// </summary>
+        internal static string CILogEvtPath {
+            get {
+                return ResourceManager.GetString("CILogEvtPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap circular_shape_silhouette {
@@ -251,6 +260,25 @@ namespace WDAC_Wizard.Properties {
         internal static string DynamicSecurity_Info {
             get {
                 return ResourceManager.GetString("DynamicSecurity_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap eventlog_progress {
+            get {
+                object obj = ResourceManager.GetObject("eventlog_progress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion of the event log to a WDAC Policy XML file was successful. .
+        /// </summary>
+        internal static string EventLogConversionSuccess {
+            get {
+                return ResourceManager.GetString("EventLogConversionSuccess", resourceCulture);
             }
         }
         
@@ -392,6 +420,16 @@ namespace WDAC_Wizard.Properties {
         internal static string LegacyPolicyID_GUID {
             get {
                 return ResourceManager.GetString("LegacyPolicyID_GUID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap loading {
+            get {
+                object obj = ResourceManager.GetObject("loading", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -725,6 +763,16 @@ namespace WDAC_Wizard.Properties {
         internal static string UnsignedPolicy_Info {
             get {
                 return ResourceManager.GetString("UnsignedPolicy_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion of the event log to a WDAC policy was unsuccessful. 
+        ///Please try a different log file..
+        /// </summary>
+        internal static string UnsuccessfulEventLogConversion {
+            get {
+                return ResourceManager.GetString("UnsuccessfulEventLogConversion", resourceCulture);
             }
         }
         

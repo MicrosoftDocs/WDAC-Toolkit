@@ -5,16 +5,299 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text; 
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Linq; 
 using System.Diagnostics;
 using System.Security.Cryptography;
-using Microsoft.Azure; 
+using System.Xml.Serialization;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Win32;
+using System.Diagnostics.Eventing.Reader;
+using System.Management.Automation;
+using System.Collections.ObjectModel;
+using System.Management.Automation.Runspaces;
+using System.Windows.Forms;
 
 namespace WDAC_Wizard
 {
+
+    internal static class Helper
+    {
+        const int AUDIT_PE = 3076;
+        const int BLOCK_PE = 3077;
+        const int AUDIT_KERNEL = 3067;
+        const int BLOCK_KERNEL = 3068;
+        const int AUDIT_SCRIPT = 8028;
+        const int BLOCK_SCRIPT = 8029;
+
+        const string AUDIT_POLICY_PATH = "AuditEvents_Policy.xml";
+        const string AUDIT_LOG_PATH = "AuditEvents_Log.txt";
+
+        public enum BrowseFileType
+        {
+            Policy = 0,     // -Show .xml files
+            EventLog = 1,   // -Show .evtx files
+            All = 2         // -Show . all files
+        }
+
+        public static string GetDOSPath(string NTPath)
+        {
+            string windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            const int WINDOWS_L = 7;
+            string logicalDisk = windowsDir.Substring(0, windowsDir.Length - WINDOWS_L); // Gets the logical disk name string of the harddrive
+
+            // Regex replace to take the NT path and convert to DOS Path
+
+            string pattern = @"\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\";
+
+            Regex regex = new Regex("\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\", RegexOptions.IgnoreCase);
+            Match match = regex.Match(NTPath);
+            if(match.Success)
+            {
+                string dosPath = NTPath.Replace(match.Value, logicalDisk);
+                return dosPath;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        public static List<DriverFile> ReadArbitraryEventLogs(List<string> auditLogPaths)
+        {
+            List<DriverFile> driverPaths = new List<DriverFile>();
+            
+
+            // If path is specifed, parse the event logs into driverPaths list
+            // Iterate through all of the auditLogPaths
+
+            foreach (var auditLogPath in auditLogPaths)
+            {
+                // Check that path provided is an evtx log
+                if (Path.GetExtension(auditLogPath) != ".evtx")
+                {
+                    continue; // do something here? Log?
+                }
+
+                EventLogReader log = new EventLogReader(auditLogPath, PathType.FilePath);
+                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
+                {
+                    if (entry.Id == AUDIT_PE || entry.Id == BLOCK_PE)
+                    {
+                        string filePath;
+                        bool isKernel = false;
+                        bool isPE = true;
+
+                        string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage.dll"
+                        filePath = GetDOSPath(ntfilePath); // replace \\Device\\HarddiskVolume\\ with harddrive string name e.g. C:\\
+
+                        if (filePath == null || !File.Exists(filePath))
+                        {
+                            continue;
+                        }
+
+                        if (entry.Properties[12].Value.ToString() == "0")
+                        {
+                            isKernel = true;
+                        }
+
+                        driverPaths.Add( new DriverFile(filePath, isKernel, isPE));
+
+                    }
+                    else if (entry.Id == AUDIT_KERNEL || entry.Id == BLOCK_KERNEL) // This is an entry for kernel
+                    {
+                        string filePath;
+                        bool isKernel = true;
+                        bool isPE = true;
+
+                        string windowsDirRelativePath = entry.Properties[1].Value.ToString();
+                        string _windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+                        filePath = _windowsDir + @"\" + windowsDirRelativePath;
+
+                        if (!File.Exists(filePath))
+                        {
+                            continue;
+                        }
+
+                        driverPaths.Add(new DriverFile(filePath, isKernel, isPE));
+                    }
+
+                    else if(entry.Id == AUDIT_SCRIPT || entry.Id == BLOCK_SCRIPT)
+                    {
+                        string filePath;
+                        bool isKernel = false;
+                        bool isPE = false;
+
+                        string ntfilePath = entry.Properties[1].Value.ToString();
+                        filePath = GetDOSPath(ntfilePath); // replace \\Device\\HarddiskVolume\\ with harddrive string name e.g. C:\\
+
+                        if (filePath == null || !File.Exists(filePath))
+                        {
+                            continue;
+                        }
+                        driverPaths.Add(new DriverFile(filePath, isKernel, isPE));
+                    }
+
+                }
+                
+            }
+
+            return driverPaths;
+        }
+
+        public static SiPolicy ReadMachineEventLogs(string tempPath, string level)
+        {
+            // If path is not specified, the event logs to read are the on-machine CodeIntegrity/Operational, and AppLocker/MSI and Script
+            // Simply call the New-CIPolicy -Audit cmdlet, and serialize the policy
+            SiPolicy siPolicy; 
+            string policyPath = Path.Combine(tempPath, AUDIT_POLICY_PATH);
+            string logPath = Path.Combine(tempPath, AUDIT_LOG_PATH); 
+            string auditCmd = String.Format("New-CIPolicy -Audit -Level {0} -FilePath {1} -UserPEs -Fallback Hash 3> {2}", level, policyPath, logPath); 
+
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+            pipeline.Commands.AddScript(auditCmd);
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch(Exception exp)
+            {
+                //Do something
+            }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+            StreamReader reader = new StreamReader(policyPath);
+            siPolicy = (SiPolicy)serializer.Deserialize(reader);
+            reader.Close();
+
+            return siPolicy; 
+        }
+
+        public static List<string> BrowseForMultiFiles(string displayTitle, BrowseFileType browseFileType)
+        {
+            List<string> policyPaths = new List<string>(); 
+
+            // Open file dialog to get file or folder path
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = displayTitle;
+            openFileDialog.CheckPathExists = true;
+
+            if(browseFileType == BrowseFileType.Policy)
+            {
+                openFileDialog.Filter = "Policy Files (*.xml)|*.xml";
+            }
+            else if (browseFileType == BrowseFileType.EventLog)
+            {
+                openFileDialog.Filter = "Event Log Files (*.evtx)|*.evtx";
+            }
+            else
+            {
+                openFileDialog.Filter = "All Files (*.)|*."; 
+            }
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                policyPaths = openFileDialog.FileNames.ToList();
+                openFileDialog.Dispose();
+
+                return policyPaths;
+            }
+            else
+            {
+                return null; 
+            }
+        }
+
+        //
+        // Summary:
+        //     Scans the input string folderPth and finds the filepath with the greatest _ID. 
+        //      
+        // Returns:
+        //     String with the newest _ID filename. example) policy_44.xml 
+        public static string GetUniquePolicyPath(string folderPth)
+        {
+            string newUniquePath = "";
+            int NewestID = -1;
+            int Start, End;
+
+            DirectoryInfo dir = new DirectoryInfo(folderPth);
+
+            foreach (var file in dir.GetFiles("*.xml"))
+            {
+                Start = file.Name.IndexOf("policy_") + 7;
+                End = file.Name.IndexOf(".xml");
+
+                // If Start indexof returns -1, 
+                if (Start == 6)
+                {
+                    continue;
+                }
+
+                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
+
+                if (ID > NewestID)
+                {
+                    NewestID = ID;
+                }
+            }
+
+            if (NewestID < 0)
+            {
+                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
+            }
+            else
+            {
+                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
+            }
+
+            return newUniquePath;
+        }
+
+        public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
+        {
+            SiPolicy siPolicy; 
+            if(xmlPath == null)
+            {
+                return null; 
+            }
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(xmlPath);
+                siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+            }
+            catch(Exception exp)
+            {
+                return null; 
+            }
+
+            return siPolicy; 
+        }
+
+        public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
+        {
+            if(siPolicy == null || xmlPath == null)
+            {
+                return; 
+            }
+
+            // Serialize policy to XML file
+            XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+            StreamWriter writer = new StreamWriter(xmlPath);
+            serializer.Serialize(writer, siPolicy);
+            writer.Close();
+        }
+    }
+
     public class packedInfo
     {
         static public byte[] blobDeets = {
@@ -38,6 +321,20 @@ namespace WDAC_Wizard
         };
     }
     
+    public class DriverFile
+    {
+        public string Path { get; set; }
+        public bool isKernel { get; set; }
+        public bool isPE { get; set; }
+
+        public DriverFile(string _path, bool _isKernel, bool _isPE)
+        {
+            this.Path = _path;
+            this.isKernel = _isKernel;
+            this.isPE = _isPE; 
+        }
+    }
+
     // Class for Policy xml Settings
     public class PolicySettings
     {
@@ -207,6 +504,7 @@ namespace WDAC_Wizard
             None,             // Null Value for RuleLevel (used in RulesFromDrivers for signaling no fallback)
             Hash,             // Use only the file's hash in rules
             FileName,         // File name and Minimum Version specified
+            RootCertificate,  // Use the Root CA certificate (top-level)
             PcaCertificate,   // Use the PCA certificate that issued the signer,
             Publisher,        // PCA+Publisher signer rules
             FilePublisher,    // Generate rules that tie filename and minimum version to a PCA/Publisher combo

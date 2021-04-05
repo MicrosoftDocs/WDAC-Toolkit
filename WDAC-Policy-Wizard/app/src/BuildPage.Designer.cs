@@ -124,7 +124,7 @@ namespace WDAC_Wizard
             this.finishPanel.Location = new System.Drawing.Point(200, 294);
             this.finishPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.finishPanel.Name = "finishPanel";
-            this.finishPanel.Size = new System.Drawing.Size(1040, 155);
+            this.finishPanel.Size = new System.Drawing.Size(1040, 218);
             this.finishPanel.TabIndex = 87;
             this.finishPanel.Visible = false;
             // 

@@ -11,8 +11,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
-using System.Xml.Serialization;
-using WDAC_Wizard.src;
+using System.Xml.Serialization; 
+using System.Security.Cryptography.X509Certificates;
 
 namespace WDAC_Wizard
 {

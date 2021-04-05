@@ -412,6 +412,7 @@ namespace WDAC_Wizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Defender App Control Policy Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClosing_Event);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.control_Panel.ResumeLayout(false);
             this.control_Panel.PerformLayout();
             this.ResumeLayout(false);
