@@ -19,17 +19,17 @@ namespace WDAC_Wizard
     public partial class SigningRules_Control : UserControl
     {
         // CI Policy objects
-        private WDAC_Policy Policy;
-        private PolicyCustomRules PolicyCustomRule;     // One instance of a custom rule. Appended to Policy.CustomRules
+        public WDAC_Policy Policy;
         private List<string> AllFilesinFolder;          // List to track all files in a folder 
 
         private Logger Log;
-        private MainWindow _MainWindow;
+        public MainWindow _MainWindow;
         private string XmlPath;
 
         private int RowSelected; // Data grid row number selected by the user 
         private int rowInEdit = -1;
         private DisplayObject displayObjectInEdit;
+        private CustomRuleConditionsPanel customRuleConditionsPanel = null; 
 
         // Declare an ArrayList to serve as the data store. 
         private System.Collections.ArrayList displayObjects =
@@ -39,7 +39,6 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
             this.Policy = pMainWindow.Policy; 
-            this.PolicyCustomRule = new PolicyCustomRules();
             this.AllFilesinFolder = new List<string>(); 
 
             this._MainWindow = pMainWindow;
@@ -49,7 +48,6 @@ namespace WDAC_Wizard
             this.RowSelected = -1;
 
             this.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
-
         }
 
         /// <summary>
@@ -60,7 +58,9 @@ namespace WDAC_Wizard
         {
             // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
             if(!readSetRules(sender, e))
-                return;
+            {
+                return; 
+            }
             displayRules();
         }
 
@@ -72,659 +72,22 @@ namespace WDAC_Wizard
         /// </summary>
         private void label_AddCustomRules_Click(object sender, EventArgs e)
         {
-            if(panel_CustomRules.Visible)
+            // Open the custom rules conditions panel
+
+            if (this.customRuleConditionsPanel == null)
             {
-                panel_CustomRules.Visible = false;
-                label_AddCustomRules.Text = "+ Custom Rules"; 
-            }
-            else
-            {
-                panel_CustomRules.Visible = true;
-                comboBox_RuleType.SelectedItem = "Publisher";             // Set as default 
-                label_AddCustomRules.Text = "- Custom Rules";
+                this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
+                this.customRuleConditionsPanel.Show();
+                this.customRuleConditionsPanel.BringToFront();
+                this.customRuleConditionsPanel.Focus();
+
+                // this.label_AddCustomRules.Text = "- Custom Rules"; 
             }
             
-
             this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
         }
 
-        /// <summary>
-        /// Sets the RuleLevel to publisher, filepath or hash for the CustomRules object. 
-        /// Executes when user selects the Rule Type dropdown combobox. 
-        /// </summary>
-        private void RuleType_ComboboxChanged(object sender, EventArgs e)
-        {
-            // Check if the selected item is null (this occurs after reseting it - rule creation)
-            if (comboBox_RuleType.SelectedIndex < 0)
-                return; 
-
-            string selectedOpt = comboBox_RuleType.SelectedItem.ToString();
-            ClearCustomRulesPanel(false);
-            label_Info.Visible = true;
-            label_Error.Visible = false; // Clear error label
-
-            switch (selectedOpt)
-            {
-                case "Publisher":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
-                    label_Info.Text = "Creates a rule for a file that is signed by the software publisher. \r\n" +
-                        "Select a file to use as reference for your rule.";
-                    break;
-
-                case "Path":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
-                    label_Info.Text = "Creates a rule for a specific file or folder. \r\n" +
-                        "Selecting folder will affect all files in the folder.";
-                    panel_FileFolder.Visible = true;
-                    radioButton_File.Checked = true; // By default, 
-                    break;
-
-                case "File Attributes":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
-                    label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
-                        "Select a file to use as reference for your rule.";
-                    break;
-
-                case "File Hash":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
-                    label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
-                        "Select the file for which you wish to create a hash rule.";
-                    break;
-                default:
-                    break; 
-            }
-
-            this.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
-        }
-
-        /// <summary>
-        /// Clears the remaining UI elements of the Custom Rules Panel when a user selects the 'Create Rule' button. 
-        /// /// </summary>
-        /// /// <param name="clearComboBox">Bool to reset the Rule Type combobox.</param>
-        private void ClearCustomRulesPanel(bool clearComboBox=false)
-        {
-            // Clear all of UI updates we make based on the type of rule so that the Custom Rules Panel is clear
-            //Publisher:
-            panel_Publisher_Scroll.Visible = false;
-            publisherInfoLabel.Visible = false;
-            trackBar_Conditions.ResetText();
-            trackBar_Conditions.Value = 0; // default bottom position 
-
-            //File Path:
-            panel_FileFolder.Visible = false;
-
-            //Other
-            textBox_ReferenceFile.Clear();
-            radioButton_Allow.Checked = true;   //default
-            label_Info.Visible = false;
-
-            // Reset the rule type combobox
-            if (clearComboBox)
-            {
-                this.comboBox_RuleType.SelectedItem = null;
-                this.comboBox_RuleType.Text = "--Select--"; 
-            }
-        }
-
-        /// <summary>
-        /// Flips the RuleType from Allow to Deny and vice-versa when either radioButton is selected. 
-        /// By default, the rules are set to Type=Allow.
-        /// </summary>
-        private void radioButton_Allow_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_Allow.Checked && !radioButton_Deny.Checked)
-                this.PolicyCustomRule.SetRulePermission(PolicyCustomRules.RulePermission.Allow);
-
-            else
-                this.PolicyCustomRule.SetRulePermission(PolicyCustomRules.RulePermission.Deny);
-
-
-            this.Log.AddInfoMsg(String.Format("Allow Radio Button set to {0}", 
-                this.PolicyCustomRule.GetRulePermission() == PolicyCustomRules.RulePermission.Allow));
-            
-        }
-
-        /// <summary>
-        /// Flips the PolicyCustom RuleType from FilePath to FolderPath, and vice-versa. 
-        /// Prompts user to select another reference path if flipping RuleType after reference
-        /// has already been set. 
-        /// </summary>
-        private void FileButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_File.Checked)
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-
-            else
-                this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Folder);
-
-            // Check if user changed Rule Level after already browsing and selecting a reference file
-            if (this.PolicyCustomRule.ReferenceFile != null)
-                button_Browse_Click(sender, e);
-
-        }
-
-
-        /// <summary>
-        /// Launches the FileDialog and prompts user to select the reference file. 
-        /// Based on rule type, sets the UI elements for Publisher, FilePath or Hash rules. 
-        /// </summary>
-        private void button_Browse_Click(object sender, EventArgs e)
-        {
-            // Browse button for reference file:
-            if(comboBox_RuleType.SelectedItem == null)
-            {
-                label_Error.Visible = true; 
-                label_Error.Text = "Please select a rule type first.";
-                this.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first."); 
-                return;
-            }
-
-            if(this.PolicyCustomRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
-            {
-                string refPath = getFileLocation();
-                if (refPath == String.Empty)
-                    return;
-
-                // Custom rule in progress
-                this._MainWindow.CustomRuleinProgress = true;
-
-                // Get generic file information to be shown to user
-                PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
-                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
-                PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-                PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName)? "N/A": fileInfo.CompanyName);
-                PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? "N/A" : fileInfo.ProductName);
-                PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? "N/A" : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "N/A" : fileInfo.FileVersion);
-                PolicyCustomRule.FileInfo.Add("FileName", Path.GetFileName(fileInfo.FileName)); //Get file name without path
-                PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? "N/A" : fileInfo.FileDescription);
-                PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? "N/A" : fileInfo.InternalName);
-
-                //TODO: only get this if ruletype=publisher, other
-
-
-                // Get cert chain info to be shown to the user
-                string leafCertSubjectName = "";
-                string pcaCertSubjectName = ""; 
-                try
-                {
-                    var signer = X509Certificate.CreateFromSignedFile(refPath);
-                    var cert = new X509Certificate2(signer);
-                    var certChain = new X509Chain();
-                    var certChainIsValid = certChain.Build(cert);
-
-                    leafCertSubjectName = cert.SubjectName.Name;
-                    if (certChain.ChainElements.Count > 1)
-                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
-
-                }
-                catch(Exception exp)
-                {
-                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}",
-                        exp, refPath));
-                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
-                    this.label_Error.Visible = true; 
-
-                    Timer settingsUpdateNotificationTimer = new Timer();
-                    settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
-                    settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
-                    settingsUpdateNotificationTimer.Start();
-                }
-
-                PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? "N/A" : leafCertSubjectName);
-                PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? "N/A" : pcaCertSubjectName);
-
-            }
-
-            switch (this.PolicyCustomRule.GetRuleType())
-            {
-                case PolicyCustomRules.RuleType.Publisher:
-
-
-                    // UI
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    labelSlider_0.Text = @"Issuing CA:";
-                    labelSlider_1.Text = @"Publisher:";
-                    labelSlider_2.Text = @"File version:";
-                    labelSlider_3.Text = @"File name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["PCACertificate"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["LeafCertificate"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["FileName"];
-
-                    panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this \r\n" +
-                        "file name with a version at or above the specified version number.";
-                    break;
-
-                case PolicyCustomRules.RuleType.Folder:
-
-                    // User wants to create rule by folder level
-                    PolicyCustomRule.ReferenceFile = getFolderLocation();
-                    this.AllFilesinFolder = new List<string>();
-                    if (PolicyCustomRule.ReferenceFile == String.Empty)
-                        break;
-
-                    // Custom rule in progress
-                    this._MainWindow.CustomRuleinProgress = true;
-
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    //ProcessAllFiles(PolicyCustomRule.ReferenceFile);
-                    //PolicyCustomRule.FolderContents = this.AllFilesinFolder; 
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
-                    break; 
-
-
-                case PolicyCustomRules.RuleType.FilePath:
-                    
-                    // FILE LEVEL
-                    
-                    // UI updates
-                    radioButton_File.Checked = true;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    panel_Publisher_Scroll.Visible = false;
-                    break;
-
-                case PolicyCustomRules.RuleType.FileAttributes:
-                    // Creates a rule -Level FileName -SpecificFileNameLevel InternalName, FileDescription
-
-                    // UI 
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
-                    labelSlider_0.Text = @"Original filename:";
-                    labelSlider_1.Text = @"File description:";
-                    labelSlider_2.Text = @"Product name:";
-                    labelSlider_3.Text = @"Internal name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["OriginalFilename"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["FileDescription"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["ProductName"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["InternalName"];
-
-                    panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-
-                    break; 
-
-                case PolicyCustomRules.RuleType.Hash:
-                    
-                    // UI updates
-                    panel_Publisher_Scroll.Visible = false;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;                    
-                    break;
-            }
-
-
-        }
-
-        /// <summary>
-        /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
-        /// </summary>
-        /// <returns>Returns the full path+name of the file</returns>
-        private string getFileLocation()
-        {
-            //TODO: move these common functions to a separate class
-            // Open file dialog to get file or folder path
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for a signed file to use as a reference for the rule.";
-            openFileDialog.CheckPathExists = true;
-            // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
-            openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
-                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|"+
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All files (*.*)|*.*";
-
-            openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
-
-            openFileDialog.RestoreDirectory = true;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog.Dispose();
-                return openFileDialog.FileName;
-            }
-            else
-                return String.Empty;
-
-        }
-
-        /// <summary>
-        /// Opens the folder dialog and grabs the folder path. Requires Folder to be toggled when Browse button 
-        /// is selected. 
-        /// </summary>
-        /// <returns>Returns the full path of the folder</returns>
-        private string getFolderLocation()
-        {
-            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-            openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
-
-            if (openFolderDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFolderDialog.Dispose();
-                return openFolderDialog.SelectedPath;
-            }
-            else
-                return String.Empty;
-
-        }
-
-        /// <summary>
-        /// Sets the RuleLevel for the Rule Type=Publisher custom rules and all UI elements when the 
-        /// scrollbar location is modified. 
-        /// </summary>
         
-        private void trackBar_Conditions_Scroll(object sender, EventArgs e)
-        {
-            int pos = trackBar_Conditions.Value; //Publisher file rules conditions
-            label_Error.Visible = false; // Clear error label
-
-            switch (this.PolicyCustomRule.GetRuleType())
-            {
-                case PolicyCustomRules.RuleType.Publisher:
-                    {
-                        // Setting the trackBar values snaps the cursor to one of the four options
-                        if (pos <= 2)
-                        {
-                            // PCACert + LeafCert + Version + FileName = FilePublisher
-                            trackBar_Conditions.Value = 0;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
-                            textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["FileName"];
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
-                                "and file name with a version at or above the specified version number.";
-                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
-                        }
-                        else if (pos > 2 && pos <= 6)
-                        {
-                            // PCACert + LeafCert + Version = SignedVersion
-                            trackBar_Conditions.Value = 4;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
-                            textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["FileVersion"];
-                            textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher, \r\n" +
-                                "with a version at or above the specified version number.";
-                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
-                        }
-                        else if (pos > 6 && pos <= 10) 
-                        {
-                            // PCACert + LeafCert  = Publisher
-                            trackBar_Conditions.Value = 8;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Publisher);
-                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["LeafCertificate"];
-                            textBoxSlider_2.Text = "*";
-                            textBoxSlider_3.Text = "*";
-                            
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA with this publisher.";
-                            this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
-                        }
-                        else  
-                        {
-                            // PCACert = PCACertificate
-                            trackBar_Conditions.Value = 12;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PcaCertificate);
-                            textBoxSlider_0.Text = this.PolicyCustomRule.FileInfo["PCACertificate"];
-                            textBoxSlider_1.Text = "*";
-                            textBoxSlider_2.Text = "*";
-                            textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = "Rule applies to all files signed by this issuing CA subject name.";
-                            this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
-
-                        }
-                    }
-
-                break;
-
-
-                case PolicyCustomRules.RuleType.FileAttributes:
-                    {
-                        // Setting the trackBar values snaps the cursor to one of the four options
-                        textBoxSlider_3.Text = "*"; //@"Internal name:";
-                        textBoxSlider_2.Text = "*"; //@"Product name:";
-                        textBoxSlider_1.Text = "*"; //@"File description
-                        textBoxSlider_0.Text = "*"; //@"Original file name:";
-
-                        if (pos <= 2)
-                        {
-                            // Internal name
-                            trackBar_Conditions.Value = 0;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
-                            textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["InternalName"];
-                            
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_3.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this internal name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file internal name: {0}", textBoxSlider_3.Text));
-                        }
-                        else if (pos > 2 && pos <= 6) 
-                        {
-                            // Product name
-                            trackBar_Conditions.Value = 4;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
-                            textBoxSlider_2.Text = this.PolicyCustomRule.FileInfo["ProductName"];
-                            
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_2.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this product name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to product name: {0}", textBoxSlider_2.Text));
-                        }
-                        else if (pos > 6 && pos <= 10) 
-                        {
-                            //File description
-                            trackBar_Conditions.Value = 8;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
-                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["FileDescription"];
-                            
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_1.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_1.Text));
-                        }
-                        else 
-                        {
-                            //Original filename
-                            trackBar_Conditions.Value = 12;
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
-                            textBoxSlider_0.Text = this.PolicyCustomRule.FileInfo["OriginalFilename"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_0.Text == "N/A")
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
-
-                        }
-                    }
-                break; 
-            }
-
-            
-        }
-
-        /// <summary>
-        /// Appends the custom rule to the bottom of the DataGridView and creates the rule in the CustomRules list. 
-        /// </summary>
-        private void button_Create_Click(object sender, EventArgs e)
-        {
-            // At a minimum, we need  rule level, and pub/hash/file - defult fallback
-            if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || this.PolicyCustomRule.ReferenceFile == null)
-            {
-                label_Error.Visible = true;
-                label_Error.Text = "Please select a rule type, a file and whether to allow or deny.";
-                this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
-                return;
-            }
-
-            // Check to make sure none of the fields are invalid
-            switch (this.PolicyCustomRule.GetRuleLevel())
-            {
-                case PolicyCustomRules.RuleLevel.None:
-                    label_Error.Visible = true;
-                    label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                    this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                    return;
-
-                case PolicyCustomRules.RuleLevel.PcaCertificate:
-                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A")
-                    {
-                        if(!AddNARuleToTable())
-                        {
-                            return;
-                        }
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.Publisher:
-                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A")
-                    {
-                        if (!AddNARuleToTable())
-                        {
-                            return;
-                        }
-                    }
-                    break;
-
-
-                case PolicyCustomRules.RuleLevel.SignedVersion:
-                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
-                        || PolicyCustomRule.FileInfo["FileVersion"] == "N/A")
-                    {
-                        if (!AddNARuleToTable())
-                        {
-                            return;
-                        }
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FilePublisher:
-                    if (PolicyCustomRule.FileInfo["PCACertificate"] == "N/A" || PolicyCustomRule.FileInfo["LeafCertificate"] == "N/A"
-                        || PolicyCustomRule.FileInfo["FileVersion"] == "N/A" || PolicyCustomRule.FileInfo["FileName"] == "N/A")
-                    {
-                        if (!AddNARuleToTable())
-                        {
-                            return;
-                        }
-                    }
-                    break;
-
-
-                default:
-                    break;
-            }
-            // Add rule and exceptions to the table and master list & Scroll to new row index
-           
-            string action = String.Empty;
-            string level = String.Empty; 
-            string name = String.Empty;
-            string files = String.Empty;
-            string exceptions = String.Empty; 
-
-            this.Log.AddInfoMsg("--- New Custom Rule Added ---");
-
-            // Set Action value to Allow or Deny
-            action = this.PolicyCustomRule.GetRulePermission().ToString(); 
-
-            // Set Level value to the RuleLevel value//or should this be type for simplicity? 
-            level = this.PolicyCustomRule.GetRuleType().ToString();
-
-             
-
-            switch(this.PolicyCustomRule.GetRuleLevel())
-            {
-                case PolicyCustomRules.RuleLevel.PcaCertificate:
-
-                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"]);
-                    break; 
-                case PolicyCustomRules.RuleLevel.Publisher:
-                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"], 
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.SignedVersion:
-                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FilePublisher:
-                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["PCACertificate"],
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["OriginalFilename"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.InternalName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["InternalName"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FileDescription:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["FileDescription"]);
-                    break;
-
-                case PolicyCustomRules.RuleLevel.ProductName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.FileInfo["ProductName"]);
-                    break;
-
-                default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.GetRuleLevel(), this.PolicyCustomRule.ReferenceFile);
-                    break;
-
-            }
-
-           
-            this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
-
-            // Attach the int row number we added it to
-            this.PolicyCustomRule.RowNumber = this.rulesDataGrid.RowCount - 1;
-
-            // Add to the DisplayObject
-            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
-            this.rulesDataGrid.RowCount += 1;
-
-
-            // Add custom list to RulesList
-            this.Policy.CustomRules.Add(this.PolicyCustomRule);
-            this.PolicyCustomRule = new PolicyCustomRules();
-
-            // Scroll to bottom to see new rule added to list
-            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
-
-            bubbleUp();
-            
-            // Reset UI view
-            ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false; 
-        }
-
-        private bool AddNARuleToTable()
-        {
-            // Warn user that the presence of an N/A attribute may result in a hash rule
-            // Prompt user for additional confirmation
-            this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-            DialogResult res = MessageBox.Show(Properties.Resources.NAField_String, 
-                "Are you sure you want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (res == DialogResult.Yes)
-            {
-                this.Log.AddWarningMsg("Rule added to rules table."); 
-                return true; 
-            }
-            else
-            {
-                this.Log.AddInfoMsg("Rule not added to rules table.");
-                return false; 
-            }
-        }
-
         /// <summary>
         /// Diplays the signing rules from the template policy or the supplemental policy in the DataGridView on Control Load. 
         /// </summary>
@@ -785,7 +148,9 @@ namespace WDAC_Wizard
                                 exceptionList += String.Format("{0}, ", exceptionID);
 
                                 if(!fileExceptionsDict.ContainsKey(exceptionID))
-                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty); 
+                                {
+                                    fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty);
+                                }
                             }
                         }
 
@@ -953,7 +318,8 @@ namespace WDAC_Wizard
 
 
             // Scroll to bottom of table
-            rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
+            // Removed this since the first row is highlighted. Confusing. 
+            // rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount-1;
         }
 
 
@@ -964,9 +330,14 @@ namespace WDAC_Wizard
         {
             // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
             if (this._MainWindow.Policy.TemplatePath != null)
+            {
                 this.XmlPath = this._MainWindow.Policy.TemplatePath;
+            }
             else
+            {
                 this.XmlPath = this._MainWindow.Policy.EditPolicyPath;
+            }
+                
             this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
 
             try
@@ -1064,13 +435,14 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
 
             // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete the '{0}' rule?", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete this rule?\n'{0}'", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (res == DialogResult.Yes)
             {
                 // Remove from UI
                 // Remove from DisplayObject
                 if (rowIdx < this.displayObjects.Count)
+
                 {
                     this.displayObjects.RemoveAt(rowIdx);
                     this.rulesDataGrid.Rows.RemoveAt(rowIdx);
@@ -1084,6 +456,7 @@ namespace WDAC_Wizard
                     {
                         if(customRule.RowNumber == rowIdx)
                         {
+
                             customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
                             this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
                             break; 
@@ -1101,8 +474,10 @@ namespace WDAC_Wizard
                         return; 
                     }
                 }
+                
 
-                // Remove from signers -- use ID to remove from scenarios (Allowed/Denied signer)
+                // Not a custom rule -- Try to remove from signers -- 
+                // use ID to remove from scenarios (Allowed/Denied signer)
                 numIdex = 0;
                 List<string> signerIDsToRemove = new List<string>();
 
@@ -1345,7 +720,6 @@ namespace WDAC_Wizard
                     }
                 }
 
-
                 // Serialize to new policy
                 XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
                 StreamWriter writer = new StreamWriter(this.XmlPath);
@@ -1419,9 +793,56 @@ namespace WDAC_Wizard
             }
         }
 
-        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
-            this.label_Error.Visible = false;
+            // Attach the int row number we added it to
+            customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+            string action = displayObjectArray[0]; 
+            string level = displayObjectArray[1];
+            string name = warnUser ? "*Hash* " + displayObjectArray[2] : displayObjectArray[2];
+            string files = displayObjectArray[3];
+            string exceptions = displayObjectArray[4];
+
+            // Add to the DisplayObject
+            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
+            this.rulesDataGrid.RowCount += 1;
+
+            // Add custom list to RulesList
+            this.Policy.CustomRules.Add(customRule);
+
+            // Scroll to bottom to see new rule added to list
+            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
+
+            bubbleUp();
+
+            // close the custom Rule Conditions Panel
+            this.customRuleConditionsPanel.Close();
+            this.customRuleConditionsPanel = null;
+            // this.label_AddCustomRules.Text = "+ Custom Rules";
+
+        }
+
+        public void CustomRulesPanel_Closing()
+        {
+            // User has closed custom rules panel. Reset panel and text
+            this.customRuleConditionsPanel = null;
+            // this.label_AddCustomRules.Text = "+ Custom Rules"; 
+        }
+
+        /// <summary>
+        /// Sets the back color to "highlight" for the checkbox picturebox when the user hovers the mouse over the label (button).  
+        /// </summary>
+        /// <param name="sender">Sender is the picturebox control </param>
+        private void AddCustomRules_MouseHover(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.WhiteSmoke;
+        }
+
+        private void AddCustomRules_MouseLeave(object sender, EventArgs e)
+        {
+            Label checkBox = ((Label)sender);
+            checkBox.BackColor = Color.White;
         }
     }
 

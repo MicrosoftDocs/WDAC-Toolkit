@@ -71,6 +71,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap add_button {
+            get {
+                object obj = ResourceManager.GetObject("add-button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The F8 preboot menu is disabled by default. This rule option allows the F8 menu to appear to physically present users..
         /// </summary>
         internal static string AdvancedBootOpts_Info {
@@ -148,6 +158,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error. Could not build certificate chain for .
+        /// </summary>
+        internal static string CertificateBuild_Error {
+            get {
+                return ResourceManager.GetString("CertificateBuild_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap check_box_checked {
@@ -193,6 +212,24 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("circular_shape_silhouette", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        internal static string DefaultFileAttributeString {
+            get {
+                return ResourceManager.GetString("DefaultFileAttributeString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.0.0.0.
+        /// </summary>
+        internal static string DefaultVersionString {
+            get {
+                return ResourceManager.GetString("DefaultVersionString", resourceCulture);
             }
         }
         
@@ -285,6 +322,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
+        ///and this original filename with a version at or above the specified file version number..
+        /// </summary>
+        internal static string FilePublisherInfo {
+            get {
+                return ResourceManager.GetString("FilePublisherInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, WDAC policies will not trust flight-signed binaries, only production binaries..
         /// </summary>
         internal static string FlightSigning_Info {
@@ -332,6 +379,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid custom rule. Please set the rule type and reference file before proceeding..
+        /// </summary>
+        internal static string InvalidCustomRule_Error {
+            get {
+                return ResourceManager.GetString("InvalidCustomRule_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented..
         /// </summary>
         internal static string InvalidSupplementalRule_Info {
@@ -341,11 +397,29 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule is not valid or modifiable on supplemental policies..
+        /// </summary>
+        internal static string InvalidSupplementalRule_NoInherit_Info {
+            get {
+                return ResourceManager.GetString("InvalidSupplementalRule_NoInherit_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted..
         /// </summary>
         internal static string ISG_Info {
             get {
                 return ResourceManager.GetString("ISG_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {A244370E-44C9-4C06-B551-F6016E563076}.
+        /// </summary>
+        internal static string LegacyPolicyID_GUID {
+            get {
+                return ResourceManager.GetString("LegacyPolicyID_GUID", resourceCulture);
             }
         }
         
@@ -478,6 +552,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
+        /// </summary>
+        internal static string PCACertificateInfo {
+            get {
+                return ResourceManager.GetString("PCACertificateInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher..
+        /// </summary>
+        internal static string PublisherInfo {
+            get {
+                return ResourceManager.GetString("PublisherInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap question_sign1 {
@@ -586,6 +678,16 @@ namespace WDAC_Wizard.Properties {
         internal static string SignedReputable {
             get {
                 return ResourceManager.GetString("SignedReputable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This rule applies to all files signed by this issuing CA and publisher, 
+        ///with a version at or above this specified file version number..
+        /// </summary>
+        internal static string SignedVersionInfo {
+            get {
+                return ResourceManager.GetString("SignedVersionInfo", resourceCulture);
             }
         }
         

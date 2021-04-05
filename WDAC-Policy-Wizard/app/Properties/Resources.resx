@@ -129,6 +129,8 @@
   </data>
   <data name="InvalidateEAs_Info" xml:space="preserve">
     <value>When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation.</value>
+  <data name="CertificateBuild_Error" xml:space="preserve">
+    <value>Error. Could not build certificate chain for </value>
   </data>
   <data name="blank-check-box_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\blank-check-box_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,11 +156,16 @@
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>
   </data>
+
   <data name="locked_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\locked-padlock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="cancel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\cancel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilePublisherInfo" xml:space="preserve">
+    <value>This rule applies to all files signed by this issuing CA and publisher, 
+and this original filename with a version at or above the specified file version number.</value>
   </data>
   <data name="ScriptEnforcement_Info" xml:space="preserve">
     <value>When disabled, unsigned PowerShell scripts and interactive PowerShell are no longer restricted to Restricted Language Mode.</value>
@@ -172,8 +179,8 @@
   <data name="radio-on-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\radio-on-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="radio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DefaultFileAttributeString" xml:space="preserve">
+    <value>N/A</value>
   </data>
   <data name="ISG_Info" xml:space="preserve">
     <value>When enabled, applications with known good reputation as defined by Microsoft’s Intelligent Security Graph (ISG) are allowlisted.</value>
@@ -208,14 +215,8 @@
   <data name="FlightSigning_Info" xml:space="preserve">
     <value>When enabled, WDAC policies will not trust flight-signed binaries, only production binaries.</value>
   </data>
-  <data name="ResetSettingsString" xml:space="preserve">
-    <value>Are you sure you want to reset settings to their original states?</value>
-  </data>
   <data name="UnsupportedRule_Info" xml:space="preserve">
     <value>This option is not currently supported ...</value>
-  </data>
-  <data name="eventlog_progress" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imgs\eventlog_progress.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="check_box_checked_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\check-box-checked_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,8 +227,12 @@
   <data name="back" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="radio-off-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imgs\radio-off-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PCACertificateInfo" xml:space="preserve">
+    <value>This rule applies to all files signed by a certificate from this issuing CA. </value>
+  </data>
+  <data name="SignedVersionInfo" xml:space="preserve">
+    <value>This rule applies to all files signed by this issuing CA and publisher, 
+with a version at or above this specified file version number.</value>
   </data>
   <data name="radio_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\radio_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,12 +246,15 @@
   <data name="newPolicy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\newPolicy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+
+  <data name="PublisherInfo" xml:space="preserve">
+    <value>This rule applies to all files signed by this issuing CA and publisher.</value>
+  </data>
   <data name="untoggle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\untoggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="NAField_String" xml:space="preserve">
-    <value>One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
-Do you want to continue by adding this rule to the policy?</value>
+  <data name="radio-off-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\radio-off-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BootAudit_Info" xml:space="preserve">
     <value>Used when the WDAC policy is in enforcement mode. When a driver fails during startup, the WDAC policy will be placed in audit mode so that Windows will load.</value>
@@ -268,6 +276,10 @@ Do you want to continue by adding this rule to the policy?</value>
   </data>
   <data name="EVSigners_Info" xml:space="preserve">
     <value>In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate.</value>
+  </data>
+
+  <data name="radio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WHQL_Info" xml:space="preserve">
     <value>When enabled, kernel-mode drivers must be WHQL-signed. Legacy cross-signed drivers will not be trusted.</value>
@@ -293,8 +305,8 @@ Do you want to continue by adding this rule to the policy?</value>
   <data name="check-box-unchecked" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\check-box-unchecked.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="next_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imgs\next_256px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DefaultVersionString" xml:space="preserve">
+    <value>0.0.0.0</value>
   </data>
   <data name="question_sign1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\question-sign.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -311,8 +323,8 @@ Do you want to continue by adding this rule to the policy?</value>
   <data name="InvalidSupplementalRule_Info" xml:space="preserve">
     <value>This rule is not modifiable on supplemental policies. The rule state is inherited from the base policy being supplemented.</value>
   </data>
-  <data name="DefaultWindows_Enforced" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\policyTemplates\DefaultWindows_Enforced.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="BlobContainerString" xml:space="preserve">
+    <value>wdac-wizard-logs</value>
   </data>
   <data name="circular_shape_silhouette" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\circular-shape-silhouette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -335,15 +347,26 @@ Do you want to continue by adding this rule to the policy?</value>
   <data name="white_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\white-merge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="UnsuccessfulEventLogConversion" xml:space="preserve">
-    <value>Conversion of the event log to a WDAC policy was unsuccessful. 
-Please try a different log file.</value>
+  <data name="next_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\next_256px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="external-link-symbol" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\external-link-symbol.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="white_draft" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\white-draft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InvalidCustomRule_Error" xml:space="preserve">
+    <value>Invalid custom rule. Please set the rule type and reference file before proceeding.</value>
+  </data>
+  <data name="externalLink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\externalLink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wizard-ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\wizard-ico.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\add-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="externalLink" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\externalLink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -353,5 +376,11 @@ Please try a different log file.</value>
   </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InvalidSupplementalRule_NoInherit_Info" xml:space="preserve">
+    <value>This rule is not valid or modifiable on supplemental policies.</value>
+  </data>
+  <data name="LegacyPolicyID_GUID" xml:space="preserve">
+    <value>{A244370E-44C9-4C06-B551-F6016E563076}</value>
   </data>
 </root>
