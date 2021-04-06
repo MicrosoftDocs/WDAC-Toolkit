@@ -397,7 +397,10 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Publisher:
 
                     // UI
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    // Show right side of the text
+                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                    this.textBox_ReferenceFile.ScrollToCaret();
                     labelSlider_0.Text = "Issuing CA:";
                     labelSlider_1.Text = "Publisher:";
                     labelSlider_2.Text = "File version:";
@@ -428,7 +431,11 @@ namespace WDAC_Wizard
                     // Custom rule in progress
                     this._MainWindow.CustomRuleinProgress = true;
 
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+
+                    // Show right side of the text
+                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                    this.textBox_ReferenceFile.ScrollToCaret();
                     break;
 
 
@@ -438,7 +445,11 @@ namespace WDAC_Wizard
 
                     // UI updates
                     radioButton_File.Checked = true;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    // Show right side of the text
+                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                    this.textBox_ReferenceFile.ScrollToCaret();
+
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
@@ -446,7 +457,11 @@ namespace WDAC_Wizard
                     // Creates a rule -Level FileName -SpecificFileNameLevel InternalName, FileDescription
 
                     // UI 
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    // Show right side of the text
+                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                    this.textBox_ReferenceFile.ScrollToCaret();
+
                     labelSlider_0.Text = "Original filename:";
                     labelSlider_1.Text = "File description:";
                     labelSlider_2.Text = "Product name:";
@@ -467,7 +482,10 @@ namespace WDAC_Wizard
 
                     // UI updates
                     panel_Publisher_Scroll.Visible = false;
-                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    // Show right side of the text
+                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                    this.textBox_ReferenceFile.ScrollToCaret();
                     break;
             }
 

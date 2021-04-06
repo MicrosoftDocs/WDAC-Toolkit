@@ -176,7 +176,7 @@ namespace WDAC_Wizard
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(7, 48);
+            this.label5.Location = new System.Drawing.Point(7, 45);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 18);
             this.label5.TabIndex = 97;
@@ -184,15 +184,14 @@ namespace WDAC_Wizard
             // 
             // button_Browse
             // 
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_Browse.FlatAppearance.BorderSize = 2;
+            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Browse.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Browse.ForeColor = System.Drawing.Color.Black;
-            this.button_Browse.Location = new System.Drawing.Point(529, 39);
+            this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_Browse.Location = new System.Drawing.Point(532, 40);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(136, 35);
+            this.button_Browse.Size = new System.Drawing.Size(107, 28);
             this.button_Browse.TabIndex = 93;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = true;
@@ -201,7 +200,7 @@ namespace WDAC_Wizard
             // textBoxBasePolicyPath
             // 
             this.textBoxBasePolicyPath.Font = new System.Drawing.Font("Tahoma", 8.5F);
-            this.textBoxBasePolicyPath.Location = new System.Drawing.Point(141, 46);
+            this.textBoxBasePolicyPath.Location = new System.Drawing.Point(141, 42);
             this.textBoxBasePolicyPath.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxBasePolicyPath.Name = "textBoxBasePolicyPath";
             this.textBoxBasePolicyPath.Size = new System.Drawing.Size(381, 25);
@@ -222,15 +221,14 @@ namespace WDAC_Wizard
             // 
             // button_Browse_Supp
             // 
-            this.button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_Browse_Supp.FlatAppearance.BorderSize = 2;
+            this.button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Browse_Supp.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Browse_Supp.ForeColor = System.Drawing.Color.Black;
-            this.button_Browse_Supp.Location = new System.Drawing.Point(532, 52);
+            this.button_Browse_Supp.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.button_Browse_Supp.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_Browse_Supp.Location = new System.Drawing.Point(532, 53);
             this.button_Browse_Supp.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse_Supp.Name = "button_Browse_Supp";
-            this.button_Browse_Supp.Size = new System.Drawing.Size(136, 35);
+            this.button_Browse_Supp.Size = new System.Drawing.Size(107, 28);
             this.button_Browse_Supp.TabIndex = 94;
             this.button_Browse_Supp.Text = "Browse";
             this.button_Browse_Supp.UseVisualStyleBackColor = true;
@@ -240,7 +238,7 @@ namespace WDAC_Wizard
             // 
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_PolicyName.ForeColor = System.Drawing.Color.Black;
-            this.textBox_PolicyName.Location = new System.Drawing.Point(144, 12);
+            this.textBox_PolicyName.Location = new System.Drawing.Point(141, 11);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
             this.textBox_PolicyName.Size = new System.Drawing.Size(381, 25);
@@ -252,7 +250,7 @@ namespace WDAC_Wizard
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(7, 12);
+            this.label6.Location = new System.Drawing.Point(7, 14);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(92, 18);
             this.label6.TabIndex = 8;
@@ -262,7 +260,7 @@ namespace WDAC_Wizard
             // 
             this.textBoxSuppPath.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSuppPath.ForeColor = System.Drawing.Color.Black;
-            this.textBoxSuppPath.Location = new System.Drawing.Point(144, 57);
+            this.textBoxSuppPath.Location = new System.Drawing.Point(141, 55);
             this.textBoxSuppPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxSuppPath.Name = "textBoxSuppPath";
             this.textBoxSuppPath.Size = new System.Drawing.Size(381, 25);

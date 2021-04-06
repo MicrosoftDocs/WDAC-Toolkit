@@ -108,8 +108,11 @@ namespace WDAC_Wizard
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.BaseToSupplementPath = openFileDialog.FileName;
-                textBoxBasePolicyPath.Text = openFileDialog.FileName;
-                
+                this.textBoxBasePolicyPath.Text = openFileDialog.FileName;
+                // Show right side of the text
+                this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
+                this.textBoxBasePolicyPath.ScrollToCaret();
+
             }
             openFileDialog.Dispose();
 
@@ -294,6 +297,10 @@ namespace WDAC_Wizard
             {
                 this._MainWindow.Policy.SchemaPath = saveFileDialog.FileName;
                 this.textBoxSuppPath.Text = saveFileDialog.FileName;
+
+                // Show right side of the text
+                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
+                this.textBoxSuppPath.ScrollToCaret();
 
                 // Show panel if path is set
                 this.panelSuppl_Base.Visible = true; 

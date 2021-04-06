@@ -342,7 +342,7 @@ namespace WDAC_Wizard
             this.label_fileLocation.AutoSize = true;
             this.label_fileLocation.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.label_fileLocation.ForeColor = System.Drawing.Color.Black;
-            this.label_fileLocation.Location = new System.Drawing.Point(9, 90);
+            this.label_fileLocation.Location = new System.Drawing.Point(9, 91);
             this.label_fileLocation.Name = "label_fileLocation";
             this.label_fileLocation.Size = new System.Drawing.Size(149, 19);
             this.label_fileLocation.TabIndex = 6;
@@ -352,7 +352,7 @@ namespace WDAC_Wizard
             // 
             this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxPolicyPath.ForeColor = System.Drawing.Color.Black;
-            this.textBoxPolicyPath.Location = new System.Drawing.Point(185, 86);
+            this.textBoxPolicyPath.Location = new System.Drawing.Point(185, 87);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
             this.textBoxPolicyPath.Size = new System.Drawing.Size(402, 26);
@@ -390,7 +390,7 @@ namespace WDAC_Wizard
             this.button_Browse.Location = new System.Drawing.Point(602, 86);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(125, 27);
+            this.button_Browse.Size = new System.Drawing.Size(107, 28);
             this.button_Browse.TabIndex = 94;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = true;

@@ -754,9 +754,9 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring custom policy signing rules ...";
+                process = "Configuring custom policy file rules ...";
             else if (progressPercent <= 80)
-                process = "Building policy signing rules ...";
+                process = "Building custom policy file rules ...";
             else if (progressPercent <= 85)
                 process = "Merging custom rules policies ...";
             else if (progressPercent <= 95)
