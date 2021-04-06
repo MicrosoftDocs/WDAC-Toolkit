@@ -255,12 +255,15 @@ namespace WDAC_Wizard
 
                 // These will trigger the textChange events
                 this.textBoxSuppPath.Text = this._Policy.SchemaPath;
+                // Show right side of the text
+                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
+                this.textBoxSuppPath.ScrollToCaret();
+
                 this.textBox_PolicyName.Text = this._Policy.PolicyName;
                 this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
 
                 // Once the supp schema path is set, show panel to select base to supplement
                 this.panelSuppl_Base.Visible = true; 
-
             }
 
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
