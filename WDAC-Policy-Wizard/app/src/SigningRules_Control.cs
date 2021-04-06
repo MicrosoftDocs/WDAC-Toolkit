@@ -618,7 +618,7 @@ namespace WDAC_Wizard
                     }
                 }
 
-                // Else, process Level=FileAttributes
+                // Else if process Level=FileAttributes
                 else if(ruleType.Equals("File Attributes"))
                 {
                     this.Log.AddInfoMsg("Removing FileAttributes Rule");

@@ -53,6 +53,10 @@ namespace WDAC_Wizard.src
             {
                 this.mergePolicyPath = policyPath;
                 this.finalPolicyTextBox.Text = policyPath;
+                // Show right side of the text
+                this.finalPolicyTextBox.SelectionStart = this.finalPolicyTextBox.TextLength - 1;
+                this.finalPolicyTextBox.ScrollToCaret();
+
                 this._MainWindow.Policy.SchemaPath = this.mergePolicyPath;
 
                 this.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));

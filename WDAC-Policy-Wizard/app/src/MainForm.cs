@@ -754,9 +754,9 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring custom policy signing rules ...";
+                process = "Configuring custom policy file rules ...";
             else if (progressPercent <= 80)
-                process = "Building policy signing rules ...";
+                process = "Building custom policy file rules ...";
             else if (progressPercent <= 85)
                 process = "Merging custom rules policies ...";
             else if (progressPercent <= 95)
@@ -785,7 +785,7 @@ namespace WDAC_Wizard
 
                 if (this.Policy.BinPath != null)
                 {
-                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + "\r\n" + this.Policy.BinPath);
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + Environment.NewLine + Environment.NewLine + this.Policy.BinPath);
                 }
                 else
                 {
@@ -969,7 +969,7 @@ namespace WDAC_Wizard
 
                 var customRule = this.Policy.CustomRules[i];
                 customRule.PSVariable = i.ToString(); 
-                string tmpPolicyPath = getUniquePolicyPath(this.TempFolderPath);
+                string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath);
 
                 createRuleScript = createCustomRuleScript(customRule, false);

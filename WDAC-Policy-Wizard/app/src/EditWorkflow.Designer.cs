@@ -105,7 +105,7 @@ namespace WDAC_Wizard
             this.button_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Create.Font = new System.Drawing.Font("Tahoma", 9F);
             this.button_Create.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Create.Location = new System.Drawing.Point(501, 25);
+            this.button_Create.Location = new System.Drawing.Point(499, 22);
             this.button_Create.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button_Create.Name = "button_Create";
             this.button_Create.Size = new System.Drawing.Size(110, 28);
@@ -116,12 +116,12 @@ namespace WDAC_Wizard
             // 
             // textBoxPolicyPath
             // 
-            this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.textBoxPolicyPath.Location = new System.Drawing.Point(20, 27);
+            this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxPolicyPath.Location = new System.Drawing.Point(17, 22);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
             this.textBoxPolicyPath.ReadOnly = true;
-            this.textBoxPolicyPath.Size = new System.Drawing.Size(462, 24);
+            this.textBoxPolicyPath.Size = new System.Drawing.Size(462, 26);
             this.textBoxPolicyPath.TabIndex = 110;
             // 
             // policyInfoPanel
@@ -151,11 +151,11 @@ namespace WDAC_Wizard
             // 
             // textBox_PolicyName
             // 
-            this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_PolicyName.Location = new System.Drawing.Point(126, 42);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
-            this.textBox_PolicyName.Size = new System.Drawing.Size(351, 24);
+            this.textBox_PolicyName.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyName.TabIndex = 9;
             this.textBox_PolicyName.TextChanged += new System.EventHandler(this.textBox_PolicyName_TextChanged);
             // 
@@ -172,11 +172,11 @@ namespace WDAC_Wizard
             // 
             // textBox_PolicyID
             // 
-            this.textBox_PolicyID.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_PolicyID.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_PolicyID.Location = new System.Drawing.Point(126, 77);
             this.textBox_PolicyID.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyID.Name = "textBox_PolicyID";
-            this.textBox_PolicyID.Size = new System.Drawing.Size(351, 24);
+            this.textBox_PolicyID.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyID.TabIndex = 7;
             this.textBox_PolicyID.TextChanged += new System.EventHandler(this.textBox_PolicyID_TextChanged);
             // 
@@ -247,7 +247,7 @@ namespace WDAC_Wizard
             // pictureBox_Progress
             // 
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
-            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.eventlog_progress;
+            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.Location = new System.Drawing.Point(78, 48);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
@@ -339,12 +339,12 @@ namespace WDAC_Wizard
             // 
             // textBox_EventLog
             // 
-            this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLog.Location = new System.Drawing.Point(23, 133);
             this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLog.Name = "textBox_EventLog";
             this.textBox_EventLog.ReadOnly = true;
-            this.textBox_EventLog.Size = new System.Drawing.Size(453, 24);
+            this.textBox_EventLog.Size = new System.Drawing.Size(453, 26);
             this.textBox_EventLog.TabIndex = 123;
             // 
             // eventLogParsing_Result_Panel
@@ -424,12 +424,12 @@ namespace WDAC_Wizard
             // 
             // textBox_EventLogFilePath
             // 
-            this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 239);
             this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
             this.textBox_EventLogFilePath.ReadOnly = true;
-            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 24);
+            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 26);
             this.textBox_EventLogFilePath.TabIndex = 118;
             this.textBox_EventLogFilePath.Text = "Select Event Log File";
             // 

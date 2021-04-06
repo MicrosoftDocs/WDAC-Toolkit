@@ -136,13 +136,17 @@ namespace WDAC_Wizard
 
                 this._Policy.SchemaPath = saveFileDialog.FileName;
                 this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
+                this.textBoxPolicyPath.ScrollToCaret(); 
             }
 
             saveFileDialog.Dispose(); 
 
 
             if(this._Policy.PolicyName != null)
+            {
                 this._MainWindow.ErrorOnPage = false;
+            }
         }
 
         /// <summary>
@@ -181,7 +185,11 @@ namespace WDAC_Wizard
                 this._MainWindow.ErrorOnPage = false;
             }
 
-            this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate; 
+            this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
+
+            // Show right side of the text
+            this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
+            this.textBoxPolicyPath.ScrollToCaret();
         }
 
         private string GetDefaultPath(string policyTemplate, int nAttempts)

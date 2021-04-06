@@ -45,6 +45,9 @@
             this.labelSlider_0 = new System.Windows.Forms.Label();
             this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
             this.dataGridView_Exceptions = new System.Windows.Forms.DataGridView();
+            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ruleCondition_static_Label = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -52,9 +55,6 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.column_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -289,6 +289,30 @@
             this.dataGridView_Exceptions.VirtualMode = true;
             this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_Exceptions_CellValueNeeded);
             // 
+            // column_Action
+            // 
+            this.column_Action.HeaderText = "Action";
+            this.column_Action.MinimumWidth = 8;
+            this.column_Action.Name = "column_Action";
+            this.column_Action.ReadOnly = true;
+            this.column_Action.Width = 76;
+            // 
+            // column_Level
+            // 
+            this.column_Level.HeaderText = "Type";
+            this.column_Level.MinimumWidth = 6;
+            this.column_Level.Name = "column_Level";
+            this.column_Level.ReadOnly = true;
+            this.column_Level.Width = 69;
+            // 
+            // column_Name
+            // 
+            this.column_Name.HeaderText = "Exception";
+            this.column_Name.MinimumWidth = 6;
+            this.column_Name.Name = "column_Name";
+            this.column_Name.ReadOnly = true;
+            this.column_Name.Width = 98;
+            // 
             // ruleCondition_static_Label
             // 
             this.ruleCondition_static_Label.AutoSize = true;
@@ -378,34 +402,10 @@
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // column_Action
-            // 
-            this.column_Action.HeaderText = "Action";
-            this.column_Action.MinimumWidth = 8;
-            this.column_Action.Name = "column_Action";
-            this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 76;
-            // 
-            // column_Level
-            // 
-            this.column_Level.HeaderText = "Type";
-            this.column_Level.MinimumWidth = 6;
-            this.column_Level.Name = "column_Level";
-            this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 69;
-            // 
-            // column_Name
-            // 
-            this.column_Name.HeaderText = "Exception";
-            this.column_Name.MinimumWidth = 6;
-            this.column_Name.Name = "column_Name";
-            this.column_Name.ReadOnly = true;
-            this.column_Name.Width = 98;
-            // 
             // Exceptions_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panel_ExceptionRule);
             this.Name = "Exceptions_Control";

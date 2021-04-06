@@ -158,7 +158,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error. Could not build certificate chain for .
+        ///   Looks up a localized string similar to Error. Could not build certificate chain for.
         /// </summary>
         internal static string CertificateBuild_Error {
             get {
@@ -234,42 +234,11 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot;&gt;
-        ///  &lt;VersionEx&gt;10.0.1.0&lt;/VersionEx&gt;
-        ///  &lt;PolicyID&gt;{A244370E-44C9-4C06-B551-F6016E563076}&lt;/PolicyID&gt;
-        ///  &lt;BasePolicyID&gt;{A244370E-44C9-4C06-B551-F6016E563076}&lt;/BasePolicyID&gt;
-        ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
-        ///  &lt;Rules&gt;
-        ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Unsigned System Integrity Policy&lt;/Option&gt;
-        ///    &lt;/Rule&gt;
-        ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Advanced Boot Options Menu&lt;/Option&gt;
-        ///    &lt;/Rul [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DefaultWindows_Enforced {
-            get {
-                return ResourceManager.GetString("DefaultWindows_Enforced", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Enables policy enforcement for .NET applications and DLLs..
         /// </summary>
         internal static string DynamicSecurity_Info {
             get {
                 return ResourceManager.GetString("DynamicSecurity_Info", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap eventlog_progress {
-            get {
-                object obj = ResourceManager.GetObject("eventlog_progress", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -473,16 +442,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One of the file attributes selected is N/A. Creating a file rule with an N/A attribute may result in a policy hash rule.
-        ///Do you want to continue by adding this rule to the policy?.
-        /// </summary>
-        internal static string NAField_String {
-            get {
-                return ResourceManager.GetString("NAField_String", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap newPolicy {
@@ -620,7 +579,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to reset settings to their original states?.
+        ///   Looks up a localized string similar to Are you sure you want to reset all settings to their original state?.
         /// </summary>
         internal static string ResetSettingsString {
             get {
@@ -767,8 +726,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conversion of the event log to a WDAC policy was unsuccessful. 
-        ///Please try a different log file..
+        ///   Looks up a localized string similar to Conversion of the event log to a WDAC Policy XML file was unsuccessful. Please try another file. .
         /// </summary>
         internal static string UnsuccessfulEventLogConversion {
             get {
