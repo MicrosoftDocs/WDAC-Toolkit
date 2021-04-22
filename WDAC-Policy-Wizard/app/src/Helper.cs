@@ -324,6 +324,30 @@ namespace WDAC_Wizard
             }
             return true; 
         }
+
+        public static int CompareVersions(string minVersion, string maxVersion)
+        {
+
+            var minversionParts = minVersion.Split('.');
+            var maxversionParts = maxVersion.Split('.'); 
+
+            for(int i = 0; i < 4; i++)
+            {
+                int minVerPart = Convert.ToInt32(minversionParts[i]);
+                int maxVerPart = Convert.ToInt32(maxversionParts[i]);
+
+                if (minVerPart > maxVerPart)
+                {
+                    return -1;
+                }
+                else if (minVerPart < maxVerPart)
+                {
+                    return 1;
+                }
+            }
+
+            return 0; 
+        }
     }
 
     public class packedInfo

@@ -106,8 +106,18 @@ namespace WDAC_Wizard
                         this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
                         return;
                     }
-                }
 
+                    if(this.PolicyCustomRule.CustomValues.MinVersion !=null)
+                    {
+                        if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
+                        {
+                            label_Error.Visible = true;
+                            label_Error.Text = "Invalid custom version input. Minimum version must be less than the maximum version";
+                            this.Log.AddWarningMsg("CustomMinVersion !< CustomMaxVersion");
+                            return;
+                        }
+                    }
+                }
 
                 if (this.PolicyCustomRule.CustomValues.FileName != null)
                 {
