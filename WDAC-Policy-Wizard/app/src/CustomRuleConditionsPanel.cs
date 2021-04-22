@@ -28,7 +28,8 @@ namespace WDAC_Wizard
         private bool RuleInEdit = false;
         private UIState state;
         private Exceptions_Control exceptionsControl;
-        private bool redoRequired; 
+        private bool redoRequired;
+        private string[] DefaultValues; 
 
         private enum UIState
         {
@@ -52,7 +53,8 @@ namespace WDAC_Wizard
             this.RuleInEdit = true;
             this.state = UIState.RuleConditions;
             this.redoRequired = false; 
-            this.exceptionsControl = null; 
+            this.exceptionsControl = null;
+            this.DefaultValues = new string[4]; 
 
         }
 
@@ -80,6 +82,39 @@ namespace WDAC_Wizard
                 this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
                 return;
             }
+
+            // Ensure custom values are valid
+            if(this.PolicyCustomRule.UsingCustomValues)
+            {
+                if(this.PolicyCustomRule.CustomValues.MinVersion != null)
+                {
+                    if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        return;
+                    }
+                }
+
+                if (this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                {
+                    if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        return;
+                    }
+                }
+
+
+                if (this.PolicyCustomRule.CustomValues.FileName != null)
+                {
+                    // Some check here - do not know what at the momemnt
+                }
+            }
+
 
             bool warnUser = false; 
             switch(this.PolicyCustomRule.Level)
@@ -233,12 +268,20 @@ namespace WDAC_Wizard
         {
             // Check if the selected item is null (this occurs after reseting it - rule creation)
             if (comboBox_RuleType.SelectedIndex < 0)
-                return;
+            {
+                return; 
+            }
 
             string selectedOpt = comboBox_RuleType.SelectedItem.ToString();
             ClearCustomRulesPanel(false);
             label_Info.Visible = true;
             label_Error.Visible = false; // Clear error label
+
+            // Reset checkbox to unchecked
+            if(this.checkBox_CustomValues.Checked)
+            {
+                this.checkBox_CustomValues.Checked = false; 
+            }
 
             switch (selectedOpt)
             {
@@ -341,11 +384,13 @@ namespace WDAC_Wizard
                 // Get generic file information to be shown to user
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
+                // Replace misleading commas in version with '.'
+                string fileVersion = fileInfo.FileVersion.Replace(',', '.');
                 PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
                 PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
                 PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
                 PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileInfo.FileVersion);
+                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileVersion);
                 PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
@@ -401,16 +446,26 @@ namespace WDAC_Wizard
                     // Show right side of the text
                     this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
                     this.textBox_ReferenceFile.ScrollToCaret();
-                    labelSlider_0.Text = "Issuing CA:";
-                    labelSlider_1.Text = "Publisher:";
-                    labelSlider_2.Text = "File version:";
-                    labelSlider_3.Text = "File name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["PCACertificate"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["LeafCertificate"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["FileVersion"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["FileName"];
+                    this.labelSlider_0.Text = "Issuing CA:";
+                    this.labelSlider_1.Text = "Publisher:";
+                    this.labelSlider_2.Text = "Minimum version:";
+                    this.labelSlider_3.Text = "File name:";
 
-                    textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); 
+                    // Version textbox should be set to normal size
+                    this.textBoxSlider_2.Size = this.textBoxSlider_3.Size; 
+
+                    // Set defaults to restore to if custom values is ever reset
+                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
+                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
+                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["FileVersion"];
+                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
+
+                    this.textBoxSlider_0.Text = this.DefaultValues[0];
+                    this.textBoxSlider_1.Text = this.DefaultValues[1];
+                    this.textBoxSlider_2.Text = this.DefaultValues[2];
+                    this.textBoxSlider_3.Text = this.DefaultValues[3];
+                    
+                    this.textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); 
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
@@ -462,14 +517,24 @@ namespace WDAC_Wizard
                     this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
                     this.textBox_ReferenceFile.ScrollToCaret();
 
-                    labelSlider_0.Text = "Original filename:";
-                    labelSlider_1.Text = "File description:";
-                    labelSlider_2.Text = "Product name:";
-                    labelSlider_3.Text = "Internal name:";
-                    textBoxSlider_0.Text = PolicyCustomRule.FileInfo["OriginalFilename"];
-                    textBoxSlider_1.Text = PolicyCustomRule.FileInfo["FileDescription"];
-                    textBoxSlider_2.Text = PolicyCustomRule.FileInfo["ProductName"];
-                    textBoxSlider_3.Text = PolicyCustomRule.FileInfo["InternalName"];
+                    this.labelSlider_0.Text = "Original filename:";
+                    this.labelSlider_1.Text = "File description:";
+                    this.labelSlider_2.Text = "Product name:";
+                    this.labelSlider_3.Text = "Internal name:";
+
+                    // Product Name textbox should be set to normal size
+                    this.textBoxSlider_2.Size = this.textBoxSlider_3.Size;
+
+                    // Set defaults to restore to if custom values is ever reset
+                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["OriginalFilename"];
+                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["FileDescription"];
+                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
+                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["InternalName"];
+
+                    this.textBoxSlider_0.Text = this.DefaultValues[0];
+                    this.textBoxSlider_1.Text = this.DefaultValues[1];
+                    this.textBoxSlider_2.Text = this.DefaultValues[2];
+                    this.textBoxSlider_3.Text = this.DefaultValues[3];
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
@@ -739,8 +804,30 @@ namespace WDAC_Wizard
         private void button_Next_Click(object sender, EventArgs e)
         {
             // Show the exception UI
+
+            // Check custom values first before proceeding
+            // Ensure custom values are valid
+            if (this.PolicyCustomRule.UsingCustomValues)
+            {
+                if (this.PolicyCustomRule.CustomValues.MinVersion != null)
+                {
+                    if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "Invalid input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        return;
+                    }
+                }
+
+                if (this.PolicyCustomRule.CustomValues.FileName != null)
+                {
+                    // Some check here - do not know what at the momemnt
+                }
+            }
+
             // Check required fields - that a reference file is selected
-            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
+            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
                 && this.PolicyCustomRule.ReferenceFile != null)
             {
                 this.state = UIState.RuleExceptions; 
@@ -940,6 +1027,149 @@ namespace WDAC_Wizard
             }
 
             return certSubjectName;
+        }
+
+        private void UseRuleCustomValues(object sender, EventArgs e)
+        {
+            // Set the UI first
+            if (this.checkBox_CustomValues.Checked)
+            {
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    this.textBoxSlider_0.ReadOnly = false;
+                    this.textBoxSlider_1.ReadOnly = false;
+                    this.textBoxSlider_2.ReadOnly = false;
+                    this.textBoxSlider_3.ReadOnly = false;
+                    this.textBox_MaxVersion.ReadOnly = false;
+
+                    // Format the version text boxes
+                    this.textBoxSlider_2.Size = this.textBoxSlider_0.Size;
+                    this.textBox_MaxVersion.Visible = false;
+                    this.label_To.Visible = false;
+                }
+                else
+                {
+                    // Publisher 
+                    this.textBoxSlider_0.ReadOnly = true; // We do not support custom values for CA or Publisher
+                    this.textBoxSlider_1.ReadOnly = true;
+                    this.textBoxSlider_2.ReadOnly = false;
+                    this.textBoxSlider_3.ReadOnly = false;
+                    this.textBox_MaxVersion.ReadOnly = false;
+
+                    // Format the version text boxes
+                    this.textBoxSlider_2.Size = this.textBox_MaxVersion.Size;
+                    this.textBox_MaxVersion.Visible = true;
+                    this.label_To.Visible = true;
+                }
+
+                this.PolicyCustomRule.UsingCustomValues = true; 
+            }
+            else
+            {
+                // Clear error if applicable
+                this.ClearLabel_ErrorText(); 
+
+                // Set text values back to default
+                this.textBoxSlider_0.ReadOnly = true; 
+                this.textBoxSlider_1.ReadOnly = true; 
+                this.textBoxSlider_2.ReadOnly = true; 
+                this.textBoxSlider_3.ReadOnly = true; 
+                this.textBox_MaxVersion.ReadOnly = true;
+
+                // Format the version text boxes
+                this.textBoxSlider_2.Size = this.textBoxSlider_0.Size;
+                this.textBox_MaxVersion.Visible = false;
+                this.label_To.Visible = false;
+
+                this.textBoxSlider_0.Text = this.DefaultValues[0];
+                this.textBoxSlider_1.Text = this.DefaultValues[1];
+                this.textBoxSlider_2.Text = this.DefaultValues[2];
+                this.textBoxSlider_3.Text = this.DefaultValues[3];
+
+                this.PolicyCustomRule.UsingCustomValues = false;
+            }
+        }
+
+        // Action handlers for custom text in the publiser and file attributes text fields
+
+        private void textBoxSlider_3_TextChanged(object sender, EventArgs e)
+        {
+            // Filename (publisher) or InternalName (file attributes)
+            // Break if not using custom values. This will be reached during setting values once proto file is chosen
+
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
+            }
+            else
+            {
+                this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
+            }
+        }
+
+        private void textBoxSlider_2_TextChanged(object sender, EventArgs e)
+        {
+            // Version (publisher) or ProductName (file attributes)
+            // Break if not using custom values. This will be reached during setting values once proto file is chosen
+
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_2.Text;
+            }
+            else
+            {
+                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+            }
+        }
+
+        private void textBoxSlider_1_TextChanged(object sender, EventArgs e)
+        {
+            // Only accessible by File Attributes
+            // Description (file attributes)
+            // Break if not using custom values. This will be reached during setting values once proto file is chosen
+
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+        }
+
+        private void textBoxSlider_0_TextChanged(object sender, EventArgs e)
+        {
+            /// Only accessible by File Attributes
+            // Original filename (file attributes)
+            // Break if not using custom values. This will be reached during setting values once proto file is chosen
+
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
+        }
+
+        private void textBox_MaxVersion_TextChanged(object sender, EventArgs e)
+        {
+            // Only accessible by publisher
+            // Set Custom Values.MaxValue
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            this.PolicyCustomRule.CustomValues.MaxVersion = textBox_MaxVersion.Text;
         }
     }   
 }

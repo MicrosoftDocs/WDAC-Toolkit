@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
+            this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
@@ -37,6 +38,7 @@
             this.radioButton_File = new System.Windows.Forms.RadioButton();
             this.label_Info = new System.Windows.Forms.Label();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
+            this.textBox_MaxVersion = new System.Windows.Forms.TextBox();
             this.textBoxSlider_3 = new System.Windows.Forms.TextBox();
             this.labelSlider_3 = new System.Windows.Forms.Label();
             this.textBoxSlider_2 = new System.Windows.Forms.TextBox();
@@ -65,6 +67,7 @@
             this.headerPanel = new System.Windows.Forms.Panel();
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
+            this.label_To = new System.Windows.Forms.Label();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -94,6 +97,17 @@
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 701);
             this.panel_CustomRules.TabIndex = 86;
             // 
+            // checkBox_CustomValues
+            // 
+            this.checkBox_CustomValues.AutoSize = true;
+            this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 185);
+            this.checkBox_CustomValues.Name = "checkBox_CustomValues";
+            this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
+            this.checkBox_CustomValues.TabIndex = 111;
+            this.checkBox_CustomValues.Text = "Use Custom Values";
+            this.checkBox_CustomValues.UseVisualStyleBackColor = true;
+            this.checkBox_CustomValues.CheckedChanged += new System.EventHandler(this.UseRuleCustomValues);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -111,7 +125,7 @@
             this.publisherInfoLabel.AutoSize = true;
             this.publisherInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(13, 591);
+            this.publisherInfoLabel.Location = new System.Drawing.Point(12, 610);
             this.publisherInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
             this.publisherInfoLabel.Size = new System.Drawing.Size(472, 36);
@@ -176,6 +190,9 @@
             // 
             // panel_Publisher_Scroll
             // 
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBox_CustomValues);
+            this.panel_Publisher_Scroll.Controls.Add(this.label_To);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBox_MaxVersion);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_3);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_3);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_2);
@@ -185,12 +202,27 @@
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(11, 395);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(15, 376);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 187);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 223);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
+            // 
+            // textBox_MaxVersion
+            // 
+            this.textBox_MaxVersion.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.textBox_MaxVersion.Location = new System.Drawing.Point(334, 102);
+            this.textBox_MaxVersion.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_MaxVersion.Name = "textBox_MaxVersion";
+            this.textBox_MaxVersion.ReadOnly = true;
+            this.textBox_MaxVersion.Size = new System.Drawing.Size(152, 26);
+            this.textBox_MaxVersion.TabIndex = 105;
+            this.textBox_MaxVersion.Text = "65355.65355.65355.65355";
+            this.textBox_MaxVersion.Visible = false;
+            this.textBox_MaxVersion.TextChanged += new System.EventHandler(this.textBox_MaxVersion_TextChanged);
             // 
             // textBoxSlider_3
             // 
@@ -202,6 +234,7 @@
             this.textBoxSlider_3.ReadOnly = true;
             this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_3.TabIndex = 103;
+            this.textBoxSlider_3.TextChanged += new System.EventHandler(this.textBoxSlider_3_TextChanged);
             // 
             // labelSlider_3
             // 
@@ -223,19 +256,20 @@
             this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_2.Name = "textBoxSlider_2";
             this.textBoxSlider_2.ReadOnly = true;
-            this.textBoxSlider_2.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_2.Size = new System.Drawing.Size(152, 26);
             this.textBoxSlider_2.TabIndex = 101;
+            this.textBoxSlider_2.TextChanged += new System.EventHandler(this.textBoxSlider_2_TextChanged);
             // 
             // labelSlider_2
             // 
             this.labelSlider_2.AutoSize = true;
             this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_2.Location = new System.Drawing.Point(36, 105);
+            this.labelSlider_2.Location = new System.Drawing.Point(36, 106);
             this.labelSlider_2.Name = "labelSlider_2";
-            this.labelSlider_2.Size = new System.Drawing.Size(84, 18);
+            this.labelSlider_2.Size = new System.Drawing.Size(122, 18);
             this.labelSlider_2.TabIndex = 102;
-            this.labelSlider_2.Text = "File version:";
+            this.labelSlider_2.Text = "Minimum version:";
             this.labelSlider_2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // textBoxSlider_1
@@ -248,6 +282,7 @@
             this.textBoxSlider_1.ReadOnly = true;
             this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_1.TabIndex = 99;
+            this.textBoxSlider_1.TextChanged += new System.EventHandler(this.textBoxSlider_1_TextChanged);
             // 
             // labelSlider_1
             // 
@@ -271,6 +306,7 @@
             this.textBoxSlider_0.ReadOnly = true;
             this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
             this.textBoxSlider_0.TabIndex = 95;
+            this.textBoxSlider_0.TextChanged += new System.EventHandler(this.textBoxSlider_0_TextChanged);
             // 
             // labelSlider_0
             // 
@@ -323,7 +359,7 @@
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox_RuleType.Name = "comboBox_RuleType";
             this.comboBox_RuleType.Size = new System.Drawing.Size(187, 26);
-            this.comboBox_RuleType.TabIndex = 89;
+            this.comboBox_RuleType.TabIndex = 3;
             this.comboBox_RuleType.SelectedIndexChanged += new System.EventHandler(this.RuleType_ComboboxChanged);
             // 
             // radioButton_Deny
@@ -335,7 +371,7 @@
             this.radioButton_Deny.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_Deny.Name = "radioButton_Deny";
             this.radioButton_Deny.Size = new System.Drawing.Size(69, 25);
-            this.radioButton_Deny.TabIndex = 90;
+            this.radioButton_Deny.TabIndex = 2;
             this.radioButton_Deny.TabStop = true;
             this.radioButton_Deny.Text = "Deny";
             this.radioButton_Deny.UseVisualStyleBackColor = true;
@@ -351,7 +387,7 @@
             this.radioButton_Allow.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_Allow.Name = "radioButton_Allow";
             this.radioButton_Allow.Size = new System.Drawing.Size(72, 25);
-            this.radioButton_Allow.TabIndex = 89;
+            this.radioButton_Allow.TabIndex = 1;
             this.radioButton_Allow.TabStop = true;
             this.radioButton_Allow.Text = "Allow";
             this.radioButton_Allow.UseVisualStyleBackColor = true;
@@ -377,7 +413,7 @@
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
             this.button_Browse.Size = new System.Drawing.Size(99, 29);
-            this.button_Browse.TabIndex = 84;
+            this.button_Browse.TabIndex = 4;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
             this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
@@ -563,6 +599,17 @@
             this.button_Back.UseVisualStyleBackColor = false;
             this.button_Back.Click += new System.EventHandler(this.button_Back_Click);
             // 
+            // label_To
+            // 
+            this.label_To.AutoSize = true;
+            this.label_To.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_To.Location = new System.Drawing.Point(314, 105);
+            this.label_To.Name = "label_To";
+            this.label_To.Size = new System.Drawing.Size(16, 21);
+            this.label_To.TabIndex = 112;
+            this.label_To.Text = "-";
+            this.label_To.Visible = false;
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -637,5 +684,8 @@
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Button button_AddException;
         private System.Windows.Forms.Button button_Back;
+        private System.Windows.Forms.CheckBox checkBox_CustomValues;
+        private System.Windows.Forms.TextBox textBox_MaxVersion;
+        private System.Windows.Forms.Label label_To;
     }
 }

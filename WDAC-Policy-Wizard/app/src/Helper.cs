@@ -296,6 +296,36 @@ namespace WDAC_Wizard
             serializer.Serialize(writer, siPolicy);
             writer.Close();
         }
+
+        // Check that version has 4 parts (follows ww.xx.yy.zz format)
+        // And each part < 2^16
+        public static bool IsValidVersion(string version)
+        {
+            var versionParts = version.Split('.');
+            if(versionParts.Length != 4)
+            {
+                return false; 
+            }
+
+            foreach(var part in versionParts)
+            {
+                try
+                {
+                    int _part = Convert.ToInt32(part);
+                    if (_part > UInt16.MaxValue || _part < 0)
+                    {
+                        return false;
+                    }
+                }
+                catch(Exception e)
+                {
+                    return false; 
+                }
+            }
+            return true; 
+        }
+
+
     }
 
     public class packedInfo
@@ -487,6 +517,23 @@ namespace WDAC_Wizard
 
     }
 
+    // Custom Values object to organize custom values in Custom Rules object
+    public class CustomValue
+    {
+        public string MinVersion;
+        public string MaxVersion;
+        public string FileName;
+        public string ProductName;
+        public string Description;
+        public string InternalName; 
+
+        public CustomValue()
+        {
+
+        }
+
+    }
+
     public class PolicyCustomRules
     {
         public enum RuleType
@@ -532,6 +579,9 @@ namespace WDAC_Wizard
         public string RuleIndex { get; set; } // Index of return struct in Get-SystemDriver cmdlet
         public int RowNumber { get; set;  }     // Index of the row in the datagrid
 
+        // Custom values
+        public bool UsingCustomValues { get; set; }
+        public CustomValue CustomValues { get; set; }
 
         // Filepath params
         public List<string> FolderContents { get; set; }
@@ -549,6 +599,9 @@ namespace WDAC_Wizard
             this.FileInfo = new Dictionary<string, string>();
             this.ExceptionList = new List<PolicyCustomRules>();
             this.FolderContents = new List<string>();
+
+            this.UsingCustomValues = false;
+            this.CustomValues = new CustomValue(); 
         }
 
         /// <summary>
@@ -568,6 +621,8 @@ namespace WDAC_Wizard
             this.RuleIndex = ruleIndex;
             this.ExceptionList = new List<PolicyCustomRules>();
             this.FileInfo = new Dictionary<string, string>();
+
+            this.UsingCustomValues = false;
         }
 
         public void SetRuleLevel(RuleLevel ruleLevel)
