@@ -201,29 +201,79 @@ namespace WDAC_Wizard
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
-                    name += String.Format("{0}: {1}, {2}, {3} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}: {1}, {2}, {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}: {1}, {2}, {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.FilePublisher:
-                    name += String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                         name = String.Format("{0}: {1}, {2}, {3} {4}, {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion,
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.FileName) ? this.PolicyCustomRule.FileInfo["FileName"] : this.PolicyCustomRule.CustomValues.FileName); 
+
+                    }
+                    else
+                    {
+                        name = String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                       this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
+                    }
+                   
                     break;
 
                 case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.FileName); 
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["OriginalFilename"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.InternalName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["InternalName"]);
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.InternalName);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["InternalName"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.FileDescription:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["FileDescription"]);
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Description);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["FileDescription"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.ProductName:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["ProductName"]);
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.ProductName);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["ProductName"]);
+                    }
                     break;
 
                 default:
