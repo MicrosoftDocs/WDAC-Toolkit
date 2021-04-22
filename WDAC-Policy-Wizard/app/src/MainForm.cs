@@ -950,7 +950,6 @@ namespace WDAC_Wizard
             }
         }
 
-
         /// <summary>
         /// Processes all of the custom rules defined by user. 
         /// </summary>
@@ -975,6 +974,16 @@ namespace WDAC_Wizard
                 createRuleScript = createCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
                 createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
+
+                // Process custom values in the file rules
+                if(customRule.UsingCustomValues)
+                {
+                    List<string> dm = HandleCustomValues(customRule); 
+                    foreach(var cmd in dm)
+                    {
+                        scriptCommands.Add(cmd); 
+                    }
+                }
 
                 //  Process all exceptions, if applicable
                 if (customRule.ExceptionList.Count > 0)
@@ -1034,6 +1043,54 @@ namespace WDAC_Wizard
             //TODO: results check ensuring 
             runspace.Dispose();
             return customRulesPathList;
+        }
+
+        public List<string> HandleCustomValues(PolicyCustomRules customRule)
+        {
+            List<string> customValueCommand = new List<string>();  
+
+            if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                if(customRule.CustomValues.MinVersion != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
+                        customRule.PSVariable, customRule.CustomValues.MinVersion));
+                }
+
+                if (customRule.CustomValues.MaxVersion != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MaximumFileVersion\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.MaxVersion));
+                }
+
+                if (customRule.CustomValues.FileName != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+            }
+
+            else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+            {
+                if(customRule.Level == PolicyCustomRules.RuleLevel.FileDescription)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileDescription\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.Description)); 
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.ProductName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"ProductName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.ProductName));
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.OriginalFileName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.InternalName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"InternalName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.InternalName));
+                }
+            }
+
+            return customValueCommand;
         }
 
         public string createCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")

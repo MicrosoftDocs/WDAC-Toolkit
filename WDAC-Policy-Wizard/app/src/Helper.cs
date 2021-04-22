@@ -324,8 +324,6 @@ namespace WDAC_Wizard
             }
             return true; 
         }
-
-
     }
 
     public class packedInfo
