@@ -1090,6 +1090,26 @@ namespace WDAC_Wizard
                 }
             }
 
+            else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
+            {
+                int i = 0;
+                string mergeCommand = String.Format("$Rule_{0} = ", customRule.PSVariable); 
+
+                foreach (var hash in customRule.CustomValues.Hashes)
+                {
+                    // Create placeholder per custom hash Rule until can fix this overwrite bug
+                    customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1} = $Rule_{0}_Template_{1}[1].PSObject.Copy()", customRule.PSVariable, i)); // Make a copy of the template
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.Id = $Rule_{0}_HashRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, hash.Substring(0,5))); // modify the ID to avoid collisions
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.attributes[\"Hash\"] = \"{2}\"", customRule.PSVariable, i, hash)); // Set the hash attribute to the hash value
+
+                    mergeCommand += String.Format("$Rule_{0}_HashRule_{1},", customRule.PSVariable, i);
+                    i++;
+                }
+                customValueCommand.Add(mergeCommand.Substring(0,mergeCommand.Length-1));
+            }
+
             return customValueCommand;
         }
 
@@ -1163,8 +1183,16 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level, 
+                        if(customRule.UsingCustomValues)
+                        {
+                            
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level,
                             customRule.ReferenceFile);
+                        }
+                        
                     }
                     break;
             }
