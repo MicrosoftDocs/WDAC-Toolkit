@@ -69,6 +69,7 @@
             this.button_Back = new System.Windows.Forms.Button();
             this.label_To = new System.Windows.Forms.Label();
             this.checkBox_CustomPath = new System.Windows.Forms.CheckBox();
+            this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -80,11 +81,12 @@
             // panel_CustomRules
             // 
             this.panel_CustomRules.BackColor = System.Drawing.Color.White;
+            this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
+            this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label1);
             this.panel_CustomRules.Controls.Add(this.publisherInfoLabel);
             this.panel_CustomRules.Controls.Add(this.panel_FileFolder);
             this.panel_CustomRules.Controls.Add(this.label_Info);
-            this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label9);
             this.panel_CustomRules.Controls.Add(this.comboBox_RuleType);
             this.panel_CustomRules.Controls.Add(this.radioButton_Deny);
@@ -204,7 +206,7 @@
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
             this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(15, 376);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
             this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 223);
@@ -626,6 +628,17 @@
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.CheckedChanged += new System.EventHandler(this.UseCustomPath);
             // 
+            // richTextBox_CustomHashes
+            // 
+            this.richTextBox_CustomHashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_CustomHashes.Location = new System.Drawing.Point(328, 191);
+            this.richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
+            this.richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
+            this.richTextBox_CustomHashes.TabIndex = 114;
+            this.richTextBox_CustomHashes.Text = "Insert comma separated list of SHA-256 Authenticode Hashes";
+            this.richTextBox_CustomHashes.Visible = false;
+            this.richTextBox_CustomHashes.Click += new System.EventHandler(this.richTextBox_CustomHashes_Click);
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -704,5 +717,6 @@
         private System.Windows.Forms.TextBox textBox_MaxVersion;
         private System.Windows.Forms.Label label_To;
         private System.Windows.Forms.CheckBox checkBox_CustomPath;
+        private System.Windows.Forms.RichTextBox richTextBox_CustomHashes;
     }
 }

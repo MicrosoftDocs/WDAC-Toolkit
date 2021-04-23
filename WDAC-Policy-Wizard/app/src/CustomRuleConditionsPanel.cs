@@ -129,6 +129,30 @@ namespace WDAC_Wizard
                         return;
                     }
                 }
+
+                // Parse hashes into PolicyCustomRule.CustomValues.Hash
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+                {
+                    var hashList = this.richTextBox_CustomHashes.Text.Split(',');
+                    foreach(var hash in hashList)
+                    {
+                        if(!String.IsNullOrEmpty(hash))
+                        {
+                            if(hash.Length == 64)
+                            {
+                                this.PolicyCustomRule.CustomValues.Hashes.Add(hash);
+                            }
+                        }
+                    }
+
+                    if(this.PolicyCustomRule.CustomValues.Hashes.Count == 0)
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.";
+                        this.Log.AddWarningMsg("Zero hash values located.");
+                        return;
+                    }
+                }
             }
 
 
@@ -293,7 +317,7 @@ namespace WDAC_Wizard
                     break;
 
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Path) ? this.PolicyCustomRule.ReferenceFile : this.PolicyCustomRule.CustomValues.Path);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
                     break;
             }
 
@@ -371,6 +395,7 @@ namespace WDAC_Wizard
                     radioButton_File.Checked = true; // By default, 
 
                     this.checkBox_CustomPath.Visible = true;
+                    this.checkBox_CustomPath.Text = "Use Custom Path";
                     break;
 
                 case "File Attributes":
@@ -385,6 +410,9 @@ namespace WDAC_Wizard
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
                         "Select the file for which you wish to create a hash rule.";
+                    
+                    this.checkBox_CustomPath.Visible = true;
+                    this.checkBox_CustomPath.Text = "Use Custom Hash Values"; 
                     break;
                 default:
                     break;
@@ -1258,15 +1286,44 @@ namespace WDAC_Wizard
 
         private void UseCustomPath(object sender, EventArgs e)
         {
-            if(this.checkBox_CustomPath.Checked)
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
-                this.PolicyCustomRule.UsingCustomValues = true;
-                this.textBox_ReferenceFile.ReadOnly = false; 
+                if (this.checkBox_CustomPath.Checked)
+                {
+                    this.richTextBox_CustomHashes.Visible = true;
+                    this.richTextBox_CustomHashes.Location = this.panel_Publisher_Scroll.Location;
+                    this.richTextBox_CustomHashes.Tag = "Title";
+
+                    this.PolicyCustomRule.UsingCustomValues = true;
+                }
+                else
+                {
+                    this.richTextBox_CustomHashes.Visible = false;
+                    this.PolicyCustomRule.UsingCustomValues = false;
+                }
             }
             else
             {
-                this.PolicyCustomRule.UsingCustomValues = false;
-                this.textBox_ReferenceFile.ReadOnly = true; 
+                if (this.checkBox_CustomPath.Checked)
+                {
+                    this.PolicyCustomRule.UsingCustomValues = true;
+                    this.textBox_ReferenceFile.ReadOnly = false;
+                }
+                else
+                {
+                    this.PolicyCustomRule.UsingCustomValues = false;
+                    this.textBox_ReferenceFile.ReadOnly = true;
+                }
+            }
+           
+        }
+
+        private void richTextBox_CustomHashes_Click(object sender, EventArgs e)
+        {
+            if(this.richTextBox_CustomHashes.Tag == "Title")
+            {
+                this.richTextBox_CustomHashes.ResetText();
+                this.richTextBox_CustomHashes.Tag = "Values"; 
             }
         }
     }   

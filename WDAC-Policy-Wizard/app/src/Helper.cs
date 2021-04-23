@@ -409,12 +409,12 @@ namespace WDAC_Wizard
 
             if (upperPath.Contains(sys)) // C:/WINDOWS/system32/foo/bar --> %SYSTEM32%/foo/bar
             {
-                envPath = "%SYSTEM32%\\" + _path.Substring(sys.Length); 
+                envPath = "%SYSTEM32%" + _path.Substring(sys.Length); 
                 return envPath; 
             }
             else if (upperPath.Contains(win)) // WINDIR
             {
-                envPath = "%WINDIR%\\" + _path.Substring(win.Length);
+                envPath = "%WINDIR%" + _path.Substring(win.Length);
                 return envPath;
             }
             else if (upperPath.Contains(os)) // OSDRIVE
@@ -628,11 +628,12 @@ namespace WDAC_Wizard
         public string ProductName;
         public string Description;
         public string InternalName;
-        public string Path; 
+        public string Path;
+        public List<string> Hashes; 
 
         public CustomValue()
         {
-
+            this.Hashes = new List<string>();
         }
 
     }
