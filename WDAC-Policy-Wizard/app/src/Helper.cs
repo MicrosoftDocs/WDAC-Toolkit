@@ -396,6 +396,38 @@ namespace WDAC_Wizard
             }
             return true; 
         }
+
+        public static string GetEnvPath(string _path)
+        {
+            // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
+            string sys = Environment.GetFolderPath(Environment.SpecialFolder.System).ToUpper();
+            string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToUpper();
+            string os = Path.GetPathRoot(Environment.SystemDirectory).ToUpper();
+
+            string envPath = String.Empty;
+            string upperPath = _path.ToUpper();
+
+            if (upperPath.Contains(sys)) // C:/WINDOWS/system32/foo/bar --> %SYSTEM32%/foo/bar
+            {
+                envPath = "%SYSTEM32%\\" + _path.Substring(sys.Length); 
+                return envPath; 
+            }
+            else if (upperPath.Contains(win)) // WINDIR
+            {
+                envPath = "%WINDIR%\\" + _path.Substring(win.Length);
+                return envPath;
+            }
+            else if (upperPath.Contains(os)) // OSDRIVE
+            {
+                envPath = "%OSDRIVE%\\" + _path.Substring(os.Length); 
+                return envPath;
+            }
+            else
+            {
+                return _path; // otherwise, not an env variable we support
+            }
+
+        }
     }
 
     public class packedInfo
@@ -755,42 +787,6 @@ namespace WDAC_Wizard
             {
                 // Log error or something
             }
-        }
-
-        public bool isEnvVar()
-        {
-            // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
-            if (this.ReferenceFile.Contains(Path.GetPathRoot(Environment.SystemDirectory)) || 
-                this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) ||
-                this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.System)))
-                return true;
-
-            // otherwise, not an env variable we support
-            else
-                return false; 
-        }
-
-        public string GetEnvVar()
-        {
-            string sys = Path.GetPathRoot(Environment.SystemDirectory);
-            string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            string os = Path.GetPathRoot(Environment.SystemDirectory);
-
-            string retVal = String.Empty; 
-
-            if (this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.System))) //OSDRIVE/WINDOWS/system32
-                retVal =  "%SYSTEM32%/" + this.ReferenceFile.Substring(Environment.GetFolderPath(Environment.SpecialFolder.System).Length); 
-
-            else if (this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows))) //OSDRIVE/WINDOWS
-                retVal = "%WINDIR%/" + this.ReferenceFile.Substring(Environment.GetFolderPath(Environment.SpecialFolder.Windows).Length);
-
-            else if (this.ReferenceFile.Contains(Path.GetPathRoot(Environment.SystemDirectory))) // OSDRIVE
-                retVal = "%OSDRIVE%/" + this.ReferenceFile.Substring(Path.GetPathRoot(Environment.SystemDirectory).Length);
-
-            else
-                retVal = "";
-
-            return retVal;
         }
     }
 

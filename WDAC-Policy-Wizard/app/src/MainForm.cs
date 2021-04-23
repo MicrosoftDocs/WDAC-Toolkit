@@ -1142,9 +1142,9 @@ namespace WDAC_Wizard
                         else
                         {
                             // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                            if (Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
+                            if (Properties.Settings.Default.useEnvVars)
                             {
-                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.GetEnvVar());
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, Helper.GetEnvPath(customRule.ReferenceFile));
                             }
                             else
                             {
