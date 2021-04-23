@@ -1119,22 +1119,37 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.FilePath:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
+                        if(customRule.UsingCustomValues)
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
+                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
                             " -Fallback Hash -UserWriteablePaths", rulePrefix, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
+                        }
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
                     {
-                        // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                        if (customRule.Type == PolicyCustomRules.RuleType.FilePath &&
-                            Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
+                        if (customRule.UsingCustomValues)
                         {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.GetEnvVar());
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
+                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
                         }
                         else
                         {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix,  customRule.ReferenceFile);
+                            // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
+                            if (Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
+                            {
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.GetEnvVar());
+                            }
+                            else
+                            {
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.ReferenceFile);
+                            }
                         }
                     }
                     break;

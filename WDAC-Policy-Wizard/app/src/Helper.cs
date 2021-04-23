@@ -327,7 +327,6 @@ namespace WDAC_Wizard
 
         public static int CompareVersions(string minVersion, string maxVersion)
         {
-
             var minversionParts = minVersion.Split('.');
             var maxversionParts = maxVersion.Split('.'); 
 
@@ -347,6 +346,55 @@ namespace WDAC_Wizard
             }
 
             return 0; 
+        }
+
+        public static bool IsValidPathRule(string customPath)
+        {
+            // Check for at most 1 wildcard param (*)
+            if(customPath.Contains("*"))
+            {
+                var wildCardParts = customPath.Split('*');
+                if (wildCardParts.Length < 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    // Start or end must be empty
+                    if (String.IsNullOrEmpty(wildCardParts[0]) || String.IsNullOrEmpty(wildCardParts[1]))
+                    {
+                        // Continue - either side is empty
+                    }
+                    else
+                    {
+                        // wildcard in middle of path - not supported
+                        return false;
+                    }
+                }
+            }
+            
+            // Check for macros (%OSDRIVE%, %WINDIR%, %SYSTEM32%)
+            if(customPath.Contains("%"))
+            {
+                var macroParts = customPath.Split('%');
+                if (macroParts.Length == 3)
+                {
+                    if (macroParts[1] == "OSDRIVE" || macroParts[1] == "WINDIR" || macroParts[1] == "SYSTEM32")
+                    {
+                        // continue with rest of checks
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Too many or too few '%'
+                    return false;
+                }
+            }
+            return true; 
         }
     }
 
@@ -547,7 +595,8 @@ namespace WDAC_Wizard
         public string FileName;
         public string ProductName;
         public string Description;
-        public string InternalName; 
+        public string InternalName;
+        public string Path; 
 
         public CustomValue()
         {
@@ -723,7 +772,7 @@ namespace WDAC_Wizard
 
         public string GetEnvVar()
         {
-            string sys = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            string sys = Path.GetPathRoot(Environment.SystemDirectory);
             string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
             string os = Path.GetPathRoot(Environment.SystemDirectory);
 

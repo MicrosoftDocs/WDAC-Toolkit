@@ -54,7 +54,7 @@ namespace WDAC_Wizard
             this.state = UIState.RuleConditions;
             this.redoRequired = false; 
             this.exceptionsControl = null;
-            this.DefaultValues = new string[4]; 
+            this.DefaultValues = new string[5]; 
 
         }
 
@@ -64,7 +64,7 @@ namespace WDAC_Wizard
         private void button_CreateRule_Click(object sender, EventArgs e)
         {
             // At a minimum, we need  rule level, and pub/hash/file - defult fallback
-            if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || this.PolicyCustomRule.ReferenceFile == null)
+            if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || (this.PolicyCustomRule.ReferenceFile == null && !this.PolicyCustomRule.UsingCustomValues))
             {
                 label_Error.Visible = true;
                 label_Error.Text = "Please select a rule type, a file to allow or deny.";
@@ -119,9 +119,15 @@ namespace WDAC_Wizard
                     }
                 }
 
-                if (this.PolicyCustomRule.CustomValues.FileName != null)
+                if (this.PolicyCustomRule.CustomValues.Path != null)
                 {
-                    // Some check here - do not know what at the momemnt
+                    if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = "Invalid path rule. Only one wildcard (*) is allowed per path rule. Wildcards can only be\r\nlocated at the beginning or end of a path rule.";
+                        this.Log.AddWarningMsg("CustomMinVersion !< CustomMaxVersion");
+                        return;
+                    }
                 }
             }
 
@@ -287,7 +293,7 @@ namespace WDAC_Wizard
                     break;
 
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Path) ? this.PolicyCustomRule.ReferenceFile : this.PolicyCustomRule.CustomValues.Path);
                     break;
             }
 
@@ -308,16 +314,16 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
             string[] stringArr = new string[5] { action , level, name, files, exceptions};
 
-            // Reset UI view
-            ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false;
-            this.RuleInEdit = false;
-
             // Offboard this to signingRules_Condition
+            this.RuleInEdit = false;
             this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser);
 
             // Renew the custom rule instance
-            this.PolicyCustomRule = new PolicyCustomRules(); 
+            this.PolicyCustomRule = new PolicyCustomRules();
+
+            // Reset UI view
+            ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false;
         }
 
         /// <summary>
@@ -340,8 +346,12 @@ namespace WDAC_Wizard
             // Reset checkbox to unchecked
             if(this.checkBox_CustomValues.Checked)
             {
-                this.checkBox_CustomValues.Checked = false; 
+                this.checkBox_CustomValues.Checked = false;
+                this.PolicyCustomRule.UsingCustomValues = false; 
             }
+
+            this.checkBox_CustomPath.Visible = false;
+            this.checkBox_CustomPath.Checked = false;
 
             switch (selectedOpt)
             {
@@ -359,6 +369,8 @@ namespace WDAC_Wizard
                         "Selecting folder will affect all files in the folder.";
                     panel_FileFolder.Visible = true;
                     radioButton_File.Checked = true; // By default, 
+
+                    this.checkBox_CustomPath.Visible = true;
                     break;
 
                 case "File Attributes":
@@ -437,6 +449,8 @@ namespace WDAC_Wizard
                 string refPath = getFileLocation();
                 if (refPath == String.Empty)
                     return;
+
+                this.DefaultValues[4] = refPath; 
 
                 // Custom rule in progress
                 this._MainWindow.CustomRuleinProgress = true;
@@ -536,7 +550,8 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
-                    PolicyCustomRule.ReferenceFile = getFolderLocation();
+                    this.PolicyCustomRule.ReferenceFile = getFolderLocation();
+                    this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile;
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                     {
@@ -1230,6 +1245,29 @@ namespace WDAC_Wizard
             }
 
             this.PolicyCustomRule.CustomValues.MaxVersion = textBox_MaxVersion.Text;
+        }
+
+        // Allow for custom text fields
+        private void ReferenceFileTextChanged(object sender, EventArgs e)
+        {
+            if(this.PolicyCustomRule.UsingCustomValues)
+            {
+                this.PolicyCustomRule.CustomValues.Path = textBox_ReferenceFile.Text; 
+            }
+        }
+
+        private void UseCustomPath(object sender, EventArgs e)
+        {
+            if(this.checkBox_CustomPath.Checked)
+            {
+                this.PolicyCustomRule.UsingCustomValues = true;
+                this.textBox_ReferenceFile.ReadOnly = false; 
+            }
+            else
+            {
+                this.PolicyCustomRule.UsingCustomValues = false;
+                this.textBox_ReferenceFile.ReadOnly = true; 
+            }
         }
     }   
 }

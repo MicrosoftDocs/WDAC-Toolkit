@@ -68,6 +68,7 @@
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
             this.label_To = new System.Windows.Forms.Label();
+            this.checkBox_CustomPath = new System.Windows.Forms.CheckBox();
             this.panel_CustomRules.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -91,6 +92,7 @@
             this.panel_CustomRules.Controls.Add(this.textBox_ReferenceFile);
             this.panel_CustomRules.Controls.Add(this.button_Browse);
             this.panel_CustomRules.Controls.Add(this.label_condition);
+            this.panel_CustomRules.Controls.Add(this.checkBox_CustomPath);
             this.panel_CustomRules.Location = new System.Drawing.Point(123, 0);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             this.panel_CustomRules.Name = "panel_CustomRules";
@@ -138,10 +140,10 @@
             // 
             this.panel_FileFolder.Controls.Add(this.radioButton_Folder);
             this.panel_FileFolder.Controls.Add(this.radioButton_File);
-            this.panel_FileFolder.Location = new System.Drawing.Point(440, 369);
+            this.panel_FileFolder.Location = new System.Drawing.Point(464, 366);
             this.panel_FileFolder.Margin = new System.Windows.Forms.Padding(2);
             this.panel_FileFolder.Name = "panel_FileFolder";
-            this.panel_FileFolder.Size = new System.Drawing.Size(162, 42);
+            this.panel_FileFolder.Size = new System.Drawing.Size(131, 42);
             this.panel_FileFolder.TabIndex = 104;
             this.panel_FileFolder.Visible = false;
             // 
@@ -399,8 +401,10 @@
             this.textBox_ReferenceFile.Location = new System.Drawing.Point(12, 334);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
-            this.textBox_ReferenceFile.Size = new System.Drawing.Size(408, 26);
+            this.textBox_ReferenceFile.ReadOnly = true;
+            this.textBox_ReferenceFile.Size = new System.Drawing.Size(448, 26);
             this.textBox_ReferenceFile.TabIndex = 88;
+            this.textBox_ReferenceFile.TextChanged += new System.EventHandler(this.ReferenceFileTextChanged);
             // 
             // button_Browse
             // 
@@ -409,10 +413,10 @@
             this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.Location = new System.Drawing.Point(440, 333);
+            this.button_Browse.Location = new System.Drawing.Point(464, 333);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
-            this.button_Browse.Size = new System.Drawing.Size(99, 29);
+            this.button_Browse.Size = new System.Drawing.Size(107, 28);
             this.button_Browse.TabIndex = 4;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
@@ -610,6 +614,18 @@
             this.label_To.Text = "-";
             this.label_To.Visible = false;
             // 
+            // checkBox_CustomPath
+            // 
+            this.checkBox_CustomPath.AutoSize = true;
+            this.checkBox_CustomPath.Location = new System.Drawing.Point(12, 363);
+            this.checkBox_CustomPath.Name = "checkBox_CustomPath";
+            this.checkBox_CustomPath.Size = new System.Drawing.Size(139, 21);
+            this.checkBox_CustomPath.TabIndex = 113;
+            this.checkBox_CustomPath.Text = "Use Custom Path";
+            this.checkBox_CustomPath.UseVisualStyleBackColor = true;
+            this.checkBox_CustomPath.Visible = false;
+            this.checkBox_CustomPath.CheckedChanged += new System.EventHandler(this.UseCustomPath);
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -687,5 +703,6 @@
         private System.Windows.Forms.CheckBox checkBox_CustomValues;
         private System.Windows.Forms.TextBox textBox_MaxVersion;
         private System.Windows.Forms.Label label_To;
+        private System.Windows.Forms.CheckBox checkBox_CustomPath;
     }
 }
