@@ -296,6 +296,138 @@ namespace WDAC_Wizard
             serializer.Serialize(writer, siPolicy);
             writer.Close();
         }
+
+        // Check that version has 4 parts (follows ww.xx.yy.zz format)
+        // And each part < 2^16
+        public static bool IsValidVersion(string version)
+        {
+            var versionParts = version.Split('.');
+            if(versionParts.Length != 4)
+            {
+                return false; 
+            }
+
+            foreach(var part in versionParts)
+            {
+                try
+                {
+                    int _part = Convert.ToInt32(part);
+                    if (_part > UInt16.MaxValue || _part < 0)
+                    {
+                        return false;
+                    }
+                }
+                catch(Exception e)
+                {
+                    return false; 
+                }
+            }
+            return true; 
+        }
+
+        public static int CompareVersions(string minVersion, string maxVersion)
+        {
+            var minversionParts = minVersion.Split('.');
+            var maxversionParts = maxVersion.Split('.'); 
+
+            for(int i = 0; i < 4; i++)
+            {
+                int minVerPart = Convert.ToInt32(minversionParts[i]);
+                int maxVerPart = Convert.ToInt32(maxversionParts[i]);
+
+                if (minVerPart > maxVerPart)
+                {
+                    return -1;
+                }
+                else if (minVerPart < maxVerPart)
+                {
+                    return 1;
+                }
+            }
+
+            return 0; 
+        }
+
+        public static bool IsValidPathRule(string customPath)
+        {
+            // Check for at most 1 wildcard param (*)
+            if(customPath.Contains("*"))
+            {
+                var wildCardParts = customPath.Split('*');
+                if (wildCardParts.Length < 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    // Start or end must be empty
+                    if (String.IsNullOrEmpty(wildCardParts[0]) || String.IsNullOrEmpty(wildCardParts[1]))
+                    {
+                        // Continue - either side is empty
+                    }
+                    else
+                    {
+                        // wildcard in middle of path - not supported
+                        return false;
+                    }
+                }
+            }
+            
+            // Check for macros (%OSDRIVE%, %WINDIR%, %SYSTEM32%)
+            if(customPath.Contains("%"))
+            {
+                var macroParts = customPath.Split('%');
+                if (macroParts.Length == 3)
+                {
+                    if (macroParts[1] == "OSDRIVE" || macroParts[1] == "WINDIR" || macroParts[1] == "SYSTEM32")
+                    {
+                        // continue with rest of checks
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Too many or too few '%'
+                    return false;
+                }
+            }
+            return true; 
+        }
+
+        public static string GetEnvPath(string _path)
+        {
+            // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
+            string sys = Environment.GetFolderPath(Environment.SpecialFolder.System).ToUpper();
+            string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToUpper();
+            string os = Path.GetPathRoot(Environment.SystemDirectory).ToUpper();
+
+            string envPath = String.Empty;
+            string upperPath = _path.ToUpper();
+
+            if (upperPath.Contains(sys)) // C:/WINDOWS/system32/foo/bar --> %SYSTEM32%/foo/bar
+            {
+                envPath = "%SYSTEM32%" + _path.Substring(sys.Length); 
+                return envPath; 
+            }
+            else if (upperPath.Contains(win)) // WINDIR
+            {
+                envPath = "%WINDIR%" + _path.Substring(win.Length);
+                return envPath;
+            }
+            else if (upperPath.Contains(os)) // OSDRIVE
+            {
+                envPath = "%OSDRIVE%\\" + _path.Substring(os.Length); 
+                return envPath;
+            }
+            else
+            {
+                return _path; // otherwise, not an env variable we support
+            }
+
+        }
     }
 
     public class packedInfo
@@ -487,6 +619,25 @@ namespace WDAC_Wizard
 
     }
 
+    // Custom Values object to organize custom values in Custom Rules object
+    public class CustomValue
+    {
+        public string MinVersion;
+        public string MaxVersion;
+        public string FileName;
+        public string ProductName;
+        public string Description;
+        public string InternalName;
+        public string Path;
+        public List<string> Hashes; 
+
+        public CustomValue()
+        {
+            this.Hashes = new List<string>();
+        }
+
+    }
+
     public class PolicyCustomRules
     {
         public enum RuleType
@@ -532,6 +683,9 @@ namespace WDAC_Wizard
         public string RuleIndex { get; set; } // Index of return struct in Get-SystemDriver cmdlet
         public int RowNumber { get; set;  }     // Index of the row in the datagrid
 
+        // Custom values
+        public bool UsingCustomValues { get; set; }
+        public CustomValue CustomValues { get; set; }
 
         // Filepath params
         public List<string> FolderContents { get; set; }
@@ -549,6 +703,9 @@ namespace WDAC_Wizard
             this.FileInfo = new Dictionary<string, string>();
             this.ExceptionList = new List<PolicyCustomRules>();
             this.FolderContents = new List<string>();
+
+            this.UsingCustomValues = false;
+            this.CustomValues = new CustomValue(); 
         }
 
         /// <summary>
@@ -568,6 +725,8 @@ namespace WDAC_Wizard
             this.RuleIndex = ruleIndex;
             this.ExceptionList = new List<PolicyCustomRules>();
             this.FileInfo = new Dictionary<string, string>();
+
+            this.UsingCustomValues = false;
         }
 
         public void SetRuleLevel(RuleLevel ruleLevel)
@@ -629,42 +788,6 @@ namespace WDAC_Wizard
             {
                 // Log error or something
             }
-        }
-
-        public bool isEnvVar()
-        {
-            // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
-            if (this.ReferenceFile.Contains(Path.GetPathRoot(Environment.SystemDirectory)) || 
-                this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) ||
-                this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.System)))
-                return true;
-
-            // otherwise, not an env variable we support
-            else
-                return false; 
-        }
-
-        public string GetEnvVar()
-        {
-            string sys = Environment.GetFolderPath(Environment.SpecialFolder.System);
-            string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            string os = Path.GetPathRoot(Environment.SystemDirectory);
-
-            string retVal = String.Empty; 
-
-            if (this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.System))) //OSDRIVE/WINDOWS/system32
-                retVal =  "%SYSTEM32%/" + this.ReferenceFile.Substring(Environment.GetFolderPath(Environment.SpecialFolder.System).Length); 
-
-            else if (this.ReferenceFile.Contains(Environment.GetFolderPath(Environment.SpecialFolder.Windows))) //OSDRIVE/WINDOWS
-                retVal = "%WINDIR%/" + this.ReferenceFile.Substring(Environment.GetFolderPath(Environment.SpecialFolder.Windows).Length);
-
-            else if (this.ReferenceFile.Contains(Path.GetPathRoot(Environment.SystemDirectory))) // OSDRIVE
-                retVal = "%OSDRIVE%/" + this.ReferenceFile.Substring(Path.GetPathRoot(Environment.SystemDirectory).Length);
-
-            else
-                retVal = "";
-
-            return retVal;
         }
     }
 

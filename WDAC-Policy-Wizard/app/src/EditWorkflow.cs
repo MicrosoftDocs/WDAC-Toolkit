@@ -368,9 +368,8 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Folder:
                     {
                         // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                        if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath &&
-                            Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
-                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.GetEnvVar());
+                        if (customRule.GetRuleType() == PolicyCustomRules.RuleType.FilePath && Properties.Settings.Default.useEnvVars )
+                            customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, Helper.GetEnvPath(customRule.ReferenceFile));
                         else
                             customRuleScript = String.Format("$Rule_{0} = New-CIPolicyRule -FilePathRule \"{1}\"", customRule.PSVariable, customRule.ReferenceFile);
                     }

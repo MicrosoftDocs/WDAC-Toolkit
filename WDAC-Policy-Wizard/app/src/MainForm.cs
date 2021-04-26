@@ -950,7 +950,6 @@ namespace WDAC_Wizard
             }
         }
 
-
         /// <summary>
         /// Processes all of the custom rules defined by user. 
         /// </summary>
@@ -975,6 +974,16 @@ namespace WDAC_Wizard
                 createRuleScript = createCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
                 createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
+
+                // Process custom values in the file rules
+                if(customRule.UsingCustomValues)
+                {
+                    List<string> dm = HandleCustomValues(customRule); 
+                    foreach(var cmd in dm)
+                    {
+                        scriptCommands.Add(cmd); 
+                    }
+                }
 
                 //  Process all exceptions, if applicable
                 if (customRule.ExceptionList.Count > 0)
@@ -1036,6 +1045,74 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
+        public List<string> HandleCustomValues(PolicyCustomRules customRule)
+        {
+            List<string> customValueCommand = new List<string>();  
+
+            if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                if(customRule.CustomValues.MinVersion != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
+                        customRule.PSVariable, customRule.CustomValues.MinVersion));
+                }
+
+                if (customRule.CustomValues.MaxVersion != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MaximumFileVersion\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.MaxVersion));
+                }
+
+                if (customRule.CustomValues.FileName != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+            }
+
+            else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+            {
+                if(customRule.Level == PolicyCustomRules.RuleLevel.FileDescription)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileDescription\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.Description)); 
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.ProductName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"ProductName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.ProductName));
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.OriginalFileName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.InternalName)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"InternalName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.InternalName));
+                }
+            }
+
+            else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
+            {
+                int i = 0;
+                string mergeCommand = String.Format("$Rule_{0} = ", customRule.PSVariable); 
+
+                foreach (var hash in customRule.CustomValues.Hashes)
+                {
+                    // Create placeholder per custom hash Rule until can fix this overwrite bug
+                    customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1} = $Rule_{0}_Template_{1}[1].PSObject.Copy()", customRule.PSVariable, i)); // Make a copy of the template
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.Id = $Rule_{0}_HashRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, hash.Substring(0,5))); // modify the ID to avoid collisions
+                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.attributes[\"Hash\"] = \"{2}\"", customRule.PSVariable, i, hash)); // Set the hash attribute to the hash value
+
+                    mergeCommand += String.Format("$Rule_{0}_HashRule_{1},", customRule.PSVariable, i);
+                    i++;
+                }
+                customValueCommand.Add(mergeCommand.Substring(0,mergeCommand.Length-1));
+            }
+
+            return customValueCommand;
+        }
+
         public string createCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
             string customRuleScript = string.Empty;
@@ -1062,22 +1139,37 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.FilePath:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
+                        if(customRule.UsingCustomValues)
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
+                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
                             " -Fallback Hash -UserWriteablePaths", rulePrefix, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
+                        }
                     }
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
                     {
-                        // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                        if (customRule.Type == PolicyCustomRules.RuleType.FilePath &&
-                            Properties.Settings.Default.useEnvVars && customRule.isEnvVar())
+                        if (customRule.UsingCustomValues)
                         {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.GetEnvVar());
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
+                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
                         }
                         else
                         {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix,  customRule.ReferenceFile);
+                            // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
+                            if (Properties.Settings.Default.useEnvVars)
+                            {
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, Helper.GetEnvPath(customRule.ReferenceFile));
+                            }
+                            else
+                            {
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.ReferenceFile);
+                            }
                         }
                     }
                     break;
@@ -1091,8 +1183,16 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level, 
+                        if(customRule.UsingCustomValues)
+                        {
+                            
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level,
                             customRule.ReferenceFile);
+                        }
+                        
                     }
                     break;
             }
