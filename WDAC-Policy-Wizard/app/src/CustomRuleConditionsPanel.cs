@@ -91,7 +91,7 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
                         this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
                         return;
                     }
@@ -102,7 +102,7 @@ namespace WDAC_Wizard
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
                         this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
                         return;
                     }
@@ -550,7 +550,7 @@ namespace WDAC_Wizard
                     this.textBox_ReferenceFile.ScrollToCaret();
                     this.labelSlider_0.Text = "Issuing CA:";
                     this.labelSlider_1.Text = "Publisher:";
-                    this.labelSlider_2.Text = "Minimum version:";
+                    this.labelSlider_2.Text = "Min version:";
                     this.labelSlider_3.Text = "File name:";
 
                     // Version textbox should be set to normal size
@@ -1320,7 +1320,7 @@ namespace WDAC_Wizard
 
         private void richTextBox_CustomHashes_Click(object sender, EventArgs e)
         {
-            if(this.richTextBox_CustomHashes.Tag == "Title")
+            if(this.richTextBox_CustomHashes.Tag.ToString() == "Title")
             {
                 this.richTextBox_CustomHashes.ResetText();
                 this.richTextBox_CustomHashes.Tag = "Values"; 

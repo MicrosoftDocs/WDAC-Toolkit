@@ -30,14 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
-            this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.publisherInfoLabel = new System.Windows.Forms.Label();
-            this.panel_FileFolder = new System.Windows.Forms.Panel();
-            this.radioButton_Folder = new System.Windows.Forms.RadioButton();
-            this.radioButton_File = new System.Windows.Forms.RadioButton();
-            this.label_Info = new System.Windows.Forms.Label();
+            this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
+            this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
+            this.label_To = new System.Windows.Forms.Label();
             this.textBox_MaxVersion = new System.Windows.Forms.TextBox();
             this.textBoxSlider_3 = new System.Windows.Forms.TextBox();
             this.labelSlider_3 = new System.Windows.Forms.Label();
@@ -48,6 +44,12 @@
             this.textBoxSlider_0 = new System.Windows.Forms.TextBox();
             this.labelSlider_0 = new System.Windows.Forms.Label();
             this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
+            this.label1 = new System.Windows.Forms.Label();
+            this.publisherInfoLabel = new System.Windows.Forms.Label();
+            this.panel_FileFolder = new System.Windows.Forms.Panel();
+            this.radioButton_Folder = new System.Windows.Forms.RadioButton();
+            this.radioButton_File = new System.Windows.Forms.RadioButton();
+            this.label_Info = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBox_RuleType = new System.Windows.Forms.ComboBox();
             this.radioButton_Deny = new System.Windows.Forms.RadioButton();
@@ -55,6 +57,7 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label_condition = new System.Windows.Forms.Label();
+            this.checkBox_CustomPath = new System.Windows.Forms.CheckBox();
             this.label_Error = new System.Windows.Forms.Label();
             this.button_CreateRule = new System.Windows.Forms.Button();
             this.button_Next = new System.Windows.Forms.Button();
@@ -67,13 +70,10 @@
             this.headerPanel = new System.Windows.Forms.Panel();
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
-            this.label_To = new System.Windows.Forms.Label();
-            this.checkBox_CustomPath = new System.Windows.Forms.CheckBox();
-            this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_CustomRules.SuspendLayout();
-            this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
+            this.panel_FileFolder.SuspendLayout();
             this.control_Panel.SuspendLayout();
             this.headerPanel.SuspendLayout();
             this.SuspendLayout();
@@ -101,6 +101,38 @@
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 701);
             this.panel_CustomRules.TabIndex = 86;
             // 
+            // richTextBox_CustomHashes
+            // 
+            this.richTextBox_CustomHashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_CustomHashes.Location = new System.Drawing.Point(328, 191);
+            this.richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
+            this.richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
+            this.richTextBox_CustomHashes.TabIndex = 114;
+            this.richTextBox_CustomHashes.Text = "Insert comma separated list of SHA-256 Authenticode Hashes";
+            this.richTextBox_CustomHashes.Visible = false;
+            this.richTextBox_CustomHashes.Click += new System.EventHandler(this.richTextBox_CustomHashes_Click);
+            // 
+            // panel_Publisher_Scroll
+            // 
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBox_CustomValues);
+            this.panel_Publisher_Scroll.Controls.Add(this.label_To);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBox_MaxVersion);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_3);
+            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_3);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_2);
+            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_2);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_1);
+            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_1);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
+            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
+            this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
+            this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
+            this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 223);
+            this.panel_Publisher_Scroll.TabIndex = 103;
+            this.panel_Publisher_Scroll.Visible = false;
+            // 
             // checkBox_CustomValues
             // 
             this.checkBox_CustomValues.AutoSize = true;
@@ -111,6 +143,142 @@
             this.checkBox_CustomValues.Text = "Use Custom Values";
             this.checkBox_CustomValues.UseVisualStyleBackColor = true;
             this.checkBox_CustomValues.CheckedChanged += new System.EventHandler(this.UseRuleCustomValues);
+            // 
+            // label_To
+            // 
+            this.label_To.AutoSize = true;
+            this.label_To.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_To.Location = new System.Drawing.Point(314, 105);
+            this.label_To.Name = "label_To";
+            this.label_To.Size = new System.Drawing.Size(16, 21);
+            this.label_To.TabIndex = 112;
+            this.label_To.Text = "-";
+            this.label_To.Visible = false;
+            // 
+            // textBox_MaxVersion
+            // 
+            this.textBox_MaxVersion.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.textBox_MaxVersion.Location = new System.Drawing.Point(334, 102);
+            this.textBox_MaxVersion.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_MaxVersion.Name = "textBox_MaxVersion";
+            this.textBox_MaxVersion.ReadOnly = true;
+            this.textBox_MaxVersion.Size = new System.Drawing.Size(152, 26);
+            this.textBox_MaxVersion.TabIndex = 105;
+            this.textBox_MaxVersion.Text = "Max version";
+            this.textBox_MaxVersion.Visible = false;
+            this.textBox_MaxVersion.TextChanged += new System.EventHandler(this.textBox_MaxVersion_TextChanged);
+            // 
+            // textBoxSlider_3
+            // 
+            this.textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_3.Location = new System.Drawing.Point(159, 144);
+            this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_3.Name = "textBoxSlider_3";
+            this.textBoxSlider_3.ReadOnly = true;
+            this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_3.TabIndex = 103;
+            this.textBoxSlider_3.TextChanged += new System.EventHandler(this.textBoxSlider_3_TextChanged);
+            // 
+            // labelSlider_3
+            // 
+            this.labelSlider_3.AutoSize = true;
+            this.labelSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.labelSlider_3.ForeColor = System.Drawing.Color.Black;
+            this.labelSlider_3.Location = new System.Drawing.Point(36, 147);
+            this.labelSlider_3.Name = "labelSlider_3";
+            this.labelSlider_3.Size = new System.Drawing.Size(75, 18);
+            this.labelSlider_3.TabIndex = 104;
+            this.labelSlider_3.Text = "File name:";
+            this.labelSlider_3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // textBoxSlider_2
+            // 
+            this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_2.Location = new System.Drawing.Point(159, 102);
+            this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_2.Name = "textBoxSlider_2";
+            this.textBoxSlider_2.ReadOnly = true;
+            this.textBoxSlider_2.Size = new System.Drawing.Size(152, 26);
+            this.textBoxSlider_2.TabIndex = 101;
+            this.textBoxSlider_2.TextChanged += new System.EventHandler(this.textBoxSlider_2_TextChanged);
+            // 
+            // labelSlider_2
+            // 
+            this.labelSlider_2.AutoSize = true;
+            this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
+            this.labelSlider_2.Location = new System.Drawing.Point(36, 106);
+            this.labelSlider_2.Name = "labelSlider_2";
+            this.labelSlider_2.Size = new System.Drawing.Size(86, 18);
+            this.labelSlider_2.TabIndex = 102;
+            this.labelSlider_2.Text = "Min version:";
+            this.labelSlider_2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // textBoxSlider_1
+            // 
+            this.textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_1.Location = new System.Drawing.Point(159, 60);
+            this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_1.Name = "textBoxSlider_1";
+            this.textBoxSlider_1.ReadOnly = true;
+            this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_1.TabIndex = 99;
+            this.textBoxSlider_1.TextChanged += new System.EventHandler(this.textBoxSlider_1_TextChanged);
+            // 
+            // labelSlider_1
+            // 
+            this.labelSlider_1.AutoSize = true;
+            this.labelSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.labelSlider_1.ForeColor = System.Drawing.Color.Black;
+            this.labelSlider_1.Location = new System.Drawing.Point(36, 62);
+            this.labelSlider_1.Name = "labelSlider_1";
+            this.labelSlider_1.Size = new System.Drawing.Size(69, 18);
+            this.labelSlider_1.TabIndex = 100;
+            this.labelSlider_1.Text = "Publisher:";
+            this.labelSlider_1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // textBoxSlider_0
+            // 
+            this.textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_0.Location = new System.Drawing.Point(159, 19);
+            this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_0.Name = "textBoxSlider_0";
+            this.textBoxSlider_0.ReadOnly = true;
+            this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_0.TabIndex = 95;
+            this.textBoxSlider_0.TextChanged += new System.EventHandler(this.textBoxSlider_0_TextChanged);
+            // 
+            // labelSlider_0
+            // 
+            this.labelSlider_0.AutoSize = true;
+            this.labelSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.labelSlider_0.ForeColor = System.Drawing.Color.Black;
+            this.labelSlider_0.Location = new System.Drawing.Point(36, 21);
+            this.labelSlider_0.Name = "labelSlider_0";
+            this.labelSlider_0.Size = new System.Drawing.Size(82, 18);
+            this.labelSlider_0.TabIndex = 98;
+            this.labelSlider_0.Text = "Issuing CA:";
+            this.labelSlider_0.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // trackBar_Conditions
+            // 
+            this.trackBar_Conditions.LargeChange = 4;
+            this.trackBar_Conditions.Location = new System.Drawing.Point(2, 13);
+            this.trackBar_Conditions.Margin = new System.Windows.Forms.Padding(2);
+            this.trackBar_Conditions.Maximum = 12;
+            this.trackBar_Conditions.Name = "trackBar_Conditions";
+            this.trackBar_Conditions.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.trackBar_Conditions.Size = new System.Drawing.Size(56, 165);
+            this.trackBar_Conditions.SmallChange = 4;
+            this.trackBar_Conditions.TabIndex = 96;
+            this.trackBar_Conditions.TickFrequency = 4;
+            this.trackBar_Conditions.Scroll += new System.EventHandler(this.trackBar_Conditions_Scroll);
             // 
             // label1
             // 
@@ -191,152 +359,6 @@
             this.label_Info.TabIndex = 95;
             this.label_Info.Text = "Label_Info";
             this.label_Info.Visible = false;
-            // 
-            // panel_Publisher_Scroll
-            // 
-            this.panel_Publisher_Scroll.Controls.Add(this.checkBox_CustomValues);
-            this.panel_Publisher_Scroll.Controls.Add(this.label_To);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBox_MaxVersion);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_3);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_3);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_2);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_2);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_1);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_1);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
-            this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
-            this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
-            this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 223);
-            this.panel_Publisher_Scroll.TabIndex = 103;
-            this.panel_Publisher_Scroll.Visible = false;
-            // 
-            // textBox_MaxVersion
-            // 
-            this.textBox_MaxVersion.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.textBox_MaxVersion.Location = new System.Drawing.Point(334, 102);
-            this.textBox_MaxVersion.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox_MaxVersion.Name = "textBox_MaxVersion";
-            this.textBox_MaxVersion.ReadOnly = true;
-            this.textBox_MaxVersion.Size = new System.Drawing.Size(152, 26);
-            this.textBox_MaxVersion.TabIndex = 105;
-            this.textBox_MaxVersion.Text = "65355.65355.65355.65355";
-            this.textBox_MaxVersion.Visible = false;
-            this.textBox_MaxVersion.TextChanged += new System.EventHandler(this.textBox_MaxVersion_TextChanged);
-            // 
-            // textBoxSlider_3
-            // 
-            this.textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_3.Location = new System.Drawing.Point(159, 144);
-            this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxSlider_3.Name = "textBoxSlider_3";
-            this.textBoxSlider_3.ReadOnly = true;
-            this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_3.TabIndex = 103;
-            this.textBoxSlider_3.TextChanged += new System.EventHandler(this.textBoxSlider_3_TextChanged);
-            // 
-            // labelSlider_3
-            // 
-            this.labelSlider_3.AutoSize = true;
-            this.labelSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_3.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_3.Location = new System.Drawing.Point(36, 147);
-            this.labelSlider_3.Name = "labelSlider_3";
-            this.labelSlider_3.Size = new System.Drawing.Size(75, 18);
-            this.labelSlider_3.TabIndex = 104;
-            this.labelSlider_3.Text = "File name:";
-            this.labelSlider_3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // textBoxSlider_2
-            // 
-            this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_2.Location = new System.Drawing.Point(159, 102);
-            this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxSlider_2.Name = "textBoxSlider_2";
-            this.textBoxSlider_2.ReadOnly = true;
-            this.textBoxSlider_2.Size = new System.Drawing.Size(152, 26);
-            this.textBoxSlider_2.TabIndex = 101;
-            this.textBoxSlider_2.TextChanged += new System.EventHandler(this.textBoxSlider_2_TextChanged);
-            // 
-            // labelSlider_2
-            // 
-            this.labelSlider_2.AutoSize = true;
-            this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_2.Location = new System.Drawing.Point(36, 106);
-            this.labelSlider_2.Name = "labelSlider_2";
-            this.labelSlider_2.Size = new System.Drawing.Size(122, 18);
-            this.labelSlider_2.TabIndex = 102;
-            this.labelSlider_2.Text = "Minimum version:";
-            this.labelSlider_2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // textBoxSlider_1
-            // 
-            this.textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_1.Location = new System.Drawing.Point(159, 60);
-            this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxSlider_1.Name = "textBoxSlider_1";
-            this.textBoxSlider_1.ReadOnly = true;
-            this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_1.TabIndex = 99;
-            this.textBoxSlider_1.TextChanged += new System.EventHandler(this.textBoxSlider_1_TextChanged);
-            // 
-            // labelSlider_1
-            // 
-            this.labelSlider_1.AutoSize = true;
-            this.labelSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_1.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_1.Location = new System.Drawing.Point(36, 62);
-            this.labelSlider_1.Name = "labelSlider_1";
-            this.labelSlider_1.Size = new System.Drawing.Size(69, 18);
-            this.labelSlider_1.TabIndex = 100;
-            this.labelSlider_1.Text = "Publisher:";
-            this.labelSlider_1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // textBoxSlider_0
-            // 
-            this.textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_0.Location = new System.Drawing.Point(159, 19);
-            this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxSlider_0.Name = "textBoxSlider_0";
-            this.textBoxSlider_0.ReadOnly = true;
-            this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_0.TabIndex = 95;
-            this.textBoxSlider_0.TextChanged += new System.EventHandler(this.textBoxSlider_0_TextChanged);
-            // 
-            // labelSlider_0
-            // 
-            this.labelSlider_0.AutoSize = true;
-            this.labelSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_0.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_0.Location = new System.Drawing.Point(36, 21);
-            this.labelSlider_0.Name = "labelSlider_0";
-            this.labelSlider_0.Size = new System.Drawing.Size(82, 18);
-            this.labelSlider_0.TabIndex = 98;
-            this.labelSlider_0.Text = "Issuing CA:";
-            this.labelSlider_0.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // trackBar_Conditions
-            // 
-            this.trackBar_Conditions.LargeChange = 4;
-            this.trackBar_Conditions.Location = new System.Drawing.Point(2, 13);
-            this.trackBar_Conditions.Margin = new System.Windows.Forms.Padding(2);
-            this.trackBar_Conditions.Maximum = 12;
-            this.trackBar_Conditions.Name = "trackBar_Conditions";
-            this.trackBar_Conditions.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar_Conditions.Size = new System.Drawing.Size(56, 165);
-            this.trackBar_Conditions.SmallChange = 4;
-            this.trackBar_Conditions.TabIndex = 96;
-            this.trackBar_Conditions.TickFrequency = 4;
-            this.trackBar_Conditions.Scroll += new System.EventHandler(this.trackBar_Conditions_Scroll);
             // 
             // label9
             // 
@@ -435,6 +457,18 @@
             this.label_condition.TabIndex = 87;
             this.label_condition.Text = "Reference File:";
             this.label_condition.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // checkBox_CustomPath
+            // 
+            this.checkBox_CustomPath.AutoSize = true;
+            this.checkBox_CustomPath.Location = new System.Drawing.Point(12, 363);
+            this.checkBox_CustomPath.Name = "checkBox_CustomPath";
+            this.checkBox_CustomPath.Size = new System.Drawing.Size(139, 21);
+            this.checkBox_CustomPath.TabIndex = 113;
+            this.checkBox_CustomPath.Text = "Use Custom Path";
+            this.checkBox_CustomPath.UseVisualStyleBackColor = true;
+            this.checkBox_CustomPath.Visible = false;
+            this.checkBox_CustomPath.CheckedChanged += new System.EventHandler(this.UseCustomPath);
             // 
             // label_Error
             // 
@@ -605,40 +639,6 @@
             this.button_Back.UseVisualStyleBackColor = false;
             this.button_Back.Click += new System.EventHandler(this.button_Back_Click);
             // 
-            // label_To
-            // 
-            this.label_To.AutoSize = true;
-            this.label_To.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_To.Location = new System.Drawing.Point(314, 105);
-            this.label_To.Name = "label_To";
-            this.label_To.Size = new System.Drawing.Size(16, 21);
-            this.label_To.TabIndex = 112;
-            this.label_To.Text = "-";
-            this.label_To.Visible = false;
-            // 
-            // checkBox_CustomPath
-            // 
-            this.checkBox_CustomPath.AutoSize = true;
-            this.checkBox_CustomPath.Location = new System.Drawing.Point(12, 363);
-            this.checkBox_CustomPath.Name = "checkBox_CustomPath";
-            this.checkBox_CustomPath.Size = new System.Drawing.Size(139, 21);
-            this.checkBox_CustomPath.TabIndex = 113;
-            this.checkBox_CustomPath.Text = "Use Custom Path";
-            this.checkBox_CustomPath.UseVisualStyleBackColor = true;
-            this.checkBox_CustomPath.Visible = false;
-            this.checkBox_CustomPath.CheckedChanged += new System.EventHandler(this.UseCustomPath);
-            // 
-            // richTextBox_CustomHashes
-            // 
-            this.richTextBox_CustomHashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox_CustomHashes.Location = new System.Drawing.Point(328, 191);
-            this.richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
-            this.richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
-            this.richTextBox_CustomHashes.TabIndex = 114;
-            this.richTextBox_CustomHashes.Text = "Insert comma separated list of SHA-256 Authenticode Hashes";
-            this.richTextBox_CustomHashes.Visible = false;
-            this.richTextBox_CustomHashes.Click += new System.EventHandler(this.richTextBox_CustomHashes_Click);
-            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -661,11 +661,11 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
-            this.panel_FileFolder.ResumeLayout(false);
-            this.panel_FileFolder.PerformLayout();
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
+            this.panel_FileFolder.ResumeLayout(false);
+            this.panel_FileFolder.PerformLayout();
             this.control_Panel.ResumeLayout(false);
             this.control_Panel.PerformLayout();
             this.headerPanel.ResumeLayout(false);
