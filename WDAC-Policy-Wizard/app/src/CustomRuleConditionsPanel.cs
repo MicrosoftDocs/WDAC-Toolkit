@@ -1161,6 +1161,7 @@ namespace WDAC_Wizard
 
                     // Format the version text boxes
                     this.textBoxSlider_2.Size = this.textBox_MaxVersion.Size;
+                    this.labelSlider_2.Text = "Version range:";
                     this.textBox_MaxVersion.Visible = true;
                     this.label_To.Visible = true;
                 }
@@ -1181,6 +1182,7 @@ namespace WDAC_Wizard
 
                 // Format the version text boxes
                 this.textBoxSlider_2.Size = this.textBoxSlider_0.Size;
+                this.labelSlider_2.Text = "Min version:";
                 this.textBox_MaxVersion.Visible = false;
                 this.label_To.Visible = false;
 
