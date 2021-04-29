@@ -10,7 +10,9 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
-using System.IO;
+using System.Management.Automation.Runspaces;
+using System.Management.Automation;
+using System.Collections.ObjectModel; 
 
 
 namespace WDAC_Wizard
@@ -376,6 +378,7 @@ namespace WDAC_Wizard
 
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.Checked = false;
+            this.panelPackagedApps.Visible = false;
 
             switch (selectedOpt)
             {
@@ -404,6 +407,13 @@ namespace WDAC_Wizard
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
+
+                case "Packaged App":
+                    this.panelPackagedApps.Location = this.label_condition.Location;
+                    this.panelPackagedApps.Visible = true;
+                    this.panelPackagedApps.BringToFront(); 
+
+                    break; 
 
                 case "File Hash":
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
@@ -1327,6 +1337,52 @@ namespace WDAC_Wizard
                 this.richTextBox_CustomHashes.ResetText();
                 this.richTextBox_CustomHashes.Tag = "Values"; 
             }
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            if(String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = "Type the name of the package to begin the search.";
+                this.Log.AddWarningMsg("Empty packaged app search criteria");
+                return; 
+            }
+
+            string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
+            Dictionary<string, string> foundPackages = new Dictionary<string, string>(); 
+            // Create runspace
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+
+            // Create the real pipeline
+            Pipeline pipeline = runspace.CreatePipeline();
+            pipeline.Commands.AddScript(script);
+            pipeline.Commands.Add("Out-String");
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+                foundPackages = Helper.ParsePSOutput(results); 
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
+            }
+
+            if(foundPackages.Count == 0)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
+                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                return;
+            }
+
+            foreach(var key in foundPackages.Keys)
+            {
+                this.checkedListBoxPackagedApps.Items.Add(key, false); 
+            }
+            //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
     }   
 }

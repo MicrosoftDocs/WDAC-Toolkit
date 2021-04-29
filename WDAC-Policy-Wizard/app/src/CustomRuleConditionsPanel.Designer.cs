@@ -70,17 +70,25 @@
             this.headerPanel = new System.Windows.Forms.Panel();
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
+            this.panelPackagedApps = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_Packaged_App = new System.Windows.Forms.TextBox();
+            this.buttonSearch = new System.Windows.Forms.Button();
+            this.checkedListBoxPackagedApps = new System.Windows.Forms.CheckedListBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel_CustomRules.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
             this.panel_FileFolder.SuspendLayout();
             this.control_Panel.SuspendLayout();
             this.headerPanel.SuspendLayout();
+            this.panelPackagedApps.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_CustomRules
             // 
             this.panel_CustomRules.BackColor = System.Drawing.Color.White;
+            this.panel_CustomRules.Controls.Add(this.panelPackagedApps);
             this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
             this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label1);
@@ -380,6 +388,7 @@
             "Publisher",
             "Path",
             "File Attributes",
+            "Packaged App",
             "File Hash"});
             this.comboBox_RuleType.Location = new System.Drawing.Point(10, 208);
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
@@ -639,6 +648,70 @@
             this.button_Back.UseVisualStyleBackColor = false;
             this.button_Back.Click += new System.EventHandler(this.button_Back_Click);
             // 
+            // panelPackagedApps
+            // 
+            this.panelPackagedApps.Controls.Add(this.label3);
+            this.panelPackagedApps.Controls.Add(this.checkedListBoxPackagedApps);
+            this.panelPackagedApps.Controls.Add(this.buttonSearch);
+            this.panelPackagedApps.Controls.Add(this.textBox_Packaged_App);
+            this.panelPackagedApps.Controls.Add(this.label2);
+            this.panelPackagedApps.Location = new System.Drawing.Point(127, 266);
+            this.panelPackagedApps.Name = "panelPackagedApps";
+            this.panelPackagedApps.Size = new System.Drawing.Size(609, 402);
+            this.panelPackagedApps.TabIndex = 115;
+            this.panelPackagedApps.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 18);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 17);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Package Name:";
+            // 
+            // textBox_Packaged_App
+            // 
+            this.textBox_Packaged_App.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Packaged_App.Location = new System.Drawing.Point(115, 13);
+            this.textBox_Packaged_App.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Packaged_App.Name = "textBox_Packaged_App";
+            this.textBox_Packaged_App.Size = new System.Drawing.Size(215, 26);
+            this.textBox_Packaged_App.TabIndex = 115;
+            // 
+            // buttonSearch
+            // 
+            this.buttonSearch.BackColor = System.Drawing.Color.Transparent;
+            this.buttonSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.buttonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSearch.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSearch.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.buttonSearch.Location = new System.Drawing.Point(357, 12);
+            this.buttonSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSearch.Name = "buttonSearch";
+            this.buttonSearch.Size = new System.Drawing.Size(107, 28);
+            this.buttonSearch.TabIndex = 115;
+            this.buttonSearch.Text = "Search";
+            this.buttonSearch.UseVisualStyleBackColor = false;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            // 
+            // checkedListBoxPackagedApps
+            // 
+            this.checkedListBoxPackagedApps.FormattingEnabled = true;
+            this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 88);
+            this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 225);
+            this.checkedListBoxPackagedApps.TabIndex = 116;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(477, 17);
+            this.label3.TabIndex = 117;
+            this.label3.Text = "Search for a package name and select the packages to include in the rule.";
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -670,6 +743,8 @@
             this.control_Panel.PerformLayout();
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
+            this.panelPackagedApps.ResumeLayout(false);
+            this.panelPackagedApps.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -718,5 +793,11 @@
         private System.Windows.Forms.Label label_To;
         private System.Windows.Forms.CheckBox checkBox_CustomPath;
         private System.Windows.Forms.RichTextBox richTextBox_CustomHashes;
+        private System.Windows.Forms.Panel panelPackagedApps;
+        private System.Windows.Forms.CheckedListBox checkedListBoxPackagedApps;
+        private System.Windows.Forms.Button buttonSearch;
+        private System.Windows.Forms.TextBox textBox_Packaged_App;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -428,6 +428,44 @@ namespace WDAC_Wizard
             }
 
         }
+
+        public static Dictionary<string, string> ParsePSOutput(Collection<PSObject> results)
+        {
+            Dictionary<string, string> output = new Dictionary<string, string>();
+
+            // Convert results to something parseable
+            StringBuilder sBuilder = new StringBuilder();
+            foreach (PSObject psObject in results)
+            {
+                sBuilder.AppendLine(psObject.ToString());
+            }
+
+            // Parse the SystemDriver cmdlet output for the scanPath only
+            string scriptOutput = sBuilder.ToString();
+            var packages = scriptOutput.Split(':');
+            int OFFSET = 21; 
+
+            try
+            {
+                foreach(var package in packages)
+                {
+                    if(package.Contains("\r\nPublisher       "))
+                    {
+                        string pkgName = package.Substring(1, package.Length - OFFSET); 
+                        if(!output.ContainsKey(pkgName))
+                        {
+                            output[pkgName] = ""; 
+                        }
+                    }
+                }
+            }
+            catch(Exception exp)
+            {
+
+            }
+
+            return output; 
+        }
     }
 
     public class packedInfo
