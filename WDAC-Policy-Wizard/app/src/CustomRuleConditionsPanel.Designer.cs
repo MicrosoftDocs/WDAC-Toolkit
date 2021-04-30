@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
             this.panelPackagedApps = new System.Windows.Forms.Panel();
+            this.panel_Progress = new System.Windows.Forms.Panel();
+            this.label_Progress = new System.Windows.Forms.Label();
+            this.pictureBox_Progress = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.checkedListBoxPackagedApps = new System.Windows.Forms.CheckedListBox();
             this.buttonSearch = new System.Windows.Forms.Button();
@@ -76,8 +79,11 @@
             this.headerPanel = new System.Windows.Forms.Panel();
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel_CustomRules.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
+            this.panel_Progress.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
             this.panel_FileFolder.SuspendLayout();
@@ -111,16 +117,48 @@
             // 
             // panelPackagedApps
             // 
+            this.panelPackagedApps.Controls.Add(this.panel_Progress);
             this.panelPackagedApps.Controls.Add(this.label3);
             this.panelPackagedApps.Controls.Add(this.checkedListBoxPackagedApps);
             this.panelPackagedApps.Controls.Add(this.buttonSearch);
             this.panelPackagedApps.Controls.Add(this.textBox_Packaged_App);
             this.panelPackagedApps.Controls.Add(this.label2);
-            this.panelPackagedApps.Location = new System.Drawing.Point(127, 266);
+            this.panelPackagedApps.Location = new System.Drawing.Point(586, 260);
             this.panelPackagedApps.Name = "panelPackagedApps";
             this.panelPackagedApps.Size = new System.Drawing.Size(609, 402);
             this.panelPackagedApps.TabIndex = 115;
             this.panelPackagedApps.Visible = false;
+            // 
+            // panel_Progress
+            // 
+            this.panel_Progress.Controls.Add(this.label_Progress);
+            this.panel_Progress.Controls.Add(this.pictureBox_Progress);
+            this.panel_Progress.Location = new System.Drawing.Point(97, 115);
+            this.panel_Progress.Name = "panel_Progress";
+            this.panel_Progress.Size = new System.Drawing.Size(280, 179);
+            this.panel_Progress.TabIndex = 118;
+            this.panel_Progress.Visible = false;
+            // 
+            // label_Progress
+            // 
+            this.label_Progress.AutoSize = true;
+            this.label_Progress.Location = new System.Drawing.Point(33, 18);
+            this.label_Progress.Name = "label_Progress";
+            this.label_Progress.Size = new System.Drawing.Size(196, 17);
+            this.label_Progress.TabIndex = 1;
+            this.label_Progress.Text = "Searching for Packaged Apps";
+            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pictureBox_Progress
+            // 
+            this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.Location = new System.Drawing.Point(67, 48);
+            this.pictureBox_Progress.Name = "pictureBox_Progress";
+            this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
+            this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox_Progress.TabIndex = 0;
+            this.pictureBox_Progress.TabStop = false;
             // 
             // label3
             // 
@@ -153,7 +191,7 @@
             this.buttonSearch.TabIndex = 115;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = false;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // textBox_Packaged_App
             // 
@@ -163,6 +201,7 @@
             this.textBox_Packaged_App.Name = "textBox_Packaged_App";
             this.textBox_Packaged_App.Size = new System.Drawing.Size(215, 26);
             this.textBox_Packaged_App.TabIndex = 115;
+            this.textBox_Packaged_App.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Packaged_App_KeyDown);
             // 
             // label2
             // 
@@ -712,6 +751,12 @@
             this.button_Back.UseVisualStyleBackColor = false;
             this.button_Back.Click += new System.EventHandler(this.button_Back_Click);
             // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -736,6 +781,9 @@
             this.panel_CustomRules.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);
             this.panelPackagedApps.PerformLayout();
+            this.panel_Progress.ResumeLayout(false);
+            this.panel_Progress.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).EndInit();
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
@@ -799,5 +847,9 @@
         private System.Windows.Forms.TextBox textBox_Packaged_App;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel_Progress;
+        private System.Windows.Forms.Label label_Progress;
+        private System.Windows.Forms.PictureBox pictureBox_Progress;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }

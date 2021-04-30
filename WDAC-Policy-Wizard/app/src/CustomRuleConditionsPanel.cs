@@ -31,7 +31,8 @@ namespace WDAC_Wizard
         private UIState state;
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
-        private string[] DefaultValues; 
+        private string[] DefaultValues;
+        private Dictionary<string,string> FoundPackages; 
 
         private enum UIState
         {
@@ -56,7 +57,8 @@ namespace WDAC_Wizard
             this.state = UIState.RuleConditions;
             this.redoRequired = false; 
             this.exceptionsControl = null;
-            this.DefaultValues = new string[5]; 
+            this.DefaultValues = new string[5];
+            this.FoundPackages = new Dictionary<string,string>(); 
 
         }
 
@@ -1379,16 +1381,52 @@ namespace WDAC_Wizard
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            if(String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
+            
+        }
+
+        // If enter button is clicked, start search process
+        private void textBox_Packaged_App_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                //enter key is down
+                ButtonSearch_Click(sender, e); 
+            }
+        }
+
+        // Event handler to begin searching for packaged apps
+        private void ButtonSearch_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
             {
                 label_Error.Visible = true;
                 label_Error.Text = "Type the name of the package to begin the search.";
                 this.Log.AddWarningMsg("Empty packaged app search criteria");
-                return; 
+                return;
             }
 
+            // Prep UI
+            this.panel_Progress.Visible = true;
+            this.panel_Progress.BringToFront(); 
+            this.label_Error.Visible = false;
+
+            // Create background worker to display updates to UI
+            if (!this.backgroundWorker.IsBusy)
+            {
+                this.backgroundWorker.RunWorkerAsync();
+            }
+        }
+
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            
+
+        }
+
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.backgroundWorker = sender as BackgroundWorker;
             string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
-            Dictionary<string, string> foundPackages = new Dictionary<string, string>(); 
             // Create runspace
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();
@@ -1401,14 +1439,14 @@ namespace WDAC_Wizard
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
-                foundPackages = Helper.ParsePSOutput(results); 
+                this.FoundPackages = Helper.ParsePSOutput(results);
             }
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
             }
 
-            if(foundPackages.Count == 0)
+            if (this.FoundPackages.Count == 0)
             {
                 label_Error.Visible = true;
                 label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
@@ -1416,9 +1454,34 @@ namespace WDAC_Wizard
                 return;
             }
 
-            foreach(var key in foundPackages.Keys)
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Remove GIF // Update UI 
+            this.panel_Progress.Visible = false;
+
+            // Unsuccessful conversion
+            if (e.Error != null)
             {
-                this.checkedListBoxPackagedApps.Items.Add(key, false); 
+                this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                
+            }
+            else
+            {
+                
+            }
+
+            this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
+
+            // Bring checkbox list to front. Sort keys to display alphabetically to user
+            this.checkedListBoxPackagedApps.BringToFront();
+            var sortedPackages = this.FoundPackages.Keys.ToList();
+            sortedPackages.Sort(); 
+
+            foreach (var key in sortedPackages)
+            {
+                this.checkedListBoxPackagedApps.Items.Add(key, false);
             }
             //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
