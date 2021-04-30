@@ -978,11 +978,15 @@ namespace WDAC_Wizard
                 // Process custom values in the file rules
                 if(customRule.UsingCustomValues)
                 {
-                    List<string> dm = HandleCustomValues(customRule); 
-                    foreach(var cmd in dm)
-                    {
-                        scriptCommands.Add(cmd); 
-                    }
+                    List<string> dm = HandleCustomValues(customRule);
+                    scriptCommands.AddRange(dm);
+                }
+
+                // Process PFN rules, if applicable
+                if(customRule.PackagedFamilyNames.Count > 0)
+                {
+                    List<string> dm = ProcessPFNRules(customRule);
+                    scriptCommands = dm; // Replace with everything returned from ProcessPFNRules
                 }
 
                 //  Process all exceptions, if applicable
@@ -1043,6 +1047,25 @@ namespace WDAC_Wizard
             //TODO: results check ensuring 
             runspace.Dispose();
             return customRulesPathList;
+        }
+
+        public List<string> ProcessPFNRules(PolicyCustomRules customRule)
+        {
+            List<string> createPFNPackages = new List<string>();
+            foreach(var packageName in customRule.PackagedFamilyNames)
+            {
+                if(customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                {
+                    createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}* -Deny", customRule.PSVariable, packageName));
+                }
+                else
+                {
+                    createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}*", customRule.PSVariable, packageName));
+                }
+                createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i}}", customRule.PSVariable));
+            }
+            
+            return createPFNPackages; 
         }
 
         public List<string> HandleCustomValues(PolicyCustomRules customRule)
@@ -1176,8 +1199,15 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
+                        if(customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Package $Package_{0}", rulePrefix);
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
                             "-Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
+                        }
                     }
                     break;
 
@@ -1577,7 +1607,9 @@ namespace WDAC_Wizard
             // Log the parsing results 
             Dictionary<string, string>.KeyCollection keys = systemInfo.Keys;
             foreach (string key in keys)
-                this.Log.AddInfoMsg(String.Format("{0} - {1}", key, systemInfo[key])); 
+            {
+                this.Log.AddInfoMsg(String.Format("{0} - {1}", key, systemInfo[key]));
+            }
 
             return systemInfo;
         }

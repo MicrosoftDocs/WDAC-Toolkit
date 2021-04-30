@@ -466,6 +466,29 @@ namespace WDAC_Wizard
 
             return output; 
         }
+
+        // Dump all of the package family names for the custom rules table
+        public static string GetListofPackages(PolicyCustomRules policyCustomRule)
+        {
+            string output = String.Empty;
+            
+            if(policyCustomRule.PackagedFamilyNames == null)
+            {
+                return String.Empty; 
+            }
+            if(policyCustomRule.PackagedFamilyNames.Count == 0)
+            {
+                return String.Empty; 
+            }
+
+            foreach(var package in policyCustomRule.PackagedFamilyNames)
+            {
+                output += String.Format("{0}, ", package); 
+            }
+
+            output = output.Substring(0, output.Length - 2); // Trim off trailing whitespace and comma
+            return output; 
+        }
     }
 
     public class packedInfo
@@ -703,7 +726,8 @@ namespace WDAC_Wizard
             InternalName,
             ProductName,
             FileDescription,
-            OriginalFileName
+            OriginalFileName,
+            PackagedFamilyName // Packaged app rule
         }
 
         public enum RulePermission { Allow, Deny };
@@ -724,6 +748,7 @@ namespace WDAC_Wizard
         // Custom values
         public bool UsingCustomValues { get; set; }
         public CustomValue CustomValues { get; set; }
+        public List<string> PackagedFamilyNames { get; set; }
 
         // Filepath params
         public List<string> FolderContents { get; set; }
@@ -743,7 +768,8 @@ namespace WDAC_Wizard
             this.FolderContents = new List<string>();
 
             this.UsingCustomValues = false;
-            this.CustomValues = new CustomValue(); 
+            this.CustomValues = new CustomValue();
+            this.PackagedFamilyNames = new List<string>(); 
         }
 
         /// <summary>

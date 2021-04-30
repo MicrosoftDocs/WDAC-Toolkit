@@ -65,13 +65,21 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_CreateRule_Click(object sender, EventArgs e)
         {
-            // At a minimum, we need  rule level, and pub/hash/file - defult fallback
-            if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || (this.PolicyCustomRule.ReferenceFile == null && !this.PolicyCustomRule.UsingCustomValues))
+            // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
+            if (this.PolicyCustomRule.ReferenceFile == null)
             {
-                label_Error.Visible = true;
-                label_Error.Text = "Please select a rule type, a file to allow or deny.";
-                this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
-                return;
+                if(this.PolicyCustomRule.UsingCustomValues || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                {
+                    
+                }
+                else
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = "Please select a rule type, a file to allow or deny.";
+                    this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
+                    return;
+                }
+                
             }
 
             // Check to make sure none of the fields are invalid
@@ -85,8 +93,30 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // Packaged family name apps. Set the list of apps at button create time
+            if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+            {
+                // Assert >=1 packaged apps must be selected
+                if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = "The list of selected packaged apps is empty. Please select at least 1 packaged app";
+                    this.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
+                    return;
+                }
+                else
+                {
+                    // Using for loop to avoid System.InvalidOperationException despite list not changing
+                    for(int i= 0; i< this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
+                    {
+                        var item = this.checkedListBoxPackagedApps.CheckedItems[i]; 
+                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString()); 
+                    }
+                }
+            }
+
             // Ensure custom values are valid
-            if(this.PolicyCustomRule.UsingCustomValues)
+            if (this.PolicyCustomRule.UsingCustomValues)
             {
                 if(this.PolicyCustomRule.CustomValues.MinVersion != null)
                 {
@@ -318,6 +348,12 @@ namespace WDAC_Wizard
                     }
                     break;
 
+                case PolicyCustomRules.RuleLevel.PackagedFamilyName:
+                    
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.textBox_Packaged_App.Text);
+                    files = Helper.GetListofPackages(this.PolicyCustomRule); 
+                    break;
+
                 default:
                     name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
                     break;
@@ -409,10 +445,12 @@ namespace WDAC_Wizard
                     break;
 
                 case "Packaged App":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
                     this.panelPackagedApps.Location = this.label_condition.Location;
                     this.panelPackagedApps.Visible = true;
-                    this.panelPackagedApps.BringToFront(); 
-
+                    this.panelPackagedApps.BringToFront();
+                    label_Info.Text = "Creates a rule for a packaged app based on its package family name.\r\nSearch for the name of the packages to allow/deny.";
                     break; 
 
                 case "File Hash":
@@ -1383,6 +1421,12 @@ namespace WDAC_Wizard
                 this.checkedListBoxPackagedApps.Items.Add(key, false); 
             }
             //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
+        }
+
+        // Triggered when the user selects each of the 
+        private void checkedListBoxPackagedApps_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }   
 }
