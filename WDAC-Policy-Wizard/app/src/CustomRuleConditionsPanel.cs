@@ -255,7 +255,7 @@ namespace WDAC_Wizard
 
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
-            // Set Action value to Allow or Deny
+            // Set Action/Permission value to Allow or Deny
             action = this.PolicyCustomRule.Permission.ToString();
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
@@ -1421,12 +1421,6 @@ namespace WDAC_Wizard
                 this.checkedListBoxPackagedApps.Items.Add(key, false); 
             }
             //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
-        }
-
-        // Triggered when the user selects each of the 
-        private void checkedListBoxPackagedApps_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }   
 }

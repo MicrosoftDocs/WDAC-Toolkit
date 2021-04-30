@@ -1054,15 +1054,16 @@ namespace WDAC_Wizard
             List<string> createPFNPackages = new List<string>();
             foreach(var packageName in customRule.PackagedFamilyNames)
             {
-                if(customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}*", customRule.PSVariable, packageName));
+                if(customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}* -Deny", customRule.PSVariable, packageName));
+                    createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i}}", customRule.PSVariable));
                 }
                 else
                 {
-                    createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}*", customRule.PSVariable, packageName));
+                    createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i -Deny}}", customRule.PSVariable));
                 }
-                createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i}}", customRule.PSVariable));
+                
             }
             
             return createPFNPackages; 
