@@ -30,6 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
+            this.panelPackagedApps = new System.Windows.Forms.Panel();
+            this.panel_Progress = new System.Windows.Forms.Panel();
+            this.label_Progress = new System.Windows.Forms.Label();
+            this.pictureBox_Progress = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.checkedListBoxPackagedApps = new System.Windows.Forms.CheckedListBox();
+            this.buttonSearch = new System.Windows.Forms.Button();
+            this.textBox_Packaged_App = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
             this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
@@ -70,7 +79,11 @@
             this.headerPanel = new System.Windows.Forms.Panel();
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel_CustomRules.SuspendLayout();
+            this.panelPackagedApps.SuspendLayout();
+            this.panel_Progress.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
             this.panel_FileFolder.SuspendLayout();
@@ -81,6 +94,7 @@
             // panel_CustomRules
             // 
             this.panel_CustomRules.BackColor = System.Drawing.Color.White;
+            this.panel_CustomRules.Controls.Add(this.panelPackagedApps);
             this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
             this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label1);
@@ -100,6 +114,103 @@
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 701);
             this.panel_CustomRules.TabIndex = 86;
+            // 
+            // panelPackagedApps
+            // 
+            this.panelPackagedApps.Controls.Add(this.panel_Progress);
+            this.panelPackagedApps.Controls.Add(this.label3);
+            this.panelPackagedApps.Controls.Add(this.checkedListBoxPackagedApps);
+            this.panelPackagedApps.Controls.Add(this.buttonSearch);
+            this.panelPackagedApps.Controls.Add(this.textBox_Packaged_App);
+            this.panelPackagedApps.Controls.Add(this.label2);
+            this.panelPackagedApps.Location = new System.Drawing.Point(586, 260);
+            this.panelPackagedApps.Name = "panelPackagedApps";
+            this.panelPackagedApps.Size = new System.Drawing.Size(609, 402);
+            this.panelPackagedApps.TabIndex = 115;
+            this.panelPackagedApps.Visible = false;
+            // 
+            // panel_Progress
+            // 
+            this.panel_Progress.Controls.Add(this.label_Progress);
+            this.panel_Progress.Controls.Add(this.pictureBox_Progress);
+            this.panel_Progress.Location = new System.Drawing.Point(97, 115);
+            this.panel_Progress.Name = "panel_Progress";
+            this.panel_Progress.Size = new System.Drawing.Size(280, 179);
+            this.panel_Progress.TabIndex = 118;
+            this.panel_Progress.Visible = false;
+            // 
+            // label_Progress
+            // 
+            this.label_Progress.AutoSize = true;
+            this.label_Progress.Location = new System.Drawing.Point(33, 18);
+            this.label_Progress.Name = "label_Progress";
+            this.label_Progress.Size = new System.Drawing.Size(196, 17);
+            this.label_Progress.TabIndex = 1;
+            this.label_Progress.Text = "Searching for Packaged Apps";
+            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pictureBox_Progress
+            // 
+            this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.Location = new System.Drawing.Point(67, 48);
+            this.pictureBox_Progress.Name = "pictureBox_Progress";
+            this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
+            this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox_Progress.TabIndex = 0;
+            this.pictureBox_Progress.TabStop = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(477, 17);
+            this.label3.TabIndex = 117;
+            this.label3.Text = "Search for a package name and select the packages to include in the rule.";
+            // 
+            // checkedListBoxPackagedApps
+            // 
+            this.checkedListBoxPackagedApps.FormattingEnabled = true;
+            this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 88);
+            this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 225);
+            this.checkedListBoxPackagedApps.TabIndex = 116;
+            // 
+            // buttonSearch
+            // 
+            this.buttonSearch.BackColor = System.Drawing.Color.Transparent;
+            this.buttonSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.buttonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSearch.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSearch.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.buttonSearch.Location = new System.Drawing.Point(357, 12);
+            this.buttonSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSearch.Name = "buttonSearch";
+            this.buttonSearch.Size = new System.Drawing.Size(107, 28);
+            this.buttonSearch.TabIndex = 115;
+            this.buttonSearch.Text = "Search";
+            this.buttonSearch.UseVisualStyleBackColor = false;
+            this.buttonSearch.Click += new System.EventHandler(this.ButtonSearch_Click);
+            // 
+            // textBox_Packaged_App
+            // 
+            this.textBox_Packaged_App.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Packaged_App.Location = new System.Drawing.Point(115, 13);
+            this.textBox_Packaged_App.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Packaged_App.Name = "textBox_Packaged_App";
+            this.textBox_Packaged_App.Size = new System.Drawing.Size(215, 26);
+            this.textBox_Packaged_App.TabIndex = 115;
+            this.textBox_Packaged_App.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Packaged_App_KeyDown);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 18);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 17);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Package Name:";
             // 
             // richTextBox_CustomHashes
             // 
@@ -380,6 +491,7 @@
             "Publisher",
             "Path",
             "File Attributes",
+            "Packaged App",
             "File Hash"});
             this.comboBox_RuleType.Location = new System.Drawing.Point(10, 208);
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
@@ -639,6 +751,12 @@
             this.button_Back.UseVisualStyleBackColor = false;
             this.button_Back.Click += new System.EventHandler(this.button_Back_Click);
             // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -661,6 +779,11 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
+            this.panelPackagedApps.ResumeLayout(false);
+            this.panelPackagedApps.PerformLayout();
+            this.panel_Progress.ResumeLayout(false);
+            this.panel_Progress.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).EndInit();
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
@@ -718,5 +841,15 @@
         private System.Windows.Forms.Label label_To;
         private System.Windows.Forms.CheckBox checkBox_CustomPath;
         private System.Windows.Forms.RichTextBox richTextBox_CustomHashes;
+        private System.Windows.Forms.Panel panelPackagedApps;
+        private System.Windows.Forms.CheckedListBox checkedListBoxPackagedApps;
+        private System.Windows.Forms.Button buttonSearch;
+        private System.Windows.Forms.TextBox textBox_Packaged_App;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel_Progress;
+        private System.Windows.Forms.Label label_Progress;
+        private System.Windows.Forms.PictureBox pictureBox_Progress;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }

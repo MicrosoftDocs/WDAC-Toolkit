@@ -428,6 +428,67 @@ namespace WDAC_Wizard
             }
 
         }
+
+        public static Dictionary<string, string> ParsePSOutput(Collection<PSObject> results)
+        {
+            Dictionary<string, string> output = new Dictionary<string, string>();
+
+            // Convert results to something parseable
+            StringBuilder sBuilder = new StringBuilder();
+            foreach (PSObject psObject in results)
+            {
+                sBuilder.AppendLine(psObject.ToString());
+            }
+
+            // Parse the SystemDriver cmdlet output for the scanPath only
+            string scriptOutput = sBuilder.ToString();
+            var packages = scriptOutput.Split(':');
+            int OFFSET = 21; 
+
+            try
+            {
+                foreach(var package in packages)
+                {
+                    if(package.Contains("\r\nPublisher       "))
+                    {
+                        string pkgName = package.Substring(1, package.Length - OFFSET); 
+                        if(!output.ContainsKey(pkgName))
+                        {
+                            output[pkgName] = ""; 
+                        }
+                    }
+                }
+            }
+            catch(Exception exp)
+            {
+
+            }
+
+            return output; 
+        }
+
+        // Dump all of the package family names for the custom rules table
+        public static string GetListofPackages(PolicyCustomRules policyCustomRule)
+        {
+            string output = String.Empty;
+            
+            if(policyCustomRule.PackagedFamilyNames == null)
+            {
+                return String.Empty; 
+            }
+            if(policyCustomRule.PackagedFamilyNames.Count == 0)
+            {
+                return String.Empty; 
+            }
+
+            foreach(var package in policyCustomRule.PackagedFamilyNames)
+            {
+                output += String.Format("{0}, ", package); 
+            }
+
+            output = output.Substring(0, output.Length - 2); // Trim off trailing whitespace and comma
+            return output; 
+        }
     }
 
     public class packedInfo
@@ -665,7 +726,8 @@ namespace WDAC_Wizard
             InternalName,
             ProductName,
             FileDescription,
-            OriginalFileName
+            OriginalFileName,
+            PackagedFamilyName // Packaged app rule
         }
 
         public enum RulePermission { Allow, Deny };
@@ -686,6 +748,7 @@ namespace WDAC_Wizard
         // Custom values
         public bool UsingCustomValues { get; set; }
         public CustomValue CustomValues { get; set; }
+        public List<string> PackagedFamilyNames { get; set; }
 
         // Filepath params
         public List<string> FolderContents { get; set; }
@@ -705,7 +768,8 @@ namespace WDAC_Wizard
             this.FolderContents = new List<string>();
 
             this.UsingCustomValues = false;
-            this.CustomValues = new CustomValue(); 
+            this.CustomValues = new CustomValue();
+            this.PackagedFamilyNames = new List<string>(); 
         }
 
         /// <summary>

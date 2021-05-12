@@ -10,7 +10,9 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
-using System.IO;
+using System.Management.Automation.Runspaces;
+using System.Management.Automation;
+using System.Collections.ObjectModel; 
 
 
 namespace WDAC_Wizard
@@ -29,7 +31,8 @@ namespace WDAC_Wizard
         private UIState state;
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
-        private string[] DefaultValues; 
+        private string[] DefaultValues;
+        private Dictionary<string,string> FoundPackages; 
 
         private enum UIState
         {
@@ -54,7 +57,8 @@ namespace WDAC_Wizard
             this.state = UIState.RuleConditions;
             this.redoRequired = false; 
             this.exceptionsControl = null;
-            this.DefaultValues = new string[5]; 
+            this.DefaultValues = new string[5];
+            this.FoundPackages = new Dictionary<string,string>(); 
 
         }
 
@@ -63,13 +67,21 @@ namespace WDAC_Wizard
         /// </summary>
         private void button_CreateRule_Click(object sender, EventArgs e)
         {
-            // At a minimum, we need  rule level, and pub/hash/file - defult fallback
-            if (!radioButton_Allow.Checked && !radioButton_Deny.Checked || (this.PolicyCustomRule.ReferenceFile == null && !this.PolicyCustomRule.UsingCustomValues))
+            // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
+            if (this.PolicyCustomRule.ReferenceFile == null)
             {
-                label_Error.Visible = true;
-                label_Error.Text = "Please select a rule type, a file to allow or deny.";
-                this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
-                return;
+                if(this.PolicyCustomRule.UsingCustomValues || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                {
+                    
+                }
+                else
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = "Please select a rule type, a file to allow or deny.";
+                    this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
+                    return;
+                }
+                
             }
 
             // Check to make sure none of the fields are invalid
@@ -83,8 +95,30 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // Packaged family name apps. Set the list of apps at button create time
+            if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+            {
+                // Assert >=1 packaged apps must be selected
+                if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = "The list of selected packaged apps is empty. Please select at least 1 packaged app";
+                    this.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
+                    return;
+                }
+                else
+                {
+                    // Using for loop to avoid System.InvalidOperationException despite list not changing
+                    for(int i= 0; i< this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
+                    {
+                        var item = this.checkedListBoxPackagedApps.CheckedItems[i]; 
+                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString()); 
+                    }
+                }
+            }
+
             // Ensure custom values are valid
-            if(this.PolicyCustomRule.UsingCustomValues)
+            if (this.PolicyCustomRule.UsingCustomValues)
             {
                 if(this.PolicyCustomRule.CustomValues.MinVersion != null)
                 {
@@ -223,7 +257,7 @@ namespace WDAC_Wizard
 
             this.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
-            // Set Action value to Allow or Deny
+            // Set Action/Permission value to Allow or Deny
             action = this.PolicyCustomRule.Permission.ToString();
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
@@ -316,6 +350,12 @@ namespace WDAC_Wizard
                     }
                     break;
 
+                case PolicyCustomRules.RuleLevel.PackagedFamilyName:
+                    
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.textBox_Packaged_App.Text);
+                    files = Helper.GetListofPackages(this.PolicyCustomRule); 
+                    break;
+
                 default:
                     name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
                     break;
@@ -376,6 +416,7 @@ namespace WDAC_Wizard
 
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.Checked = false;
+            this.panelPackagedApps.Visible = false;
 
             switch (selectedOpt)
             {
@@ -404,6 +445,15 @@ namespace WDAC_Wizard
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
+
+                case "Packaged App":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
+                    this.panelPackagedApps.Location = this.label_condition.Location;
+                    this.panelPackagedApps.Visible = true;
+                    this.panelPackagedApps.BringToFront();
+                    label_Info.Text = "Creates a rule for a packaged app based on its package family name.\r\nSearch for the name of the packages to allow/deny.";
+                    break; 
 
                 case "File Hash":
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
@@ -1327,6 +1377,113 @@ namespace WDAC_Wizard
                 this.richTextBox_CustomHashes.ResetText();
                 this.richTextBox_CustomHashes.Tag = "Values"; 
             }
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        // If enter button is clicked, start search process
+        private void textBox_Packaged_App_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                //enter key is down
+                ButtonSearch_Click(sender, e); 
+            }
+        }
+
+        // Event handler to begin searching for packaged apps
+        private void ButtonSearch_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = "Type the name of the package to begin the search.";
+                this.Log.AddWarningMsg("Empty packaged app search criteria");
+                return;
+            }
+
+            // Prep UI
+            this.panel_Progress.Visible = true;
+            this.panel_Progress.BringToFront(); 
+            this.label_Error.Visible = false;
+
+            // Create background worker to display updates to UI
+            if (!this.backgroundWorker.IsBusy)
+            {
+                this.backgroundWorker.RunWorkerAsync();
+            }
+        }
+
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            
+
+        }
+
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.backgroundWorker = sender as BackgroundWorker;
+            string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
+            // Create runspace
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+
+            // Create the real pipeline
+            Pipeline pipeline = runspace.CreatePipeline();
+            pipeline.Commands.AddScript(script);
+            pipeline.Commands.Add("Out-String");
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+                this.FoundPackages = Helper.ParsePSOutput(results);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
+            }
+
+            if (this.FoundPackages.Count == 0)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
+                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                return;
+            }
+
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Remove GIF // Update UI 
+            this.panel_Progress.Visible = false;
+
+            // Unsuccessful conversion
+            if (e.Error != null)
+            {
+                this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                
+            }
+            else
+            {
+                
+            }
+
+            this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
+
+            // Bring checkbox list to front. Sort keys to display alphabetically to user
+            this.checkedListBoxPackagedApps.BringToFront();
+            var sortedPackages = this.FoundPackages.Keys.ToList();
+            sortedPackages.Sort(); 
+
+            foreach (var key in sortedPackages)
+            {
+                this.checkedListBoxPackagedApps.Items.Add(key, false);
+            }
+            //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
     }   
 }
