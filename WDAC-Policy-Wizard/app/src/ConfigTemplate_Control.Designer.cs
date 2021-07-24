@@ -78,6 +78,8 @@ namespace WDAC_Wizard
             this.label27 = new System.Windows.Forms.Label();
             this.label_HVCI = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button_20 = new System.Windows.Forms.Button();
+            this.label_20 = new System.Windows.Forms.Label();
             this.panel_AdvancedOptions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -737,11 +739,42 @@ namespace WDAC_Wizard
             this.label4.Text = "Learn more about policy options     ";
             this.label4.Click += new System.EventHandler(this.LabelPolicyOptions_Click);
             // 
+            // button_20
+            // 
+            this.button_20.BackColor = System.Drawing.Color.Transparent;
+            this.button_20.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
+            this.button_20.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_20.FlatAppearance.BorderSize = 0;
+            this.button_20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_20.Location = new System.Drawing.Point(783, 421);
+            this.button_20.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_20.Name = "button_20";
+            this.button_20.Size = new System.Drawing.Size(40, 41);
+            this.button_20.TabIndex = 52;
+            this.button_20.Tag = "untoggle";
+            this.button_20.UseVisualStyleBackColor = false;
+            this.button_20.Click += new System.EventHandler(this.Toggle_Button_Click);
+            // 
+            // label_20
+            // 
+            this.label_20.AutoSize = true;
+            this.label_20.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_20.ForeColor = System.Drawing.Color.Black;
+            this.label_20.Location = new System.Drawing.Point(512, 429);
+            this.label_20.Name = "label_20";
+            this.label_20.Size = new System.Drawing.Size(213, 21);
+            this.label_20.TabIndex = 51;
+            this.label_20.Tag = "Enabled";
+            this.label_20.Text = "Treat Revoked as Unsigned";
+            this.label_20.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            // 
             // ConfigTemplate_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.button_20);
+            this.Controls.Add(this.label_20);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label_AuditMode);
@@ -836,5 +869,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label_HVCI;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button_20;
+        private System.Windows.Forms.Label label_20;
     }
 }

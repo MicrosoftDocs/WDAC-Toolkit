@@ -588,6 +588,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When enabled, WDAC will treat revoked and expired binaries as unsigned. .
+        /// </summary>
+        internal static string RevokedAsUnsigned_Info {
+            get {
+                return ResourceManager.GetString("RevokedAsUnsigned_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Turning this off will disable default FilePath rule protection of enforcing user-writeability and only allowing admin-writeable locations..
         /// </summary>
         internal static string RuntimeRules {
