@@ -304,8 +304,8 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default.allowTelemetry);
             this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
-            this.SettingsDict.Add("usermodeRecList", (bool)Properties.Settings.Default.useUsermodeBlockRules);
-            this.SettingsDict.Add("kernelmodeRecList", (bool)Properties.Settings.Default.useDriverBlockRules);
+            this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
+            this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
