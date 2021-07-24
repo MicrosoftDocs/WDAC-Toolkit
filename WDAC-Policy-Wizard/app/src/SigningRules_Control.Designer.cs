@@ -213,7 +213,7 @@ namespace WDAC_Wizard
             // checkBox_KernelList
             // 
             this.checkBox_KernelList.AutoSize = true;
-            this.checkBox_KernelList.Location = new System.Drawing.Point(163, 608);
+            this.checkBox_KernelList.Location = new System.Drawing.Point(163, 634);
             this.checkBox_KernelList.Name = "checkBox_KernelList";
             this.checkBox_KernelList.Size = new System.Drawing.Size(320, 21);
             this.checkBox_KernelList.TabIndex = 98;
@@ -224,7 +224,7 @@ namespace WDAC_Wizard
             // checkBox_UserModeList
             // 
             this.checkBox_UserModeList.AutoSize = true;
-            this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 634);
+            this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 607);
             this.checkBox_UserModeList.Name = "checkBox_UserModeList";
             this.checkBox_UserModeList.Size = new System.Drawing.Size(348, 21);
             this.checkBox_UserModeList.TabIndex = 99;

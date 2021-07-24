@@ -1397,13 +1397,13 @@ namespace WDAC_Wizard
             }
 
             // Check whether the recommended block list rules are wanted in the output:
-            if(Properties.Settings.Default.useUsermodeBlockRules || this.Policy.UseUserModeBlocks)
+            if(this.Policy.UseUserModeBlocks)
             {
                 string recommendedUsermodeBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
                 policyPaths.Add(recommendedUsermodeBlockPath);
             }
 
-            if (Properties.Settings.Default.useDriverBlockRules ||this.Policy.UseKernelModeBlocks)
+            if (this.Policy.UseKernelModeBlocks)
             {
                 string recommendedDriverBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml"); ; 
                 policyPaths.Add(recommendedDriverBlockPath); 

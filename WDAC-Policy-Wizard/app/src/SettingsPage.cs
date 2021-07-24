@@ -172,7 +172,7 @@ namespace WDAC_Wizard
             // Currently true, set to false
             PictureBox checkBox = ((PictureBox)sender);
 
-            if (Properties.Settings.Default.useDefaultStrings)
+            if (Properties.Settings.Default.useDriverBlockRules)
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
@@ -195,7 +195,7 @@ namespace WDAC_Wizard
             // Currently true, set to false
             PictureBox checkBox = ((PictureBox)sender);
 
-            if (Properties.Settings.Default.useDefaultStrings)
+            if (Properties.Settings.Default.useUsermodeBlockRules)
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
@@ -303,7 +303,9 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default.allowTelemetry);
-            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary); 
+            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
+            this.SettingsDict.Add("usermodeRecList", (bool)Properties.Settings.Default.useUsermodeBlockRules);
+            this.SettingsDict.Add("kernelmodeRecList", (bool)Properties.Settings.Default.useDriverBlockRules);
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
