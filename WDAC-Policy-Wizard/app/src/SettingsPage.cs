@@ -240,7 +240,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                this.Log.AddErrorMsg("Launching webpage for Terms of Use link encountered the following error", exp);
             }
 
         }
@@ -255,7 +255,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                this.Log.AddErrorMsg("Launching webpage for Privacy agreement link encountered the following error", exp);
             }
 
         }
@@ -367,6 +367,32 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.White;
         }
 
-        
+        private void LabelDriverBlock_Click(object sender, EventArgs e)
+        {
+            // Launch the WDAC recommended blocklist page
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for Driver recommended Blocklist link encountered the following error", exp);
+            }
+        }
+
+        private void Label_UsermodeBlock_Click(object sender, EventArgs e)
+        {
+            // Launch the WDAC recommended blocklist page
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-block-rules";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
+            }
+        }
     }
 }

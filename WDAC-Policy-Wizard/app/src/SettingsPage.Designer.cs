@@ -42,6 +42,8 @@ namespace WDAC_Wizard
             this.useDefaultStrings_CheckBox = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.usermodeRecList_checkBox = new System.Windows.Forms.PictureBox();
+            this.kernelmodeRecList_checkBox = new System.Windows.Forms.PictureBox();
             this.convertPolicyToBinary_CheckBox = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
             this.allowTelemetry_CheckBox = new System.Windows.Forms.PictureBox();
@@ -52,17 +54,15 @@ namespace WDAC_Wizard
             this.label1 = new System.Windows.Forms.Label();
             this.resetButton = new System.Windows.Forms.Button();
             this.Update_Label = new System.Windows.Forms.Label();
-            this.kernelmodeRecList_checkBox = new System.Windows.Forms.PictureBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.usermodeRecList_checkBox = new System.Windows.Forms.PictureBox();
-            this.label12 = new System.Windows.Forms.Label();
+            this.label_UsermodeBlock = new System.Windows.Forms.Label();
+            this.label_DriverBlock = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.usermodeRecList_checkBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kernelmodeRecList_checkBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kernelmodeRecList_checkBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.usermodeRecList_checkBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -185,10 +185,10 @@ namespace WDAC_Wizard
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.label_DriverBlock);
+            this.panel1.Controls.Add(this.label_UsermodeBlock);
             this.panel1.Controls.Add(this.usermodeRecList_checkBox);
-            this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.kernelmodeRecList_checkBox);
-            this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.convertPolicyToBinary_CheckBox);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.allowTelemetry_CheckBox);
@@ -211,11 +211,39 @@ namespace WDAC_Wizard
             this.panel1.Size = new System.Drawing.Size(713, 528);
             this.panel1.TabIndex = 12;
             // 
+            // usermodeRecList_checkBox
+            // 
+            this.usermodeRecList_checkBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.usermodeRecList_checkBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.usermodeRecList_checkBox.Location = new System.Drawing.Point(39, 130);
+            this.usermodeRecList_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.usermodeRecList_checkBox.Name = "usermodeRecList_checkBox";
+            this.usermodeRecList_checkBox.Size = new System.Drawing.Size(23, 26);
+            this.usermodeRecList_checkBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.usermodeRecList_checkBox.TabIndex = 23;
+            this.usermodeRecList_checkBox.TabStop = false;
+            this.usermodeRecList_checkBox.Tag = "Unchecked";
+            this.usermodeRecList_checkBox.Click += new System.EventHandler(this.UsermodeRecList_checkBox_Click);
+            // 
+            // kernelmodeRecList_checkBox
+            // 
+            this.kernelmodeRecList_checkBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.kernelmodeRecList_checkBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.kernelmodeRecList_checkBox.Location = new System.Drawing.Point(39, 170);
+            this.kernelmodeRecList_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.kernelmodeRecList_checkBox.Name = "kernelmodeRecList_checkBox";
+            this.kernelmodeRecList_checkBox.Size = new System.Drawing.Size(23, 26);
+            this.kernelmodeRecList_checkBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.kernelmodeRecList_checkBox.TabIndex = 21;
+            this.kernelmodeRecList_checkBox.TabStop = false;
+            this.kernelmodeRecList_checkBox.Tag = "Unchecked";
+            this.kernelmodeRecList_checkBox.Click += new System.EventHandler(this.KernelmodeRecList_checkBox_Click);
+            // 
             // convertPolicyToBinary_CheckBox
             // 
             this.convertPolicyToBinary_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
             this.convertPolicyToBinary_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.convertPolicyToBinary_CheckBox.Location = new System.Drawing.Point(39, 89);
+            this.convertPolicyToBinary_CheckBox.Location = new System.Drawing.Point(39, 90);
             this.convertPolicyToBinary_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.convertPolicyToBinary_CheckBox.Name = "convertPolicyToBinary_CheckBox";
             this.convertPolicyToBinary_CheckBox.Size = new System.Drawing.Size(23, 26);
@@ -232,7 +260,7 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(72, 92);
+            this.label7.Location = new System.Drawing.Point(72, 93);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(320, 21);
@@ -282,7 +310,7 @@ namespace WDAC_Wizard
             // 
             this.useEnvVars_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
             this.useEnvVars_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.useEnvVars_CheckBox.Location = new System.Drawing.Point(39, 51);
+            this.useEnvVars_CheckBox.Location = new System.Drawing.Point(39, 50);
             this.useEnvVars_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useEnvVars_CheckBox.Name = "useEnvVars_CheckBox";
             this.useEnvVars_CheckBox.Size = new System.Drawing.Size(23, 26);
@@ -299,7 +327,7 @@ namespace WDAC_Wizard
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(72, 54);
+            this.label8.Location = new System.Drawing.Point(72, 53);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(441, 21);
@@ -343,57 +371,37 @@ namespace WDAC_Wizard
             this.Update_Label.Text = "Saving Setting ...";
             this.Update_Label.Visible = false;
             // 
-            // kernelmodeRecList_checkBox
+            // label_UsermodeBlock
             // 
-            this.kernelmodeRecList_checkBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.kernelmodeRecList_checkBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.kernelmodeRecList_checkBox.Location = new System.Drawing.Point(39, 162);
-            this.kernelmodeRecList_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.kernelmodeRecList_checkBox.Name = "kernelmodeRecList_checkBox";
-            this.kernelmodeRecList_checkBox.Size = new System.Drawing.Size(23, 26);
-            this.kernelmodeRecList_checkBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.kernelmodeRecList_checkBox.TabIndex = 21;
-            this.kernelmodeRecList_checkBox.TabStop = false;
-            this.kernelmodeRecList_checkBox.Tag = "Unchecked";
-            this.kernelmodeRecList_checkBox.Click += new System.EventHandler(this.KernelmodeRecList_checkBox_Click);
+            this.label_UsermodeBlock.AutoSize = true;
+            this.label_UsermodeBlock.BackColor = System.Drawing.Color.White;
+            this.label_UsermodeBlock.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_UsermodeBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.label_UsermodeBlock.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.label_UsermodeBlock.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_UsermodeBlock.Location = new System.Drawing.Point(72, 133);
+            this.label_UsermodeBlock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_UsermodeBlock.Name = "label_UsermodeBlock";
+            this.label_UsermodeBlock.Size = new System.Drawing.Size(466, 21);
+            this.label_UsermodeBlock.TabIndex = 24;
+            this.label_UsermodeBlock.Text = "Create policies with Microsoft\'s Recommended Block Rules    ";
+            this.label_UsermodeBlock.Click += new System.EventHandler(this.Label_UsermodeBlock_Click);
             // 
-            // label11
+            // label_DriverBlock
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.Black;
-            this.label11.Location = new System.Drawing.Point(72, 165);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(532, 21);
-            this.label11.TabIndex = 20;
-            this.label11.Text = "Create new policies with Microsoft\'s Recommended Driver Block Rules";
-            // 
-            // usermodeRecList_checkBox
-            // 
-            this.usermodeRecList_checkBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.usermodeRecList_checkBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.usermodeRecList_checkBox.Location = new System.Drawing.Point(39, 127);
-            this.usermodeRecList_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.usermodeRecList_checkBox.Name = "usermodeRecList_checkBox";
-            this.usermodeRecList_checkBox.Size = new System.Drawing.Size(23, 26);
-            this.usermodeRecList_checkBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.usermodeRecList_checkBox.TabIndex = 23;
-            this.usermodeRecList_checkBox.TabStop = false;
-            this.usermodeRecList_checkBox.Tag = "Unchecked";
-            this.usermodeRecList_checkBox.Click += new System.EventHandler(this.UsermodeRecList_checkBox_Click);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.Black;
-            this.label12.Location = new System.Drawing.Point(72, 130);
-            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(482, 21);
-            this.label12.TabIndex = 22;
-            this.label12.Text = "Create new policies with Microsoft\'s Recommended Block Rules";
+            this.label_DriverBlock.AutoSize = true;
+            this.label_DriverBlock.BackColor = System.Drawing.Color.White;
+            this.label_DriverBlock.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_DriverBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.label_DriverBlock.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.label_DriverBlock.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_DriverBlock.Location = new System.Drawing.Point(72, 173);
+            this.label_DriverBlock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_DriverBlock.Name = "label_DriverBlock";
+            this.label_DriverBlock.Size = new System.Drawing.Size(516, 21);
+            this.label_DriverBlock.TabIndex = 25;
+            this.label_DriverBlock.Text = "Create policies with Microsoft\'s Recommended Driver Block Rules    ";
+            this.label_DriverBlock.Click += new System.EventHandler(this.LabelDriverBlock_Click);
             // 
             // SettingsPage
             // 
@@ -411,11 +419,11 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.usermodeRecList_checkBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kernelmodeRecList_checkBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kernelmodeRecList_checkBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.usermodeRecList_checkBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -443,8 +451,8 @@ namespace WDAC_Wizard
         private System.Windows.Forms.PictureBox convertPolicyToBinary_CheckBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.PictureBox usermodeRecList_checkBox;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.PictureBox kernelmodeRecList_checkBox;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label_DriverBlock;
+        private System.Windows.Forms.Label label_UsermodeBlock;
     }
 }
