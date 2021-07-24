@@ -356,6 +356,30 @@ namespace WDAC_Wizard
                     files = Helper.GetListofPackages(this.PolicyCustomRule); 
                     break;
 
+                case PolicyCustomRules.RuleLevel.Folder:
+                    
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Path);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level,  this.PolicyCustomRule.ReferenceFile);
+                    }
+                    break;
+
+                case PolicyCustomRules.RuleLevel.FilePath:
+
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Path);
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
+                    }
+                    break;
+
                 default:
                     name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
                     break;
