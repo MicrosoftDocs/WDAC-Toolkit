@@ -161,6 +161,14 @@
 	  ButtonMapping="button_17">
   </Rule>
   <Rule
+   Name="UnsignedNotRevoked"
+   AllowedValue="Enabled"
+   Supported="True"
+   RuleNumber="20"
+   ValidSupplemental="False"
+   ButtonMapping="button_20">
+  </Rule>
+  <Rule
     Name="HVCI"
     AllowedValue="Enabled"
     Supported="True"

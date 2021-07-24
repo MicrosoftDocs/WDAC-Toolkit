@@ -44,7 +44,10 @@ namespace WDAC_Wizard
             // User coming back to this page and changing template -- redo flow
             if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
                  && this._MainWindow.Policy.TemplatePath != null)
+            {
                 this._MainWindow.RedoFlowRequired = true;
+            }
+                
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
             // Update UI
             uncheck_all();
@@ -63,7 +66,10 @@ namespace WDAC_Wizard
             // User coming back to this page and changing template -- redo flow
             if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
                  && this._MainWindow.Policy.TemplatePath != null)
-                this._MainWindow.RedoFlowRequired = true; 
+            {
+                this._MainWindow.RedoFlowRequired = true;
+            }
+                
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.WindowsWorks;
             // Update UI
             uncheck_all();
@@ -83,7 +89,10 @@ namespace WDAC_Wizard
             // User coming back to this page and changing template -- redo flow
             if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
                  && this._MainWindow.Policy.TemplatePath != null)
+            {
                 this._MainWindow.RedoFlowRequired = true;
+            }
+                
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.SignedReputable;
             
             // Update UI

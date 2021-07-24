@@ -166,6 +166,52 @@ namespace WDAC_Wizard
             SaveSetting();
         }
 
+        private void KernelmodeRecList_checkBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDefaultStrings)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useDriverBlockRules = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useDriverBlockRules = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        private void UsermodeRecList_checkBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDefaultStrings)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useUsermodeBlockRules = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useUsermodeBlockRules = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
         private void SaveSetting()
         {
             // Save settings and show settings update to user
@@ -319,5 +365,6 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.White;
         }
 
+        
     }
 }

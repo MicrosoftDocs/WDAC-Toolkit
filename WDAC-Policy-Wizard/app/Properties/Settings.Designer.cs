@@ -61,7 +61,7 @@ namespace WDAC_Wizard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool convertPolicyToBinary {
             get {
                 return ((bool)(this["convertPolicyToBinary"]));
@@ -80,6 +80,30 @@ namespace WDAC_Wizard.Properties {
             }
             set {
                 this["showMultiplePolicyDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useDriverBlockRules {
+            get {
+                return ((bool)(this["useDriverBlockRules"]));
+            }
+            set {
+                this["useDriverBlockRules"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useUsermodeBlockRules {
+            get {
+                return ((bool)(this["useUsermodeBlockRules"]));
+            }
+            set {
+                this["useUsermodeBlockRules"] = value;
             }
         }
     }

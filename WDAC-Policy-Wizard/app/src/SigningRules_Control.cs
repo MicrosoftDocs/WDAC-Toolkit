@@ -844,6 +844,32 @@ namespace WDAC_Wizard
             Label checkBox = ((Label)sender);
             checkBox.BackColor = Color.White;
         }
+
+        private void checkBox_KernelList_CheckedChanged(object sender, EventArgs e)
+        {
+            // If checked, create a policy with the recommended driver block rules
+            if(this.checkBox_KernelList.Checked)
+            {
+                this.Policy.UseKernelModeBlocks = true;
+            }
+            else
+            {
+                this.Policy.UseKernelModeBlocks = false;
+            }
+        }
+
+        private void checkBox_UserModeList_CheckedChanged(object sender, EventArgs e)
+        {
+            // If checked, create a policy with the recommended user mode block rules
+            if (this.checkBox_UserModeList.Checked)
+            {
+                this.Policy.UseUserModeBlocks = true;
+            }
+            else
+            {
+                this.Policy.UseUserModeBlocks = false;
+            }
+        }
     }
 
     // Class for the datastore
