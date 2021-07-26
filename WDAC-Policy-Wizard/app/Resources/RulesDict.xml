@@ -29,7 +29,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="3"
-    ValidSupplemental="False"
+    ValidSupplemental="True"
 	  ButtonMapping="button_6">
   </Rule>
   <Rule
@@ -159,6 +159,14 @@
     RuleNumber="19"
     ValidSupplemental="False"
 	  ButtonMapping="button_17">
+  </Rule>
+  <Rule
+     Name="UnsignedNotRevoked"
+     AllowedValue="Enabled"
+     Supported="True"
+     RuleNumber="20"
+     ValidSupplemental="False"
+     ButtonMapping="button_20">
   </Rule>
   <Rule
     Name="HVCI"

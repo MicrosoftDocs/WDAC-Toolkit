@@ -1502,7 +1502,11 @@ namespace WDAC_Wizard
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
             {
                 string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
+                // Set policy info - ID, Name
+                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+
                 pipeline.Commands.AddScript(updateVersionCmd);
+                pipeline.Commands.AddScript(setIdInfoCmd);
             }
 
             if (pipeline.Commands.Count > 0)
