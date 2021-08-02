@@ -1457,6 +1457,7 @@ namespace WDAC_Wizard
                 string arbitraryPFN = this.textBox_Packaged_App.Text; 
                 if(arbitraryPFN.Length > 3)
                 {
+                    arbitraryPFN = String.Concat(arbitraryPFN.Where(c => !Char.IsWhiteSpace(c)));
                     this.checkedListBoxPackagedApps.Items.Add(arbitraryPFN, true);
 
                     // Once added to the table, clear the textbox automatically
@@ -1552,11 +1553,33 @@ namespace WDAC_Wizard
 
             // Else, return text to 'Search' button
             // Unhide the PFN search UI
+            // If there are any checked boxes, clear the list of arbitrary/custom PFN rules after prompting user
             else
             {
-                this.buttonSearch.Text = "Search";
-                this.PolicyCustomRule.UsingCustomValues = false;
+                if(this.checkedListBoxPackagedApps.Items.Count > 0)
+                {
+                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", "Confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (res == DialogResult.Yes)
+                    {
+                        this.buttonSearch.Text = "Search";
+                        this.PolicyCustomRule.UsingCustomValues = false;
+                        int n_Rules = this.checkedListBoxPackagedApps.Items.Count; 
+
+                        for(int j= 0; j < n_Rules; j++)
+                        {
+                            // Remove at the 0th index n_Rules times
+                            this.checkedListBoxPackagedApps.Items.RemoveAt(0); 
+                        }
+                    }
+                    else
+                    {
+                        this.checkBox_CustomPFN.Checked = true; 
+                    }
+                }
             }
         }
-    }   
-}
+    }
+}   
+
