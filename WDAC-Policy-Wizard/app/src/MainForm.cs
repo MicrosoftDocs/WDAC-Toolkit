@@ -22,6 +22,7 @@ using System.Security.Permissions;
 
 using Microsoft.Win32;
 using WDAC_Wizard.src;
+using WDAC_Wizard.Properties;
 
 namespace WDAC_Wizard
 {
@@ -983,7 +984,7 @@ namespace WDAC_Wizard
                 }
 
                 // Process PFN rules, if applicable
-                if(customRule.PackagedFamilyNames.Count > 0)
+                if(customRule.PackagedFamilyNames.Count > 0 && !customRule.UsingCustomValues)
                 {
                     List<string> dm = ProcessPFNRules(customRule);
                     scriptCommands = dm; // Replace with everything returned from ProcessPFNRules
@@ -1112,7 +1113,29 @@ namespace WDAC_Wizard
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"InternalName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.InternalName));
                 }
+                else if (customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                {
+                    int i = 0;
+                    customValueCommand.Add("$Wizard_Package = Get-AppxPackage -Name *WDACWizard*");
+                    string mergeCommand = String.Empty; 
+
+                    foreach (var pfn in customRule.CustomValues.PackageFamilyNames)
+                    {
+                        // Create placeholder per custom hash Rule until can fix this overwrite bug
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
+                        // customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.Id = $Rule_{0}_PFNRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, i)); // modify the ID to avoid collisions
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn)); // Set the hash attribute to the hash value
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion)); // Set the hash attribute to the hash value
+
+                        customValueCommand.Add(String.Format("$Rule_{0} += $Rule_{0}_PFNRule_{1}", customRule.PSVariable, i));
+                        i++;
+                    }
+
+                    // customValueCommand.Add(mergeCommand);
+                }
             }
+
+            
 
             else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
             {
@@ -1200,9 +1223,16 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
-                        if(customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                        if(customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName )
                         {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Package $Package_{0}", rulePrefix);
+                            if(customRule.UsingCustomValues)
+                            {
+
+                            }
+                            else
+                            {
+                                customRuleScript = String.Format("{0} = New-CIPolicyRule -Package $Package_{0}", rulePrefix);
+                            }
                         }
                         else
                         {

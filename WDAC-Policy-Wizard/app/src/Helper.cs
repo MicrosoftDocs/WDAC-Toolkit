@@ -690,13 +690,14 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
+        public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 
         public CustomValue()
         {
             this.Hashes = new List<string>();
+            this.PackageFamilyNames = new List<string>();
         }
-
     }
 
     public class PolicyCustomRules
