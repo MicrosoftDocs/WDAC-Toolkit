@@ -1536,7 +1536,7 @@ namespace WDAC_Wizard
                     StreamReader reader = new StreamReader(this.Policy.SchemaPath);
                     SiPolicy finalSiPolicy = (SiPolicy)serializer.Deserialize(reader);
                     reader.Close();
-                    binaryFileName = String.Format("{0}.cip", finalSiPolicy.BasePolicyID);
+                    binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
                 }
                 catch
                 {
