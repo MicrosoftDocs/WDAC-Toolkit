@@ -54,7 +54,7 @@ namespace WDAC_Wizard
             this.Policy.ConfigRules = initRulesDict(); // If supplemental, need to disable the button
 
             // If unable to read the CI policy, fail gracefully and return to the home page
-            if (!this.readSetRules(sender, e))
+            if (!this.ReadSetRules(sender, e))
                 return; 
 
             // Enable audit mode by default
@@ -265,6 +265,14 @@ namespace WDAC_Wizard
                 case "Dynamic Code Security":
                     label_Info.Text = Resources.DynamicSecurity_Info;
                     break;
+
+                case "Treat Revoked as Unsigned":
+                    label_Info.Text = Resources.RevokedAsUnsigned_Info;
+                    break; 
+
+                default:
+                    label_Info.Text = "";
+                    break; 
             }
 
             // Format the label to fit at the bottom of the page.
@@ -362,7 +370,7 @@ namespace WDAC_Wizard
         /// Parses the template or the policy that the user would like to edit. Sets all of the 
         /// CI Policy related fields from the xml document. 
         /// </summary>
-        private bool readSetRules(object sender, EventArgs e)
+        private bool ReadSetRules(object sender, EventArgs e)
         {
             // Read in the pre-set policy rules and HVCI option from either:
             // Template policy schema file IF NEW policy selected

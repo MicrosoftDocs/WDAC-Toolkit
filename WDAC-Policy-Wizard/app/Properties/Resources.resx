@@ -378,6 +378,8 @@ with a version at or above this specified file version number.</value>
   <data name="UnsuccessfulEventLogConversion" xml:space="preserve">
     <value>Conversion of the event log to a WDAC Policy XML file was unsuccessful. Please try another file. </value>
   </data>
+  <data name="RevokedAsUnsigned_Info" xml:space="preserve">
+    <value>When enabled, WDAC will treat revoked and expired binaries as unsigned. </value>
   <data name="DefaultPFNVersion" xml:space="preserve">
     <value>1.0.0.0</value>
   </data>

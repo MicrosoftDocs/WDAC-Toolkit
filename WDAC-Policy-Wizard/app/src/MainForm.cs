@@ -1425,7 +1425,20 @@ namespace WDAC_Wizard
                     policyPaths.Add(path);
                 }
             }
-                
+
+            // Check whether the recommended block list rules are wanted in the output:
+            if(this.Policy.UseUserModeBlocks)
+            {
+                string recommendedUsermodeBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
+                policyPaths.Add(recommendedUsermodeBlockPath);
+            }
+
+            if (this.Policy.UseKernelModeBlocks)
+            {
+                string recommendedDriverBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml"); ; 
+                policyPaths.Add(recommendedDriverBlockPath); 
+            }
+
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
             if (policyPaths.Count < 1)
             {
@@ -1519,7 +1532,11 @@ namespace WDAC_Wizard
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
             {
                 string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
+                // Set policy info - ID, Name
+                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+
                 pipeline.Commands.AddScript(updateVersionCmd);
+                pipeline.Commands.AddScript(setIdInfoCmd);
             }
 
             if (pipeline.Commands.Count > 0)

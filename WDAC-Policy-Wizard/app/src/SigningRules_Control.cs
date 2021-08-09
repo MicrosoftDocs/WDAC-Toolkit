@@ -57,11 +57,15 @@ namespace WDAC_Wizard
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
             // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
-            if(!readSetRules(sender, e))
+            if(!ReadSetRules(sender, e))
             {
                 return; 
             }
-            displayRules();
+
+            DisplayRules();
+
+            // Set recommended blocklist states
+            SetBlocklistStates(); 
         }
 
         
@@ -91,7 +95,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Diplays the signing rules from the template policy or the supplemental policy in the DataGridView on Control Load. 
         /// </summary>
-        private void displayRules()
+        private void DisplayRules()
         {
             string friendlyName = String.Empty;    //  this.Policy.Signers[signerID].Name;
             string action = String.Empty;
@@ -115,13 +119,12 @@ namespace WDAC_Wizard
                 if(signer.FileAttribRef != null)
                 {
                     foreach(var fileRef in signer.FileAttribRef)
+                    {
                         signerFields.Add(fileRef.RuleID);
+                    }
                 }
-
                 signersDict.Add(signer.ID, signerFields);
             }
-                
-
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
@@ -326,7 +329,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Method to parse either the template or supplemental policy and store into the custom data structures for digestion. 
         /// </summary>
-        private bool readSetRules(object sender, EventArgs e)
+        private bool ReadSetRules(object sender, EventArgs e)
         {
             // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
             if (this._MainWindow.Policy.TemplatePath != null)
@@ -364,6 +367,30 @@ namespace WDAC_Wizard
             bubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
             return true; 
+        }
+
+        /// <summary>
+        /// Method to check the Settings defined by the user for the initial conditions on the recommended blocklist checkboxes. 
+        /// </summary>
+        private void SetBlocklistStates()
+        {
+            if(Properties.Settings.Default.useDriverBlockRules)
+            {
+                this.checkBox_KernelList.Checked = true; 
+            }
+            else
+            {
+                this.checkBox_KernelList.Checked = false; 
+            }
+
+            if (Properties.Settings.Default.useUsermodeBlockRules)
+            {
+                this.checkBox_UserModeList.Checked = true;
+            }
+            else
+            {
+                this.checkBox_UserModeList.Checked = false;
+            }
         }
 
         /// <summary>
@@ -843,6 +870,32 @@ namespace WDAC_Wizard
         {
             Label checkBox = ((Label)sender);
             checkBox.BackColor = Color.White;
+        }
+
+        private void checkBox_KernelList_CheckedChanged(object sender, EventArgs e)
+        {
+            // If checked, create a policy with the recommended driver block rules
+            if(this.checkBox_KernelList.Checked)
+            {
+                this.Policy.UseKernelModeBlocks = true;
+            }
+            else
+            {
+                this.Policy.UseKernelModeBlocks = false;
+            }
+        }
+
+        private void checkBox_UserModeList_CheckedChanged(object sender, EventArgs e)
+        {
+            // If checked, create a policy with the recommended user mode block rules
+            if (this.checkBox_UserModeList.Checked)
+            {
+                this.Policy.UseUserModeBlocks = true;
+            }
+            else
+            {
+                this.Policy.UseUserModeBlocks = false;
+            }
         }
     }
 

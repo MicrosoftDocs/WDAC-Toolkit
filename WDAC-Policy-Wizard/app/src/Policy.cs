@@ -49,6 +49,10 @@ namespace WDAC_Wizard
         public bool EnableAudit { get; set; }           // Turn on audit mode? 
         public string VersionNumber { get; set; }       // Policy version. By default, 10.0.0.0.
 
+        // Policy Settings
+        public bool UseUserModeBlocks { get; set; }
+        public bool UseKernelModeBlocks { get; set; }
+
         // Paths:
         public string SchemaPath { get; set; }          // Path to final xml file on disk
         public string TemplatePath { get; set; }        // ReadOnly Path to template policy - TODO: make const
@@ -97,7 +101,10 @@ namespace WDAC_Wizard
             this.PoliciesToMerge = new List<string>(); 
 
             this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
-            this.PolicyID = formatDate(false); 
+            this.PolicyID = formatDate(false);
+
+            this.UseKernelModeBlocks = false;
+            this.UseUserModeBlocks = false; 
         }
 
         public string formatDate(bool includeTime = true)

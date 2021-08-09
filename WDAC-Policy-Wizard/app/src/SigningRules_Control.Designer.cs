@@ -46,6 +46,8 @@ namespace WDAC_Wizard
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
             this.label_AddCustomRules = new System.Windows.Forms.Button();
+            this.checkBox_KernelList = new System.Windows.Forms.CheckBox();
+            this.checkBox_UserModeList = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,10 +56,9 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(202, 398);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(168, 332);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(0, 24);
+            this.label7.Size = new System.Drawing.Size(0, 21);
             this.label7.TabIndex = 57;
             // 
             // label1
@@ -65,10 +66,9 @@ namespace WDAC_Wizard
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(195, 40);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(162, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 34);
+            this.label1.Size = new System.Drawing.Size(220, 29);
             this.label1.TabIndex = 47;
             this.label1.Text = "Policy Signing Rules";
             // 
@@ -84,7 +84,7 @@ namespace WDAC_Wizard
             this.Column_Name,
             this.Column_Exceptions,
             this.Column_Files});
-            this.rulesDataGrid.Location = new System.Drawing.Point(196, 194);
+            this.rulesDataGrid.Location = new System.Drawing.Point(163, 162);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(2);
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
@@ -92,7 +92,7 @@ namespace WDAC_Wizard
             this.rulesDataGrid.RowHeadersWidth = 70;
             this.rulesDataGrid.RowTemplate.Height = 24;
             this.rulesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.rulesDataGrid.Size = new System.Drawing.Size(1055, 528);
+            this.rulesDataGrid.Size = new System.Drawing.Size(879, 440);
             this.rulesDataGrid.TabIndex = 92;
             this.rulesDataGrid.VirtualMode = true;
             this.rulesDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataClicked);
@@ -104,7 +104,7 @@ namespace WDAC_Wizard
             this.column_Action.MinimumWidth = 6;
             this.column_Action.Name = "column_Action";
             this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 90;
+            this.column_Action.Width = 76;
             // 
             // column_Level
             // 
@@ -112,7 +112,7 @@ namespace WDAC_Wizard
             this.column_Level.MinimumWidth = 6;
             this.column_Level.Name = "column_Level";
             this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 82;
+            this.column_Level.Width = 71;
             // 
             // Column_Name
             // 
@@ -120,7 +120,7 @@ namespace WDAC_Wizard
             this.Column_Name.MinimumWidth = 6;
             this.Column_Name.Name = "Column_Name";
             this.Column_Name.ReadOnly = true;
-            this.Column_Name.Width = 87;
+            this.Column_Name.Width = 74;
             // 
             // Column_Exceptions
             // 
@@ -128,7 +128,7 @@ namespace WDAC_Wizard
             this.Column_Exceptions.MinimumWidth = 6;
             this.Column_Exceptions.Name = "Column_Exceptions";
             this.Column_Exceptions.ReadOnly = true;
-            this.Column_Exceptions.Width = 123;
+            this.Column_Exceptions.Width = 105;
             // 
             // Column_Files
             // 
@@ -136,17 +136,16 @@ namespace WDAC_Wizard
             this.Column_Files.MinimumWidth = 6;
             this.Column_Files.Name = "Column_Files";
             this.Column_Files.ReadOnly = true;
-            this.Column_Files.Width = 148;
+            this.Column_Files.Width = 127;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(195, 158);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Location = new System.Drawing.Point(162, 132);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(237, 25);
+            this.label8.Size = new System.Drawing.Size(187, 21);
             this.label8.TabIndex = 91;
             this.label8.Text = "Policy Signing Rules List";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -156,10 +155,9 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(195, 84);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(162, 70);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(679, 22);
+            this.label3.Size = new System.Drawing.Size(556, 18);
             this.label3.TabIndex = 80;
             this.label3.Text = "Create allow or deny rules for signed files based on its publisher, path or hash " +
     "value.";
@@ -170,10 +168,10 @@ namespace WDAC_Wizard
             this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deleteButton.Image = global::WDAC_Wizard.Properties.Resources.minus_button;
-            this.deleteButton.Location = new System.Drawing.Point(1084, 728);
-            this.deleteButton.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.deleteButton.Location = new System.Drawing.Point(903, 607);
+            this.deleteButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(185, 31);
+            this.deleteButton.Size = new System.Drawing.Size(154, 26);
             this.deleteButton.TabIndex = 93;
             this.deleteButton.Text = "   Remove Rule";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -186,10 +184,10 @@ namespace WDAC_Wizard
             this.label_Error.AutoSize = true;
             this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Error.ForeColor = System.Drawing.Color.Red;
-            this.label_Error.Location = new System.Drawing.Point(182, 790);
+            this.label_Error.Location = new System.Drawing.Point(152, 666);
             this.label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_Error.Name = "label_Error";
-            this.label_Error.Size = new System.Drawing.Size(765, 22);
+            this.label_Error.Size = new System.Drawing.Size(648, 18);
             this.label_Error.TabIndex = 96;
             this.label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text tex" +
     "t text text text";
@@ -201,10 +199,10 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label_AddCustomRules.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_AddCustomRules.Image = ((System.Drawing.Image)(resources.GetObject("label_AddCustomRules.Image")));
-            this.label_AddCustomRules.Location = new System.Drawing.Point(1057, 158);
-            this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+            this.label_AddCustomRules.Location = new System.Drawing.Point(881, 132);
+            this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label_AddCustomRules.Name = "label_AddCustomRules";
-            this.label_AddCustomRules.Size = new System.Drawing.Size(209, 31);
+            this.label_AddCustomRules.Size = new System.Drawing.Size(174, 26);
             this.label_AddCustomRules.TabIndex = 97;
             this.label_AddCustomRules.Text = "   Add Custom Rule";
             this.label_AddCustomRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -212,12 +210,36 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.UseVisualStyleBackColor = true;
             this.label_AddCustomRules.Click += new System.EventHandler(this.label_AddCustomRules_Click);
             // 
+            // checkBox_KernelList
+            // 
+            this.checkBox_KernelList.AutoSize = true;
+            this.checkBox_KernelList.Location = new System.Drawing.Point(163, 634);
+            this.checkBox_KernelList.Name = "checkBox_KernelList";
+            this.checkBox_KernelList.Size = new System.Drawing.Size(320, 21);
+            this.checkBox_KernelList.TabIndex = 98;
+            this.checkBox_KernelList.Text = "Merge with Recommended Kernel Block Rules";
+            this.checkBox_KernelList.UseVisualStyleBackColor = true;
+            this.checkBox_KernelList.CheckedChanged += new System.EventHandler(this.checkBox_KernelList_CheckedChanged);
+            // 
+            // checkBox_UserModeList
+            // 
+            this.checkBox_UserModeList.AutoSize = true;
+            this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 607);
+            this.checkBox_UserModeList.Name = "checkBox_UserModeList";
+            this.checkBox_UserModeList.Size = new System.Drawing.Size(348, 21);
+            this.checkBox_UserModeList.TabIndex = 99;
+            this.checkBox_UserModeList.Text = "Merge with Recommended User Mode Block Rules";
+            this.checkBox_UserModeList.UseVisualStyleBackColor = true;
+            this.checkBox_UserModeList.CheckedChanged += new System.EventHandler(this.checkBox_UserModeList_CheckedChanged);
+            // 
             // SigningRules_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Controls.Add(this.checkBox_UserModeList);
+            this.Controls.Add(this.checkBox_KernelList);
             this.Controls.Add(this.label_AddCustomRules);
             this.Controls.Add(this.label_Error);
             this.Controls.Add(this.deleteButton);
@@ -228,7 +250,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label3);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SigningRules_Control";
-            this.Size = new System.Drawing.Size(1444, 870);
+            this.Size = new System.Drawing.Size(1203, 725);
             this.Load += new System.EventHandler(this.SigningRules_Control_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).EndInit();
             this.ResumeLayout(false);
@@ -250,5 +272,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.Button label_AddCustomRules;
+        private System.Windows.Forms.CheckBox checkBox_KernelList;
+        private System.Windows.Forms.CheckBox checkBox_UserModeList;
     }
 }

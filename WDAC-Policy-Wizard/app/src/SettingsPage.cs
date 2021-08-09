@@ -166,6 +166,52 @@ namespace WDAC_Wizard
             SaveSetting();
         }
 
+        private void KernelmodeRecList_checkBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDriverBlockRules)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useDriverBlockRules = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useDriverBlockRules = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        private void UsermodeRecList_checkBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useUsermodeBlockRules)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useUsermodeBlockRules = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useUsermodeBlockRules = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
         private void SaveSetting()
         {
             // Save settings and show settings update to user
@@ -194,7 +240,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                this.Log.AddErrorMsg("Launching webpage for Terms of Use link encountered the following error", exp);
             }
 
         }
@@ -209,7 +255,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                this.Log.AddErrorMsg("Launching webpage for Privacy agreement link encountered the following error", exp);
             }
 
         }
@@ -257,7 +303,9 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
             this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default.allowTelemetry);
-            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary); 
+            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
+            this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
+            this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
@@ -319,5 +367,32 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.White;
         }
 
+        private void LabelDriverBlock_Click(object sender, EventArgs e)
+        {
+            // Launch the WDAC recommended blocklist page
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for Driver recommended Blocklist link encountered the following error", exp);
+            }
+        }
+
+        private void Label_UsermodeBlock_Click(object sender, EventArgs e)
+        {
+            // Launch the WDAC recommended blocklist page
+            try
+            {
+                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-block-rules";
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
+            }
+        }
     }
 }
