@@ -354,7 +354,7 @@ namespace WDAC_Wizard
             if(customPath.Contains("*"))
             {
                 var wildCardParts = customPath.Split('*');
-                if (wildCardParts.Length < 2)
+                if (wildCardParts.Length > 2)
                 {
                     return false;
                 }
