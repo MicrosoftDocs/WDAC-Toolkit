@@ -164,8 +164,14 @@ namespace WDAC_Wizard
                     }
                 }
 
+                // Parse package family names into PolicyCustomRule.CustomValues.PackageFamilyNames
+                if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                {
+                    this.PolicyCustomRule.CustomValues.PackageFamilyNames = this.PolicyCustomRule.PackagedFamilyNames;
+                }
+
                 // Parse hashes into PolicyCustomRule.CustomValues.Hash
-                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
                     var hashList = this.richTextBox_CustomHashes.Text.Split(',');
                     foreach(var hash in hashList)
@@ -1429,16 +1435,41 @@ namespace WDAC_Wizard
                 return;
             }
 
-            // Prep UI
-            this.panel_Progress.Visible = true;
-            this.panel_Progress.BringToFront(); 
-            this.label_Error.Visible = false;
-
-            // Create background worker to display updates to UI
-            if (!this.backgroundWorker.IsBusy)
+            // Check whether we are creating a PFN based on arbitrary package name
+            if(!this.checkBox_CustomPFN.Checked)
             {
-                this.backgroundWorker.RunWorkerAsync();
+                // Searching for PFN on device
+                // Prep UI
+                this.panel_Progress.Visible = true;
+                this.panel_Progress.BringToFront();
+                this.label_Error.Visible = false;
+
+                // Create background worker to display updates to UI
+                if (!this.backgroundWorker.IsBusy)
+                {
+                    this.backgroundWorker.RunWorkerAsync();
+                }
             }
+            else
+            {
+                // Using arbitrary/custom PFN in rule creation
+                // Add PFN to list with checkbox checked
+                string arbitraryPFN = this.textBox_Packaged_App.Text; 
+                if(arbitraryPFN.Length > 3)
+                {
+                    arbitraryPFN = String.Concat(arbitraryPFN.Where(c => !Char.IsWhiteSpace(c)));
+                    this.checkedListBoxPackagedApps.Items.Add(arbitraryPFN, true);
+
+                    // Once added to the table, clear the textbox automatically
+                    this.textBox_Packaged_App.Clear(); 
+                }
+                else
+                {
+                    this.label_Error.Visible = true;
+                    this.label_Error.Text = "Package Family name must be at least 3 characters.";
+                }
+            }
+            
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1509,5 +1540,46 @@ namespace WDAC_Wizard
             }
             //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
-    }   
-}
+
+        private void Checkbox_CustomPFN_Checked(object sender, EventArgs e)
+        {
+            // If checked, update text on the 'Search' button
+            // Hide the PFN search UI
+            if(this.checkBox_CustomPFN.Checked)
+            {
+                this.buttonSearch.Text = "Create";
+                this.PolicyCustomRule.UsingCustomValues = true; 
+            }
+
+            // Else, return text to 'Search' button
+            // Unhide the PFN search UI
+            // If there are any checked boxes, clear the list of arbitrary/custom PFN rules after prompting user
+            else
+            {
+                if(this.checkedListBoxPackagedApps.Items.Count > 0)
+                {
+                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", "Confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (res == DialogResult.Yes)
+                    {
+                        this.buttonSearch.Text = "Search";
+                        this.PolicyCustomRule.UsingCustomValues = false;
+                        int n_Rules = this.checkedListBoxPackagedApps.Items.Count; 
+
+                        for(int j= 0; j < n_Rules; j++)
+                        {
+                            // Remove at the 0th index n_Rules times
+                            this.checkedListBoxPackagedApps.Items.RemoveAt(0); 
+                        }
+                    }
+                    else
+                    {
+                        this.checkBox_CustomPFN.Checked = true; 
+                    }
+                }
+            }
+        }
+    }
+}   
+
