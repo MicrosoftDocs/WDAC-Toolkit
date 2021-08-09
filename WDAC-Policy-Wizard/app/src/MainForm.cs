@@ -1408,15 +1408,36 @@ namespace WDAC_Wizard
             // First merged policy will define the type of the output. eg) if merging a legcy with multi --> output=legacy, vice-versa
             // Again, the policy at customRulesMergePath will be the correct format and will determine the output format as its first in the command
             // TODO: what if CustomRules is empty ??
-            if (this.Policy.CustomRules.Count > 0)
-            {
-                policyPaths.Add(customRulesMergePath);
-            }
 
-            if (this.Policy.TemplatePath != null)
+            // TemplatePath holds the structure of the policy under edit
+            // If editing a policy, e.g. supplemental, have the TemplatePath define the structure
+
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
             {
-                policyPaths.Add(this.Policy.TemplatePath);
+                // TemplatePath holds the structure of the policy under edit
+                if (this.Policy.TemplatePath != null)
+                {
+                    policyPaths.Add(this.Policy.TemplatePath);
+                }
+
+                if (this.Policy.CustomRules.Count > 0)
+                {
+                    policyPaths.Add(customRulesMergePath);
+                }
             }
+            else
+            {
+                if (this.Policy.CustomRules.Count > 0)
+                {
+                    policyPaths.Add(customRulesMergePath);
+                }
+
+                if (this.Policy.TemplatePath != null)
+                {
+                    policyPaths.Add(this.Policy.TemplatePath);
+                }
+            }
+            
 
             if (this.Policy.PoliciesToMerge.Count > 0)
             {
@@ -1469,7 +1490,7 @@ namespace WDAC_Wizard
             {
                 Collection<PSObject> results = pipeline.Invoke();
                 // Make copy of the finished schema file
-                File.Copy(this.Policy.SchemaPath, DEST_PATH);
+                File.Copy(this.Policy.SchemaPath, DEST_PATH, true);
             }
             catch (Exception e)
             {

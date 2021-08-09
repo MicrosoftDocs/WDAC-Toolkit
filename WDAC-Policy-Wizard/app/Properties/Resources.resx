@@ -380,6 +380,7 @@ with a version at or above this specified file version number.</value>
   </data>
   <data name="RevokedAsUnsigned_Info" xml:space="preserve">
     <value>When enabled, WDAC will treat revoked and expired binaries as unsigned. </value>
+  </data>
   <data name="DefaultPFNVersion" xml:space="preserve">
     <value>1.0.0.0</value>
   </data>
