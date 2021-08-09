@@ -158,8 +158,9 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid path rule. Only one wildcard (*) is allowed per path rule. Wildcards can only be\r\nlocated at the beginning or end of a path rule.";
-                        this.Log.AddWarningMsg("CustomMinVersion !< CustomMaxVersion");
+                        label_Error.Text = "Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be\r\nlocated at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%" +
+                            "\r\nare the supported macros.";
+                        this.Log.AddWarningMsg("Invalid custom path rule");
                         return;
                     }
                 }
