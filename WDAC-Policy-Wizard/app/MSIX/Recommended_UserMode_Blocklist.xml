@@ -23,8 +23,6 @@
   <!-- File Rules
   --> 
   <FileRules>
-  <Allow ID="ID_ALLOW_A_1" FileName="*" />
-  <Allow ID="ID_ALLOW_A_2" FileName="*" />
   <Deny ID="ID_DENY_ADDINPROCESS" FriendlyName="AddInProcess.exe" FileName="AddInProcess.exe" MinimumFileVersion="65535.65535.65535.65535"/>
   <Deny ID="ID_DENY_ADDINPROCESS32" FriendlyName="AddInProcess32.exe" FileName="AddInProcess32.exe" MinimumFileVersion="65535.65535.65535.65535"/>
   <Deny ID="ID_DENY_ADDINUTIL" FriendlyName="AddInUtil.exe" FileName="AddInUtil.exe" MinimumFileVersion="65535.65535.65535.65535"/>
@@ -758,7 +756,6 @@
   <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Driver Signing Scenarios">
   <ProductSigners>
   <FileRulesRef>
-  <FileRuleRef RuleID="ID_ALLOW_A_1"/>
   <FileRuleRef RuleID="ID_DENY_KD_KMCI"/> 
   </FileRulesRef>
   </ProductSigners>
@@ -766,7 +763,6 @@
   <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="User Mode Signing Scenarios">
   <ProductSigners>
   <FileRulesRef>
-  <FileRuleRef RuleID="ID_ALLOW_A_2"/>
   <FileRuleRef RuleID="ID_DENY_ADDINPROCESS"/> 
   <FileRuleRef RuleID="ID_DENY_ADDINPROCESS32"/> 
   <FileRuleRef RuleID="ID_DENY_ADDINUTIL"/> 
