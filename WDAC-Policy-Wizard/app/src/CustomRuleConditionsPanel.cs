@@ -667,10 +667,13 @@ namespace WDAC_Wizard
                         break; 
                     }
 
+                    // Add an asterix to the end of the path to allow all 
+                    this.PolicyCustomRule.ReferenceFile += "\\*"; 
+
                     // Custom rule in progress
                     this._MainWindow.CustomRuleinProgress = true;
 
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = this.PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
                     this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
