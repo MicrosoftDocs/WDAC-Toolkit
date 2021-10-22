@@ -384,4 +384,34 @@ with a version at or above this specified file version number.</value>
   <data name="DefaultPFNVersion" xml:space="preserve">
     <value>1.0.0.0</value>
   </data>
+  <data name="HashEmptyList_Error" xml:space="preserve">
+    <value>Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.</value>
+  </data>
+  <data name="InvalidAttributeSelection_Error" xml:space="preserve">
+    <value>The file attribute selected cannot be N/A. Please select another attribute or rule type</value>
+  </data>
+  <data name="InvalidRule_Error" xml:space="preserve">
+    <value>Please select a rule type and a file to allow or deny.</value>
+  </data>
+  <data name="InvalidVersionFormat_Error" xml:space="preserve">
+    <value>Invalid custom version input. Version input must follow w.x.y.z format 
+and &lt; 65535.65535.65535.65535</value>
+  </data>
+  <data name="InvalidVersionRange_Error" xml:space="preserve">
+    <value>Invalid custom version input. Minimum version must be less than the maximum version</value>
+  </data>
+  <data name="InvalidVersion_Error" xml:space="preserve">
+    <value>Invalid input. Version input must follow w.x.y.z format and &lt; 65535.65535.65535.65535</value>
+  </data>
+  <data name="InvalidWildcardPath_Error" xml:space="preserve">
+    <value>Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be
+located at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%
+are the supported macros.</value>
+  </data>
+  <data name="PFNEmptyList_Error" xml:space="preserve">
+    <value>The list of selected packaged apps is empty. Please select at least 1 packaged app</value>
+  </data>
+  <data name="PFNSearch_Warn" xml:space="preserve">
+    <value>Type the name of the package to begin the search.</value>
+  </data>
 </root>

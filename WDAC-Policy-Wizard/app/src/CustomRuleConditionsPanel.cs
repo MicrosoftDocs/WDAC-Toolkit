@@ -77,7 +77,7 @@ namespace WDAC_Wizard
                 else
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = "Please select a rule type, a file to allow or deny.";
+                    label_Error.Text = Properties.Resources.InvalidRule_Error;
                     this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
                     return;
                 }
@@ -92,7 +92,7 @@ namespace WDAC_Wizard
                 && this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString))
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
+                    label_Error.Text = Properties.Resources.InvalidAttributeSelection_Error;
                     this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
                     return;
                 }
@@ -106,7 +106,7 @@ namespace WDAC_Wizard
                 if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = "The list of selected packaged apps is empty. Please select at least 1 packaged app";
+                    label_Error.Text = Properties.Resources.PFNEmptyList_Error;
                     this.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
                     return;
                 }
@@ -131,8 +131,8 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
-                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        label_Error.Text = Properties.Resources.InvalidVersionFormat_Error; 
+                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion", this.PolicyCustomRule.CustomValues.MinVersion));
                         return;
                     }
                 }
@@ -142,8 +142,8 @@ namespace WDAC_Wizard
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
-                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
+                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
                         return;
                     }
 
@@ -152,8 +152,8 @@ namespace WDAC_Wizard
                         if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
                         {
                             label_Error.Visible = true;
-                            label_Error.Text = "Invalid custom version input. Minimum version must be less than the maximum version";
-                            this.Log.AddWarningMsg("CustomMinVersion !< CustomMaxVersion");
+                            label_Error.Text = Properties.Resources.InvalidVersionRange_Error; 
+                            this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
                             return;
                         }
                     }
@@ -164,8 +164,7 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be\r\nlocated at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%" +
-                            "\r\nare the supported macros.";
+                        label_Error.Text = Properties.Resources.InvalidWildcardPath_Error;
                         this.Log.AddWarningMsg("Invalid custom path rule");
                         return;
                     }
@@ -195,10 +194,32 @@ namespace WDAC_Wizard
                     if(this.PolicyCustomRule.CustomValues.Hashes.Count == 0)
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.";
+                        label_Error.Text = Properties.Resources.HashEmptyList_Error;
                         this.Log.AddWarningMsg("Zero hash values located.");
                         return;
                     }
+
+                }
+
+                // Check for N/A's only in the PCA and Publisher section 
+                switch (this.PolicyCustomRule.Level)
+                {
+                    case PolicyCustomRules.RuleLevel.PcaCertificate:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
+                        }
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.Publisher:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
+                        }
+                        break;
                 }
             }
             else
@@ -544,6 +565,9 @@ namespace WDAC_Wizard
                 this.comboBox_RuleType.SelectedItem = null;
                 this.comboBox_RuleType.Text = "--Select--";
             }
+
+            // Reset the Slider UI textboxes
+            ResetSliderUI(); 
         }
 
 
@@ -943,6 +967,17 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Resets the Slider UI to empty values 
+        /// </summary>
+        private void ResetSliderUI()
+        {
+            this.textBoxSlider_0.Clear();
+            this.textBoxSlider_1.Clear();
+            this.textBoxSlider_2.Clear();
+            this.textBoxSlider_3.Clear();
+        }
+
+        /// <summary>
         /// Opens the folder dialog and grabs the folder path. Requires Folder to be toggled when Browse button 
         /// is selected. 
         /// </summary>
@@ -1011,7 +1046,7 @@ namespace WDAC_Wizard
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        label_Error.Text = Properties.Resources.InvalidVersion_Error;
                         this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
                         return;
                     }
@@ -1248,7 +1283,7 @@ namespace WDAC_Wizard
                 {
                     // Publisher 
                     this.textBoxSlider_0.ReadOnly = true; // We do not support custom values for CA or Publisher
-                    this.textBoxSlider_1.ReadOnly = true;
+                    this.textBoxSlider_1.ReadOnly = true; // TODO: support custom values for CN on publisher
                     this.textBoxSlider_2.ReadOnly = false;
                     this.textBoxSlider_3.ReadOnly = false;
                     this.textBox_MaxVersion.ReadOnly = false;
@@ -1444,7 +1479,7 @@ namespace WDAC_Wizard
             if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
             {
                 label_Error.Visible = true;
-                label_Error.Text = "Type the name of the package to begin the search.";
+                label_Error.Text = Properties.Resources.PFNSearch_Warn;
                 this.Log.AddWarningMsg("Empty packaged app search criteria");
                 return;
             }

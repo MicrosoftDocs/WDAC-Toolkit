@@ -329,6 +329,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash..
+        /// </summary>
+        internal static string HashEmptyList_Error {
+            get {
+                return ResourceManager.GetString("HashEmptyList_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap house {
@@ -357,11 +366,29 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file attribute selected cannot be N/A. Please select another attribute or rule type.
+        /// </summary>
+        internal static string InvalidAttributeSelection_Error {
+            get {
+                return ResourceManager.GetString("InvalidAttributeSelection_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid custom rule. Please set the rule type and reference file before proceeding..
         /// </summary>
         internal static string InvalidCustomRule_Error {
             get {
                 return ResourceManager.GetString("InvalidCustomRule_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a rule type and a file to allow or deny..
+        /// </summary>
+        internal static string InvalidRule_Error {
+            get {
+                return ResourceManager.GetString("InvalidRule_Error", resourceCulture);
             }
         }
         
@@ -380,6 +407,45 @@ namespace WDAC_Wizard.Properties {
         internal static string InvalidSupplementalRule_NoInherit_Info {
             get {
                 return ResourceManager.GetString("InvalidSupplementalRule_NoInherit_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid input. Version input must follow w.x.y.z format and &lt; 65535.65535.65535.65535.
+        /// </summary>
+        internal static string InvalidVersion_Error {
+            get {
+                return ResourceManager.GetString("InvalidVersion_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid custom version input. Version input must follow w.x.y.z format 
+        ///and &lt; 65535.65535.65535.65535.
+        /// </summary>
+        internal static string InvalidVersionFormat_Error {
+            get {
+                return ResourceManager.GetString("InvalidVersionFormat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid custom version input. Minimum version must be less than the maximum version.
+        /// </summary>
+        internal static string InvalidVersionRange_Error {
+            get {
+                return ResourceManager.GetString("InvalidVersionRange_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be
+        ///located at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%
+        ///are the supported macros..
+        /// </summary>
+        internal static string InvalidWildcardPath_Error {
+            get {
+                return ResourceManager.GetString("InvalidWildcardPath_Error", resourceCulture);
             }
         }
         
@@ -525,6 +591,24 @@ namespace WDAC_Wizard.Properties {
         internal static string PCACertificateInfo {
             get {
                 return ResourceManager.GetString("PCACertificateInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list of selected packaged apps is empty. Please select at least 1 packaged app.
+        /// </summary>
+        internal static string PFNEmptyList_Error {
+            get {
+                return ResourceManager.GetString("PFNEmptyList_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type the name of the package to begin the search..
+        /// </summary>
+        internal static string PFNSearch_Warn {
+            get {
+                return ResourceManager.GetString("PFNSearch_Warn", resourceCulture);
             }
         }
         
