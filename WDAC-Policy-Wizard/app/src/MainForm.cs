@@ -1174,6 +1174,18 @@ namespace WDAC_Wizard
                 rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
             }
 
+            // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
+            // Wizard will enforce null versions falling back to hash
+            // Remove this section once the PS cmdlet bug is fixed
+
+            if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
+            {
+                if(String.IsNullOrEmpty(customRule.CustomValues.MinVersion))
+                {
+                    customRule.Level = PolicyCustomRules.RuleLevel.Hash;
+                }
+            }
+
             // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
             switch (customRule.Type)
             {

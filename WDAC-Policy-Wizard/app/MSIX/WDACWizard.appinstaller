@@ -12,7 +12,7 @@
 		ProcessorArchitecture="x64"/>
 
     <UpdateSettings>
-        <OnLaunch HoursBetweenUpdateChecks="120" ShowPrompt="true" UpdateBlocksActivation="true"/>
+        <OnLaunch HoursBetweenUpdateChecks="168" ShowPrompt="true" UpdateBlocksActivation="true"/>
 			<ForceUpdateFromAnyVersion>true</ForceUpdateFromAnyVersion>
     </UpdateSettings>
 </AppInstaller>
