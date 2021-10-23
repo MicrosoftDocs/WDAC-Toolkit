@@ -390,6 +390,10 @@ with a version at or above this specified file version number.</value>
   <data name="InvalidAttributeSelection_Error" xml:space="preserve">
     <value>The file attribute selected cannot be N/A. Please select another attribute or rule type</value>
   </data>
+  <data name="InvalidPublisherFormat_Error" xml:space="preserve">
+    <value>Invalid publisher CN input. Publisher input must follow format: 'CN=PublisherName' or 'PublisherName'. Other fields
+like 'O=' or 'L=' must be removed.</value>
+  </data>
   <data name="InvalidRule_Error" xml:space="preserve">
     <value>Please select a rule type and a file to allow or deny.</value>
   </data>

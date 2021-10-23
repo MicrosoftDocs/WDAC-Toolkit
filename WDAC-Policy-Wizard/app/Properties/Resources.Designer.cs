@@ -384,6 +384,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid publisher CN input. Publisher input must follow format: &apos;CN=PublisherName&apos; or &apos;PublisherName&apos;. Other fields
+        ///like &apos;O=&apos; or &apos;L=&apos; must be removed..
+        /// </summary>
+        internal static string InvalidPublisherFormat_Error {
+            get {
+                return ResourceManager.GetString("InvalidPublisherFormat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a rule type and a file to allow or deny..
         /// </summary>
         internal static string InvalidRule_Error {

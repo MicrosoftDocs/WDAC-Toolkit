@@ -972,7 +972,7 @@ namespace WDAC_Wizard
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath);
 
-                createRuleScript = createCustomRuleScript(customRule, false);
+                createRuleScript = CreateCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
                 createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
 
@@ -1001,7 +1001,7 @@ namespace WDAC_Wizard
                         var exceptionRule = customRule.ExceptionList[j];
                         exceptionRule.PSVariable = j.ToString();
 
-                        scriptCommands.Add(createCustomRuleScript(exceptionRule, true, customRule.PSVariable));
+                        scriptCommands.Add(CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable));
 
                         // Add required exceptions IDs and FileException = 1
                         scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
@@ -1076,7 +1076,13 @@ namespace WDAC_Wizard
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                if(customRule.CustomValues.MinVersion != null)
+                if (customRule.CustomValues.Publisher != null)
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -ne \"FileAttrib\"){{$i.attributes[\"CertPublisher\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.Publisher));
+                }
+
+                if (customRule.CustomValues.MinVersion != null)
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
                         customRule.PSVariable, customRule.CustomValues.MinVersion));
@@ -1135,8 +1141,6 @@ namespace WDAC_Wizard
                 }
             }
 
-            
-
             else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
             {
                 int i = 0;
@@ -1160,7 +1164,7 @@ namespace WDAC_Wizard
             return customValueCommand;
         }
 
-        public string createCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
+        public string CreateCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
             string customRuleScript = string.Empty;
             string rulePrefix = string.Empty;

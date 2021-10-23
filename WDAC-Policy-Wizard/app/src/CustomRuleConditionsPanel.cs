@@ -126,7 +126,23 @@ namespace WDAC_Wizard
             // Ensure custom values are valid
             if (this.PolicyCustomRule.UsingCustomValues)
             {
-                if(this.PolicyCustomRule.CustomValues.MinVersion != null) 
+                if(this.PolicyCustomRule.CustomValues.Publisher != null)
+                {
+                    if (!Helper.IsValidPublisher(this.PolicyCustomRule.CustomValues.Publisher))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidPublisherFormat_Error;
+                        this.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", this.PolicyCustomRule.CustomValues.Publisher));
+                        return;
+                    }
+                    else
+                    {
+                        // Valid publisher, format so WDAC is happy with the input
+                        this.PolicyCustomRule.CustomValues.Publisher = Helper.FormatPublisherCN(this.PolicyCustomRule.CustomValues.Publisher); 
+                    }
+                }
+
+                if(this.PolicyCustomRule.CustomValues.MinVersion != null && this.PolicyCustomRule.CustomValues.MinVersion != "*") 
                 {
                     if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
@@ -137,7 +153,7 @@ namespace WDAC_Wizard
                     }
                 }
 
-                if (this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                if (this.PolicyCustomRule.CustomValues.MaxVersion != null && this.PolicyCustomRule.CustomValues.MaxVersion != "*")
                 {
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
                     {
@@ -147,15 +163,12 @@ namespace WDAC_Wizard
                         return;
                     }
 
-                    if(this.PolicyCustomRule.CustomValues.MinVersion !=null) //TODO: remove this check
+                    if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
                     {
-                        if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
-                        {
-                            label_Error.Visible = true;
-                            label_Error.Text = Properties.Resources.InvalidVersionRange_Error; 
-                            this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
-                            return;
-                        }
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidVersionRange_Error; 
+                        this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
+                        return;
                     }
                 }
 
@@ -307,8 +320,17 @@ namespace WDAC_Wizard
                     name += String.Format("{0}: {1} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"]);
                     break;
                 case PolicyCustomRules.RuleLevel.Publisher:
-                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}: {1}, {2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher);
+                    }
+                    else
+                    {
+                        name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
@@ -1282,8 +1304,8 @@ namespace WDAC_Wizard
                 else
                 {
                     // Publisher 
-                    this.textBoxSlider_0.ReadOnly = true; // We do not support custom values for CA or Publisher
-                    this.textBoxSlider_1.ReadOnly = true; // TODO: support custom values for CN on publisher
+                    this.textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
+                    this.textBoxSlider_1.ReadOnly = false; 
                     this.textBoxSlider_2.ReadOnly = false;
                     this.textBoxSlider_3.ReadOnly = false;
                     this.textBox_MaxVersion.ReadOnly = false;
@@ -1368,8 +1390,7 @@ namespace WDAC_Wizard
 
         private void textBoxSlider_1_TextChanged(object sender, EventArgs e)
         {
-            // Only accessible by File Attributes
-            // Description (file attributes)
+            // Leaf cert publisher (publisher) or Description (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
             if (!this.PolicyCustomRule.UsingCustomValues)
@@ -1377,7 +1398,15 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                this.PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
+            }
+            else
+            {
+                this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+            }
+            
         }
 
         private void textBoxSlider_0_TextChanged(object sender, EventArgs e)
