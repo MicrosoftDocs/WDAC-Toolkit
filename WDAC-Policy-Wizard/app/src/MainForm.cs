@@ -1099,7 +1099,7 @@ namespace WDAC_Wizard
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.FileName));
                 }
-                else
+                else // will only impact SignedVersion rules
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
                         customRule.PSVariable));
