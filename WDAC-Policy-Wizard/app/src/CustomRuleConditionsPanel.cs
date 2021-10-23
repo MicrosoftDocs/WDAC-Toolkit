@@ -323,12 +323,12 @@ namespace WDAC_Wizard
                     
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        name = String.Format("{0}: {1}, {2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name = String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher);
                     }
                     else
                     {
-                        name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name += String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
                     }
                     break;
@@ -337,13 +337,14 @@ namespace WDAC_Wizard
                     
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        name = String.Format("{0}: {1}, {2}, {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & versions {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                            String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion);
                     }
                     else
                     {
-                        name = String.Format("{0}: {1}, {2}, {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
                     }
                     break;
@@ -351,7 +352,8 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleLevel.FilePublisher:
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                         name = String.Format("{0}: {1}, {2}, {3} {4}, {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                         name = String.Format("{0}: {1}, CN={2} & versions {3} {4} with filename = {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.FileName) ? this.PolicyCustomRule.FileInfo["FileName"] : this.PolicyCustomRule.CustomValues.FileName); 
@@ -359,7 +361,7 @@ namespace WDAC_Wizard
                     }
                     else
                     {
-                        name = String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater with filename = {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
                     }
                    

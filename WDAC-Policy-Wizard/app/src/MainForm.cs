@@ -1076,28 +1076,33 @@ namespace WDAC_Wizard
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                if (customRule.CustomValues.Publisher != null)
+                if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -ne \"FileAttrib\"){{$i.attributes[\"CertPublisher\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.Publisher));
                 }
 
-                if (customRule.CustomValues.MinVersion != null)
+                if (customRule.CustomValues.MinVersion != null && customRule.CustomValues.MinVersion != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
                         customRule.PSVariable, customRule.CustomValues.MinVersion));
                 }
 
-                if (customRule.CustomValues.MaxVersion != null)
+                if (customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MaximumFileVersion\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.MaxVersion));
                 }
 
-                if (customRule.CustomValues.FileName != null)
+                if (customRule.CustomValues.FileName != null && customRule.CustomValues.FileName != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+                else
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
+                        customRule.PSVariable));
                 }
             }
 
@@ -1195,8 +1200,19 @@ namespace WDAC_Wizard
             {
                 case PolicyCustomRules.RuleType.Publisher:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
+                        if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion)
+                        {
+                            // Signed Version rules, for some odd reason, cannot set custom version ranges. 
+                            // To solve this problem, force set the Level to FilePublisher and set the FileName field to "*"
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level \"FilePublisher\" -DriverFilePath \'{2}\'" +
+                            " -Fallback Hash", rulePrefix, customRule.ReferenceFile);
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" +
                             " -Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
+                        }
+                        
                     }
                     break;
 
