@@ -1204,7 +1204,7 @@ namespace WDAC_Wizard
                         {
                             // Signed Version rules, for some odd reason, cannot set custom version ranges. 
                             // To solve this problem, force set the Level to FilePublisher and set the FileName field to "*"
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level \"FilePublisher\" -DriverFilePath \'{2}\'" +
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level \"FilePublisher\" -DriverFilePath \'{1}\'" +
                             " -Fallback Hash", rulePrefix, customRule.ReferenceFile);
                         }
                         else
