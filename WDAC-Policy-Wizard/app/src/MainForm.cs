@@ -972,7 +972,7 @@ namespace WDAC_Wizard
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath);
 
-                createRuleScript = createCustomRuleScript(customRule, false);
+                createRuleScript = CreateCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
                 createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
 
@@ -1001,7 +1001,7 @@ namespace WDAC_Wizard
                         var exceptionRule = customRule.ExceptionList[j];
                         exceptionRule.PSVariable = j.ToString();
 
-                        scriptCommands.Add(createCustomRuleScript(exceptionRule, true, customRule.PSVariable));
+                        scriptCommands.Add(CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable));
 
                         // Add required exceptions IDs and FileException = 1
                         scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
@@ -1076,22 +1076,33 @@ namespace WDAC_Wizard
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                if(customRule.CustomValues.MinVersion != null)
+                if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -ne \"FileAttrib\"){{$i.attributes[\"CertPublisher\"] = \"{1}\"}}}}",
+                        customRule.PSVariable, customRule.CustomValues.Publisher));
+                }
+
+                if (customRule.CustomValues.MinVersion != null && customRule.CustomValues.MinVersion != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
                         customRule.PSVariable, customRule.CustomValues.MinVersion));
                 }
 
-                if (customRule.CustomValues.MaxVersion != null)
+                if (customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MaximumFileVersion\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.MaxVersion));
                 }
 
-                if (customRule.CustomValues.FileName != null)
+                if (customRule.CustomValues.FileName != null && customRule.CustomValues.FileName != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.FileName));
+                }
+                else // will only impact SignedVersion rules
+                {
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
+                        customRule.PSVariable));
                 }
             }
 
@@ -1135,8 +1146,6 @@ namespace WDAC_Wizard
                 }
             }
 
-            
-
             else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
             {
                 int i = 0;
@@ -1160,7 +1169,7 @@ namespace WDAC_Wizard
             return customValueCommand;
         }
 
-        public string createCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
+        public string CreateCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
             string customRuleScript = string.Empty;
             string rulePrefix = string.Empty;
@@ -1174,13 +1183,36 @@ namespace WDAC_Wizard
                 rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
             }
 
+            // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
+            // Wizard will enforce null versions falling back to hash
+            // Remove this section once the PS cmdlet bug is fixed
+
+            if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
+            {
+                if(String.IsNullOrEmpty(customRule.CustomValues.MinVersion))
+                {
+                    customRule.Level = PolicyCustomRules.RuleLevel.Hash;
+                }
+            }
+
             // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
             switch (customRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
                     {
-                        customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" + 
+                        if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion)
+                        {
+                            // Signed Version rules, for some odd reason, cannot set custom version ranges. 
+                            // To solve this problem, force set the Level to FilePublisher and set the FileName field to "*"
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level \"FilePublisher\" -DriverFilePath \'{1}\'" +
+                            " -Fallback Hash", rulePrefix, customRule.ReferenceFile);
+                        }
+                        else
+                        {
+                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" +
                             " -Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
+                        }
+                        
                     }
                     break;
 

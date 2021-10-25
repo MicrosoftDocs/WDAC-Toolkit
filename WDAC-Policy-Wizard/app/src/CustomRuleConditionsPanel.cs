@@ -77,7 +77,7 @@ namespace WDAC_Wizard
                 else
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = "Please select a rule type, a file to allow or deny.";
+                    label_Error.Text = Properties.Resources.InvalidRule_Error;
                     this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
                     return;
                 }
@@ -86,14 +86,18 @@ namespace WDAC_Wizard
 
             // Check to make sure none of the fields are invalid
             // If the selected attribute is not found (UI will show Properties.Resources.DefaultFileAttributeString), do not allow creation
-            if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0
-                && this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString))
+            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
             {
-                label_Error.Visible = true;
-                label_Error.Text = "The file attribute selected cannot be N/A. Please select another attribute or rule type";
-                this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
-                return;
+                if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.None || (trackBar_Conditions.Value == 0
+                && this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString))
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = Properties.Resources.InvalidAttributeSelection_Error;
+                    this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                    return;
+                }
             }
+            
 
             // Packaged family name apps. Set the list of apps at button create time
             if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
@@ -102,7 +106,7 @@ namespace WDAC_Wizard
                 if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = "The list of selected packaged apps is empty. Please select at least 1 packaged app";
+                    label_Error.Text = Properties.Resources.PFNEmptyList_Error;
                     this.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
                     return;
                 }
@@ -116,40 +120,55 @@ namespace WDAC_Wizard
                     }
                 }
             }
+            // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
+            bool warnUser = false;
 
             // Ensure custom values are valid
             if (this.PolicyCustomRule.UsingCustomValues)
             {
-                if(this.PolicyCustomRule.CustomValues.MinVersion != null)
+                if(this.PolicyCustomRule.CustomValues.Publisher != null)
+                {
+                    if (!Helper.IsValidPublisher(this.PolicyCustomRule.CustomValues.Publisher))
+                    {
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidPublisherFormat_Error;
+                        this.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", this.PolicyCustomRule.CustomValues.Publisher));
+                        return;
+                    }
+                    else
+                    {
+                        // Valid publisher, format so WDAC is happy with the input
+                        this.PolicyCustomRule.CustomValues.Publisher = Helper.FormatPublisherCN(this.PolicyCustomRule.CustomValues.Publisher); 
+                    }
+                }
+
+                if(this.PolicyCustomRule.CustomValues.MinVersion != null && this.PolicyCustomRule.CustomValues.MinVersion != "*") 
                 {
                     if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
-                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        label_Error.Text = Properties.Resources.InvalidVersionFormat_Error; 
+                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion", this.PolicyCustomRule.CustomValues.MinVersion));
                         return;
                     }
                 }
 
-                if (this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                if (this.PolicyCustomRule.CustomValues.MaxVersion != null && this.PolicyCustomRule.CustomValues.MaxVersion != "*")
                 {
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom version input. Version input must follow w.x.y.z format \r\nand < 65535.65535.65535.65535";
-                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
+                        label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
+                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
                         return;
                     }
 
-                    if(this.PolicyCustomRule.CustomValues.MinVersion !=null)
+                    if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
                     {
-                        if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
-                        {
-                            label_Error.Visible = true;
-                            label_Error.Text = "Invalid custom version input. Minimum version must be less than the maximum version";
-                            this.Log.AddWarningMsg("CustomMinVersion !< CustomMaxVersion");
-                            return;
-                        }
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidVersionRange_Error; 
+                        this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
+                        return;
                     }
                 }
 
@@ -158,8 +177,7 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be\r\nlocated at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%" +
-                            "\r\nare the supported macros.";
+                        label_Error.Text = Properties.Resources.InvalidWildcardPath_Error;
                         this.Log.AddWarningMsg("Invalid custom path rule");
                         return;
                     }
@@ -189,54 +207,79 @@ namespace WDAC_Wizard
                     if(this.PolicyCustomRule.CustomValues.Hashes.Count == 0)
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.";
+                        label_Error.Text = Properties.Resources.HashEmptyList_Error;
                         this.Log.AddWarningMsg("Zero hash values located.");
                         return;
                     }
+
+                }
+
+                // Check for N/A's only in the PCA and Publisher section 
+                switch (this.PolicyCustomRule.Level)
+                {
+                    case PolicyCustomRules.RuleLevel.PcaCertificate:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
+                        }
+                        break;
+
+                    case PolicyCustomRules.RuleLevel.Publisher:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
+                        }
+                        break;
                 }
             }
-
-
-            bool warnUser = false; 
-            switch(this.PolicyCustomRule.Level)
+            else
+            // Check for N/A's if not using custom rules only
             {
-                case PolicyCustomRules.RuleLevel.PcaCertificate:
-                    if(this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
-                    {
-                        warnUser = true;
-                        this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
-                    }
-                    break;
+                switch (this.PolicyCustomRule.Level)
+                {
+                    case PolicyCustomRules.RuleLevel.PcaCertificate:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
+                        }
+                        break;
 
-                case PolicyCustomRules.RuleLevel.Publisher:
-                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString || 
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
-                    {
-                        warnUser = true;
-                        this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
-                    }
-                    break;
+                    case PolicyCustomRules.RuleLevel.Publisher:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
+                        }
+                        break;
 
-                case PolicyCustomRules.RuleLevel.SignedVersion:
-                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString || 
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                        this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultVersionString)
-                    {
-                        warnUser = true;
-                        this.Log.AddWarningMsg("RuleLevel.SignedVersion rule attempt with null attribute(s)");
-                    }
-                    break;
+                    case PolicyCustomRules.RuleLevel.SignedVersion:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
+                        // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
+                        // Wizard will enforce null versions falling back to hash
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.SignedVersion rule attempt with null attribute(s)");
+                        }
+                        break;
 
-                case PolicyCustomRules.RuleLevel.FilePublisher:
-                    if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                        this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultVersionString || 
-                        this.PolicyCustomRule.FileInfo["FileName"] == Properties.Resources.DefaultFileAttributeString)
-                    {
-                        warnUser = true;
-                        this.Log.AddWarningMsg("RuleLevel.FilePublisher rule attempt with null attribute(s)");
-                    }
-                    break;
+                    case PolicyCustomRules.RuleLevel.FilePublisher:
+                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString ||
+                            this.PolicyCustomRule.FileInfo["FileName"] == Properties.Resources.DefaultFileAttributeString)
+                        {
+                            warnUser = true;
+                            this.Log.AddWarningMsg("RuleLevel.FilePublisher rule attempt with null attribute(s)");
+                        }
+                        break;
+                }
             }
 
             if(warnUser)
@@ -277,21 +320,31 @@ namespace WDAC_Wizard
                     name += String.Format("{0}: {1} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"]);
                     break;
                 case PolicyCustomRules.RuleLevel.Publisher:
-                    name += String.Format("{0}: {1}, {2} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                    
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        name = String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher);
+                    }
+                    else
+                    {
+                        name += String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"]);
+                    }
                     break;
 
                 case PolicyCustomRules.RuleLevel.SignedVersion:
                     
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        name = String.Format("{0}: {1}, {2}, {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & versions {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                            String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion);
                     }
                     else
                     {
-                        name = String.Format("{0}: {1}, {2}, {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                         this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
                     }
                     break;
@@ -299,7 +352,8 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleLevel.FilePublisher:
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                         name = String.Format("{0}: {1}, {2}, {3} {4}, {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"], this.PolicyCustomRule.FileInfo["LeafCertificate"],
+                         name = String.Format("{0}: {1}, CN={2} & versions {3} {4} with filename = {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion,
                              String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.FileName) ? this.PolicyCustomRule.FileInfo["FileName"] : this.PolicyCustomRule.CustomValues.FileName); 
@@ -307,7 +361,7 @@ namespace WDAC_Wizard
                     }
                     else
                     {
-                        name = String.Format("{0}: {1}, {2}, {3}, {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
+                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater with filename = {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
                     }
                    
@@ -535,6 +589,9 @@ namespace WDAC_Wizard
                 this.comboBox_RuleType.SelectedItem = null;
                 this.comboBox_RuleType.Text = "--Select--";
             }
+
+            // Reset the Slider UI textboxes
+            ResetSliderUI(); 
         }
 
 
@@ -567,13 +624,12 @@ namespace WDAC_Wizard
                 // Get generic file information to be shown to user
                 PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
-                // Replace misleading commas in version with '.'
-                string fileVersion = fileInfo.FileVersion.Replace(',', '.');
+                
                 PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
                 PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
                 PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
                 PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
-                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileVersion);
+                PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileVersion.Replace(',', '.')); // Replace misleading commas in version with '.'
                 PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
                 PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
                 PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
@@ -587,6 +643,7 @@ namespace WDAC_Wizard
                     try
                     {
                         var signer = X509Certificate.CreateFromSignedFile(refPath);
+
                         var cert = new X509Certificate2(signer);
                         var certChain = new X509Chain();
                         var certChainIsValid = certChain.Build(cert);
@@ -667,10 +724,13 @@ namespace WDAC_Wizard
                         break; 
                     }
 
+                    // Add an asterix to the end of the path to allow all 
+                    this.PolicyCustomRule.ReferenceFile += "\\*"; 
+
                     // Custom rule in progress
                     this._MainWindow.CustomRuleinProgress = true;
 
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    this.textBox_ReferenceFile.Text = this.PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
                     this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
@@ -931,6 +991,17 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Resets the Slider UI to empty values 
+        /// </summary>
+        private void ResetSliderUI()
+        {
+            this.textBoxSlider_0.Clear();
+            this.textBoxSlider_1.Clear();
+            this.textBoxSlider_2.Clear();
+            this.textBoxSlider_3.Clear();
+        }
+
+        /// <summary>
         /// Opens the folder dialog and grabs the folder path. Requires Folder to be toggled when Browse button 
         /// is selected. 
         /// </summary>
@@ -966,6 +1037,7 @@ namespace WDAC_Wizard
                 if (res == DialogResult.Yes)
                 {
                     this.SigningControl.CustomRulesPanel_Closing();
+                    this._MainWindow.CustomRuleinProgress = false; 
                     e.Cancel = false; 
                 }
                 else
@@ -998,7 +1070,7 @@ namespace WDAC_Wizard
                     if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = "Invalid input. Version input must follow w.x.y.z format and < 65535.65535.65535.65535";
+                        label_Error.Text = Properties.Resources.InvalidVersion_Error;
                         this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
                         return;
                     }
@@ -1234,8 +1306,8 @@ namespace WDAC_Wizard
                 else
                 {
                     // Publisher 
-                    this.textBoxSlider_0.ReadOnly = true; // We do not support custom values for CA or Publisher
-                    this.textBoxSlider_1.ReadOnly = true;
+                    this.textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
+                    this.textBoxSlider_1.ReadOnly = false; 
                     this.textBoxSlider_2.ReadOnly = false;
                     this.textBoxSlider_3.ReadOnly = false;
                     this.textBox_MaxVersion.ReadOnly = false;
@@ -1320,8 +1392,7 @@ namespace WDAC_Wizard
 
         private void textBoxSlider_1_TextChanged(object sender, EventArgs e)
         {
-            // Only accessible by File Attributes
-            // Description (file attributes)
+            // Leaf cert publisher (publisher) or Description (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
             if (!this.PolicyCustomRule.UsingCustomValues)
@@ -1329,7 +1400,15 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                this.PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
+            }
+            else
+            {
+                this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+            }
+            
         }
 
         private void textBoxSlider_0_TextChanged(object sender, EventArgs e)
@@ -1431,7 +1510,7 @@ namespace WDAC_Wizard
             if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
             {
                 label_Error.Visible = true;
-                label_Error.Text = "Type the name of the package to begin the search.";
+                label_Error.Text = Properties.Resources.PFNSearch_Warn;
                 this.Log.AddWarningMsg("Empty packaged app search criteria");
                 return;
             }

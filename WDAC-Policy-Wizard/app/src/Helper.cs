@@ -297,6 +297,47 @@ namespace WDAC_Wizard
             writer.Close();
         }
 
+        // Check that publisher does not have multiple instances of '='
+        // That could indicate more fields like C=, L=, S= have been provided
+        // TODO: simply parse for CN only
+        public static bool IsValidPublisher(string publisher)
+        {
+            if(String.IsNullOrEmpty(publisher))
+            {
+                return false; 
+            }
+
+            var pubParts = publisher.Split('='); 
+            if (pubParts.Length > 2)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static string FormatPublisherCN(string publisher)
+        {
+            string formattedPub;
+
+            var pubParts = publisher.Split('=');
+            if(pubParts.Length == 2)
+            {
+                // Ex) ["CN =", "   Contoso Corporation"]
+                formattedPub = pubParts[1]; 
+            }
+            else
+            {
+                formattedPub = publisher; 
+            }
+
+            // Remove any prepended whitespace
+            char[] charsToTrim = { ' ', '\'' };
+            formattedPub = formattedPub.Trim(charsToTrim); 
+
+            return formattedPub; 
+        }
+
         // Check that version has 4 parts (follows ww.xx.yy.zz format)
         // And each part < 2^16
         public static bool IsValidVersion(string version)
@@ -683,6 +724,7 @@ namespace WDAC_Wizard
     // Custom Values object to organize custom values in Custom Rules object
     public class CustomValue
     {
+        public string Publisher;
         public string MinVersion;
         public string MaxVersion;
         public string FileName;
