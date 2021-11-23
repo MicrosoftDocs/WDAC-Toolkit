@@ -3,7 +3,11 @@
   <VersionEx>10.0.22493.0</VersionEx>
   <PolicyTypeID>{D2BDA982-CCF6-4344-AC5B-0B44427B6816}</PolicyTypeID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
-  <Rules />
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+  </Rules>
   <!--EKUS-->
   <EKUs />
   <!--File Rules-->
@@ -771,7 +775,6 @@
     </SigningScenario>
     <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="">
       <ProductSigners>
-        <FileRulesRef />
       </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
