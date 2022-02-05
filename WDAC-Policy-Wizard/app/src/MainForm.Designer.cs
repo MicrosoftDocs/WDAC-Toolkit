@@ -121,7 +121,7 @@ namespace WDAC_Wizard
             this.button_Edit.Text = "Policy Editor";
             this.button_Edit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button_Edit.UseVisualStyleBackColor = true;
-            this.button_Edit.Click += new System.EventHandler(this.button_Edit_Click);
+            this.button_Edit.Click += new System.EventHandler(this.Button_Edit_Click);
             // 
             // button_Merge
             // 
