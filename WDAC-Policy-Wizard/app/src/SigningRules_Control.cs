@@ -520,33 +520,42 @@ namespace WDAC_Wizard
                 return; 
             }
 
-
-            // Check if this is a custom rule that we can delete from memory without modifying the policy
-            if(this.Policy.CustomRules.Count > 0)
+            // Remove from table iff sucessful re-serialization
+            // Remove from DisplayObject
+            if (rowIdx < this.displayObjects.Count)
             {
-                foreach(var customRule in this.Policy.CustomRules)
-                {
-                    if(customRule.RowNumber == rowIdx)
-                    {
-                        customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
-                        this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
-                        break; 
-                    }
-                    else
-                    {
-                        numIdex++;
-                    }
-                }
-
-                // Check if we assigned a value to custom rule indx to remove
-                if(customRuleIdx != -1)
-                {
-                    this.Policy.CustomRules.RemoveAt(customRuleIdx);
-                    // return; 
-                }
+                this.displayObjects.RemoveAt(rowIdx);
+                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
             }
 
+            // Check if this is a custom rule that we can delete from memory without modifying the policy
+            if (String.IsNullOrEmpty(ruleId))
+            {
+                if (this.Policy.CustomRules.Count > 0)
+                {
+                    foreach (var customRule in this.Policy.CustomRules)
+                    {
+                        if (customRule.RowNumber == rowIdx)
+                        {
+                            customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
+                            break;
+                        }
+                        else
+                        {
+                            numIdex++;
+                        }
+                    }
 
+                    // Check if we assigned a value to custom rule indx to remove
+                    if (customRuleIdx != -1)
+                    {
+                        this.Policy.CustomRules.RemoveAt(customRuleIdx);
+                        return; 
+                    }
+                }
+            }
+           
             // Not a custom rule -- Try to remove from signers -- 
             // use ID to remove from scenarios (Allowed/Denied signer)
             if (ruleType.Equals("Publisher"))
@@ -558,56 +567,25 @@ namespace WDAC_Wizard
                     if (signer.ID.Equals(ruleId))
                     {
                         this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
-                        this.Log.AddInfoMsg("Removing from siPolicy.signers");
+                        this.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
+
+                        // Remove the signer from Signing Scenarios
+                        RemoveSignerIdFromSigningScenario(signer.ID); 
+
+                        // Remove any associted FileAttributeRef refrences
+                        if(signer.FileAttribRef != null)
+                        {
+                            foreach(var fileAttrib in signer.FileAttribRef)
+                            {
+                                RemoveRuleIdFromFileAttribs(fileAttrib.RuleID); 
+                            }
+                        }
                         break;
+
                     }
                     else
                     {
                         numIdex++;
-                    }
-                }
-
-                // Remove the signer from Signing Scenarios
-                // TODO: update
-
-                foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
-                {
-                    // Check Allowed Signers
-                    numIdex = 0;
-                    if (scenario.ProductSigners.AllowedSigners != null)
-                    {
-                        foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
-                        {
-                            if (allowedSigner.SignerId.Equals(ruleId))
-                            {
-                                scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
-                                    .Where((val, idx) => idx != numIdex).ToArray();
-                                this.Log.AddInfoMsg(String.Format("Removing {0} from AllowedSigners", allowedSigner.SignerId.ToString()));
-                                break;
-                            }
-
-                            else
-                                numIdex++;
-                        }
-                    }
-
-                    // Check Denied Signers
-                    numIdex = 0;
-                    if (scenario.ProductSigners.DeniedSigners != null)
-                    {
-                        foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
-                        {
-                            if (deniedSigner.SignerId.Equals(ruleId))
-                            {
-                                scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
-                                    .Where((val, idx) => idx != numIdex).ToArray();
-                                this.Log.AddInfoMsg(String.Format("Removing {0} from DeniedSigners", deniedSigner.SignerId.ToString()));
-                                break;
-                            }
-
-                            else
-                                numIdex++;
-                        }
                     }
                 }
             }
@@ -658,7 +636,7 @@ namespace WDAC_Wizard
                 // Remove rule from signer/scenario fields
                 foreach (var ruleIDtoRemove in ruleIDsToRemove)
                 {
-                    RemoveIdFromSigningScenario(ruleIDtoRemove);
+                    RemoveRuleIdFromFileAttribs(ruleIDtoRemove);
                 }
             }
 
@@ -681,7 +659,7 @@ namespace WDAC_Wizard
                     }
                     else
                     {
-                        fileRuleID = ((FileRuleRef)fileRule).RuleID;
+                        fileRuleID = ((FileAttrib)fileRule).ID;
                     }
 
 
@@ -698,7 +676,7 @@ namespace WDAC_Wizard
                 }
 
                 // Remove from Signing Scenario
-                RemoveIdFromSigningScenario(ruleId);
+                RemoveRuleIdFromFileAttribs(ruleId);
             }
 
             // Serialize to new policy
@@ -714,17 +692,64 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("Serialization failed after removing rule with error: ", exp);
                 return; 
             }
+        }
 
-            // Remove from table iff sucessful re-serialization
-            // Remove from DisplayObject
-            if (rowIdx < this.displayObjects.Count)
+        private void RemoveSignerIdFromSigningScenario(string ruleId)
+        {
+            foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
             {
-                this.displayObjects.RemoveAt(rowIdx);
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                // Check Allowed Signers
+                int numIdex = 0;
+                if (scenario.ProductSigners.AllowedSigners != null)
+                {
+                    foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
+                    {
+                        if (allowedSigner.SignerId.Equals(ruleId))
+                        {
+                            scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
+                                .Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing {0} from AllowedSigners", allowedSigner.SignerId.ToString()));
+
+                            // If removing the last AllowedSigner, set AllowedSigners to null so serialization is successful
+                            if (scenario.ProductSigners.AllowedSigners.AllowedSigner.Length == 0)
+                            {
+                                scenario.ProductSigners.AllowedSigners = null;
+                            }
+                            break;
+                        }
+
+                        else
+                            numIdex++;
+                    }
+                }
+
+                // Check Denied Signers
+                numIdex = 0;
+                if (scenario.ProductSigners.DeniedSigners != null)
+                {
+                    foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
+                    {
+                        if (deniedSigner.SignerId.Equals(ruleId))
+                        {
+                            scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
+                                .Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing {0} from DeniedSigners", deniedSigner.SignerId.ToString()));
+
+                            if (scenario.ProductSigners.DeniedSigners.DeniedSigner.Length == 0)
+                            {
+                                scenario.ProductSigners.DeniedSigners = null;
+                            }
+                            break;
+                        }
+
+                        else
+                            numIdex++;
+                    }
+                }
             }
         }
 
-        private void RemoveIdFromSigningScenario(string ruleId)
+        private void RemoveRuleIdFromFileAttribs(string ruleId)
         {
             int numIdex = 0; 
 
@@ -745,6 +770,11 @@ namespace WDAC_Wizard
                         scenario.ProductSigners.FileRulesRef.FileRuleRef = scenario.ProductSigners.FileRulesRef.FileRuleRef.
                             Where((val, idx) => idx != numIdex).ToArray();
                         this.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleId));
+
+                        if(scenario.ProductSigners.FileRulesRef.FileRuleRef.Length == 0)
+                        {
+                            scenario.ProductSigners.FileRulesRef = null; 
+                        }
                         break;
                     }
 
