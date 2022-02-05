@@ -323,10 +323,10 @@ namespace WDAC_Wizard
                     {
                         // If this is a hash rule, only show the one SHA256 Hash to the user. Easier to remove from table if they are to delete the rule
                         level = "Hash";
-                        if (!friendlyName.Contains("Hash Page Sha256"))
-                        {
-                            continue; 
-                        }
+                        //if (!friendlyName.Contains("Hash Page Sha256"))
+                        //{
+                        //    continue; 
+                        //}
                     }
 
                     else if (filePath != null || fileName != null)
@@ -619,10 +619,7 @@ namespace WDAC_Wizard
                         continue;
                     }
 
-                    if (hash != null)
-                        friendlyName = friendlyName.Substring(0, friendlyName.IndexOf("Hash") - 1);
-
-                    if (ruleName.Equals(friendlyName)) // then delete from policy
+                    if (fileRuleID.Equals(ruleId)) // then delete from policy
                     {
                         this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
                         ruleIDsToRemove.Add(fileRuleID);
