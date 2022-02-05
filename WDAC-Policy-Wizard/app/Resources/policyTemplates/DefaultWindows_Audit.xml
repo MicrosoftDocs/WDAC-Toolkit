@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.1.0</VersionEx>
-  <PolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyID>
-  <BasePolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</BasePolicyID>
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
+  <VersionEx>10.0.2.0</VersionEx>
+  <PolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</PolicyID>
+  <BasePolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
       <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
     </Rule>
     <Rule>
       <Option>Enabled:Advanced Boot Options Menu</Option>
@@ -21,28 +24,10 @@
       <Option>Enabled:Update Policy No Reboot</Option>
     </Rule>
     <Rule>
-      <Option>Enabled:Audit Mode</Option>
+      <Option>Enabled:Dynamic Code Security</Option>
     </Rule>
     <Rule>
-      <Option>Enabled:Allow Supplemental Policies</Option>
-    </Rule>
-    <Rule>
-      <Option>Required:WHQL</Option>
-    </Rule>
-    <Rule>
-      <Option>Enabled:Boot Menu Protection</Option>
-    </Rule>
-    <Rule>
-      <Option>Disabled:Script Enforcement</Option>
-    </Rule>
-    <Rule>
-      <Option>Required:Enforce Store Applications</Option>
-    </Rule>
-    <Rule>
-      <Option>Enabled:Managed Installer</Option>
-    </Rule>
-    <Rule>
-      <Option>Enabled:Intelligent Security Graph Authorization</Option>
+      <Option>Enabled:Revoked Expired As Unsigned</Option>
     </Rule>
   </Rules>
   <!--EKUS-->
@@ -56,6 +41,11 @@
     <EKU ID="ID_EKU_DCODEGEN" FriendlyName="Dynamic Code Generation EKU - 1.3.6.1.4.1.311.76.5.1" Value="010A2B0601040182374C0501" />
     <EKU ID="ID_EKU_AM" FriendlyName="AntiMalware EKU -1.3.6.1.4.1.311.76.11.1 " Value="010a2b0601040182374c0b01" />
   </EKUs>
+  <!--File Rules-->
+  <FileRules>
+    <Allow ID="ID_ALLOW_WDAC_WIZARD" FriendlyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe FileRule" MinimumFileVersion="0.0.0.0" PackageFamilyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe" PackageVersion="1.6.4.0" />
+    <FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
+  </FileRules>
   <!--Signers-->
   <Signers>
     <Signer ID="ID_SIGNER_WINDOWS_PRODUCTION" Name="Microsoft Product Root 2010 Windows EKU">
@@ -139,6 +129,10 @@
       <CertRoot Type="Wellknown" Value="04" />
       <CertEKU ID="ID_EKU_WHQL" />
     </Signer>
+    <Signer ID="ID_SIGNER_STORE_FLIGHT_ROOT" Name="Microsoft Flighting Root 2014 Store EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_STORE" />
+    </Signer>
     <Signer ID="ID_SIGNER_STORE" Name="Microsoft MarketPlace PCA 2011">
       <CertRoot Type="TBS" Value="FC9EDE3DCCA09186B2D3BF9B738A2050CB1A554DA2DCADB55F3F72EE17721378" />
       <CertEKU ID="ID_EKU_STORE" />
@@ -151,7 +145,7 @@
       <CertRoot Type="Wellknown" Value="0E" />
       <CertEKU ID="ID_EKU_RT_EXT" />
     </Signer>
-    <Signer ID="ID_SIGNER_RT_STANDARD" Name="Microsoft Standard Root 2001 RT EUK">
+    <Signer ID="ID_SIGNER_RT_STANDARD" Name="Microsoft Standard Root 2011 RT EKU">
       <CertRoot Type="Wellknown" Value="07" />
       <CertEKU ID="ID_EKU_RT_EXT" />
     </Signer>
@@ -171,6 +165,11 @@
     <Signer ID="ID_SIGNER_AM" Name="MincryptKnownRootMicrosoftStandardRoot2011">
       <CertRoot Type="Wellknown" Value="07" />
       <CertEKU ID="ID_EKU_AM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
+      <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
+      <CertPublisher Value="Microsoft Corporation" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_REFRESH_POLICY" />
     </Signer>
   </Signers>
   <SigningScenarios>
@@ -208,15 +207,20 @@
           <AllowedSigner SignerId="ID_SIGNER_HAL_FLIGHT_USER" />
           <AllowedSigner SignerId="ID_SIGNER_WHQL_FLIGHT_SHA2_USER" />
           <AllowedSigner SignerId="ID_SIGNER_STORE" />
+          <AllowedSigner SignerId="ID_SIGNER_STORE_FLIGHT_ROOT" />
           <AllowedSigner SignerId="ID_SIGNER_RT_PRODUCTION" />
           <AllowedSigner SignerId="ID_SIGNER_DRM" />
           <AllowedSigner SignerId="ID_SIGNER_DCODEGEN" />
           <AllowedSigner SignerId="ID_SIGNER_AM" />
           <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />
           <AllowedSigner SignerId="ID_SIGNER_RT_STANDARD" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010_USER" />
         </AllowedSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_WDAC_WIZARD" />
+        </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
@@ -243,12 +247,12 @@
   <Settings>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>
-        <String>DefaultWindowsEnforced</String>
+        <String>DefaultWindowsAudit</String>
       </Value>
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>031017</String>
+        <String>092421</String>
       </Value>
     </Setting>
   </Settings>

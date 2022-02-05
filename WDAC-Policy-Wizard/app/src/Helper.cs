@@ -554,6 +554,20 @@ namespace WDAC_Wizard
             0x2E, 0x6E, 0x65, 0x74
         };
     }
+
+    public class Signer
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string CertOemID { get; set; }
+        public string CommonName { get; set; }
+        public List<string> FileAttribRefs { get; set; }
+
+        public Signer()
+        {
+            this.FileAttribRefs = new List<string>();
+        }
+    }
     
     public class DriverFile
     {

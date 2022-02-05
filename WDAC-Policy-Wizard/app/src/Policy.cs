@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
-using Windows.UI.Xaml;
+//using Windows.UI.Xaml;
 
 namespace WDAC_Wizard
 {
