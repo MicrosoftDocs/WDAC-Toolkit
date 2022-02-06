@@ -12,8 +12,14 @@ using Microsoft.Win32;
 
 namespace WDAC_Wizard
 {
+    /// <summary>
+    /// The local SiPolicy class for all policy manipulation
+    /// </summary>
     public class WDAC_Policy
     {
+        /// <summary>
+        /// Enum to handle the type of policy being created/manipulated, e.g. Base, Supplemental, Edit or Merge workflows
+        /// </summary>
         public enum PolicyType
         {
             None, 
@@ -23,6 +29,9 @@ namespace WDAC_Wizard
             Merge
         }
 
+        /// <summary>
+        /// The template being leveraged in the new single or multiple policy creation workflow
+        /// </summary>
         public enum NewPolicyTemplate
         {
             None, 
@@ -31,6 +40,9 @@ namespace WDAC_Wizard
             SignedReputable, 
         }
 
+        /// <summary>
+        /// The base policy format. Can be either legacy (single policy) or multiple policy (19H1+)
+        /// </summary>
         public enum Format
         {
             None,
@@ -101,13 +113,16 @@ namespace WDAC_Wizard
             this.PoliciesToMerge = new List<string>(); 
 
             this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
-            this.PolicyID = formatDate(false);
+            this.PolicyID = FormatDate(false);
 
             this.UseKernelModeBlocks = false;
             this.UseUserModeBlocks = false; 
         }
 
-        public string formatDate(bool includeTime = true)
+        /// <summary>
+        /// Helper funtion to format the date to be used in temp policy IDs
+        /// </summary>
+        public string FormatDate(bool includeTime = true)
         {
             DateTime sDate = DateTime.Now;
             if (includeTime)
@@ -118,6 +133,9 @@ namespace WDAC_Wizard
                     sDate.ToString("yy"));
         }
 
+        /// <summary>
+        /// Helper function to update the version number on a policy in edit. Will roll the version beginning with the LSB
+        /// </summary>
         public string UpdateVersion()
         {
             int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
@@ -143,6 +161,9 @@ namespace WDAC_Wizard
             return this.VersionNumber; 
         }
 
+        /// <summary>
+        /// Helper function to get the Windows version (e.g. 1903) to determine whether certain features are supported on this system.
+        /// </summary>
         public int GetWinVersion()
         {
             try
@@ -156,6 +177,9 @@ namespace WDAC_Wizard
             return -1;  
         }
 
+        /// <summary>
+        /// Determines whether the policy file contains a version number and the name needs to be updated along with the policy xml version.
+        /// </summary>
         public bool EditPathContainsVersionInfo()
         {
             int START = 14;

@@ -84,7 +84,7 @@ namespace WDAC_Wizard
             this.button_New.Text = "Policy Creator";
             this.button_New.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button_New.UseVisualStyleBackColor = true;
-            this.button_New.Click += new System.EventHandler(this.button_New_Click);
+            this.button_New.Click += new System.EventHandler(this.Button_New_Click);
             // 
             // label_Info
             // 
@@ -101,9 +101,9 @@ namespace WDAC_Wizard
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.BackgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker1_RunWorkerCompleted);
             // 
             // button_Edit
             // 
@@ -139,7 +139,7 @@ namespace WDAC_Wizard
             this.button_Merge.Text = "Policy Merger";
             this.button_Merge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button_Merge.UseVisualStyleBackColor = true;
-            this.button_Merge.Click += new System.EventHandler(this.button_Merge_Click);
+            this.button_Merge.Click += new System.EventHandler(this.Button_Merge_Click);
             // 
             // control_Panel
             // 
@@ -308,7 +308,7 @@ namespace WDAC_Wizard
             this.home_Button.Text = "     Home";
             this.home_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.home_Button.UseVisualStyleBackColor = false;
-            this.home_Button.Click += new System.EventHandler(this.home_Button_Click);
+            this.home_Button.Click += new System.EventHandler(this.Home_Button_Click);
             // 
             // settings_Button
             // 
@@ -329,7 +329,7 @@ namespace WDAC_Wizard
             this.settings_Button.Text = "     Settings";
             this.settings_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.settings_Button.UseVisualStyleBackColor = false;
-            this.settings_Button.Click += new System.EventHandler(this.settings_Button_Click);
+            this.settings_Button.Click += new System.EventHandler(this.Settings_Button_Click);
             // 
             // button_Next
             // 
@@ -341,7 +341,7 @@ namespace WDAC_Wizard
             this.button_Next.Text = "Next";
             this.button_Next.UseVisualStyleBackColor = true;
             this.button_Next.Visible = false;
-            this.button_Next.Click += new System.EventHandler(this.button_Next_Click);
+            this.button_Next.Click += new System.EventHandler(this.Button_Next_Click);
             // 
             // label1
             // 
@@ -412,7 +412,6 @@ namespace WDAC_Wizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Defender App Control Policy Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClosing_Event);
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.control_Panel.ResumeLayout(false);
             this.control_Panel.PerformLayout();
             this.ResumeLayout(false);

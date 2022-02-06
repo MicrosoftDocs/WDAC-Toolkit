@@ -267,7 +267,7 @@
             this.trackBar_Conditions.SmallChange = 4;
             this.trackBar_Conditions.TabIndex = 96;
             this.trackBar_Conditions.TickFrequency = 4;
-            this.trackBar_Conditions.Scroll += new System.EventHandler(this.trackBar_Conditions_Scroll);
+            this.trackBar_Conditions.Scroll += new System.EventHandler(this.TrackBar_Conditions_Scroll);
             // 
             // dataGridView_Exceptions
             // 
@@ -287,7 +287,7 @@
             this.dataGridView_Exceptions.Size = new System.Drawing.Size(621, 150);
             this.dataGridView_Exceptions.TabIndex = 107;
             this.dataGridView_Exceptions.VirtualMode = true;
-            this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_Exceptions_CellValueNeeded);
+            this.dataGridView_Exceptions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.DataGridView_Exceptions_CellValueNeeded);
             // 
             // column_Action
             // 
@@ -363,7 +363,7 @@
             this.comboBox_ExceptionType.Name = "comboBox_ExceptionType";
             this.comboBox_ExceptionType.Size = new System.Drawing.Size(187, 26);
             this.comboBox_ExceptionType.TabIndex = 89;
-            this.comboBox_ExceptionType.SelectedIndexChanged += new System.EventHandler(this.comboBox_ExceptionType_SelectedIndexChanged);
+            this.comboBox_ExceptionType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ExceptionType_SelectedIndexChanged);
             // 
             // textBox_ReferenceFile
             // 
@@ -388,7 +388,7 @@
             this.button_Browse.TabIndex = 84;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
+            this.button_Browse.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // label11
             // 

@@ -417,7 +417,7 @@
             this.trackBar_Conditions.SmallChange = 4;
             this.trackBar_Conditions.TabIndex = 96;
             this.trackBar_Conditions.TickFrequency = 4;
-            this.trackBar_Conditions.Scroll += new System.EventHandler(this.trackBar_Conditions_Scroll);
+            this.trackBar_Conditions.Scroll += new System.EventHandler(this.TrackBar_Conditions_Scroll);
             // 
             // label1
             // 
@@ -586,7 +586,7 @@
             this.button_Browse.TabIndex = 4;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
+            this.button_Browse.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // label_condition
             // 
@@ -655,7 +655,7 @@
             this.button_Next.TabIndex = 107;
             this.button_Next.Text = "Next >";
             this.button_Next.UseVisualStyleBackColor = false;
-            this.button_Next.Click += new System.EventHandler(this.button_Next_Click);
+            this.button_Next.Click += new System.EventHandler(this.Button_Next_Click);
             // 
             // control_Panel
             // 

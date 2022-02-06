@@ -197,7 +197,7 @@ namespace WDAC_Wizard
             this.button_Browse.TabIndex = 93;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = true;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
+            this.button_Browse.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // textBoxBasePolicyPath
             // 
@@ -207,7 +207,7 @@ namespace WDAC_Wizard
             this.textBoxBasePolicyPath.Name = "textBoxBasePolicyPath";
             this.textBoxBasePolicyPath.Size = new System.Drawing.Size(456, 28);
             this.textBoxBasePolicyPath.TabIndex = 14;
-            this.textBoxBasePolicyPath.Click += new System.EventHandler(this.button_Browse_Click);
+            this.textBoxBasePolicyPath.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // label2
             // 

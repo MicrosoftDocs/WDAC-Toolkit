@@ -599,7 +599,7 @@ namespace WDAC_Wizard
         /// Launches the FileDialog and prompts user to select the reference file. 
         /// Based on rule type, sets the UI elements for Publisher, FilePath or Hash rules. 
         /// </summary>
-        private void button_Browse_Click(object sender, EventArgs e)
+        private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Browse button for reference file:
             if (comboBox_RuleType.SelectedItem == null)
@@ -612,7 +612,7 @@ namespace WDAC_Wizard
 
             if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Folder)
             {
-                string refPath = getFileLocation();
+                string refPath = GetFileLocation();
                 if (refPath == String.Empty)
                     return;
 
@@ -716,7 +716,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
-                    this.PolicyCustomRule.ReferenceFile = getFolderLocation();
+                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
                     this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile;
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
@@ -826,11 +826,11 @@ namespace WDAC_Wizard
             // Check if user changed Rule Level after already browsing and selecting a reference file
             if (this.PolicyCustomRule.ReferenceFile != null)
             {
-                button_Browse_Click(sender, e);
+                Button_Browse_Click(sender, e);
             }
         }
 
-        private void trackBar_Conditions_Scroll(object sender, EventArgs e)
+        private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
         {
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
             label_Error.Visible = false; // Clear error label
@@ -961,7 +961,7 @@ namespace WDAC_Wizard
         /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
         /// </summary>
         /// <returns>Returns the full path+name of the file</returns>
-        private string getFileLocation()
+        private string GetFileLocation()
         {
             //TODO: move these common functions to a separate class
             // Open file dialog to get file or folder path
@@ -1006,7 +1006,7 @@ namespace WDAC_Wizard
         /// is selected. 
         /// </summary>
         /// <returns>Returns the full path of the folder</returns>
-        private string getFolderLocation()
+        private string GetFolderLocation()
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
@@ -1057,7 +1057,7 @@ namespace WDAC_Wizard
             base.OnFormClosing(e);
         }
 
-        private void button_Next_Click(object sender, EventArgs e)
+        private void Button_Next_Click(object sender, EventArgs e)
         {
             // Show the exception UI
 

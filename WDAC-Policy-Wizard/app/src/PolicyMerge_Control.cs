@@ -44,10 +44,10 @@ namespace WDAC_Wizard.src
             this._MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
         }
 
-        private void button_Browse_Click(object sender, EventArgs e)
+        private void Button_Browse_Click(object sender, EventArgs e)
         {
             string dspTitle = "Choose the final merged WDAC path location";
-            string policyPath = savePolicy(dspTitle);
+            string policyPath = SavePolicy(dspTitle);
 
             if (!String.IsNullOrEmpty(policyPath))
             {
@@ -73,7 +73,7 @@ namespace WDAC_Wizard.src
 
         }
 
-        private void button_AddPolicy_Click(object sender, EventArgs e)
+        private void Button_AddPolicy_Click(object sender, EventArgs e)
         {
             string dspTitle = "Choose WDAC policies to merge";
             List<string> policyPathsList = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.Policy);
@@ -88,7 +88,7 @@ namespace WDAC_Wizard.src
                     {
                         if (existingPath.Equals(policyPath))
                         {
-                            showError(String.Format("{0} is already selected and in table.", Path.GetFileName(policyPath)));
+                            ShowError(String.Format("{0} is already selected and in table.", Path.GetFileName(policyPath)));
                             isNewPolicy = false; 
                             break;
                         }
@@ -118,7 +118,7 @@ namespace WDAC_Wizard.src
             }
         }
 
-        private void button_RemovePolicy_Click(object sender, EventArgs e)
+        private void Button_RemovePolicy_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
@@ -185,10 +185,9 @@ namespace WDAC_Wizard.src
                 }
             }
         }
-        
-       
+              
 
-        private string savePolicy(string displayTitle)
+        private string SavePolicy(string displayTitle)
         {
             string policyPath = String.Empty;
             // Open file dialog to get file or folder path
@@ -208,7 +207,7 @@ namespace WDAC_Wizard.src
         }
 
 
-        private void showError(string dspStr)
+        private void ShowError(string dspStr)
         {
             this.label_Error.Text = dspStr; 
             this.label_Error.Visible = true;
@@ -224,7 +223,7 @@ namespace WDAC_Wizard.src
         /// Grid View Specific 
         ///
 
-        private void policiesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        private void PoliciesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
             if (e.RowIndex == this.policiesDataGrid.RowCount - 1) return;

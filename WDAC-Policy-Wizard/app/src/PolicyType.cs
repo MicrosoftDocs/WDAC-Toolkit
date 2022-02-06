@@ -93,7 +93,7 @@ namespace WDAC_Wizard
         /// Opens the filedialog prompting the user to select the base policy to extend for the 
         /// supplemental policy. 
         /// </summary>
-        private void button_Browse_Click(object sender, EventArgs e)
+        private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Hide the validation panel
             basePolicyValidation_Panel.Visible = false; 
@@ -249,7 +249,7 @@ namespace WDAC_Wizard
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                string dateString = this._MainWindow.formatDate(false);
+                string dateString = this._MainWindow.FormatDate(false);
                 this._Policy.SchemaPath = GetDefaultPath("Supplemental_Policy", 0);
                 this._Policy.PolicyName = String.Format("{0}_{1}", "My Supplemental Policy", dateString);
 
@@ -271,7 +271,7 @@ namespace WDAC_Wizard
 
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
-            string dateString = this._MainWindow.formatDate(false);
+            string dateString = this._MainWindow.FormatDate(false);
             string proposedPath;
 
             if (nAttempts == 0)

@@ -69,7 +69,7 @@ namespace WDAC_Wizard
         }
 
         
-        //private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 

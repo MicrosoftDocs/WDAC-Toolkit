@@ -112,7 +112,7 @@ namespace WDAC_Wizard
         {
             // Show the text fields now that user has selected base policy template:
             this.policyInfoPanel.Visible = true;
-            this._MainWindow.display_info_text(0); 
+            this._MainWindow.Display_info_text(0); 
 
             // Force other switch buttons off
             this.allowMsft_Button.Tag = "untoggle";
@@ -182,7 +182,7 @@ namespace WDAC_Wizard
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                string dateString = this._MainWindow.formatDate(false);
+                string dateString = this._MainWindow.FormatDate(false);
                 this._Policy.SchemaPath = GetDefaultPath(policyTemplate, 0); 
                 this._Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, dateString);
 
@@ -203,7 +203,7 @@ namespace WDAC_Wizard
 
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
-            string dateString = this._MainWindow.formatDate(false);
+            string dateString = this._MainWindow.FormatDate(false);
             string proposedPath;
 
             if(nAttempts ==0)
