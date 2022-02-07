@@ -234,7 +234,7 @@ namespace WDAC_Wizard
             this.button_Browse_Supp.TabIndex = 3;
             this.button_Browse_Supp.Text = "Browse";
             this.button_Browse_Supp.UseVisualStyleBackColor = true;
-            this.button_Browse_Supp.Click += new System.EventHandler(this.button_BrowseSupp_Click);
+            this.button_Browse_Supp.Click += new System.EventHandler(this.Button_BrowseSupp_Click);
             // 
             // textBox_PolicyName
             // 
@@ -269,7 +269,7 @@ namespace WDAC_Wizard
             this.textBoxSuppPath.Size = new System.Drawing.Size(456, 28);
             this.textBoxSuppPath.TabIndex = 2;
             this.textBoxSuppPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.textBoxSuppPath.Click += new System.EventHandler(this.button_BrowseSupp_Click);
+            this.textBoxSuppPath.Click += new System.EventHandler(this.Button_BrowseSupp_Click);
             // 
             // label_fileLocation
             // 

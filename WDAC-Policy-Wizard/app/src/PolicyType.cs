@@ -82,7 +82,7 @@ namespace WDAC_Wizard
             basePolicy_PictureBox.Image = Properties.Resources.radio_off; 
 
             // Show supplemental policy panel to allow user to build against a policy
-            reset_panel();
+            Reset_panel();
             panelSupplName.Visible = true;
 
             this._MainWindow.ErrorOnPage = true;
@@ -124,15 +124,19 @@ namespace WDAC_Wizard
             CheckPolicy_Recur(0); 
         }
 
+        /// <summary>
+        /// Recurrsively checks the base policy to determine if the base allows for supplemental policies. If not, 
+        /// the Wizard will prompt the user to modify the base to add the supplemental option
+        /// </summary>
         private void CheckPolicy_Recur(int count)
         {
             // Verification: does the chosen base policy allow supplemental policies
             this.Verified_Label.Visible = true;
             this.Verified_PictureBox.Visible = true;
 
-            int isPolicyExtendableCode = isPolicyExtendable(this.BaseToSupplementPath);
+            int IsPolicyExtendableCode = IsPolicyExtendable(this.BaseToSupplementPath);
 
-            if (isPolicyExtendableCode == 0 && count < 2)
+            if (IsPolicyExtendableCode == 0 && count < 2)
             {
                 this.Verified_Label.Text = "This base policy allows supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.verified;
@@ -144,7 +148,7 @@ namespace WDAC_Wizard
                     "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }
-            else if (isPolicyExtendableCode == 1 && count < 1)
+            else if (IsPolicyExtendableCode == 1 && count < 1)
             {
                 this.Verified_Label.Text = "This base policy does not allow supplemental policies.";
                 this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
@@ -158,7 +162,7 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.Yes)
                 {
-                    // Run command Set-RuleOption -Option 17, check isPolicyExtendable again
+                    // Run command Set-RuleOption -Option 17, check IsPolicyExtendable again
                     this._MainWindow.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
                     AddSupplementalOption(this.BaseToSupplementPath);
                     CheckPolicy_Recur(++count); 
@@ -180,7 +184,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="basePolPath">Path to the xml CI policy</param>
         /// <returns>Returns true if the GUID allows supplemental policies</returns>
-        private int isPolicyExtendable(string basePolPath)
+        private int IsPolicyExtendable(string basePolPath)
         {
             // Checks that this policy is 1) a base policy, 2) has the allow supplemental policy rule-option
             WDAC_Policy _BasePolicy = new WDAC_Policy();
@@ -203,12 +207,12 @@ namespace WDAC_Wizard
                 return 99;
             }
 
-            this.Log.AddInfoMsg(String.Format("isPolicyExtendable -- Policy Type: {0}", _BasePolicy.siPolicy.PolicyType.ToString()));
+            this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", _BasePolicy.siPolicy.PolicyType.ToString()));
             
             if(_BasePolicy.siPolicy.PolicyType.ToString().Contains("Supplemental"))
             {
                 // Policy is not base -- not going to fix this case
-                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 2");
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2");
                 return 2;
             }
 
@@ -217,7 +221,7 @@ namespace WDAC_Wizard
                 if(rule.Item.ToString().Contains("Supplemental"))
                 {
                     allowsSupplemental = true;
-                    this.Log.AddInfoMsg(String.Format("isPolicyExtendable -- {0}: True", rule.ToString())); 
+                    this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- {0}: True", rule.ToString())); 
                     break; 
                 }
             }
@@ -225,13 +229,13 @@ namespace WDAC_Wizard
             // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
             if (allowsSupplemental)
             {
-                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 0"); 
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 0"); 
                 return 0; 
             }
             else
             {
                 // Policy does not have the supplemental rule option -- can fix this case
-                this.Log.AddInfoMsg("isPolicyExtendable -- returns error code 1");
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 1");
                 return 1; 
             }
         }
@@ -239,7 +243,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Resets the supplemental panel to its original state. 
         /// </summary>
-        private void reset_panel()
+        private void Reset_panel()
        {
             this.BaseToSupplementPath = null; 
             this.textBoxBasePolicyPath.Text = "";
@@ -269,25 +273,40 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
         }
 
+        /// <summary>
+        /// Determines a default path for the edited policy on disk. Determines if that path exits, and recurrsively determines a new path.   
+        /// </summary>
+        /// <returns> Returns a unique path to policy after editing it</returns>
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
             string dateString = this._MainWindow.FormatDate(false);
             string proposedPath;
 
             if (nAttempts == 0)
+            {
                 proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     String.Format("{0}{1}.xml", policyTemplate, dateString));
+            }
             else
+            {
                 proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     String.Format("{0}{1}_{2}.xml", policyTemplate, dateString, nAttempts));
+            }
 
             if (File.Exists(proposedPath))
+            {
                 return GetDefaultPath(policyTemplate, ++nAttempts);
+            }
             else
+            {
                 return proposedPath;
+            }       
         }
 
-        private void button_BrowseSupp_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Browse button clicked. Open the save dialog to allow user to select a path to save their policy 
+        /// </summary>
+        private void Button_BrowseSupp_Click(object sender, EventArgs e)
         {
             // Save dialog box pressed
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -312,24 +331,42 @@ namespace WDAC_Wizard
             saveFileDialog.Dispose();
         }
 
+        /// <summary>
+        /// Add the "Allow Supplemental" policy rule-option to a base policy on disk by serializing and de-serializing the policy
+        /// </summary>
         private void AddSupplementalOption(string basePath)
         {
-            Runspace policyRuleOptsRunspace = RunspaceFactory.CreateRunspace();
-            policyRuleOptsRunspace.Open();
-            Pipeline pipeline = policyRuleOptsRunspace.CreatePipeline();
-
-            // Add Rule 17: Enabled:Allow Supplemental Policies
-            pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17", basePath));
+            SiPolicy tempSiPolicy; 
 
             try
             {
-                Collection<PSObject> results = pipeline.Invoke();
+                // Deserialize the policy into SiPolicy object
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(basePath);
+                tempSiPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+
+                // Append allow supplemental rule to SiPolicy obj
+                RuleType[] existingRules = tempSiPolicy.Rules;
+
+                RuleType allowSupplementalsRule = new RuleType();
+                allowSupplementalsRule.Item = OptionType.EnabledAllowSupplementalPolicies;
+                Array.Resize(ref existingRules, existingRules.Length + 1);
+                existingRules[existingRules.Length-1] = allowSupplementalsRule;
+                tempSiPolicy.Rules = existingRules;
+
+                // Serialize the policy back to xml policy format
+                serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamWriter writer = new StreamWriter(basePath);
+                serializer.Serialize(writer, tempSiPolicy);
+                writer.Close();
+
             }
-            catch (Exception e)
+            catch (Exception exp)
             {
-                this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", e);
+                this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", exp);
             }
-            policyRuleOptsRunspace.Close();
+
         }
 
         private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
