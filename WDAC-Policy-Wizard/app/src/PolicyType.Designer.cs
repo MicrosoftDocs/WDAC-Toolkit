@@ -245,7 +245,7 @@ namespace WDAC_Wizard
             this.textBox_PolicyName.Name = "textBox_PolicyName";
             this.textBox_PolicyName.Size = new System.Drawing.Size(456, 28);
             this.textBox_PolicyName.TabIndex = 1;
-            this.textBox_PolicyName.TextChanged += new System.EventHandler(this.textBox_PolicyName_TextChanged);
+            this.textBox_PolicyName.TextChanged += new System.EventHandler(this.TextBox_PolicyName_TextChanged);
             // 
             // label6
             // 
@@ -347,7 +347,7 @@ namespace WDAC_Wizard
             this.label_LearnMore.Size = new System.Drawing.Size(351, 22);
             this.label_LearnMore.TabIndex = 98;
             this.label_LearnMore.Text = "Learn more about multiple policy format    ";
-            this.label_LearnMore.Click += new System.EventHandler(this.label_LearnMore_Click);
+            this.label_LearnMore.Click += new System.EventHandler(this.Label_LearnMore_Click);
             // 
             // panel_MultiPolicy
             // 
@@ -403,7 +403,7 @@ namespace WDAC_Wizard
             this.radioButton_MultiplePolicy.TabStop = true;
             this.radioButton_MultiplePolicy.Text = "Multiple Policy Format";
             this.radioButton_MultiplePolicy.UseVisualStyleBackColor = true;
-            this.radioButton_MultiplePolicy.Click += new System.EventHandler(this.multipleFormat_ButtonClick);
+            this.radioButton_MultiplePolicy.Click += new System.EventHandler(this.MultipleFormat_ButtonClick);
             // 
             // radioButton_SinglePolicy
             // 
@@ -416,7 +416,7 @@ namespace WDAC_Wizard
             this.radioButton_SinglePolicy.TabIndex = 1;
             this.radioButton_SinglePolicy.Text = "Single Policy Format";
             this.radioButton_SinglePolicy.UseVisualStyleBackColor = true;
-            this.radioButton_SinglePolicy.Click += new System.EventHandler(this.singleFormat_ButtonClick);
+            this.radioButton_SinglePolicy.Click += new System.EventHandler(this.SingleFormat_ButtonClick);
             // 
             // PolicyType
             // 

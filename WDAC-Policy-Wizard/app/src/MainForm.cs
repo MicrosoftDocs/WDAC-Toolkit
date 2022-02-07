@@ -809,7 +809,7 @@ namespace WDAC_Wizard
         /// </summary>
         public void CreatePolicyRuleOptions(BackgroundWorker worker)
         {
-            // Set-RuleOption: https://docs.microsoft.com/en-us/powershell/module/configci/set-ruleoption?view=win10-ps
+            // Set-RuleOption: https://docs.microsoft.com/powershell/module/configci/set-ruleoption?view=win10-ps
             // Inputs: -FilePath <string> required existing, -Option <Int32>: indices of rules options
 
             this.Log.AddInfoMsg("--- Create Policy Rule Options --- ");
@@ -1204,7 +1204,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
+            // Create new CI Rule: https://docs.microsoft.com/powershell/module/configci/new-cipolicyrule
             switch (customRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
@@ -1651,7 +1651,7 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
+            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
             string binaryFileName; 
             if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
@@ -2270,7 +2270,7 @@ namespace WDAC_Wizard
         {
             // Check that WDAC feature is compatible with system
             // Cmdlets are available on all builds 1909+. 
-            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability
+            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability
 
             int REQUIRED_V = 1909;
             string REQUIRED_ED = "Enterprise";
@@ -2311,7 +2311,7 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.OK)
                 {
-                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability");
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability");
                 }
             }
         }

@@ -218,7 +218,7 @@ namespace WDAC_Wizard
 
             foreach(var rule in _BasePolicy.siPolicy.Rules)
             {
-                if(rule.Item.ToString().Contains("Supplemental"))
+                if(rule.Item == OptionType.EnabledAllowSupplementalPolicies)
                 {
                     allowsSupplemental = true;
                     this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- {0}: True", rule.ToString())); 
@@ -332,7 +332,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Add the "Allow Supplemental" policy rule-option to a base policy on disk by serializing and de-serializing the policy
+        /// Add the "Allow Supplemental" policy rule-option to a base policy on disk by de-serializing and re-serializing the policy
         /// </summary>
         private void AddSupplementalOption(string basePath)
         {
@@ -369,14 +369,19 @@ namespace WDAC_Wizard
 
         }
 
-        private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
+        // <summary>
+        /// Policy name has been modified by the user. Update the policy name
+        /// </summary>
+        private void TextBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
             // Policy Friend Name
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
-
-        private void multipleFormat_ButtonClick(object sender, EventArgs e)
+        // <summary>
+        /// User is creating a multi-policy formated policy. Update the UI to reflect the desired state
+        /// </summary>
+        private void MultipleFormat_ButtonClick(object sender, EventArgs e)
         {
             // Show the multi-policy UI panel
             this.panel_MultiPolicy.Visible = true;
@@ -400,7 +405,10 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
         }
 
-        private void singleFormat_ButtonClick(object sender, EventArgs e)
+        // <summary>
+        /// User is creating a single-policy formated policy. Update the UI to reflect the desired state and hide the multipolicy panel
+        /// </summary>
+        private void SingleFormat_ButtonClick(object sender, EventArgs e)
         {
             // UI changes - Hide the panel
             this.panel_MultiPolicy.Visible = false;
@@ -417,6 +425,9 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
         }
 
+        // <summary>
+        /// Method fires on page load and sets the default state of the UI determined by last time the page was loaded
+        /// </summary>
         private void PolicyType_Load(object sender, EventArgs e)
         {
             // On page load, check whether multiple or single policy format was chosen last time the page was loaded
@@ -432,12 +443,15 @@ namespace WDAC_Wizard
             }
         }
 
-        private void label_LearnMore_Click(object sender, EventArgs e)
+        // <summary>
+        /// User has clicked the "Learn More" label. Launch the multi-policy help online doc
+        /// </summary>
+        private void Label_LearnMore_Click(object sender, EventArgs e)
         {
             // multi-policy info label clicked. Launch multi-policy info webpage
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/" +
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/" +
                     "deploy-multiple-windows-defender-application-control-policies";
                 System.Diagnostics.Process.Start(webpage);
             }

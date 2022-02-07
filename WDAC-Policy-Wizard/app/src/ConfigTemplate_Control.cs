@@ -316,7 +316,7 @@ namespace WDAC_Wizard
         private Dictionary<string, Dictionary<string, string>> initRulesDict()
         {
             // Wiring the button IDs to the corresponding rules
-            // Default values and order can be found @: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
+            // Default values and order can be found @: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
             string dictPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
             Dictionary<string, Dictionary<string, string>> rulesDict = new Dictionary<string, Dictionary<string, string>>();
 
@@ -566,7 +566,7 @@ namespace WDAC_Wizard
             // Label for learn more about policy options clicked. Launch msft docs page. 
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity";
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)
@@ -580,7 +580,7 @@ namespace WDAC_Wizard
             // Label for learn more about policy options clicked. Launch msft docs page. 
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/" +
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/" +
                     "windows-defender-application-control/select-types-of-rules-to-create";
                 System.Diagnostics.Process.Start(webpage);
             }

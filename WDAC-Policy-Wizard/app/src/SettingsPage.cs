@@ -372,7 +372,7 @@ namespace WDAC_Wizard
             // Launch the WDAC recommended blocklist page
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules";
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)
@@ -386,7 +386,7 @@ namespace WDAC_Wizard
             // Launch the WDAC recommended blocklist page
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-block-rules";
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-block-rules";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)

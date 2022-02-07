@@ -195,7 +195,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Sets the new Policy Name setting. 
         /// </summary>
-        private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
+        private void TextBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
@@ -348,7 +348,7 @@ namespace WDAC_Wizard
         {
             string customRuleScript = string.Empty;
 
-            // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
+            // Create new CI Rule: https://docs.microsoft.com/powershell/module/configci/new-cipolicyrule
             switch (customRule.GetRuleType())
             {
                 case PolicyCustomRules.RuleType.Publisher:
@@ -526,7 +526,7 @@ namespace WDAC_Wizard
             // multi-policy info label clicked. Launch multi-policy info webpage
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control"
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control"
                     + "/audit-windows-defender-application-control-policies#create-a-windows-defender-application-control-policy-that-captures-audit-information-from-the-event-log";
                 System.Diagnostics.Process.Start(webpage);
             }

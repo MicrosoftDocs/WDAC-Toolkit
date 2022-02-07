@@ -160,7 +160,7 @@ namespace WDAC_Wizard
             this.textBox_PolicyName.Name = "textBox_PolicyName";
             this.textBox_PolicyName.Size = new System.Drawing.Size(420, 29);
             this.textBox_PolicyName.TabIndex = 2;
-            this.textBox_PolicyName.TextChanged += new System.EventHandler(this.textBox_PolicyName_TextChanged);
+            this.textBox_PolicyName.TextChanged += new System.EventHandler(this.TextBox_PolicyName_TextChanged);
             // 
             // label_policyName
             // 

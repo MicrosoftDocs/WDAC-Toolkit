@@ -224,7 +224,7 @@ namespace WDAC_Wizard
             // ISG label clicked. Launch ISG webpage
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/" +
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/" +
                     "windows-defender-application-control/use-windows-defender-application-control-with-" +
                     "intelligent-security-graph";
                 System.Diagnostics.Process.Start(webpage);
@@ -262,7 +262,7 @@ namespace WDAC_Wizard
         {
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)
