@@ -1176,7 +1176,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Processes all of the custom rules with custom values. E.g. custom version ranges, custom filenames, file paths
+        /// Processes all of the custom rules with arbitrary custom values. E.g. custom version ranges, custom filenames, file paths
         /// </summary>
         public string CreateCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
@@ -1192,11 +1192,27 @@ namespace WDAC_Wizard
                 rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
             }
 
+        // TODO: add support for custom EKU values
+        /*
+         *      $propsNoId = @{
+         *      Value = '010A2B06010401823
+         *      FriendlyName = 'Test EKU'
+         *      }
+         * 
+         *      $obj_noID = new-object -Ty
+         *      $rule[0].Ekus += $obj_noID
+         *      Eku schema:
+         * 
+         *      First byte: n_ekus
+         *      Second: n_bytes (e.g. 10 for 1.3.6.1.4.1.311.76.11.1)
+         */
+
+
             // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
             // Wizard will enforce null versions falling back to hash
             // Remove this section once the PS cmdlet bug is fixed
 
-            if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
+            if (customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
             {
                 if(String.IsNullOrEmpty(customRule.CustomValues.MinVersion))
                 {

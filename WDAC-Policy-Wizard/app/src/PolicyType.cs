@@ -373,14 +373,12 @@ namespace WDAC_Wizard
                 Helper.SerializePolicytoXML(tempSiPolicy, basePath); 
                 
                 return true; 
-
             }
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", exp);
                 return false; 
             }
-
         }
 
         // <summary>
