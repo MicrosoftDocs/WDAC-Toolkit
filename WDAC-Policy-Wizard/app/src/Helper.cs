@@ -470,6 +470,31 @@ namespace WDAC_Wizard
 
         }
 
+        /// <summary>
+        /// Check that the given directory is write-accessable by the user.  
+        /// /// </summary>
+        public static bool IsUserWriteable(string path)
+        {
+            // Try to create a subdir in the folderPath. If successful, write access is true. 
+            // If an exception is hit, the path is likely not user-writeable 
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(path);
+                if (di.Exists)
+                {
+                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(path, "testSubDir"));
+                    dis.Create();
+                    dis.Delete();
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
         public static Dictionary<string, string> ParsePSOutput(Collection<PSObject> results)
         {
             Dictionary<string, string> output = new Dictionary<string, string>();

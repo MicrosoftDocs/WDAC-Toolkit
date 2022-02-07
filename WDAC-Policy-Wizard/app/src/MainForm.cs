@@ -1435,7 +1435,7 @@ namespace WDAC_Wizard
             }
 
             // Check if user-writeable. If it is not, default to MyDocuments
-            if(!WriteAccess(Path.GetDirectoryName(this.Policy.SchemaPath)))
+            if(!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
             {
                 this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
             }
@@ -1657,10 +1657,7 @@ namespace WDAC_Wizard
             {
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                    StreamReader reader = new StreamReader(this.Policy.SchemaPath);
-                    SiPolicy finalSiPolicy = (SiPolicy)serializer.Deserialize(reader);
-                    reader.Close();
+                    SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
                     binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
                 }
                 catch
@@ -2235,32 +2232,6 @@ namespace WDAC_Wizard
                 return executablePath;
             else
                 return folderPath; 
-        }
-
-        /// <summary>
-        /// Check that the given directory is write-accessable by the user.  
-        /// /// </summary>
-        private bool WriteAccess(string folderPath)
-        {
-            // Try to create a subdir in the folderPath. If successful, write access is true. 
-            // If an exception is hit, the path is likely not user-writeable 
-            try
-            {
-                DirectoryInfo di = new DirectoryInfo(folderPath); 
-                if(di.Exists)
-                {
-                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(folderPath, "testSubDir"));
-                    dis.Create();
-                    dis.Delete(); 
-                }
-
-                return true; 
-            }
-            catch(Exception e)
-            {
-                this.Log.AddErrorMsg("WriteAccess() encountered the following exception: " + e); 
-                return false; 
-            }
         }
 
         /// <summary>

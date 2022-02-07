@@ -109,6 +109,7 @@ namespace WDAC_Wizard
             {
                 this.BaseToSupplementPath = openFileDialog.FileName;
                 this.textBoxBasePolicyPath.Text = openFileDialog.FileName;
+
                 // Show right side of the text
                 this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
                 this.textBoxBasePolicyPath.ScrollToCaret();
@@ -164,7 +165,19 @@ namespace WDAC_Wizard
                 {
                     // Run command Set-RuleOption -Option 17, check IsPolicyExtendable again
                     this._MainWindow.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
-                    AddSupplementalOption(this.BaseToSupplementPath);
+                    bool success = AddSupplementalOption(this.BaseToSupplementPath);
+
+                    // If adding supplemental option was unsuccessful for any reason
+                    if(!success)
+                    {
+                        DialogResult _res = MessageBox.Show(String.Format("The Wizard was unable to add the 'Allow Supplemental Policy Option' to {0}.", Path.GetFileName(this.BaseToSupplementPath)),
+                            "Something went wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        this._MainWindow.ErrorOnPage = true;
+                        this._MainWindow.ErrorMsg = "The Wizard was unable to add the 'Allow Supplemental Policy Option'.";
+
+                        return; 
+                    }
+
                     CheckPolicy_Recur(++count); 
                 }
             }
@@ -192,10 +205,7 @@ namespace WDAC_Wizard
             // Read File
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(basePolPath);
-                _BasePolicy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                _BasePolicy.siPolicy = Helper.DeserializeXMLtoPolicy(basePolPath);
             }
             catch (Exception exp)
             {
@@ -334,17 +344,14 @@ namespace WDAC_Wizard
         /// <summary>
         /// Add the "Allow Supplemental" policy rule-option to a base policy on disk by de-serializing and re-serializing the policy
         /// </summary>
-        private void AddSupplementalOption(string basePath)
+        private bool AddSupplementalOption(string basePath)
         {
             SiPolicy tempSiPolicy; 
 
             try
             {
                 // Deserialize the policy into SiPolicy object
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(basePath);
-                tempSiPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                tempSiPolicy = Helper.DeserializeXMLtoPolicy(basePath); 
 
                 // Append allow supplemental rule to SiPolicy obj
                 RuleType[] existingRules = tempSiPolicy.Rules;
@@ -355,16 +362,23 @@ namespace WDAC_Wizard
                 existingRules[existingRules.Length-1] = allowSupplementalsRule;
                 tempSiPolicy.Rules = existingRules;
 
+                // Check if path is user-writeable. If it is not, copy to documents and update path to BasePolicyToSupplement
+                if (!Helper.IsUserWriteable(Path.GetDirectoryName(basePath)))
+                {
+                    basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(basePath));
+                    this.BaseToSupplementPath = basePath; 
+                }
+
                 // Serialize the policy back to xml policy format
-                serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamWriter writer = new StreamWriter(basePath);
-                serializer.Serialize(writer, tempSiPolicy);
-                writer.Close();
+                Helper.SerializePolicytoXML(tempSiPolicy, basePath); 
+                
+                return true; 
 
             }
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", exp);
+                return false; 
             }
 
         }
@@ -388,7 +402,6 @@ namespace WDAC_Wizard
 
             // Set the setting to show this radio button selected next page load
             Properties.Settings.Default.showMultiplePolicyDefault = true; 
-
 
             // Just call into the events to reset the UI
             if (this.basePolicy_PictureBox.Tag.ToString().Contains("Unselected"))

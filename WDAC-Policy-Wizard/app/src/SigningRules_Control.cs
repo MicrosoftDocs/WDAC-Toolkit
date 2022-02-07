@@ -392,11 +392,7 @@ namespace WDAC_Wizard
             try
             {
                 // Read File
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(this.XmlPath);
-                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
-
+                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(this.XmlPath); 
             } 
             catch (Exception exp)
             {
@@ -679,10 +675,7 @@ namespace WDAC_Wizard
             // Serialize to new policy
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamWriter writer = new StreamWriter(this.XmlPath);
-                serializer.Serialize(writer, this.Policy.siPolicy);
-                writer.Close();
+                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath); 
             }
             catch(Exception exp)
             {
