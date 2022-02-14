@@ -183,6 +183,21 @@ namespace WDAC_Wizard
                     }
                 }
 
+                // Check custom EKU value to ensure 
+                if (this.PolicyCustomRule.CustomValues.EKU != null)
+                {
+                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKU); 
+                    if(String.IsNullOrEmpty(ekuTLVEncoded))
+                    {
+                        this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " +
+                            this.PolicyCustomRule.CustomValues.EKU); 
+                    }
+                    else
+                    {
+                        this.PolicyCustomRule.CustomValues.EKU = ekuTLVEncoded; 
+                    }
+                }
+
                 // Parse package family names into PolicyCustomRule.CustomValues.PackageFamilyNames
                 if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
@@ -1659,6 +1674,44 @@ namespace WDAC_Wizard
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// EKU checkbox state changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBoxEkuStateChanged(object sender, EventArgs e)
+        {
+            // If user wants to use checkbox
+            // Enable the textbox
+            if(this.checkBoxEku.Checked)
+            {
+                this.textBoxEKU.Enabled = true;
+                this.textBoxEKU.ReadOnly = false; 
+                this.PolicyCustomRule.UsingCustomValues = true; 
+            }
+            else
+            {
+                this.textBoxEKU.Enabled = false;
+                this.textBoxEKU.ReadOnly = true; 
+
+                // Reset the UsingCustomValues field iff not set custom using the checkbox
+                if (!this.checkBox_CustomValues.Checked)
+                {
+                    this.PolicyCustomRule.UsingCustomValues = false; 
+                }
+            }
+        }
+
+        /// <summary>
+        /// EKU textbox value changed. User input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxEKU_TextChanged(object sender, EventArgs e)
+        {
+            this.PolicyCustomRule.CustomValues.EKU = this.textBoxEKU.Text; 
         }
     }
 }   
