@@ -40,7 +40,8 @@ namespace WDAC_Wizard
         {
             Policy = 0,     // -Show .xml files
             EventLog = 1,   // -Show .evtx files
-            All = 2         // -Show . all files
+            PEFile = 2,     // -Show PE (.exe, .dll, .sys) files
+            All = 3         // -Show . all files
         }
 
         public static string GetDOSPath(string NTPath)
@@ -180,6 +181,12 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Helper function to call OpenFileDialog and multi-select files
+        /// </summary>
+        /// <param name="displayTitle"></param>
+        /// <param name="browseFileType"></param>
+        /// <returns>String list of file paths if paths found and user clicks OK. Null otherwise</returns>
         public static List<string> BrowseForMultiFiles(string displayTitle, BrowseFileType browseFileType)
         {
             List<string> policyPaths = new List<string>(); 
@@ -191,7 +198,7 @@ namespace WDAC_Wizard
 
             if(browseFileType == BrowseFileType.Policy)
             {
-                openFileDialog.Filter = "Policy Files (*.xml)|*.xml";
+                openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
             }
             else if (browseFileType == BrowseFileType.EventLog)
             {
@@ -215,6 +222,77 @@ namespace WDAC_Wizard
             {
                 return null; 
             }
+        }
+
+        /// <summary>
+        /// Browse for single file path using OpenFileDialog
+        /// </summary>
+        /// <param name="displayTitle"></param>
+        /// <param name="browseFile"></param>
+        /// <returns>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
+        public static string BrowseForSingleFile(string displayTitle, BrowseFileType browseFile)
+        {
+            // Open file dialog to get file or folder path
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = displayTitle;
+            openFileDialog.CheckPathExists = true;
+
+            if(browseFile.Equals(BrowseFileType.PEFile))
+            {
+                openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
+                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
+                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All files (*.*)|*.*";
+
+                openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
+            }
+            else if(browseFile.Equals(BrowseFileType.Policy))
+            {
+                openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
+            }
+            else
+            {
+                openFileDialog.Filter = "All Files (*.)|*.";
+            }            
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                openFileDialog.Dispose();
+            }
+
+            return openFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Open SaveFileDialog for a single file
+        /// </summary>
+        /// <returns>>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
+        public static string SaveSingleFile(string displayTitle, BrowseFileType browseFile)
+        {
+            string saveLocationPath = String.Empty; 
+
+            // Save dialog box pressed
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = displayTitle;
+            saveFileDialog.CheckPathExists = true;
+
+            if(browseFile == BrowseFileType.Policy)
+            {
+                saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
+            }
+            else
+            {
+                saveFileDialog.Filter = "All Files (*.)|*.";
+            }
+            saveFileDialog.RestoreDirectory = true;
+
+            saveFileDialog.ShowDialog();
+            saveLocationPath = saveFileDialog.FileName; 
+            saveFileDialog.Dispose();
+
+            return saveLocationPath; 
         }
 
         //

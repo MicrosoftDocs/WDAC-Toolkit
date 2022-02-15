@@ -418,4 +418,13 @@ are the supported macros.</value>
   <data name="PFNSearch_Warn" xml:space="preserve">
     <value>Type the name of the package to begin the search.</value>
   </data>
+  <data name="OpenPEFileDialogTitle" xml:space="preserve">
+    <value>Browse for a file to use as a reference for the WDAC rule.</value>
+  </data>
+  <data name="OpenXMLFileDialogTitle" xml:space="preserve">
+    <value>Browse for existing WDAC Policy File.</value>
+  </data>
+  <data name="SaveXMLFileDialogTitle" xml:space="preserve">
+    <value>Choose a Location to Save your WDAC Policy</value>
+  </data>
 </root>

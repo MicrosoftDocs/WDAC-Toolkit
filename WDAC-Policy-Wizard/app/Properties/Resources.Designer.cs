@@ -596,6 +596,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse for a file to use as a reference for the WDAC rule..
+        /// </summary>
+        internal static string OpenPEFileDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenPEFileDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for existing WDAC Policy File..
+        /// </summary>
+        internal static string OpenXMLFileDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenXMLFileDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {
@@ -705,6 +723,15 @@ namespace WDAC_Wizard.Properties {
         internal static string RuntimeRules {
             get {
                 return ResourceManager.GetString("RuntimeRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a Location to Save your WDAC Policy.
+        /// </summary>
+        internal static string SaveXMLFileDialogTitle {
+            get {
+                return ResourceManager.GetString("SaveXMLFileDialogTitle", resourceCulture);
             }
         }
         

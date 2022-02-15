@@ -133,25 +133,15 @@ namespace WDAC_Wizard
         private void textBoxPolicyPath_TextChanged(object sender, EventArgs e)
         {
             // Save dialog box pressed
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "Save Your Base Policy File";
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.DefaultExt = "xml";
-            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
-            saveFileDialog.RestoreDirectory = true;
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                textBoxPolicyPath.Text = saveFileDialog.FileName;
 
-                this._Policy.SchemaPath = saveFileDialog.FileName;
-                this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
-                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
-                this.textBoxPolicyPath.ScrollToCaret(); 
-            }
+            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
 
-            saveFileDialog.Dispose(); 
-
-
+            textBoxPolicyPath.Text = policyPath;
+            this._Policy.SchemaPath = policyPath;
+            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
+            this.textBoxPolicyPath.ScrollToCaret(); 
+            
             if(this._Policy.PolicyName != null)
             {
                 this._MainWindow.ErrorOnPage = false;

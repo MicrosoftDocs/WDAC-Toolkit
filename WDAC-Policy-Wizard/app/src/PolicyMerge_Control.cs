@@ -78,7 +78,12 @@ namespace WDAC_Wizard.src
             string dspTitle = "Choose WDAC policies to merge";
             List<string> policyPathsList = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.Policy);
 
-            foreach(var policyPath in policyPathsList)
+            if (policyPathsList == null)
+            {
+                return;
+            }
+
+            foreach (var policyPath in policyPathsList)
             {
                 bool isNewPolicy = true; 
                 if (!String.IsNullOrEmpty(policyPath))
@@ -189,21 +194,8 @@ namespace WDAC_Wizard.src
 
         private string SavePolicy(string displayTitle)
         {
-            string policyPath = String.Empty;
             // Open file dialog to get file or folder path
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = displayTitle;
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
-            saveFileDialog.RestoreDirectory = true;
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                policyPath = saveFileDialog.FileName;
-            }
-            saveFileDialog.Dispose();
-
-            return policyPath;
+            return Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
         }
 
 

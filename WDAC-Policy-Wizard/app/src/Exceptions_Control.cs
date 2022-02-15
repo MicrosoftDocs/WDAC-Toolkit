@@ -298,31 +298,8 @@ namespace WDAC_Wizard
         /// <returns>Returns the full path+name of the file</returns>
         private string GetFileLocation()
         {
-            //TODO: move these common functions to a separate class
             // Open file dialog to get file or folder path
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for a signed file to use as a reference for the rule.";
-            openFileDialog.CheckPathExists = true;
-            // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
-            openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
-                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All files (*.*)|*.*";
-
-            openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
-
-            openFileDialog.RestoreDirectory = true;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog.Dispose();
-                return openFileDialog.FileName;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            return Helper.BrowseForSingleFile(Properties.Resources.OpenPEFileDialogTitle, Helper.BrowseFileType.PEFile);
         }
 
         private void Exceptions_Control_Load(object sender, EventArgs e)

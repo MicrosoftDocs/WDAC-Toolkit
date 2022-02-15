@@ -90,21 +90,15 @@ namespace WDAC_Wizard
             }
                        
             this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
-
-            // Save dialog box pressed
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for existing WDAC Policy File";
-            openFileDialog.CheckPathExists = true;
-            openFileDialog.DefaultExt = "xml";
-            openFileDialog.Filter = "Policy Files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
+            string policyPath = String.Empty; 
 
             try
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                policyPath = Helper.BrowseForSingleFile(Properties.Resources.OpenXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
+                if (! String.IsNullOrEmpty(policyPath))
                 {
-                    textBoxPolicyPath.Text = openFileDialog.FileName;                   
-                    this.EditPath = openFileDialog.FileName;
+                    textBoxPolicyPath.Text = policyPath;                   
+                    this.EditPath = policyPath;
 
                     // Parse the policy for its information and display it
                     ParsePolicy(this.EditPath);
@@ -121,7 +115,6 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("EditWorkflow Browse() encountered the following error ", exp); 
             }
-            openFileDialog.Dispose();
         }
 
         /// <summary>
@@ -229,6 +222,11 @@ namespace WDAC_Wizard
 
             string dspTitle = "Choose event logs to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
+
+            if(eventLogPaths == null)
+            {
+                return; 
+            }
 
             // Prep UI
             this.textBox_EventLogFilePath.Text = eventLogPaths[0]; 

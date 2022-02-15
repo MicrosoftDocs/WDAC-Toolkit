@@ -96,30 +96,28 @@ namespace WDAC_Wizard
         private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Hide the validation panel
-            basePolicyValidation_Panel.Visible = false; 
+            basePolicyValidation_Panel.Visible = false;
 
             // Open file dialog to get file or folder path
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Please select your exisiting policy XML file.";
-            openFileDialog.CheckPathExists = true;
-            //openFileDialog.DefaultExt = "xml";
-            openFileDialog.Filter = "Policy File (*.xml)|*.xml"; 
-            openFileDialog.RestoreDirectory = true;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            string policyPath = Helper.BrowseForSingleFile(Properties.Resources.OpenXMLFileDialogTitle, Helper.BrowseFileType.Policy);
+  
+            if (String.IsNullOrEmpty(policyPath))
             {
-                this.BaseToSupplementPath = openFileDialog.FileName;
-                this.textBoxBasePolicyPath.Text = openFileDialog.FileName;
-
-                // Show right side of the text
-                this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
-                this.textBoxBasePolicyPath.ScrollToCaret();
-
+                return; 
             }
-            openFileDialog.Dispose();
+
+            this.BaseToSupplementPath = policyPath;
+            this.textBoxBasePolicyPath.Text = policyPath;
+
+            // Show right side of the text
+            this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
+            this.textBoxBasePolicyPath.ScrollToCaret();
 
             // User has modified the supplemental policy from original, force restart flow
-            if(this._MainWindow.Policy.BaseToSupplementPath != this.BaseToSupplementPath)
+            if (this._MainWindow.Policy.BaseToSupplementPath != this.BaseToSupplementPath)
+            {
                 this._MainWindow.RedoFlowRequired = true;
+            }
 
             this._MainWindow.Policy.BaseToSupplementPath = this.BaseToSupplementPath;
             CheckPolicy_Recur(0); 
@@ -319,26 +317,21 @@ namespace WDAC_Wizard
         private void Button_BrowseSupp_Click(object sender, EventArgs e)
         {
             // Save dialog box pressed
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "Save Your Supplemental Policy File";
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.DefaultExt = "xml";
-            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml|All files (*.*)|*.*";
-            saveFileDialog.RestoreDirectory = true;
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
+            if(String.IsNullOrEmpty(policyPath))
             {
-                this._MainWindow.Policy.SchemaPath = saveFileDialog.FileName;
-                this.textBoxSuppPath.Text = saveFileDialog.FileName;
-
-                // Show right side of the text
-                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
-                this.textBoxSuppPath.ScrollToCaret();
-
-                // Show panel if path is set
-                this.panelSuppl_Base.Visible = true; 
+                return; 
             }
 
-            saveFileDialog.Dispose();
+            this._MainWindow.Policy.SchemaPath = policyPath;
+            this.textBoxSuppPath.Text = policyPath;
+
+            // Show right side of the text
+            this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
+            this.textBoxSuppPath.ScrollToCaret();
+
+            // Show panel if path is set
+            this.panelSuppl_Base.Visible = true; 
         }
 
         /// <summary>
