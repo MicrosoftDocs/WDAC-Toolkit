@@ -62,7 +62,18 @@ namespace WDAC_Wizard
                 return; 
             }
 
-            DisplayRules();
+            try
+            {
+                DisplayRules();
+            }
+            catch(Exception exp)
+            {
+                this.Log.AddErrorMsg("DisplayRules() encountered an exception.", exp);
+                DialogResult res = MessageBox.Show("The Wizard is unable to read all the rules in your CI policy xml file. The policy XML is likely corrupted. " +
+                    "Try converting the policy to binary to locate the issue in the XML.",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
 
             // Set recommended blocklist states
             SetBlocklistStates(); 
