@@ -1116,6 +1116,16 @@ namespace WDAC_Wizard
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
                         customRule.PSVariable));
                 }
+
+                // Custom EKU Values
+
+                if(!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
+                {
+                    customValueCommand.Add("$ekuObj = new-object -TypeName Microsoft.SecureBoot.UserConfig.Eku");
+                    customValueCommand.Add(String.Format("$ekuObj.Value = \"{0}\"", customRule.CustomValues.EKUEncoded));
+                    customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"EKU - {0}\"", customRule.CustomValues.EKUFriendly));
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.Ekus += $ekuObj}}", customRule.PSVariable));
+                }
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
@@ -1197,22 +1207,6 @@ namespace WDAC_Wizard
             {
                 rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
             }
-
-        // TODO: add support for custom EKU values
-        /*
-         *      $propsNoId = @{
-         *      Value = '010A2B06010401823
-         *      FriendlyName = 'Test EKU'
-         *      }
-         * 
-         *      $obj_noID = new-object -Ty
-         *      $rule[0].Ekus += $obj_noID
-         *      Eku schema:
-         * 
-         *      First byte: n_ekus
-         *      Second: n_bytes (e.g. 10 for 1.3.6.1.4.1.311.76.11.1)
-         */
-
 
             // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
             // Wizard will enforce null versions falling back to hash
@@ -1677,12 +1671,12 @@ namespace WDAC_Wizard
             string binaryFileName; 
             if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                try
+                SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
+                if(finalSiPolicy != null)
                 {
-                    SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
                     binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
                 }
-                catch
+                else
                 {
                     binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) + ".bin";
                 }

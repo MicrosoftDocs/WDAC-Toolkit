@@ -184,17 +184,20 @@ namespace WDAC_Wizard
                 }
 
                 // Check custom EKU value to ensure 
-                if (this.PolicyCustomRule.CustomValues.EKU != null)
+                if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
                 {
-                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKU); 
+                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKUFriendly); 
                     if(String.IsNullOrEmpty(ekuTLVEncoded))
                     {
                         this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " +
-                            this.PolicyCustomRule.CustomValues.EKU); 
+                            this.PolicyCustomRule.CustomValues.EKUFriendly);
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
+                        return; 
                     }
                     else
                     {
-                        this.PolicyCustomRule.CustomValues.EKU = ekuTLVEncoded; 
+                        this.PolicyCustomRule.CustomValues.EKUEncoded = ekuTLVEncoded; 
                     }
                 }
 
@@ -459,6 +462,12 @@ namespace WDAC_Wizard
                 default:
                     name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
                     break;
+            }
+
+            // Handle custom EKU
+            if(!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+            {
+                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly; 
             }
 
             // Handle exceptions
@@ -1673,7 +1682,9 @@ namespace WDAC_Wizard
             else
             {
                 this.textBoxEKU.Enabled = false;
-                this.textBoxEKU.ReadOnly = true; 
+                this.textBoxEKU.ReadOnly = true;
+                this.textBoxEKU.Text = String.Empty;
+                this.PolicyCustomRule.CustomValues.EKUFriendly = String.Empty; 
 
                 // Reset the UsingCustomValues field iff not set custom using the checkbox
                 if (!this.checkBox_CustomValues.Checked)
@@ -1690,7 +1701,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxEKU_TextChanged(object sender, EventArgs e)
         {
-            this.PolicyCustomRule.CustomValues.EKU = this.textBoxEKU.Text; 
+            this.PolicyCustomRule.CustomValues.EKUFriendly = this.textBoxEKU.Text; 
         }
     }
 }   

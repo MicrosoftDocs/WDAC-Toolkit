@@ -1011,7 +1011,8 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
-        public string EKU; 
+        public string EKUFriendly;
+        public string EKUEncoded;
         public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 

@@ -384,6 +384,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This EKU is not valid or could not be converted to DER encoding. E.g. of a properly formated
+        ///EKU is 1.3.6.1.4.1.311.76.3.1.
+        /// </summary>
+        internal static string InvalidEKUFormat_Error {
+            get {
+                return ResourceManager.GetString("InvalidEKUFormat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid publisher CN input. Publisher input must follow format: &apos;CN=PublisherName&apos; or &apos;PublisherName&apos;. Other fields
         ///like &apos;O=&apos; or &apos;L=&apos; must be removed..
         /// </summary>
