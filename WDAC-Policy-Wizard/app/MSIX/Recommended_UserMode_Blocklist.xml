@@ -7,6 +7,9 @@
     <Rule>
       <Option>Enabled:UMCI</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
   </Rules>
   <!-- EKUS
   -->
