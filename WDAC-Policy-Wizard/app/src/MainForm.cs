@@ -727,11 +727,9 @@ namespace WDAC_Wizard
                 CreatePolicyRuleOptions(worker);
 
                 // Handle custom rules:
-                //  1. Create all of the $Rule objects running New-CIPolicyRule
-                //  2. Create a unique CI policy per custom rule by running New-CIPolicy
                 List<string> customRulesPathList = ProcessCustomRules(worker);
+                
                 // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
-                // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
                 MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
             }
                       
@@ -741,7 +739,7 @@ namespace WDAC_Wizard
             // Set additional parameters, for instance, policy name, GUIDs, version, etc
             SetAdditionalParameters(worker);
 
-            // Convert the policy from XML to Bin -- v2 
+            // Convert the policy from XML to Binary file
             if (Properties.Settings.Default.convertPolicyToBinary)
             {
                 ConvertPolicyToBinary();
@@ -1574,9 +1572,9 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // IF the policy is multi format ONLY AND NOT supplemental set policy info, and reset the guids
+            // The only time we should be reseting the GUID is NEW Base Policy
             // Setting these will revert policy under edit to BasePolicy
-            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
                 if(this.Policy.siPolicy != null)
                 {
@@ -1588,10 +1586,6 @@ namespace WDAC_Wizard
                     {
                         resetGuid = true; 
                     }
-                }
-                else
-                {
-                    resetGuid = true; 
                 }
             }
 
