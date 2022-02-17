@@ -92,12 +92,6 @@ namespace WDAC_Wizard
                 this.RedoFlowRequired = false; 
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; // Set by default to match the UI default view
 
-                Console.WriteLine("1.3.6.1.4.1.311.76.3.1" + " - " + Helper.EKUValueToTLVEncoding("1.3.6.1.4.1.311.76.3.1"));
-                Console.WriteLine("1.3.6.1.4.1.311.21.20" + " - " + Helper.EKUValueToTLVEncoding("1.3.6.1.4.1.311.21.20"));
-                Console.WriteLine("1.3.6.1.4.1.311.76.5.1" + " - " + Helper.EKUValueToTLVEncoding("1.3.6.1.4.1.311.76.5.1"));
-                Console.WriteLine("1.3.6.1.4.1.311.76.11.1" + " - " + Helper.EKUValueToTLVEncoding("1.3.6.1.4.1.311.76.11.1"));
-                Console.WriteLine("1.3.6.1.4.1.311.79.7.1" + " - " + Helper.EKUValueToTLVEncoding("1.3.6.1.4.1.311.79.7.1"));
-
                 PageController(sender, e); 
                 button_Next.Visible = true; 
 
