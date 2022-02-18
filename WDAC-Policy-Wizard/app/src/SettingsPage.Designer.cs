@@ -98,7 +98,7 @@ namespace WDAC_Wizard
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(243, 42);
             this.label3.TabIndex = 3;
-            this.label3.Text = "2019 Microsoft Corporation ©\r\nJordan.Geurten@microsoft.com";
+            this.label3.Text = "2022 Microsoft Corporation ©\r\nJordan.Geurten@microsoft.com";
             // 
             // terms_Label
             // 

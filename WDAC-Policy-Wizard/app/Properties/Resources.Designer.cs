@@ -384,6 +384,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This EKU is not valid or could not be converted to DER encoding. E.g. of a properly formated
+        ///EKU is 1.3.6.1.4.1.311.76.3.1.
+        /// </summary>
+        internal static string InvalidEKUFormat_Error {
+            get {
+                return ResourceManager.GetString("InvalidEKUFormat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid publisher CN input. Publisher input must follow format: &apos;CN=PublisherName&apos; or &apos;PublisherName&apos;. Other fields
         ///like &apos;O=&apos; or &apos;L=&apos; must be removed..
         /// </summary>
@@ -596,6 +606,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse for a file to use as a reference for the WDAC rule..
+        /// </summary>
+        internal static string OpenPEFileDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenPEFileDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for existing WDAC Policy File..
+        /// </summary>
+        internal static string OpenXMLFileDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenXMLFileDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {
@@ -705,6 +733,15 @@ namespace WDAC_Wizard.Properties {
         internal static string RuntimeRules {
             get {
                 return ResourceManager.GetString("RuntimeRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a Location to Save your WDAC Policy.
+        /// </summary>
+        internal static string SaveXMLFileDialogTitle {
+            get {
+                return ResourceManager.GetString("SaveXMLFileDialogTitle", resourceCulture);
             }
         }
         

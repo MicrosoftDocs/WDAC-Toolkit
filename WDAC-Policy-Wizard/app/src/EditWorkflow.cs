@@ -90,21 +90,15 @@ namespace WDAC_Wizard
             }
                        
             this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
-
-            // Save dialog box pressed
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for existing WDAC Policy File";
-            openFileDialog.CheckPathExists = true;
-            openFileDialog.DefaultExt = "xml";
-            openFileDialog.Filter = "Policy Files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
+            string policyPath = String.Empty; 
 
             try
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                policyPath = Helper.BrowseForSingleFile(Properties.Resources.OpenXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
+                if (! String.IsNullOrEmpty(policyPath))
                 {
-                    textBoxPolicyPath.Text = openFileDialog.FileName;                   
-                    this.EditPath = openFileDialog.FileName;
+                    textBoxPolicyPath.Text = policyPath;                   
+                    this.EditPath = policyPath;
 
                     // Parse the policy for its information and display it
                     ParsePolicy(this.EditPath);
@@ -121,7 +115,6 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("EditWorkflow Browse() encountered the following error ", exp); 
             }
-            openFileDialog.Dispose();
         }
 
         /// <summary>
@@ -195,7 +188,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Sets the new Policy Name setting. 
         /// </summary>
-        private void textBox_PolicyName_TextChanged(object sender, EventArgs e)
+        private void TextBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
             this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
@@ -229,6 +222,11 @@ namespace WDAC_Wizard
 
             string dspTitle = "Choose event logs to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
+
+            if(eventLogPaths == null)
+            {
+                return; 
+            }
 
             // Prep UI
             this.textBox_EventLogFilePath.Text = eventLogPaths[0]; 
@@ -348,7 +346,7 @@ namespace WDAC_Wizard
         {
             string customRuleScript = string.Empty;
 
-            // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
+            // Create new CI Rule: https://docs.microsoft.com/powershell/module/configci/new-cipolicyrule
             switch (customRule.GetRuleType())
             {
                 case PolicyCustomRules.RuleType.Publisher:
@@ -526,7 +524,7 @@ namespace WDAC_Wizard
             // multi-policy info label clicked. Launch multi-policy info webpage
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control"
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control"
                     + "/audit-windows-defender-application-control-policies#create-a-windows-defender-application-control-policy-that-captures-audit-information-from-the-event-log";
                 System.Diagnostics.Process.Start(webpage);
             }

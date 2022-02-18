@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
   <VersionEx>10.0.0.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
@@ -2127,8 +2127,8 @@
     <CiSigner SignerId="ID_SIGNER_S_316_1_2" />
   </CiSigners>
   <HvciOptions>0</HvciOptions>
-  <BasePolicyID>{6796CCC4-E1E5-4E20-A2B4-C2A4589CDB96}</BasePolicyID>
-  <PolicyID>{6796CCC4-E1E5-4E20-A2B4-C2A4589CDB96}</PolicyID>
+  <BasePolicyID>{963DC7A2-B4FA-44A9-A194-8A3617B2A8EF}</BasePolicyID>
+  <PolicyID>{963DC7A2-B4FA-44A9-A194-8A3617B2A8EF}</PolicyID>
   <Settings>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>

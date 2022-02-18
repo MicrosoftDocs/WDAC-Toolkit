@@ -81,7 +81,7 @@ namespace WDAC_Wizard
         /// a template policy then customize policy rules and file rules.
         /// </summary>
         /// 
-        private void button_New_Click(object sender, EventArgs e)
+        private void Button_New_Click(object sender, EventArgs e)
         {
             if (!this.ConfigInProcess)
             {
@@ -92,7 +92,7 @@ namespace WDAC_Wizard
                 this.RedoFlowRequired = false; 
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; // Set by default to match the UI default view
 
-                pageController(sender, e); 
+                PageController(sender, e); 
                 button_Next.Visible = true; 
 
             }
@@ -100,11 +100,11 @@ namespace WDAC_Wizard
             else
             {
                 // Working on other workflow - do you want to leave?
-                if (wantToAbandonWork())
+                if (WantToAbandonWork())
                 {
-                    display_info_text(0);
+                    Display_info_text(0);
                     this.ConfigInProcess = false;
-                    button_New_Click(sender, e);
+                    Button_New_Click(sender, e);
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace WDAC_Wizard
         /// Edit policy button selected: User can load a pre-exisiting policy on disk and 
         /// view and reconfigure its rules and settings. 
         /// </summary>
-        private void button_Edit_Click(object sender, EventArgs e)
+        private void Button_Edit_Click(object sender, EventArgs e)
         {
             // Edit Policy Button:
            
@@ -126,7 +126,7 @@ namespace WDAC_Wizard
                 this.ConfigInProcess = true;
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.Edit; 
 
-                pageController(sender, e);
+                PageController(sender, e);
                 button_Next.Visible = true;
             }
 
@@ -134,11 +134,11 @@ namespace WDAC_Wizard
             {
                 // Working on other workflow - do you want to leave?
                 // If so, set the ConfigInProcess flag to false
-                if (wantToAbandonWork())
+                if (WantToAbandonWork())
                 {
-                    display_info_text(0);
+                    Display_info_text(0);
                     this.ConfigInProcess = false;
-                    button_Edit_Click(sender, e);
+                    Button_Edit_Click(sender, e);
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace WDAC_Wizard
         /// Merge policy button selected: User must select two policies on disk to merge into 
         /// one single policy where the new policy is the intersection of the former two. 
         /// </summary>
-        private void button_Merge_Click(object sender, EventArgs e)
+        private void Button_Merge_Click(object sender, EventArgs e)
         {
             if (!this.ConfigInProcess)
             {
@@ -158,7 +158,7 @@ namespace WDAC_Wizard
                 this.ConfigInProcess = true;
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.Merge;
 
-                pageController(sender, e);
+                PageController(sender, e);
                 button_Next.Visible = true;
             }
 
@@ -166,11 +166,11 @@ namespace WDAC_Wizard
             {
                 // Working on other workflow - do you want to leave?
                 // If so, set the ConfigInProcess flag to false
-                if (wantToAbandonWork())
+                if (WantToAbandonWork())
                 {
-                    display_info_text(0);
+                    Display_info_text(0);
                     this.ConfigInProcess = false;
-                    button_Merge_Click(sender, e);
+                    Button_Merge_Click(sender, e);
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Home button on the left hand navigation panel. Resets the state of the application and brings user to the MainWindow form.  
         /// </summary>
-        private void home_Button_Click(object sender, EventArgs e)
+        private void Home_Button_Click(object sender, EventArgs e)
         {
             this.button_Next.Visible = false;
 
@@ -200,7 +200,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Settings button on the left hand navigation panel. Loads the Settings UserControl. 
         /// </summary>
-        private void settings_Button_Click(object sender, EventArgs e)
+        private void Settings_Button_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("Workflow -- Settings Button Selected");
             this.button_Next.Visible = false;
@@ -220,7 +220,7 @@ namespace WDAC_Wizard
         /// Controls the PageController method when the user presses the Next button.
         /// If there is an ErrorOnPage flag, the page is not advanced. 
         /// </summary>
-        private void button_Next_Click(object sender, EventArgs e)
+        private void Button_Next_Click(object sender, EventArgs e)
         {
             if (!this.ErrorOnPage)
             {
@@ -237,11 +237,11 @@ namespace WDAC_Wizard
                 }
 
                 this.CurrentPage++;
-                pageController(sender, e);
+                PageController(sender, e);
             }
                 
             else
-                display_info_text(99); 
+                Display_info_text(99); 
         }
 
         private void PageNButton_Click(object sender, EventArgs e)
@@ -256,7 +256,7 @@ namespace WDAC_Wizard
 
             // If settings page was previous, re-enable Next button
             this.button_Next.Visible = true; 
-            pageController(sender, e);
+            PageController(sender, e);
         }
 
 
@@ -264,9 +264,9 @@ namespace WDAC_Wizard
         /// Controller mechanism to determine which UserControls to place ontop of the MainWindow WinForm.
         /// Method called by the Next and Back button.
         /// </summary>
-        public void pageController(object sender, EventArgs e)
+        public void PageController(object sender, EventArgs e)
         {
-            display_info_text(0);
+            Display_info_text(0);
             
             //RemoveControls(); 
 
@@ -478,7 +478,7 @@ namespace WDAC_Wizard
 
 
                         case WDAC_Policy.PolicyType.None:
-                            display_info_text(98);
+                            Display_info_text(98);
                             this.CurrentPage--;
                             break;
                     }
@@ -710,7 +710,7 @@ namespace WDAC_Wizard
         /// Event handler where the time-consuming work of creating the policies is accomplished. 
         /// No UI changes should be performed in this method. 
         /// </summary>
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
@@ -721,11 +721,9 @@ namespace WDAC_Wizard
                 CreatePolicyRuleOptions(worker);
 
                 // Handle custom rules:
-                //  1. Create all of the $Rule objects running New-CIPolicyRule
-                //  2. Create a unique CI policy per custom rule by running New-CIPolicy
                 List<string> customRulesPathList = ProcessCustomRules(worker);
+                
                 // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
-                // For some reason, Merge-CIPolicy -Rules <Rule[]> is not trivial - use -PolicyPaths instead
                 MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
             }
                       
@@ -735,7 +733,7 @@ namespace WDAC_Wizard
             // Set additional parameters, for instance, policy name, GUIDs, version, etc
             SetAdditionalParameters(worker);
 
-            // Convert the policy from XML to Bin -- v2 
+            // Convert the policy from XML to Binary file
             if (Properties.Settings.Default.convertPolicyToBinary)
             {
                 ConvertPolicyToBinary();
@@ -748,7 +746,7 @@ namespace WDAC_Wizard
         /// Event handler where the progress of the worker is updated when worker.ReportProgress is 
         /// called. Handle UI updates to BuildPage class through public method 'UpdateProgressBar'.
         /// </summary>
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BackgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             string process = "";
             int progressPercent = e.ProgressPercentage;
@@ -773,7 +771,7 @@ namespace WDAC_Wizard
         /// successful and unsuccessful results. Successful results in a call to the BuildPage 
         /// ShowFinishMsg method.
         /// </summary>
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             {
@@ -809,7 +807,7 @@ namespace WDAC_Wizard
         /// </summary>
         public void CreatePolicyRuleOptions(BackgroundWorker worker)
         {
-            // Set-RuleOption: https://docs.microsoft.com/en-us/powershell/module/configci/set-ruleoption?view=win10-ps
+            // Set-RuleOption: https://docs.microsoft.com/powershell/module/configci/set-ruleoption?view=win10-ps
             // Inputs: -FilePath <string> required existing, -Option <Int32>: indices of rules options
 
             this.Log.AddInfoMsg("--- Create Policy Rule Options --- ");
@@ -1028,7 +1026,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", createVarScript));
 
                 // Run the policy creation script
-                string policyScript = createPolicyScript(tmpPolicyPath); 
+                string policyScript = CreatePolicyScript(tmpPolicyPath); 
                 pipeline.Commands.AddScript(policyScript);
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
                                
@@ -1050,6 +1048,9 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
+        /// <summary>
+        /// Processes all of the custom PFN rules by running Get-AppxPackage and New-CIPolicyRule. 
+        /// </summary>
         public List<string> ProcessPFNRules(PolicyCustomRules customRule)
         {
             List<string> createPFNPackages = new List<string>();
@@ -1070,6 +1071,9 @@ namespace WDAC_Wizard
             return createPFNPackages; 
         }
 
+        /// <summary>
+        /// Processes all of the custom rules with custom values. E.g. custom version ranges, custom filenames, file paths
+        /// </summary>
         public List<string> HandleCustomValues(PolicyCustomRules customRule)
         {
             List<string> customValueCommand = new List<string>();  
@@ -1103,6 +1107,16 @@ namespace WDAC_Wizard
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
                         customRule.PSVariable));
+                }
+
+                // Custom EKU Values
+
+                if(!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
+                {
+                    customValueCommand.Add("$ekuObj = new-object -TypeName Microsoft.SecureBoot.UserConfig.Eku");
+                    customValueCommand.Add(String.Format("$ekuObj.Value = \"{0}\"", customRule.CustomValues.EKUEncoded));
+                    customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"EKU - {0}\"", customRule.CustomValues.EKUFriendly));
+                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.Ekus += $ekuObj}}", customRule.PSVariable));
                 }
             }
 
@@ -1169,6 +1183,9 @@ namespace WDAC_Wizard
             return customValueCommand;
         }
 
+        /// <summary>
+        /// Processes all of the custom rules with arbitrary custom values. E.g. custom version ranges, custom filenames, file paths
+        /// </summary>
         public string CreateCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
         {
             string customRuleScript = string.Empty;
@@ -1187,7 +1204,7 @@ namespace WDAC_Wizard
             // Wizard will enforce null versions falling back to hash
             // Remove this section once the PS cmdlet bug is fixed
 
-            if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
+            if (customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
             {
                 if(String.IsNullOrEmpty(customRule.CustomValues.MinVersion))
                 {
@@ -1195,7 +1212,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Create new CI Rule: https://docs.microsoft.com/en-us/powershell/module/configci/new-cipolicyrule
+            // Create new CI Rule: https://docs.microsoft.com/powershell/module/configci/new-cipolicyrule
             switch (customRule.Type)
             {
                 case PolicyCustomRules.RuleType.Publisher:
@@ -1301,7 +1318,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
+        /// Creates the custom New-CIPolicy script
         /// </summary>
         public string CreatePolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
         {
@@ -1323,7 +1340,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
         /// </summary>
-        public string createPolicyScript(string tempPolicyPath)
+        public string CreatePolicyScript(string tempPolicyPath)
         {
             string policyScript = string.Empty;
 
@@ -1426,7 +1443,7 @@ namespace WDAC_Wizard
             }
 
             // Check if user-writeable. If it is not, default to MyDocuments
-            if(!WriteAccess(Path.GetDirectoryName(this.Policy.SchemaPath)))
+            if(!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
             {
                 this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
             }
@@ -1542,29 +1559,41 @@ namespace WDAC_Wizard
         {
             // Operations: Set HVCI options, policy version, policy ID values, GUIDs:
             this.Log.AddInfoMsg("-- Set Additional Parameters --");
+            bool resetGuid = false; 
 
             // Create runspace, pipeline and runscript
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // IF the policy is multi format ONLY AND NOT supplemental set policy info, and reset the guids
+            // The only time we should be reseting the GUID is NEW Base Policy
             // Setting these will revert policy under edit to BasePolicy
-            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                if (this.Policy.siPolicy.PolicyType != global::PolicyType.SupplementalPolicy)
+                if(this.Policy.siPolicy != null)
                 {
-                    // Set policy info - ID, Name
-                    string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
-
-                    // Reset the GUIDs s.t. does not mirror the policy GUID 
-                    string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
-
-                    pipeline.Commands.AddScript(setIdInfoCmd);
-                    pipeline.Commands.AddScript(resetGuidsCmd);
+                    if(this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                    {
+                        resetGuid = false;
+                    }
+                    else
+                    {
+                        resetGuid = true; 
+                    }
                 }
             }
 
+            if(resetGuid)
+            {
+                // Set policy info - ID, Name
+                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+
+                // Reset the GUIDs s.t. does not mirror the policy GUID 
+                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
+
+                pipeline.Commands.AddScript(setIdInfoCmd);
+                pipeline.Commands.AddScript(resetGuidsCmd);
+            }
             
             if (this.Policy.EnableHVCI)
             {
@@ -1626,19 +1655,16 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
+            // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
             string binaryFileName; 
             if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                try
+                SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
+                if(finalSiPolicy != null)
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                    StreamReader reader = new StreamReader(this.Policy.SchemaPath);
-                    SiPolicy finalSiPolicy = (SiPolicy)serializer.Deserialize(reader);
-                    reader.Close();
                     binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
                 }
-                catch
+                else
                 {
                     binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) + ".bin";
                 }
@@ -1828,7 +1854,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="includeTime">Bool indicating whether to include the time string (hour+min) in return</param>
         /// <returns>Returns Date string with format: MM-dd-yy_HH-mm [24 hour time] of MM-dd-yy</returns>
-        public string formatDate(bool includeTime=true)
+        public string FormatDate(bool includeTime=true)
         {
             DateTime sDate = DateTime.Now;
             if(includeTime)
@@ -1841,13 +1867,10 @@ namespace WDAC_Wizard
 
         // UI helper functions
 
-        //
-        // Summary:
-        //     Prompts the user to confirm if they want to abandon progress
-        //      
-        // Returns:
-        //     Bool - true: abandon work, false - cancel abandon work 
-        private bool wantToAbandonWork()
+        /// <summary>
+        /// Prompts the user to confirm if they want to abandon progress
+        /// </summary>       
+        private bool WantToAbandonWork()
         {
             this.Log.AddWarningMsg("Abandon Work Entered.");
             DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", 
@@ -1873,13 +1896,9 @@ namespace WDAC_Wizard
                 
         }
 
-        //
-        // Summary:
-        //     Displays the left-most control panel with home, settings buttons and progress pages. 
-        //     Displays the highlighting panel to show users current page.
-        //      
-        // Returns:
-        //     None. 
+        /// <summary>
+        /// Displays the left-most control panel with home, settings buttons and progress pages. Displays the highlighting panel to show users current page.
+        /// </summary> 
         private void ShowControlPanel(object sender, EventArgs e)
         {
             this.Controls.Add(this.control_Panel);
@@ -2098,12 +2117,10 @@ namespace WDAC_Wizard
 
         }
 
-        //
-        // Summary:
-        //     Empties this.Controls based on contents of PageList. 
-        //      
-        // Returns:
-        //     None.
+   
+        /// <summary>
+        /// Empties this.Controls based on contents of PageList.
+        /// </summary> 
         private void RemoveControls()
         {
             // Empty this.PageList so that we can start a new workflow after policy build
@@ -2118,7 +2135,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Public method to set the text and visibility of the info text label at bottom-left of the form or user control.
         /// </summary>
-        public void display_info_text(int infoN)
+        public void Display_info_text(int infoN)
         {
             label_Info.Visible = true;
             label_Info.ForeColor = Color.DeepSkyBlue;
@@ -2180,38 +2197,16 @@ namespace WDAC_Wizard
 
         public void ResetWorkflow(object sender, EventArgs e)
         {
-            this.home_Button_Click(sender, e); 
+            this.Home_Button_Click(sender, e); 
         }
-
-        //
-        // Summary:
-        //     Checks for updates on the startup of the application. Currently set to grab updates from the scratch location. 
-        //      
-        // Returns:
-        //     None.
-        /*private async Task CheckForUpdates()
-        {
-            this.Log.AddInfoMsg("Checking for Updates -- STARTED"); 
-            // TODO: point the update manager to github
-            using (var manager = new UpdateManager(@"\\scratch2\scratch\jogeurte\WDACWizard\Releases\"))
-            {
-                await manager.UpdateApp();
-                this.Log.AddInfoMsg("Checking for Updates -- UPDATING APP");
-            }
-            this.Log.AddInfoMsg("Checking for Updates -- FINISHED");
-        }*/
-
-
-        //
-        // Summary:
-        //     Creates the session folder. Contents such as the log, intermediate policies are stored here.  
-        //      
-        // Returns:
-        //     Returns the folder path for the current app session.
+    
+        /// <summary>
+        /// Creates the session folder. Contents such as the log, intermediate policies are stored here.
+        /// </summary>
         private string CreateTempFolder()
         {
             //AppData + WDAC Temp folder
-            string tempFolder = Path.Combine("WDACWizard", "Temp", formatDate()); 
+            string tempFolder = Path.Combine("WDACWizard", "Temp", FormatDate()); 
             string tempFolderPath = Path.Combine(Path.GetTempPath(), tempFolder); 
 
             if (!Directory.Exists(tempFolderPath))
@@ -2230,6 +2225,9 @@ namespace WDAC_Wizard
             this.Log.CloseLogger();
         }
 
+        /// <summary>
+        /// Get exe/assembly path  
+        /// /// </summary>
         private string GetExecutablePath(bool exePath)
         {
             string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
@@ -2241,37 +2239,13 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Check that the given directory is write-accessable by the user.  
+        /// SKU check to see if cmdlets are on the system 
         /// /// </summary>
-        private bool WriteAccess(string folderPath)
-        {
-            // Try to create a subdir in the folderPath. If successful, write access is true. 
-            // If an exception is hit, the path is likely not user-writeable 
-            try
-            {
-                DirectoryInfo di = new DirectoryInfo(folderPath); 
-                if(di.Exists)
-                {
-                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(folderPath, "testSubDir"));
-                    dis.Create();
-                    dis.Delete(); 
-                }
-
-                return true; 
-            }
-            catch(Exception e)
-            {
-                this.Log.AddErrorMsg("WriteAccess() encountered the following exception: " + e); 
-                return false; 
-            }
-        }
-
-        // SKU check if cmdlets are available on the device 
         private void LicenseCheck()
         {
             // Check that WDAC feature is compatible with system
             // Cmdlets are available on all builds 1909+. 
-            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability
+            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability
 
             int REQUIRED_V = 1909;
             string REQUIRED_ED = "Enterprise";
@@ -2312,26 +2286,24 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.OK)
                 {
-                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/feature-availability");
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability");
                 }
             }
         }
 
-        public int getReleaseId()
+        public int GetReleaseId()
         {
             return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
         }
 
+        /// <summary>
+        /// Hide info label on timer tick
+        /// /// </summary>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.label_Info.Visible = false;
         }
 
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 
 }

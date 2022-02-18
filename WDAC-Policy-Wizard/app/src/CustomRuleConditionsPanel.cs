@@ -183,6 +183,24 @@ namespace WDAC_Wizard
                     }
                 }
 
+                // Check custom EKU value to ensure 
+                if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+                {
+                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKUFriendly); 
+                    if(String.IsNullOrEmpty(ekuTLVEncoded))
+                    {
+                        this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " +
+                            this.PolicyCustomRule.CustomValues.EKUFriendly);
+                        label_Error.Visible = true;
+                        label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
+                        return; 
+                    }
+                    else
+                    {
+                        this.PolicyCustomRule.CustomValues.EKUEncoded = ekuTLVEncoded; 
+                    }
+                }
+
                 // Parse package family names into PolicyCustomRule.CustomValues.PackageFamilyNames
                 if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
@@ -446,6 +464,12 @@ namespace WDAC_Wizard
                     break;
             }
 
+            // Handle custom EKU
+            if(!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+            {
+                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly; 
+            }
+
             // Handle exceptions
             if(this.PolicyCustomRule.ExceptionList.Count > 0)
             {
@@ -599,7 +623,7 @@ namespace WDAC_Wizard
         /// Launches the FileDialog and prompts user to select the reference file. 
         /// Based on rule type, sets the UI elements for Publisher, FilePath or Hash rules. 
         /// </summary>
-        private void button_Browse_Click(object sender, EventArgs e)
+        private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Browse button for reference file:
             if (comboBox_RuleType.SelectedItem == null)
@@ -612,9 +636,11 @@ namespace WDAC_Wizard
 
             if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Folder)
             {
-                string refPath = getFileLocation();
+                string refPath = GetFileLocation();
                 if (refPath == String.Empty)
-                    return;
+                {
+                    return; 
+                }
 
                 this.DefaultValues[4] = refPath; 
 
@@ -716,7 +742,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
-                    this.PolicyCustomRule.ReferenceFile = getFolderLocation();
+                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
                     this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile;
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
@@ -826,11 +852,11 @@ namespace WDAC_Wizard
             // Check if user changed Rule Level after already browsing and selecting a reference file
             if (this.PolicyCustomRule.ReferenceFile != null)
             {
-                button_Browse_Click(sender, e);
+                Button_Browse_Click(sender, e);
             }
         }
 
-        private void trackBar_Conditions_Scroll(object sender, EventArgs e)
+        private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
         {
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
             label_Error.Visible = false; // Clear error label
@@ -961,33 +987,10 @@ namespace WDAC_Wizard
         /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
         /// </summary>
         /// <returns>Returns the full path+name of the file</returns>
-        private string getFileLocation()
+        private string GetFileLocation()
         {
-            //TODO: move these common functions to a separate class
             // Open file dialog to get file or folder path
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for a signed file to use as a reference for the rule.";
-            openFileDialog.CheckPathExists = true;
-            // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
-            openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
-                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All files (*.*)|*.*";
-
-            openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
-
-            openFileDialog.RestoreDirectory = true;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog.Dispose();
-                return openFileDialog.FileName;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            return Helper.BrowseForSingleFile(Properties.Resources.OpenPEFileDialogTitle, Helper.BrowseFileType.PEFile); 
         }
 
         /// <summary>
@@ -1006,7 +1009,7 @@ namespace WDAC_Wizard
         /// is selected. 
         /// </summary>
         /// <returns>Returns the full path of the folder</returns>
-        private string getFolderLocation()
+        private string GetFolderLocation()
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
@@ -1057,7 +1060,7 @@ namespace WDAC_Wizard
             base.OnFormClosing(e);
         }
 
-        private void button_Next_Click(object sender, EventArgs e)
+        private void Button_Next_Click(object sender, EventArgs e)
         {
             // Show the exception UI
 
@@ -1659,6 +1662,46 @@ namespace WDAC_Wizard
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// EKU checkbox state changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBoxEkuStateChanged(object sender, EventArgs e)
+        {
+            // If user wants to use checkbox
+            // Enable the textbox
+            if(this.checkBoxEku.Checked)
+            {
+                this.textBoxEKU.Enabled = true;
+                this.textBoxEKU.ReadOnly = false; 
+                this.PolicyCustomRule.UsingCustomValues = true; 
+            }
+            else
+            {
+                this.textBoxEKU.Enabled = false;
+                this.textBoxEKU.ReadOnly = true;
+                this.textBoxEKU.Text = String.Empty;
+                this.PolicyCustomRule.CustomValues.EKUFriendly = String.Empty; 
+
+                // Reset the UsingCustomValues field iff not set custom using the checkbox
+                if (!this.checkBox_CustomValues.Checked)
+                {
+                    this.PolicyCustomRule.UsingCustomValues = false; 
+                }
+            }
+        }
+
+        /// <summary>
+        /// EKU textbox value changed. User input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxEKU_TextChanged(object sender, EventArgs e)
+        {
+            this.PolicyCustomRule.CustomValues.EKUFriendly = this.textBoxEKU.Text; 
         }
     }
 }   

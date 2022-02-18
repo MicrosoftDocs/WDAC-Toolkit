@@ -85,7 +85,7 @@
             this.finalPolicyTextBox.Name = "finalPolicyTextBox";
             this.finalPolicyTextBox.Size = new System.Drawing.Size(448, 26);
             this.finalPolicyTextBox.TabIndex = 4;
-            this.finalPolicyTextBox.Click += new System.EventHandler(this.button_Browse_Click);
+            this.finalPolicyTextBox.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // button_Browse
             // 
@@ -100,7 +100,7 @@
             this.button_Browse.TabIndex = 94;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = true;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
+            this.button_Browse.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // policiesDataGrid
             // 
@@ -116,7 +116,7 @@
             this.policiesDataGrid.Size = new System.Drawing.Size(676, 150);
             this.policiesDataGrid.TabIndex = 95;
             this.policiesDataGrid.VirtualMode = true;
-            this.policiesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.policiesDataGrid_CellValueNeeded);
+            this.policiesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.PoliciesDataGrid_CellValueNeeded);
             // 
             // Column_Number
             // 
@@ -142,7 +142,7 @@
             this.button_AddPolicy.TabIndex = 96;
             this.button_AddPolicy.Text = "+ Add Policy";
             this.button_AddPolicy.UseVisualStyleBackColor = true;
-            this.button_AddPolicy.Click += new System.EventHandler(this.button_AddPolicy_Click);
+            this.button_AddPolicy.Click += new System.EventHandler(this.Button_AddPolicy_Click);
             // 
             // button_RemovePolicy
             // 
@@ -154,7 +154,7 @@
             this.button_RemovePolicy.TabIndex = 97;
             this.button_RemovePolicy.Text = "- Remove Policy";
             this.button_RemovePolicy.UseVisualStyleBackColor = true;
-            this.button_RemovePolicy.Click += new System.EventHandler(this.button_RemovePolicy_Click);
+            this.button_RemovePolicy.Click += new System.EventHandler(this.Button_RemovePolicy_Click);
             // 
             // label_Error
             // 

@@ -38,8 +38,8 @@ namespace WDAC_Wizard
 
         /// <summary>
         /// Clears the remaining UI elements of the Custom Rules Panel when a user selects the 'Create Rule' button. 
-        /// /// </summary>
-        /// /// <param name="clearComboBox">Bool to reset the Rule Type combobox.</param>
+        /// </summary>
+        /// <param name="clearComboBox">Bool to reset the Rule Type combobox.</param>
         private void ClearCustomRulesPanel(bool clearComboBox = false)
         {
             // Clear all of UI updates we make based on the type of rule so that the Custom Rules Panel is clear
@@ -63,7 +63,7 @@ namespace WDAC_Wizard
             }
         }
 
-        private void comboBox_ExceptionType_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox_ExceptionType_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Check if the selected item is null (this occurs after reseting it - rule creation)
             if (this.comboBox_ExceptionType.SelectedIndex < 0)
@@ -104,7 +104,7 @@ namespace WDAC_Wizard
         }
 
 
-        private void button_Browse_Click(object sender, EventArgs e)
+        private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Browse button for reference file:
             if (comboBox_ExceptionType.SelectedItem == null)
@@ -117,7 +117,7 @@ namespace WDAC_Wizard
 
             if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
             {
-                string refPath = getFileLocation();
+                string refPath = GetFileLocation();
 
                 if (refPath == String.Empty)
                     return;
@@ -195,7 +195,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
-                    ExceptionRule.ReferenceFile = getFolderLocation();
+                    ExceptionRule.ReferenceFile = GetFolderLocation();
                     if (ExceptionRule.ReferenceFile == String.Empty)
                     {
                         break;
@@ -265,7 +265,7 @@ namespace WDAC_Wizard
             }
         }
 
-        private void button_CreateException_Click(object sender, EventArgs e)
+        private void Button_CreateException_Click(object sender, EventArgs e)
         {
             // Add the exception to the table
             this.CustomRule.AddException(this.ExceptionRule);
@@ -277,7 +277,7 @@ namespace WDAC_Wizard
         /// is selected. 
         /// </summary>
         /// <returns>Returns the full path of the folder</returns>
-        private string getFolderLocation()
+        private string GetFolderLocation()
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
@@ -296,33 +296,10 @@ namespace WDAC_Wizard
         /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
         /// </summary>
         /// <returns>Returns the full path+name of the file</returns>
-        private string getFileLocation()
+        private string GetFileLocation()
         {
-            //TODO: move these common functions to a separate class
             // Open file dialog to get file or folder path
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Browse for a signed file to use as a reference for the rule.";
-            openFileDialog.CheckPathExists = true;
-            // Performed scan of program files -- most common filetypes (occurence > 20 in the folder) with SIPs: 
-            openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
-                "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All files (*.*)|*.*";
-
-            openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
-
-            openFileDialog.RestoreDirectory = true;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog.Dispose();
-                return openFileDialog.FileName;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            return Helper.BrowseForSingleFile(Properties.Resources.OpenPEFileDialogTitle, Helper.BrowseFileType.PEFile);
         }
 
         private void Exceptions_Control_Load(object sender, EventArgs e)
@@ -505,7 +482,7 @@ namespace WDAC_Wizard
             ClearCustomRulesPanel(true); 
         }
 
-        private void trackBar_Conditions_Scroll(object sender, EventArgs e)
+        private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
         {
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
 
@@ -628,7 +605,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Called when DataGridView needs to paint data
         /// </summary>
-        private void dataGridView_Exceptions_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        private void DataGridView_Exceptions_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
             if (e.RowIndex == this.dataGridView_Exceptions.RowCount - 1) return;

@@ -79,6 +79,9 @@ namespace WDAC_Wizard
             this.label_WaitMsg.Visible = false; 
         }
 
+        /// <summary>
+        /// Shows an error message if the CI policy build process throws an error 
+        /// </summary>
         public string FormatText(string longstring)
         {
             if(longstring.Length > PATH_LENGTH_LIMIT)

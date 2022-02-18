@@ -44,7 +44,6 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>MixedMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -244,11 +243,13 @@
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.PolicyType.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.Resource.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.SigningRules_Control.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.ConfigTemplate_Control.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.PolicyType.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.Resource.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.SigningRules_Control.resources" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -17,7 +17,7 @@
   <!--EKUS-->
   <EKUs />
   <!--File Rules-->
-  <FileRules>
+  FileRules>
     <Allow ID="ID_ALLOW_ALL_1" FriendlyName="" FileName="*" />
     <Allow ID="ID_ALLOW_ALL_2" FriendlyName="" FileName="*" />
     <Deny ID="ID_DENY_BANDAI_SHA1" FriendlyName="bandai.sys Hash Sha1" Hash="0F780B7ADA5DD8464D9F2CC537D973F5AC804E9C" />

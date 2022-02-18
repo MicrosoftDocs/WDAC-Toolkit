@@ -112,7 +112,7 @@ namespace WDAC_Wizard
         {
             // Show the text fields now that user has selected base policy template:
             this.policyInfoPanel.Visible = true;
-            this._MainWindow.display_info_text(0); 
+            this._MainWindow.Display_info_text(0); 
 
             // Force other switch buttons off
             this.allowMsft_Button.Tag = "untoggle";
@@ -133,25 +133,15 @@ namespace WDAC_Wizard
         private void textBoxPolicyPath_TextChanged(object sender, EventArgs e)
         {
             // Save dialog box pressed
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "Save Your Base Policy File";
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.DefaultExt = "xml";
-            saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
-            saveFileDialog.RestoreDirectory = true;
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                textBoxPolicyPath.Text = saveFileDialog.FileName;
 
-                this._Policy.SchemaPath = saveFileDialog.FileName;
-                this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
-                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
-                this.textBoxPolicyPath.ScrollToCaret(); 
-            }
+            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
 
-            saveFileDialog.Dispose(); 
-
-
+            textBoxPolicyPath.Text = policyPath;
+            this._Policy.SchemaPath = policyPath;
+            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
+            this.textBoxPolicyPath.ScrollToCaret(); 
+            
             if(this._Policy.PolicyName != null)
             {
                 this._MainWindow.ErrorOnPage = false;
@@ -182,7 +172,7 @@ namespace WDAC_Wizard
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                string dateString = this._MainWindow.formatDate(false);
+                string dateString = this._MainWindow.FormatDate(false);
                 this._Policy.SchemaPath = GetDefaultPath(policyTemplate, 0); 
                 this._Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, dateString);
 
@@ -203,7 +193,7 @@ namespace WDAC_Wizard
 
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
-            string dateString = this._MainWindow.formatDate(false);
+            string dateString = this._MainWindow.FormatDate(false);
             string proposedPath;
 
             if(nAttempts ==0)
@@ -224,7 +214,7 @@ namespace WDAC_Wizard
             // ISG label clicked. Launch ISG webpage
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/" +
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/" +
                     "windows-defender-application-control/use-windows-defender-application-control-with-" +
                     "intelligent-security-graph";
                 System.Diagnostics.Process.Start(webpage);
@@ -262,7 +252,7 @@ namespace WDAC_Wizard
         {
             try
             {
-                string webpage = "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
+                string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
                 System.Diagnostics.Process.Start(webpage);
             }
             catch (Exception exp)

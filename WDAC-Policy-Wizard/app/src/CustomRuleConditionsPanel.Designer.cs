@@ -81,6 +81,8 @@
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.checkBoxEku = new System.Windows.Forms.CheckBox();
+            this.textBoxEKU = new System.Windows.Forms.TextBox();
             this.panel_CustomRules.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
             this.panel_Progress.SuspendLayout();
@@ -187,7 +189,7 @@
             this.checkedListBoxPackagedApps.FormattingEnabled = true;
             this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
             this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 208);
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 191);
             this.checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
@@ -238,6 +240,8 @@
             // 
             // panel_Publisher_Scroll
             // 
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxEKU);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxEku);
             this.panel_Publisher_Scroll.Controls.Add(this.checkBox_CustomValues);
             this.panel_Publisher_Scroll.Controls.Add(this.label_To);
             this.panel_Publisher_Scroll.Controls.Add(this.textBox_MaxVersion);
@@ -253,14 +257,14 @@
             this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 223);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 255);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
             // 
             // checkBox_CustomValues
             // 
             this.checkBox_CustomValues.AutoSize = true;
-            this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 185);
+            this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 226);
             this.checkBox_CustomValues.Name = "checkBox_CustomValues";
             this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
             this.checkBox_CustomValues.TabIndex = 111;
@@ -303,7 +307,7 @@
             this.textBoxSlider_3.Name = "textBoxSlider_3";
             this.textBoxSlider_3.ReadOnly = true;
             this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_3.TabIndex = 103;
+            this.textBoxSlider_3.TabIndex = 5;
             this.textBoxSlider_3.TextChanged += new System.EventHandler(this.textBoxSlider_3_TextChanged);
             // 
             // labelSlider_3
@@ -327,7 +331,7 @@
             this.textBoxSlider_2.Name = "textBoxSlider_2";
             this.textBoxSlider_2.ReadOnly = true;
             this.textBoxSlider_2.Size = new System.Drawing.Size(152, 26);
-            this.textBoxSlider_2.TabIndex = 101;
+            this.textBoxSlider_2.TabIndex = 4;
             this.textBoxSlider_2.TextChanged += new System.EventHandler(this.textBoxSlider_2_TextChanged);
             // 
             // labelSlider_2
@@ -351,7 +355,7 @@
             this.textBoxSlider_1.Name = "textBoxSlider_1";
             this.textBoxSlider_1.ReadOnly = true;
             this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_1.TabIndex = 99;
+            this.textBoxSlider_1.TabIndex = 3;
             this.textBoxSlider_1.TextChanged += new System.EventHandler(this.textBoxSlider_1_TextChanged);
             // 
             // labelSlider_1
@@ -375,7 +379,7 @@
             this.textBoxSlider_0.Name = "textBoxSlider_0";
             this.textBoxSlider_0.ReadOnly = true;
             this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
-            this.textBoxSlider_0.TabIndex = 95;
+            this.textBoxSlider_0.TabIndex = 2;
             this.textBoxSlider_0.TextChanged += new System.EventHandler(this.textBoxSlider_0_TextChanged);
             // 
             // labelSlider_0
@@ -402,7 +406,7 @@
             this.trackBar_Conditions.SmallChange = 4;
             this.trackBar_Conditions.TabIndex = 96;
             this.trackBar_Conditions.TickFrequency = 4;
-            this.trackBar_Conditions.Scroll += new System.EventHandler(this.trackBar_Conditions_Scroll);
+            this.trackBar_Conditions.Scroll += new System.EventHandler(this.TrackBar_Conditions_Scroll);
             // 
             // label1
             // 
@@ -421,7 +425,7 @@
             this.publisherInfoLabel.AutoSize = true;
             this.publisherInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(12, 610);
+            this.publisherInfoLabel.Location = new System.Drawing.Point(12, 655);
             this.publisherInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.publisherInfoLabel.Name = "publisherInfoLabel";
             this.publisherInfoLabel.Size = new System.Drawing.Size(472, 36);
@@ -569,7 +573,7 @@
             this.button_Browse.TabIndex = 4;
             this.button_Browse.Text = "Browse";
             this.button_Browse.UseVisualStyleBackColor = false;
-            this.button_Browse.Click += new System.EventHandler(this.button_Browse_Click);
+            this.button_Browse.Click += new System.EventHandler(this.Button_Browse_Click);
             // 
             // label_condition
             // 
@@ -635,7 +639,7 @@
             this.button_Next.TabIndex = 107;
             this.button_Next.Text = "Next >";
             this.button_Next.UseVisualStyleBackColor = false;
-            this.button_Next.Click += new System.EventHandler(this.button_Next_Click);
+            this.button_Next.Click += new System.EventHandler(this.Button_Next_Click);
             // 
             // control_Panel
             // 
@@ -770,6 +774,30 @@
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
+            // checkBoxEku
+            // 
+            this.checkBoxEku.AutoSize = true;
+            this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
+            this.checkBoxEku.Name = "checkBoxEku";
+            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
+            this.checkBoxEku.TabIndex = 113;
+            this.checkBoxEku.Text = "Add EKU Rule";
+            this.checkBoxEku.UseVisualStyleBackColor = true;
+            this.checkBoxEku.CheckedChanged += new System.EventHandler(this.CheckBoxEkuStateChanged);
+            // 
+            // textBoxEKU
+            // 
+            this.textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxEKU.Enabled = false;
+            this.textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxEKU.Location = new System.Drawing.Point(159, 196);
+            this.textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxEKU.Name = "textBoxEKU";
+            this.textBoxEKU.ReadOnly = true;
+            this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
+            this.textBoxEKU.TabIndex = 114;
+            this.textBoxEKU.TextChanged += new System.EventHandler(this.TextBoxEKU_TextChanged);
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -865,5 +893,7 @@
         private System.Windows.Forms.PictureBox pictureBox_Progress;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.Windows.Forms.CheckBox checkBox_CustomPFN;
+        private System.Windows.Forms.CheckBox checkBoxEku;
+        private System.Windows.Forms.TextBox textBoxEKU;
     }
 }
