@@ -240,9 +240,9 @@ namespace WDAC_Wizard
             if(browseFile.Equals(BrowseFileType.PEFile))
             {
                 openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
+                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS;*.JS|" +
                 "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All Binary and Script Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN;*.PS1;*.BAT;*.VBS;*.JS;*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
                 "All files (*.*)|*.*";
 
                 openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
