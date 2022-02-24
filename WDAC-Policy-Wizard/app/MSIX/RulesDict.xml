@@ -161,7 +161,7 @@
 	  ButtonMapping="button_17">
   </Rule>
   <Rule
-     Name="UnsignedNotRevoked"
+     Name="RevokedExpiredAsUnsigned"
      AllowedValue="Enabled"
      Supported="True"
      RuleNumber="20"
