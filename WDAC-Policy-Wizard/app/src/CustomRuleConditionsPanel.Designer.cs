@@ -310,6 +310,7 @@
             // textBox_MaxVersion
             // 
             this.textBox_MaxVersion.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox_MaxVersion.Enabled = false;
             this.textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
             this.textBox_MaxVersion.Location = new System.Drawing.Point(334, 102);
@@ -325,6 +326,7 @@
             // textBoxSlider_3
             // 
             this.textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_3.Enabled = false;
             this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxSlider_3.Location = new System.Drawing.Point(159, 144);
             this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
@@ -349,6 +351,7 @@
             // textBoxSlider_2
             // 
             this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_2.Enabled = false;
             this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxSlider_2.Location = new System.Drawing.Point(159, 102);
             this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
@@ -373,6 +376,7 @@
             // textBoxSlider_1
             // 
             this.textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_1.Enabled = false;
             this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxSlider_1.Location = new System.Drawing.Point(159, 60);
             this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
@@ -397,6 +401,7 @@
             // textBoxSlider_0
             // 
             this.textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_0.Enabled = false;
             this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxSlider_0.Location = new System.Drawing.Point(159, 19);
             this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
@@ -574,6 +579,7 @@
             // 
             // textBox_ReferenceFile
             // 
+            this.textBox_ReferenceFile.Enabled = false;
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_ReferenceFile.Location = new System.Drawing.Point(12, 334);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
