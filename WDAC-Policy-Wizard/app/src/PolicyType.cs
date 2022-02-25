@@ -318,9 +318,11 @@ namespace WDAC_Wizard
         {
             // Save dialog box pressed
             string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
-            if(String.IsNullOrEmpty(policyPath))
+
+            // If cancel button is selected by user, or path does not exist prevent unhandled error
+            if (String.IsNullOrEmpty(policyPath))
             {
-                return; 
+                return;
             }
 
             this._MainWindow.Policy.SchemaPath = policyPath;

@@ -50,7 +50,7 @@ namespace WDAC_Wizard
                 
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
             // Update UI
-            uncheck_all();
+            Uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
             allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
@@ -72,7 +72,7 @@ namespace WDAC_Wizard
                 
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.WindowsWorks;
             // Update UI
-            uncheck_all();
+            Uncheck_all();
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
             windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
@@ -83,7 +83,7 @@ namespace WDAC_Wizard
         /// Signed and Reputable template policy selected. Least restrictive and lowest level of security.  
         /// </summary>
         /// 
-        private void signedReputable_Button_Click(object sender, EventArgs e)
+        private void SignedReputable_Button_Click(object sender, EventArgs e)
         {
             //Policy Signed and Reputable (certificate & reputation signing)
             // User coming back to this page and changing template -- redo flow
@@ -96,7 +96,7 @@ namespace WDAC_Wizard
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.SignedReputable;
             
             // Update UI
-            uncheck_all();
+            Uncheck_all();
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
             signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
@@ -107,8 +107,7 @@ namespace WDAC_Wizard
         /// Uncheck all of the tempalte policy options. Required since the buttons do not automatically 
         /// untoggle each other. Called each time a user toggles a template.  
         /// </summary>
-        /// 
-        private void uncheck_all()
+        private void Uncheck_all()
         {
             // Show the text fields now that user has selected base policy template:
             this.policyInfoPanel.Visible = true;
@@ -129,12 +128,19 @@ namespace WDAC_Wizard
         /// <summary>
         /// Sets the policy schema path string. Triggered when user wants to modify the save path for their policy: browse button press or PolicyPath TextBox text changed.  
         /// </summary>
-        /// 
-        private void textBoxPolicyPath_TextChanged(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxPolicyPath_TextChanged(object sender, EventArgs e)
         {
             // Save dialog box pressed
 
-            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
+            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
+
+            // If cancel button is selected by user, or path does not exist prevent unhandled error
+            if(String.IsNullOrEmpty(policyPath))
+            {
+                return; 
+            }
 
             textBoxPolicyPath.Text = policyPath;
             this._Policy.SchemaPath = policyPath;
@@ -149,10 +155,11 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Sets the policy friendly name string. Triggered when user wants to modify the policy name: PolicyName TextBox text changed.  
+        /// Sets the policy friendly name string. Triggered when user wants to modify the policy name: PolicyName TextBox text changed. 
         /// </summary>
-        /// 
-        private void textBoxPolicyName_TextChanged(object sender, EventArgs e)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxPolicyName_TextChanged(object sender, EventArgs e)
         {
             // Policy Friend Name
             this._Policy.PolicyName = textBox_PolicyName.Text;
@@ -191,6 +198,12 @@ namespace WDAC_Wizard
             this.textBoxPolicyPath.ScrollToCaret();
         }
 
+        /// <summary>
+        /// Find a default path for the policy to be saved. 
+        /// </summary>
+        /// <param name="policyTemplate"></param>
+        /// <param name="nAttempts"></param>
+        /// <returns></returns>
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
             string dateString = this._MainWindow.FormatDate(false);
@@ -208,7 +221,12 @@ namespace WDAC_Wizard
             else
                 return proposedPath;
         }
-                
+
+        /// <summary>
+        /// User has clicked the ISG label to learn more. Launch webpage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ISGLabel_Click(object sender, EventArgs e)
         {
             // ISG label clicked. Launch ISG webpage
@@ -247,8 +265,12 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.White;
         }
 
-        // Learn more about the template policies
-        private void label3_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Learn more about the template policies
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Label_LearnMore_Click(object sender, EventArgs e)
         {
             try
             {

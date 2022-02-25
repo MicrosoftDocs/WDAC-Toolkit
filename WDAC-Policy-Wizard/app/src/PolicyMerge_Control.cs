@@ -123,6 +123,11 @@ namespace WDAC_Wizard.src
             }
         }
 
+        /// <summary>
+        /// User selected the Remove Policy button. Remove the selected rows from the table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_RemovePolicy_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
