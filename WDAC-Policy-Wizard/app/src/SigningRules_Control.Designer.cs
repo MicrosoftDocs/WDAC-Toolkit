@@ -88,7 +88,6 @@ namespace WDAC_Wizard
             this.column_ID});
             this.rulesDataGrid.Location = new System.Drawing.Point(163, 162);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(2);
-            this.rulesDataGrid.MultiSelect = false;
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
             this.rulesDataGrid.RowHeadersVisible = false;

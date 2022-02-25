@@ -77,7 +77,7 @@ namespace WDAC_Wizard
             // If user is changing the policy schema being edited, show message
             if(this._MainWindow.PageList.Count > 1)
             {
-                DialogResult res = MessageBox.Show("Modifying the current schema to edit will cause you to lose your progress." +
+                DialogResult res = MessageBox.Show("Modifying the current schema to edit will cause you to lose your progress. " +
                     "Are you sure you want to do this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res == DialogResult.Yes)
                 {

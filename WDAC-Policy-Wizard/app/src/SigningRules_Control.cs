@@ -497,33 +497,74 @@ namespace WDAC_Wizard
         /// </summary>
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
+            this.Log.AddNewSeparationLine("Delete Rule Button Clicked");
 
-            // Get info about the rule user wants to delete: row index and value
-            int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+            // Determine whether the user is deleting one row or multiple rows
+            List<int> rowIdxs = new List<int>();
+            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+            string userPromptMsg = String.Empty; 
+
+            if(numRowsSelected < 1)
+            {
+                return; 
+            }
+            else if(numRowsSelected == 1)
+            {
+                // Exactly one row/rule to delete
+                int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
+                userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)this.rulesDataGrid["Column_Name", rowIdx].Value);
+            }
+            else
+            {
+                // Multiple rows - show different UI
+                userPromptMsg = String.Format("Are you sure you want to delete these {0} rules?", numRowsSelected.ToString());
+            }
+
+            // Prompt the user for additional deletion confirmation
+            DialogResult res = MessageBox.Show(userPromptMsg, "Rule Deletion Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (res == DialogResult.No)
+            {
+                this.Log.AddInfoMsg(Properties.Resources.DeleteRowsCanceled);
+                return;
+            }
+
+            for (int i = 0; i < numRowsSelected; i++)
+            {
+                rowIdxs.Add(this.rulesDataGrid.SelectedRows[i].Index);
+            }
+
+            // Call helper function to delete all the rows defined in rowIdxs
+            DeleteRowsFromRulesTable(rowIdxs);
+        }
+
+        /// <summary>
+        /// Deletes all rules defined in rowIdxs by calling DeleteRowFromTable per row index
+        /// </summary>
+        /// <param name="rowIdxs"></param>
+        private void DeleteRowsFromRulesTable(List<int> rowIdxs)
+        {
+            foreach(int rowIdx in rowIdxs)
+            {
+                DeleteRowFromRulesTable(rowIdx);
+            }
+        }
+
+        /// <summary>
+        /// Delete rule and row (where applicable)
+        /// </summary>
+        /// <param name="rowIdx"></param>
+        private void DeleteRowFromRulesTable(int rowIdx)
+        {
             int numIdex = 0;
-            int customRuleIdx = -1; 
+            int customRuleIdx = -1;
+            List<string> ruleIDsToRemove = new List<string>();
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
             string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
-            List<string> ruleIDsToRemove = new List<string>(); 
 
-            if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
-            {
-                this.Log.AddErrorMsg("Rule to delete is not a valid rule");
-                return;
-            }
-
-            this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
-
-            // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete this rule?\n'{0}'", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (res == DialogResult.No)
-            {
-                return; 
-            }
+            this.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
 
             // Remove from table iff sucessful re-serialization
             // Remove from DisplayObject
@@ -556,11 +597,11 @@ namespace WDAC_Wizard
                     if (customRuleIdx != -1)
                     {
                         this.Policy.CustomRules.RemoveAt(customRuleIdx);
-                        return; 
+                        return;
                     }
                 }
             }
-           
+
             // Not a custom rule -- Try to remove from signers -- 
             // use ID to remove from scenarios (Allowed/Denied signer)
             if (ruleType.Equals("Publisher"))
@@ -575,14 +616,14 @@ namespace WDAC_Wizard
                         this.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
 
                         // Remove the signer from Signing Scenarios
-                        RemoveSignerIdFromSigningScenario(signer.ID); 
+                        RemoveSignerIdFromSigningScenario(signer.ID);
 
                         // Remove any associted FileAttributeRef refrences
-                        if(signer.FileAttribRef != null)
+                        if (signer.FileAttribRef != null)
                         {
-                            foreach(var fileAttrib in signer.FileAttribRef)
+                            foreach (var fileAttrib in signer.FileAttribRef)
                             {
-                                RemoveRuleIdFromFileAttribs(fileAttrib.RuleID); 
+                                RemoveRuleIdFromFileAttribs(fileAttrib.RuleID);
                             }
                         }
                         break;
@@ -646,10 +687,10 @@ namespace WDAC_Wizard
             else
             {
                 // Remove from FileRules
-                numIdex = 0; 
+                numIdex = 0;
                 foreach (var fileRule in this.Policy.siPolicy.FileRules)
                 {
-                    string fileRuleID = string.Empty; 
+                    string fileRuleID = string.Empty;
 
                     if (fileRule.GetType() == typeof(Deny))
                     {
@@ -684,12 +725,12 @@ namespace WDAC_Wizard
             // Serialize to new policy
             try
             {
-                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath); 
+                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath);
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 this.Log.AddErrorMsg("Serialization failed after removing rule with error: ", exp);
-                return; 
+                return;
             }
         }
 
