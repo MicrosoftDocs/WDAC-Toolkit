@@ -80,12 +80,10 @@ namespace WDAC_Wizard
         }
 
         
-        //private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 
         /// </summary>
-        private void label_AddCustomRules_Click(object sender, EventArgs e)
+        private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
             // Open the custom rules conditions panel
 
@@ -417,7 +415,7 @@ namespace WDAC_Wizard
                 return false; 
             }
             
-            bubbleUp(); // all original signing rules are set in MainWindow object - ...
+            BubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
             return true; 
         }
@@ -477,7 +475,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Method to set all of the MainWindow objects to the local instances of the Policy helper class objects.
         /// </summary>
-        private void bubbleUp()
+        private void BubbleUp()
         {
             // Passing rule, signing scenarios, etc datastructs to MainWindow class
            this._MainWindow.Policy.CISigners = this.Policy.CISigners;
@@ -497,7 +495,7 @@ namespace WDAC_Wizard
         /// Removes the highlighted rule row in the this.rulesDataGrid DataGridView. 
         /// Can only be executed on custom rules from this session. 
         /// </summary>
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
@@ -695,6 +693,10 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Helper function which removes a signer rule ID from all signing scenarios
+        /// </summary>
+        /// <param name="ruleId"></param>
         private void RemoveSignerIdFromSigningScenario(string ruleId)
         {
             foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
@@ -750,6 +752,10 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Helper function which removes a rule ID from FileRules ref in the signing scenarios
+        /// </summary>
+        /// <param name="ruleId"></param>
         private void RemoveRuleIdFromFileAttribs(string ruleId)
         {
             int numIdex = 0; 
@@ -786,29 +792,9 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Highlights the row of data in the DataGridView
+        /// Sets the display object when the DataGridView needed to paint data
         /// </summary>
-        private void DataClicked(object sender, DataGridViewCellEventArgs e)
-        {
-            // Remove highlighting from previous selected row
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.BackColor = Color.White;
-            if(this.RowSelected > 0 && this.RowSelected < this.rulesDataGrid.Rows.Count)
-                this.rulesDataGrid.Rows[this.RowSelected].DefaultCellStyle = defaultCellStyle; 
-
-            // Highlight the row to show user feedback
-            DataGridViewCellStyle highlightCellStyle = new DataGridViewCellStyle();
-            highlightCellStyle.BackColor = Color.FromArgb(0, 120, 215); 
-            DataGridViewRow customRow = this.rulesDataGrid.CurrentRow;
-            this.rulesDataGrid.Rows[customRow.Index].DefaultCellStyle = highlightCellStyle;
-            this.RowSelected = customRow.Index; 
-            
-        }
-
-        /// <summary>
-        /// Called when DataGridView needs to paint data
-        /// </summary>
-        private void rulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        private void RulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
             if (e.RowIndex == this.rulesDataGrid.RowCount - 1) return;
@@ -854,6 +840,12 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Adds a new rule to the DataGrid Table
+        /// </summary>
+        /// <param name="displayObjectArray"></param>
+        /// <param name="customRule"></param>
+        /// <param name="warnUser"></param>
         public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
@@ -874,7 +866,7 @@ namespace WDAC_Wizard
             // Scroll to bottom to see new rule added to list
             this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
 
-            bubbleUp();
+            BubbleUp();
 
             // close the custom Rule Conditions Panel
             this.customRuleConditionsPanel.Close();
@@ -883,6 +875,9 @@ namespace WDAC_Wizard
 
         }
 
+        /// <summary>
+        /// Nullifies the custom rule conditions panel on form closing
+        /// </summary>
         public void CustomRulesPanel_Closing()
         {
             // User has closed custom rules panel. Reset panel and text
@@ -900,13 +895,12 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.WhiteSmoke;
         }
 
-        private void AddCustomRules_MouseLeave(object sender, EventArgs e)
-        {
-            Label checkBox = ((Label)sender);
-            checkBox.BackColor = Color.White;
-        }
-
-        private void checkBox_KernelList_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Sets the UseKernelModeBlocks attribute dictated by the state of the checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBox_KernelList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended driver block rules
             if(this.checkBox_KernelList.Checked)
@@ -919,7 +913,12 @@ namespace WDAC_Wizard
             }
         }
 
-        private void checkBox_UserModeList_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Sets the UseKernelModeBlocks attribute dictated by the state of the checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBox_UserModeList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended user mode block rules
             if (this.checkBox_UserModeList.Checked)
