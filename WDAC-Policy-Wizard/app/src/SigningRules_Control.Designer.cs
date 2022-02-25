@@ -257,16 +257,16 @@ namespace WDAC_Wizard
             // 
             this.panel_Progress.Controls.Add(this.label_Progress);
             this.panel_Progress.Controls.Add(this.pictureBox_Progress);
-            this.panel_Progress.Location = new System.Drawing.Point(461, 273);
+            this.panel_Progress.Location = new System.Drawing.Point(527, 270);
             this.panel_Progress.Name = "panel_Progress";
-            this.panel_Progress.Size = new System.Drawing.Size(280, 194);
+            this.panel_Progress.Size = new System.Drawing.Size(156, 168);
             this.panel_Progress.TabIndex = 115;
             this.panel_Progress.Visible = false;
             // 
             // label_Progress
             // 
             this.label_Progress.AutoSize = true;
-            this.label_Progress.Location = new System.Drawing.Point(68, 18);
+            this.label_Progress.Location = new System.Drawing.Point(11, 2);
             this.label_Progress.Name = "label_Progress";
             this.label_Progress.Size = new System.Drawing.Size(131, 20);
             this.label_Progress.TabIndex = 1;
@@ -277,7 +277,7 @@ namespace WDAC_Wizard
             // 
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
-            this.pictureBox_Progress.Location = new System.Drawing.Point(69, 48);
+            this.pictureBox_Progress.Location = new System.Drawing.Point(12, 32);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
             this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
