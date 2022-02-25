@@ -49,7 +49,13 @@ namespace WDAC_Wizard
             this.label_AddCustomRules = new System.Windows.Forms.Button();
             this.checkBox_KernelList = new System.Windows.Forms.CheckBox();
             this.checkBox_UserModeList = new System.Windows.Forms.CheckBox();
+            this.panel_Progress = new System.Windows.Forms.Panel();
+            this.label_Progress = new System.Windows.Forms.Label();
+            this.pictureBox_Progress = new System.Windows.Forms.PictureBox();
+            this.backgroundWorkerRulesDeleter = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).BeginInit();
+            this.panel_Progress.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.SuspendLayout();
             // 
             // label7
@@ -247,12 +253,49 @@ namespace WDAC_Wizard
             this.checkBox_UserModeList.UseVisualStyleBackColor = true;
             this.checkBox_UserModeList.CheckedChanged += new System.EventHandler(this.CheckBox_UserModeList_CheckedChanged);
             // 
+            // panel_Progress
+            // 
+            this.panel_Progress.Controls.Add(this.label_Progress);
+            this.panel_Progress.Controls.Add(this.pictureBox_Progress);
+            this.panel_Progress.Location = new System.Drawing.Point(461, 273);
+            this.panel_Progress.Name = "panel_Progress";
+            this.panel_Progress.Size = new System.Drawing.Size(280, 194);
+            this.panel_Progress.TabIndex = 115;
+            this.panel_Progress.Visible = false;
+            // 
+            // label_Progress
+            // 
+            this.label_Progress.AutoSize = true;
+            this.label_Progress.Location = new System.Drawing.Point(68, 18);
+            this.label_Progress.Name = "label_Progress";
+            this.label_Progress.Size = new System.Drawing.Size(131, 20);
+            this.label_Progress.TabIndex = 1;
+            this.label_Progress.Text = "Removing Rules";
+            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pictureBox_Progress
+            // 
+            this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
+            this.pictureBox_Progress.Location = new System.Drawing.Point(69, 48);
+            this.pictureBox_Progress.Name = "pictureBox_Progress";
+            this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
+            this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox_Progress.TabIndex = 0;
+            this.pictureBox_Progress.TabStop = false;
+            // 
+            // backgroundWorkerRulesDeleter
+            // 
+            this.backgroundWorkerRulesDeleter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DoWorkBackgroundWorker);
+            this.backgroundWorkerRulesDeleter.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.FinishedBackgroundWorker);
+            // 
             // SigningRules_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Controls.Add(this.panel_Progress);
             this.Controls.Add(this.checkBox_UserModeList);
             this.Controls.Add(this.checkBox_KernelList);
             this.Controls.Add(this.label_AddCustomRules);
@@ -268,6 +311,9 @@ namespace WDAC_Wizard
             this.Size = new System.Drawing.Size(1203, 725);
             this.Load += new System.EventHandler(this.SigningRules_Control_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).EndInit();
+            this.panel_Progress.ResumeLayout(false);
+            this.panel_Progress.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,5 +336,9 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Files;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Exceptions;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_ID;
+        private System.Windows.Forms.Panel panel_Progress;
+        private System.Windows.Forms.Label label_Progress;
+        private System.Windows.Forms.PictureBox pictureBox_Progress;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerRulesDeleter;
     }
 }

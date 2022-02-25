@@ -500,9 +500,8 @@ namespace WDAC_Wizard
             this.Log.AddNewSeparationLine("Delete Rule Button Clicked");
 
             // Determine whether the user is deleting one row or multiple rows
-            List<int> rowIdxs = new List<int>();
             int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
-            string userPromptMsg = String.Empty; 
+            string userPromptMsg; 
 
             if(numRowsSelected < 1)
             {
@@ -529,13 +528,14 @@ namespace WDAC_Wizard
                 return;
             }
 
-            for (int i = 0; i < numRowsSelected; i++)
-            {
-                rowIdxs.Add(this.rulesDataGrid.SelectedRows[i].Index);
-            }
+            // Creates background worker to display updates to UI
+            this.panel_Progress.Visible = true;
+            this.panel_Progress.BringToFront(); 
 
-            // Call helper function to delete all the rows defined in rowIdxs
-            DeleteRowsFromRulesTable(rowIdxs);
+            if (!this.backgroundWorkerRulesDeleter.IsBusy)
+            {
+                this.backgroundWorkerRulesDeleter.RunWorkerAsync();
+            }
         }
 
         /// <summary>
@@ -570,8 +570,19 @@ namespace WDAC_Wizard
             // Remove from DisplayObject
             if (rowIdx < this.displayObjects.Count)
             {
-                this.displayObjects.RemoveAt(rowIdx);
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                if (InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        this.displayObjects.RemoveAt(rowIdx);
+                        this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                    }));
+                }
+                else
+                {
+                    this.displayObjects.RemoveAt(rowIdx);
+                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                }
             }
 
             // Check if this is a custom rule that we can delete from memory without modifying the policy
@@ -970,6 +981,39 @@ namespace WDAC_Wizard
             {
                 this.Policy.UseUserModeBlocks = false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DoWorkBackgroundWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            //
+            List<int> rowIdxs = new List<int>();
+            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+
+            for (int i = 0; i < numRowsSelected; i++)
+            {
+                rowIdxs.Add(this.rulesDataGrid.SelectedRows[i].Index);
+            }
+
+            // Call helper function to delete all the rows defined in rowIdxs
+            DeleteRowsFromRulesTable(rowIdxs);
+        }
+
+
+        /// <summary>
+        /// Background worker is done computationally expensive work. Hides the progress panel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FinishedBackgroundWorker(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            // Hide progress panel
+            this.panel_Progress.Visible = false;
+            this.panel_Progress.SendToBack(); 
         }
     }
 

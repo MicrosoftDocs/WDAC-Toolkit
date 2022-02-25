@@ -312,7 +312,6 @@ namespace WDAC_Wizard
             string progress = String.Format("{0} / {1} Rules from Event Log Created", (int) completedRules, this.NumberRules); 
 
             label_Progress.Text = progress; 
-
         }
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
