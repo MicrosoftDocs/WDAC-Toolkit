@@ -1060,9 +1060,22 @@ namespace WDAC_Wizard
             base.OnFormClosing(e);
         }
 
+        /// <summary>
+        /// Next button clicked by user. Check UI state before proceeding to Exceptions panel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Next_Click(object sender, EventArgs e)
         {
-            // Show the exception UI
+            // Assert not a path rule since path rules cannot be excepted in WDAC
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.PathRuleNoExceptionAllowed;
+                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path rules cannot be excepted.");
+                return;
+            }
 
             // Check custom values first before proceeding
             // Ensure custom values are valid
@@ -1086,6 +1099,7 @@ namespace WDAC_Wizard
             }
 
             // Check required fields - that a reference file is selected
+            // Show the exception UI
             if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
                 && this.PolicyCustomRule.ReferenceFile != null)
             {

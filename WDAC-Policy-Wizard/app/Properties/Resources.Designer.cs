@@ -624,6 +624,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support path rule exceptions. 
+        ///Please select the  &apos;Create Rule&apos; button..
+        /// </summary>
+        internal static string PathRuleNoExceptionAllowed {
+            get {
+                return ResourceManager.GetString("PathRuleNoExceptionAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {
