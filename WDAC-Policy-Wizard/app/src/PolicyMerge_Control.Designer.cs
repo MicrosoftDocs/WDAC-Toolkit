@@ -136,9 +136,10 @@
             // 
             this.button_AddPolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button_AddPolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_AddPolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_AddPolicy.Location = new System.Drawing.Point(165, 307);
             this.button_AddPolicy.Name = "button_AddPolicy";
-            this.button_AddPolicy.Size = new System.Drawing.Size(120, 30);
+            this.button_AddPolicy.Size = new System.Drawing.Size(130, 30);
             this.button_AddPolicy.TabIndex = 96;
             this.button_AddPolicy.Text = "+ Add Policy";
             this.button_AddPolicy.UseVisualStyleBackColor = true;
@@ -148,9 +149,10 @@
             // 
             this.button_RemovePolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button_RemovePolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_RemovePolicy.Location = new System.Drawing.Point(307, 307);
+            this.button_RemovePolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_RemovePolicy.Location = new System.Drawing.Point(317, 307);
             this.button_RemovePolicy.Name = "button_RemovePolicy";
-            this.button_RemovePolicy.Size = new System.Drawing.Size(120, 30);
+            this.button_RemovePolicy.Size = new System.Drawing.Size(130, 30);
             this.button_RemovePolicy.TabIndex = 97;
             this.button_RemovePolicy.Text = "- Remove Policy";
             this.button_RemovePolicy.UseVisualStyleBackColor = true;

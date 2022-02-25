@@ -44,6 +44,11 @@ namespace WDAC_Wizard.src
             this._MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
         }
 
+        /// <summary>
+        /// User has selected the Browse button. Prompts user to select a file location to save their merged WDAC policy output file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Browse_Click(object sender, EventArgs e)
         {
             string dspTitle = "Choose the final merged WDAC path location";
@@ -66,13 +71,13 @@ namespace WDAC_Wizard.src
                     this._MainWindow.ErrorOnPage = false; 
                 }
             }
-            else
-            {
-                this.Log.AddInfoMsg("Final Merge Policy set to: Could Not Resolve Path");
-            }
-
         }
 
+        /// <summary>
+        /// User has selected the + Add Policy button. Prompts user to select multiple WDAC policy files to be merged
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_AddPolicy_Click(object sender, EventArgs e)
         {
             string dspTitle = "Choose WDAC policies to merge";
@@ -123,6 +128,11 @@ namespace WDAC_Wizard.src
             }
         }
 
+        /// <summary>
+        /// User has selected the - Remove Policy button. Prompts user to select the WDAC policy files to be removed from the table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_RemovePolicy_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
@@ -191,30 +201,37 @@ namespace WDAC_Wizard.src
             }
         }
               
-
+        /// <summary>
+        /// Calls the helper function to get save file location path
+        /// </summary>
+        /// <param name="displayTitle"></param>
+        /// <returns>Path to save the merged WDAC file output. String.Empty if user cancels</returns>
         private string SavePolicy(string displayTitle)
         {
             // Open file dialog to get file or folder path
             return Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
         }
 
-
+        /// <summary>
+        /// Display error label. Set timer to show the error for 5 seconds
+        /// </summary>
+        /// <param name="dspStr"></param>
         private void ShowError(string dspStr)
         {
             this.label_Error.Text = dspStr; 
             this.label_Error.Visible = true;
 
             Timer settingsUpdateNotificationTimer = new Timer();
-            settingsUpdateNotificationTimer.Interval = (5000); // 1.5 secs
+            settingsUpdateNotificationTimer.Interval = (5000); // 5 secs
             settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
             settingsUpdateNotificationTimer.Start();
         }
 
-
-        ///
-        /// Grid View Specific 
-        ///
-
+        /// <summary>
+        /// Method to retrieve the Cell Values
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PoliciesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
@@ -244,13 +261,18 @@ namespace WDAC_Wizard.src
             }
         }
 
+        /// <summary>
+        /// Method to hide the error label. Called when timer runs out (5s)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.label_Error.Visible = false;
         }
     }
 
-    // Class for the datastore
+    // Class for the table datastore
     public class DisplayObject
     {
         public string Number;

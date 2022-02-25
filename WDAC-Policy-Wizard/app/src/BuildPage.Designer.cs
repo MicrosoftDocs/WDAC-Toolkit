@@ -109,7 +109,7 @@ namespace WDAC_Wizard
             this.hyperlinkLabel.Size = new System.Drawing.Size(123, 19);
             this.hyperlinkLabel.TabIndex = 85;
             this.hyperlinkLabel.Text = "Unable to locate";
-            this.hyperlinkLabel.Click += new System.EventHandler(this.hyperlinkLabel_Click);
+            this.hyperlinkLabel.Click += new System.EventHandler(this.HyperlinkLabel_Click);
             // 
             // finishPanel
             // 
@@ -130,9 +130,9 @@ namespace WDAC_Wizard
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(1, 48);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(131, 19);
+            this.label4.Size = new System.Drawing.Size(237, 19);
             this.label4.TabIndex = 87;
-            this.label4.Text = "Output locations:";
+            this.label4.Text = "Output locations (click to open):";
             // 
             // progressString_Label
             // 
