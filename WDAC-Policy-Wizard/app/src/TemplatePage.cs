@@ -145,9 +145,14 @@ namespace WDAC_Wizard
             textBoxPolicyPath.Text = policyPath;
             this._Policy.SchemaPath = policyPath;
             this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
-            this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1; 
-            this.textBoxPolicyPath.ScrollToCaret(); 
-            
+
+            // Scroll to the right-most side of the textbox
+            if(this.textBoxPolicyPath.TextLength > 0)
+            {
+                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
+                this.textBoxPolicyPath.ScrollToCaret();
+            }
+                        
             if(this._Policy.PolicyName != null)
             {
                 this._MainWindow.ErrorOnPage = false;
@@ -194,8 +199,12 @@ namespace WDAC_Wizard
             this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
 
             // Show right side of the text
-            this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
-            this.textBoxPolicyPath.ScrollToCaret();
+            if(this.textBoxPolicyPath.TextLength > 0)
+            {
+                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
+                this.textBoxPolicyPath.ScrollToCaret();
+            }
+            
         }
 
         /// <summary>
