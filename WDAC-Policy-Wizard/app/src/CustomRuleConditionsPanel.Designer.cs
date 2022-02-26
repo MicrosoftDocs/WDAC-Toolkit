@@ -42,6 +42,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
+            this.textBoxEKU = new System.Windows.Forms.TextBox();
+            this.checkBoxEku = new System.Windows.Forms.CheckBox();
             this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
             this.label_To = new System.Windows.Forms.Label();
             this.textBox_MaxVersion = new System.Windows.Forms.TextBox();
@@ -81,8 +83,6 @@
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.checkBoxEku = new System.Windows.Forms.CheckBox();
-            this.textBoxEKU = new System.Windows.Forms.TextBox();
             this.panel_CustomRules.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
             this.panel_Progress.SuspendLayout();
@@ -260,6 +260,30 @@
             this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 255);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
+            // 
+            // textBoxEKU
+            // 
+            this.textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxEKU.Enabled = false;
+            this.textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxEKU.Location = new System.Drawing.Point(159, 196);
+            this.textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxEKU.Name = "textBoxEKU";
+            this.textBoxEKU.ReadOnly = true;
+            this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
+            this.textBoxEKU.TabIndex = 114;
+            this.textBoxEKU.TextChanged += new System.EventHandler(this.TextBoxEKU_TextChanged);
+            // 
+            // checkBoxEku
+            // 
+            this.checkBoxEku.AutoSize = true;
+            this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
+            this.checkBoxEku.Name = "checkBoxEku";
+            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
+            this.checkBoxEku.TabIndex = 113;
+            this.checkBoxEku.Text = "Add EKU Rule";
+            this.checkBoxEku.UseVisualStyleBackColor = true;
+            this.checkBoxEku.CheckedChanged += new System.EventHandler(this.CheckBoxEkuStateChanged);
             // 
             // checkBox_CustomValues
             // 
@@ -773,30 +797,6 @@
             this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
-            // 
-            // checkBoxEku
-            // 
-            this.checkBoxEku.AutoSize = true;
-            this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
-            this.checkBoxEku.Name = "checkBoxEku";
-            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
-            this.checkBoxEku.TabIndex = 113;
-            this.checkBoxEku.Text = "Add EKU Rule";
-            this.checkBoxEku.UseVisualStyleBackColor = true;
-            this.checkBoxEku.CheckedChanged += new System.EventHandler(this.CheckBoxEkuStateChanged);
-            // 
-            // textBoxEKU
-            // 
-            this.textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxEKU.Enabled = false;
-            this.textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxEKU.Location = new System.Drawing.Point(159, 196);
-            this.textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxEKU.Name = "textBoxEKU";
-            this.textBoxEKU.ReadOnly = true;
-            this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
-            this.textBoxEKU.TabIndex = 114;
-            this.textBoxEKU.TextChanged += new System.EventHandler(this.TextBoxEKU_TextChanged);
             // 
             // CustomRuleConditionsPanel
             // 

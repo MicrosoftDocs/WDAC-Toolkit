@@ -27,7 +27,7 @@ namespace WDAC_Wizard
         public Logger Log;
         private MainWindow _MainWindow;
         private SigningRules_Control SigningControl;
-        private bool RuleInEdit = false;
+        public bool RuleInEdit = false;
         private UIState state;
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
@@ -49,7 +49,7 @@ namespace WDAC_Wizard
 
             this._MainWindow = pControl._MainWindow;
             this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.CustomRuleinProgress = false;
+            this._MainWindow.CustomRuleinProgress = true;
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
             this.SigningControl = pControl;
