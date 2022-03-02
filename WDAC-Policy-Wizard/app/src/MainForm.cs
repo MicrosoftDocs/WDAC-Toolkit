@@ -773,9 +773,21 @@ namespace WDAC_Wizard
         /// </summary>
         private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // If error in workflow, log final exception
             if (e.Error != null)
             {
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+            }
+            this.Log.AddNewSeparationLine("Workflow -- DONE");
+
+            // Upload log file if customer consents
+            if (Properties.Settings.Default.allowTelemetry)
+            {
+                this.Log.UploadLog();
+            }
+
+            if (e.Error != null)
+            {
                 this._BuildPage.ShowError();
             }
             else
@@ -792,13 +804,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.Log.AddNewSeparationLine("Workflow -- DONE"); 
-
-            // Upload log file if customer consents
-            if (Properties.Settings.Default.allowTelemetry)
-            {
-                this.Log.UploadLog();
-            }
+            // Re-initialize SiPolicy object
+            this.Policy = new WDAC_Policy();
         }
 
         /// <summary>
@@ -1477,6 +1484,7 @@ namespace WDAC_Wizard
             }
             else
             {
+                // Merge issue #87 is here - non zero custom rules
                 if (this.Policy.CustomRules.Count > 0)
                 {
                     policyPaths.Add(customRulesMergePath);
@@ -1488,7 +1496,7 @@ namespace WDAC_Wizard
                 }
             }
             
-
+            // Added in the order based on their final order in the table
             if (this.Policy.PoliciesToMerge.Count > 0)
             {
                 foreach(var path in this.Policy.PoliciesToMerge)
@@ -1523,7 +1531,6 @@ namespace WDAC_Wizard
             }
 
             // Remove last comma and add outputFilePath
-            // TODO: check if this.Policy.SchemaPath is user-writeable
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
             mergeScript += String.Format(" -OutputFilePath \"{0}\"", this.Policy.SchemaPath);
 

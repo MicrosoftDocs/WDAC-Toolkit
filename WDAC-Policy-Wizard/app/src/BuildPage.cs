@@ -119,9 +119,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Opens the file explorer to the CI policy just built located in the folder path defined in the FilePath param . 
         /// </summary>
-        private void hyperlinkLabel_Click(object sender, EventArgs e)
+        private void HyperlinkLabel_Click(object sender, EventArgs e)
         {
-            
             // open text file in notepad (or another default text editor)
             if (File.Exists(this.FilePath))
             {
