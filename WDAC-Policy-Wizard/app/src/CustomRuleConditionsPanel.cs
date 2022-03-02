@@ -65,7 +65,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Appends the custom rule to the bottom of the DataGridView and creates the rule in the CustomRules list. 
         /// </summary>
-        private void button_CreateRule_Click(object sender, EventArgs e)
+        private void Button_CreateRule_Click(object sender, EventArgs e)
         {
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
             if (this.PolicyCustomRule.ReferenceFile == null)
@@ -710,8 +710,12 @@ namespace WDAC_Wizard
                     // UI
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     this.labelSlider_0.Text = "Issuing CA:";
                     this.labelSlider_1.Text = "Publisher:";
                     this.labelSlider_2.Text = "Min version:";
@@ -759,8 +763,12 @@ namespace WDAC_Wizard
                     this.textBox_ReferenceFile.Text = this.PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     break;
 
 
@@ -772,9 +780,12 @@ namespace WDAC_Wizard
                     radioButton_File.Checked = true;
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
@@ -784,9 +795,12 @@ namespace WDAC_Wizard
                     // UI 
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     this.labelSlider_0.Text = "Original filename:";
                     this.labelSlider_1.Text = "File description:";
                     this.labelSlider_2.Text = "Product name:";
@@ -819,8 +833,12 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = false;
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     break;
             }
 
@@ -856,6 +874,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Gets the location of the trackbar and sets the Rule Level 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
         {
             int pos = trackBar_Conditions.Value; //Publisher file rules conditions
@@ -1025,11 +1048,21 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Hides the error label
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.label_Error.Visible = false;
         }
 
+        /// <summary>
+        /// Fires at Form Closing event. Determine whether to close the panel or cancel in case of active rule
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CustomRulesPanel_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (this.RuleInEdit)
@@ -1060,9 +1093,22 @@ namespace WDAC_Wizard
             base.OnFormClosing(e);
         }
 
+        /// <summary>
+        /// Next button clicked by user. Check UI state before proceeding to Exceptions panel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Next_Click(object sender, EventArgs e)
         {
-            // Show the exception UI
+            // Assert not a path rule since path rules cannot be excepted in WDAC
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.PathRuleNoExceptionAllowed;
+                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path rules cannot be excepted.");
+                return;
+            }
 
             // Check custom values first before proceeding
             // Ensure custom values are valid
@@ -1086,6 +1132,7 @@ namespace WDAC_Wizard
             }
 
             // Check required fields - that a reference file is selected
+            // Show the exception UI
             if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
                 && this.PolicyCustomRule.ReferenceFile != null)
             {
@@ -1112,7 +1159,12 @@ namespace WDAC_Wizard
             }
         }
 
-        private void button_Back_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Back button has been selected. Show CustomRules if sitting on Exceptions Control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Back_Click(object sender, EventArgs e)
         {
             this.state = UIState.RuleConditions;
             SetUIState();
@@ -1128,6 +1180,9 @@ namespace WDAC_Wizard
             this.button_Back.Enabled = false;
         }
 
+        /// <summary>
+        /// Sets the state of the UI. Will show the CustomRule or Exceptions control panel
+        /// </summary>
         private void SetUIState()
         {
             // bring info label to front
@@ -1217,6 +1272,11 @@ namespace WDAC_Wizard
             this.button_AddException.Focus();
         }
 
+        /// <summary>
+        /// Sets the error text string and whether the error label should persist/is sticky
+        /// </summary>
+        /// <param name="errorText"></param>
+        /// <param name="shouldPersist"></param>
         public void SetLabel_ErrorText(string errorText, bool shouldPersist=false)
         {
             this.label_Error.Focus();
@@ -1234,20 +1294,31 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Clear the error label text and set to invisible
+        /// </summary>
         public void ClearLabel_ErrorText()
         {
             this.label_Error.Text = "";
             this.label_Error.Visible = false;
         }
 
-        // Add exception button clicked. 
-        private void button_AddException_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Add exception button clicked. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_AddException_Click(object sender, EventArgs e)
         {
             this.exceptionsControl.AddException(); 
         }
 
-        // Custom Rule is Deny Rule
-        private void radioButton_Deny_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Deny radio button selected. Custom rule is a deny Rule
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RadioButton_Deny_Click(object sender, EventArgs e)
         {
             this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
             this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
@@ -1259,8 +1330,12 @@ namespace WDAC_Wizard
             }
         }
 
-        // Custom Rule is an Allow Rule
-        private void radioButton_Allow_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Allow radio button selected. Custom rule is an Allow Rule
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RadioButton_Allow_Click(object sender, EventArgs e)
         {
             this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Allow;
             this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
@@ -1272,6 +1347,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Format the custom published input from the user
+        /// </summary>
+        /// <param name="certSubjectName"></param>
+        /// <returns></returns>
         private string FormatSubjectName(string certSubjectName)
         {
             // Remove unwanted info from the subject name (C= onwards)
@@ -1288,6 +1368,11 @@ namespace WDAC_Wizard
             return certSubjectName;
         }
 
+        /// <summary>
+        /// The Use Custom Rules checkbox has been clicked by the user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UseRuleCustomValues(object sender, EventArgs e)
         {
             // Set the UI first
@@ -1295,12 +1380,8 @@ namespace WDAC_Wizard
             {
                 if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
-                    this.textBoxSlider_0.ReadOnly = false;
-                    this.textBoxSlider_1.ReadOnly = false;
-                    this.textBoxSlider_2.ReadOnly = false;
-                    this.textBoxSlider_3.ReadOnly = false;
-                    this.textBox_MaxVersion.ReadOnly = false;
-
+                    SetTextBoxStates(true, PolicyCustomRules.RuleType.FileAttributes); 
+                    
                     // Format the version text boxes
                     this.textBoxSlider_2.Size = this.textBoxSlider_0.Size;
                     this.textBox_MaxVersion.Visible = false;
@@ -1308,13 +1389,9 @@ namespace WDAC_Wizard
                 }
                 else
                 {
-                    // Publisher 
-                    this.textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
-                    this.textBoxSlider_1.ReadOnly = false; 
-                    this.textBoxSlider_2.ReadOnly = false;
-                    this.textBoxSlider_3.ReadOnly = false;
-                    this.textBox_MaxVersion.ReadOnly = false;
-
+                    // Set textbox states to write, enabled, and white back color
+                    SetTextBoxStates(true);
+                    
                     // Format the version text boxes
                     this.textBoxSlider_2.Size = this.textBox_MaxVersion.Size;
                     this.labelSlider_2.Text = "Version range:";
@@ -1327,14 +1404,10 @@ namespace WDAC_Wizard
             else
             {
                 // Clear error if applicable
-                this.ClearLabel_ErrorText(); 
+                this.ClearLabel_ErrorText();
 
                 // Set text values back to default
-                this.textBoxSlider_0.ReadOnly = true; 
-                this.textBoxSlider_1.ReadOnly = true; 
-                this.textBoxSlider_2.ReadOnly = true; 
-                this.textBoxSlider_3.ReadOnly = true; 
-                this.textBox_MaxVersion.ReadOnly = true;
+                SetTextBoxStates(false); 
 
                 // Format the version text boxes
                 this.textBoxSlider_2.Size = this.textBoxSlider_0.Size;
@@ -1351,9 +1424,75 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Set the UI states (enabled, readonly) and appearances for the publisher or file attribute textboxes
+        /// </summary>
+        /// <param name="enabled"></param>
+        private void SetTextBoxStates(bool enabled, PolicyCustomRules.RuleType ruleType=PolicyCustomRules.RuleType.Publisher)
+        {
+            if(enabled)
+            {
+                // If enabled, allow user input
+                this.textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
+                this.textBoxSlider_1.ReadOnly = false;
+                this.textBoxSlider_2.ReadOnly = false;
+                this.textBoxSlider_3.ReadOnly = false;
+                this.textBox_MaxVersion.ReadOnly = false;
+
+                this.textBoxSlider_0.Enabled = false; 
+                this.textBoxSlider_1.Enabled = true;
+                this.textBoxSlider_2.Enabled = true;
+                this.textBoxSlider_3.Enabled = true;
+                this.textBox_MaxVersion.Enabled = true;
+
+                // Set back color to white to help user determine boxes are userwriteable
+                this.textBoxSlider_0.BackColor = Color.White;
+                this.textBoxSlider_1.BackColor = Color.White;
+                this.textBoxSlider_2.BackColor = Color.White;
+                this.textBoxSlider_3.BackColor = Color.White;
+                this.textBox_MaxVersion.BackColor = Color.White;
+
+                // If RuleType == FileAttributes, ensure first textbox is user writeable
+                if (ruleType == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    this.textBoxSlider_0.ReadOnly = false;
+                    this.textBoxSlider_0.Enabled = true;
+                }
+            }
+            else
+            {
+                // Set to read only if disabled
+                this.textBoxSlider_0.ReadOnly = true;
+                this.textBoxSlider_1.ReadOnly = true;
+                this.textBoxSlider_2.ReadOnly = true;
+                this.textBoxSlider_3.ReadOnly = true;
+                this.textBox_MaxVersion.ReadOnly = true;
+
+                // Set to not enabled so accepts no user interaction
+                this.textBoxSlider_0.Enabled = false;
+                this.textBoxSlider_1.Enabled = false;
+                this.textBoxSlider_2.Enabled = false;
+                this.textBoxSlider_3.Enabled = false;
+                this.textBox_MaxVersion.Enabled = false;
+
+                // Set back to default color
+                this.textBoxSlider_0.BackColor = SystemColors.Control;
+                this.textBoxSlider_1.BackColor = SystemColors.Control;
+                this.textBoxSlider_2.BackColor = SystemColors.Control;
+                this.textBoxSlider_3.BackColor = SystemColors.Control;
+                this.textBox_MaxVersion.BackColor = SystemColors.Control;
+            }
+
+        }
+
         // Action handlers for custom text in the publiser and file attributes text fields
 
-        private void textBoxSlider_3_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Fourth textbox text has been modified by the user. Picks up the input 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxSlider_3_TextChanged(object sender, EventArgs e)
         {
             // Filename (publisher) or InternalName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
@@ -1372,8 +1511,12 @@ namespace WDAC_Wizard
                 this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
             }
         }
-
-        private void textBoxSlider_2_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Third textbox text has been modified by the user. Picks up the input 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxSlider_2_TextChanged(object sender, EventArgs e)
         {
             // Version (publisher) or ProductName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
@@ -1393,7 +1536,12 @@ namespace WDAC_Wizard
             }
         }
 
-        private void textBoxSlider_1_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Second textbox text has been modified by the user. Picks up the input 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxSlider_1_TextChanged(object sender, EventArgs e)
         {
             // Leaf cert publisher (publisher) or Description (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
@@ -1414,7 +1562,12 @@ namespace WDAC_Wizard
             
         }
 
-        private void textBoxSlider_0_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// First textbox text has been modified by the user. Picks up the input 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxSlider_0_TextChanged(object sender, EventArgs e)
         {
             /// Only accessible by File Attributes
             // Original filename (file attributes)
@@ -1428,7 +1581,12 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
         }
 
-        private void textBox_MaxVersion_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// The max version textbox has been modified by the user. Picks up the input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBox_MaxVersion_TextChanged(object sender, EventArgs e)
         {
             // Only accessible by publisher
             // Set Custom Values.MaxValue
@@ -1440,7 +1598,11 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CustomValues.MaxVersion = textBox_MaxVersion.Text;
         }
 
-        // Allow for custom text fields
+        /// <summary>
+        /// Text has been modified in the Reference Textbox. Picks up the user input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ReferenceFileTextChanged(object sender, EventArgs e)
         {
             if(this.PolicyCustomRule.UsingCustomValues)
@@ -1449,6 +1611,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// User has selected the UseCustomPath checkbox. Could be use custom path rules or custom hash rule.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UseCustomPath(object sender, EventArgs e)
         {
             if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
@@ -1460,6 +1627,7 @@ namespace WDAC_Wizard
                     this.richTextBox_CustomHashes.Tag = "Title";
 
                     this.PolicyCustomRule.UsingCustomValues = true;
+                    this.textBox_ReferenceFile.Text = String.Empty;
                 }
                 else
                 {
@@ -1473,17 +1641,25 @@ namespace WDAC_Wizard
                 {
                     this.PolicyCustomRule.UsingCustomValues = true;
                     this.textBox_ReferenceFile.ReadOnly = false;
+                    this.textBox_ReferenceFile.BackColor = Color.White; 
                 }
                 else
                 {
                     this.PolicyCustomRule.UsingCustomValues = false;
                     this.textBox_ReferenceFile.ReadOnly = true;
+                    this.textBox_ReferenceFile.BackColor = SystemColors.Control;
+                    this.textBox_ReferenceFile.Text = String.Empty; 
                 }
             }
            
         }
 
-        private void richTextBox_CustomHashes_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Updates the custom hashes values when the hash table has been modified by user input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RichTextBox_CustomHashes_Click(object sender, EventArgs e)
         {
             if(this.richTextBox_CustomHashes.Tag.ToString() == "Title")
             {
@@ -1492,13 +1668,12 @@ namespace WDAC_Wizard
             }
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        // If enter button is clicked, start search process
-        private void textBox_Packaged_App_KeyDown(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Starts Appx search process once user selects search button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBox_Packaged_App_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -1507,7 +1682,11 @@ namespace WDAC_Wizard
             }
         }
 
-        // Event handler to begin searching for packaged apps
+        /// <summary>
+        /// Event handler to begin searching for packaged apps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
@@ -1561,7 +1740,12 @@ namespace WDAC_Wizard
 
         }
 
-        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        /// <summary>
+        /// Runs the Get-AppxPackage -Name command and parses the output
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             this.backgroundWorker = sender as BackgroundWorker;
             string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
@@ -1594,7 +1778,12 @@ namespace WDAC_Wizard
 
         }
 
-        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary>
+        /// Lists all of the Appx packages and sorts them to display to user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Remove GIF // Update UI 
             this.panel_Progress.Visible = false;
@@ -1624,6 +1813,11 @@ namespace WDAC_Wizard
             //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
 
+        /// <summary>
+        /// Sets the UI for custom PFN rules. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Checkbox_CustomPFN_Checked(object sender, EventArgs e)
         {
             // If checked, update text on the 'Search' button
@@ -1676,13 +1870,15 @@ namespace WDAC_Wizard
             if(this.checkBoxEku.Checked)
             {
                 this.textBoxEKU.Enabled = true;
-                this.textBoxEKU.ReadOnly = false; 
+                this.textBoxEKU.ReadOnly = false;
+                this.textBoxEKU.BackColor = Color.White; 
                 this.PolicyCustomRule.UsingCustomValues = true; 
             }
             else
             {
                 this.textBoxEKU.Enabled = false;
                 this.textBoxEKU.ReadOnly = true;
+                this.textBoxEKU.BackColor = SystemColors.Control;
                 this.textBoxEKU.Text = String.Empty;
                 this.PolicyCustomRule.CustomValues.EKUFriendly = String.Empty; 
 

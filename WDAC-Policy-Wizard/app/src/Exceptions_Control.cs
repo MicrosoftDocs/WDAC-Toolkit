@@ -174,10 +174,12 @@ namespace WDAC_Wizard
                     // UI
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-                    break;
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     labelSlider_0.Text = "Issuing CA:";
                     labelSlider_1.Text = "Publisher:";
                     labelSlider_2.Text = "File version:";
@@ -206,8 +208,12 @@ namespace WDAC_Wizard
 
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     //ProcessAllFiles(ExceptionRule.ReferenceFile);
                     //ExceptionRule.FolderContents = this.AllFilesinFolder; 
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
@@ -222,9 +228,12 @@ namespace WDAC_Wizard
                     radioButton_File.Checked = true;
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                   
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
@@ -234,8 +243,12 @@ namespace WDAC_Wizard
                     // UI 
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+
                     labelSlider_0.Text = "Original filename:";
                     labelSlider_1.Text = "File description:";
                     labelSlider_2.Text = "Product name:";
@@ -258,9 +271,12 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = false;
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-                    
+                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+
                     break;
             }
         }

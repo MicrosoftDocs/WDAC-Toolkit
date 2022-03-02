@@ -278,7 +278,7 @@ namespace WDAC_Wizard
 
         }
 
-        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             this.backgroundWorker = sender as BackgroundWorker;
             string xmlPath = String.Empty; 
@@ -314,7 +314,7 @@ namespace WDAC_Wizard
             label_Progress.Text = progress; 
         }
 
-        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Remove GIF // Update UI 
             this.panel_Progress.Visible = false;
