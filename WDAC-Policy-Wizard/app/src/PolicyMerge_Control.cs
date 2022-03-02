@@ -54,11 +54,13 @@ namespace WDAC_Wizard.src
                 this.mergePolicyPath = policyPath;
                 this.finalPolicyTextBox.Text = policyPath;
                 // Show right side of the text
-                this.finalPolicyTextBox.SelectionStart = this.finalPolicyTextBox.TextLength - 1;
-                this.finalPolicyTextBox.ScrollToCaret();
+                if(this.finalPolicyTextBox.TextLength > 0)
+                {
+                    this.finalPolicyTextBox.SelectionStart = this.finalPolicyTextBox.TextLength - 1;
+                    this.finalPolicyTextBox.ScrollToCaret();
+                }
 
                 this._MainWindow.Policy.SchemaPath = this.mergePolicyPath;
-
                 this.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));
 
                 if(this.nPolicies >= 2)
@@ -123,6 +125,11 @@ namespace WDAC_Wizard.src
             }
         }
 
+        /// <summary>
+        /// User selected the Remove Policy button. Remove the selected rows from the table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_RemovePolicy_Click(object sender, EventArgs e)
         {
             this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
