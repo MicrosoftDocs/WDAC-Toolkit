@@ -51,7 +51,7 @@ namespace WDAC_Wizard
             this.Policy._PolicyTemplate = this._MainWindow.Policy._PolicyTemplate; 
             this.Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
 
-            this.Policy.ConfigRules = initRulesDict(); // If supplemental, need to disable the button
+            this.Policy.ConfigRules = InitRulesDict(); // If supplemental, need to disable the button
 
             // If unable to read the CI policy, fail gracefully and return to the home page
             if (!this.ReadSetRules(sender, e))
@@ -313,7 +313,7 @@ namespace WDAC_Wizard
         /// whether or not the rule is supported, and the option number. 
         /// </summary>
         /// <returns>Config rules dictionary which the fields from the RulesDict xml file</returns>
-        private Dictionary<string, Dictionary<string, string>> initRulesDict()
+        private Dictionary<string, Dictionary<string, string>> InitRulesDict()
         {
             // Wiring the button IDs to the corresponding rules
             // Default values and order can be found @: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
@@ -347,7 +347,7 @@ namespace WDAC_Wizard
             }
             catch(Exception e)
             {
-                this.Log.AddErrorMsg("Reading RulesDict.xml in initRulesDict() encountered the following error: ", e); 
+                this.Log.AddErrorMsg("Reading RulesDict.xml in InitRulesDict() encountered the following error: ", e); 
             }
             return rulesDict; 
         }
@@ -414,25 +414,21 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
 
             // Read File
-            try
+            SiPolicy sipolicy = Helper.DeserializeXMLtoPolicy(xmlPathToRead); 
+            if(sipolicy == null)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(xmlPathToRead);
-                this.Policy.siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
-            }
-            catch(Exception exp)
-            {
-                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
+                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy failed during ReadSetRules");
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
                     "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
                     this._MainWindow.ResetWorkflow(sender, e);
-                return false; 
+                return false;
             }
-            
+
+            this.Policy.siPolicy = sipolicy; 
+                        
             // Merge with configRules:
             foreach(var rule in this.Policy.siPolicy.Rules)
             {

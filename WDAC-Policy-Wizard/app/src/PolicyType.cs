@@ -110,9 +110,12 @@ namespace WDAC_Wizard
             this.textBoxBasePolicyPath.Text = policyPath;
 
             // Show right side of the text
-            this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
-            this.textBoxBasePolicyPath.ScrollToCaret();
-
+            if(this.textBoxBasePolicyPath.TextLength > 0)
+            {
+                this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
+                this.textBoxBasePolicyPath.ScrollToCaret();
+            }
+            
             // User has modified the supplemental policy from original, force restart flow
             if (this._MainWindow.Policy.BaseToSupplementPath != this.BaseToSupplementPath)
             {
@@ -268,9 +271,12 @@ namespace WDAC_Wizard
                 // These will trigger the textChange events
                 this.textBoxSuppPath.Text = this._Policy.SchemaPath;
                 // Show right side of the text
-                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
-                this.textBoxSuppPath.ScrollToCaret();
-
+                if(this.textBoxSuppPath.TextLength > 0)
+                {
+                    this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
+                    this.textBoxSuppPath.ScrollToCaret();
+                }
+                
                 this.textBox_PolicyName.Text = this._Policy.PolicyName;
                 this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
 
@@ -318,17 +324,22 @@ namespace WDAC_Wizard
         {
             // Save dialog box pressed
             string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
-            if(String.IsNullOrEmpty(policyPath))
+
+            // If cancel button is selected by user, or path does not exist prevent unhandled error
+            if (String.IsNullOrEmpty(policyPath))
             {
-                return; 
+                return;
             }
 
             this._MainWindow.Policy.SchemaPath = policyPath;
             this.textBoxSuppPath.Text = policyPath;
 
             // Show right side of the text
-            this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
-            this.textBoxSuppPath.ScrollToCaret();
+            if(this.textBoxSuppPath.TextLength > 0)
+            {
+                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
+                this.textBoxSuppPath.ScrollToCaret();
+            }
 
             // Show panel if path is set
             this.panelSuppl_Base.Visible = true; 

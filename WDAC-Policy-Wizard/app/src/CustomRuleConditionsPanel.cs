@@ -710,8 +710,12 @@ namespace WDAC_Wizard
                     // UI
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     this.labelSlider_0.Text = "Issuing CA:";
                     this.labelSlider_1.Text = "Publisher:";
                     this.labelSlider_2.Text = "Min version:";
@@ -759,8 +763,12 @@ namespace WDAC_Wizard
                     this.textBox_ReferenceFile.Text = this.PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     break;
 
 
@@ -772,9 +780,12 @@ namespace WDAC_Wizard
                     radioButton_File.Checked = true;
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     panel_Publisher_Scroll.Visible = false;
                     break;
 
@@ -784,9 +795,12 @@ namespace WDAC_Wizard
                     // UI 
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
-
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     this.labelSlider_0.Text = "Original filename:";
                     this.labelSlider_1.Text = "File description:";
                     this.labelSlider_2.Text = "Product name:";
@@ -819,8 +833,12 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = false;
                     this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                    this.textBox_ReferenceFile.ScrollToCaret();
+                    if(this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+                    
                     break;
             }
 
@@ -1076,13 +1094,21 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Next button selected by the user. Show the exception panel if sitting on CustomRules
+        /// Next button clicked by user. Check UI state before proceeding to Exceptions panel.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_Next_Click(object sender, EventArgs e)
         {
-            // Show the exception UI
+            // Assert not a path rule since path rules cannot be excepted in WDAC
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.PathRuleNoExceptionAllowed;
+                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path rules cannot be excepted.");
+                return;
+            }
 
             // Check custom values first before proceeding
             // Ensure custom values are valid
@@ -1106,6 +1132,7 @@ namespace WDAC_Wizard
             }
 
             // Check required fields - that a reference file is selected
+            // Show the exception UI
             if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None 
                 && this.PolicyCustomRule.ReferenceFile != null)
             {
