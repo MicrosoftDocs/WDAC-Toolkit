@@ -1641,12 +1641,14 @@ namespace WDAC_Wizard
                 {
                     this.PolicyCustomRule.UsingCustomValues = true;
                     this.textBox_ReferenceFile.ReadOnly = false;
+                    this.textBox_ReferenceFile.Enabled = true; 
                     this.textBox_ReferenceFile.BackColor = Color.White; 
                 }
                 else
                 {
                     this.PolicyCustomRule.UsingCustomValues = false;
                     this.textBox_ReferenceFile.ReadOnly = true;
+                    this.textBox_ReferenceFile.Enabled = false;
                     this.textBox_ReferenceFile.BackColor = SystemColors.Control;
                     this.textBox_ReferenceFile.Text = String.Empty; 
                 }

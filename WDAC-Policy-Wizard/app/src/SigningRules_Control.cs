@@ -516,6 +516,14 @@ namespace WDAC_Wizard
             {
                 // Exactly one row/rule to delete
                 int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
+                string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
+                
+                // Assert cannot delete the 'empty' bottom row
+                if (String.IsNullOrEmpty(type))
+                {
+                    return; 
+                }
+
                 userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)this.rulesDataGrid["Column_Name", rowIdx].Value);
             }
             else
@@ -564,6 +572,14 @@ namespace WDAC_Wizard
             int numIdex = 0;
             int customRuleIdx = -1;
             List<string> ruleIDsToRemove = new List<string>();
+
+            string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
+
+            // Assert cannot delete the 'empty' bottom row
+            if (String.IsNullOrEmpty(type))
+            {
+                return;
+            }
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
