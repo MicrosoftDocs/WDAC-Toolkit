@@ -240,9 +240,9 @@ namespace WDAC_Wizard
             if(browseFile.Equals(BrowseFileType.PEFile))
             {
                 openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
-                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS, *.JS|" +
+                "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS;*.JS|" +
                 "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
-                "All Binary Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN,*.PS1;*.BAT;*.VBS, *.JS, *.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                "All Binary and Script Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN;*.PS1;*.BAT;*.VBS;*.JS;*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
                 "All files (*.*)|*.*";
 
                 openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
@@ -340,6 +340,11 @@ namespace WDAC_Wizard
             return newUniquePath;
         }
 
+        /// <summary>
+        /// Deserialize the xml policy on disk to SiPolicy
+        /// </summary>
+        /// <param name="xmlPath"></param>
+        /// <returns>SiPolicy object</returns>
         public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
         {
             SiPolicy siPolicy; 
@@ -362,6 +367,11 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Serialize the SiPolicy object to XML file
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object</param>
+        /// <param name="xmlPath">Path to serialize the SiPolicy to</param>
         public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
         {
             if(siPolicy == null || xmlPath == null)
