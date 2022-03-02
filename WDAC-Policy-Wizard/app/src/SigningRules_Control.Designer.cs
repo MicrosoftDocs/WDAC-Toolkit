@@ -174,7 +174,7 @@ namespace WDAC_Wizard
             this.label_AddCustomRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label_AddCustomRules.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.label_AddCustomRules.UseVisualStyleBackColor = true;
-            this.label_AddCustomRules.Click += new System.EventHandler(this.label_AddCustomRules_Click);
+            this.label_AddCustomRules.Click += new System.EventHandler(this.Label_AddCustomRules_Click);
             // 
             // checkBox_KernelList
             // 

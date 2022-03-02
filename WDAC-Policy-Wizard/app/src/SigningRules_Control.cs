@@ -35,6 +35,9 @@ namespace WDAC_Wizard
         private System.Collections.ArrayList displayObjects =
             new System.Collections.ArrayList();
 
+        // Bool tracking whether CustomRules Panel open
+        public bool isCustomPanelOpen; 
+
         public SigningRules_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -46,6 +49,7 @@ namespace WDAC_Wizard
             this._MainWindow.CustomRuleinProgress = false; 
             this.Log = this._MainWindow.Log;
             this.RowSelected = -1;
+            this.isCustomPanelOpen = false; 
 
             this.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
         }
@@ -85,7 +89,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 
         /// </summary>
-        private void label_AddCustomRules_Click(object sender, EventArgs e)
+        private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
             // Open the custom rules conditions panel
 
@@ -97,6 +101,7 @@ namespace WDAC_Wizard
                 this.customRuleConditionsPanel.Focus();
 
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
+                this.isCustomPanelOpen = true; 
             }
             
             this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
@@ -888,6 +893,24 @@ namespace WDAC_Wizard
             // User has closed custom rules panel. Reset panel and text
             this.customRuleConditionsPanel = null;
             // this.label_AddCustomRules.Text = "+ Custom Rules"; 
+        }
+
+        /// <summary>
+        /// Closes the CustomRules Panel
+        /// </summary>
+        public void CloseCustomRulesPanel()
+        {
+            if (this.customRuleConditionsPanel == null)
+            {
+                return;
+            }
+
+            // Close the custom Rule Conditions Panel
+            // Set RuleInEdit to false to not trigger another confirmation from user on FormClosing()
+            this.customRuleConditionsPanel.RuleInEdit = false; 
+            this.customRuleConditionsPanel.Close();
+            this.customRuleConditionsPanel = null;
+            this._MainWindow.CustomRuleinProgress = false; 
         }
 
         /// <summary>

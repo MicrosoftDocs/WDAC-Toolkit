@@ -279,6 +279,7 @@
             this.checkBoxEku.AutoSize = true;
             this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
             this.checkBoxEku.Name = "checkBoxEku";
+            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
             this.checkBoxEku.Size = new System.Drawing.Size(138, 24);
             this.checkBoxEku.TabIndex = 113;
             this.checkBoxEku.Text = "Add EKU Rule";

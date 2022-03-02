@@ -48,6 +48,7 @@ namespace WDAC_Wizard
 
         // Edit Workflow datastructs
         private BuildPage _BuildPage;
+        private SigningRules_Control _SigningRulesControl; 
 
         public MainWindow()
         {
@@ -185,6 +186,21 @@ namespace WDAC_Wizard
         private void Home_Button_Click(object sender, EventArgs e)
         {
             this.button_Next.Visible = false;
+
+            // If the CustomRules Panel is open, close it
+            if (this.CustomRuleinProgress && this._SigningRulesControl != null)
+            {
+                DialogResult res = MessageBox.Show("Do you want to return home and abandon this custom rule?",
+                        "Confirmation",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                {
+                    // Close the CustomRuleConditionsPanel
+                    this._SigningRulesControl.CloseCustomRulesPanel(); 
+                }
+            }
 
             // Reset flags
             this.ConfigInProcess = false;
@@ -524,12 +540,12 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _SigningSupplementalRules = new SigningRules_Control(this);
-                                _SigningSupplementalRules.Name = pageKey;
-                                this.PageList.Add(_SigningSupplementalRules.Name);
-                                this.Controls.Add(_SigningSupplementalRules);
-                                _SigningSupplementalRules.BringToFront();
-                                _SigningSupplementalRules.Focus();
+                                this._SigningRulesControl = new SigningRules_Control(this);
+                                this._SigningRulesControl.Name = pageKey;
+                                this.PageList.Add(this._SigningRulesControl.Name);
+                                this.Controls.Add(this._SigningRulesControl);
+                                this._SigningRulesControl.BringToFront();
+                                this._SigningRulesControl.Focus();
                             }
 
                             ShowControlPanel(sender, e);
@@ -548,12 +564,12 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _SigningRules_Control = new SigningRules_Control(this);
-                                _SigningRules_Control.Name = pageKey;
-                                this.PageList.Add(_SigningRules_Control.Name);
-                                this.Controls.Add(_SigningRules_Control);
-                                _SigningRules_Control.BringToFront();
-                                _SigningRules_Control.Focus();
+                                this._SigningRulesControl = new SigningRules_Control(this);
+                                this._SigningRulesControl.Name = pageKey;
+                                this.PageList.Add(this._SigningRulesControl.Name);
+                                this.Controls.Add(this._SigningRulesControl);
+                                this._SigningRulesControl.BringToFront();
+                                this._SigningRulesControl.Focus();
                             }
 
                             ShowControlPanel(sender, e);
@@ -577,12 +593,12 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _SigningRules = new SigningRules_Control(this);
-                                _SigningRules.Name = pageKey; 
-                                this.PageList.Add(_SigningRules.Name);
-                                this.Controls.Add(_SigningRules);
-                                _SigningRules.BringToFront();
-                                _SigningRules.Focus();
+                                this._SigningRulesControl = new SigningRules_Control(this);
+                                this._SigningRulesControl.Name = pageKey; 
+                                this.PageList.Add(this._SigningRulesControl.Name);
+                                this.Controls.Add(this._SigningRulesControl);
+                                this._SigningRulesControl.BringToFront();
+                                this._SigningRulesControl.Focus();
                             }
 
                             ShowControlPanel(sender, e);
