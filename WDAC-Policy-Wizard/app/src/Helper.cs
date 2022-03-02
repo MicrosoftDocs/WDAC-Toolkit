@@ -340,6 +340,11 @@ namespace WDAC_Wizard
             return newUniquePath;
         }
 
+        /// <summary>
+        /// Deserialize the xml policy on disk to SiPolicy
+        /// </summary>
+        /// <param name="xmlPath"></param>
+        /// <returns>SiPolicy object</returns>
         public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
         {
             SiPolicy siPolicy; 
@@ -362,6 +367,11 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Serialize the SiPolicy object to XML file
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object</param>
+        /// <param name="xmlPath">Path to serialize the SiPolicy to</param>
         public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
         {
             if(siPolicy == null || xmlPath == null)
