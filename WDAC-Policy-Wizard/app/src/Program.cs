@@ -21,7 +21,7 @@ namespace WDAC_Wizard
             if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());             // Edit as needed
+            Application.Run(new MainWindow()); 
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
