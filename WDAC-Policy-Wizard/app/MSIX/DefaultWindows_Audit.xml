@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.0.2.0</VersionEx>
-  <PolicyID>{C06D3CA1-CF60-4709-AB5C-10270C486D88}</PolicyID>
-  <BasePolicyID>{C06D3CA1-CF60-4709-AB5C-10270C486D88}</BasePolicyID>
+  <VersionEx>10.0.3.0</VersionEx>
+  <PolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</PolicyID>
+  <BasePolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
@@ -28,6 +28,9 @@
     </Rule>
     <Rule>
       <Option>Enabled:Revoked Expired As Unsigned</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
     </Rule>
   </Rules>
   <!--EKUS-->
@@ -248,7 +251,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>092421</String>
+        <String>022422</String>
       </Value>
     </Setting>
   </Settings>
