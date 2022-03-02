@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.0.2.0</VersionEx>
-  <PolicyID>{7C6D026F-C0D9-4492-BAF0-81FBF49946C8}</PolicyID>
-  <BasePolicyID>{7C6D026F-C0D9-4492-BAF0-81FBF49946C8}</BasePolicyID>
+  <VersionEx>10.0.3.0</VersionEx>
+  <PolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</PolicyID>
+  <BasePolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
@@ -18,7 +18,13 @@
       <Option>Enabled:Inherit Default Policy</Option>
     </Rule>
     <Rule>
+      <Option>Enabled:Dynamic Code Security</Option>
+    </Rule>
+    <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
     </Rule>
   </Rules>
   <!--EKUS-->
@@ -147,6 +153,11 @@
   </CiSigners>
   <HvciOptions>0</HvciOptions>
   <Settings>
+    <Setting Provider="AllHostIds" Key="{0468C085-CA5B-11D0-AF08-00609797F0E0}" ValueName="EnterpriseDefinedClsId">
+      <Value>
+        <Boolean>true</Boolean>
+      </Value>
+    </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>
         <String>DefaultMicrosoftEnforced</String>
@@ -154,7 +165,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>092421</String>
+        <String>022422</String>
       </Value>
     </Setting>
   </Settings>
