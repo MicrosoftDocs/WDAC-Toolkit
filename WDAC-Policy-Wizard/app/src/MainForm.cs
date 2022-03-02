@@ -839,7 +839,8 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("Create Policy Rule Options -- copying Template Policy encountered the following error ", e); 
             }
             
-            int N_Rules = 19; 
+            // Iterate through all the RuleOptions (20) to remove each one
+            int N_Rules = 20; 
             for(int i = 0; i <= N_Rules; i++)
             {
                 pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", this.Policy.TemplatePath, i));
