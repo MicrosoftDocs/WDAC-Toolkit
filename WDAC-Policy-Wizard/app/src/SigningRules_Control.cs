@@ -84,8 +84,6 @@ namespace WDAC_Wizard
         }
 
         
-        //private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 
         /// </summary>
@@ -422,7 +420,7 @@ namespace WDAC_Wizard
                 return false; 
             }
             
-            bubbleUp(); // all original signing rules are set in MainWindow object - ...
+            BubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
             return true; 
         }
@@ -482,7 +480,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Method to set all of the MainWindow objects to the local instances of the Policy helper class objects.
         /// </summary>
-        private void bubbleUp()
+        private void BubbleUp()
         {
             // Passing rule, signing scenarios, etc datastructs to MainWindow class
            this._MainWindow.Policy.CISigners = this.Policy.CISigners;
@@ -502,42 +500,94 @@ namespace WDAC_Wizard
         /// Removes the highlighted rule row in the this.rulesDataGrid DataGridView. 
         /// Can only be executed on custom rules from this session. 
         /// </summary>
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
-            this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
+            this.Log.AddNewSeparationLine("Delete Rule Button Clicked");
 
-            // Get info about the rule user wants to delete: row index and value
-            int rowIdx = this.rulesDataGrid.CurrentCell.RowIndex;
+            // Determine whether the user is deleting one row or multiple rows
+            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+            string userPromptMsg; 
+
+            if(numRowsSelected < 1)
+            {
+                return; 
+            }
+            else if(numRowsSelected == 1)
+            {
+                // Exactly one row/rule to delete
+                int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
+                userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)this.rulesDataGrid["Column_Name", rowIdx].Value);
+            }
+            else
+            {
+                // Multiple rows - show different UI
+                userPromptMsg = String.Format("Are you sure you want to delete these {0} rules?", numRowsSelected.ToString());
+            }
+
+            // Prompt the user for additional deletion confirmation
+            DialogResult res = MessageBox.Show(userPromptMsg, "Rule Deletion Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (res == DialogResult.No)
+            {
+                this.Log.AddInfoMsg(Properties.Resources.DeleteRowsCanceled);
+                return;
+            }
+
+            // Creates background worker to display updates to UI
+            this.panel_Progress.Visible = true;
+            this.panel_Progress.BringToFront(); 
+
+            if (!this.backgroundWorkerRulesDeleter.IsBusy)
+            {
+                this.backgroundWorkerRulesDeleter.RunWorkerAsync();
+            }
+        }
+
+        /// <summary>
+        /// Deletes all rules defined in rowIdxs by calling DeleteRowFromTable per row index
+        /// </summary>
+        /// <param name="rowIdxs"></param>
+        private void DeleteRowsFromRulesTable(List<int> rowIdxs)
+        {
+            foreach(int rowIdx in rowIdxs)
+            {
+                DeleteRowFromRulesTable(rowIdx);
+            }
+        }
+
+        /// <summary>
+        /// Delete rule and row (where applicable)
+        /// </summary>
+        /// <param name="rowIdx"></param>
+        private void DeleteRowFromRulesTable(int rowIdx)
+        {
             int numIdex = 0;
-            int customRuleIdx = -1; 
+            int customRuleIdx = -1;
+            List<string> ruleIDsToRemove = new List<string>();
 
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
             string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
-            List<string> ruleIDsToRemove = new List<string>(); 
 
-            if (String.IsNullOrEmpty(ruleName) && String.IsNullOrEmpty(ruleType)) // Not a valid rule -- break
-            {
-                this.Log.AddErrorMsg("Rule to delete is not a valid rule");
-                return;
-            }
-
-            this.Log.AddInfoMsg(String.Format("Rule to delete - ruleName:{0}, ruleType:{1}", ruleName, ruleType));
-
-            // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(String.Format("Are you sure you want to delete this rule?\n'{0}'", ruleName), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (res == DialogResult.No)
-            {
-                return; 
-            }
+            this.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
 
             // Remove from table iff sucessful re-serialization
             // Remove from DisplayObject
             if (rowIdx < this.displayObjects.Count)
             {
-                this.displayObjects.RemoveAt(rowIdx);
-                this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                if (InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        this.displayObjects.RemoveAt(rowIdx);
+                        this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                    }));
+                }
+                else
+                {
+                    this.displayObjects.RemoveAt(rowIdx);
+                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                }
             }
 
             // Check if this is a custom rule that we can delete from memory without modifying the policy
@@ -563,11 +613,11 @@ namespace WDAC_Wizard
                     if (customRuleIdx != -1)
                     {
                         this.Policy.CustomRules.RemoveAt(customRuleIdx);
-                        return; 
+                        return;
                     }
                 }
             }
-           
+
             // Not a custom rule -- Try to remove from signers -- 
             // use ID to remove from scenarios (Allowed/Denied signer)
             if (ruleType.Equals("Publisher"))
@@ -582,14 +632,14 @@ namespace WDAC_Wizard
                         this.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
 
                         // Remove the signer from Signing Scenarios
-                        RemoveSignerIdFromSigningScenario(signer.ID); 
+                        RemoveSignerIdFromSigningScenario(signer.ID);
 
                         // Remove any associted FileAttributeRef refrences
-                        if(signer.FileAttribRef != null)
+                        if (signer.FileAttribRef != null)
                         {
-                            foreach(var fileAttrib in signer.FileAttribRef)
+                            foreach (var fileAttrib in signer.FileAttribRef)
                             {
-                                RemoveRuleIdFromFileAttribs(fileAttrib.RuleID); 
+                                RemoveRuleIdFromFileAttribs(fileAttrib.RuleID);
                             }
                         }
                         break;
@@ -653,10 +703,10 @@ namespace WDAC_Wizard
             else
             {
                 // Remove from FileRules
-                numIdex = 0; 
+                numIdex = 0;
                 foreach (var fileRule in this.Policy.siPolicy.FileRules)
                 {
-                    string fileRuleID = string.Empty; 
+                    string fileRuleID = string.Empty;
 
                     if (fileRule.GetType() == typeof(Deny))
                     {
@@ -691,15 +741,19 @@ namespace WDAC_Wizard
             // Serialize to new policy
             try
             {
-                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath); 
+                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath);
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 this.Log.AddErrorMsg("Serialization failed after removing rule with error: ", exp);
-                return; 
+                return;
             }
         }
 
+        /// <summary>
+        /// Helper function which removes a signer rule ID from all signing scenarios
+        /// </summary>
+        /// <param name="ruleId"></param>
         private void RemoveSignerIdFromSigningScenario(string ruleId)
         {
             foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
@@ -755,6 +809,10 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Helper function which removes a rule ID from FileRules ref in the signing scenarios
+        /// </summary>
+        /// <param name="ruleId"></param>
         private void RemoveRuleIdFromFileAttribs(string ruleId)
         {
             int numIdex = 0; 
@@ -791,29 +849,9 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Highlights the row of data in the DataGridView
+        /// Sets the display object when the DataGridView needed to paint data
         /// </summary>
-        private void DataClicked(object sender, DataGridViewCellEventArgs e)
-        {
-            // Remove highlighting from previous selected row
-            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
-            defaultCellStyle.BackColor = Color.White;
-            if(this.RowSelected > 0 && this.RowSelected < this.rulesDataGrid.Rows.Count)
-                this.rulesDataGrid.Rows[this.RowSelected].DefaultCellStyle = defaultCellStyle; 
-
-            // Highlight the row to show user feedback
-            DataGridViewCellStyle highlightCellStyle = new DataGridViewCellStyle();
-            highlightCellStyle.BackColor = Color.FromArgb(0, 120, 215); 
-            DataGridViewRow customRow = this.rulesDataGrid.CurrentRow;
-            this.rulesDataGrid.Rows[customRow.Index].DefaultCellStyle = highlightCellStyle;
-            this.RowSelected = customRow.Index; 
-            
-        }
-
-        /// <summary>
-        /// Called when DataGridView needs to paint data
-        /// </summary>
-        private void rulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        private void RulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
             if (e.RowIndex == this.rulesDataGrid.RowCount - 1) return;
@@ -859,6 +897,12 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Adds a new rule to the DataGrid Table
+        /// </summary>
+        /// <param name="displayObjectArray"></param>
+        /// <param name="customRule"></param>
+        /// <param name="warnUser"></param>
         public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
@@ -879,7 +923,7 @@ namespace WDAC_Wizard
             // Scroll to bottom to see new rule added to list
             this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
 
-            bubbleUp();
+            BubbleUp();
 
             // close the custom Rule Conditions Panel
             this.customRuleConditionsPanel.Close();
@@ -888,6 +932,9 @@ namespace WDAC_Wizard
 
         }
 
+        /// <summary>
+        /// Nullifies the custom rule conditions panel on form closing
+        /// </summary>
         public void CustomRulesPanel_Closing()
         {
             // User has closed custom rules panel. Reset panel and text
@@ -923,13 +970,12 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.WhiteSmoke;
         }
 
-        private void AddCustomRules_MouseLeave(object sender, EventArgs e)
-        {
-            Label checkBox = ((Label)sender);
-            checkBox.BackColor = Color.White;
-        }
-
-        private void checkBox_KernelList_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Sets the UseKernelModeBlocks attribute dictated by the state of the checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBox_KernelList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended driver block rules
             if(this.checkBox_KernelList.Checked)
@@ -942,7 +988,12 @@ namespace WDAC_Wizard
             }
         }
 
-        private void checkBox_UserModeList_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Sets the UseKernelModeBlocks attribute dictated by the state of the checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBox_UserModeList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended user mode block rules
             if (this.checkBox_UserModeList.Checked)
@@ -953,6 +1004,39 @@ namespace WDAC_Wizard
             {
                 this.Policy.UseUserModeBlocks = false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DoWorkBackgroundWorker(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            //
+            List<int> rowIdxs = new List<int>();
+            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+
+            for (int i = 0; i < numRowsSelected; i++)
+            {
+                rowIdxs.Add(this.rulesDataGrid.SelectedRows[i].Index);
+            }
+
+            // Call helper function to delete all the rows defined in rowIdxs
+            DeleteRowsFromRulesTable(rowIdxs);
+        }
+
+
+        /// <summary>
+        /// Background worker is done computationally expensive work. Hides the progress panel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FinishedBackgroundWorker(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            // Hide progress panel
+            this.panel_Progress.Visible = false;
+            this.panel_Progress.SendToBack(); 
         }
     }
 

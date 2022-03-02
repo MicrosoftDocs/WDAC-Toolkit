@@ -243,6 +243,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user has canceled deleting the row from the SigningRules_Control.
+        /// </summary>
+        internal static string DeleteRowsCanceled {
+            get {
+                return ResourceManager.GetString("DeleteRowsCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enables policy enforcement for .NET applications and DLLs..
         /// </summary>
         internal static string DynamicSecurity_Info {
