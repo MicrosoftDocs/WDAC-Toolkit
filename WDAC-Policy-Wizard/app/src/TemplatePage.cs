@@ -184,9 +184,8 @@ namespace WDAC_Wizard
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                string dateString = this._MainWindow.FormatDate(false);
                 this._Policy.SchemaPath = GetDefaultPath(policyTemplate, 0); 
-                this._Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, dateString);
+                this._Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, Helper.GetFormattedDate());
 
                 // These will trigger the textChange events
                 this.textBoxPolicyPath.Text = this._Policy.SchemaPath;
@@ -215,15 +214,14 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private string GetDefaultPath(string policyTemplate, int nAttempts)
         {
-            string dateString = this._MainWindow.FormatDate(false);
             string proposedPath;
 
             if(nAttempts ==0)
                 proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    String.Format("{0}{1}.xml", policyTemplate, dateString));
+                    String.Format("{0}{1}.xml", policyTemplate, Helper.GetFormattedDate()));
             else
                 proposedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    String.Format("{0}{1}_{2}.xml", policyTemplate, dateString, nAttempts));
+                    String.Format("{0}{1}_{2}.xml", policyTemplate, Helper.GetFormattedDate(), nAttempts));
 
             if (File.Exists(proposedPath))
                 return GetDefaultPath(policyTemplate, ++nAttempts);

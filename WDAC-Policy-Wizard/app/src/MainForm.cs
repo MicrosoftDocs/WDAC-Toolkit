@@ -1872,23 +1872,6 @@ namespace WDAC_Wizard
             
         }
 
-                
-        /// <summary>
-        /// Retrieves the current date and formats it in descending order.
-        /// </summary>
-        /// <param name="includeTime">Bool indicating whether to include the time string (hour+min) in return</param>
-        /// <returns>Returns Date string with format: MM-dd-yy_HH-mm [24 hour time] of MM-dd-yy</returns>
-        public string FormatDate(bool includeTime=true)
-        {
-            DateTime sDate = DateTime.Now;
-            if(includeTime)
-                return String.Format("{0}{1}{2}_{3}{4}", sDate.ToString("MM"), sDate.ToString("dd"),
-                    sDate.ToString("yy"), sDate.ToString("HH"), sDate.ToString("mm"));
-            else
-                return String.Format("{0}{1}{2}", sDate.ToString("MM"), sDate.ToString("dd"),
-                    sDate.ToString("yy"));
-        }
-
         // UI helper functions
 
         /// <summary>
@@ -2230,7 +2213,7 @@ namespace WDAC_Wizard
         private string CreateTempFolder()
         {
             //AppData + WDAC Temp folder
-            string tempFolder = Path.Combine("WDACWizard", "Temp", FormatDate()); 
+            string tempFolder = Path.Combine("WDACWizard", "Temp", Helper.GetFormattedDateTime()); 
             string tempFolderPath = Path.Combine(Path.GetTempPath(), tempFolder); 
 
             if (!Directory.Exists(tempFolderPath))

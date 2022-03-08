@@ -805,6 +805,40 @@ namespace WDAC_Wizard
             return octet; 
         }
 
+        /// <summary>
+        /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
+        /// </summary>
+        /// <returns>DateTime string in format YYYY-MM-DD</returns>
+        public static string GetFormattedDate()
+        {
+            // Get DateTime now in UTC
+            // Format to ISO 8601 (YYYY-MM-DD)
+            return DateTime.UtcNow.ToString("yyyy-MM-dd");
+        }
+
+        /// <summary>
+        /// Calls DateTime.UTCNow and formats to ISO 8601 (T[hh][mm][ss])
+        /// </summary>
+        /// <returns>DateTime string in format T[hh][mm][ss]</returns>
+        public static string GetFormattedTime()
+        {
+            // Get DateTime now in UTC
+            // Format to ISO 8601 (T[hh][mm][ss])
+            return "T" + DateTime.UtcNow.ToString("HH-mm-ss");
+        }
+
+        /// <summary>
+        /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD-T[hh][mm][ss])
+        /// </summary>
+        /// <returns>DateTime string in format YYYY-MM-DD-T[hh][mm][ss]</returns>
+        public static string GetFormattedDateTime()
+        {
+            // Get DateTime now in UTC
+            // Format to ISO 8601 (T[hh][mm][ss])
+            return DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH-mm-ss");
+        }
+
+
     }
 
     public class packedInfo
@@ -1227,39 +1261,39 @@ namespace WDAC_Wizard
 
         public void AddInfoMsg(string info)
         {
-            string msg = String.Format("{0} [INFO]: {1}", DateTime.Now, info);
+            string msg = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), info);
             this.Log.WriteLine(msg);
         }
         public void AddErrorMsg(string error)
         {
-            string msg = String.Format("{0} [ERROR]: {1}", DateTime.Now, error);
+            string msg = String.Format("{0} [ERROR]: {1}", Helper.GetFormattedDateTime(), error);
             this.Log.WriteLine(msg);
         }
 
         public void AddErrorMsg(string error, Exception e)
         {
-            string msg = String.Format("{0} [ERROR]: {1}: {2}", DateTime.Now, error, e.ToString());
+            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e.ToString());
             this.Log.WriteLine(msg);
         }
 
         public void AddErrorMsg(string error, Exception e, int lineN)
         {
-            string msg = String.Format("{0} [ERROR] at line {1}. \r\n {2}: {3}", DateTime.Now, lineN, error, e.ToString());
+            string msg = String.Format("{0} [ERROR] at line {1}. \r\n {2}: {3}", Helper.GetFormattedDateTime(), lineN, error, e.ToString());
             this.Log.WriteLine(msg);
         }
 
         public void AddWarningMsg(string warning)
         {
-            string msg = String.Format("{0} [WARNING]: {1}", DateTime.Now, warning);
+            string msg = String.Format("{0} [WARNING]: {1}", Helper.GetFormattedDateTime(), warning);
             this.Log.WriteLine(msg);
         }
 
         public void AddNewSeparationLine(string subTitle)
         {
             string[] msg = new string[3];
-            msg[0] = String.Format("{0} [INFO]: **********************************************************************", DateTime.Now);
-            msg[1] = String.Format("{0} [INFO]: {1}", DateTime.Now, subTitle);
-            msg[2] = String.Format("{0} [INFO]: **********************************************************************", DateTime.Now);
+            msg[0] = String.Format("{0} [INFO]: **********************************************************************", Helper.GetFormattedDateTime());
+            msg[1] = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), subTitle);
+            msg[2] = String.Format("{0} [INFO]: **********************************************************************", Helper.GetFormattedDateTime());
 
             foreach(var line in msg)
             {
@@ -1267,11 +1301,13 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Sets the name for the log file based on date and time
+        /// </summary>
+        /// <returns></returns>
         public string GetLoggerDst()
         {
-            DateTime sDate = DateTime.Now;
-            string fileName = String.Format("/Log_{0}{1}_{2}{3}{4}", sDate.ToString("MM"), sDate.ToString("dd"),
-               sDate.ToString("HH"), sDate.ToString("mm"), sDate.ToString("ss")) + ".txt";
+            string fileName = String.Format("/Log_{0}_{1}.txt", Helper.GetFormattedDate(), Helper.GetFormattedTime());
             return fileName;
         }
 
@@ -1322,7 +1358,6 @@ namespace WDAC_Wizard
             }
             
         }
-
         // Private
 
         private string GetHashFromFile(string fileName)
@@ -1346,10 +1381,10 @@ namespace WDAC_Wizard
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             this.AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
-            this.AddInfoMsg(String.Format("Session ID: {0}-{1}", this.getInstallTime(), DateTime.Now)); 
+            this.AddInfoMsg(String.Format("Session ID: {0}", GetInstallTime())); 
         }
 
-        private string getInstallTime()
+        private string GetInstallTime()
         {
             RegistryHive rootNode = RegistryHive.LocalMachine;
             RegistryView registryView = RegistryView.Registry64;
