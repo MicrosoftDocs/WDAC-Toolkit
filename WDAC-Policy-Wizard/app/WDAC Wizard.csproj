@@ -183,6 +183,12 @@
     <Compile Include="src\CustomRuleConditionsPanel.Designer.cs">
       <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\EKUPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\EKUPanel.Designer.cs">
+      <DependentUpon>EKUPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Exceptions_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -266,6 +272,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\EditWorkflow.resx">
       <DependentUpon>EditWorkflow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\EKUPanel.resx">
+      <DependentUpon>EKUPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Exceptions_Control.resx">
       <DependentUpon>Exceptions_Control.cs</DependentUpon>

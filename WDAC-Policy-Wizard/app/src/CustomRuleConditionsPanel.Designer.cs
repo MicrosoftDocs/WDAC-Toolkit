@@ -138,7 +138,7 @@
             this.checkBox_CustomPFN.AutoSize = true;
             this.checkBox_CustomPFN.Location = new System.Drawing.Point(7, 76);
             this.checkBox_CustomPFN.Name = "checkBox_CustomPFN";
-            this.checkBox_CustomPFN.Size = new System.Drawing.Size(247, 24);
+            this.checkBox_CustomPFN.Size = new System.Drawing.Size(209, 21);
             this.checkBox_CustomPFN.TabIndex = 119;
             this.checkBox_CustomPFN.Text = "Use Custom Package Family";
             this.checkBox_CustomPFN.UseVisualStyleBackColor = true;
@@ -159,7 +159,7 @@
             this.label_Progress.AutoSize = true;
             this.label_Progress.Location = new System.Drawing.Point(33, 18);
             this.label_Progress.Name = "label_Progress";
-            this.label_Progress.Size = new System.Drawing.Size(230, 20);
+            this.label_Progress.Size = new System.Drawing.Size(196, 17);
             this.label_Progress.TabIndex = 1;
             this.label_Progress.Text = "Searching for Packaged Apps";
             this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -180,7 +180,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(3, 50);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(560, 20);
+            this.label3.Size = new System.Drawing.Size(477, 17);
             this.label3.TabIndex = 117;
             this.label3.Text = "Search for a package name and select the packages to include in the rule.";
             // 
@@ -189,7 +189,7 @@
             this.checkedListBoxPackagedApps.FormattingEnabled = true;
             this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
             this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 172);
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 157);
             this.checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
@@ -223,7 +223,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 18);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 20);
+            this.label2.Size = new System.Drawing.Size(108, 17);
             this.label2.TabIndex = 0;
             this.label2.Text = "Package Name:";
             // 
@@ -272,17 +272,15 @@
             this.textBoxEKU.ReadOnly = true;
             this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
             this.textBoxEKU.TabIndex = 114;
-            this.textBoxEKU.TextChanged += new System.EventHandler(this.TextBoxEKU_TextChanged);
             // 
             // checkBoxEku
             // 
             this.checkBoxEku.AutoSize = true;
             this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
             this.checkBoxEku.Name = "checkBoxEku";
-            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
-            this.checkBoxEku.Size = new System.Drawing.Size(138, 24);
+            this.checkBoxEku.Size = new System.Drawing.Size(127, 21);
             this.checkBoxEku.TabIndex = 113;
-            this.checkBoxEku.Text = "Add EKU Rule";
+            this.checkBoxEku.Text = "Add EKU Rules";
             this.checkBoxEku.UseVisualStyleBackColor = true;
             this.checkBoxEku.CheckedChanged += new System.EventHandler(this.CheckBoxEkuStateChanged);
             // 
@@ -291,7 +289,7 @@
             this.checkBox_CustomValues.AutoSize = true;
             this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 226);
             this.checkBox_CustomValues.Name = "checkBox_CustomValues";
-            this.checkBox_CustomValues.Size = new System.Drawing.Size(180, 24);
+            this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
             this.checkBox_CustomValues.TabIndex = 111;
             this.checkBox_CustomValues.Text = "Use Custom Values";
             this.checkBox_CustomValues.UseVisualStyleBackColor = true;
@@ -623,7 +621,7 @@
             this.checkBox_CustomPath.AutoSize = true;
             this.checkBox_CustomPath.Location = new System.Drawing.Point(12, 363);
             this.checkBox_CustomPath.Name = "checkBox_CustomPath";
-            this.checkBox_CustomPath.Size = new System.Drawing.Size(163, 24);
+            this.checkBox_CustomPath.Size = new System.Drawing.Size(139, 21);
             this.checkBox_CustomPath.TabIndex = 113;
             this.checkBox_CustomPath.Text = "Use Custom Path";
             this.checkBox_CustomPath.UseVisualStyleBackColor = true;
@@ -635,7 +633,7 @@
             this.label_Error.AutoSize = true;
             this.label_Error.Location = new System.Drawing.Point(125, 726);
             this.label_Error.Name = "label_Error";
-            this.label_Error.Size = new System.Drawing.Size(91, 20);
+            this.label_Error.Size = new System.Drawing.Size(78, 17);
             this.label_Error.TabIndex = 87;
             this.label_Error.Text = "label_Error";
             this.label_Error.Visible = false;

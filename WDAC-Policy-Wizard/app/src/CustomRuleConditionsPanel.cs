@@ -32,7 +32,10 @@ namespace WDAC_Wizard
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
         private string[] DefaultValues;
-        private Dictionary<string,string> FoundPackages; 
+        private Dictionary<string,string> FoundPackages;
+
+        private EKUPanel ekuPanel;
+        private bool isEkuPanelOpen; 
 
         private enum UIState
         {
@@ -58,7 +61,9 @@ namespace WDAC_Wizard
             this.redoRequired = false; 
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
-            this.FoundPackages = new Dictionary<string,string>(); 
+            this.FoundPackages = new Dictionary<string,string>();
+
+            this.isEkuPanelOpen = false; 
 
         }
 
@@ -184,20 +189,24 @@ namespace WDAC_Wizard
                 }
 
                 // Check custom EKU value to ensure 
-                if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+                if (this.PolicyCustomRule.CustomValues.EKUs.Count > 0)
                 {
-                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKUFriendly); 
-                    if(String.IsNullOrEmpty(ekuTLVEncoded))
+                    foreach(EKU eku in this.PolicyCustomRule.CustomValues.EKUs)
                     {
-                        this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " +
-                            this.PolicyCustomRule.CustomValues.EKUFriendly);
-                        label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
-                        return; 
-                    }
-                    else
-                    {
-                        this.PolicyCustomRule.CustomValues.EKUEncoded = ekuTLVEncoded; 
+                        // Try to convert the oid to ASN1 encoding
+                        string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(eku.Value);
+
+                        if (String.IsNullOrEmpty(ekuTLVEncoded))
+                        {
+                            this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value: " + eku.Value);
+                            label_Error.Visible = true;
+                            label_Error.Text = eku.Value + Properties.Resources.InvalidEKUFormat_Error;
+                            return;
+                        }
+                        else
+                        {
+                            eku.ValueEncoded = ekuTLVEncoded;
+                        }
                     }
                 }
 
@@ -465,9 +474,15 @@ namespace WDAC_Wizard
             }
 
             // Handle custom EKU
-            if(!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+            if(this.PolicyCustomRule.CustomValues.EKUs.Count > 0)
             {
-                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly; 
+                files += "EKU: ";
+                foreach(EKU eku in this.PolicyCustomRule.CustomValues.EKUs)
+                {
+                    files += eku.Value + ", "; 
+                }
+
+                files = files.Substring(0, files.Length - 2); 
             }
 
             // Handle exceptions
@@ -663,6 +678,7 @@ namespace WDAC_Wizard
                 // Get cert chain info to be shown to the user if type is publisher. Otherwise, we don't check or try to build the cert chain
                 string leafCertSubjectName = "";
                 string pcaCertSubjectName = "";
+                
 
                 if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
@@ -676,6 +692,18 @@ namespace WDAC_Wizard
 
                         leafCertSubjectName = cert.SubjectName.Name;
                         leafCertSubjectName = FormatSubjectName(leafCertSubjectName);
+
+                        // Add all the EKUs from the leaf cert. Filter out the code signing one on the UI
+                        foreach(X509Extension extension in cert.Extensions)
+                        {
+                            if(extension.Oid.FriendlyName == "Enhanced Key Usage")
+                            {
+                                X509EnhancedKeyUsageExtension ext = (X509EnhancedKeyUsageExtension)extension;
+                                PolicyCustomRule.CertEKUs = ext.EnhancedKeyUsages;
+
+                                break; 
+                            }
+                        }
 
                         if (certChain.ChainElements.Count > 1)
                         {
@@ -1867,22 +1895,37 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void CheckBoxEkuStateChanged(object sender, EventArgs e)
         {
-            // If user wants to use checkbox
-            // Enable the textbox
+            // If user wants to use EKU rules - show the EKU Panel
             if(this.checkBoxEku.Checked)
             {
-                this.textBoxEKU.Enabled = true;
-                this.textBoxEKU.ReadOnly = false;
-                this.textBoxEKU.BackColor = Color.White; 
-                this.PolicyCustomRule.UsingCustomValues = true; 
+                // Assert that we must have at least 1 non CS EKU to launch the EKU Panel
+                if(CountOfNonCSOids(PolicyCustomRule.CertEKUs) > 0)
+                {
+                    this.PolicyCustomRule.UsingCustomValues = true;
+
+                    if (this.ekuPanel == null)
+                    {
+                        this.ekuPanel = new EKUPanel(this);
+                        this.ekuPanel.Show();
+                        this.ekuPanel.BringToFront();
+                        this.ekuPanel.Focus();
+
+                        // this.label_AddCustomRules.Text = "- Custom Rules"; 
+                        this.isEkuPanelOpen = true;
+                    }
+                }
+                else
+                {
+                    this.checkBoxEku.Checked = false; 
+                }
+                
             }
             else
             {
                 this.textBoxEKU.Enabled = false;
                 this.textBoxEKU.ReadOnly = true;
-                this.textBoxEKU.BackColor = SystemColors.Control;
                 this.textBoxEKU.Text = String.Empty;
-                this.PolicyCustomRule.CustomValues.EKUFriendly = String.Empty; 
+                this.PolicyCustomRule.CustomValues.EKUs = new List<EKU>(); 
 
                 // Reset the UsingCustomValues field iff not set custom using the checkbox
                 if (!this.checkBox_CustomValues.Checked)
@@ -1893,13 +1936,65 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// EKU textbox value changed. User input
+        /// Returns the count of EKUs that are not the Code Signing EKU
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxEKU_TextChanged(object sender, EventArgs e)
+        /// <param name="oidCollection"></param>
+        /// <returns></returns>
+        private int CountOfNonCSOids(OidCollection oidCollection)
         {
-            this.PolicyCustomRule.CustomValues.EKUFriendly = this.textBoxEKU.Text; 
+            int count = 0; 
+            if(oidCollection == null)
+            {
+                return 0; 
+            }
+
+            foreach(var oid in oidCollection)
+            {
+                if(oid.Value != Properties.Resources.CodeSigningEKUValue)
+                {
+                    count++; 
+                }
+            }
+
+            return count; 
+        }
+
+        /// <summary>
+        /// Sets the OidCollection in PolicyCustomRule's RuleEkus
+        /// </summary>
+        /// <param name="oidCollection"></param>
+        public void SetOidCollection(OidCollection oidCollection)
+        {
+            if(oidCollection == null) { return;  }
+
+            this.PolicyCustomRule.RuleEKUs = oidCollection;
+
+            // add the list of friendly names to the textbox
+            string textboxString = String.Empty; 
+
+            foreach(var oid in oidCollection)
+            {
+                textboxString += oid.Value + ", ";
+
+                EKU eku = new EKU(oid.FriendlyName, oid.Value); 
+                this.PolicyCustomRule.CustomValues.EKUs.Add(eku); 
+            }
+
+            this.textBoxEKU.Text = textboxString.Substring(0, textboxString.Length - 2); 
+
+            // EKUPanel is closing - reset EKUPanel attrs
+            this.isEkuPanelOpen = false;
+            this.ekuPanel = null; 
+
+        }
+
+        /// <summary>
+        /// Returns the OidCollection defined in PolicyCustomRule's CertEkus
+        /// </summary>
+        /// <returns></returns>
+        public OidCollection GetOidCollection()
+        {
+            return this.PolicyCustomRule.CertEKUs; 
         }
     }
 }   

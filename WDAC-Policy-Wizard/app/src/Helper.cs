@@ -1055,15 +1055,28 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
-        public string EKUFriendly;
-        public string EKUEncoded;
+        public List<EKU> EKUs; 
         public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 
         public CustomValue()
         {
+            this.EKUs = new List<EKU>(); 
             this.Hashes = new List<string>();
             this.PackageFamilyNames = new List<string>();
+        }
+    }
+
+    public class EKU
+    {
+        public string FriendlyName;
+        public string Value;
+        public string ValueEncoded;
+
+        public EKU(string name, string value)
+        {
+            this.FriendlyName = name;
+            this.Value = value; 
         }
     }
 
@@ -1123,6 +1136,10 @@ namespace WDAC_Wizard
 
         // Exception Params -- currently not supporting
         public List<PolicyCustomRules> ExceptionList { get; set; }
+
+        // EKU Structs
+        public OidCollection CertEKUs { get; set; } // EKUs from the cert
+        public OidCollection RuleEKUs { get; set; } // EKUs to add to the rule
 
         // Constructors
         public PolicyCustomRules()
