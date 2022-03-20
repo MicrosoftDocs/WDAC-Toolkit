@@ -23,6 +23,7 @@ namespace WDAC_Wizard
 
         private OidCollection EKUCollection { get; set; } // EKUs to add from the cert
         private List<bool> EkusPosToAdd { get; set; }
+        private bool FormClosingAutoInitiated; 
 
         CustomRuleConditionsPanel _customRulesControl; 
 
@@ -30,7 +31,8 @@ namespace WDAC_Wizard
         {
             this._customRulesControl = customRuleConditionsPanel;
             this.EKUCollection = new OidCollection(); 
-            this.EkusPosToAdd = new List<bool>(); 
+            this.EkusPosToAdd = new List<bool>();
+            this.FormClosingAutoInitiated = false; 
             InitializeComponent();
         }
 
@@ -83,21 +85,32 @@ namespace WDAC_Wizard
         {
             // Add selected OIDs stored in ekusToAdd
             // Notifies CustomRuleConditionsPanel that form is closing
+            int cEkus = 0; 
             OidCollection oidsToAdd = new OidCollection();  
 
-            for(int i=0; i<this.EKUCollection.Count; i++)
+            for(int i=0; i< this.EkusPosToAdd.Count; i++)
             {
                 if(this.EkusPosToAdd[i] == true)
                 {
-                    oidsToAdd.Add(this.EKUCollection[i]); 
+                    oidsToAdd.Add(this.EKUCollection[i]);
+                    cEkus++; 
                 }
+            }
+
+            // Assert that at least 1 EKU must be selected
+            if (cEkus == 0)
+            {
+                MessageBox.Show(Properties.Resources.InvalidEkuSelection, "Invalid Selection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             SetEkuCollection(oidsToAdd);
 
             // Close form 
+            this.FormClosingAutoInitiated = true; 
             this.Close(); 
         }
+
 
         /// <summary>
         /// 
@@ -144,6 +157,20 @@ namespace WDAC_Wizard
                     this.EKUCollection.Add(eku);
                     this.EkusPosToAdd.Add(true); 
                 }
+            }
+        }
+
+        /// <summary>
+        /// Fires on form closing event. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFormClosing(object sender, EventArgs e)
+        {
+            // If user closing the form, need to clean up the UI on CustomRuleConditionsPanel
+            if(!this.FormClosingAutoInitiated)
+            {
+                this._customRulesControl.EkuPanelClosing(); 
             }
         }
 

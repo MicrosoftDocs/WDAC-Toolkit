@@ -264,12 +264,12 @@
             // textBoxEKU
             // 
             this.textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxEKU.Enabled = false;
             this.textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxEKU.Location = new System.Drawing.Point(159, 196);
             this.textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxEKU.Name = "textBoxEKU";
             this.textBoxEKU.ReadOnly = true;
+            this.textBoxEKU.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
             this.textBoxEKU.TabIndex = 114;
             // 

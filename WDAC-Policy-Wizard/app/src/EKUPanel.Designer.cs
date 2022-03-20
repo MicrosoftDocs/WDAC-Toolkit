@@ -138,6 +138,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.ekuDataGridView);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.headerLabel);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EKUPanel";
             this.Text = "Custom Rules";

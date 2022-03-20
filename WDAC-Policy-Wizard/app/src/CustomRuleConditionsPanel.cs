@@ -1922,7 +1922,6 @@ namespace WDAC_Wizard
             }
             else
             {
-                this.textBoxEKU.Enabled = false;
                 this.textBoxEKU.ReadOnly = true;
                 this.textBoxEKU.Text = String.Empty;
                 this.PolicyCustomRule.CustomValues.EKUs = new List<EKU>(); 
@@ -1932,6 +1931,26 @@ namespace WDAC_Wizard
                 {
                     this.PolicyCustomRule.UsingCustomValues = false; 
                 }
+            }
+        }
+
+        /// <summary>
+        /// Resets the EKU UI since the user has decided to close the panel
+        /// </summary>
+        public void EkuPanelClosing()
+        {
+            // Reset UI
+            this.ekuPanel = null; 
+            this.checkBoxEku.Checked = false;
+
+            this.textBoxEKU.ReadOnly = true;
+            this.textBoxEKU.Text = String.Empty;
+            this.PolicyCustomRule.CustomValues.EKUs = new List<EKU>();
+
+            // Reset the UsingCustomValues field iff not set custom using the checkbox
+            if (!this.checkBox_CustomValues.Checked)
+            {
+                this.PolicyCustomRule.UsingCustomValues = false;
             }
         }
 
