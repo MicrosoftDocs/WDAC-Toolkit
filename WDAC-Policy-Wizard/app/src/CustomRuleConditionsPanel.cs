@@ -768,7 +768,11 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo; 
+                    publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo;
+
+                    // Show the EKU UI
+                    ShowEkuUI(true); 
+
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
@@ -852,6 +856,9 @@ namespace WDAC_Wizard
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
+
+                    // Hide the EKU UI
+                    ShowEkuUI(false); 
 
                     break;
 
@@ -1885,6 +1892,26 @@ namespace WDAC_Wizard
                         this.checkBox_CustomPFN.Checked = true; 
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Shows or hides the EKU UI depending on the rule type
+        /// </summary>
+        /// <param name="uiToBeShown">If true, indicates to show the Eku UI. Otherwise, hides it.</param>
+        private void ShowEkuUI(bool uiToBeShown)
+        {
+            if(uiToBeShown)
+            {
+                // Show the Eku UI
+                this.checkBoxEku.Visible = true;
+                this.textBoxEKU.Visible = true;
+            }
+            else
+            {
+                // Hide the Eku UI
+                this.checkBoxEku.Visible = false;
+                this.textBoxEKU.Visible = false;
             }
         }
 
