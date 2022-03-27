@@ -37,6 +37,7 @@ namespace WDAC_Wizard
             this.Column_EKUFriendlyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column_EKUValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button_CreateEKURule = new System.Windows.Forms.Button();
+            this.labelError = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ekuDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,10 +74,10 @@ namespace WDAC_Wizard
             this.Column_ToAdd,
             this.Column_EKUFriendlyName,
             this.Column_EKUValue});
+            this.ekuDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.ekuDataGridView.Location = new System.Drawing.Point(16, 88);
             this.ekuDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.ekuDataGridView.Name = "ekuDataGridView";
-            this.ekuDataGridView.ReadOnly = true;
             this.ekuDataGridView.RowHeadersVisible = false;
             this.ekuDataGridView.RowHeadersWidth = 70;
             this.ekuDataGridView.RowTemplate.Height = 24;
@@ -85,6 +86,7 @@ namespace WDAC_Wizard
             this.ekuDataGridView.TabIndex = 113;
             this.ekuDataGridView.VirtualMode = true;
             this.ekuDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EKUDataGridViewCellClick);
+            this.ekuDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EKUDataGridViewCellValueChanged);
             this.ekuDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EKUDataGridViewCellValueNeeded);
             // 
             // Column_ToAdd
@@ -92,7 +94,6 @@ namespace WDAC_Wizard
             this.Column_ToAdd.HeaderText = "Enabled";
             this.Column_ToAdd.MinimumWidth = 6;
             this.Column_ToAdd.Name = "Column_ToAdd";
-            this.Column_ToAdd.ReadOnly = true;
             this.Column_ToAdd.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Column_ToAdd.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Column_ToAdd.Width = 89;
@@ -102,7 +103,6 @@ namespace WDAC_Wizard
             this.Column_EKUFriendlyName.HeaderText = "Friendly Name";
             this.Column_EKUFriendlyName.MinimumWidth = 6;
             this.Column_EKUFriendlyName.Name = "Column_EKUFriendlyName";
-            this.Column_EKUFriendlyName.ReadOnly = true;
             this.Column_EKUFriendlyName.Width = 128;
             // 
             // Column_EKUValue
@@ -110,7 +110,6 @@ namespace WDAC_Wizard
             this.Column_EKUValue.HeaderText = "EKU Value";
             this.Column_EKUValue.MinimumWidth = 6;
             this.Column_EKUValue.Name = "Column_EKUValue";
-            this.Column_EKUValue.ReadOnly = true;
             this.Column_EKUValue.Width = 105;
             // 
             // button_CreateEKURule
@@ -120,7 +119,7 @@ namespace WDAC_Wizard
             this.button_CreateEKURule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_CreateEKURule.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_CreateEKURule.ForeColor = System.Drawing.Color.Black;
-            this.button_CreateEKURule.Location = new System.Drawing.Point(326, 298);
+            this.button_CreateEKURule.Location = new System.Drawing.Point(326, 314);
             this.button_CreateEKURule.Margin = new System.Windows.Forms.Padding(2);
             this.button_CreateEKURule.Name = "button_CreateEKURule";
             this.button_CreateEKURule.Size = new System.Drawing.Size(110, 30);
@@ -129,19 +128,32 @@ namespace WDAC_Wizard
             this.button_CreateEKURule.UseVisualStyleBackColor = false;
             this.button_CreateEKURule.Click += new System.EventHandler(this.ButtonCreateEKURules);
             // 
+            // labelError
+            // 
+            this.labelError.AutoSize = true;
+            this.labelError.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelError.ForeColor = System.Drawing.Color.Black;
+            this.labelError.Location = new System.Drawing.Point(13, 289);
+            this.labelError.Name = "labelError";
+            this.labelError.Size = new System.Drawing.Size(148, 18);
+            this.labelError.TabIndex = 115;
+            this.labelError.Text = "My name is labelError";
+            this.labelError.Visible = false;
+            // 
             // EKUPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 346);
+            this.ClientSize = new System.Drawing.Size(458, 355);
+            this.Controls.Add(this.labelError);
             this.Controls.Add(this.button_CreateEKURule);
             this.Controls.Add(this.ekuDataGridView);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.headerLabel);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EKUPanel";
             this.Text = "Custom Rules";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.EKUPanelOnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.ekuDataGridView)).EndInit();
             this.ResumeLayout(false);
@@ -158,5 +170,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column_ToAdd;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_EKUFriendlyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_EKUValue;
+        private System.Windows.Forms.Label labelError;
     }
 }

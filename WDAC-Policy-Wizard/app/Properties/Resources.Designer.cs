@@ -402,7 +402,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  is not valid or could not be converted to DER encoding. E.g. of a properly formated
+        ///   Looks up a localized string similar to  is not valid or could not be converted to DER encoding. An example of a properly formatted
         ///EKU is 1.3.6.1.4.1.311.76.3.1.
         /// </summary>
         internal static string InvalidEKUFormat_Error {
