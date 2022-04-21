@@ -2220,8 +2220,6 @@ namespace WDAC_Wizard
                 Directory.CreateDirectory(tempFolderPath);
 
             return tempFolderPath; 
-
-
         }
 
         /// <summary>
