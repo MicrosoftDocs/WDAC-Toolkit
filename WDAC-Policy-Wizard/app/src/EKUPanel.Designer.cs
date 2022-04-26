@@ -33,7 +33,7 @@ namespace WDAC_Wizard
             this.headerLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ekuDataGridView = new System.Windows.Forms.DataGridView();
-            this.Column_ToAdd = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column_ToAdd = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column_EKUFriendlyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column_EKUValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button_CreateEKURule = new System.Windows.Forms.Button();
@@ -85,13 +85,17 @@ namespace WDAC_Wizard
             this.ekuDataGridView.Size = new System.Drawing.Size(420, 196);
             this.ekuDataGridView.TabIndex = 113;
             this.ekuDataGridView.VirtualMode = true;
-            this.ekuDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EKUDataGridViewCellClick);
             this.ekuDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EKUDataGridViewCellValueChanged);
             this.ekuDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EKUDataGridViewCellValueNeeded);
+            this.ekuDataGridView.CurrentCellDirtyStateChanged += new System.EventHandler(this.EKUDataGridViewStateChange);
             // 
             // Column_ToAdd
             // 
             this.Column_ToAdd.HeaderText = "Enabled";
+            this.Column_ToAdd.Items.AddRange(new object[] {
+            "-",
+            "Include",
+            "Exclude"});
             this.Column_ToAdd.MinimumWidth = 6;
             this.Column_ToAdd.Name = "Column_ToAdd";
             this.Column_ToAdd.Resizable = System.Windows.Forms.DataGridViewTriState.True;
@@ -167,9 +171,9 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView ekuDataGridView;
         private System.Windows.Forms.Button button_CreateEKURule;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Column_ToAdd;
+        private System.Windows.Forms.Label labelError;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column_ToAdd;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_EKUFriendlyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_EKUValue;
-        private System.Windows.Forms.Label labelError;
     }
 }

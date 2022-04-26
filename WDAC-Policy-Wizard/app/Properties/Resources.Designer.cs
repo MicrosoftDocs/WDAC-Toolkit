@@ -623,6 +623,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An EKU value must first be provided. For example, 1.3.6.1.4.1.311.10.3.6..
+        /// </summary>
+        internal static string NullEkuValue {
+            get {
+                return ResourceManager.GetString("NullEkuValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap office {

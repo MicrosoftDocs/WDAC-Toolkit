@@ -2192,6 +2192,11 @@ namespace WDAC_Wizard
 
             }
 
+            if(String.IsNullOrWhiteSpace(label_Info.Text))
+            {
+                return; 
+            }
+
             label_Info.Focus();
             label_Info.BringToFront();             
             

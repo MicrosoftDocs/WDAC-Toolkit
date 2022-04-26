@@ -1925,27 +1925,20 @@ namespace WDAC_Wizard
             // If user wants to use EKU rules - show the EKU Panel
             if(this.checkBoxEku.Checked)
             {
-                // Assert that we must have at least 1 non CS EKU to launch the EKU Panel
-                if(CountOfNonCSOids(PolicyCustomRule.CertEKUs) > 0)
-                {
-                    this.PolicyCustomRule.UsingCustomValues = true;
-
-                    if (this.ekuPanel == null)
-                    {
-                        this.ekuPanel = new EKUPanel(this);
-                        this.ekuPanel.Show();
-                        this.ekuPanel.BringToFront();
-                        this.ekuPanel.Focus();
-
-                        // this.label_AddCustomRules.Text = "- Custom Rules"; 
-                        this.isEkuPanelOpen = true;
-                    }
-                }
-                else
-                {
-                    this.checkBoxEku.Checked = false; 
-                }
+                // Launch the EKU Panel even if no EKUs on the cert to encourage custom EKU rule definition
+                //if(CountOfNonCSOids(PolicyCustomRule.CertEKUs) > 0)
                 
+                this.PolicyCustomRule.UsingCustomValues = true;
+
+                if (this.ekuPanel == null)
+                {
+                    this.ekuPanel = new EKUPanel(this);
+                    this.ekuPanel.Show();
+                    this.ekuPanel.BringToFront();
+                    this.ekuPanel.Focus();
+
+                    this.isEkuPanelOpen = true;
+                }
             }
             else
             {
