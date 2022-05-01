@@ -15,7 +15,7 @@ namespace WDAC_Wizard
     {
         private int RowSelected; // Data grid row number selected by the user 
         private int rowInEdit = -1;
-        private EKUDisplayObject displayObjectInEdit;
+        //private EKUDisplayObject displayObjectInEdit;
 
         // Declare an ArrayList to serve as the data store. 
         private System.Collections.ArrayList displayObjects =
@@ -35,47 +35,6 @@ namespace WDAC_Wizard
             this.FormClosingAutoInitiated = false; 
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Virtual method for Cell values required 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EKUDataGridViewCellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
-        {
-            // If this is the row for new records, no values are needed.
-            if (e.RowIndex == this.ekuDataGridView.RowCount - 1) return;
-            if (e.RowIndex >= this.displayObjects.Count) return; 
-
-            EKUDisplayObject displayObject = null;
-
-            // Store a reference to the Customer object for the row being painted.
-            if (e.RowIndex == rowInEdit)
-            {
-                displayObject = this.displayObjectInEdit;
-            }
-            else
-            {
-                displayObject = (EKUDisplayObject)this.displayObjects[e.RowIndex];
-            }
-
-            // Set the cell value to paint using the Customer object retrieved.
-            switch (this.ekuDataGridView.Columns[e.ColumnIndex].Name)
-            {
-                case "Column_ToAdd":
-                    e.Value = displayObject.ToAdd; 
-                    break;
-
-                case "Column_EKUFriendlyName":
-                    e.Value = displayObject.EKUFriendlyName;
-                    break;
-
-                case "Column_EKUValue":
-                    e.Value = displayObject.EKUValue;
-                    break;
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -149,6 +108,7 @@ namespace WDAC_Wizard
             string toAdd = "Included"; // default setting all values to true
             string friendlyName;
             string value;
+            int count = 0; 
 
             OidCollection oidCollection = this._customRulesControl.GetOidCollection(); 
             if(oidCollection == null)
@@ -158,17 +118,22 @@ namespace WDAC_Wizard
 
             foreach (var eku in oidCollection)
             {
-                friendlyName = eku.FriendlyName;
+                friendlyName = String.IsNullOrEmpty(eku.FriendlyName) ? String.Empty : eku.FriendlyName;
                 value = eku.Value;
 
                 if(value != Properties.Resources.CodeSigningEKUValue)
                 {
-                    this.displayObjects.Add(new EKUDisplayObject(toAdd, friendlyName, value));
-                    this.ekuDataGridView.RowCount += 1;
+                    //this.displayObjects.Add(new EKUDisplayObject(toAdd, friendlyName, value));
+                    //this.ekuDataGridView.RowCount += 1;
+                    this.ekuDataGridView.Rows[count].Cells[0].Value = toAdd;
+                    this.ekuDataGridView.Rows[count].Cells[1].Value = friendlyName;
+                    this.ekuDataGridView.Rows[count].Cells[2].Value = value;
 
                     // Add to struct
                     this.EKUCollection.Add(eku);
-                    this.EkusPosToAdd.Add(true); 
+                    this.EkusPosToAdd.Add(true);
+
+                    count++; 
                 }
             }
         }
@@ -206,16 +171,7 @@ namespace WDAC_Wizard
             string ekuValue = this.ekuDataGridView[2, e.RowIndex].EditedFormattedValue.ToString();
 
             // Check if a DisplayObject exist. If true, update all parameters. Else, create one
-            if (e.RowIndex >= this.displayObjects.Count)
-            {
-                this.displayObjects.Add(new EKUDisplayObject("-", friendlyName, ekuValue)); // force false to trigger validation upon enablement
-            }
-            else
-            {
-                EKUDisplayObject displayObject = (EKUDisplayObject)this.displayObjects[e.RowIndex];
-                displayObject.EKUFriendlyName = friendlyName;
-                displayObject.EKUValue = ekuValue; 
-            }
+            
 
             // Check if an EKUCollection exists. If true, update the parameters. Else, create one. ToAdd is handled by _Click eventhandler
             if (e.RowIndex >= this.EKUCollection.Count)
@@ -291,7 +247,7 @@ namespace WDAC_Wizard
     }
 
     // Class for the datastore
-    public class EKUDisplayObject
+    public class _EKUDisplayObject
     {
         //public string ToAdd { get; set; }
         public string ToAdd { get; set; }
@@ -299,13 +255,13 @@ namespace WDAC_Wizard
         public string EKUFriendlyName { get; set; }
         public string EKUValue { get; set; }
 
-        public EKUDisplayObject()
+        public _EKUDisplayObject()
         {
             this.ToAdd = "-"; 
             this.EKUFriendlyName = String.Empty;
             this.EKUValue = String.Empty;
         }
-        public EKUDisplayObject(string toAdd, string friendlyName, string value)
+        public _EKUDisplayObject(string toAdd, string friendlyName, string value)
         {
             this.ToAdd = toAdd;
             this.EKUFriendlyName = friendlyName;

@@ -84,9 +84,7 @@ namespace WDAC_Wizard
             this.ekuDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ekuDataGridView.Size = new System.Drawing.Size(420, 196);
             this.ekuDataGridView.TabIndex = 113;
-            this.ekuDataGridView.VirtualMode = true;
             this.ekuDataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EKUDataGridViewCellValueChanged);
-            this.ekuDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EKUDataGridViewCellValueNeeded);
             this.ekuDataGridView.CurrentCellDirtyStateChanged += new System.EventHandler(this.EKUDataGridViewStateChange);
             // 
             // Column_ToAdd
