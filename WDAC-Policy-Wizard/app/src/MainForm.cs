@@ -1135,11 +1135,12 @@ namespace WDAC_Wizard
 
                 // Custom EKU Values
 
-                if(!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
+                if(customRule.CustomValues.EKUs.Count > 0)
                 {
                     customValueCommand.Add("$ekuObj = new-object -TypeName Microsoft.SecureBoot.UserConfig.Eku");
-                    customValueCommand.Add(String.Format("$ekuObj.Value = \"{0}\"", customRule.CustomValues.EKUEncoded));
-                    customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"EKU - {0}\"", customRule.CustomValues.EKUFriendly));
+                    customValueCommand.Add(String.Format("$ekuObj.Value = \"{0}\"", customRule.CustomValues.EKUs[0].ValueEncoded)); // TODO: iterate through all EKUs once multi -ekus are confirmed
+                    string friendlyName = String.IsNullOrEmpty(customRule.CustomValues.EKUs[0].FriendlyName) ? " EKU - " + customRule.CustomValues.EKUs[0].Value : customRule.CustomValues.EKUs[0].FriendlyName;
+                    customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"{0}\"", friendlyName)); 
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.Ekus += $ekuObj}}", customRule.PSVariable));
                 }
             }
@@ -2190,6 +2191,11 @@ namespace WDAC_Wizard
                     label_Info.Text = " ";
                     break;
 
+            }
+
+            if(String.IsNullOrWhiteSpace(label_Info.Text))
+            {
+                return; 
             }
 
             label_Info.Focus();

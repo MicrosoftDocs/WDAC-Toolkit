@@ -216,6 +216,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1.3.6.1.5.5.7.3.3.
+        /// </summary>
+        internal static string CodeSigningEKUValue {
+            get {
+                return ResourceManager.GetString("CodeSigningEKUValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N/A.
         /// </summary>
         internal static string DefaultFileAttributeString {
@@ -393,12 +402,21 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This EKU is not valid or could not be converted to DER encoding. E.g. of a properly formated
+        ///   Looks up a localized string similar to  is not valid or could not be converted to DER encoding. An example of a properly formatted
         ///EKU is 1.3.6.1.4.1.311.76.3.1.
         /// </summary>
         internal static string InvalidEKUFormat_Error {
             get {
                 return ResourceManager.GetString("InvalidEKUFormat_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid selection. The Wizard expects at least one (1) EKU to be selected. .
+        /// </summary>
+        internal static string InvalidEkuSelection {
+            get {
+                return ResourceManager.GetString("InvalidEkuSelection", resourceCulture);
             }
         }
         
@@ -601,6 +619,15 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("not-extendable", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An EKU value must first be provided. For example, 1.3.6.1.4.1.311.10.3.6..
+        /// </summary>
+        internal static string NullEkuValue {
+            get {
+                return ResourceManager.GetString("NullEkuValue", resourceCulture);
             }
         }
         

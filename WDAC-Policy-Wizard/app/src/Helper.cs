@@ -1055,15 +1055,28 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
-        public string EKUFriendly;
-        public string EKUEncoded;
+        public List<EKU> EKUs; 
         public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 
         public CustomValue()
         {
+            this.EKUs = new List<EKU>(); 
             this.Hashes = new List<string>();
             this.PackageFamilyNames = new List<string>();
+        }
+    }
+
+    public class EKU
+    {
+        public string FriendlyName;
+        public string Value;
+        public string ValueEncoded;
+
+        public EKU(string name, string value)
+        {
+            this.FriendlyName = name;
+            this.Value = value; 
         }
     }
 
@@ -1123,6 +1136,10 @@ namespace WDAC_Wizard
 
         // Exception Params -- currently not supporting
         public List<PolicyCustomRules> ExceptionList { get; set; }
+
+        // EKU Structs
+        public OidCollection CertEKUs { get; set; } // EKUs from the cert
+        public OidCollection RuleEKUs { get; set; } // EKUs to add to the rule
 
         // Constructors
         public PolicyCustomRules()
@@ -1239,10 +1256,10 @@ namespace WDAC_Wizard
 
         // Singleton pattern here we only allow one instance of the class. 
 
-        public Logger(string _FolderName)
+        public Logger(string folderPath)
         {
             string fileName = GetLoggerDst();
-            this.FileName = _FolderName + fileName;
+            this.FileName = folderPath + fileName;
 
             if (!File.Exists(this.FileName))
             {
@@ -1253,38 +1270,32 @@ namespace WDAC_Wizard
             this.AddBoilerPlate(); 
         }
 
-
-        public string GetPath()
-        {
-            return this.FileName; 
-        }
-
         public void AddInfoMsg(string info)
         {
-            string msg = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), info);
+            string msg = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), SanitizeMsg(info));
             this.Log.WriteLine(msg);
         }
         public void AddErrorMsg(string error)
         {
-            string msg = String.Format("{0} [ERROR]: {1}", Helper.GetFormattedDateTime(), error);
+            string msg = String.Format("{0} [ERROR]: {1}", Helper.GetFormattedDateTime(), SanitizeMsg(error));
             this.Log.WriteLine(msg);
         }
 
         public void AddErrorMsg(string error, Exception e)
         {
-            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e.ToString());
+            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), SanitizeMsg(error), e.ToString());
             this.Log.WriteLine(msg);
         }
 
         public void AddErrorMsg(string error, Exception e, int lineN)
         {
-            string msg = String.Format("{0} [ERROR] at line {1}. \r\n {2}: {3}", Helper.GetFormattedDateTime(), lineN, error, e.ToString());
-            this.Log.WriteLine(msg);
-        }
+            string msg = String.Format("{0} [ERROR] at line {1}. \r\n {2}: {3}", Helper.GetFormattedDateTime(), lineN, SanitizeMsg(error), e.ToString());
+            this.Log.WriteLine(msg);        
+}
 
         public void AddWarningMsg(string warning)
         {
-            string msg = String.Format("{0} [WARNING]: {1}", Helper.GetFormattedDateTime(), warning);
+            string msg = String.Format("{0} [WARNING]: {1}", Helper.GetFormattedDateTime(), SanitizeMsg(warning));
             this.Log.WriteLine(msg);
         }
 
@@ -1299,6 +1310,30 @@ namespace WDAC_Wizard
             {
                 this.Log.WriteLine(line);
             }
+        }
+
+        /// <summary>
+        /// Removes any path of the form :\Users\john.doe\xyz with %USERPROFILE%
+        /// </summary>
+        /// <param name="msg">Sanitized message</param>
+        /// <returns></returns>
+        private string SanitizeMsg(string msg)
+        {
+            string unsanitizedPath = @":\Users\";
+            if (!msg.Contains(unsanitizedPath))
+            {
+                return msg; 
+            }
+
+            string sanitizedMsg;
+            string userProfileString = "%USERPROFILE%";
+            int startOfUnsantizedMsg = msg.IndexOf(unsanitizedPath) + unsanitizedPath.Length;
+            int endOfUnsanitizedMsg = msg.IndexOf("\\", startOfUnsantizedMsg );
+            
+            // Replace all instances of userprofile with %USERPROFILE%
+            string stringToReplace = msg.Substring(startOfUnsantizedMsg, endOfUnsanitizedMsg - startOfUnsantizedMsg );
+            sanitizedMsg = msg.Replace(stringToReplace, userProfileString); 
+            return sanitizedMsg; 
         }
 
         /// <summary>
