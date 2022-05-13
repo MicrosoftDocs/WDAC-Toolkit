@@ -195,7 +195,7 @@ namespace AppLocker_Policy_Converter
                 {
                     if(ruleCollection.Items[i].GetType() == typeof(FilePublisherRuleType))
                     {
-                        wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
+                       // wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                     else if (ruleCollection.Items[i].GetType() == typeof(FileHashRuleType))
                     {

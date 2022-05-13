@@ -154,6 +154,9 @@ namespace AppLocker_Policy_Converter
 
             cFileAttribRules++;
 
+            // Add FileAttrib to SiPolicy.FileRules
+            // siPolicy.FileRules.Append(
+
             // Link the signer to AllowedSigner/DeniedSigner objs
             if (action == "Allow")
             {
@@ -195,7 +198,7 @@ namespace AppLocker_Policy_Converter
                     allowRule.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
 
                     // Copy and append to rule and signing scenario
-                    FileRules fileRules = (FileRules) siPolicy.FileRules.Clone();
+                    //FileRules fileRules = (FileRules) siPolicy.FileRules.Clone();
                 }
                 else
                 {
@@ -215,20 +218,71 @@ namespace AppLocker_Policy_Converter
         public static SiPolicy ConvertFilePathRule(FilePathRuleType filePathRule, SiPolicy siPolicy)
         {
             string action = (String)filePathRule.Action.ToString();
+            //siPolicy.FileRules; 
+
+            if(siPolicy.FileRules == null)
+            {
+                siPolicy.FileRules = new object[1]; 
+            }
+
+            string wdacPathRule = MakeValidPathRule(filePathRule.Conditions.FilePathCondition.Path);
+
+            // Unable to convert to valid WDAC path rule, return
+            if(String.IsNullOrEmpty(wdacPathRule))
+            {
+                return siPolicy; 
+            }
 
             if (action == "Allow")
             {
                 Allow allowRule = new Allow();
-                allowRule.FilePath = filePathRule.Conditions.FilePathCondition.Path;
+                allowRule.FilePath = wdacPathRule; 
                 allowRule.FriendlyName = filePathRule.Description;
                 allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
+
+                // Copy and replace the FileRules obj[] in siPolicy
+                object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+                for(int i = 0; i < fileRulesCopy.Length - 1; i++)
+                {
+                    fileRulesCopy[i] = siPolicy.FileRules[i]; 
+                }
+
+                fileRulesCopy[fileRulesCopy.Length-1] = allowRule; 
+                siPolicy.FileRules = fileRulesCopy;
+
+                // Link the new FileAttrib object back to the Windows signing scenario
+                /*FileRulesRef fileRulesRef = new FileRulesRef();
+                fileRulesRef.FileRuleRef
+
+                fileAttribRef.RuleID = allowRule.ID;
+
+                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef = new FileAttribRef[1]; 
+
+                signer.FileAttribRef = new FileAttribRef[1];
+                signer.FileAttribRef[0] = fileAttribRef;
+
+                */
             }
             else
             {
                 Deny denyRule = new Deny();
-                denyRule.FilePath = filePathRule.Conditions.FilePathCondition.Path;
+                denyRule.FilePath = wdacPathRule; 
                 denyRule.FriendlyName = filePathRule.Description;
                 denyRule.ID = "ID_DENY_C_" + cFilePathRules.ToString();
+
+                // Copy and replace the FileRules obj[] in siPolicy
+
+
+                object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+                for (int i = 0; i < fileRulesCopy.Length - 1; i++)
+                {
+                    fileRulesCopy[i] = siPolicy.FileRules[i];
+                }
+
+                fileRulesCopy[fileRulesCopy.Length-1] = denyRule;
+                siPolicy.FileRules = fileRulesCopy;
+
+                // Repeat for Signing Scenarios
             }
             // TODO: check that this is a valid path rule for WDAC - show warning if so
 
@@ -273,24 +327,86 @@ namespace AppLocker_Policy_Converter
             return bHash; 
         }
 
-        // Check that publisher does not have multiple instances of '='
-        // That could indicate more fields like C=, L=, S= have been provided
-        // TODO: simply parse for CN only
-        public static bool IsValidPublisher(string publisher)
+        public static string MakeValidPathRule(string appLockerPathRule)
         {
-            if (String.IsNullOrEmpty(publisher))
+            string wdacPathRule = String.Empty; 
+
+            // WDAC only supports a handful of macros
+            if (appLockerPathRule.Contains("*") && appLockerPathRule.Contains("%"))
             {
-                return false;
+                Console.WriteLine("");
+                Console.WriteLine(String.Format("WARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
+                return null;
             }
 
-            var pubParts = publisher.Split('=');
-            if (pubParts.Length > 2)
+            if(appLockerPathRule.Contains("%"))
             {
-                return false;
+                var macroParts = appLockerPathRule.Split("%"); 
+                wdacPathRule = macroParts[0] + macroParts[2]; // Keep only the outside edges
+
+                Console.WriteLine("");
+                Console.WriteLine(String.Format("WARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
+                Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
+
+                return wdacPathRule; 
             }
 
-            return true;
+            int cWildcards = appLockerPathRule.Count(f => (f == '*'));
+
+            // Assert the only position is front or back
+            if(cWildcards == 1)
+            {
+                int idx = appLockerPathRule.IndexOf('*'); 
+                if (idx == 0 || idx == appLockerPathRule.Length-1)
+                {
+                    // This is a valid position for the 1 wildcard
+                }
+                else
+                {
+                    var parts = appLockerPathRule.Split('*');
+
+                    foreach (string subString in parts)
+                        wdacPathRule += subString;
+
+                    Console.WriteLine("");
+                    Console.WriteLine(String.Format("WARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
+                    Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
+
+                    return wdacPathRule;
+                }
+            }
+
+            // WDAC supports at most 1 wildcard * in the path
+            if (cWildcards > 1)
+            {
+                var parts = appLockerPathRule.Split('*');
+                if (parts.Length > 2)
+                {
+                    foreach (string subString in parts)
+                        wdacPathRule += subString;
+
+                    // Keep the leading wildcard
+                    if(String.IsNullOrEmpty(parts[0]))
+                    {
+                        wdacPathRule = "*" + wdacPathRule; 
+                    }
+                    else 
+                    {
+                        // Else, keep the trailing the wildcard
+                        wdacPathRule += "*"; 
+                    }
+
+                    Console.WriteLine("");
+                    Console.WriteLine(String.Format("WARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
+                    Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
+
+                    return wdacPathRule; 
+                }
+            }
+            
+            return appLockerPathRule; 
         }
+
 
         /// <summary>
         /// Parses the AppLocker PublisherName into one Publisher value for WDAC. If CN is present, returns CN, else, returns O value. 
