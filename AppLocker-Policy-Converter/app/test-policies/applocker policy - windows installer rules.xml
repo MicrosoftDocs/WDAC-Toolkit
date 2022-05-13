@@ -1,0 +1,11 @@
+  <RuleCollection Type="Msi" EnforcementMode="Enabled">
+    <FilePathRule Id="c56d06e9-6e72-4f00-8b64-414f88428cbc" Name="All Windows Installer files" Description="Allows members of the local Administrators group to run all Windows Installer files." UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePathCondition Path="*" />
+      </Conditions>
+      <Exceptions>
+        <FilePathCondition Path="%HOT%\*" />
+        <FilePathCondition Path="%REMOVABLE%\*" />
+      </Exceptions>
+    </FilePathRule>
+  </RuleCollection>

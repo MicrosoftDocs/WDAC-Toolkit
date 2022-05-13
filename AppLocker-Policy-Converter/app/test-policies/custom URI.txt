@@ -1,0 +1,11 @@
+Name: Applocker Executables
+OMA-URI: ./Vendor/MSFT/AppLocker/ApplicationLaunchRestrictions/cab01d50-8ea8-4c65-a3e1-d8e572edb806/EXE/Policy
+
+Name: AppLocker Windows Installer
+OMA-URI: ./Vendor/MSFT/AppLocker/ApplicationLaunchRestrictions/0d85f7ce-f6ad-4617-9f3d-4619176d79bc/MSI/Policy
+
+Name: AppLocker Script
+OMA-URI: ./Vendor/MSFT/AppLocker/ApplicationLaunchRestrictions/1c7a1c31-a6cb-4983-9528-85d4a6b14581/Script/Policy
+
+Name: AppLocker Packaged Apps
+OMA-URI: ./Vendor/MSFT/AppLocker/ApplicationLaunchRestrictions/6c0c7da1-4ac9-49c8-ac84-986c8903fcbd/StoreApps/Policy

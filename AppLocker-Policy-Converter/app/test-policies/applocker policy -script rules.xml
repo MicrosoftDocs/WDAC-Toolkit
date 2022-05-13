@@ -1,0 +1,108 @@
+  <RuleCollection Type="Script" EnforcementMode="Enabled">
+    <FilePathRule Id="d3e71ebe-d037-476d-a8b4-0d70c85e488b" Name="All scripts" Description="Allows members of the local Administrators group to run all scripts." UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePathCondition Path="*" />
+      </Conditions>
+      <Exceptions>
+        <FilePathCondition Path="%HOT%\*" />
+        <FilePathCondition Path="%REMOVABLE%\*" />
+      </Exceptions>
+    </FilePathRule>
+    <FileHashRule Id="207d9f00-79bd-46a9-bdae-f6ae6170c151" Name="Netlock: prefs.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x366382A41A7F507D71AA519F77083166C7C231FC9DFE2AAC7A1C3227A500F292" SourceFileName="prefs.js" SourceFileLength="365" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="28f0b203-2e06-4b23-bf8a-62fc76d14125" Name="Netlock: keyconfig-service.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x42373521BFBA56FF4EB94F4090A910825C6CF8390D3174A7C8255C3A17770DAC" SourceFileName="keyconfig-service.js" SourceFileLength="4520" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="2a6bf888-29c9-4d4e-8804-6cfe5a1353c0" Name="Netlock: externalBrowserLaunch.js, hardwareSupportWorker.js, integrityCheck.js..." Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x0AAF323D2789DF4A25978CDDB4C5AAB8D769CA47822109353068C6DEAEBF64F7" SourceFileName="externalBrowserLaunch.js" SourceFileLength="1595" />
+          <FileHash Type="SHA256" Data="0x6820229BAF680964BC8D24FF7F4CCE0F695C32936EC9D84E98D1A1C815595EB4" SourceFileName="hardwareSupportWorker.js" SourceFileLength="391" />
+          <FileHash Type="SHA256" Data="0x91E14D8FA8C657933CE1A3FF17926C7845308AF2B9A5D250F3DD78597E9C6792" SourceFileName="integrityCheck.js" SourceFileLength="2757" />
+          <FileHash Type="SHA256" Data="0x086E489D86A7629D401EC868800EF7E7DC20E60F8923ED342F063A6BDE94074E" SourceFileName="integrityCheckWorker.js" SourceFileLength="1942" />
+          <FileHash Type="SHA256" Data="0x66309E362465D7747CB7C115A37C21BF79DE4438E953F9F68F1E70E4328A2361" SourceFileName="launcherUiEventHandler.js" SourceFileLength="658" />
+          <FileHash Type="SHA256" Data="0x80D98A07E9DF796D6100D853E8EC9F3F92E720831EC3D77F3C1BCF1ACE57DF10" SourceFileName="notificationDialog.js" SourceFileLength="1775" />
+          <FileHash Type="SHA256" Data="0xB7FED23E3319C58E31DB2F0DA2BBF36824FE3C180B08D122C531747248CC509F" SourceFileName="notificationsList.js" SourceFileLength="6114" />
+          <FileHash Type="SHA256" Data="0xB1BE48F7DF60F99115BDFCE296FC103539EA57159B7BA2B31D9FA96EA99D5710" SourceFileName="notificationsViewController.js" SourceFileLength="2146" />
+          <FileHash Type="SHA256" Data="0x4539DE9F6DF08DE70806B672A9FB3B3066393B7EEC56A8012660170B92A011FD" SourceFileName="notificationsWorker.js" SourceFileLength="4899" />
+          <FileHash Type="SHA256" Data="0xFB3C9C09A52CF950E10521820646B5C38F242A86625B665B005A73BDDE102248" SourceFileName="notifySoftwareVersionWorker.js" SourceFileLength="2233" />
+          <FileHash Type="SHA256" Data="0x638A35CB319CC4C8D6A7AC98DB45E2881933106D51BB6D518F0B7AC9A60F74DE" SourceFileName="overlay.js" SourceFileLength="8484" />
+          <FileHash Type="SHA256" Data="0x9DCDD02956E93C142E878E1350C9B2FDC2BE66D2D47D08F69CA9BEC0F4D76439" SourceFileName="securityCodes.js" SourceFileLength="7513" />
+          <FileHash Type="SHA256" Data="0x14534AB462488EE8D0B9528A7D40E75EF7E262E5C01E373E47215133C48CAC5E" SourceFileName="securityCodesPopup.js" SourceFileLength="3420" />
+          <FileHash Type="SHA256" Data="0x903DE51252EF8499C06DC544E11675C7727DCFCCA0156B6B40DD4D816F8626E9" SourceFileName="selfRegistration.js" SourceFileLength="10964" />
+          <FileHash Type="SHA256" Data="0xB05A85B574C1F0819C566648407A4156CF94245138F6824B000B9018F99420A2" SourceFileName="selfRegistrationWorker.js" SourceFileLength="28364" />
+          <FileHash Type="SHA256" Data="0x6AAF8B108EC2F7CB609CB35877FF3AE2788F361F2DD5691320BDFB96D0160B4B" SourceFileName="tokenServices.js" SourceFileLength="13889" />
+          <FileHash Type="SHA256" Data="0x2AD24AD574C1D6B1D6E9158C8499DE65341A737E6BD1270A791B574210CBDE07" SourceFileName="wysiwys.js" SourceFileLength="5604" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="34f0beda-3d71-4939-890a-c945e0a71e87" Name="Netlock: channel-prefs.js, lockprefs.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x511D559A69EEC637ADC5024BD513D153350DD8A0CA3B37A8091A7E8AA9618846" SourceFileName="channel-prefs.js" SourceFileLength="250" />
+          <FileHash Type="SHA256" Data="0x9EEBEDF03D6EAF0F5DD011F5ABBEB4C64EDF406562987F5B2CCB320F0B55C925" SourceFileName="lockprefs.js" SourceFileLength="47" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="49de9fa1-3981-4f23-a177-01f86ac4c615" Name="Netlock: keyconfig.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xBC63BE1885CB159CD68D8551B8577C7C7F3731113E036E463783441B2BE2930B" SourceFileName="keyconfig.js" SourceFileLength="1860" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="67f0b48a-1594-4406-95e5-0a09aec337fa" Name="Netlock: keyconfig-service.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x42373521BFBA56FF4EB94F4090A910825C6CF8390D3174A7C8255C3A17770DAC" SourceFileName="keyconfig-service.js" SourceFileLength="4520" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="9d802cfc-0221-4f70-b31c-753c5dc0a5b7" Name="Netlock: channel-prefs.js, lockprefs.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xF2D608EAFCDDEE87986419D5F987490EFCFBE83F53CB300A67BA28085F625E08" SourceFileName="channel-prefs.js" SourceFileLength="245" />
+          <FileHash Type="SHA256" Data="0x9EEBEDF03D6EAF0F5DD011F5ABBEB4C64EDF406562987F5B2CCB320F0B55C925" SourceFileName="lockprefs.js" SourceFileLength="47" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="a69b290c-18d6-4a98-9fa7-f4cdd86a8856" Name="Netlock: externalBrowserLaunch.js, hardwareSupportWorker.js, integrityCheck.js..." Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x0AAF323D2789DF4A25978CDDB4C5AAB8D769CA47822109353068C6DEAEBF64F7" SourceFileName="externalBrowserLaunch.js" SourceFileLength="1595" />
+          <FileHash Type="SHA256" Data="0x6820229BAF680964BC8D24FF7F4CCE0F695C32936EC9D84E98D1A1C815595EB4" SourceFileName="hardwareSupportWorker.js" SourceFileLength="391" />
+          <FileHash Type="SHA256" Data="0x91E14D8FA8C657933CE1A3FF17926C7845308AF2B9A5D250F3DD78597E9C6792" SourceFileName="integrityCheck.js" SourceFileLength="2757" />
+          <FileHash Type="SHA256" Data="0x086E489D86A7629D401EC868800EF7E7DC20E60F8923ED342F063A6BDE94074E" SourceFileName="integrityCheckWorker.js" SourceFileLength="1942" />
+          <FileHash Type="SHA256" Data="0x66309E362465D7747CB7C115A37C21BF79DE4438E953F9F68F1E70E4328A2361" SourceFileName="launcherUiEventHandler.js" SourceFileLength="658" />
+          <FileHash Type="SHA256" Data="0x80D98A07E9DF796D6100D853E8EC9F3F92E720831EC3D77F3C1BCF1ACE57DF10" SourceFileName="notificationDialog.js" SourceFileLength="1775" />
+          <FileHash Type="SHA256" Data="0xB7FED23E3319C58E31DB2F0DA2BBF36824FE3C180B08D122C531747248CC509F" SourceFileName="notificationsList.js" SourceFileLength="6114" />
+          <FileHash Type="SHA256" Data="0xB1BE48F7DF60F99115BDFCE296FC103539EA57159B7BA2B31D9FA96EA99D5710" SourceFileName="notificationsViewController.js" SourceFileLength="2146" />
+          <FileHash Type="SHA256" Data="0x4539DE9F6DF08DE70806B672A9FB3B3066393B7EEC56A8012660170B92A011FD" SourceFileName="notificationsWorker.js" SourceFileLength="4899" />
+          <FileHash Type="SHA256" Data="0xFB3C9C09A52CF950E10521820646B5C38F242A86625B665B005A73BDDE102248" SourceFileName="notifySoftwareVersionWorker.js" SourceFileLength="2233" />
+          <FileHash Type="SHA256" Data="0x638A35CB319CC4C8D6A7AC98DB45E2881933106D51BB6D518F0B7AC9A60F74DE" SourceFileName="overlay.js" SourceFileLength="8484" />
+          <FileHash Type="SHA256" Data="0x9DCDD02956E93C142E878E1350C9B2FDC2BE66D2D47D08F69CA9BEC0F4D76439" SourceFileName="securityCodes.js" SourceFileLength="7513" />
+          <FileHash Type="SHA256" Data="0x14534AB462488EE8D0B9528A7D40E75EF7E262E5C01E373E47215133C48CAC5E" SourceFileName="securityCodesPopup.js" SourceFileLength="3420" />
+          <FileHash Type="SHA256" Data="0x903DE51252EF8499C06DC544E11675C7727DCFCCA0156B6B40DD4D816F8626E9" SourceFileName="selfRegistration.js" SourceFileLength="10964" />
+          <FileHash Type="SHA256" Data="0xB05A85B574C1F0819C566648407A4156CF94245138F6824B000B9018F99420A2" SourceFileName="selfRegistrationWorker.js" SourceFileLength="28364" />
+          <FileHash Type="SHA256" Data="0x6AAF8B108EC2F7CB609CB35877FF3AE2788F361F2DD5691320BDFB96D0160B4B" SourceFileName="tokenServices.js" SourceFileLength="13889" />
+          <FileHash Type="SHA256" Data="0x2AD24AD574C1D6B1D6E9158C8499DE65341A737E6BD1270A791B574210CBDE07" SourceFileName="wysiwys.js" SourceFileLength="5604" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="c959969a-708b-4551-b223-2d3d54c66946" Name="Netlock: keyconfig.js" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xBC63BE1885CB159CD68D8551B8577C7C7F3731113E036E463783441B2BE2930B" SourceFileName="keyconfig.js" SourceFileLength="1860" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+  </RuleCollection>
