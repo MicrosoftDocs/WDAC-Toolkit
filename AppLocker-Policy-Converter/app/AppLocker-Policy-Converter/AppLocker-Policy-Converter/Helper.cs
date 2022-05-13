@@ -108,6 +108,12 @@ namespace AppLocker_Policy_Converter
             return siPolicy;
         }
 
+        /// <summary>
+        /// Converts an AppLocker FilePathRuleType to an SiPolicy publisher rule. Adds the new rule to the provided policy
+        /// </summary>
+        /// <param name="filePubRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy ConvertFilePublisherRule(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
         {
             string action = (String)filePubRule.Action.ToString();
@@ -183,6 +189,12 @@ namespace AppLocker_Policy_Converter
             return siPolicy;
         }
 
+        /// <summary>
+        /// Converts an AppLocker FileHashRuleType to an SiPolicy rule. Adds the new rule to the provided policy
+        /// </summary>
+        /// <param name="fileHashRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy ConvertFileHashRule(FileHashRuleType fileHashRule, SiPolicy siPolicy)
         {
             foreach(FileHashType fileHash in fileHashRule.Conditions.FileHashCondition)
@@ -193,32 +205,40 @@ namespace AppLocker_Policy_Converter
                 {
                     Allow allowRule = new Allow();
                     allowRule.Hash = ConvertHashStringToByte(fileHash.Data);
-                    allowRule.FriendlyName = fileHashRule.Description;
-                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type == SHA256
+                    allowRule.FriendlyName = fileHashRule.Name;
+                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //e.g. Type = SHA256
                     allowRule.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
 
-                    // Copy and append to rule and signing scenario
-                    //FileRules fileRules = (FileRules) siPolicy.FileRules.Clone();
+                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddSiPolicyAllowRule(allowRule, siPolicy);
                 }
                 else
                 {
                     Deny denyRule = new Deny();
                     denyRule.Hash = ConvertHashStringToByte(fileHash.Data);
-                    denyRule.FriendlyName = fileHashRule.Description;
-                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type == SHA256
+                    denyRule.FriendlyName = fileHashRule.Name;
+                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type = SHA256
                     denyRule.ID = String.Format("ID_DENY_B_{0}_{1}", cFileHashRules, algo);
+
+                    // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddSiPolicyDenyRule(denyRule, siPolicy);
                 }
 
                 cFileHashRules++;
             }
-            return siPolicy;
 
+            return siPolicy;
         }
 
+        /// <summary>
+        /// Converts an AppLocker FilePathRuleType to an SiPolicy rule. Adds the new rule to the provided policy
+        /// </summary>
+        /// <param name="filePathRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy ConvertFilePathRule(FilePathRuleType filePathRule, SiPolicy siPolicy)
         {
             string action = (String)filePathRule.Action.ToString();
-            //siPolicy.FileRules; 
 
             if(siPolicy.FileRules == null)
             {
@@ -240,28 +260,8 @@ namespace AppLocker_Policy_Converter
                 allowRule.FriendlyName = filePathRule.Description;
                 allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
 
-                // Copy and replace the FileRules obj[] in siPolicy
-                object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
-                for(int i = 0; i < fileRulesCopy.Length - 1; i++)
-                {
-                    fileRulesCopy[i] = siPolicy.FileRules[i]; 
-                }
-
-                fileRulesCopy[fileRulesCopy.Length-1] = allowRule; 
-                siPolicy.FileRules = fileRulesCopy;
-
-                // Link the new FileAttrib object back to the Windows signing scenario
-                /*FileRulesRef fileRulesRef = new FileRulesRef();
-                fileRulesRef.FileRuleRef
-
-                fileAttribRef.RuleID = allowRule.ID;
-
-                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef = new FileAttribRef[1]; 
-
-                signer.FileAttribRef = new FileAttribRef[1];
-                signer.FileAttribRef[0] = fileAttribRef;
-
-                */
+                // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddSiPolicyAllowRule(allowRule, siPolicy);
             }
             else
             {
@@ -270,21 +270,9 @@ namespace AppLocker_Policy_Converter
                 denyRule.FriendlyName = filePathRule.Description;
                 denyRule.ID = "ID_DENY_C_" + cFilePathRules.ToString();
 
-                // Copy and replace the FileRules obj[] in siPolicy
-
-
-                object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
-                for (int i = 0; i < fileRulesCopy.Length - 1; i++)
-                {
-                    fileRulesCopy[i] = siPolicy.FileRules[i];
-                }
-
-                fileRulesCopy[fileRulesCopy.Length-1] = denyRule;
-                siPolicy.FileRules = fileRulesCopy;
-
-                // Repeat for Signing Scenarios
+                // Add the Deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddSiPolicyDenyRule(denyRule, siPolicy);
             }
-            // TODO: check that this is a valid path rule for WDAC - show warning if so
 
             cFilePathRules++;
             return siPolicy;
@@ -318,15 +306,21 @@ namespace AppLocker_Policy_Converter
         {
             sHash = sHash.Substring(2); // Trim the first 0x off the string
             byte[] bHash = new byte[sHash.Length];
+            int _base = 16; 
 
             for (int i = 0; i < sHash.Length; i++)
             {
-                bHash[i] = Convert.ToByte(sHash[i]);
+                bHash[i] = Convert.ToByte(sHash[16], _base);
             }
 
             return bHash; 
         }
 
+        /// <summary>
+        /// Converts an AppLocker FilePath rule to one that WDAC can handle. Returns null where constraints are broken.
+        /// </summary>
+        /// <param name="appLockerPathRule"></param>
+        /// <returns></returns>
         public static string MakeValidPathRule(string appLockerPathRule)
         {
             string wdacPathRule = String.Empty; 
@@ -407,7 +401,6 @@ namespace AppLocker_Policy_Converter
             return appLockerPathRule; 
         }
 
-
         /// <summary>
         /// Parses the AppLocker PublisherName into one Publisher value for WDAC. If CN is present, returns CN, else, returns O value. 
         /// </summary>
@@ -429,34 +422,80 @@ namespace AppLocker_Policy_Converter
             return formattedPub;
         }
 
-        // Check that version has 4 parts (follows ww.xx.yy.zz format)
-        // And each part < 2^16
-        public static bool IsValidVersion(string version)
+        private static SiPolicy AddSiPolicyAllowRule(Allow allowRule, SiPolicy siPolicy)
         {
-            var versionParts = version.Split('.');
-            if (versionParts.Length != 4)
+            // Copy and replace the FileRules obj[] in siPolicy
+            object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+            for (int i = 0; i < fileRulesCopy.Length - 1; i++)
             {
-                return false;
+                fileRulesCopy[i] = siPolicy.FileRules[i];
             }
 
-            foreach (var part in versionParts)
+            fileRulesCopy[fileRulesCopy.Length - 1] = allowRule;
+            siPolicy.FileRules = fileRulesCopy;
+
+            // Copy and replace the FileRulesRef section to add to Signing Scenarios
+            FileRulesRef refCopy = new FileRulesRef();
+            if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
             {
-                try
-                {
-                    int _part = Convert.ToInt32(part);
-                    if (_part > UInt16.MaxValue || _part < 0)
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                refCopy.FileRuleRef = new FileRuleRef[1];
+                refCopy.FileRuleRef[0] = new FileRuleRef();
+                refCopy.FileRuleRef[0].RuleID = allowRule.ID;
             }
-            return true;
+            else
+            {
+                refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                {
+                    refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                }
+
+                refCopy.FileRuleRef[fileRulesCopy.Length - 1] = new FileRuleRef();
+                refCopy.FileRuleRef[fileRulesCopy.Length - 1].RuleID = allowRule.ID;
+            }
+
+            siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+            return siPolicy; 
         }
 
+
+        private static SiPolicy AddSiPolicyDenyRule(Deny denyRule, SiPolicy siPolicy)
+        {
+            // Copy and replace the FileRules obj[] in siPolicy
+            object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+            for (int i = 0; i < fileRulesCopy.Length - 1; i++)
+            {
+                fileRulesCopy[i] = siPolicy.FileRules[i];
+            }
+
+            fileRulesCopy[fileRulesCopy.Length - 1] = denyRule;
+            siPolicy.FileRules = fileRulesCopy;
+
+            // Copy and replace the FileRulesRef section to add to Signing Scenarios
+            FileRulesRef refCopy = new FileRulesRef();
+            if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
+            {
+                refCopy.FileRuleRef = new FileRuleRef[1];
+                refCopy.FileRuleRef[0] = new FileRuleRef();
+                refCopy.FileRuleRef[0].RuleID = denyRule.ID;
+            }
+            else
+            {
+                refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                {
+                    refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                }
+
+                refCopy.FileRuleRef[fileRulesCopy.Length - 1] = new FileRuleRef();
+                refCopy.FileRuleRef[fileRulesCopy.Length - 1].RuleID = denyRule.ID;
+            }
+
+            siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+            return siPolicy; 
+        }
+
+      
         public static int CompareVersions(string minVersion, string maxVersion)
         {
             var minversionParts = minVersion.Split('.');
@@ -529,257 +568,6 @@ namespace AppLocker_Policy_Converter
             return true;
         }
 
-        public static string GetEnvPath(string _path)
-        {
-            // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
-            string sys = Environment.GetFolderPath(Environment.SpecialFolder.System).ToUpper();
-            string win = Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToUpper();
-            string os = Path.GetPathRoot(Environment.SystemDirectory).ToUpper();
-
-            string envPath = String.Empty;
-            string upperPath = _path.ToUpper();
-
-            if (upperPath.Contains(sys)) // C:/WINDOWS/system32/foo/bar --> %SYSTEM32%/foo/bar
-            {
-                envPath = "%SYSTEM32%" + _path.Substring(sys.Length);
-                return envPath;
-            }
-            else if (upperPath.Contains(win)) // WINDIR
-            {
-                envPath = "%WINDIR%" + _path.Substring(win.Length);
-                return envPath;
-            }
-            else if (upperPath.Contains(os)) // OSDRIVE
-            {
-                envPath = "%OSDRIVE%\\" + _path.Substring(os.Length);
-                return envPath;
-            }
-            else
-            {
-                return _path; // otherwise, not an env variable we support
-            }
-
-        }
-
-        /// <summary>
-        /// Check that the given directory is write-accessable by the user.  
-        /// /// </summary>
-        public static bool IsUserWriteable(string path)
-        {
-            // Try to create a subdir in the folderPath. If successful, write access is true. 
-            // If an exception is hit, the path is likely not user-writeable 
-            try
-            {
-                DirectoryInfo di = new DirectoryInfo(path);
-                if (di.Exists)
-                {
-                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(path, "testSubDir"));
-                    dis.Create();
-                    dis.Delete();
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-
-        /// <summary>
-        /// Convert OID/EKU data type to TLV triplet according to schema https://docs.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier?redirectedfrom=MSDN
-        /// </summary>
-        /// <param name="oid"></param>
-        /// <returns>Encoded TLV string containing the EKU</returns>
-        public static string EKUValueToTLVEncoding(string stringEku)
-        {
-            List<string> encodedEku = new List<string>();
-
-            // CONST
-            const string N_EKU = "01"; // Only support 1 EKU at a time
-
-
-            if (String.IsNullOrEmpty(stringEku))
-            {
-                return null;
-            }
-
-            var ekuParts = stringEku.Split('.');
-
-            if (ekuParts == null || ekuParts.Length < 2)
-            {
-                return null;
-            }
-
-            // Ensure properly formatted oids provided
-            foreach (var ekuPart in ekuParts)
-            {
-                try
-                {
-                    int.Parse(ekuPart);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Bad oid format. NAN values provided.");
-                    return null;
-                }
-            }
-
-            encodedEku.Add(FormatHexString(N_EKU));
-            encodedEku.Add(FormatHexString(ekuParts.Length.ToString("X")));
-
-            // The first two nodes of the OID are encoded onto a single byte. The first node is multiplied by the decimal 40 and the result is added to the value of the second node.
-            int firstByteD = 40 * int.Parse(ekuParts[0]) + int.Parse(ekuParts[1]);
-            string firstByteHex = FormatHexString(firstByteD.ToString("X"));
-
-            encodedEku.Add(firstByteHex);
-
-            // Convert the rest of the EKU/OID from pos 2 to end
-            foreach (var ekuPart in ekuParts.Skip(2))
-            {
-                List<string> ekuOctet = GetEKUOctet(int.Parse(ekuPart));
-                foreach (var octet in ekuOctet)
-                {
-                    encodedEku.Add(octet);
-                }
-            }
-
-            return string.Join("", encodedEku);
-        }
-
-        public static List<string> GetEKUOctet(int node)
-        {
-            List<string> octet = new List<string>();
-            const int MAX_EKU_VAL = 127;
-            const int MSB = 0;
-            const int IGNORE_POS = 9;
-
-            if (node > MAX_EKU_VAL)
-            {
-                // Node values greater than or equal to 128 are encoded on multiple bytes.
-                // Bit 7 of the leftmost byte is set to one.
-                // Bits 0 through 6 of each byte contains the encoded value.
-                string s = Convert.ToString(node, 2); //Convert to binary in a string
-
-                int[] bits = s.PadLeft(16, '0') // Add 0's from left
-                             .Select(c => int.Parse(c.ToString())) // convert each char to int
-                             .ToArray();
-
-                // MSB (bit 7 of the leftmost byte) set to 1
-                // Ignoring bit 7 of the rightmost byte (ie set to 0)
-                // Shifting the right nibble of the leftmost byte by 1 bit
-                bits[MSB] = 1;
-                bits[IGNORE_POS] = 0;
-
-                bits[4] = bits[5];
-                bits[5] = bits[6];
-                bits[6] = bits[7];
-                bits[7] = 0;
-
-                // Convert left and right byte to hex to add to octet list
-                List<string> decArr = DecodeBitArray(bits);
-                octet.Add(decArr[0] + decArr[1]);
-                octet.Add(decArr[2] + decArr[3]);
-            }
-            else
-            {
-                // Node values less than or equal to 127 are encoded on one byte.
-                octet.Add(FormatHexString(node.ToString("X")));
-            }
-
-            return octet;
-        }
-
-        /// <summary>
-        ///  Simple method to ensure hex values are size=2
-        /// </summary>
-        /// <param name="hex_in"></param>
-        /// <returns></returns>
-        public static string FormatHexString(string hex_in)
-        {
-            if (String.IsNullOrEmpty(hex_in))
-            {
-                return String.Empty;
-            }
-            if (hex_in.Length == 1)
-            {
-                return "0" + hex_in;
-            }
-            else
-            {
-                return hex_in;
-            }
-        }
-
-        /// <summary>
-        /// Convert bit array to hexidecimal values
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <returns></returns>
-        public static List<string> DecodeBitArray(int[] bits)
-        {
-            List<string> octet = new List<string>();
-            int val = 0;
-
-            for (int i = 0; i < bits.Length; i++)
-            {
-                if (i % 4 == 0)
-                {
-                    val = 0;
-                    val += 8 * bits[i];
-                }
-                else if (i % 4 == 1)
-                {
-                    val += 4 * bits[i];
-                }
-                else if (i % 4 == 2)
-                {
-                    val += 2 * bits[i];
-                }
-                else if (i % 4 == 3)
-                {
-                    val += 1 * bits[i];
-                    octet.Add(val.ToString("X"));
-                }
-            }
-
-            return octet;
-        }
-
-        /// <summary>
-        /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
-        /// </summary>
-        /// <returns>DateTime string in format YYYY-MM-DD</returns>
-        public static string GetFormattedDate()
-        {
-            // Get DateTime now in UTC
-            // Format to ISO 8601 (YYYY-MM-DD)
-            return DateTime.UtcNow.ToString("yyyy-MM-dd");
-        }
-
-        /// <summary>
-        /// Calls DateTime.UTCNow and formats to ISO 8601 (T[hh][mm][ss])
-        /// </summary>
-        /// <returns>DateTime string in format T[hh][mm][ss]</returns>
-        public static string GetFormattedTime()
-        {
-            // Get DateTime now in UTC
-            // Format to ISO 8601 (T[hh][mm][ss])
-            return "T" + DateTime.UtcNow.ToString("HH-mm-ss");
-        }
-
-        /// <summary>
-        /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD-T[hh][mm][ss])
-        /// </summary>
-        /// <returns>DateTime string in format YYYY-MM-DD-T[hh][mm][ss]</returns>
-        public static string GetFormattedDateTime()
-        {
-            // Get DateTime now in UTC
-            // Format to ISO 8601 (T[hh][mm][ss])
-            return DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH-mm-ss");
-        }
-
-
+       
     }
 }

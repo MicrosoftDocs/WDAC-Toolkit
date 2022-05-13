@@ -47,7 +47,7 @@ namespace AppLocker_Policy_Converter
             }
 
             List<AppLockerPolicy> appLockerPolicies = ParseAppLockerPolicies(applockerPolicyPaths);
-            ConvertPolicies(appLockerPolicies);
+            ConvertPolicies(appLockerPolicies, outputPath);
 
             return 0; 
         }
@@ -176,16 +176,16 @@ namespace AppLocker_Policy_Converter
             return policy; 
         }
 
-        static void ConvertPolicies(List<AppLockerPolicy> appLockerPolicies)
+        static void ConvertPolicies(List<AppLockerPolicy> appLockerPolicies, string outputPath)
         {
             List<SiPolicy> wdacPolicies = new List<SiPolicy>();
             foreach(AppLockerPolicy appLockerPolicy in appLockerPolicies)
             {
-                ProcessPolicy(appLockerPolicy);
+                ProcessPolicy(appLockerPolicy, outputPath);
             }
         }
 
-        static void ProcessPolicy(AppLockerPolicy appLockerPolicy)
+        static void ProcessPolicy(AppLockerPolicy appLockerPolicy, string outputPath)
         {
             SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
 
@@ -207,6 +207,8 @@ namespace AppLocker_Policy_Converter
                     }
                 }
             }
+
+            Helper.SerializePolicytoXML(wdacPolicy, outputPath); 
         }
 
         static void ShowErrorScreen()
