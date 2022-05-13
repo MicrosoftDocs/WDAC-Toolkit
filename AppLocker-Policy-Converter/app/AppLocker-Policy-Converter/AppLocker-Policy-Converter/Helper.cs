@@ -22,15 +22,12 @@ namespace AppLocker_Policy_Converter
 
     internal static class Helper
     {
-
-        public enum BrowseFileType
-        {
-            Policy = 0,     // -Show .xml files
-            EventLog = 1,   // -Show .evtx files
-            PEFile = 2,     // -Show PE (.exe, .dll, .sys) files
-            All = 3         // -Show . all files
-        }
-
+        // Counts of file rules created to pipe into IDs
+        static public int cFilePublisherRules = 0;
+        static public int cFileAttribRules = 0;
+        static public int cFilePathRules = 0; 
+        static public int cFileHashRules = 0;
+       
         public static AppLockerPolicy SerializeAppLockerPolicy(string xmlPath)
         {
             AppLockerPolicy appLockerPolicy;
@@ -81,35 +78,162 @@ namespace AppLocker_Policy_Converter
             return siPolicy;
         }
 
-        public static void ConvertFilePublisherRule(FilePublisherRuleType filePubRule)
+        /// <summary>
+        /// Deserialize the xml policy on disk to SiPolicy
+        /// </summary>
+        /// <param name="xmlPath"></param>
+        /// <returns>SiPolicy object</returns>
+        public static SiPolicy DeserializeXMLStringtoPolicy(string xmlContents)
+        {
+            SiPolicy siPolicy;
+            
+            try
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                writer.Write(xmlContents);
+                writer.Flush();
+                stream.Position = 0;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(stream);
+                siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+
+            return siPolicy;
+        }
+
+        public static SiPolicy ConvertFilePublisherRule(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
         {
             string action = (String)filePubRule.Action.ToString();
-            string desc = filePubRule.Description;
-            string binName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
-            string lowVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.LowSection;
-            string highVerson = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.HighSection;
-            string product = filePubRule.Conditions.FilePublisherCondition.ProductName;
-            string publisher = filePubRule.Conditions.FilePublisherCondition.PublisherName;
+            string productName = filePubRule.Conditions.FilePublisherCondition.ProductName;
+            string minVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.LowSection;
+            string maxVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.HighSection;
+
+            // Create new signer object
+            Signer signer = new Signer();
+            signer.Name = filePubRule.Name;
+
+            CertPublisher cPub = new CertPublisher();
+            cPub.Value = ExtractPublisher(filePubRule.Conditions.FilePublisherCondition.PublisherName);
+            signer.CertPublisher = cPub;
+
+            string signerId = "ID_SIGNER_" + cFilePublisherRules;
+
+            // Create new FileAttrib object to link to signer
+            FileAttrib fileAttrib = new FileAttrib(); 
+            fileAttrib.FileName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
+
+            // Do not blindly set versions == "*"
+            // This is okay to do for Original Filenames
+            if(minVersion != "*")
+            {
+                fileAttrib.MinimumFileVersion = minVersion;
+            }
+            if(maxVersion != "*")
+            {
+                fileAttrib.MaximumFileVersion = maxVersion;
+            }
+            if(productName != "*" || !String.IsNullOrEmpty(productName))
+            {
+                fileAttrib.ProductName = productName; 
+            }
+
+            fileAttrib.ID = "ID_FILEATTRIB_" + cFileAttribRules;
+
+            // Link the new FileAttrib object back to the signer
+            FileAttribRef fileAttribRef = new FileAttribRef();
+            fileAttribRef.RuleID = fileAttrib.ID;
+            signer.FileAttribRef = new FileAttribRef[1];
+            signer.FileAttribRef[0] = fileAttribRef;
+
+            cFileAttribRules++;
+
+            // Link the signer to AllowedSigner/DeniedSigner objs
+            if (action == "Allow")
+            {
+                AllowedSigner allowedSigner = new AllowedSigner();
+                allowedSigner.SignerId = signerId;
+
+                // Copy and replace
+                int cAllowedSigners = siPolicy.SigningScenarios[0].ProductSigners.AllowedSigners.AllowedSigner.Length;
+                AllowedSigner[] allowedSigners = new AllowedSigner[cAllowedSigners + 1];
+
+                for(int i = 0; i< cAllowedSigners; i++)
+                {
+                    allowedSigners[i] = siPolicy.SigningScenarios[0].ProductSigners.AllowedSigners.AllowedSigner[i];
+                }
+
+                allowedSigners[cAllowedSigners + 1] = allowedSigner;
+            }
+            else
+            {
+                DeniedSigner deniedSigner = new DeniedSigner();
+                deniedSigner.SignerId = signerId;
+            }
+            cFilePublisherRules++;
+            return siPolicy;
         }
 
-        public static void ConvertFileHashRule(FileHashRuleType fileHashRule)
+        public static SiPolicy ConvertFileHashRule(FileHashRuleType fileHashRule, SiPolicy siPolicy)
         {
-            string action = fileHashRule.Action.ToString();
-            string desc = fileHashRule.Description;
+            foreach(FileHashType fileHash in fileHashRule.Conditions.FileHashCondition)
+            {
+                string action = fileHashRule.Action.ToString();
 
-            // Iterate through these
-            string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type == SHA256
-            string hash = fileHashRule.Conditions.FileHashCondition[0].Data;
+                if (action == "Allow")
+                {
+                    Allow allowRule = new Allow();
+                    allowRule.Hash = ConvertHashStringToByte(fileHash.Data);
+                    allowRule.FriendlyName = fileHashRule.Description;
+                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type == SHA256
+                    allowRule.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
 
-            string binName = fileHashRule.Conditions.FileHashCondition[0].SourceFileName;
+                    // Copy and append to rule and signing scenario
+                    FileRules fileRules = (FileRules) siPolicy.FileRules.Clone();
+                }
+                else
+                {
+                    Deny denyRule = new Deny();
+                    denyRule.Hash = ConvertHashStringToByte(fileHash.Data);
+                    denyRule.FriendlyName = fileHashRule.Description;
+                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type == SHA256
+                    denyRule.ID = String.Format("ID_DENY_B_{0}_{1}", cFileHashRules, algo);
+                }
+
+                cFileHashRules++;
+            }
+            return siPolicy;
+
         }
 
-        public static void ConvertFilePathRule(FilePathRuleType filePathRule)
+        public static SiPolicy ConvertFilePathRule(FilePathRuleType filePathRule, SiPolicy siPolicy)
         {
             string action = (String)filePathRule.Action.ToString();
-            string desc = filePathRule.Description;
 
-            string path = filePathRule.Conditions.FilePathCondition.Path;
+            if (action == "Allow")
+            {
+                Allow allowRule = new Allow();
+                allowRule.FilePath = filePathRule.Conditions.FilePathCondition.Path;
+                allowRule.FriendlyName = filePathRule.Description;
+                allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
+            }
+            else
+            {
+                Deny denyRule = new Deny();
+                denyRule.FilePath = filePathRule.Conditions.FilePathCondition.Path;
+                denyRule.FriendlyName = filePathRule.Description;
+                denyRule.ID = "ID_DENY_C_" + cFilePathRules.ToString();
+            }
+            // TODO: check that this is a valid path rule for WDAC - show warning if so
+
+            cFilePathRules++;
+            return siPolicy;
         }
 
         /// <summary>
@@ -131,6 +255,24 @@ namespace AppLocker_Policy_Converter
             writer.Close();
         }
 
+        /// <summary>
+        /// Takes in an AppLocker hash string value and returns an SiPolicy hash
+        /// </summary>
+        /// <param name="sHash"></param>
+        /// <returns></returns>
+        public static byte[] ConvertHashStringToByte(string sHash)
+        {
+            sHash = sHash.Substring(2); // Trim the first 0x off the string
+            byte[] bHash = new byte[sHash.Length];
+
+            for (int i = 0; i < sHash.Length; i++)
+            {
+                bHash[i] = Convert.ToByte(sHash[i]);
+            }
+
+            return bHash; 
+        }
+
         // Check that publisher does not have multiple instances of '='
         // That could indicate more fields like C=, L=, S= have been provided
         // TODO: simply parse for CN only
@@ -150,20 +292,19 @@ namespace AppLocker_Policy_Converter
             return true;
         }
 
-        public static string FormatPublisherCN(string publisher)
+        /// <summary>
+        /// Parses the AppLocker PublisherName into one Publisher value for WDAC. If CN is present, returns CN, else, returns O value. 
+        /// </summary>
+        /// <param name="publisher"></param>
+        /// <returns></returns>
+        public static string ExtractPublisher(string publisher)
         {
-            string formattedPub;
+            // Always grab the first value - it will be CN where exists, O otherwise (when O=CN)
+            // Ex) ["O =", "   Contoso Corporation"]
+            var pubParts = publisher.Split(',');
+            string formattedPub = pubParts[0];
 
-            var pubParts = publisher.Split('=');
-            if (pubParts.Length == 2)
-            {
-                // Ex) ["CN =", "   Contoso Corporation"]
-                formattedPub = pubParts[1];
-            }
-            else
-            {
-                formattedPub = publisher;
-            }
+            formattedPub = formattedPub.Split('=')[1]; 
 
             // Remove any prepended whitespace
             char[] charsToTrim = { ' ', '\'' };

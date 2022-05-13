@@ -187,8 +187,7 @@ namespace AppLocker_Policy_Converter
 
         static void ProcessPolicy(AppLockerPolicy appLockerPolicy)
         {
-            Console.WriteLine("Stop");
-            SiPolicy wdacPolicy = new SiPolicy(); 
+            SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
 
             foreach(RuleCollectionType ruleCollection in appLockerPolicy.RuleCollection)
             {
@@ -196,15 +195,15 @@ namespace AppLocker_Policy_Converter
                 {
                     if(ruleCollection.Items[i].GetType() == typeof(FilePublisherRuleType))
                     {
-                        Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i]);
+                        wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                     else if (ruleCollection.Items[i].GetType() == typeof(FileHashRuleType))
                     {
-                        Helper.ConvertFileHashRule((FileHashRuleType)ruleCollection.Items[i]);
+                        wdacPolicy = Helper.ConvertFileHashRule((FileHashRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                     else if(ruleCollection.Items[i].GetType() == typeof(FilePathRuleType))
                     {
-                        Helper.ConvertFilePathRule((FilePathRuleType)ruleCollection.Items[i]);
+                        wdacPolicy = Helper.ConvertFilePathRule((FilePathRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                 }
             }
