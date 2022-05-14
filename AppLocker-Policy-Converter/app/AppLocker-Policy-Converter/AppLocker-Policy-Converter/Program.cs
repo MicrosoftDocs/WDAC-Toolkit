@@ -12,6 +12,10 @@ namespace AppLocker_Policy_Converter
     {
         static int Main(string[] args)
         {
+
+            string _path = "C:\\Windows\\schemas\\CodeIntegrity\\ExamplePolicies\\RecommendedDriverBlock_Enforced.xml";
+            SiPolicy sipolicy = Helper.DeserializeXMLtoPolicy(_path); 
+
             if (args.Length < 1)
             {
                 ShowErrorScreen();

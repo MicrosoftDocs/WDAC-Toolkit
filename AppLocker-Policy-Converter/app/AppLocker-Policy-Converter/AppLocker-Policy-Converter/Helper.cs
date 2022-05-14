@@ -304,13 +304,15 @@ namespace AppLocker_Policy_Converter
         /// <returns></returns>
         public static byte[] ConvertHashStringToByte(string sHash)
         {
-            sHash = sHash.Substring(2); // Trim the first 0x off the string
-            byte[] bHash = new byte[sHash.Length];
-            int _base = 16; 
+            sHash = sHash.Substring(2); // Trim the first "0x" off the string
+            byte[] bHash = new byte[sHash.Length/2];
+            int _base = 16;
+            string sValue;  //chunk into 2's
 
-            for (int i = 0; i < sHash.Length; i++)
+            for(int i= 0; i < sHash.Length; i+=2)
             {
-                bHash[i] = Convert.ToByte(sHash[16], _base);
+                sValue = "" + sHash[i] + sHash[i + 1];
+                bHash[i / 2] = Convert.ToByte(sValue, _base);
             }
 
             return bHash; 
