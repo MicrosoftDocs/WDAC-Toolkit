@@ -12,10 +12,6 @@ namespace AppLocker_Policy_Converter
     {
         static int Main(string[] args)
         {
-
-            string _path = "C:\\Windows\\schemas\\CodeIntegrity\\ExamplePolicies\\RecommendedDriverBlock_Enforced.xml";
-            SiPolicy sipolicy = Helper.DeserializeXMLtoPolicy(_path); 
-
             if (args.Length < 1)
             {
                 ShowErrorScreen();
@@ -124,6 +120,11 @@ namespace AppLocker_Policy_Converter
             return appLockerPaths; 
         }
 
+        /// <summary>
+        /// Parses the input paths to extract the 'Output Path' from the AppLocker policy paths
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         static string GetOutputPath(string[] args)
         {
             string outputPath = string.Empty;
@@ -157,7 +158,7 @@ namespace AppLocker_Policy_Converter
         }
 
         /// <summary>
-        /// 
+        /// Parses the AppLocker paths provided by the user and adds them to the list to process only if the file exists
         /// </summary>
         /// <param name="policyPaths"></param>
         static List<AppLockerPolicy> ParseAppLockerPolicies(List<string> policyPaths)
@@ -167,19 +168,18 @@ namespace AppLocker_Policy_Converter
             {
                 if(File.Exists(policyPath))
                 {
-                    appLockerPolicies.Add(ParseAppLockerPolicy(policyPath));
+                    appLockerPolicies.Add(Helper.SerializeAppLockerPolicy(policyPath));
                 }
             }
 
             return appLockerPolicies; 
         }
 
-        static AppLockerPolicy ParseAppLockerPolicy(string policyPath)
-        {
-            AppLockerPolicy policy = Helper.SerializeAppLockerPolicy(policyPath);
-            return policy; 
-        }
-
+        /// <summary>
+        /// Calls the ProcessPolicy method on the list of AppLocker policies provided
+        /// </summary>
+        /// <param name="appLockerPolicies"></param>
+        /// <param name="outputPath"></param>
         static void ConvertPolicies(List<AppLockerPolicy> appLockerPolicies, string outputPath)
         {
             List<SiPolicy> wdacPolicies = new List<SiPolicy>();
@@ -188,7 +188,12 @@ namespace AppLocker_Policy_Converter
                 ProcessPolicy(appLockerPolicy, outputPath);
             }
         }
-
+        
+        /// <summary>
+        /// Iterates through the list of AppLocker rules and converts and adds each to a WDAC policy
+        /// </summary>
+        /// <param name="appLockerPolicy"></param>
+        /// <param name="outputPath"></param>
         static void ProcessPolicy(AppLockerPolicy appLockerPolicy, string outputPath)
         {
             SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
@@ -199,11 +204,11 @@ namespace AppLocker_Policy_Converter
                 {
                     if(ruleCollection.Items[i].GetType() == typeof(FilePublisherRuleType))
                     {
-                       // wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
+                       wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                     else if (ruleCollection.Items[i].GetType() == typeof(FileHashRuleType))
                     {
-                        wdacPolicy = Helper.ConvertFileHashRule((FileHashRuleType)ruleCollection.Items[i], wdacPolicy);
+                       wdacPolicy = Helper.ConvertFileHashRule((FileHashRuleType)ruleCollection.Items[i], wdacPolicy);
                     }
                     else if(ruleCollection.Items[i].GetType() == typeof(FilePathRuleType))
                     {
@@ -212,9 +217,32 @@ namespace AppLocker_Policy_Converter
                 }
             }
 
+            wdacPolicy = FormatPolicy(wdacPolicy);
             Helper.SerializePolicytoXML(wdacPolicy, outputPath); 
         }
 
+        /// <summary>
+        /// Sets new PolicyID and BasePolicyID, as well as the FriendlyName on the SiPolicy signing scenarios
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        static SiPolicy FormatPolicy(SiPolicy siPolicy)
+        {
+            // Set GUIDs
+            Guid newGuid = new Guid();
+            siPolicy.BasePolicyID = newGuid.ToString();
+            siPolicy.PolicyID = siPolicy.BasePolicyID;
+
+            // Set Signing Scenario friendly names
+            siPolicy.SigningScenarios[0].FriendlyName = "Auto generated policy on " + Helper.GetFormattedDate();
+            siPolicy.SigningScenarios[1].FriendlyName = siPolicy.SigningScenarios[0].FriendlyName; 
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Shows a default error screen on the console
+        /// </summary>
         static void ShowErrorScreen()
         {
             Console.WriteLine("");
@@ -223,91 +251,14 @@ namespace AppLocker_Policy_Converter
             ShowHelpMenu();
         }
 
+        /// <summary>
+        /// Shows the help menu on the console
+        /// </summary>
         static void ShowHelpMenu()
         {
             Console.WriteLine("-h  | --help       Displays this help screen.");
             Console.WriteLine("-PolicyPaths       Required parameter. Path(s) to the AppLocker policies to convert.");
             Console.WriteLine("-OutputPath        Required parameter. Path to the converted WDAC policy.");
-        }
-
-
-        public class DriverExceptions
-        {
-            public const int InvalidPath = 0xE100;
-            public static string InvalidPathErrorString = "The path of the file is not valid.";
-
-            public const int NullInfoObj = 0xE101;
-            public static string NullInfoObjString = "The file specified cannot be found.";
-
-            public const int EmptyCompanyName = 0xE102;
-            public static string EmptyCompanyNameString = "The company name of the PE is empty or null.";
-
-            public const int EmptyOriginalFileName = 0xE103;
-            public static string EmptyOriginalFileNameString = "The original filename of the PE is empty or null.";
-
-            public const int BadOriginalFileName = 0xE104;
-            public static string BadOriginalFileNameString = "The original filename must contain an extension.";
-
-            public const int EmptyProductName = 0xE105;
-            public static string EmptyProductNameString = "The product name of the PE is empty or null.";
-
-            public const int EmptyFileDescription = 0xE106;
-            public static string EmptyFileDescriptionString = "The description of the PE is empty or null.";
-
-            public const int EmptyFileVersion = 0xE107;
-            public static string EmptyFileVersionString = "The version of the PE is empty or null.";
-
-            public const int BadMajorPartFileVersion = 0xE108;
-            public const int BadMinorPartFileVersion = 0xE109;
-            public const int BadBuildPartFileVersion = 0xE10A;
-            public const int BadPrivatePartFileVersion = 0xE10B;
-            public static string BadFileVersionString = "The version of the PE exceeds the upper limit (65535).";
-
-            public const int EmptyProductVersion = 0xE10C;
-            public static string EmptyProductVersionString = "The product version of the PE is empty or null.";
-
-
-            public static string DecodeErrorCode(int errorCode)
-            {
-                switch (errorCode)
-                {
-                    case DriverExceptions.NullInfoObj:
-                        return DriverExceptions.NullInfoObjString;
-
-                    case DriverExceptions.InvalidPath:
-                        return DriverExceptions.InvalidPathErrorString;
-
-                    case DriverExceptions.EmptyCompanyName:
-                        return DriverExceptions.EmptyCompanyNameString;
-
-                    case DriverExceptions.EmptyOriginalFileName:
-                        return DriverExceptions.EmptyOriginalFileNameString;
-
-                    case DriverExceptions.BadOriginalFileName:
-                        return DriverExceptions.BadOriginalFileNameString;
-
-                    case DriverExceptions.EmptyProductName:
-                        return DriverExceptions.EmptyProductNameString;
-
-                    case DriverExceptions.EmptyFileDescription:
-                        return DriverExceptions.EmptyFileDescriptionString;
-
-                    case DriverExceptions.EmptyFileVersion:
-                        return DriverExceptions.EmptyFileVersionString;
-
-                    case DriverExceptions.BadMajorPartFileVersion:
-                    case DriverExceptions.BadMinorPartFileVersion:
-                    case DriverExceptions.BadBuildPartFileVersion:
-                    case DriverExceptions.BadPrivatePartFileVersion:
-                        return DriverExceptions.BadFileVersionString;
-
-                    case DriverExceptions.EmptyProductVersion:
-                        return DriverExceptions.EmptyProductVersionString;
-
-                    default:
-                        return "";
-                }
-            }
         }
     }
 }

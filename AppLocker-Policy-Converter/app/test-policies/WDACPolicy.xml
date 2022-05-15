@@ -2,8 +2,8 @@
 <SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Base Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
   <VersionEx>10.0.0.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
-  <PolicyID>{784C4414-79F4-4C32-A6A5-F0FB42A51D0D}</PolicyID>
-  <BasePolicyID>{784C4414-79F4-4C32-A6A5-F0FB42A51D0D}</BasePolicyID>
+  <PolicyID>00000000-0000-0000-0000-000000000000</PolicyID>
+  <BasePolicyID>00000000-0000-0000-0000-000000000000</BasePolicyID>
   <Rules>
     <Rule>
       <Option>Enabled:Unsigned System Integrity Policy</Option>
@@ -20,6 +20,42 @@
   </Rules>
   <EKUs />
   <FileRules>
+    <FileAttrib ID="ID_FILEATTRIB_A_0" FriendlyName="" FileName="*" ProductName="MIDBROWSER" MinimumFileVersion="10.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_1" FriendlyName="SR413284" FileName="*" ProductName="FOXIT READER SETUP" />
+    <FileAttrib ID="ID_FILEATTRIB_A_2" FriendlyName="" FileName="*" ProductName="DTLOCKER+ APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_3" FriendlyName="" FileName="*" ProductName="ANWENDUNG REMOVEEX" MinimumFileVersion="2012.12.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_4" FriendlyName="" FileName="*" ProductName="MOZILLA WEBAPP RUNTIME APP UNINSTALLER" MinimumFileVersion="1.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_5" FriendlyName="" FileName="*" ProductName="DT4000 APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_6" FriendlyName="FOXIT READER will be blocked based on Publisher and Product Name" FileName="*" ProductName="FOXIT READER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_7" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD64.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.5.1.1" MaximumFileVersion="8.5.1.1" />
+    <FileAttrib ID="ID_FILEATTRIB_A_8" FriendlyName="" FileName="*" ProductName="PERSONALGATEWAYCONFIGURATOR" />
+    <FileAttrib ID="ID_FILEATTRIB_A_9" FriendlyName="SR413284" FileName="*" ProductName="FOXIT READER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_10" FriendlyName="Change 53611, Blacklisting Opera Internet Browser by product name and publisher" FileName="*" ProductName="OPERA INTERNET BROWSER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_11" FriendlyName="Ecat neu with PPcatalog.exe with version 6.19.1.15" FileName="*" ProductName="*" MinimumFileVersion="6.19.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_12" FriendlyName="" FileName="*" ProductName="CLICKSHARE" />
+    <FileAttrib ID="ID_FILEATTRIB_A_13" FriendlyName="" FileName="*" ProductName="FIREFOX" MinimumFileVersion="10.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_14" FriendlyName="change 58675" FileName="*" ProductName="GOOGLE CHROME" />
+    <FileAttrib ID="ID_FILEATTRIB_A_15" FriendlyName="" FileName="*" ProductName="MIDENTITY" MinimumFileVersion="2013.7.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_16" FriendlyName="Change 51852 - Block Policy for AirParrot" FileName="*" ProductName="AIRPARROT 2" />
+    <FileAttrib ID="ID_FILEATTRIB_A_17" FriendlyName="" FileName="TOTALCMD.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.0.1.0" MaximumFileVersion="8.0.1.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_18" FriendlyName="" FileName="*" ProductName="DTLOCKER+ APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_19" FriendlyName="" FileName="*" ProductName="JAVA(TM) PLATFORM SE 7 U21" MinimumFileVersion="7.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_20" FriendlyName="" FileName="*" ProductName="USB COPY PROTECTION" MinimumFileVersion="5.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_21" FriendlyName="PCAN-EXPLORER FOR WINDOWS will be blocked based on Publisher and Product Name" FileName="*" ProductName="PCAN-EXPLORER FOR WINDOWS" />
+    <FileAttrib ID="ID_FILEATTRIB_A_22" FriendlyName="change 54481" FileName="brave.exe" ProductName="Brave Browser" MinimumFileVersion="1.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_23" FriendlyName="" FileName="*" ProductName="KOBIL SYSTEMS GMBH MIDENTITYSTARTER" MinimumFileVersion="2012.9.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_24" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.5.1.1" MaximumFileVersion="8.5.1.1" />
+    <FileAttrib ID="ID_FILEATTRIB_A_25" FriendlyName="" FileName="*" ProductName="*" MinimumFileVersion="6.18.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_26" FriendlyName="Change 52030, blocking executable" FileName="*" ProductName="FIREFOX" />
+    <FileAttrib ID="ID_FILEATTRIB_A_27" FriendlyName="" FileName="*" ProductName="KOBIL MIDENTITY UPDTR" MinimumFileVersion="2012.9.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_28" FriendlyName="405097-Applocker block policy CCLEANER" FileName="*" ProductName="CCLEANER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_29" FriendlyName="" FileName="*" ProductName="WUERT SHOP APPLICATION" MinimumFileVersion="2.3.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_30" FriendlyName="SR 408160 - Create Block Policy for Internet Explorer 32bit Version 10 Only" FileName="IEXPLORE.EXE" ProductName="WINDOWS® INTERNET EXPLORER" MaximumFileVersion="10.0.9200.17183" />
+    <FileAttrib ID="ID_FILEATTRIB_A_31" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD64.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.0.1.0" MaximumFileVersion="8.0.1.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_32" FriendlyName="SR 408160 - Create Block Policy for Internet Explorer 64bit Version 10 Only" FileName="IEXPLORE.EXE" ProductName="WINDOWS® INTERNET EXPLORER" MaximumFileVersion="10.0.9200.17183" />
+    <FileAttrib ID="ID_FILEATTRIB_A_33" FriendlyName="" FileName="*" ProductName="FIREFOX" MinimumFileVersion="38.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_34" FriendlyName="405097-Applocker block policy CCLEANER" FileName="*" ProductName="CCLEANER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_35" FriendlyName="SR413284" FileName="*" ProductName="DONTSLEEP" />
     <Deny ID="ID_DENY_C_0" FriendlyName="SR 408400 - Block policy for Microsoft Edge DEV Version only" FilePath="*\Edge Dev\Application\msedge.exe" />
     <Deny ID="ID_DENY_C_1" FriendlyName="All Doxygen Executables" FilePath="*\doxy.exe" />
     <Deny ID="ID_DENY_C_2" FriendlyName="change 58675" FilePath="*\chrome.exe" />
@@ -98,13 +134,234 @@
     <Allow ID="ID_ALLOW_B_58_SHA256" FriendlyName="Netlock: NetLock.exe" Hash="6F4A7E45734A90ADA481CEFECD34BF9148A3F204CD5A50EE6769AECD3039988B" />
     <Allow ID="ID_ALLOW_B_59_SHA256" FriendlyName="Netlock: Log.exe" Hash="F8EA949BAF10FF56DC04FA682792B4EE42E386F6141E2B13427BAE57D77BB80B" />
   </FileRules>
-  <Signers />
+  <Signers>
+    <Signer Name="usbstick_commerzbank: MIDBROWSER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_0">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_0" />
+    </Signer>
+    <Signer Name="FOXIT READER SETUP, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_1">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_1" />
+    </Signer>
+    <Signer Name="DTLOCKER+ APPLICATION, from O=KINGSTON DIGITAL INC., L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_2">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON DIGITAL INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_2" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: ANWENDUNG REMOVEEX signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_3">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_3" />
+    </Signer>
+    <Signer Name="Netlock: MOZILLA WEBAPP RUNTIME APP UNINSTALLER signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_4">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_4" />
+    </Signer>
+    <Signer Name="DT4000 APPLICATION, from O=KINGSTON TECHNOLOGY, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_5">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON TECHNOLOGY" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_5" />
+    </Signer>
+    <Signer Name="FOXIT READER, from O=FOXIT SOFTWARE INCORPORATED, L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_6">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INCORPORATED" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_6" />
+    </Signer>
+    <Signer Name="TOTALCMD64.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_7">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_7" />
+    </Signer>
+    <Signer Name="PowerBI Gateway Configurator" ID="ID_SIGNER_A_8">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_8" />
+    </Signer>
+    <Signer Name="FOXIT READER, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_9">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_9" />
+    </Signer>
+    <Signer Name="OPERA INTERNET BROWSER, from O=OPERA SOFTWARE AS, L=OSLO, C=NO" ID="ID_SIGNER_A_10">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="OPERA SOFTWARE AS" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_10" />
+    </Signer>
+    <Signer Name="ECAT neu executables by O=DOCWARE GMBH, L=FÜRTH, C=DE" ID="ID_SIGNER_A_11">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="DOCWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_11" />
+    </Signer>
+    <Signer Name="CLICKSHARE, from O=BARCO N.V., L=KORTRIJK, S=WEST-VLAANDEREN, C=BE" ID="ID_SIGNER_A_12">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="BARCO N.V." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_12" />
+    </Signer>
+    <Signer Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_13">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_13" />
+    </Signer>
+    <Signer Name="GOOGLE CHROME, from O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_14">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GOOGLE LLC" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_14" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: MIDENTITY signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_15">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_15" />
+    </Signer>
+    <Signer Name="AIRPARROT 2, from O=SQUIRRELS LLC, L=NORTH CANTON, S=OHIO, C=US" ID="ID_SIGNER_A_16">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="SQUIRRELS LLC" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_16" />
+    </Signer>
+    <Signer Name="TOTALCMD.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_17">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_17" />
+    </Signer>
+    <Signer Name="DTLOCKER+ APPLICATION, from O=KINGSTON TECHNOLOGY CORPORATION, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_18">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON TECHNOLOGY CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_18" />
+    </Signer>
+    <Signer Name="NedBank: JAVA(TM) PLATFORM SE 7 U21 signed by O=ORACLE AMERICA, INC., L=REDWOOD SHORES, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_19">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="ORACLE AMERICA" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_19" />
+    </Signer>
+    <Signer Name="KRONES Thailand Training USB: USB COPY PROTECTION signed by O=TRUSCONT LTD, L=KIRYAT BIALIK, S=ISRAEL, C=IL" ID="ID_SIGNER_A_20">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="TRUSCONT LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_20" />
+    </Signer>
+    <Signer Name="PCAN-EXPLORER FOR WINDOWS, from O=PEAK-SYSTEM TECHNIK GMBH, L=DARMSTADT, S=HESSEN, C=DE" ID="ID_SIGNER_A_21">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PEAK-SYSTEM TECHNIK GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_21" />
+    </Signer>
+    <Signer Name="Block brave browser by publisher" ID="ID_SIGNER_A_22">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="&quot;Brave Software&quot;" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_22" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: KOBIL SYSTEMS GMBH MIDENTITYSTARTER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_23">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_23" />
+    </Signer>
+    <Signer Name="TOTALCMD.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_24">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_24" />
+    </Signer>
+    <Signer Name="ECAD Executables: by O=DOCWARE GMBH, L=FUERTH, S=BAYERN, C=DE" ID="ID_SIGNER_A_25">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="DOCWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_25" />
+    </Signer>
+    <Signer Name="FIREFOX, from O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_26">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_26" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: KOBIL MIDENTITY UPDTR signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_27">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_27" />
+    </Signer>
+    <Signer Name="CCLEANER, from O=PIRIFORM SOFTWARE LTD, L=LONDON, C=GB" ID="ID_SIGNER_A_28">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PIRIFORM SOFTWARE LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_28" />
+    </Signer>
+    <Signer Name="Wuerth: WUERT SHOP APPLICATION signed by O=ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG, L=COLOGNE, S=NORTH RHINE WESTPHALIA, C=DE" ID="ID_SIGNER_A_29">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_29" />
+    </Signer>
+    <Signer Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ID="ID_SIGNER_A_30">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_30" />
+    </Signer>
+    <Signer Name="TOTALCMD64.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_31">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_31" />
+    </Signer>
+    <Signer Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ID="ID_SIGNER_A_32">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_32" />
+    </Signer>
+    <Signer Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_33">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_33" />
+    </Signer>
+    <Signer Name="CCLEANER, from O=PIRIFORM LTD, L=LONDON, S=LONDON, C=GB" ID="ID_SIGNER_A_34">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PIRIFORM LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_34" />
+    </Signer>
+    <Signer Name="DONTSLEEP, from O=NENAD HRG, L=TAUFKIRCHEN, S=BAYERN, C=DE" ID="ID_SIGNER_A_35">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="NENAD HRG" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_35" />
+    </Signer>
+  </Signers>
   <SigningScenarios>
-    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 05-12-2022" Value="131">
+    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 2022-05-15" Value="131">
       <ProductSigners />
     </SigningScenario>
-    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 05-12-2022" Value="12">
+    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 2022-05-15" Value="12">
       <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_A_0" />
+          <AllowedSigner SignerId="ID_SIGNER_A_2" />
+          <AllowedSigner SignerId="ID_SIGNER_A_3" />
+          <AllowedSigner SignerId="ID_SIGNER_A_4" />
+          <AllowedSigner SignerId="ID_SIGNER_A_5" />
+          <AllowedSigner SignerId="ID_SIGNER_A_11" />
+          <AllowedSigner SignerId="ID_SIGNER_A_12" />
+          <AllowedSigner SignerId="ID_SIGNER_A_13" />
+          <AllowedSigner SignerId="ID_SIGNER_A_15" />
+          <AllowedSigner SignerId="ID_SIGNER_A_18" />
+          <AllowedSigner SignerId="ID_SIGNER_A_19" />
+          <AllowedSigner SignerId="ID_SIGNER_A_20" />
+          <AllowedSigner SignerId="ID_SIGNER_A_23" />
+          <AllowedSigner SignerId="ID_SIGNER_A_25" />
+          <AllowedSigner SignerId="ID_SIGNER_A_27" />
+          <AllowedSigner SignerId="ID_SIGNER_A_29" />
+          <AllowedSigner SignerId="ID_SIGNER_A_33" />
+        </AllowedSigners>
+        <DeniedSigners>
+          <DeniedSigner SignerId="ID_SIGNER_A_1" />
+          <DeniedSigner SignerId="ID_SIGNER_A_6" />
+          <DeniedSigner SignerId="ID_SIGNER_A_7" />
+          <DeniedSigner SignerId="ID_SIGNER_A_8" />
+          <DeniedSigner SignerId="ID_SIGNER_A_9" />
+          <DeniedSigner SignerId="ID_SIGNER_A_10" />
+          <DeniedSigner SignerId="ID_SIGNER_A_14" />
+          <DeniedSigner SignerId="ID_SIGNER_A_16" />
+          <DeniedSigner SignerId="ID_SIGNER_A_17" />
+          <DeniedSigner SignerId="ID_SIGNER_A_21" />
+          <DeniedSigner SignerId="ID_SIGNER_A_22" />
+          <DeniedSigner SignerId="ID_SIGNER_A_24" />
+          <DeniedSigner SignerId="ID_SIGNER_A_26" />
+          <DeniedSigner SignerId="ID_SIGNER_A_28" />
+          <DeniedSigner SignerId="ID_SIGNER_A_30" />
+          <DeniedSigner SignerId="ID_SIGNER_A_31" />
+          <DeniedSigner SignerId="ID_SIGNER_A_32" />
+          <DeniedSigner SignerId="ID_SIGNER_A_34" />
+          <DeniedSigner SignerId="ID_SIGNER_A_35" />
+        </DeniedSigners>
         <FileRulesRef>
           <FileRuleRef RuleID="ID_DENY_C_0" />
           <FileRuleRef RuleID="ID_DENY_C_1" />

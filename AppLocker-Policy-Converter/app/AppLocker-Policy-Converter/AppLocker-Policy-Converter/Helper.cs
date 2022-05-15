@@ -120,24 +120,34 @@ namespace AppLocker_Policy_Converter
             string productName = filePubRule.Conditions.FilePublisherCondition.ProductName;
             string minVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.LowSection;
             string maxVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.HighSection;
+            string publisherName = filePubRule.Conditions.FilePublisherCondition.PublisherName;
+            string fileName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
 
-            // Create new signer object
-            Signer signer = new Signer();
-            signer.Name = filePubRule.Name;
-
+            // Create new CertPublisher object and add CertPublisher field
             CertPublisher cPub = new CertPublisher();
-            cPub.Value = ExtractPublisher(filePubRule.Conditions.FilePublisherCondition.PublisherName);
-            signer.CertPublisher = cPub;
+            cPub.Value = ExtractPublisher(publisherName);
 
-            string signerId = "ID_SIGNER_" + cFilePublisherRules;
+            // Create new Certificate Root object and add to CertRoot field
+            CertRoot cRoot = new CertRoot();
+            cRoot.Type = CertEnumType.Wellknown;
+            byte[] tbsValue = new byte[1];
+            cRoot.Value = tbsValue; 
+
+            /*
+            cRoot.Type = CertEnumType.TBS;
+            byte[] tbsValue = new byte[32];
+            cRoot.Value = tbsValue; 
+            */
 
             // Create new FileAttrib object to link to signer
-            FileAttrib fileAttrib = new FileAttrib(); 
-            fileAttrib.FileName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
+            FileAttrib fileAttrib = new FileAttrib();
+            fileAttrib.FileName = fileName;
+            fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
+            fileAttrib.FriendlyName = filePubRule.Description;
 
             // Do not blindly set versions == "*"
             // This is okay to do for Original Filenames
-            if(minVersion != "*")
+            if (minVersion != "*")
             {
                 fileAttrib.MinimumFileVersion = minVersion;
             }
@@ -150,42 +160,36 @@ namespace AppLocker_Policy_Converter
                 fileAttrib.ProductName = productName; 
             }
 
-            fileAttrib.ID = "ID_FILEATTRIB_" + cFileAttribRules;
+            // Add the FileAttributeReference to SiPolicy
+            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+            cFileAttribRules++;
 
             // Link the new FileAttrib object back to the signer
             FileAttribRef fileAttribRef = new FileAttribRef();
             fileAttribRef.RuleID = fileAttrib.ID;
+
+            // Create new signer object
+            Signer signer = new Signer();
+            signer.Name = filePubRule.Name;
+            signer.ID = "ID_SIGNER_A_" + cFilePublisherRules;
+            signer.CertRoot = cRoot; 
+            signer.CertPublisher = cPub;
             signer.FileAttribRef = new FileAttribRef[1];
             signer.FileAttribRef[0] = fileAttribRef;
 
-            cFileAttribRules++;
+            cFilePublisherRules++;
 
-            // Add FileAttrib to SiPolicy.FileRules
-            // siPolicy.FileRules.Append(
-
-            // Link the signer to AllowedSigner/DeniedSigner objs
             if (action == "Allow")
             {
-                AllowedSigner allowedSigner = new AllowedSigner();
-                allowedSigner.SignerId = signerId;
-
-                // Copy and replace
-                int cAllowedSigners = siPolicy.SigningScenarios[0].ProductSigners.AllowedSigners.AllowedSigner.Length;
-                AllowedSigner[] allowedSigners = new AllowedSigner[cAllowedSigners + 1];
-
-                for(int i = 0; i< cAllowedSigners; i++)
-                {
-                    allowedSigners[i] = siPolicy.SigningScenarios[0].ProductSigners.AllowedSigners.AllowedSigner[i];
-                }
-
-                allowedSigners[cAllowedSigners + 1] = allowedSigner;
+                // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
+                siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
             }
             else
             {
-                DeniedSigner deniedSigner = new DeniedSigner();
-                deniedSigner.SignerId = signerId;
+                // Add the deny signer to Signers and the product signers section with Windows Signing Scenario
+                siPolicy = AddSiPolicyDenySigner(signer, siPolicy);
             }
-            cFilePublisherRules++;
+            
             return siPolicy;
         }
 
@@ -424,9 +428,16 @@ namespace AppLocker_Policy_Converter
             return formattedPub;
         }
 
+        /// <summary>
+        /// Handles adding the new Allow Rule object to the provided siPolicy
+        /// </summary>
+        /// <param name="allowRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         private static SiPolicy AddSiPolicyAllowRule(Allow allowRule, SiPolicy siPolicy)
         {
             // Copy and replace the FileRules obj[] in siPolicy
+            // FileRules always initalized - no need to check if null
             object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
             for (int i = 0; i < fileRulesCopy.Length - 1; i++)
             {
@@ -452,18 +463,24 @@ namespace AppLocker_Policy_Converter
                     refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
                 }
 
-                refCopy.FileRuleRef[fileRulesCopy.Length - 1] = new FileRuleRef();
-                refCopy.FileRuleRef[fileRulesCopy.Length - 1].RuleID = allowRule.ID;
+                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = allowRule.ID;
             }
 
             siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             return siPolicy; 
         }
 
-
+        /// <summary>
+        /// Handles adding the new Deny Rule object to the provided siPolicy
+        /// </summary>
+        /// <param name="denyRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         private static SiPolicy AddSiPolicyDenyRule(Deny denyRule, SiPolicy siPolicy)
         {
             // Copy and replace the FileRules obj[] in siPolicy
+            // FileRules always initalized - no need to check if null
             object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
             for (int i = 0; i < fileRulesCopy.Length - 1; i++)
             {
@@ -489,87 +506,137 @@ namespace AppLocker_Policy_Converter
                     refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
                 }
 
-                refCopy.FileRuleRef[fileRulesCopy.Length - 1] = new FileRuleRef();
-                refCopy.FileRuleRef[fileRulesCopy.Length - 1].RuleID = denyRule.ID;
+                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = denyRule.ID;
             }
 
             siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             return siPolicy; 
         }
 
-      
-        public static int CompareVersions(string minVersion, string maxVersion)
+        /// <summary>
+        /// Handles adding the new AllowSignerobject to the provided siPolicy
+        /// </summary>
+        /// <param name="signer"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicyAllowSigner(Signer signer, SiPolicy siPolicy)
         {
-            var minversionParts = minVersion.Split('.');
-            var maxversionParts = maxVersion.Split('.');
-
-            for (int i = 0; i < 4; i++)
+            // Copy the SiPolicy signer object and add the signer param to the field
+            Signer[] signersCopy = new Signer[siPolicy.Signers.Length + 1];
+            for (int i = 0; i < signersCopy.Length - 1; i++)
             {
-                int minVerPart = Convert.ToInt32(minversionParts[i]);
-                int maxVerPart = Convert.ToInt32(maxversionParts[i]);
-
-                if (minVerPart > maxVerPart)
-                {
-                    return -1;
-                }
-                else if (minVerPart < maxVerPart)
-                {
-                    return 1;
-                }
+                signersCopy[i] = siPolicy.Signers[i];
             }
 
-            return 0;
+            signersCopy[signersCopy.Length - 1] = signer;
+            siPolicy.Signers = signersCopy;
+
+            // Create an AllowedSigner object to add to the SiPolicy ProductSigners section
+            AllowedSigner allowedSigner = new AllowedSigner();
+            allowedSigner.SignerId = signer.ID;
+
+            // Copy and replace
+            if(siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
+            {
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners = new AllowedSigners();
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner; 
+            }
+            else
+            {
+                int cAllowedSigners = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner.Length;
+                AllowedSigner[] allowedSigners = new AllowedSigner[cAllowedSigners + 1];
+
+                for (int i = 0; i < cAllowedSigners; i++)
+                {
+                    allowedSigners[i] = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[i];
+                }
+
+                allowedSigners[cAllowedSigners] = allowedSigner;
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = allowedSigners;
+            }
+            
+            return siPolicy;             
         }
 
-        public static bool IsValidPathRule(string customPath)
+        /// <summary>
+        /// Handles adding the new DenySigner object to the provided siPolicy
+        /// </summary>
+        /// <param name="signer"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicyDenySigner(Signer signer, SiPolicy siPolicy)
         {
-            // Check for at most 1 wildcard param (*)
-            if (customPath.Contains("*"))
+            // Copy the SiPolicy signer object and add the signer param to the field
+            Signer[] signersCopy = new Signer[siPolicy.Signers.Length + 1];
+            for (int i = 0; i < signersCopy.Length - 1; i++)
             {
-                var wildCardParts = customPath.Split('*');
-                if (wildCardParts.Length > 2)
-                {
-                    return false;
-                }
-                else
-                {
-                    // Start or end must be empty
-                    if (String.IsNullOrEmpty(wildCardParts[0]) || String.IsNullOrEmpty(wildCardParts[1]))
-                    {
-                        // Continue - either side is empty
-                    }
-                    else
-                    {
-                        // wildcard in middle of path - not supported
-                        return false;
-                    }
-                }
+                signersCopy[i] = siPolicy.Signers[i];
             }
 
-            // Check for macros (%OSDRIVE%, %WINDIR%, %SYSTEM32%)
-            if (customPath.Contains("%"))
+            signersCopy[signersCopy.Length - 1] = signer;
+            siPolicy.Signers = signersCopy;
+
+            // Create an AllowedSigner object to add to the SiPolicy ProductSigners section
+            DeniedSigner deniedSigner = new DeniedSigner();
+            deniedSigner.SignerId = signer.ID;
+
+            // Copy and replace
+            if (siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners == null)
             {
-                var macroParts = customPath.Split('%');
-                if (macroParts.Length == 3)
-                {
-                    if (macroParts[1] == "OSDRIVE" || macroParts[1] == "WINDIR" || macroParts[1] == "SYSTEM32")
-                    {
-                        // continue with rest of checks
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    // Too many or too few '%'
-                    return false;
-                }
+                siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners = new DeniedSigners();
+                siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = new DeniedSigner[1];
+                siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner[0] = deniedSigner;
             }
-            return true;
+            else
+            {
+                int cDeniedSigners = siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner.Length;
+                DeniedSigner[] deniedSigners = new DeniedSigner[cDeniedSigners + 1];
+
+                for (int i = 0; i < cDeniedSigners; i++)
+                {
+                    deniedSigners[i] = siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner[i];
+                }
+
+                deniedSigners[cDeniedSigners] = deniedSigner;
+                siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = deniedSigners;
+            }
+
+            return siPolicy;
         }
 
-       
+        /// <summary>
+        /// Handles adding the new FileAttribute object to the provided siPolicy
+        /// </summary>
+        /// <param name="fileAttrib"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicyFileAttrib(FileAttrib fileAttrib, SiPolicy siPolicy)
+        {
+            // Copy and replace FileRules section in SiPolicy
+            // FileRules always initalized - no need to check if null
+            object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+            for (int i = 0; i < fileRulesCopy.Length - 1; i++)
+            {
+                fileRulesCopy[i] = siPolicy.FileRules[i];
+            }
+
+            fileRulesCopy[fileRulesCopy.Length - 1] = fileAttrib; 
+            siPolicy.FileRules = fileRulesCopy;
+
+            return siPolicy; 
+        }
+
+        /// <summary>
+        /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
+        /// </summary>
+        /// <returns>DateTime string in format YYYY-MM-DD</returns>
+        public static string GetFormattedDate()
+        {
+            // Get DateTime now in UTC
+            // Format to ISO 8601 (YYYY-MM-DD)
+            return DateTime.UtcNow.ToString("yyyy-MM-dd");
+        }
     }
 }
