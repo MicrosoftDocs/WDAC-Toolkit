@@ -1017,13 +1017,17 @@ namespace WDAC_Wizard
                 {
                     // Determine if rule is UMCI and KMCI by attempting to access Rule_0[1].Exceptions = ''
                     // If error, there is only 1 index to update
-                    
+                    string exceptionCommand = String.Empty; 
                     for(int j = 0; j < customRule.ExceptionList.Count; j++ )
                     {
                         var exceptionRule = customRule.ExceptionList[j];
                         exceptionRule.PSVariable = j.ToString();
-
-                        scriptCommands.Add(CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable));
+                        
+                        exceptionCommand = CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable);
+                        if (!String.IsNullOrEmpty(exceptionCommand))
+                        {
+                            scriptCommands.Add(exceptionCommand);
+                        }
 
                         // Add required exceptions IDs and FileException = 1
                         scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
@@ -1040,6 +1044,10 @@ namespace WDAC_Wizard
                 // Run the rule creation commands
                 foreach (var script in scriptCommands)
                 {
+                    if(String.IsNullOrEmpty(script))
+                    {
+                        continue; 
+                    }
                     pipeline.Commands.AddScript(script);
                     this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", script));
                 }
@@ -1171,16 +1179,20 @@ namespace WDAC_Wizard
                     foreach (var pfn in customRule.CustomValues.PackageFamilyNames)
                     {
                         // Create placeholder per custom hash Rule until can fix this overwrite bug
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
-                        // customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.Id = $Rule_{0}_PFNRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, i)); // modify the ID to avoid collisions
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn)); // Set the hash attribute to the hash value
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion)); // Set the hash attribute to the hash value
+                        if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                        {
+                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package -Deny", customRule.PSVariable, i));
+                        }
+                        else
+                        {
+                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
+                        }
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn));
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion));
 
                         customValueCommand.Add(String.Format("$Rule_{0} += $Rule_{0}_PFNRule_{1}", customRule.PSVariable, i));
                         i++;
                     }
-
-                    // customValueCommand.Add(mergeCommand);
                 }
             }
 
@@ -1192,8 +1204,17 @@ namespace WDAC_Wizard
                 foreach (var hash in customRule.CustomValues.Hashes)
                 {
                     // Create placeholder per custom hash Rule until can fix this overwrite bug
-                    customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                    if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                    {
+                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\" -Deny", customRule.PSVariable,
                         i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    }
+                    else
+                    {
+                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    }
+
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1} = $Rule_{0}_Template_{1}[1].PSObject.Copy()", customRule.PSVariable, i)); // Make a copy of the template
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.Id = $Rule_{0}_HashRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, hash.Substring(0,5))); // modify the ID to avoid collisions
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.attributes[\"Hash\"] = \"{2}\"", customRule.PSVariable, i, hash)); // Set the hash attribute to the hash value
@@ -1300,7 +1321,7 @@ namespace WDAC_Wizard
                         {
                             if(customRule.UsingCustomValues)
                             {
-
+                                return String.Empty;
                             }
                             else
                             {
@@ -1319,7 +1340,7 @@ namespace WDAC_Wizard
                     {
                         if(customRule.UsingCustomValues)
                         {
-                            
+                            return String.Empty; 
                         }
                         else
                         {

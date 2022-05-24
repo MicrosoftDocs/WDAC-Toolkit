@@ -213,12 +213,9 @@ namespace WDAC_Wizard
                     var hashList = this.richTextBox_CustomHashes.Text.Split(',');
                     foreach(var hash in hashList)
                     {
-                        if(!String.IsNullOrEmpty(hash))
+                        if(!String.IsNullOrEmpty(hash) && hash.Trim().Length%2 == 0) // must be an even number
                         {
-                            if(hash.Length == 64)
-                            {
-                                this.PolicyCustomRule.CustomValues.Hashes.Add(hash);
-                            }
+                            this.PolicyCustomRule.CustomValues.Hashes.Add(hash.Trim());
                         }
                     }
 
@@ -459,8 +456,26 @@ namespace WDAC_Wizard
                     }
                     break;
 
+                case PolicyCustomRules.RuleLevel.Hash:
+                    if (this.PolicyCustomRule.UsingCustomValues)
+                    {
+                        if(PolicyCustomRule.CustomValues.Hashes.Count > 1)
+                        {
+                            name = String.Format("{0}; Custom Hash List: {1}, ...", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Hashes[0]);
+                        }
+                        else
+                        {
+                            name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Hashes[0]);
+                        }
+                    }
+                    else
+                    {
+                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
+                    }
+                    break;
+
                 default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Hash List" : this.PolicyCustomRule.ReferenceFile);
+                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Rule" : this.PolicyCustomRule.ReferenceFile);
                     break;
             }
 
@@ -1903,4 +1918,3 @@ namespace WDAC_Wizard
         }
     }
 }   
-
