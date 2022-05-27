@@ -66,7 +66,7 @@ namespace WDAC_Wizard
             this.basePolicy_PictureBox.Tag = "Unselected"; 
 
             // Require >= 1903 for multiple policy formats - show UI notification 
-            if (this._Policy.GetWinVersion() < 1903)
+            if (Helper.GetWinVersion() < 1903)
                 MessageBox.Show("The multiple policy format will not work on pre-1903 systems","Multiple Policy Format Attention", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 

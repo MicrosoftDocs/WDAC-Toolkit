@@ -148,22 +148,6 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Helper function to get the Windows version (e.g. 1903) to determine whether certain features are supported on this system.
-        /// </summary>
-        public int GetWinVersion()
-        {
-            try
-            {
-                return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
-            } 
-            catch(Exception e)
-            {
-
-            }
-            return -1;  
-        }
-
-        /// <summary>
         /// Determines whether the policy file contains a version number and the name needs to be updated along with the policy xml version.
         /// </summary>
         public bool EditPathContainsVersionInfo()

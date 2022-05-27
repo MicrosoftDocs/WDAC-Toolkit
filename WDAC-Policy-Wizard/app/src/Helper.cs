@@ -806,6 +806,22 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Helper function to get the Windows version (e.g. 1903) to determine whether certain features are supported on this system.
+        /// </summary>
+        public static int GetWinVersion()
+        {
+            try
+            {
+                return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
+            }
+            catch (Exception e)
+            {
+
+            }
+            return -1;
+        }
+
+        /// <summary>
         /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
         /// </summary>
         /// <returns>DateTime string in format YYYY-MM-DD</returns>
