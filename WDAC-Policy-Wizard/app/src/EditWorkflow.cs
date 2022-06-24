@@ -236,11 +236,11 @@ namespace WDAC_Wizard
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
 
-            this.DriverFiles = Helper.ReadArbitraryEventLogs(eventLogPaths);
+            List<CiEvent> ciEvents = EventLog.ReadArbitraryEventLogs(eventLogPaths);
                      
             // TODO: handle 0 case
-            this.NumberRules = this.DriverFiles.Count;
-            this.label_Progress.Text = String.Format("0 / {0} Rules from Event Log Created", this.NumberRules); 
+            //this.NumberRules = this.DriverFiles.Count;
+            //this.label_Progress.Text = String.Format("0 / {0} Rules from Event Log Created", this.NumberRules); 
 
 
             // Create background worker to display updates to UI
@@ -290,10 +290,10 @@ namespace WDAC_Wizard
             
             else if(this.Workflow == WorkflowType.DeviceEventLog)
             {
-                SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath, this.SelectedLevel.ToString());
+                //SiPolicy siPolicy = Helper.ReadMachineEventLogs(this._MainWindow.TempFolderPath, this.SelectedLevel.ToString());
 
                 xmlPath = Path.Combine(this._MainWindow.TempFolderPath, EVENT_LOG_POLICY_PATH);
-                Helper.SerializePolicytoXML(siPolicy, xmlPath);
+                // Helper.SerializePolicytoXML(siPolicy, xmlPath);
             }
             else
             {

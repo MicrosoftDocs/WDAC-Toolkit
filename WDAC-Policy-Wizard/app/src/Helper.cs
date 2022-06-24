@@ -67,120 +67,6 @@ namespace WDAC_Wizard
             }
         }
 
-
-        public static List<DriverFile> ReadArbitraryEventLogs(List<string> auditLogPaths)
-        {
-            List<DriverFile> driverPaths = new List<DriverFile>();
-            
-
-            // If path is specifed, parse the event logs into driverPaths list
-            // Iterate through all of the auditLogPaths
-
-            foreach (var auditLogPath in auditLogPaths)
-            {
-                // Check that path provided is an evtx log
-                if (Path.GetExtension(auditLogPath) != ".evtx")
-                {
-                    continue; // do something here? Log?
-                }
-
-                EventLogReader log = new EventLogReader(auditLogPath, PathType.FilePath);
-                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
-                {
-                    if (entry.Id == AUDIT_PE || entry.Id == BLOCK_PE)
-                    {
-                        string filePath;
-                        bool isKernel = false;
-                        bool isPE = true;
-
-                        string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage.dll"
-                        filePath = GetDOSPath(ntfilePath); // replace \\Device\\HarddiskVolume\\ with harddrive string name e.g. C:\\
-
-                        if (filePath == null || !File.Exists(filePath))
-                        {
-                            continue;
-                        }
-
-                        if (entry.Properties[12].Value.ToString() == "0")
-                        {
-                            isKernel = true;
-                        }
-
-                        driverPaths.Add( new DriverFile(filePath, isKernel, isPE));
-
-                    }
-                    else if (entry.Id == AUDIT_KERNEL || entry.Id == BLOCK_KERNEL) // This is an entry for kernel
-                    {
-                        string filePath;
-                        bool isKernel = true;
-                        bool isPE = true;
-
-                        string windowsDirRelativePath = entry.Properties[1].Value.ToString();
-                        string _windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-                        filePath = _windowsDir + @"\" + windowsDirRelativePath;
-
-                        if (!File.Exists(filePath))
-                        {
-                            continue;
-                        }
-
-                        driverPaths.Add(new DriverFile(filePath, isKernel, isPE));
-                    }
-
-                    else if(entry.Id == AUDIT_SCRIPT || entry.Id == BLOCK_SCRIPT)
-                    {
-                        string filePath;
-                        bool isKernel = false;
-                        bool isPE = false;
-
-                        string ntfilePath = entry.Properties[1].Value.ToString();
-                        filePath = GetDOSPath(ntfilePath); // replace \\Device\\HarddiskVolume\\ with harddrive string name e.g. C:\\
-
-                        if (filePath == null || !File.Exists(filePath))
-                        {
-                            continue;
-                        }
-                        driverPaths.Add(new DriverFile(filePath, isKernel, isPE));
-                    }
-
-                }
-                
-            }
-
-            return driverPaths;
-        }
-
-        public static SiPolicy ReadMachineEventLogs(string tempPath, string level)
-        {
-            // If path is not specified, the event logs to read are the on-machine CodeIntegrity/Operational, and AppLocker/MSI and Script
-            // Simply call the New-CIPolicy -Audit cmdlet, and serialize the policy
-            SiPolicy siPolicy; 
-            string policyPath = Path.Combine(tempPath, AUDIT_POLICY_PATH);
-            string logPath = Path.Combine(tempPath, AUDIT_LOG_PATH); 
-            string auditCmd = String.Format("New-CIPolicy -Audit -Level {0} -FilePath {1} -UserPEs -Fallback Hash 3> {2}", level, policyPath, logPath); 
-
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(auditCmd);
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch(Exception exp)
-            {
-                //Do something
-            }
-
-            XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-            StreamReader reader = new StreamReader(policyPath);
-            siPolicy = (SiPolicy)serializer.Deserialize(reader);
-            reader.Close();
-
-            return siPolicy; 
-        }
-
         /// <summary>
         /// Helper function to call OpenFileDialog and multi-select files
         /// </summary>
@@ -330,11 +216,11 @@ namespace WDAC_Wizard
 
             if (NewestID < 0)
             {
-                newUniquePath = System.IO.Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
+                newUniquePath = Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
             }
             else
             {
-                newUniquePath = System.IO.Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
+                newUniquePath = Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
             }
 
             return newUniquePath;

@@ -183,6 +183,7 @@
     <Compile Include="src\CustomRuleConditionsPanel.Designer.cs">
       <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\EventLog.cs" />
     <Compile Include="src\Exceptions_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
