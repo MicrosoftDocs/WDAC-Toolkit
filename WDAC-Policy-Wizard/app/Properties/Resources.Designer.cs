@@ -261,7 +261,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conversion of the event log to a WDAC Policy XML file was successful. .
+        ///   Looks up a localized string similar to The WDAC Wizard successfully parsed all of the WDAC Event Logs.
         /// </summary>
         internal static string EventLogConversionSuccess {
             get {

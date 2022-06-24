@@ -18,7 +18,10 @@ namespace WDAC_Wizard
             new System.Collections.ArrayList();
 
         private Logger Log;
-        private SiPolicy siPolicy; 
+        private SiPolicy siPolicy;
+
+        private EventDisplayObject displayObjectInEdit;
+        private int rowInEdit = -1;
 
         public EventLogRuleConfiguration(MainWindow pMainWindow)
         {
@@ -58,15 +61,15 @@ namespace WDAC_Wizard
             {
                 // Create one row per ciEvent per signer Event
                 // File signed by 3 signers will create 3 rows/rules
-                foreach (SignerEvent signerEvent in ciEvent.SignerEvents)
-                {
-                    EventDisplayObject dpObject = new EventDisplayObject(
+                EventDisplayObject dpObject = new EventDisplayObject(
                         ciEvent.EventId.ToString(),
                         ciEvent.FileName,
                         ciEvent.ProductName,
                         ciEvent.PolicyName,
-                        signerEvent.PublisherName);
-                }
+                        ciEvent.SignerInfo.PublisherName);
+
+                this.DisplayObjects.Add(dpObject);
+                this.eventsDataGridView.RowCount += 1;
             }
         }
 
@@ -92,9 +95,9 @@ namespace WDAC_Wizard
 
             int selectedRow = e.RowIndex;
             SetCustomRulesPanel(
-                this.CiEvents[selectedRow].SignerEvents[0].IssuerName,
-                this.CiEvents[selectedRow].SignerEvents[0].PublisherName,
-                this.CiEvents[selectedRow].FileName,
+                this.CiEvents[selectedRow].SignerInfo.IssuerName,
+                this.CiEvents[selectedRow].SignerInfo.PublisherName,
+                this.CiEvents[selectedRow].OriginalFilename,
                 this.CiEvents[selectedRow].FileVersion,
                 this.CiEvents[selectedRow].ProductName);
         }
@@ -168,7 +171,51 @@ namespace WDAC_Wizard
             }
         }
 
+        private void EventsDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            // If this is the row for new records, no values are needed.
+            if (e.RowIndex == this.eventsDataGridView.RowCount - 1) return;
 
+            EventDisplayObject displayObject = null;
+
+            // Store a reference to the Customer object for the row being painted.
+            if (e.RowIndex == rowInEdit)
+            {
+                displayObject = this.displayObjectInEdit;
+            }
+            else
+            {
+                displayObject = (EventDisplayObject)this.DisplayObjects[e.RowIndex];
+            }
+
+            // Set the cell value to paint using the Customer object retrieved.
+            switch (this.eventsDataGridView.Columns[e.ColumnIndex].Name)
+            {
+                case "addedColumn":
+                    e.Value = displayObject.Action;
+                    break;
+
+                case "eventIdColumn":
+                    e.Value = displayObject.EventId;
+                    break;
+
+                case "filenameColumn":
+                    e.Value = displayObject.Filename;
+                    break;
+
+                case "productColumn":
+                    e.Value = displayObject.Product;
+                    break;
+
+                case "policyColumn":
+                    e.Value = displayObject.PolicyName;
+                    break;
+
+                case "publisherColumn":
+                    e.Value = displayObject.Publisher;
+                    break;
+            }
+        }
     }
 
     // Class for the datastore

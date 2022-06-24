@@ -27,7 +27,6 @@ namespace WDAC_Wizard
         private WDAC_Policy Policy;
         private Runspace runspace;
         private WorkflowType Workflow;
-        private RuleLevel SelectedLevel;
         private List<string> EventLogPaths; 
         const int PAD_X = 3;
         const int PAD_Y = 3;
@@ -65,7 +64,6 @@ namespace WDAC_Wizard
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
             this.Workflow = WorkflowType.Edit; // Edit xml is default in the UI
-            this.SelectedLevel = RuleLevel.None;
             this.EventLogPaths = new List<string>();
         }
 
@@ -209,21 +207,6 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ParseLog_ButtonClick(object sender, EventArgs e)
         {
-            if (this.SelectedLevel == RuleLevel.None)
-            {
-                this.Log.AddWarningMsg("Selected Level is null. Level must be selected before Parse_LogEvent_Click");
-                this.label_Error.Text = "Rule level must be selected before event log file parsing can begin";
-                this.label_Error.Visible = true;
-                this.label_Error.BringToFront();
-                return; 
-            }
-
-            if (this.runspace == null)
-            {
-                this.runspace = RunspaceFactory.CreateRunspace();
-                this.runspace.Open();
-            }
-
             string dspTitle = "Choose event logs to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.EventLog);
 
@@ -257,20 +240,10 @@ namespace WDAC_Wizard
         {
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
-
-            if(this.SelectedLevel == RuleLevel.None)
-            {
-                this.Log.AddWarningMsg("Selected Level is null. Level must be selected before ParseEventLog_Click");
-                this.label_Error.Text = "Rule level must be selected before event log parsing can begin";
-                this.label_Error.Visible = true;
-                this.label_Error.BringToFront(); 
-                return; 
-            }
-
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false; 
-            this.label_Progress.Text = "Event Viewer Log Conversion in Progress";
+            this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
             this.Workflow = WorkflowType.DeviceEventLog; 
 
             // Create background worker to display updates to UI
@@ -302,7 +275,7 @@ namespace WDAC_Wizard
         {
             int progressPercent = e.ProgressPercentage;
             double completedRules = Math.Ceiling((double)progressPercent / (double)100 * (double)this.NumberRules); 
-            string progress = String.Format("{0} / {1} Rules from Event Log Created", (int) completedRules, this.NumberRules); 
+            string progress = String.Format("{0} / {1} Event Log events parsed", (int) completedRules, this.NumberRules); 
 
             label_Progress.Text = progress; 
         }
@@ -330,7 +303,7 @@ namespace WDAC_Wizard
             {
                 this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
                 this.parseresult_PictureBox.Image = Properties.Resources.verified;
-                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log to WDAC Policy Conversion Success", 
+                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log Parsing Success", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 

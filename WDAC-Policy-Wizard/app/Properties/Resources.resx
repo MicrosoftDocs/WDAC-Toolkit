@@ -149,7 +149,7 @@
     <value>When enabled, future WDAC policy updates are applied without requiring a system reboot.</value>
   </data>
   <data name="EventLogConversionSuccess" xml:space="preserve">
-    <value>Conversion of the event log to a WDAC Policy XML file was successful. </value>
+    <value>The WDAC Wizard successfully parsed all of the WDAC Event Logs</value>
   </data>
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>

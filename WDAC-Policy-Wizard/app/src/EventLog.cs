@@ -26,6 +26,11 @@ namespace WDAC_Wizard
         // Signature Event
         const int SIG_INFO_ID = 3089;
 
+        /// <summary>
+        /// Parses the events logs from the auditLogPaths paths into CiEvent objects
+        /// </summary>
+        /// <param name="auditLogPaths"></param>
+        /// <returns></returns>
         public static List<CiEvent> ReadArbitraryEventLogs(List<string> auditLogPaths)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
@@ -61,28 +66,48 @@ namespace WDAC_Wizard
                     // Audit 3076's
                     if (entry.Id == AUDIT_PE_ID)
                     {
-                        CiEvent auditEvent = ReadPEAuditEvent(entry, signerEvents);
-                        if (auditEvent != null)
+                        List<CiEvent> auditEvents = ReadPEAuditEvent(entry, signerEvents);
+
+                        foreach(CiEvent auditEvent in auditEvents)
                         {
-                            ciEvents.Add(auditEvent);
+                            if (auditEvent != null)
+                            {
+                                if (!IsDuplicateEvent(auditEvent, ciEvents))
+                                {
+                                    ciEvents.Add(auditEvent);
+                                }
+                            }
                         }
                     }
                     // Block 3077's
                     else if(entry.Id == BLOCK_PE_ID)
                     {
-                        CiEvent blockEvent = ReadPEAuditEvent(entry, signerEvents);
-                        if (blockEvent != null)
+                        List<CiEvent> blockEvents = ReadPEBlockEvent(entry, signerEvents);
+                        foreach (CiEvent blockEvent in blockEvents)
                         {
-                            ciEvents.Add(blockEvent);
+                            if (blockEvent != null)
+                            {
+                                if (!IsDuplicateEvent(blockEvent, ciEvents))
+                                {
+                                    ciEvents.Add(blockEvent);
+                                }
+                            }
                         }
                     }
                     // Block 3033's
                     else if(entry.Id == BLOCK_SIG_LEVEL_ID)
                     {
-                        CiEvent blockSLEvent = ReadSLBlockEvent(entry, signerEvents);
-                        if (blockSLEvent != null)
+                        List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, signerEvents);
+
+                        foreach(CiEvent blockSLEvent in blockSLEvents)
                         {
-                            ciEvents.Add(blockSLEvent);
+                            if (blockSLEvent != null)
+                            {
+                                if (!IsDuplicateEvent(blockSLEvent, ciEvents))
+                                {
+                                    ciEvents.Add(blockSLEvent);
+                                }
+                            }
                         }
                     }
                 }
@@ -96,8 +121,9 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static CiEvent ReadPEAuditEvent(EventRecord entry, List<SignerEvent> signerEvents)
+        public static List<CiEvent> ReadPEAuditEvent(EventRecord entry, List<SignerEvent> signerEvents)
         {
+            List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
 
             // Event Info
@@ -109,7 +135,8 @@ namespace WDAC_Wizard
 
                 // File related info
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
-                ciEvent.FileName = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
                 ciEvent.SHA1 = (byte[])entry.Properties[12].Value;
                 ciEvent.SHA1Page = (byte[])entry.Properties[8].Value;
                 ciEvent.SHA2 = (byte[])entry.Properties[14].Value;
@@ -124,14 +151,22 @@ namespace WDAC_Wizard
                 // ciEvent.PolicyGUID = entry.Properties[32].Value.ToString();
                 ciEvent.PolicyName = entry.Properties[18].Value.ToString();
                 ciEvent.PolicyId = entry.Properties[20].Value.ToString();
+                ciEvent.PolicyHash = (byte[])entry.Properties[22].Value;
 
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in signerEvents)
                 {
                     if (signer.CorrelationId == ciEvent.CorrelationId)
                     {
-                        ciEvent.SignerEvents.Add(signer);
+                        ciEvent.SignerInfo = signer;
+                        ciEvents.Add(ciEvent);
                     }
+                }
+
+                // In the case where the file is unsigned
+                if(ciEvents.Count == 0)
+                {
+                    ciEvents.Add(ciEvent);
                 }
             }
             catch (Exception e)
@@ -139,7 +174,7 @@ namespace WDAC_Wizard
                 return null;
             }
 
-            return ciEvent;
+            return ciEvents;
         }
 
         /// <summary>
@@ -147,8 +182,9 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static CiEvent ReadPEBlockEvent(EventRecord entry, List<SignerEvent> signerEvents)
+        public static List<CiEvent> ReadPEBlockEvent(EventRecord entry, List<SignerEvent> signerEvents)
         {
+            List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent(); 
 
             // Version 5
@@ -160,7 +196,8 @@ namespace WDAC_Wizard
 
                 // File related info
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
-                ciEvent.FileName = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
                 ciEvent.SHA1 = (byte[])entry.Properties[12].Value;
                 ciEvent.SHA1Page = (byte[])entry.Properties[8].Value;
                 ciEvent.SHA2 = (byte[])entry.Properties[14].Value;
@@ -175,23 +212,30 @@ namespace WDAC_Wizard
                 ciEvent.PolicyGUID = entry.Properties[32].Value.ToString();
                 ciEvent.PolicyName = entry.Properties[18].Value.ToString();
                 ciEvent.PolicyId = entry.Properties[20].Value.ToString();
+                ciEvent.PolicyHash = (byte[])entry.Properties[22].Value;
 
                 // Try to match with pre-populated signer events
-                foreach(SignerEvent signer in signerEvents)
+                foreach (SignerEvent signer in signerEvents)
                 {
-                    if(signer.CorrelationId == ciEvent.CorrelationId)
+                    if (signer.CorrelationId == ciEvent.CorrelationId)
                     {
-                        ciEvent.SignerEvents.Add(signer);
+                        ciEvent.SignerInfo = signer;
+                        ciEvents.Add(ciEvent);
                     }
                 }
 
+                // In the case where the file is unsigned
+                if (ciEvents.Count == 0)
+                {
+                    ciEvents.Add(ciEvent);
+                }
             }
             catch(Exception e)
             {
                 return null; 
             }
 
-            return ciEvent; 
+            return ciEvents; 
         }
 
         /// <summary>
@@ -199,8 +243,9 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static CiEvent ReadSLBlockEvent(EventRecord entry, List<SignerEvent> signerEvents)
+        public static List<CiEvent> ReadSLBlockEvent(EventRecord entry, List<SignerEvent> signerEvents)
         {
+            List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
 
             // Version 0
@@ -212,7 +257,8 @@ namespace WDAC_Wizard
 
                 // File related info
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
-                ciEvent.FileName = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
+                ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
 
                 // Try to match with pre-populated signer events
                 // This will be the only thing to allow on to by pass this block event
@@ -220,8 +266,15 @@ namespace WDAC_Wizard
                 {
                     if (signer.CorrelationId == ciEvent.CorrelationId)
                     {
-                        ciEvent.SignerEvents.Add(signer);
+                        ciEvent.SignerInfo = signer;
+                        ciEvents.Add(ciEvent);
                     }
+                }
+
+                // In the case where the file is unsigned
+                if (ciEvents.Count == 0)
+                {
+                    ciEvents.Add(ciEvent);
                 }
 
             }
@@ -230,7 +283,7 @@ namespace WDAC_Wizard
                 return null;
             }
 
-            return ciEvent;
+            return ciEvents;
         }
 
         /// <summary>
@@ -263,6 +316,45 @@ namespace WDAC_Wizard
 
             return signerEvent; 
         }
+
+        /// <summary>
+        /// Determines whether the new ciEvent created is unique or a duplicate within the event logs
+        /// </summary>
+        /// <param name="newEvent"></param>
+        /// <param name="existingEvents"></param>
+        /// <returns></returns>
+        private static bool IsDuplicateEvent(CiEvent newEvent, List<CiEvent> existingEvents)
+        {
+            if(existingEvents.Count == 0)
+            {
+                return false; 
+            }
+
+            // Check file identifiers
+            byte[] fileHash = newEvent.SHA2;
+            string filePath = newEvent.FilePath; // could be same file but different path
+            int eventId = newEvent.EventId;
+
+            string publisher = newEvent.SignerInfo.PublisherName;
+
+            // Check policy hash - could be blocked by different policies in the evtx
+            byte[] policyHash = newEvent.PolicyHash; 
+
+            foreach(CiEvent existingEvent in existingEvents)
+            {
+                if(fileHash == existingEvent.SHA2 &&
+                    filePath == existingEvent.FilePath && 
+                    policyHash == existingEvent.PolicyHash &&
+                    publisher == existingEvent.SignerInfo.PublisherName &&
+                    eventId == existingEvent.EventId)
+                {
+                    return true; 
+                }
+
+            }
+
+            return false; 
+        }
     }
 
     public class CiEvent
@@ -275,6 +367,7 @@ namespace WDAC_Wizard
 
         // File related info
         public string FileName { get; set; }
+        public string FilePath { get; set; }
         public byte[] SHA1 { get; set; }
         public byte[] SHA1Page { get; set; }
         public byte[] SHA2 { get; set; }
@@ -287,16 +380,18 @@ namespace WDAC_Wizard
         public string FileVersion { get; set; }
         public string PackageFamilyName { get; set; }
 
-        public List<SignerEvent> SignerEvents {get;set;}
+        // Signer info - 1 signer per CiEvent
+        public SignerEvent SignerInfo {get;set;}
 
         // Policy related info
         public string PolicyName { get; set; }
         public string PolicyGUID { get; set; }
         public string PolicyId { get; set; }
+        public byte[] PolicyHash { get; set; }
 
         public CiEvent()
         {
-            this.SignerEvents = new List<SignerEvent>(); 
+            this.SignerInfo = new SignerEvent();
         }
     }
 

@@ -224,8 +224,8 @@ namespace WDAC_Wizard
             // 
             // eventsDataGridView
             // 
-            this.eventsDataGridView.AllowUserToAddRows = false;
             this.eventsDataGridView.AllowUserToDeleteRows = false;
+            this.eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.eventsDataGridView.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -236,15 +236,19 @@ namespace WDAC_Wizard
             this.policyColumn,
             this.publisherColumn});
             this.eventsDataGridView.Location = new System.Drawing.Point(167, 123);
+            this.eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.eventsDataGridView.MultiSelect = false;
             this.eventsDataGridView.Name = "eventsDataGridView";
             this.eventsDataGridView.ReadOnly = true;
-            this.eventsDataGridView.RowHeadersWidth = 51;
+            this.eventsDataGridView.RowHeadersVisible = false;
+            this.eventsDataGridView.RowHeadersWidth = 70;
             this.eventsDataGridView.RowTemplate.Height = 24;
+            this.eventsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.eventsDataGridView.Size = new System.Drawing.Size(799, 287);
             this.eventsDataGridView.TabIndex = 4;
             this.eventsDataGridView.VirtualMode = true;
             this.eventsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EventRowClick);
+            this.eventsDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EventsDataGrid_CellValueNeeded);
             // 
             // addedColumn
             // 
