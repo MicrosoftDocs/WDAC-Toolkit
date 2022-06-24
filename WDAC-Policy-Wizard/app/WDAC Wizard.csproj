@@ -184,6 +184,12 @@
       <DependentUpon>CustomRuleConditionsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="src\EventLog.cs" />
+    <Compile Include="src\EventLogRuleConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\EventLogRuleConfiguration.Designer.cs">
+      <DependentUpon>EventLogRuleConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Exceptions_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -267,6 +273,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\EditWorkflow.resx">
       <DependentUpon>EditWorkflow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\EventLogRuleConfiguration.resx">
+      <DependentUpon>EventLogRuleConfiguration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Exceptions_Control.resx">
       <DependentUpon>Exceptions_Control.cs</DependentUpon>

@@ -40,6 +40,7 @@ namespace WDAC_Wizard
         public Logger Log { get; set; }
         public List<string> PageList;
         public WDAC_Policy Policy { get; set; }
+        public List<CiEvent> CiEvents { get; set; }
         // Runspace param to access all PS Variables and eliminate overhead opening each time
         private Runspace runspace;
         private int RulesNumber;
@@ -48,7 +49,15 @@ namespace WDAC_Wizard
 
         // Edit Workflow datastructs
         private BuildPage _BuildPage;
-        private SigningRules_Control _SigningRulesControl; 
+        private SigningRules_Control _SigningRulesControl;
+        public EditWorkflowType EditWorkflow;
+
+        public enum EditWorkflowType
+        {
+            Edit = 0,
+            DeviceEventLog = 1,
+            ArbitraryEventLog = 2
+        }
 
         public MainWindow()
         {
@@ -63,6 +72,7 @@ namespace WDAC_Wizard
             this.RulesNumber = 0;
 
             this.Policy = new WDAC_Policy();
+            this.CiEvents = new List<CiEvent>(); 
             this.PageList = new List<string>();
             this.ExeFolderPath = GetExecutablePath(false);
 
@@ -456,12 +466,25 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _RulesPage = new ConfigTemplate_Control(this);
-                                _RulesPage.Name = pageKey;
-                                this.PageList.Add(_RulesPage.Name);
-                                this.Controls.Add(_RulesPage);
-                                _RulesPage.BringToFront();
-                                _RulesPage.Focus();
+                                // CHECKS HERE IF EDIT FLOW OR AUDIT FLOW
+                                if(this.EditWorkflow == EditWorkflowType.Edit)
+                                {
+                                    var _RulesPage = new ConfigTemplate_Control(this);
+                                    _RulesPage.Name = pageKey;
+                                    this.PageList.Add(_RulesPage.Name);
+                                    this.Controls.Add(_RulesPage);
+                                    _RulesPage.BringToFront();
+                                    _RulesPage.Focus();
+                                }
+                                else
+                                {
+                                    var _RulesPage = new EventLogRuleConfiguration(this);
+                                    _RulesPage.Name = pageKey;
+                                    this.PageList.Add(_RulesPage.Name);
+                                    this.Controls.Add(_RulesPage);
+                                    _RulesPage.BringToFront();
+                                    _RulesPage.Focus();
+                                }
                             }
 
                             ShowControlPanel(sender, e);
