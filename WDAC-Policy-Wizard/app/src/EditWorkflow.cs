@@ -360,7 +360,7 @@ namespace WDAC_Wizard
             this.panel_EventLog_Conversion.Visible = true;
             this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
 
-            this._MainWindow.EditWorkflow = MainWindow.EditWorkflowType.DeviceEventLog;
+            this._MainWindow.EditWorkflow = MainWindow.EditWorkflowType.EventLog;
 
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);

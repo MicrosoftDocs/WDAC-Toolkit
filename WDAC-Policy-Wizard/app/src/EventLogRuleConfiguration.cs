@@ -19,6 +19,7 @@ namespace WDAC_Wizard
 
         private Logger Log;
         private SiPolicy siPolicy;
+        private MainWindow _MainWindow; 
 
         private EventDisplayObject displayObjectInEdit;
         private int rowInEdit = -1;
@@ -37,6 +38,7 @@ namespace WDAC_Wizard
 
             this.CiEvents = pMainWindow.CiEvents; 
             this.Log = pMainWindow.Log;
+            this._MainWindow = pMainWindow; 
             this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.EmptyWDAC);
 
             this.DisplayObjects = new List<EventDisplayObject>();
@@ -94,7 +96,6 @@ namespace WDAC_Wizard
         {
             // Update UI and SiPolicy object
             EventDisplayObject dp = this.DisplayObjects[this.SelectedRow];
-            dp.Action = "Added to policy"; 
             CiEvent ciEvent = this.CiEvents[this.SelectedRow];
 
             switch(this.ruleTypeComboBox.SelectedIndex)
@@ -102,14 +103,18 @@ namespace WDAC_Wizard
                 case 0: // Publisher
                     if(IsValidPublisherUiState())
                     {
+                        dp.Action = "Added to policy";
                         this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
+                        this._MainWindow.EventLogPolicy = this.siPolicy; 
                     }
                     break;
 
                 case 1: // File Path Rule
                     if(IsValidFilePathUiState())
                     {
+                        dp.Action = "Added to policy"; 
                         this.siPolicy = PolicyHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
+                        this._MainWindow.EventLogPolicy = this.siPolicy;
                     }
                     break; 
 
@@ -117,12 +122,16 @@ namespace WDAC_Wizard
                 case 3:
                     if(IsValidFileAttributesUiState())
                     {
+                        dp.Action = "Added to policy"; 
                         this.siPolicy = PolicyHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
+                        this._MainWindow.EventLogPolicy = this.siPolicy;
                     }
                     break;
 
                 case 4: // Hash rule
+                    dp.Action = "Added to policy"; 
                     this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
+                    this._MainWindow.EventLogPolicy = this.siPolicy;
                     break; 
             }
 
@@ -141,6 +150,10 @@ namespace WDAC_Wizard
             ResetCustomRulesPanel();
 
             int selectedRow = e.RowIndex;
+            if(selectedRow >= this.CiEvents.Count)
+            {
+                return;
+            }
             
             SetPublisherPanel(
                 this.CiEvents[selectedRow].SignerInfo.IssuerName,
@@ -237,7 +250,17 @@ namespace WDAC_Wizard
             this.FileAttributesUIState[3] = this.intFileNameCheckBox.Checked == true ? 1 : 0;
             this.FileAttributesUIState[4] = this.pfnCheckBox.Checked == true ? 1 : 0;
 
-            if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(this.origFileNameTextBox.Text))
+            // Nothing selected
+            if(FileAttributesUIState[0] == 0 &&
+                FileAttributesUIState[1] == 0 &&
+                FileAttributesUIState[2] == 0 &&
+                FileAttributesUIState[3] == 0 &&
+                FileAttributesUIState[4] == 0)
+            {
+                return false; 
+            }
+
+                if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(this.origFileNameTextBox.Text))
             {
                 return false;
             }
@@ -274,6 +297,13 @@ namespace WDAC_Wizard
             // UI States:
             this.FilePathUIState[0] = this.filePathCheckBox.Checked == true ? 1 : 0;
             this.FilePathUIState[1] = this.folderPathCheckBox.Checked == true ? 1 : 0;
+
+            // Nothing selected
+            if (FilePathUIState[0] == 0 &&
+                FilePathUIState[1] == 0)
+            {
+                return false;
+            }
 
             if (FilePathUIState[0] == 1 && String.IsNullOrEmpty(this.filePathTextBox.Text))
             {
@@ -519,7 +549,7 @@ namespace WDAC_Wizard
         private void SetFilePathPanel(string filepath)
         {
             this.filePathTextBox.Text = filepath;
-            this.folderPathTextBox.Text = Path.GetDirectoryName(filepath);
+            this.folderPathTextBox.Text = Path.GetDirectoryName(filepath) + "\\*";
 
             this.filePathCheckBox.Checked = true;
             this.folderPathCheckBox.Checked = true; 

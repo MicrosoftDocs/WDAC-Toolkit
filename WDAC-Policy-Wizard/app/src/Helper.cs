@@ -63,7 +63,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                return null;
+                return NTPath;
             }
         }
 

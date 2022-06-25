@@ -51,12 +51,12 @@ namespace WDAC_Wizard
         private BuildPage _BuildPage;
         private SigningRules_Control _SigningRulesControl;
         public EditWorkflowType EditWorkflow;
+        public SiPolicy EventLogPolicy; 
 
         public enum EditWorkflowType
         {
             Edit = 0,
-            DeviceEventLog = 1,
-            ArbitraryEventLog = 2
+            EventLog = 1,
         }
 
         public MainWindow()
@@ -587,12 +587,29 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                this._SigningRulesControl = new SigningRules_Control(this);
-                                this._SigningRulesControl.Name = pageKey;
-                                this.PageList.Add(this._SigningRulesControl.Name);
-                                this.Controls.Add(this._SigningRulesControl);
-                                this._SigningRulesControl.BringToFront();
-                                this._SigningRulesControl.Focus();
+                                // CHECKS HERE IF EDIT FLOW OR AUDIT FLOW
+                                if (this.EditWorkflow == EditWorkflowType.Edit)
+                                {
+                                    this._SigningRulesControl = new SigningRules_Control(this);
+                                    this._SigningRulesControl.Name = pageKey;
+                                    this.PageList.Add(this._SigningRulesControl.Name);
+                                    this.Controls.Add(this._SigningRulesControl);
+                                    this._SigningRulesControl.BringToFront();
+                                    this._SigningRulesControl.Focus();
+                                }
+                                else
+                                {
+                                    // Go to build page and provide the SiPolicy object
+                                    pageKey = "Event Logs Build Page";
+                                    this._BuildPage = new BuildPage(this);
+                                    this._BuildPage.Name = pageKey;
+                                    this.PageList.Add(this._BuildPage.Name);
+                                    this.Controls.Add(this._BuildPage);
+                                    this._BuildPage.BringToFront();
+                                    this._BuildPage.Focus();
+                                    button_Next.Visible = false;
+                                    ProcessPolicy();
+                                }
                             }
 
                             ShowControlPanel(sender, e);
@@ -724,6 +741,33 @@ namespace WDAC_Wizard
         /// </summary>
         private void ProcessPolicy()
         {
+            // Short circuit policy building if using Event Log workflow
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit && this.EditWorkflow == EditWorkflowType.EventLog)
+            {
+                string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
+                string pathToWrite = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
+
+                try
+                {
+                    Helper.SerializePolicytoXML(this.EventLogPolicy, pathToWrite);
+                }
+                catch(Exception e)
+                {
+                    this.Log.AddErrorMsg("Event Log SiPolicy serialization failed with error: ", e);
+                }
+                
+                // Upload log file if customer consents
+                if (Properties.Settings.Default.allowTelemetry)
+                {
+                    this.Log.UploadLog();
+                }
+
+                // Build Page:
+                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to WDAC Policy");
+                this._BuildPage.ShowFinishMsg(pathToWrite);
+                return;
+            }
+
             // Create folder for temp intermediate policies
             try
             {
