@@ -94,7 +94,7 @@ namespace WDAC_Wizard
         {
             // Update UI and SiPolicy object
             EventDisplayObject dp = this.DisplayObjects[this.SelectedRow];
-            dp.Action = "Adding"; 
+            dp.Action = "Added to policy"; 
             CiEvent ciEvent = this.CiEvents[this.SelectedRow];
 
             switch(this.ruleTypeComboBox.SelectedIndex)
@@ -102,7 +102,7 @@ namespace WDAC_Wizard
                 case 0: // Publisher
                     if(IsValidPublisherUiState())
                     {
-                        // this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy);
+                        this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
                     }
                     break;
 
@@ -544,14 +544,85 @@ namespace WDAC_Wizard
         /// <param name="ciEvent"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
+        public static SiPolicy AddSiPolicyPublisherRule(CiEvent ciEvent, SiPolicy siPolicy, int[] uiState)
+        {
+            // Create new signer object
+            Signer signer = new Signer();
+            signer.ID = "ID_SIGNER_A_" + cFilePublisherRules;
+            cFilePublisherRules++;
+
+            // Create new Certificate Root object and add to CertRoot field
+            CertRoot cRoot = new CertRoot();
+            cRoot.Type = CertEnumType.TBS;
+            cRoot.Value = ciEvent.SignerInfo.IssuerTBSHash;
+            signer.CertRoot = cRoot;
+
+            signer.Name = String.Format("Issuing CA = {0} ({1})",
+                    ciEvent.SignerInfo.IssuerName, Helper.ConvertHash(ciEvent.SignerInfo.IssuerTBSHash));
+
+            // Create new CertPublisher object and add CertPublisher field
+            if (uiState[1] == 1) // CertPub CN
+            {
+                CertPublisher cPub = new CertPublisher();
+                cPub.Value = ciEvent.SignerInfo.PublisherName;
+                signer.CertPublisher = cPub;
+
+                signer.Name = String.Format("Allow CN = {0} issued by {1} ({2})", ciEvent.SignerInfo.PublisherName,
+                    ciEvent.SignerInfo.IssuerName, Helper.ConvertHash(ciEvent.SignerInfo.IssuerTBSHash));
+            }
+
+            // Create new FileAttrib object to link to signer
+            FileAttrib fileAttrib = new FileAttrib();
+            fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
+            cFileAttribRules++;
+
+            if (uiState[2] == 1) // Original Filename
+            {
+                fileAttrib.FileName = ciEvent.OriginalFilename;
+            }
+
+            if (uiState[3] == 1) // Version
+            {
+                fileAttrib.MinimumFileVersion = ciEvent.FileVersion;
+            }
+
+            if (uiState[4] == 1) // Product
+            {
+                fileAttrib.ProductName = ciEvent.ProductName;
+            }
+
+            // Link the new FileAttrib object back to the signer
+            FileAttribRef fileAttribRef = new FileAttribRef();
+            fileAttribRef.RuleID = fileAttrib.ID;
+
+            signer.FileAttribRef = new FileAttribRef[1];
+            signer.FileAttribRef[0] = fileAttribRef;
+
+
+            // Add the FileAttributeReference to SiPolicy
+            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+
+            // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
+            siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
+
+            return siPolicy;
+        }
+
+
+        /// <summary>
+        /// Creates up to 2 path rules. One for the parent path and one for the full path
+        /// </summary>
+        /// <param name="ciEvent"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy AddSiPolicyFileAttributeRule(CiEvent ciEvent, SiPolicy siPolicy, int[] uiState)
         {
-            List<Allow> allowFileAttributeRules = new List<Allow>(); 
+            List<Allow> allowFileAttributeRules = new List<Allow>();
 
             Allow allowRule = new Allow();
-            allowRule.FriendlyName = String.Format("Allow file {0} by file attributes; Correlation Id: {1}", 
+            allowRule.FriendlyName = String.Format("Allow {0} by file attributes; Correlation Id: {1}",
                 ciEvent.FileName, ciEvent.CorrelationId);
-            allowRule.ID = "ID_ALLOW_B_" + cFilePathRules.ToString();
+            allowRule.ID = "ID_ALLOW_B_" + cFileAttribRules.ToString();
             cFileAttribRules++;
 
             // Original filename
@@ -590,8 +661,6 @@ namespace WDAC_Wizard
             siPolicy = AddSiPolicyAllowRules(allowFileAttributeRules, siPolicy);
             return siPolicy;
         }
-
-
 
         /// <summary>
         /// Creates up to 2 path rules. One for the parent path and one for the full path
@@ -723,6 +792,74 @@ namespace WDAC_Wizard
                 siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             }
             
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Handles adding the new FileAttribute object to the provided siPolicy
+        /// </summary>
+        /// <param name="fileAttrib"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicyFileAttrib(FileAttrib fileAttrib, SiPolicy siPolicy)
+        {
+            // Copy and replace FileRules section in SiPolicy
+            // FileRules always initalized - no need to check if null
+            object[] fileRulesCopy = new object[siPolicy.FileRules.Length + 1];
+            for (int i = 0; i < fileRulesCopy.Length - 1; i++)
+            {
+                fileRulesCopy[i] = siPolicy.FileRules[i];
+            }
+
+            fileRulesCopy[fileRulesCopy.Length - 1] = fileAttrib;
+            siPolicy.FileRules = fileRulesCopy;
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Handles adding the new AllowSignerobject to the provided siPolicy
+        /// </summary>
+        /// <param name="signer"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicyAllowSigner(Signer signer, SiPolicy siPolicy)
+        {
+            // Copy the SiPolicy signer object and add the signer param to the field
+            Signer[] signersCopy = new Signer[siPolicy.Signers.Length + 1];
+            for (int i = 0; i < signersCopy.Length - 1; i++)
+            {
+                signersCopy[i] = siPolicy.Signers[i];
+            }
+
+            signersCopy[signersCopy.Length - 1] = signer;
+            siPolicy.Signers = signersCopy;
+
+            // Create an AllowedSigner object to add to the SiPolicy ProductSigners section
+            AllowedSigner allowedSigner = new AllowedSigner();
+            allowedSigner.SignerId = signer.ID;
+
+            // Copy and replace
+            if (siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
+            {
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners = new AllowedSigners();
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner;
+            }
+            else
+            {
+                int cAllowedSigners = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner.Length;
+                AllowedSigner[] allowedSigners = new AllowedSigner[cAllowedSigners + 1];
+
+                for (int i = 0; i < cAllowedSigners; i++)
+                {
+                    allowedSigners[i] = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[i];
+                }
+
+                allowedSigners[cAllowedSigners] = allowedSigner;
+                siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = allowedSigners;
+            }
+
             return siPolicy;
         }
     }

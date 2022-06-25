@@ -86,9 +86,9 @@ namespace WDAC_Wizard
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(167, 653);
+            this.addButton.Location = new System.Drawing.Point(442, 412);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(113, 30);
+            this.addButton.Size = new System.Drawing.Size(130, 30);
             this.addButton.TabIndex = 0;
             this.addButton.Text = "Add Allow Rule";
             this.addButton.UseVisualStyleBackColor = true;
@@ -478,7 +478,7 @@ namespace WDAC_Wizard
             this.hashRulePanel.Controls.Add(this.sha2TextBox);
             this.hashRulePanel.Controls.Add(this.sha1PageTextBox);
             this.hashRulePanel.Controls.Add(this.sha1TextBox);
-            this.hashRulePanel.Location = new System.Drawing.Point(1021, 464);
+            this.hashRulePanel.Location = new System.Drawing.Point(1021, 489);
             this.hashRulePanel.Name = "hashRulePanel";
             this.hashRulePanel.Size = new System.Drawing.Size(603, 164);
             this.hashRulePanel.TabIndex = 22;
@@ -530,7 +530,7 @@ namespace WDAC_Wizard
             this.sha2PageTextBox.Location = new System.Drawing.Point(172, 120);
             this.sha2PageTextBox.Name = "sha2PageTextBox";
             this.sha2PageTextBox.ReadOnly = true;
-            this.sha2PageTextBox.Size = new System.Drawing.Size(351, 26);
+            this.sha2PageTextBox.Size = new System.Drawing.Size(398, 26);
             this.sha2PageTextBox.TabIndex = 19;
             // 
             // sha2TextBox
@@ -539,7 +539,7 @@ namespace WDAC_Wizard
             this.sha2TextBox.Location = new System.Drawing.Point(171, 81);
             this.sha2TextBox.Name = "sha2TextBox";
             this.sha2TextBox.ReadOnly = true;
-            this.sha2TextBox.Size = new System.Drawing.Size(352, 26);
+            this.sha2TextBox.Size = new System.Drawing.Size(399, 26);
             this.sha2TextBox.TabIndex = 18;
             // 
             // sha1PageTextBox
@@ -548,7 +548,7 @@ namespace WDAC_Wizard
             this.sha1PageTextBox.Location = new System.Drawing.Point(173, 42);
             this.sha1PageTextBox.Name = "sha1PageTextBox";
             this.sha1PageTextBox.ReadOnly = true;
-            this.sha1PageTextBox.Size = new System.Drawing.Size(351, 26);
+            this.sha1PageTextBox.Size = new System.Drawing.Size(397, 26);
             this.sha1PageTextBox.TabIndex = 17;
             // 
             // sha1TextBox
@@ -557,7 +557,7 @@ namespace WDAC_Wizard
             this.sha1TextBox.Location = new System.Drawing.Point(173, 3);
             this.sha1TextBox.Name = "sha1TextBox";
             this.sha1TextBox.ReadOnly = true;
-            this.sha1TextBox.Size = new System.Drawing.Size(351, 26);
+            this.sha1TextBox.Size = new System.Drawing.Size(397, 26);
             this.sha1TextBox.TabIndex = 16;
             // 
             // filePathRulePanel

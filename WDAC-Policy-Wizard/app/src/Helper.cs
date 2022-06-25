@@ -817,7 +817,7 @@ namespace WDAC_Wizard
         };
     }
 
-    public class Signer
+    public class WDACSigner
     {
         public string ID { get; set; }
         public string Name { get; set; }
@@ -825,7 +825,7 @@ namespace WDAC_Wizard
         public string CommonName { get; set; }
         public List<string> FileAttribRefs { get; set; }
 
-        public Signer()
+        public WDACSigner()
         {
             this.FileAttribRefs = new List<string>();
         }
