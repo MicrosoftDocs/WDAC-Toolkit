@@ -407,6 +407,7 @@
     <None Include="Resources\gear.png" />
     <None Include="Resources\imgs\add-button.png" />
     <None Include="Resources\eventlog_progress.bmp" />
+    <None Include="Resources\EmptyWDAC.xml" />
     <Content Include="Resources\imgs\back.png" />
     <Content Include="Resources\imgs\blank-check-box.png" />
     <None Include="Resources\untoggle.png" />

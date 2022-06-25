@@ -254,6 +254,36 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Deserialize the xml policy string to SiPolicy
+        /// </summary>
+        /// <param name="xmlPath"></param>
+        /// <returns>SiPolicy object</returns>
+        public static SiPolicy DeserializeXMLStringtoPolicy(string xmlContents)
+        {
+            SiPolicy siPolicy;
+
+            try
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                writer.Write(xmlContents);
+                writer.Flush();
+                stream.Position = 0;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
+                StreamReader reader = new StreamReader(stream);
+                siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                reader.Close();
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+
+            return siPolicy;
+        }
+
+        /// <summary>
         /// Serialize the SiPolicy object to XML file
         /// </summary>
         /// <param name="siPolicy">SiPolicy object</param>
@@ -689,6 +719,27 @@ namespace WDAC_Wizard
             }
 
             return octet; 
+        }
+
+        /// <summary>
+        /// Converts a hash byte[] to hash hex string
+        /// </summary>
+        /// <param name="hashByte"></param>
+        /// <returns></returns>
+        public static string ConvertHash(byte[] hashByte)
+        {
+            if(hashByte == null)
+            {
+                return string.Empty; 
+            }
+
+            string hashstring = string.Empty; 
+            for(int i = 0; i < hashByte.Length; i++)
+            {
+                hashstring += hashByte[i].ToString("X");
+            }
+
+            return hashstring;
         }
 
         /// <summary>

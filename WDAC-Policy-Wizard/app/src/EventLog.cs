@@ -11,20 +11,24 @@ namespace WDAC_Wizard
 {
     internal static class EventLog
     {
-        // Audit Events
-        const int AUDIT_KERNEL_ID = 3067;
+        // WDAC Events
+        // Usermode
         const int AUDIT_PE_ID = 3076;
-        const int AUDIT_SCRIPT_ID = 8028;
-
-        // Block Events
         const int BLOCK_PE_ID = 3077;
-        const int BLOCK_KERNEL_ID = 3068;
-        const int BLOCK_SCRIPT_ID = 8029;
 
+        // Kernel mode
         const int BLOCK_SIG_LEVEL_ID = 3033;
+        const int AUDIT_KERNEL_ID = 3067;
+        const int BLOCK_KERNEL_ID = 3068;
 
         // Signature Event
         const int SIG_INFO_ID = 3089;
+
+        // AppLocker
+        const int AUDIT_SCRIPT_ID = 8028;
+        const int BLOCK_SCRIPT_ID = 8029;
+        const int SOME_ID = 8036; 
+
 
         /// <summary>
         /// Parses the events logs from the auditLogPaths paths into CiEvent objects
@@ -100,6 +104,101 @@ namespace WDAC_Wizard
                         List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, signerEvents);
 
                         foreach(CiEvent blockSLEvent in blockSLEvents)
+                        {
+                            if (blockSLEvent != null)
+                            {
+                                if (!IsDuplicateEvent(blockSLEvent, ciEvents))
+                                {
+                                    ciEvents.Add(blockSLEvent);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ciEvents;
+        }
+
+        /// <summary>
+        /// Parses the events logs from the auditLogPaths paths into CiEvent objects
+        /// </summary>
+        /// <param name="auditLogPaths"></param>
+        /// <returns></returns>
+        public static List<CiEvent> ReadSystemEventLogs()
+        {
+            List<CiEvent> ciEvents = new List<CiEvent>();
+            List<SignerEvent> signerEvents = new List<SignerEvent>();
+
+            List<string> logPaths = new List<string>();
+            logPaths.Add("Microsoft-Windows-CodeIntegrity/Operational");
+            logPaths.Add("Microsoft-Windows-Applocker/MSI and Script");
+
+            // Loop through the CI and AppLocker logs
+            foreach (var logPath in logPaths)
+            {
+                EventLogReader log = new EventLogReader(logPath, PathType.LogName);
+
+                // Read Signature Events first to prepopulate for correlation with audit/block events
+                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
+                {
+                    if (entry.Id == SIG_INFO_ID)
+                    {
+                        SignerEvent signerEvent = ReadSignatureEvent(entry);
+                        if (signerEvent != null)
+                        {
+                            signerEvents.Add(signerEvent);
+                        }
+                    }
+                }
+
+                log = new EventLogReader(logPath, PathType.LogName);
+                // Read all other audit/block events
+                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
+                {
+                    // Audit 3076's
+                    if (entry.Id == AUDIT_PE_ID)
+                    {
+                        List<CiEvent> auditEvents = ReadPEAuditEvent(entry, signerEvents);
+
+                        foreach (CiEvent auditEvent in auditEvents)
+                        {
+                            if (auditEvent != null)
+                            {
+                                if (!IsDuplicateEvent(auditEvent, ciEvents))
+                                {
+                                    ciEvents.Add(auditEvent);
+                                }
+                            }
+                        }
+                    }
+                    // Block 3077's
+                    else if (entry.Id == BLOCK_PE_ID)
+                    {
+                        List<CiEvent> blockEvents = ReadPEBlockEvent(entry, signerEvents);
+                        foreach (CiEvent blockEvent in blockEvents)
+                        {
+                            if (blockEvent != null)
+                            {
+                                if (!IsDuplicateEvent(blockEvent, ciEvents))
+                                {
+                                    ciEvents.Add(blockEvent);
+                                }
+                            }
+                        }
+                    }
+
+                    else if(entry.Id == AUDIT_SCRIPT_ID)
+                    {
+
+                    }
+
+                    // Block 3033's
+                    else if (entry.Id == BLOCK_SIG_LEVEL_ID)
+                    {
+                        List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, signerEvents);
+
+                        foreach (CiEvent blockSLEvent in blockSLEvents)
                         {
                             if (blockSLEvent != null)
                             {

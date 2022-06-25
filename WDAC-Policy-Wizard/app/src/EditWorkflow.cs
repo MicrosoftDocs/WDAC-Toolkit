@@ -218,7 +218,7 @@ namespace WDAC_Wizard
             this.EventLogPaths = eventLogPaths; 
 
             // Prep UI
-            this.textBox_EventLogFilePath.Text = eventLogPaths[0]; 
+            this.textBox_EventLogFilePath.Text = string.Join(", ", eventLogPaths.ToArray()); 
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
@@ -267,7 +267,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                // this._MainWindow.CiEvents = EventLog.ReadSystemEventLogs();
+                this._MainWindow.CiEvents = EventLog.ReadSystemEventLogs();
             }
         }
 
