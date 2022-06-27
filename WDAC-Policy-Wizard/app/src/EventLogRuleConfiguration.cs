@@ -207,29 +207,55 @@ namespace WDAC_Wizard
             this.PublisherUIState[4] = this.productCheckBox.Checked == true ? 1 : 0;
 
             if(String.IsNullOrEmpty(this.issuerTextBox.Text) ||
-                this.issuerTextBox.Text == Properties.Resources.BadEventPubValue )
+                this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
             {
+                // Log exception error and throw error to user
+                MessageBox.Show(String.Format("The Issuer is invalid for rule creation. The issuer cannot be empty or '{0}'", Properties.Resources.BadEventPubValue), 
+                    "New Rule Creation Error", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
                 return false; 
             }
 
             if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) || 
                 this.publisherTextBox.Text == Properties.Resources.BadEventPubValue))
             {
+                MessageBox.Show(String.Format("The Publisher is invalid for rule creation. The Publisher cannot be empty '{0}'", Properties.Resources.BadEventPubValue),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Publisher = Unknown");
                 return false;
             }
 
             if (PublisherUIState[2] == 1 && String.IsNullOrEmpty(this.filenameTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Filename is invalid for rule creation. The Filename cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Empty Filename");
                 return false;
             }
 
             if (PublisherUIState[3] == 1 && String.IsNullOrEmpty(this.versionCheckBox.Text))
             {
+                MessageBox.Show(String.Format("The Version field is invalid for rule creation. The Version field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Empty Version field");
                 return false;
             }
 
             if (PublisherUIState[4] == 1 && String.IsNullOrEmpty(this.productTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Empty Product name");
                 return false;
             }
 
@@ -257,31 +283,61 @@ namespace WDAC_Wizard
                 FileAttributesUIState[3] == 0 &&
                 FileAttributesUIState[4] == 0)
             {
+                MessageBox.Show(String.Format("At least one file attribute needs to be selected to create the rule."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - File attributes none selected");
                 return false; 
             }
 
-                if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(this.origFileNameTextBox.Text))
+            if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(this.origFileNameTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Original filename is invalid for rule creation. The original filename cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Original filename name");
                 return false;
             }
 
             if (FileAttributesUIState[1] == 1 && String.IsNullOrEmpty(this.fileDescTextBox.Text))
             {
+                MessageBox.Show(String.Format("The File description is invalid for rule creation. The File description field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - File description");
                 return false;
             }
 
             if (FileAttributesUIState[2] == 1 && String.IsNullOrEmpty(this.prodNameTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Product name ");
                 return false;
             }
 
             if (FileAttributesUIState[3] == 1 && String.IsNullOrEmpty(this.intFileNameTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Internal filename is invalid for rule creation. The Internal filename field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Internal filename");
                 return false;
             }
 
             if (FileAttributesUIState[4] == 1 && String.IsNullOrEmpty(this.pfnTextBox.Text))
             {
+                MessageBox.Show(String.Format("The Package Family Name is invalid for rule creation. The Package Family Name field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Package Family Name ");
                 return false;
             }
 
@@ -302,16 +358,31 @@ namespace WDAC_Wizard
             if (FilePathUIState[0] == 0 &&
                 FilePathUIState[1] == 0)
             {
+                MessageBox.Show(String.Format("At least one file path needs to be selected to create the rule."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - Path rules none selected");
                 return false;
             }
 
             if (FilePathUIState[0] == 1 && String.IsNullOrEmpty(this.filePathTextBox.Text))
             {
+                MessageBox.Show(String.Format("The file path field is invalid for rule creation. The file path field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - empty file path field");
                 return false;
             }
             
             if(FilePathUIState[1] == 1 && String.IsNullOrEmpty(this.folderPathTextBox.Text))
             {
+                MessageBox.Show(String.Format("The folder path field is invalid for rule creation. The folder path field cannot be empty if its checkbox is selected."),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - empty folder path field");
                 return false; 
             }
 

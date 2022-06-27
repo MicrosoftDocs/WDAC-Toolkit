@@ -141,7 +141,7 @@ namespace WDAC_Wizard
 
             catch (Exception e)
             {
-                // Log eexception error and throw error to user
+                // Log exception error and throw error to user
                 DialogResult res = MessageBox.Show("The base policy you have selected cannot be parsed by the Wizard\n\n" +
                     "This is typically a result of a malformed policy.",
                     "Policy Parsing Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
