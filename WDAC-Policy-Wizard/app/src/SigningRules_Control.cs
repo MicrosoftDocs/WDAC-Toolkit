@@ -120,13 +120,13 @@ namespace WDAC_Wizard
             string ruleID = String.Empty;
 
             // Increase efficiency by constructing signers dictionary hint
-            Dictionary<string, Signer> signersDict = new Dictionary<string, Signer>();
+            Dictionary<string, WDACSigner> signersDict = new Dictionary<string, WDACSigner>();
             Dictionary<string, string> fileExceptionsDict = new Dictionary<string, string>();
 
             // Parse the siPolicy Signers to Diction<ID, Signer objs>
             foreach (var siPolicySigner in this.Policy.siPolicy.Signers)
             {
-                Signer signer = new Signer();
+                WDACSigner signer = new WDACSigner();
                 
                 if (siPolicySigner.FileAttribRef != null)
                 {

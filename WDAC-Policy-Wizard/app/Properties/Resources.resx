@@ -149,7 +149,7 @@
     <value>When enabled, future WDAC policy updates are applied without requiring a system reboot.</value>
   </data>
   <data name="EventLogConversionSuccess" xml:space="preserve">
-    <value>Conversion of the event log to a WDAC Policy XML file was successful. </value>
+    <value>The WDAC Wizard successfully parsed all of the WDAC Event Logs</value>
   </data>
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>
@@ -437,5 +437,11 @@ EKU is 1.3.6.1.4.1.311.76.3.1</value>
   <data name="PathRuleNoExceptionAllowed" xml:space="preserve">
     <value>Unable to proceed to Exceptions Panel. WDAC does not support path rule exceptions. 
 Please select the  'Create Rule' button.</value>
+  </data>
+  <data name="BadEventPubValue" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="EmptyWDAC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EmptyWDAC.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
