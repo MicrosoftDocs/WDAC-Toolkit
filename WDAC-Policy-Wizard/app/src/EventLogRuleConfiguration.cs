@@ -129,14 +129,16 @@ namespace WDAC_Wizard
                     break;
 
                 case 4: // Hash rule
-                    dp.Action = "Added to policy"; 
-                    this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
-                    this._MainWindow.EventLogPolicy = this.siPolicy;
+                    if(IsValidHashRuleUiState())
+                    {
+                        dp.Action = "Added to policy";
+                        this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
+                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                    }
                     break; 
             }
 
             this.eventsDataGridView.Refresh();
-            // Need to scroll somewhere else to update the cellvalue 
         }
 
         /// <summary>
@@ -386,7 +388,28 @@ namespace WDAC_Wizard
                 return false; 
             }
 
-           
+            return true;
+        }
+
+        /// <summary>
+        /// Checks that there are hash values for the rare null hashes state
+        /// </summary>
+        /// <returns></returns>
+        public bool IsValidHashRuleUiState()
+        {
+            // Nothing selected
+            if (String.IsNullOrEmpty(this.sha1TextBox.Text) ||
+                String.IsNullOrEmpty(this.sha2TextBox.Text) ||
+                String.IsNullOrEmpty(this.sha1PageTextBox.Text) ||
+                String.IsNullOrEmpty(this.sha2PageTextBox.Text))
+            {
+                MessageBox.Show(String.Format("Hash values cannot be empty in order to create a hash-based rule"),
+                    "New Rule Creation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Log.AddWarningMsg("Event Log Config - hash rules none selected");
+                return false;
+            }
 
             return true;
         }
@@ -634,6 +657,7 @@ namespace WDAC_Wizard
     internal static class PolicyHelper
     {
         // Counts of file rules created to pipe into IDs
+        static public int cPublisherRules = 0;
         static public int cFilePublisherRules = 0;
         static public int cFileAttribRules = 0;
         static public int cFilePathRules = 0;
@@ -647,10 +671,12 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public static SiPolicy AddSiPolicyPublisherRule(CiEvent ciEvent, SiPolicy siPolicy, int[] uiState)
         {
+            bool createFileRule = false; 
+
             // Create new signer object
             Signer signer = new Signer();
-            signer.ID = "ID_SIGNER_A_" + cFilePublisherRules;
-            cFilePublisherRules++;
+            signer.ID = "ID_SIGNER_A_" + cPublisherRules;
+            cPublisherRules++;
 
             // Create new Certificate Root object and add to CertRoot field
             CertRoot cRoot = new CertRoot();
@@ -675,33 +701,38 @@ namespace WDAC_Wizard
             // Create new FileAttrib object to link to signer
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
-            cFileAttribRules++;
 
             if (uiState[2] == 1) // Original Filename
             {
                 fileAttrib.FileName = ciEvent.OriginalFilename;
+                createFileRule = true;
             }
 
             if (uiState[3] == 1) // Version
             {
                 fileAttrib.MinimumFileVersion = ciEvent.FileVersion;
+                createFileRule = true;
             }
 
             if (uiState[4] == 1) // Product
             {
                 fileAttrib.ProductName = ciEvent.ProductName;
+                createFileRule = true;
             }
 
-            // Link the new FileAttrib object back to the signer
-            FileAttribRef fileAttribRef = new FileAttribRef();
-            fileAttribRef.RuleID = fileAttrib.ID;
+            if(createFileRule)
+            {
+                // Link the new FileAttrib object back to the signer
+                FileAttribRef fileAttribRef = new FileAttribRef();
+                fileAttribRef.RuleID = fileAttrib.ID;
 
-            signer.FileAttribRef = new FileAttribRef[1];
-            signer.FileAttribRef[0] = fileAttribRef;
+                signer.FileAttribRef = new FileAttribRef[1];
+                signer.FileAttribRef[0] = fileAttribRef;
+                cFileAttribRules++;
 
-
-            // Add the FileAttributeReference to SiPolicy
-            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+                // Add the FileAttributeReference to SiPolicy
+                siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+            }
 
             // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
             siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);

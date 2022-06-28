@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AppInstaller
 	Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard.appinstaller"
-    Version="1.6.6.0"
+    Version="1.7.0.0"
     xmlns="http://schemas.microsoft.com/appx/appinstaller/2018">
 
     <MainPackage
         Name="Microsoft.WDAC.WDACWizard"
-		    Version="1.6.6.0"
+		    Version="1.7.0.0"
         Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
-        Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard_1.6.6.0_x64_8wekyb3d8bbwe.MSIX"
+        Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard_1.7.0.0_x64_8wekyb3d8bbwe.MSIX"
 		ProcessorArchitecture="x64"/>
 
     <UpdateSettings>

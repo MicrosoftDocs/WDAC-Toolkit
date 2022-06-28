@@ -389,13 +389,13 @@ namespace WDAC_Wizard
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(16, 130);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(270, 19);
+            this.label4.Size = new System.Drawing.Size(274, 18);
             this.label4.TabIndex = 117;
-            this.label4.Text = "Parse a Event Log evtx Files to Policy";
+            this.label4.Text = "Parse Event Log evtx Files to Policy";
             // 
             // label6
             // 
