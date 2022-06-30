@@ -55,12 +55,6 @@ namespace WDAC_Wizard
             this.fileDescCheckBox = new System.Windows.Forms.CheckBox();
             this.origFileNameCheckBox = new System.Windows.Forms.CheckBox();
             this.eventsDataGridView = new System.Windows.Forms.DataGridView();
-            this.addedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eventIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.filenameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.productColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.policyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.publisherColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.hashRulePanel = new System.Windows.Forms.Panel();
@@ -77,6 +71,12 @@ namespace WDAC_Wizard
             this.folderPathTextBox = new System.Windows.Forms.TextBox();
             this.folderPathCheckBox = new System.Windows.Forms.CheckBox();
             this.filePathCheckBox = new System.Windows.Forms.CheckBox();
+            this.addedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eventIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.filenameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.policyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.publisherColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.publisherRulePanel.SuspendLayout();
             this.fileAttributeRulePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventsDataGridView)).BeginInit();
@@ -389,64 +389,11 @@ namespace WDAC_Wizard
             this.eventsDataGridView.RowHeadersWidth = 70;
             this.eventsDataGridView.RowTemplate.Height = 24;
             this.eventsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventsDataGridView.Size = new System.Drawing.Size(799, 287);
+            this.eventsDataGridView.Size = new System.Drawing.Size(896, 287);
             this.eventsDataGridView.TabIndex = 4;
             this.eventsDataGridView.VirtualMode = true;
             this.eventsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EventRowClick);
             this.eventsDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EventsDataGrid_CellValueNeeded);
-            // 
-            // addedColumn
-            // 
-            this.addedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.addedColumn.HeaderText = "Added To Policy";
-            this.addedColumn.MinimumWidth = 100;
-            this.addedColumn.Name = "addedColumn";
-            this.addedColumn.ReadOnly = true;
-            // 
-            // eventIdColumn
-            // 
-            this.eventIdColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.eventIdColumn.HeaderText = "Event Id";
-            this.eventIdColumn.MinimumWidth = 6;
-            this.eventIdColumn.Name = "eventIdColumn";
-            this.eventIdColumn.ReadOnly = true;
-            this.eventIdColumn.Width = 82;
-            // 
-            // filenameColumn
-            // 
-            this.filenameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.filenameColumn.HeaderText = "Filename";
-            this.filenameColumn.MinimumWidth = 6;
-            this.filenameColumn.Name = "filenameColumn";
-            this.filenameColumn.ReadOnly = true;
-            this.filenameColumn.Width = 94;
-            // 
-            // productColumn
-            // 
-            this.productColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.productColumn.HeaderText = "Product";
-            this.productColumn.MinimumWidth = 6;
-            this.productColumn.Name = "productColumn";
-            this.productColumn.ReadOnly = true;
-            this.productColumn.Width = 86;
-            // 
-            // policyColumn
-            // 
-            this.policyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.policyColumn.HeaderText = "Policy Name";
-            this.policyColumn.MinimumWidth = 6;
-            this.policyColumn.Name = "policyColumn";
-            this.policyColumn.ReadOnly = true;
-            this.policyColumn.Width = 106;
-            // 
-            // publisherColumn
-            // 
-            this.publisherColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.publisherColumn.HeaderText = "Publisher";
-            this.publisherColumn.MinimumWidth = 6;
-            this.publisherColumn.Name = "publisherColumn";
-            this.publisherColumn.ReadOnly = true;
-            this.publisherColumn.Width = 96;
             // 
             // label1
             // 
@@ -616,6 +563,65 @@ namespace WDAC_Wizard
             this.filePathCheckBox.Text = "File Path:";
             this.filePathCheckBox.UseVisualStyleBackColor = true;
             // 
+            // addedColumn
+            // 
+            this.addedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.addedColumn.HeaderText = "Added To Policy";
+            this.addedColumn.MinimumWidth = 100;
+            this.addedColumn.Name = "addedColumn";
+            this.addedColumn.ReadOnly = true;
+            this.addedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // eventIdColumn
+            // 
+            this.eventIdColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.eventIdColumn.HeaderText = "Event Id";
+            this.eventIdColumn.MinimumWidth = 6;
+            this.eventIdColumn.Name = "eventIdColumn";
+            this.eventIdColumn.ReadOnly = true;
+            this.eventIdColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.eventIdColumn.Width = 82;
+            // 
+            // filenameColumn
+            // 
+            this.filenameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.filenameColumn.HeaderText = "Filename";
+            this.filenameColumn.MinimumWidth = 6;
+            this.filenameColumn.Name = "filenameColumn";
+            this.filenameColumn.ReadOnly = true;
+            this.filenameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.filenameColumn.Width = 94;
+            // 
+            // productColumn
+            // 
+            this.productColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.productColumn.HeaderText = "Product";
+            this.productColumn.MinimumWidth = 6;
+            this.productColumn.Name = "productColumn";
+            this.productColumn.ReadOnly = true;
+            this.productColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.productColumn.Width = 86;
+            // 
+            // policyColumn
+            // 
+            this.policyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.policyColumn.HeaderText = "Policy Name";
+            this.policyColumn.MinimumWidth = 6;
+            this.policyColumn.Name = "policyColumn";
+            this.policyColumn.ReadOnly = true;
+            this.policyColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.policyColumn.Width = 106;
+            // 
+            // publisherColumn
+            // 
+            this.publisherColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.publisherColumn.HeaderText = "Publisher";
+            this.publisherColumn.MinimumWidth = 6;
+            this.publisherColumn.Name = "publisherColumn";
+            this.publisherColumn.ReadOnly = true;
+            this.publisherColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.publisherColumn.Width = 96;
+            // 
             // EventLogRuleConfiguration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -668,12 +674,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.CheckBox filenameCheckBox;
         private System.Windows.Forms.CheckBox publisherCheckBox;
         private System.Windows.Forms.CheckBox issuerCheckBox;
-        private System.Windows.Forms.DataGridViewTextBoxColumn addedColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn eventIdColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn filenameColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn productColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn policyColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn publisherColumn;
         private System.Windows.Forms.Panel fileAttributeRulePanel;
         private System.Windows.Forms.TextBox pfnTextBox;
         private System.Windows.Forms.TextBox intFileNameTextBox;
@@ -699,5 +699,11 @@ namespace WDAC_Wizard
         private System.Windows.Forms.CheckBox folderPathCheckBox;
         private System.Windows.Forms.CheckBox filePathCheckBox;
         private System.Windows.Forms.TextBox filePathTextBox;
+        private System.Windows.Forms.DataGridViewTextBoxColumn addedColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn eventIdColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn filenameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn productColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn policyColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn publisherColumn;
     }
 }

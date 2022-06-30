@@ -348,7 +348,7 @@ namespace WDAC_Wizard
             this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(22, 240);
             this.eventLogParsing_Result_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.eventLogParsing_Result_Panel.Name = "eventLogParsing_Result_Panel";
-            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(526, 47);
+            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(817, 47);
             this.eventLogParsing_Result_Panel.TabIndex = 122;
             this.eventLogParsing_Result_Panel.Visible = false;
             // 

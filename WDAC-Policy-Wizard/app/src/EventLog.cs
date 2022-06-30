@@ -595,6 +595,12 @@ namespace WDAC_Wizard
 
         public CiEvent()
         {
+            // Init as empty for the properties going into the DataViewGrid for sorting
+            this.EventId = 0;
+            this.FileName = String.Empty;
+            this.ProductName = String.Empty;
+            this.PolicyName = String.Empty;
+
             this.SignerInfo = new SignerEvent();
         }
     }
@@ -611,5 +617,10 @@ namespace WDAC_Wizard
         public string IssuerName { get; set; }
         public byte[] IssuerTBSHash { get; set; }
         public string PublisherName { get; set; }
+
+        public SignerEvent()
+        {
+            this.PublisherName = String.Empty;
+        }
     }
 }
