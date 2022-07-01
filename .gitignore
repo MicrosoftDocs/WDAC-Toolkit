@@ -330,3 +330,4 @@ ASALocalRun/
 .mfractor/
 *.exe
 *.bak
+WDAC-Policy-Wizard/app/MSIX/WDAC Wizard.exe
