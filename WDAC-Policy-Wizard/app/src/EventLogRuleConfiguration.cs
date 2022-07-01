@@ -156,6 +156,13 @@ namespace WDAC_Wizard
             {
                 return;
             }
+
+            // Header selected, sort table
+            if(selectedRow == -1)
+            {
+                SortDataGrid(sender, e);
+                return;
+            }
             
             SetPublisherPanel(
                 this.CiEvents[selectedRow].SignerInfo.IssuerName,
@@ -165,6 +172,87 @@ namespace WDAC_Wizard
                 this.CiEvents[selectedRow].ProductName);
 
             this.SelectedRow = selectedRow;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SortDataGrid(object sender, DataGridViewCellEventArgs e)
+        {
+            // If the list is not sorted by the desired column, sort the list
+            // Otherwise, simply reverse the list of objects to change from ascending --> descending --> ascending
+            if(this.eventsDataGridView.Columns[e.ColumnIndex].Tag != (object) "Sorted")
+            {
+                SortDisplayObjects(e.ColumnIndex, false);
+                ResetColTags();
+                this.eventsDataGridView.Columns[e.ColumnIndex].Tag = "Sorted";
+            }
+            else
+            {
+                SortDisplayObjects(e.ColumnIndex, true);
+            }
+            this.eventsDataGridView.Refresh();
+        }
+
+        private void SortDisplayObjects(int columnToSort, bool isSorted)
+        {
+            /*
+             *  public string Action;
+             *  public string EventId;
+             *  public string Filename;
+             *  public string Product;
+             *  public string PolicyName;
+             *  public string Publisher;
+            */
+
+            // Sort display objects and CiEvents since row number is used to reference CiEvent
+            if (!isSorted)
+            {
+                switch(columnToSort)
+                {
+                    case 1:
+                        this.DisplayObjects.Sort((x, y) => x.EventId.CompareTo(y.EventId));
+                        this.CiEvents.Sort((x, y) => x.EventId.CompareTo(y.EventId));
+                        break;
+
+                    case 2:
+                        this.DisplayObjects.Sort((x, y) => x.Filename.CompareTo(y.Filename));
+                        this.CiEvents.Sort((x, y) => x.FileName.CompareTo(y.FileName));
+                        break;
+
+                    case 3:
+                        this.DisplayObjects.Sort((x, y) => x.Product.CompareTo(y.Product));
+                        this.CiEvents.Sort((x, y) => x.ProductName.CompareTo(y.ProductName));
+                        break;
+
+                    case 4:
+                        this.DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        this.CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        break;
+
+                    case 5:
+                        this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
+                        this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
+                        break;
+                }
+            }
+            else
+            {
+                this.DisplayObjects.Reverse();
+                this.CiEvents.Reverse();
+            }
+
+            this._MainWindow.CiEvents = this.CiEvents;
+        }
+
+        private void ResetColTags()
+        {
+            for(int i = 0; i< this.eventsDataGridView.Columns.Count; i++)
+            {
+                this.eventsDataGridView.Columns[i].Tag = ""; 
+            }
         }
 
         /// <summary>
@@ -1020,10 +1108,10 @@ namespace WDAC_Wizard
         {
             this.Action = "   ---   ";
             this.EventId = eventId;
-            this.Filename = filename;
-            this.Product = product;
-            this.PolicyName = policyName;
-            this.Publisher = publisher;
+            this.Filename = String.IsNullOrEmpty(filename) ? String.Empty : filename;
+            this.Product = String.IsNullOrEmpty(product) ? String.Empty : product;
+            this.PolicyName = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
+            this.Publisher = String.IsNullOrEmpty(publisher) ? String.Empty : publisher;
         }
 
     }

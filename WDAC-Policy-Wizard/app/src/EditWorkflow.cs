@@ -297,7 +297,15 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
                 this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
-                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable; 
+                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                this._MainWindow.ErrorOnPage = true;
+            }
+            else if(this._MainWindow.CiEvents.Count < 1)
+            {
+                this.Log.AddErrorMsg("Zero CiEvents were created.");
+                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion;
+                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                this._MainWindow.ErrorOnPage = true; 
             }
             else
             {
@@ -305,6 +313,7 @@ namespace WDAC_Wizard
                 this.parseresult_PictureBox.Image = Properties.Resources.verified;
                 DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log Parsing Success", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this._MainWindow.ErrorOnPage = false;
             }
 
             this.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
