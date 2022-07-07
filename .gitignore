@@ -330,3 +330,5 @@ ASALocalRun/
 .mfractor/
 *.exe
 *.bak
+AppLocker-Policy-Converter/app/test-policies/WDACPolicy_Test_AuthRoot.xml
+*.xml

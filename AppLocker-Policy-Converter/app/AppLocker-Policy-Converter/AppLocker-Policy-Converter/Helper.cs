@@ -27,6 +27,7 @@ namespace AppLocker_Policy_Converter
         static public int cFileAttribRules = 0;
         static public int cFilePathRules = 0; 
         static public int cFileHashRules = 0;
+        static public string LastError = string.Empty; 
        
         public static AppLockerPolicy SerializeAppLockerPolicy(string xmlPath)
         {
@@ -44,7 +45,7 @@ namespace AppLocker_Policy_Converter
             }
             catch (Exception exp)
             {
-                return null;
+                throw new NullReferenceException("There is an error in " + xmlPath, exp);
             }
 
             return appLockerPolicy;
@@ -116,11 +117,18 @@ namespace AppLocker_Policy_Converter
         /// <returns></returns>
         public static SiPolicy ConvertFilePublisherRule(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
         {
+            string publisherName = filePubRule.Conditions.FilePublisherCondition.PublisherName;
+
+            // Microsoft Corporation signers need 2 rules - handle with a different method
+            if(publisherName.Contains("Microsoft"))
+            {
+                return ConvertMSFTFilePublisherRule(filePubRule, siPolicy);
+            }
+
             string action = (String)filePubRule.Action.ToString();
             string productName = filePubRule.Conditions.FilePublisherCondition.ProductName;
             string minVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.LowSection;
             string maxVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.HighSection;
-            string publisherName = filePubRule.Conditions.FilePublisherCondition.PublisherName;
             string fileName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
 
             // Create new CertPublisher object and add CertPublisher field
@@ -130,14 +138,8 @@ namespace AppLocker_Policy_Converter
             // Create new Certificate Root object and add to CertRoot field
             CertRoot cRoot = new CertRoot();
             cRoot.Type = CertEnumType.Wellknown;
-            byte[] tbsValue = new byte[1];
-            cRoot.Value = tbsValue; 
-
-            /*
-            cRoot.Type = CertEnumType.TBS;
-            byte[] tbsValue = new byte[32];
-            cRoot.Value = tbsValue; 
-            */
+            byte[] arr = { 20 }; //Authroot
+            cRoot.Value = arr;
 
             // Create new FileAttrib object to link to signer
             FileAttrib fileAttrib = new FileAttrib();
@@ -192,6 +194,103 @@ namespace AppLocker_Policy_Converter
             
             return siPolicy;
         }
+
+        /// <summary>
+        /// Converts an AppLocker FilePathRuleType to 2 SiPolicy Microsoft publisher rules (Wellknown root = 06,07). Adds the new rules to the provided policy
+        /// </summary>
+        /// <param name="filePubRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy ConvertMSFTFilePublisherRule(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
+        {
+            string publisherName = filePubRule.Conditions.FilePublisherCondition.PublisherName;
+            string action = (String)filePubRule.Action.ToString();
+            string productName = filePubRule.Conditions.FilePublisherCondition.ProductName;
+            string minVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.LowSection;
+            string maxVersion = filePubRule.Conditions.FilePublisherCondition.BinaryVersionRange.HighSection;
+            string fileName = filePubRule.Conditions.FilePublisherCondition.BinaryName;
+
+            // Create new CertPublisher object and add CertPublisher field
+            CertPublisher cPub = new CertPublisher();
+            cPub.Value = ExtractPublisher(publisherName);
+
+            // Create new 2 new cert root objects for Microsoft Wellknown Roots 06 and 07
+            // Impossible to know from the AppLocker policy which root was used so trust both
+            CertRoot cProdRoot = new CertRoot();
+            cProdRoot.Type = CertEnumType.Wellknown;
+            byte[] arr = { 06 }; // MS Root 2010
+            cProdRoot.Value = arr;
+
+            CertRoot cStdRoot = new CertRoot();
+            cStdRoot.Type = CertEnumType.Wellknown;
+            byte[] arr1 = { 07 }; // MS Root 2011
+            cStdRoot.Value = arr1;
+
+            // Create new FileAttrib object to link to signer
+            FileAttrib fileAttrib = new FileAttrib();
+            fileAttrib.FileName = fileName;
+            fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
+            fileAttrib.FriendlyName = filePubRule.Description;
+
+            // Do not blindly set versions == "*"
+            // This is okay to do for Original Filenames
+            if (minVersion != "*")
+            {
+                fileAttrib.MinimumFileVersion = minVersion;
+            }
+            if (maxVersion != "*")
+            {
+                fileAttrib.MaximumFileVersion = maxVersion;
+            }
+            if (productName != "*" || !String.IsNullOrEmpty(productName))
+            {
+                fileAttrib.ProductName = productName;
+            }
+
+            // Add the FileAttributeReference to SiPolicy
+            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+            cFileAttribRules++;
+
+            // Link the new FileAttrib object back to the signer
+            FileAttribRef fileAttribRef = new FileAttribRef();
+            fileAttribRef.RuleID = fileAttrib.ID;
+
+            // Create new signer object for Prod root (Wellknown=06)
+            Signer prodSigner = new Signer();
+            prodSigner.Name = filePubRule.Name;
+            prodSigner.ID = "ID_SIGNER_A_" + cFilePublisherRules;
+            prodSigner.CertRoot = cProdRoot;
+            prodSigner.CertPublisher = cPub;
+            prodSigner.FileAttribRef = new FileAttribRef[1];
+            prodSigner.FileAttribRef[0] = fileAttribRef;
+            cFilePublisherRules++;
+
+            // Create new signer object for Std root (Wellknown=07)
+            Signer stdSigner = new Signer();
+            stdSigner.Name = filePubRule.Name;
+            stdSigner.ID = "ID_SIGNER_A_" + cFilePublisherRules;
+            stdSigner.CertRoot = cStdRoot;
+            stdSigner.CertPublisher = cPub;
+            stdSigner.FileAttribRef = new FileAttribRef[1];
+            stdSigner.FileAttribRef[0] = fileAttribRef;
+            cFilePublisherRules++;
+
+            if (action == "Allow")
+            {
+                // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
+                siPolicy = AddSiPolicyAllowSigner(prodSigner, siPolicy);
+                siPolicy = AddSiPolicyAllowSigner(stdSigner, siPolicy);
+            }
+            else
+            {
+                // Add the deny signer to Signers and the product signers section with Windows Signing Scenario
+                siPolicy = AddSiPolicyDenySigner(prodSigner, siPolicy);
+                siPolicy = AddSiPolicyDenySigner(stdSigner, siPolicy);
+            }
+
+            return siPolicy;
+        }
+
 
         /// <summary>
         /// Converts an AppLocker FileHashRuleType to an SiPolicy rule. Adds the new rule to the provided policy
@@ -417,6 +516,11 @@ namespace AppLocker_Policy_Converter
             // Always grab the first value - it will be CN where exists, O otherwise (when O=CN)
             // Ex) ["O =", "   Contoso Corporation"]
             var pubParts = publisher.Split(',');
+            if(pubParts.Length < 2)
+            {
+                return publisher;
+            }
+
             string formattedPub = pubParts[0];
 
             formattedPub = formattedPub.Split('=')[1]; 
@@ -637,6 +741,15 @@ namespace AppLocker_Policy_Converter
             // Get DateTime now in UTC
             // Format to ISO 8601 (YYYY-MM-DD)
             return DateTime.UtcNow.ToString("yyyy-MM-dd");
+        }
+
+        /// <summary>
+        /// Returns the last error encountered by the Helper method
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLastError()
+        {
+            return LastError;
         }
     }
 }

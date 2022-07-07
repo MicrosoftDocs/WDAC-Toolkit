@@ -46,8 +46,11 @@ namespace AppLocker_Policy_Converter
                 return -1;
             }
 
-            List<AppLockerPolicy> appLockerPolicies = ParseAppLockerPolicies(applockerPolicyPaths);
-            ConvertPolicies(appLockerPolicies, outputPath);
+            List<(AppLockerPolicy, string)> appLockerPolicies = ParseAppLockerPolicies(applockerPolicyPaths);
+            SiPolicy wdacPolicy = ConvertPolicies(appLockerPolicies, outputPath);
+
+            wdacPolicy = FormatPolicy(wdacPolicy);
+            Helper.SerializePolicytoXML(wdacPolicy, outputPath);
 
             return 0; 
         }
@@ -105,10 +108,10 @@ namespace AppLocker_Policy_Converter
             {
                 for(int j = appLockerArgV + 1; j < outputPathArgV; j++)
                 {
-                    appLockerPaths.Add(args[j]); 
+                    appLockerPaths.Add(args[j].Trim(',')); 
                 }
             }
-            // Provided in order, e.g. -OutputPath <path_1> -InputPaths <path_2>,<path_3>
+            // Provided out of order, e.g. -OutputPath <path_1> -InputPaths <path_2>,<path_3>
             else
             {
                 for (int j = appLockerArgV + 1; j < args.Length; j++)
@@ -161,17 +164,32 @@ namespace AppLocker_Policy_Converter
         /// Parses the AppLocker paths provided by the user and adds them to the list to process only if the file exists
         /// </summary>
         /// <param name="policyPaths"></param>
-        static List<AppLockerPolicy> ParseAppLockerPolicies(List<string> policyPaths)
+        static List<(AppLockerPolicy, string)> ParseAppLockerPolicies(List<string> policyPaths)
         {
-            List<AppLockerPolicy> appLockerPolicies = new List<AppLockerPolicy>(); 
+            List<(AppLockerPolicy, string)> appLockerPolicies = new List<(AppLockerPolicy, string)>(); 
             foreach (string policyPath in policyPaths)
             {
                 if(File.Exists(policyPath))
                 {
-                    appLockerPolicies.Add(Helper.SerializeAppLockerPolicy(policyPath));
+                    try
+                    {
+                        AppLockerPolicy appLockerPolicy = Helper.SerializeAppLockerPolicy(policyPath);
+                        appLockerPolicies.Add((appLockerPolicy, policyPath));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(String.Format("\r\nERROR converting {0} with exception: {1}", policyPath, e));
+                    }
+                    // if(appLockerPolicy == null)
+                    // {
+                    //     Console.WriteLine(Helper.GetLastError());
+                    // }
+                    // else
+                    // {
+                    //     
+                    // }
                 }
             }
-
             return appLockerPolicies; 
         }
 
@@ -180,13 +198,24 @@ namespace AppLocker_Policy_Converter
         /// </summary>
         /// <param name="appLockerPolicies"></param>
         /// <param name="outputPath"></param>
-        static void ConvertPolicies(List<AppLockerPolicy> appLockerPolicies, string outputPath)
+        static SiPolicy ConvertPolicies(List<(AppLockerPolicy, string)> appLockerPolicies, string outputPath)
         {
-            List<SiPolicy> wdacPolicies = new List<SiPolicy>();
-            foreach(AppLockerPolicy appLockerPolicy in appLockerPolicies)
+            SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
+
+            foreach (var appLockerPolicy in appLockerPolicies)
             {
-                ProcessPolicy(appLockerPolicy, outputPath);
+                try
+                {
+                    wdacPolicy = ProcessPolicy(appLockerPolicy.Item1, outputPath, wdacPolicy);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(String.Format("\r\nERROR converting {0} with exception: {1}", appLockerPolicy.Item2, e));
+                }
+                Console.WriteLine("Successfully converted " + appLockerPolicy.Item2);
             }
+            Console.WriteLine("\r\nSuccessfully converted AppLocker policies to WDAC Policy at location " + outputPath);
+            return wdacPolicy;
         }
         
         /// <summary>
@@ -194,9 +223,12 @@ namespace AppLocker_Policy_Converter
         /// </summary>
         /// <param name="appLockerPolicy"></param>
         /// <param name="outputPath"></param>
-        static void ProcessPolicy(AppLockerPolicy appLockerPolicy, string outputPath)
+        static SiPolicy ProcessPolicy(AppLockerPolicy appLockerPolicy, string outputPath, SiPolicy wdacPolicy)
         {
-            SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
+            if(appLockerPolicy == null)
+            {
+                throw new Exception();
+            }
 
             foreach(RuleCollectionType ruleCollection in appLockerPolicy.RuleCollection)
             {
@@ -217,8 +249,7 @@ namespace AppLocker_Policy_Converter
                 }
             }
 
-            wdacPolicy = FormatPolicy(wdacPolicy);
-            Helper.SerializePolicytoXML(wdacPolicy, outputPath); 
+            return wdacPolicy;
         }
 
         /// <summary>
@@ -229,8 +260,7 @@ namespace AppLocker_Policy_Converter
         static SiPolicy FormatPolicy(SiPolicy siPolicy)
         {
             // Set GUIDs
-            Guid newGuid = new Guid();
-            siPolicy.BasePolicyID = newGuid.ToString();
+            siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
             siPolicy.PolicyID = siPolicy.BasePolicyID;
 
             // Set Signing Scenario friendly names
