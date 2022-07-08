@@ -184,12 +184,15 @@ namespace AppLocker_Policy_Converter
             if (action == "Allow")
             {
                 // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
+                // Add to CiSigners section to indicate that this is a valid Enterprise signer
                 siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
+                siPolicy = AddCiSigner(signer, siPolicy);
             }
             else
             {
                 // Add the deny signer to Signers and the product signers section with Windows Signing Scenario
                 siPolicy = AddSiPolicyDenySigner(signer, siPolicy);
+                siPolicy = AddCiSigner(signer, siPolicy);
             }
             
             return siPolicy;
@@ -660,9 +663,31 @@ namespace AppLocker_Policy_Converter
                 allowedSigners[cAllowedSigners] = allowedSigner;
                 siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = allowedSigners;
             }
-            
             return siPolicy;             
         }
+
+        /// <summary>
+        /// Adds a CiSigner object to the CiSigners section in the WDAC policy
+        /// </summary>
+        /// <param name="ciSigner"></param>
+        /// <param name="siPolicy"></param>
+        private static SiPolicy AddCiSigner(Signer signer, SiPolicy siPolicy)
+        {
+            // Add to the CiSigners section of the policy as well
+            // Copy the SiPolicy signer object and add the signer param to the field
+            CiSigner[] ciSignersCopy = new CiSigner[siPolicy.CiSigners.Length + 1];
+            for (int i = 0; i < ciSignersCopy.Length - 1; i++)
+            {
+                ciSignersCopy[i] = siPolicy.CiSigners[i];
+            }
+
+            ciSignersCopy[ciSignersCopy.Length - 1] = new CiSigner();
+            ciSignersCopy[ciSignersCopy.Length - 1].SignerId = signer.ID;
+            siPolicy.CiSigners = ciSignersCopy;
+
+            return siPolicy;
+        }
+
 
         /// <summary>
         /// Handles adding the new DenySigner object to the provided siPolicy
