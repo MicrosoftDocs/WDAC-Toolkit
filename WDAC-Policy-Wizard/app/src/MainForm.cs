@@ -40,6 +40,7 @@ namespace WDAC_Wizard
         public Logger Log { get; set; }
         public List<string> PageList;
         public WDAC_Policy Policy { get; set; }
+        public List<CiEvent> CiEvents { get; set; }
         // Runspace param to access all PS Variables and eliminate overhead opening each time
         private Runspace runspace;
         private int RulesNumber;
@@ -48,7 +49,15 @@ namespace WDAC_Wizard
 
         // Edit Workflow datastructs
         private BuildPage _BuildPage;
-        private SigningRules_Control _SigningRulesControl; 
+        private SigningRules_Control _SigningRulesControl;
+        public EditWorkflowType EditWorkflow;
+        public SiPolicy EventLogPolicy; 
+
+        public enum EditWorkflowType
+        {
+            Edit = 0,
+            EventLog = 1,
+        }
 
         public MainWindow()
         {
@@ -63,6 +72,7 @@ namespace WDAC_Wizard
             this.RulesNumber = 0;
 
             this.Policy = new WDAC_Policy();
+            this.CiEvents = new List<CiEvent>(); 
             this.PageList = new List<string>();
             this.ExeFolderPath = GetExecutablePath(false);
 
@@ -456,12 +466,25 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                var _RulesPage = new ConfigTemplate_Control(this);
-                                _RulesPage.Name = pageKey;
-                                this.PageList.Add(_RulesPage.Name);
-                                this.Controls.Add(_RulesPage);
-                                _RulesPage.BringToFront();
-                                _RulesPage.Focus();
+                                // CHECKS HERE IF EDIT FLOW OR AUDIT FLOW
+                                if(this.EditWorkflow == EditWorkflowType.Edit)
+                                {
+                                    var _RulesPage = new ConfigTemplate_Control(this);
+                                    _RulesPage.Name = pageKey;
+                                    this.PageList.Add(_RulesPage.Name);
+                                    this.Controls.Add(_RulesPage);
+                                    _RulesPage.BringToFront();
+                                    _RulesPage.Focus();
+                                }
+                                else
+                                {
+                                    var _RulesPage = new EventLogRuleConfiguration(this);
+                                    _RulesPage.Name = pageKey;
+                                    this.PageList.Add(_RulesPage.Name);
+                                    this.Controls.Add(_RulesPage);
+                                    _RulesPage.BringToFront();
+                                    _RulesPage.Focus();
+                                }
                             }
 
                             ShowControlPanel(sender, e);
@@ -564,12 +587,29 @@ namespace WDAC_Wizard
                             }
                             else
                             {
-                                this._SigningRulesControl = new SigningRules_Control(this);
-                                this._SigningRulesControl.Name = pageKey;
-                                this.PageList.Add(this._SigningRulesControl.Name);
-                                this.Controls.Add(this._SigningRulesControl);
-                                this._SigningRulesControl.BringToFront();
-                                this._SigningRulesControl.Focus();
+                                // CHECKS HERE IF EDIT FLOW OR AUDIT FLOW
+                                if (this.EditWorkflow == EditWorkflowType.Edit)
+                                {
+                                    this._SigningRulesControl = new SigningRules_Control(this);
+                                    this._SigningRulesControl.Name = pageKey;
+                                    this.PageList.Add(this._SigningRulesControl.Name);
+                                    this.Controls.Add(this._SigningRulesControl);
+                                    this._SigningRulesControl.BringToFront();
+                                    this._SigningRulesControl.Focus();
+                                }
+                                else
+                                {
+                                    // Go to build page and provide the SiPolicy object
+                                    pageKey = "Event Logs Build Page";
+                                    this._BuildPage = new BuildPage(this);
+                                    this._BuildPage.Name = pageKey;
+                                    this.PageList.Add(this._BuildPage.Name);
+                                    this.Controls.Add(this._BuildPage);
+                                    this._BuildPage.BringToFront();
+                                    this._BuildPage.Focus();
+                                    button_Next.Visible = false;
+                                    ProcessPolicy();
+                                }
                             }
 
                             ShowControlPanel(sender, e);
@@ -701,6 +741,33 @@ namespace WDAC_Wizard
         /// </summary>
         private void ProcessPolicy()
         {
+            // Short circuit policy building if using Event Log workflow
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit && this.EditWorkflow == EditWorkflowType.EventLog)
+            {
+                string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
+                string pathToWrite = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
+
+                try
+                {
+                    Helper.SerializePolicytoXML(this.EventLogPolicy, pathToWrite);
+                }
+                catch(Exception e)
+                {
+                    this.Log.AddErrorMsg("Event Log SiPolicy serialization failed with error: ", e);
+                }
+                
+                // Upload log file if customer consents
+                if (Properties.Settings.Default.allowTelemetry)
+                {
+                    this.Log.UploadLog();
+                }
+
+                // Build Page:
+                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to WDAC Policy");
+                this._BuildPage.ShowFinishMsg(pathToWrite);
+                return;
+            }
+
             // Create folder for temp intermediate policies
             try
             {
@@ -1017,13 +1084,17 @@ namespace WDAC_Wizard
                 {
                     // Determine if rule is UMCI and KMCI by attempting to access Rule_0[1].Exceptions = ''
                     // If error, there is only 1 index to update
-                    
+                    string exceptionCommand = String.Empty; 
                     for(int j = 0; j < customRule.ExceptionList.Count; j++ )
                     {
                         var exceptionRule = customRule.ExceptionList[j];
                         exceptionRule.PSVariable = j.ToString();
-
-                        scriptCommands.Add(CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable));
+                        
+                        exceptionCommand = CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable);
+                        if (!String.IsNullOrEmpty(exceptionCommand))
+                        {
+                            scriptCommands.Add(exceptionCommand);
+                        }
 
                         // Add required exceptions IDs and FileException = 1
                         scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
@@ -1040,6 +1111,10 @@ namespace WDAC_Wizard
                 // Run the rule creation commands
                 foreach (var script in scriptCommands)
                 {
+                    if(String.IsNullOrEmpty(script))
+                    {
+                        continue; 
+                    }
                     pipeline.Commands.AddScript(script);
                     this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", script));
                 }
@@ -1171,16 +1246,20 @@ namespace WDAC_Wizard
                     foreach (var pfn in customRule.CustomValues.PackageFamilyNames)
                     {
                         // Create placeholder per custom hash Rule until can fix this overwrite bug
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
-                        // customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.Id = $Rule_{0}_PFNRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, i)); // modify the ID to avoid collisions
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn)); // Set the hash attribute to the hash value
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion)); // Set the hash attribute to the hash value
+                        if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                        {
+                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package -Deny", customRule.PSVariable, i));
+                        }
+                        else
+                        {
+                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
+                        }
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn));
+                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion));
 
                         customValueCommand.Add(String.Format("$Rule_{0} += $Rule_{0}_PFNRule_{1}", customRule.PSVariable, i));
                         i++;
                     }
-
-                    // customValueCommand.Add(mergeCommand);
                 }
             }
 
@@ -1192,8 +1271,17 @@ namespace WDAC_Wizard
                 foreach (var hash in customRule.CustomValues.Hashes)
                 {
                     // Create placeholder per custom hash Rule until can fix this overwrite bug
-                    customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                    if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+                    {
+                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\" -Deny", customRule.PSVariable,
                         i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    }
+                    else
+                    {
+                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
+                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
+                    }
+
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1} = $Rule_{0}_Template_{1}[1].PSObject.Copy()", customRule.PSVariable, i)); // Make a copy of the template
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.Id = $Rule_{0}_HashRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, hash.Substring(0,5))); // modify the ID to avoid collisions
                     customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.attributes[\"Hash\"] = \"{2}\"", customRule.PSVariable, i, hash)); // Set the hash attribute to the hash value
@@ -1300,7 +1388,7 @@ namespace WDAC_Wizard
                         {
                             if(customRule.UsingCustomValues)
                             {
-
+                                return String.Empty;
                             }
                             else
                             {
@@ -1319,7 +1407,7 @@ namespace WDAC_Wizard
                     {
                         if(customRule.UsingCustomValues)
                         {
-                            
+                            return String.Empty; 
                         }
                         else
                         {
@@ -2220,8 +2308,6 @@ namespace WDAC_Wizard
                 Directory.CreateDirectory(tempFolderPath);
 
             return tempFolderPath; 
-
-
         }
 
         /// <summary>

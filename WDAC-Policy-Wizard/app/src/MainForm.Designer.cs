@@ -372,9 +372,9 @@ namespace WDAC_Wizard
             this.label3.Location = new System.Drawing.Point(563, 453);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(195, 18);
+            this.label3.Size = new System.Drawing.Size(218, 36);
             this.label3.TabIndex = 34;
-            this.label3.Text = "Edit an existing policy on disk";
+            this.label3.Text = "Edit an existing policy on disk or \r\nconvert event logs to a policy";
             // 
             // label4
             // 

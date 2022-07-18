@@ -331,7 +331,6 @@ ASALocalRun/
 *.exe
 *.bak
 AppLocker-Policy-Converter/app/test-policies/WDACPolicy_Test_AuthRoot.xml
-*.xml
 *.cip
 AppLocker-Policy-Converter/app/test-policies/WDACPolicy.xml
-AppLocker-Policy-Converter/app/test-policies/WDACPolicy.xml
+WDAC-Policy-Wizard/app/MSIX/WDAC Wizard.exe
