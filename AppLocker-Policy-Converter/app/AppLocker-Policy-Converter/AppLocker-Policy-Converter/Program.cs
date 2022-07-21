@@ -180,14 +180,10 @@ namespace AppLocker_Policy_Converter
                     {
                         Console.WriteLine(String.Format("\r\nERROR converting {0} with exception: {1}", policyPath, e));
                     }
-                    // if(appLockerPolicy == null)
-                    // {
-                    //     Console.WriteLine(Helper.GetLastError());
-                    // }
-                    // else
-                    // {
-                    //     
-                    // }
+                }
+                else
+                {
+                    Console.WriteLine("\r\nERROR Could not locate the policy at " + policyPath);
                 }
             }
             return appLockerPolicies; 
@@ -234,6 +230,13 @@ namespace AppLocker_Policy_Converter
             {
                 for(int i = 0; i < ruleCollection.Items.Length; i++)
                 {
+                    // Skip the Managed Installer rule collection
+                    if(ruleCollection.Type == "ManagedInstaller")
+                    {
+                        Console.Write("\r\nWARNING: Skipping ManagedInstaller rule collection as these are not valid WDAC rules.");
+                        break; 
+                    }
+
                     if(ruleCollection.Items[i].GetType() == typeof(FilePublisherRuleType))
                     {
                        wdacPolicy = Helper.ConvertFilePublisherRule((FilePublisherRuleType)ruleCollection.Items[i], wdacPolicy);
