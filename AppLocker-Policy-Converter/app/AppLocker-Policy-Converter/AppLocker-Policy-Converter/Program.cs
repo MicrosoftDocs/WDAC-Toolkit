@@ -197,20 +197,29 @@ namespace AppLocker_Policy_Converter
         static SiPolicy ConvertPolicies(List<(AppLockerPolicy, string)> appLockerPolicies, string outputPath)
         {
             SiPolicy wdacPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty);
+            List<string> successfulPaths = new List<string>();
 
             foreach (var appLockerPolicy in appLockerPolicies)
             {
                 try
                 {
                     wdacPolicy = ProcessPolicy(appLockerPolicy.Item1, outputPath, wdacPolicy);
+                    successfulPaths.Add(appLockerPolicy.Item2);
                 }
                 catch(Exception e)
                 {
                     Console.WriteLine(String.Format("\r\nERROR converting {0} with exception: {1}", appLockerPolicy.Item2, e));
                 }
-                Console.WriteLine("\r\nSuccessfully converted " + appLockerPolicy.Item2);
+                
             }
-            Console.WriteLine("\r\nSuccessfully converted AppLocker policies to WDAC Policy at location " + outputPath);
+
+            Console.WriteLine("\r\nSUCCESSFULLY CONVERTED THE FOLLOWING POLICIES:");
+            foreach(var successPath in successfulPaths)
+            {
+                Console.WriteLine(successPath);
+            }
+
+            Console.WriteLine("\r\nOutput WDAC Policy at location " + outputPath);
             return wdacPolicy;
         }
         

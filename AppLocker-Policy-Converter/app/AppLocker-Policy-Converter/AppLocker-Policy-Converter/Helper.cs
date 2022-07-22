@@ -451,6 +451,7 @@ namespace AppLocker_Policy_Converter
                             deny.Hash = ConvertHashStringToByte(hashVal.Data);
                             string algo = hashVal.Type.ToString(); //e.g. Type = SHA256
                             deny.ID = String.Format("ID_DENY_B_{0}_{1}", cFileHashRules, algo);
+                            deny.FriendlyName = hashVal.SourceFileName; 
 
                             siPolicy = AddSiPolicyDenyRule(deny, siPolicy, true);
                             exceptDenyRule.DenyRuleID = deny.ID; 
@@ -463,6 +464,7 @@ namespace AppLocker_Policy_Converter
                             allow.Hash = ConvertHashStringToByte(hashVal.Data);
                             string algo = hashVal.Type.ToString(); //e.g. Type = SHA256
                             allow.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
+                            allow.FriendlyName = hashVal.SourceFileName;
 
                             siPolicy = AddSiPolicyAllowRule(allow, siPolicy, true);
                             exceptAllowRule.AllowRuleID = allow.ID;
@@ -487,6 +489,7 @@ namespace AppLocker_Policy_Converter
                         }
                         deny.FilePath = wdacPath;
                         deny.ID = "ID_DENY_C_" + cFilePathRules.ToString();
+                        deny.FriendlyName = "Deny path - " + exception.Path;
 
                         siPolicy = AddSiPolicyDenyRule(deny, siPolicy, true);
                         exceptDenyRule.DenyRuleID = deny.ID;
@@ -505,6 +508,7 @@ namespace AppLocker_Policy_Converter
                         }
                         allow.FilePath = wdacPath;
                         allow.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
+                        allow.FriendlyName = "Allow path - " + exception.Path;
 
                         siPolicy = AddSiPolicyAllowRule(allow, siPolicy, true);
                         exceptAllowRule.AllowRuleID = allow.ID;
@@ -514,8 +518,9 @@ namespace AppLocker_Policy_Converter
                 }
                 else if (exceptionItem.GetType() == typeof(FilePublisherConditionType))
                 {
-                    // FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
-                    // exceptionObjects.Add(exception);
+                    FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
+                    Console.WriteLine(String.Format("\r\nWARNING: SKIPPING RULE EXCEPTION {0}. Id = {1}" +
+                        "\r\nPublisher rules cannot be used to except publisher rules in WDAC.", exception.PublisherName, filePubRule.Id));
                 }
             }
 
