@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppLocker-Policy-Converter", "AppLocker-Policy-Converter\AppLocker-Policy-Converter.csproj", "{E6812CFE-4744-4EB6-A1F7-470C5B3CC54C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6812CFE-4744-4EB6-A1F7-470C5B3CC54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6812CFE-4744-4EB6-A1F7-470C5B3CC54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6812CFE-4744-4EB6-A1F7-470C5B3CC54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6812CFE-4744-4EB6-A1F7-470C5B3CC54C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {214DF3E0-EFB4-426C-A3F8-9F9BBE39B57E}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,561 @@
+<AppLockerPolicy Version="1">
+  <RuleCollection Type="Exe" EnforcementMode="Enabled">
+    <FilePublisherRule Id="084531ca-f0a0-445c-88b6-f41c1f456292" Name="usbstick_commerzbank: MIDBROWSER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ProductName="MIDBROWSER" BinaryName="*">
+          <BinaryVersionRange LowSection="10.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="0c237900-8dd7-4f37-9030-4fec3eeb5ba7" Name="FOXIT READER SETUP, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" Description="SR413284" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ProductName="FOXIT READER SETUP" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="0e374de3-e093-49de-b97b-6ace248b0e95" Name="DTLOCKER+ APPLICATION, from O=KINGSTON DIGITAL INC., L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KINGSTON DIGITAL INC., L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ProductName="DTLOCKER+ APPLICATION" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="11ecd61e-4a54-46a6-8d86-db3b41451bb8" Name="usbstick_commerzbank: ANWENDUNG REMOVEEX signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ProductName="ANWENDUNG REMOVEEX" BinaryName="*">
+          <BinaryVersionRange LowSection="2012.12.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="13c3f539-001c-4bce-9d58-d96b9471251f" Name="Netlock: MOZILLA WEBAPP RUNTIME APP UNINSTALLER signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ProductName="MOZILLA WEBAPP RUNTIME APP UNINSTALLER" BinaryName="*">
+          <BinaryVersionRange LowSection="1.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="15ae912e-bbff-4fd5-a7bb-738f228524bf" Name="DT4000 APPLICATION, from O=KINGSTON TECHNOLOGY, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KINGSTON TECHNOLOGY, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ProductName="DT4000 APPLICATION" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="2175fcc7-4c62-4706-9309-428729856516" Name="FOXIT READER, from O=FOXIT SOFTWARE INCORPORATED, L=FREMONT, S=CALIFORNIA, C=US" Description="FOXIT READER will be blocked based on Publisher and Product Name" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=FOXIT SOFTWARE INCORPORATED, L=FREMONT, S=CALIFORNIA, C=US" ProductName="FOXIT READER" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="2fb62fca-11e4-4639-9d2a-752fb7e99dcd" Name="TOTALCMD64.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" Description="53970 - Create block policy for TotalCommander V8" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ProductName="TOTAL COMMANDER" BinaryName="TOTALCMD64.EXE">
+          <BinaryVersionRange LowSection="8.5.1.1" HighSection="8.5.1.1" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+	<FilePublisherRule Id="31373371-15ae-4f5d-9be4-b348b5a4fc1b" Name="PowerBI Gateway Configurator" Description="" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ProductName="PERSONALGATEWAYCONFIGURATOR" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="35f47639-3db3-4332-92da-9e0beca24f50" Name="FOXIT READER, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" Description="SR413284" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ProductName="FOXIT READER" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="37f33972-aca6-4350-8d05-78f544bd23ce" Name="OPERA INTERNET BROWSER, from O=OPERA SOFTWARE AS, L=OSLO, C=NO" Description="Change 53611, Blacklisting Opera Internet Browser by product name and publisher" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=OPERA SOFTWARE AS, L=OSLO, C=NO" ProductName="OPERA INTERNET BROWSER" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="3c0387d3-e4ea-4f34-a28e-1b89499d2025" Name="ECAT neu executables by O=DOCWARE GMBH, L=FÜRTH, C=DE" Description="Ecat neu with PPcatalog.exe with version 6.19.1.15" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=DOCWARE GMBH, L=FÜRTH, C=DE" ProductName="*" BinaryName="*">
+          <BinaryVersionRange LowSection="6.19.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="426db140-7ce2-46b9-a8e8-ef41cdd07aa8" Name="CLICKSHARE, from O=BARCO N.V., L=KORTRIJK, S=WEST-VLAANDEREN, C=BE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=BARCO N.V., L=KORTRIJK, S=WEST-VLAANDEREN, C=BE" ProductName="CLICKSHARE" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="5b26c8e9-8267-4604-b44b-ec4a5bb62da4" Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ProductName="FIREFOX" BinaryName="*">
+          <BinaryVersionRange LowSection="10.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="5d9422be-82c1-4f0e-802f-07db89f7e856" Name="GOOGLE CHROME, from O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CA, C=US" Description="change 58675" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CA, C=US" ProductName="GOOGLE CHROME" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="602e3112-9292-44f2-97ad-a4a4d17e4a6b" Name="usbstick_commerzbank: MIDENTITY signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ProductName="MIDENTITY" BinaryName="*">
+          <BinaryVersionRange LowSection="2013.7.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="6cfbdcb2-0198-4fa9-95de-181137e9d1e2" Name="AIRPARROT 2, from O=SQUIRRELS LLC, L=NORTH CANTON, S=OHIO, C=US" Description="Change 51852 - Block Policy for AirParrot" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=SQUIRRELS LLC, L=NORTH CANTON, S=OHIO, C=US" ProductName="AIRPARROT 2" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="7151a632-fd83-45d1-ac5e-a435bba58071" Name="TOTALCMD.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" Description="" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ProductName="TOTAL COMMANDER" BinaryName="TOTALCMD.EXE">
+          <BinaryVersionRange LowSection="8.0.1.0" HighSection="8.0.1.0" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="746a9f35-b39b-45da-abd8-90fde38117fc" Name="DTLOCKER+ APPLICATION, from O=KINGSTON TECHNOLOGY CORPORATION, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KINGSTON TECHNOLOGY CORPORATION, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ProductName="DTLOCKER+ APPLICATION" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="74db8848-c0d7-4fc1-8655-f96f184bc217" Name="NedBank: JAVA(TM) PLATFORM SE 7 U21 signed by O=ORACLE AMERICA, INC., L=REDWOOD SHORES, S=CALIFORNIA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=ORACLE AMERICA, INC., L=REDWOOD SHORES, S=CALIFORNIA, C=US" ProductName="JAVA(TM) PLATFORM SE 7 U21" BinaryName="*">
+          <BinaryVersionRange LowSection="7.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="7c289a57-6a23-4abe-a0ac-8d133a8273bf" Name="KRONES Thailand Training USB: USB COPY PROTECTION signed by O=TRUSCONT LTD, L=KIRYAT BIALIK, S=ISRAEL, C=IL" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=TRUSCONT LTD, L=KIRYAT BIALIK, S=ISRAEL, C=IL" ProductName="USB COPY PROTECTION" BinaryName="*">
+          <BinaryVersionRange LowSection="5.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="7ec20415-431d-442b-897e-a4e37aae5d69" Name="PCAN-EXPLORER FOR WINDOWS, from O=PEAK-SYSTEM TECHNIK GMBH, L=DARMSTADT, S=HESSEN, C=DE" Description="PCAN-EXPLORER FOR WINDOWS will be blocked based on Publisher and Product Name" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=PEAK-SYSTEM TECHNIK GMBH, L=DARMSTADT, S=HESSEN, C=DE" ProductName="PCAN-EXPLORER FOR WINDOWS" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="97d7d8df-1fbe-4fc7-a978-371ce8efbf97" Name="Block brave browser by publisher" Description="change 54481" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=&quot;Brave Software&quot;, Inc., L=San Francisco, ST=California, C=US" ProductName="Brave Browser" BinaryName="brave.exe">
+          <BinaryVersionRange LowSection="1.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="9b0abbfb-8c41-4487-b5d9-1ff4dcec4216" Name="usbstick_commerzbank: KOBIL SYSTEMS GMBH MIDENTITYSTARTER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ProductName="KOBIL SYSTEMS GMBH MIDENTITYSTARTER" BinaryName="*">
+          <BinaryVersionRange LowSection="2012.9.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="a11da081-564f-45d7-8ed4-77674f062207" Name="TOTALCMD.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" Description="53970 - Create block policy for TotalCommander V8" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ProductName="TOTAL COMMANDER" BinaryName="TOTALCMD.EXE">
+          <BinaryVersionRange LowSection="8.5.1.1" HighSection="8.5.1.1" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="a48e6925-a9e4-4483-aab1-86239660aadd" Name="ECAD Executables: by O=DOCWARE GMBH, L=FUERTH, S=BAYERN, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=DOCWARE GMBH, L=FUERTH, S=BAYERN, C=DE" ProductName="*" BinaryName="*">
+          <BinaryVersionRange LowSection="6.18.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="aeb63a74-ae45-4c20-a33e-dfc881337d99" Name="FIREFOX, from O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" Description="Change 52030, blocking executable" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ProductName="FIREFOX" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="b70d316c-6f0d-42f6-8370-ba3f308bac14" Name="usbstick_commerzbank: KOBIL MIDENTITY UPDTR signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ProductName="KOBIL MIDENTITY UPDTR" BinaryName="*">
+          <BinaryVersionRange LowSection="2012.9.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="bee8b265-dfba-44a8-8b3a-f10755f45ce2" Name="CCLEANER, from O=PIRIFORM SOFTWARE LTD, L=LONDON, C=GB" Description="405097-Applocker block policy CCLEANER" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=PIRIFORM SOFTWARE LTD, L=LONDON, C=GB" ProductName="CCLEANER" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="c6433923-e7e9-4cb4-a713-bd0a0c8fb87a" Name="Wuerth: WUERT SHOP APPLICATION signed by O=ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG, L=COLOGNE, S=NORTH RHINE WESTPHALIA, C=DE" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG, L=COLOGNE, S=NORTH RHINE WESTPHALIA, C=DE" ProductName="WUERT SHOP APPLICATION" BinaryName="*">
+          <BinaryVersionRange LowSection="2.3.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="d4ce4a3b-071f-4e7d-9b28-f2dd02d0632e" Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" Description="SR 408160 - Create Block Policy for Internet Explorer 32bit Version 10 Only" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ProductName="WINDOWS® INTERNET EXPLORER" BinaryName="IEXPLORE.EXE">
+          <BinaryVersionRange LowSection="*" HighSection="10.0.9200.17183" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="d71f4507-a8e6-4874-ada8-95942cc17aa3" Name="TOTALCMD64.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" Description="53970 - Create block policy for TotalCommander V8" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ProductName="TOTAL COMMANDER" BinaryName="TOTALCMD64.EXE">
+          <BinaryVersionRange LowSection="8.0.1.0" HighSection="8.0.1.0" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="ddc1f6cf-317a-4a68-9740-44083b583931" Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" Description="SR 408160 - Create Block Policy for Internet Explorer 64bit Version 10 Only" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ProductName="WINDOWS® INTERNET EXPLORER" BinaryName="IEXPLORE.EXE">
+          <BinaryVersionRange LowSection="*" HighSection="10.0.9200.17183" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="e7384180-da5f-45c2-83f0-ccd4235ba887" Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ProductName="FIREFOX" BinaryName="*">
+          <BinaryVersionRange LowSection="38.0.0.0" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="e7d27b35-9dcd-4d06-8b5d-1bbe9f98326c" Name="CCLEANER, from O=PIRIFORM LTD, L=LONDON, S=LONDON, C=GB" Description="405097-Applocker block policy CCLEANER" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=PIRIFORM LTD, L=LONDON, S=LONDON, C=GB" ProductName="CCLEANER" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePublisherRule Id="f3238623-b3f8-4fb1-b085-daad7eae7561" Name="DONTSLEEP, from O=NENAD HRG, L=TAUFKIRCHEN, S=BAYERN, C=DE" Description="SR413284" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePublisherCondition PublisherName="O=NENAD HRG, L=TAUFKIRCHEN, S=BAYERN, C=DE" ProductName="DONTSLEEP" BinaryName="*">
+          <BinaryVersionRange LowSection="*" HighSection="*" />
+        </FilePublisherCondition>
+      </Conditions>
+    </FilePublisherRule>
+    <FilePathRule Id="02839e73-39e1-4d5d-9b19-971d1740dc3e" Name="*\Edge Dev\Application\msedge.exe" Description="SR 408400 - Block policy for Microsoft Edge DEV Version only" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\Edge Dev\Application\msedge.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="25361a00-5f80-4708-a957-d9efaf6b488b" Name="*\doxy*.exe" Description="All Doxygen Executables" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\doxy*.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="42daf5b6-5f51-448e-8cd3-d70bba3a1785" Name="*\chrome.exe" Description="change 58675" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\chrome.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="4bd1dcff-ba55-4709-815e-772147e0721b" Name="*\ChromeSetup.exe" Description="change 58675" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\ChromeSetup.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="52fff6ff-61c7-484d-ba44-85062868236e" Name="*\moveexe.exe" Description="LTSpice Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\moveexe.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="5788accc-010b-4684-8a68-a53296016fdd" Name="*\tarv16.exe" Description="Target 3001 Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\tarv16.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="5af70fce-2113-4493-a48c-6fe26cd45354" Name="*\sim.exe" Description="Target 3001 Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\sim.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="5fbf03d3-9c9d-471e-bb64-c4a0a9a66271" Name="*\opera.exe" Description="Change 53611, Blacklisting Opera Internet Browser by filename opera.exe" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\opera.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="69d4686a-87d5-473e-9471-2614ec2001c6" Name="*\unlink.exe" Description="LTSpice Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\unlink.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="8f26f758-a887-4899-94fe-7e7a0dba01d0" Name="*\HashCalc.exe" Description="HashCalc.exe will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\HashCalc.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="97db9e9b-43dd-482d-90b0-04d45affd19d" Name="*\TarV16\medium\Updater.exe" Description="Target 3001 Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\TarV16\medium\Updater.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="9828d84e-b3b2-455e-9996-b142e6cc3623" Name="All files" Description="Allows members of the local Administrators group to run all applications." UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FilePathCondition Path="*" />
+      </Conditions>
+      <Exceptions>
+        <FilePathCondition Path="%HOT%\*" />
+        <FilePathCondition Path="%REMOVABLE%\*" />
+      </Exceptions>
+    </FilePathRule>
+    <FilePathRule Id="ae653fd1-d079-43f6-84f4-6b64dcc322ec" Name="*\firefox.exe" Description="Change 52030, blocking executable" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\firefox.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="d5ce6b5d-004d-4ea4-976d-d3796408ce26" Name="*\scad3.exe" Description="LTSpice Executable will be blocked" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\scad3.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="f0b19cfe-2019-491c-a703-9b9d738440cf" Name="Block brave Browser by filename" Description="change 54481" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\brave.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FilePathRule Id="fed63005-28e3-4a5a-b663-4e575b190801" Name="*\DontSleep.exe" Description="SR 422583 - Block Rule for application DontSleep" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\DontSleep.exe" />
+      </Conditions>
+    </FilePathRule>
+	<FilePathRule Id="c93dea95-80c3-4f25-b519-9cf9d1139287" Name="PowerBI Gateway Installer" Description="" UserOrGroupSid="S-1-1-0" Action="Deny">
+      <Conditions>
+        <FilePathCondition Path="*\PowerBIGatewayInstaller.exe" />
+      </Conditions>
+    </FilePathRule>
+    <FileHashRule Id="0622f675-07bb-4891-8670-80693d9c90f9" Name="NedBank V2 (Incident: 1022426): agent.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xCF5D35EB0FA042936FF956D0CAFCC7588C48CCEBF1B8181EA1B096D2FEE6F4B5" SourceFileName="agent.exe" SourceFileLength="55642" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="082e822a-21e9-4a66-8d8c-4000aff55e27" Name="KRONES Thailand Training USB: Convergence Video Viewer.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x939F843BBCB96A0E22DC7B1556B61E56F8E3B3059BBB066A9377E6C0D6213DBD" SourceFileName="Convergence Video Viewer.exe" SourceFileLength="85504" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="1fda5fb6-f4e9-436e-8996-978f76211349" Name="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xB6D82986A5A4BF9A0E97128368D0483CC4F88DCA1CE6BB7F7A1686F6D89AE6C7" SourceFileName="java.exe" SourceFileLength="45161" />
+          <FileHash Type="SHA256" Data="0xFA755016C4CB2D98B5B1C569B41950488041B3805F44AD4160F53ED863305D22" SourceFileName="javaw.exe" SourceFileLength="45163" />
+          <FileHash Type="SHA256" Data="0x292A5F919DB08FD0397EB770F7481602431D6FF3FBC9887DA0C0EE897F02E6F0" SourceFileName="jpicpl32.exe" SourceFileLength="16501" />
+          <FileHash Type="SHA256" Data="0xACBD027EAA52B2089B537E186940B97A5F6E00578EDDCA7BAB6F00B5804CD457" SourceFileName="jucheck.exe" SourceFileLength="241777" />
+          <FileHash Type="SHA256" Data="0x8BE2D3CC7FD2368EE528DDCB84A3B2CD69D1A1BCDE54112167EB6156928F67B6" SourceFileName="jusched.exe" SourceFileLength="32881" />
+          <FileHash Type="SHA256" Data="0xC092C860C84AAA7BD122A33558B20ABCDEE597720B68EC5CA6C654E097527F70" SourceFileName="keytool.exe" SourceFileLength="45185" />
+          <FileHash Type="SHA256" Data="0x78678E95230753FC6EF2C345B8D6267C0566D85F1A1B16AFBBBC9A9C7F3CFC07" SourceFileName="kinit.exe" SourceFileLength="45181" />
+          <FileHash Type="SHA256" Data="0x4432EC32A8BD334D5CE942FE26B3CC98ABEE179899790CADD1D166683E768807" SourceFileName="klist.exe" SourceFileLength="45181" />
+          <FileHash Type="SHA256" Data="0xAFFE1AAF651367634E0ACAABC716900B8C198BC5199D0F12BBA7E93358D89BFB" SourceFileName="ktab.exe" SourceFileLength="45179" />
+          <FileHash Type="SHA256" Data="0x9BCB8F1E61D9F1A2F1793D79A67058B0CCF414EB476357B63B8B8D85CA8D87D1" SourceFileName="orbd.exe" SourceFileLength="45204" />
+          <FileHash Type="SHA256" Data="0x2EB9DCB8BC96753C485F68A3516C8F3AD5569660AA1F18B35A360AC90486BB67" SourceFileName="policytool.exe" SourceFileLength="45191" />
+          <FileHash Type="SHA256" Data="0x83E63DC27D262564EE3F6C86862110AEA9FB27347B1FFFD6E0C5EF75AF879F60" SourceFileName="rmid.exe" SourceFileLength="45179" />
+          <FileHash Type="SHA256" Data="0x9169855F13F61EBC76AA906B8BAA3D97208FBCBADBE61CD5B4FE88A3004CB637" SourceFileName="rmiregistry.exe" SourceFileLength="45191" />
+          <FileHash Type="SHA256" Data="0x48ACABE034E3EA347DFF7E6CD198494B9CB796A3A699845403E9B374EA857C61" SourceFileName="servertool.exe" SourceFileLength="45216" />
+          <FileHash Type="SHA256" Data="0x4248253AB97926D293E818013A83D96DB6E58D96055F9199C48DA6F0FF65F8C3" SourceFileName="tnameserv.exe" SourceFileLength="45206" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="214bb55d-9eda-4b18-ace2-c3b3f9f46186" Name="usbstick_commerzbank: helper.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x3B3E52AD2466D95BE32105A74260F12287B27B6889013BA1B1735704BDC888DA" SourceFileName="helper.exe" SourceFileLength="827594" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="2d1a4fa2-76a6-467d-8355-a596a72b1cce" Name="Nedbank Secure Browser.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x8C987032CBAE92894F7890A95F46CBBD723C45646D5AD65D345F36807CC7CDEA" SourceFileName="Nedbank Secure Browser.exe" SourceFileLength="889856" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="3503e3f5-936f-4444-8177-1c8ad2586061" Name="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x597ABE476465BC2E247893D26D316F551AA1230A383C0108C74C8B3A6206E6B4" SourceFileName="CertDelete.exe" SourceFileLength="161280" />
+          <FileHash Type="SHA256" Data="0x28F5B70288BB37EC2E7185EB5D42E1D8D308CB6A33478629722A86596EA4A266" SourceFileName="ChangeTokenMode.exe" SourceFileLength="182272" />
+          <FileHash Type="SHA256" Data="0xFA07F9B8CF92FBD4F0E7414DFCC1A63D6AE06A64CFCC73D1DB382BE5FCD079C5" SourceFileName="DumpTokenInfo.exe" SourceFileLength="274432" />
+          <FileHash Type="SHA256" Data="0x2C75DC9FDBB4ABA9EB4C79790FFB6C12DB18EB7F0C282B8CD133F779A1E012D6" SourceFileName="OrphanDelete.exe" SourceFileLength="156160" />
+          <FileHash Type="SHA256" Data="0xA857BB99D4486917757F41025D00CBA120EFC90138E4D96CFE1C0368CF147FD8" SourceFileName="PurgeTokenProfile.exe" SourceFileLength="198144" />
+          <FileHash Type="SHA256" Data="0xDA1507DD31AE4A04FB714A750D4A0EC749C0D50B0532543B431173B8B803D83B" SourceFileName="repair.exe" SourceFileLength="58368" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="3baf604a-081a-48a1-a494-ae6b5e5c7c9e" Name="Netlock: TokenLock.exe, updater.exe, wow_helper.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x9612E26B069E1521AD79BA72B6C9016E113D2E6080873C04D3245939F3D7FBAE" SourceFileName="TokenLock.exe" SourceFileLength="1084928" />
+          <FileHash Type="SHA256" Data="0x9AB7E3DEB5E194CA3C118DE8A49F5294C17FCB6093CD5DA93F1774FF049BCE5E" SourceFileName="updater.exe" SourceFileLength="557568" />
+          <FileHash Type="SHA256" Data="0xD903E78DC244A77D51DFC728E6A1CA9B21E4ABFC6D554B9601A1817CA49711E7" SourceFileName="wow_helper.exe" SourceFileLength="127064" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="45f9342f-cbc3-4070-a467-518b7c5df7b8" Name="ecat_alt-cd: javaws.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xB954DF127B793FF19D03989E87949381C9EA7F466E83FED007D1FA47BCA1481C" SourceFileName="javaws.exe" SourceFileLength="135168" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="546f4b05-a291-4ae8-99bd-6722aa2f78ce" Name="NedBank: AuthLauncher.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xE1FA9586C96BCB73A472220F850FEAF0C621F6005F498763F0F0350BE84C3674" SourceFileName="AuthLauncher.exe" SourceFileLength="3344896" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="5fbc78c7-e3ba-4fef-bc1e-517aabf95fd9" Name="NedBank: ProxyManager.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x2EE25AFE02AAFB9736981BE189F693CB601A5529CF51846D8A6589328909C916" SourceFileName="ProxyManager.exe" SourceFileLength="2979840" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="63ebc69e-5e33-4910-9f4f-8e9a59722d73" Name="NedBank: jabswitch.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xDCA4CECCE5866AC77B4B336C0304D2CB29BD2F52C630963CD2BCB38D508852F9" SourceFileName="jabswitch.exe" SourceFileLength="48032" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="6eb419e4-f700-4a14-8f63-46638fddce8e" Name="usbstick_commerzbank: CleanUp.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x84C42E09A1DC8405B4B1382E9F4B4F39601AE35143F0ACC317504B424B0A5D82" SourceFileName="CleanUp.exe" SourceFileLength="161096" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="7aadd582-7905-48e6-b7d9-cc8e97c39a08" Name="NedBank: Nedbank Secure Browser.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x8C987032CBAE92894F7890A95F46CBBD723C45646D5AD65D345F36807CC7CDEA" SourceFileName="Nedbank Secure Browser.exe" SourceFileLength="889856" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="9cbc7313-3c38-43e8-a01c-7e62cffee13a" Name="NedBank: SplashScreen.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xB4691C4E0997E23169A41AE268D070C0BA27320BB8352493CF030CED5C7ED34D" SourceFileName="SplashScreen.exe" SourceFileLength="4318720" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="a5a24844-98a2-4837-8172-6da592277191" Name="NedBank: MMXBrowser.exe, mmxXulStub.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x04F9E1EE389F3DED38BCDD59FB8EE7D8B92564D02A744C85D25952FF9897F4D3" SourceFileName="MMXBrowser.exe" SourceFileLength="581632" />
+          <FileHash Type="SHA256" Data="0x408DC8333E9A044FC8E198FE8CA60EA70C3C97F618D26E5D36C1FECE4D9D0847" SourceFileName="mmxXulStub.exe" SourceFileLength="94720" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+	<FileHashRule Id="a76e0463-cf48-4773-8a85-95a71f65d2a2" Name="Commonwealth: NetLock.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x6F4A7E45734A90ADA481CEFECD34BF9148A3F204CD5A50EE6769AECD3039988B" SourceFileName="NetLock.exe" SourceFileLength="479172" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="b1888e37-51b6-4d28-91ee-2b350329d0d7" Name="ecat_alt-cd: setup.exe, WinParts.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x3842EA4A16309879C76EC17DBB48C10B008DF1FB2E706B83CEBA1682EA86A3E9" SourceFileName="setup.exe" SourceFileLength="1344830" />
+          <FileHash Type="SHA256" Data="0x716293C28F2252BB257D73F2D1751CD858A4662A6FFFBE423FF59F8CB6FEFC1C" SourceFileName="WinParts.exe" SourceFileLength="348160" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="b2434530-855b-41a9-ab69-3891a15b865a" Name="NedBank: agent.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xB55C5811BDB15B3F2F99D4512DC7D7F201E009552FD9668EA5BC8E43A729553C" SourceFileName="agent.exe" SourceFileLength="55643" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="bbfe0841-866a-4436-b520-6ec4d519701a" Name="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xE5246F709B211104362E1015DCCB9E92300907DB1CDEFEEBD1EF0D0CF1877E08" SourceFileName="crashreporter.exe" SourceFileLength="109056" />
+          <FileHash Type="SHA256" Data="0x3E5A762F5B184ED39104FA7CAF8C6487154AFBC7A69CE044E235B8DA73C7963C" SourceFileName="dumpFFStore.exe" SourceFileLength="604160" />
+          <FileHash Type="SHA256" Data="0x0B042CE9A2569E158F796CB39065DA602E9AF0B19B1051392B1481930377E61D" SourceFileName="js.exe" SourceFileLength="3106304" />
+          <FileHash Type="SHA256" Data="0x4D6087D8C1797AFAE35EA65D0273C3B0867F07BA75EB8E0CA63F7C296A29B09F" SourceFileName="plugin-container.exe" SourceFileLength="9728" />
+          <FileHash Type="SHA256" Data="0xA103F2DC97876DC5770867F0B10D89F0D83DC2F7BCB630E02BFE6485758FC667" SourceFileName="plugin-hang-ui.exe" SourceFileLength="19456" />
+          <FileHash Type="SHA256" Data="0x9105E3B49400C85AA6620D160E19446EB19ACD78AF5F2E427C3AA60AB4A79A83" SourceFileName="redit.exe" SourceFileLength="8704" />
+          <FileHash Type="SHA256" Data="0xA2D9B567B43E1B027CBF616A0E30EA7E6C72D0C88B4D56BDEF0D90E1F969B2B8" SourceFileName="updater.exe" SourceFileLength="253440" />
+          <FileHash Type="SHA256" Data="0x408DC8333E9A044FC8E198FE8CA60EA70C3C97F618D26E5D36C1FECE4D9D0847" SourceFileName="xulrunner-stub.exe" SourceFileLength="94720" />
+          <FileHash Type="SHA256" Data="0xCF8434C0D95B1D9E3A9287CE9E4C56691F32D290B0DC03E97A889AC7A5FD24A7" SourceFileName="xulrunner.exe" SourceFileLength="89600" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="c2f7bb1a-3b56-431f-8838-6df3f6dcfd5d" Name="NedBank: CloseTokenProcess.exe, Launcher.exe, Settings.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x62238A21ADC8D85B7927F511CEC8C3B2B2E32687D3D8AD20164FE3150A245CFE" SourceFileName="CloseTokenProcess.exe" SourceFileLength="1827328" />
+          <FileHash Type="SHA256" Data="0x7BE802C05047B62DCC8EDC87B2F161D766EDC0F04EF651214F8FC085BD34B2BE" SourceFileName="Launcher.exe" SourceFileLength="4813824" />
+          <FileHash Type="SHA256" Data="0x7390531DF2645D02294903EB35912D8ACE531B40286A8244EC21DCD039BC4ACE" SourceFileName="Settings.exe" SourceFileLength="2578944" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="dee3c50f-358e-40fa-94d1-68fb7eda055b" Name="usbstick_commerzbank: plugin-container.exe, updater.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x1B944B3FE6A30A414AB43002292E994769037C3C104688C0027179653DD56C32" SourceFileName="plugin-container.exe" SourceFileLength="9728" />
+          <FileHash Type="SHA256" Data="0x34A8E9D6EFA02636F094853BF7379621FB84ED30571310C9235969FDC706A699" SourceFileName="updater.exe" SourceFileLength="246272" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="e565339c-3630-4e8c-a948-08bede387806" Name="ecat_alt-cd: iexplore.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xFADDFA93AAA64F0EE6130ED18F627AC2FBC244430316E58F4744D2C113D70616" SourceFileName="iexplore.exe" SourceFileLength="451072" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="cd77bbd3-4067-46e7-91c3-6a7a39c17bac" Name="Commonwealth: Log.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xF8EA949BAF10FF56DC04FA682792B4EE42E386F6141E2B13427BAE57D77BB80B" SourceFileName="Log.exe" SourceFileLength="49494" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="f151910e-1883-4e62-aa61-f947ca8ef973" Name="NedBank: ButtonManagement.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xD47E73C1EBDB05105134DC1EF7C7BEC498DAB51FE6746F44FEA345015EC8BD17" SourceFileName="ButtonManagement.exe" SourceFileLength="5203968" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="fcb914fa-3c7f-4bd4-8e77-900bef053739" Name="Netlock: NetLock.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0x6F4A7E45734A90ADA481CEFECD34BF9148A3F204CD5A50EE6769AECD3039988B" SourceFileName="NetLock.exe" SourceFileLength="479172" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+    <FileHashRule Id="ffdd6434-6868-4088-85b7-9de43693f3e9" Name="Netlock: Log.exe" Description="" UserOrGroupSid="S-1-1-0" Action="Allow">
+      <Conditions>
+        <FileHashCondition>
+          <FileHash Type="SHA256" Data="0xF8EA949BAF10FF56DC04FA682792B4EE42E386F6141E2B13427BAE57D77BB80B" SourceFileName="Log.exe" SourceFileLength="49494" />
+        </FileHashCondition>
+      </Conditions>
+    </FileHashRule>
+  </RuleCollection>
+</AppLockerPolicy>

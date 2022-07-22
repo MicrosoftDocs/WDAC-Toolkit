@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Base Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
+  <VersionEx>10.0.0.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <PolicyID>00000000-0000-0000-0000-000000000000</PolicyID>
+  <BasePolicyID>00000000-0000-0000-0000-000000000000</BasePolicyID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:Enforce Store Applications</Option>
+    </Rule>
+  </Rules>
+  <EKUs />
+  <FileRules>
+    <FileAttrib ID="ID_FILEATTRIB_A_0" FriendlyName="" FileName="*" ProductName="MIDBROWSER" MinimumFileVersion="10.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_1" FriendlyName="SR413284" FileName="*" ProductName="FOXIT READER SETUP" />
+    <FileAttrib ID="ID_FILEATTRIB_A_2" FriendlyName="" FileName="*" ProductName="DTLOCKER+ APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_3" FriendlyName="" FileName="*" ProductName="ANWENDUNG REMOVEEX" MinimumFileVersion="2012.12.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_4" FriendlyName="" FileName="*" ProductName="MOZILLA WEBAPP RUNTIME APP UNINSTALLER" MinimumFileVersion="1.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_5" FriendlyName="" FileName="*" ProductName="DT4000 APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_6" FriendlyName="FOXIT READER will be blocked based on Publisher and Product Name" FileName="*" ProductName="FOXIT READER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_7" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD64.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.5.1.1" MaximumFileVersion="8.5.1.1" />
+    <FileAttrib ID="ID_FILEATTRIB_A_8" FriendlyName="" FileName="*" ProductName="PERSONALGATEWAYCONFIGURATOR" />
+    <FileAttrib ID="ID_FILEATTRIB_A_9" FriendlyName="SR413284" FileName="*" ProductName="FOXIT READER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_10" FriendlyName="Change 53611, Blacklisting Opera Internet Browser by product name and publisher" FileName="*" ProductName="OPERA INTERNET BROWSER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_11" FriendlyName="Ecat neu with PPcatalog.exe with version 6.19.1.15" FileName="*" ProductName="*" MinimumFileVersion="6.19.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_12" FriendlyName="" FileName="*" ProductName="CLICKSHARE" />
+    <FileAttrib ID="ID_FILEATTRIB_A_13" FriendlyName="" FileName="*" ProductName="FIREFOX" MinimumFileVersion="10.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_14" FriendlyName="change 58675" FileName="*" ProductName="GOOGLE CHROME" />
+    <FileAttrib ID="ID_FILEATTRIB_A_15" FriendlyName="" FileName="*" ProductName="MIDENTITY" MinimumFileVersion="2013.7.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_16" FriendlyName="Change 51852 - Block Policy for AirParrot" FileName="*" ProductName="AIRPARROT 2" />
+    <FileAttrib ID="ID_FILEATTRIB_A_17" FriendlyName="" FileName="TOTALCMD.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.0.1.0" MaximumFileVersion="8.0.1.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_18" FriendlyName="" FileName="*" ProductName="DTLOCKER+ APPLICATION" />
+    <FileAttrib ID="ID_FILEATTRIB_A_19" FriendlyName="" FileName="*" ProductName="JAVA(TM) PLATFORM SE 7 U21" MinimumFileVersion="7.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_20" FriendlyName="" FileName="*" ProductName="USB COPY PROTECTION" MinimumFileVersion="5.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_21" FriendlyName="PCAN-EXPLORER FOR WINDOWS will be blocked based on Publisher and Product Name" FileName="*" ProductName="PCAN-EXPLORER FOR WINDOWS" />
+    <FileAttrib ID="ID_FILEATTRIB_A_22" FriendlyName="change 54481" FileName="brave.exe" ProductName="Brave Browser" MinimumFileVersion="1.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_23" FriendlyName="" FileName="*" ProductName="KOBIL SYSTEMS GMBH MIDENTITYSTARTER" MinimumFileVersion="2012.9.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_24" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.5.1.1" MaximumFileVersion="8.5.1.1" />
+    <FileAttrib ID="ID_FILEATTRIB_A_25" FriendlyName="" FileName="*" ProductName="*" MinimumFileVersion="6.18.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_26" FriendlyName="Change 52030, blocking executable" FileName="*" ProductName="FIREFOX" />
+    <FileAttrib ID="ID_FILEATTRIB_A_27" FriendlyName="" FileName="*" ProductName="KOBIL MIDENTITY UPDTR" MinimumFileVersion="2012.9.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_28" FriendlyName="405097-Applocker block policy CCLEANER" FileName="*" ProductName="CCLEANER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_29" FriendlyName="" FileName="*" ProductName="WUERT SHOP APPLICATION" MinimumFileVersion="2.3.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_30" FriendlyName="SR 408160 - Create Block Policy for Internet Explorer 32bit Version 10 Only" FileName="IEXPLORE.EXE" ProductName="WINDOWS® INTERNET EXPLORER" MaximumFileVersion="10.0.9200.17183" />
+    <FileAttrib ID="ID_FILEATTRIB_A_31" FriendlyName="53970 - Create block policy for TotalCommander V8" FileName="TOTALCMD64.EXE" ProductName="TOTAL COMMANDER" MinimumFileVersion="8.0.1.0" MaximumFileVersion="8.0.1.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_32" FriendlyName="SR 408160 - Create Block Policy for Internet Explorer 64bit Version 10 Only" FileName="IEXPLORE.EXE" ProductName="WINDOWS® INTERNET EXPLORER" MaximumFileVersion="10.0.9200.17183" />
+    <FileAttrib ID="ID_FILEATTRIB_A_33" FriendlyName="" FileName="*" ProductName="FIREFOX" MinimumFileVersion="38.0.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_A_34" FriendlyName="405097-Applocker block policy CCLEANER" FileName="*" ProductName="CCLEANER" />
+    <FileAttrib ID="ID_FILEATTRIB_A_35" FriendlyName="SR413284" FileName="*" ProductName="DONTSLEEP" />
+    <Deny ID="ID_DENY_C_0" FriendlyName="SR 408400 - Block policy for Microsoft Edge DEV Version only" FilePath="*\Edge Dev\Application\msedge.exe" />
+    <Deny ID="ID_DENY_C_1" FriendlyName="All Doxygen Executables" FilePath="*\doxy.exe" />
+    <Deny ID="ID_DENY_C_2" FriendlyName="change 58675" FilePath="*\chrome.exe" />
+    <Deny ID="ID_DENY_C_3" FriendlyName="change 58675" FilePath="*\ChromeSetup.exe" />
+    <Deny ID="ID_DENY_C_4" FriendlyName="LTSpice Executable will be blocked" FilePath="*\moveexe.exe" />
+    <Deny ID="ID_DENY_C_5" FriendlyName="Target 3001 Executable will be blocked" FilePath="*\tarv16.exe" />
+    <Deny ID="ID_DENY_C_6" FriendlyName="Target 3001 Executable will be blocked" FilePath="*\sim.exe" />
+    <Deny ID="ID_DENY_C_7" FriendlyName="Change 53611, Blacklisting Opera Internet Browser by filename opera.exe" FilePath="*\opera.exe" />
+    <Deny ID="ID_DENY_C_8" FriendlyName="LTSpice Executable will be blocked" FilePath="*\unlink.exe" />
+    <Deny ID="ID_DENY_C_9" FriendlyName="HashCalc.exe will be blocked" FilePath="*\HashCalc.exe" />
+    <Deny ID="ID_DENY_C_10" FriendlyName="Target 3001 Executable will be blocked" FilePath="*\TarV16\medium\Updater.exe" />
+    <Allow ID="ID_ALLOW_C_11" FriendlyName="Allows members of the local Administrators group to run all applications." FilePath="*" />
+    <Deny ID="ID_DENY_C_12" FriendlyName="Change 52030, blocking executable" FilePath="*\firefox.exe" />
+    <Deny ID="ID_DENY_C_13" FriendlyName="LTSpice Executable will be blocked" FilePath="*\scad3.exe" />
+    <Deny ID="ID_DENY_C_14" FriendlyName="change 54481" FilePath="*\brave.exe" />
+    <Deny ID="ID_DENY_C_15" FriendlyName="SR 422583 - Block Rule for application DontSleep" FilePath="*\DontSleep.exe" />
+    <Deny ID="ID_DENY_C_16" FriendlyName="" FilePath="*\PowerBIGatewayInstaller.exe" />
+    <Allow ID="ID_ALLOW_B_0_SHA256" FriendlyName="NedBank V2 (Incident: 1022426): agent.exe" Hash="CF5D35EB0FA042936FF956D0CAFCC7588C48CCEBF1B8181EA1B096D2FEE6F4B5" />
+    <Allow ID="ID_ALLOW_B_1_SHA256" FriendlyName="KRONES Thailand Training USB: Convergence Video Viewer.exe" Hash="939F843BBCB96A0E22DC7B1556B61E56F8E3B3059BBB066A9377E6C0D6213DBD" />
+    <Allow ID="ID_ALLOW_B_2_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="B6D82986A5A4BF9A0E97128368D0483CC4F88DCA1CE6BB7F7A1686F6D89AE6C7" />
+    <Allow ID="ID_ALLOW_B_3_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="FA755016C4CB2D98B5B1C569B41950488041B3805F44AD4160F53ED863305D22" />
+    <Allow ID="ID_ALLOW_B_4_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="292A5F919DB08FD0397EB770F7481602431D6FF3FBC9887DA0C0EE897F02E6F0" />
+    <Allow ID="ID_ALLOW_B_5_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="ACBD027EAA52B2089B537E186940B97A5F6E00578EDDCA7BAB6F00B5804CD457" />
+    <Allow ID="ID_ALLOW_B_6_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="8BE2D3CC7FD2368EE528DDCB84A3B2CD69D1A1BCDE54112167EB6156928F67B6" />
+    <Allow ID="ID_ALLOW_B_7_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="C092C860C84AAA7BD122A33558B20ABCDEE597720B68EC5CA6C654E097527F70" />
+    <Allow ID="ID_ALLOW_B_8_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="78678E95230753FC6EF2C345B8D6267C0566D85F1A1B16AFBBBC9A9C7F3CFC07" />
+    <Allow ID="ID_ALLOW_B_9_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="4432EC32A8BD334D5CE942FE26B3CC98ABEE179899790CADD1D166683E768807" />
+    <Allow ID="ID_ALLOW_B_10_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="AFFE1AAF651367634E0ACAABC716900B8C198BC5199D0F12BBA7E93358D89BFB" />
+    <Allow ID="ID_ALLOW_B_11_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="9BCB8F1E61D9F1A2F1793D79A67058B0CCF414EB476357B63B8B8D85CA8D87D1" />
+    <Allow ID="ID_ALLOW_B_12_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="2EB9DCB8BC96753C485F68A3516C8F3AD5569660AA1F18B35A360AC90486BB67" />
+    <Allow ID="ID_ALLOW_B_13_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="83E63DC27D262564EE3F6C86862110AEA9FB27347B1FFFD6E0C5EF75AF879F60" />
+    <Allow ID="ID_ALLOW_B_14_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="9169855F13F61EBC76AA906B8BAA3D97208FBCBADBE61CD5B4FE88A3004CB637" />
+    <Allow ID="ID_ALLOW_B_15_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="48ACABE034E3EA347DFF7E6CD198494B9CB796A3A699845403E9B374EA857C61" />
+    <Allow ID="ID_ALLOW_B_16_SHA256" FriendlyName="ecat_alt-cd: java.exe, javaw.exe, jpicpl32.exe..." Hash="4248253AB97926D293E818013A83D96DB6E58D96055F9199C48DA6F0FF65F8C3" />
+    <Allow ID="ID_ALLOW_B_17_SHA256" FriendlyName="usbstick_commerzbank: helper.exe" Hash="3B3E52AD2466D95BE32105A74260F12287B27B6889013BA1B1735704BDC888DA" />
+    <Allow ID="ID_ALLOW_B_18_SHA256" FriendlyName="Nedbank Secure Browser.exe" Hash="8C987032CBAE92894F7890A95F46CBBD723C45646D5AD65D345F36807CC7CDEA" />
+    <Allow ID="ID_ALLOW_B_19_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="597ABE476465BC2E247893D26D316F551AA1230A383C0108C74C8B3A6206E6B4" />
+    <Allow ID="ID_ALLOW_B_20_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="28F5B70288BB37EC2E7185EB5D42E1D8D308CB6A33478629722A86596EA4A266" />
+    <Allow ID="ID_ALLOW_B_21_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="FA07F9B8CF92FBD4F0E7414DFCC1A63D6AE06A64CFCC73D1DB382BE5FCD079C5" />
+    <Allow ID="ID_ALLOW_B_22_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="2C75DC9FDBB4ABA9EB4C79790FFB6C12DB18EB7F0C282B8CD133F779A1E012D6" />
+    <Allow ID="ID_ALLOW_B_23_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="A857BB99D4486917757F41025D00CBA120EFC90138E4D96CFE1C0368CF147FD8" />
+    <Allow ID="ID_ALLOW_B_24_SHA256" FriendlyName="NedBank: CertDelete.exe, ChangeTokenMode.exe, DumpTokenInfo.exe..." Hash="DA1507DD31AE4A04FB714A750D4A0EC749C0D50B0532543B431173B8B803D83B" />
+    <Allow ID="ID_ALLOW_B_25_SHA256" FriendlyName="Netlock: TokenLock.exe, updater.exe, wow_helper.exe" Hash="9612E26B069E1521AD79BA72B6C9016E113D2E6080873C04D3245939F3D7FBAE" />
+    <Allow ID="ID_ALLOW_B_26_SHA256" FriendlyName="Netlock: TokenLock.exe, updater.exe, wow_helper.exe" Hash="9AB7E3DEB5E194CA3C118DE8A49F5294C17FCB6093CD5DA93F1774FF049BCE5E" />
+    <Allow ID="ID_ALLOW_B_27_SHA256" FriendlyName="Netlock: TokenLock.exe, updater.exe, wow_helper.exe" Hash="D903E78DC244A77D51DFC728E6A1CA9B21E4ABFC6D554B9601A1817CA49711E7" />
+    <Allow ID="ID_ALLOW_B_28_SHA256" FriendlyName="ecat_alt-cd: javaws.exe" Hash="B954DF127B793FF19D03989E87949381C9EA7F466E83FED007D1FA47BCA1481C" />
+    <Allow ID="ID_ALLOW_B_29_SHA256" FriendlyName="NedBank: AuthLauncher.exe" Hash="E1FA9586C96BCB73A472220F850FEAF0C621F6005F498763F0F0350BE84C3674" />
+    <Allow ID="ID_ALLOW_B_30_SHA256" FriendlyName="NedBank: ProxyManager.exe" Hash="2EE25AFE02AAFB9736981BE189F693CB601A5529CF51846D8A6589328909C916" />
+    <Allow ID="ID_ALLOW_B_31_SHA256" FriendlyName="NedBank: jabswitch.exe" Hash="DCA4CECCE5866AC77B4B336C0304D2CB29BD2F52C630963CD2BCB38D508852F9" />
+    <Allow ID="ID_ALLOW_B_32_SHA256" FriendlyName="usbstick_commerzbank: CleanUp.exe" Hash="84C42E09A1DC8405B4B1382E9F4B4F39601AE35143F0ACC317504B424B0A5D82" />
+    <Allow ID="ID_ALLOW_B_33_SHA256" FriendlyName="NedBank: Nedbank Secure Browser.exe" Hash="8C987032CBAE92894F7890A95F46CBBD723C45646D5AD65D345F36807CC7CDEA" />
+    <Allow ID="ID_ALLOW_B_34_SHA256" FriendlyName="NedBank: SplashScreen.exe" Hash="B4691C4E0997E23169A41AE268D070C0BA27320BB8352493CF030CED5C7ED34D" />
+    <Allow ID="ID_ALLOW_B_35_SHA256" FriendlyName="NedBank: MMXBrowser.exe, mmxXulStub.exe" Hash="04F9E1EE389F3DED38BCDD59FB8EE7D8B92564D02A744C85D25952FF9897F4D3" />
+    <Allow ID="ID_ALLOW_B_36_SHA256" FriendlyName="NedBank: MMXBrowser.exe, mmxXulStub.exe" Hash="408DC8333E9A044FC8E198FE8CA60EA70C3C97F618D26E5D36C1FECE4D9D0847" />
+    <Allow ID="ID_ALLOW_B_37_SHA256" FriendlyName="Commonwealth: NetLock.exe" Hash="6F4A7E45734A90ADA481CEFECD34BF9148A3F204CD5A50EE6769AECD3039988B" />
+    <Allow ID="ID_ALLOW_B_38_SHA256" FriendlyName="ecat_alt-cd: setup.exe, WinParts.exe" Hash="3842EA4A16309879C76EC17DBB48C10B008DF1FB2E706B83CEBA1682EA86A3E9" />
+    <Allow ID="ID_ALLOW_B_39_SHA256" FriendlyName="ecat_alt-cd: setup.exe, WinParts.exe" Hash="716293C28F2252BB257D73F2D1751CD858A4662A6FFFBE423FF59F8CB6FEFC1C" />
+    <Allow ID="ID_ALLOW_B_40_SHA256" FriendlyName="NedBank: agent.exe" Hash="B55C5811BDB15B3F2F99D4512DC7D7F201E009552FD9668EA5BC8E43A729553C" />
+    <Allow ID="ID_ALLOW_B_41_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="E5246F709B211104362E1015DCCB9E92300907DB1CDEFEEBD1EF0D0CF1877E08" />
+    <Allow ID="ID_ALLOW_B_42_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="3E5A762F5B184ED39104FA7CAF8C6487154AFBC7A69CE044E235B8DA73C7963C" />
+    <Allow ID="ID_ALLOW_B_43_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="0B042CE9A2569E158F796CB39065DA602E9AF0B19B1051392B1481930377E61D" />
+    <Allow ID="ID_ALLOW_B_44_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="4D6087D8C1797AFAE35EA65D0273C3B0867F07BA75EB8E0CA63F7C296A29B09F" />
+    <Allow ID="ID_ALLOW_B_45_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="A103F2DC97876DC5770867F0B10D89F0D83DC2F7BCB630E02BFE6485758FC667" />
+    <Allow ID="ID_ALLOW_B_46_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="9105E3B49400C85AA6620D160E19446EB19ACD78AF5F2E427C3AA60AB4A79A83" />
+    <Allow ID="ID_ALLOW_B_47_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="A2D9B567B43E1B027CBF616A0E30EA7E6C72D0C88B4D56BDEF0D90E1F969B2B8" />
+    <Allow ID="ID_ALLOW_B_48_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="408DC8333E9A044FC8E198FE8CA60EA70C3C97F618D26E5D36C1FECE4D9D0847" />
+    <Allow ID="ID_ALLOW_B_49_SHA256" FriendlyName="NedBank: crashreporter.exe, dumpFFStore.exe, js.exe..." Hash="CF8434C0D95B1D9E3A9287CE9E4C56691F32D290B0DC03E97A889AC7A5FD24A7" />
+    <Allow ID="ID_ALLOW_B_50_SHA256" FriendlyName="NedBank: CloseTokenProcess.exe, Launcher.exe, Settings.exe" Hash="62238A21ADC8D85B7927F511CEC8C3B2B2E32687D3D8AD20164FE3150A245CFE" />
+    <Allow ID="ID_ALLOW_B_51_SHA256" FriendlyName="NedBank: CloseTokenProcess.exe, Launcher.exe, Settings.exe" Hash="7BE802C05047B62DCC8EDC87B2F161D766EDC0F04EF651214F8FC085BD34B2BE" />
+    <Allow ID="ID_ALLOW_B_52_SHA256" FriendlyName="NedBank: CloseTokenProcess.exe, Launcher.exe, Settings.exe" Hash="7390531DF2645D02294903EB35912D8ACE531B40286A8244EC21DCD039BC4ACE" />
+    <Allow ID="ID_ALLOW_B_53_SHA256" FriendlyName="usbstick_commerzbank: plugin-container.exe, updater.exe" Hash="1B944B3FE6A30A414AB43002292E994769037C3C104688C0027179653DD56C32" />
+    <Allow ID="ID_ALLOW_B_54_SHA256" FriendlyName="usbstick_commerzbank: plugin-container.exe, updater.exe" Hash="34A8E9D6EFA02636F094853BF7379621FB84ED30571310C9235969FDC706A699" />
+    <Allow ID="ID_ALLOW_B_55_SHA256" FriendlyName="ecat_alt-cd: iexplore.exe" Hash="FADDFA93AAA64F0EE6130ED18F627AC2FBC244430316E58F4744D2C113D70616" />
+    <Allow ID="ID_ALLOW_B_56_SHA256" FriendlyName="Commonwealth: Log.exe" Hash="F8EA949BAF10FF56DC04FA682792B4EE42E386F6141E2B13427BAE57D77BB80B" />
+    <Allow ID="ID_ALLOW_B_57_SHA256" FriendlyName="NedBank: ButtonManagement.exe" Hash="D47E73C1EBDB05105134DC1EF7C7BEC498DAB51FE6746F44FEA345015EC8BD17" />
+    <Allow ID="ID_ALLOW_B_58_SHA256" FriendlyName="Netlock: NetLock.exe" Hash="6F4A7E45734A90ADA481CEFECD34BF9148A3F204CD5A50EE6769AECD3039988B" />
+    <Allow ID="ID_ALLOW_B_59_SHA256" FriendlyName="Netlock: Log.exe" Hash="F8EA949BAF10FF56DC04FA682792B4EE42E386F6141E2B13427BAE57D77BB80B" />
+  </FileRules>
+  <Signers>
+    <Signer Name="usbstick_commerzbank: MIDBROWSER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_0">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_0" />
+    </Signer>
+    <Signer Name="FOXIT READER SETUP, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_1">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_1" />
+    </Signer>
+    <Signer Name="DTLOCKER+ APPLICATION, from O=KINGSTON DIGITAL INC., L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_2">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON DIGITAL INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_2" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: ANWENDUNG REMOVEEX signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_3">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_3" />
+    </Signer>
+    <Signer Name="Netlock: MOZILLA WEBAPP RUNTIME APP UNINSTALLER signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_4">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_4" />
+    </Signer>
+    <Signer Name="DT4000 APPLICATION, from O=KINGSTON TECHNOLOGY, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_5">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON TECHNOLOGY" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_5" />
+    </Signer>
+    <Signer Name="FOXIT READER, from O=FOXIT SOFTWARE INCORPORATED, L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_6">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INCORPORATED" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_6" />
+    </Signer>
+    <Signer Name="TOTALCMD64.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_7">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_7" />
+    </Signer>
+    <Signer Name="PowerBI Gateway Configurator" ID="ID_SIGNER_A_8">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_8" />
+    </Signer>
+    <Signer Name="FOXIT READER, from O=FOXIT SOFTWARE INC., L=FREMONT, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_9">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="FOXIT SOFTWARE INC." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_9" />
+    </Signer>
+    <Signer Name="OPERA INTERNET BROWSER, from O=OPERA SOFTWARE AS, L=OSLO, C=NO" ID="ID_SIGNER_A_10">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="OPERA SOFTWARE AS" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_10" />
+    </Signer>
+    <Signer Name="ECAT neu executables by O=DOCWARE GMBH, L=FÜRTH, C=DE" ID="ID_SIGNER_A_11">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="DOCWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_11" />
+    </Signer>
+    <Signer Name="CLICKSHARE, from O=BARCO N.V., L=KORTRIJK, S=WEST-VLAANDEREN, C=BE" ID="ID_SIGNER_A_12">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="BARCO N.V." />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_12" />
+    </Signer>
+    <Signer Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_13">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_13" />
+    </Signer>
+    <Signer Name="GOOGLE CHROME, from O=GOOGLE LLC, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_14">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GOOGLE LLC" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_14" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: MIDENTITY signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_15">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_15" />
+    </Signer>
+    <Signer Name="AIRPARROT 2, from O=SQUIRRELS LLC, L=NORTH CANTON, S=OHIO, C=US" ID="ID_SIGNER_A_16">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="SQUIRRELS LLC" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_16" />
+    </Signer>
+    <Signer Name="TOTALCMD.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_17">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_17" />
+    </Signer>
+    <Signer Name="DTLOCKER+ APPLICATION, from O=KINGSTON TECHNOLOGY CORPORATION, L=FOUNTAIN VALLEY, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_18">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KINGSTON TECHNOLOGY CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_18" />
+    </Signer>
+    <Signer Name="NedBank: JAVA(TM) PLATFORM SE 7 U21 signed by O=ORACLE AMERICA, INC., L=REDWOOD SHORES, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_19">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="ORACLE AMERICA" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_19" />
+    </Signer>
+    <Signer Name="KRONES Thailand Training USB: USB COPY PROTECTION signed by O=TRUSCONT LTD, L=KIRYAT BIALIK, S=ISRAEL, C=IL" ID="ID_SIGNER_A_20">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="TRUSCONT LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_20" />
+    </Signer>
+    <Signer Name="PCAN-EXPLORER FOR WINDOWS, from O=PEAK-SYSTEM TECHNIK GMBH, L=DARMSTADT, S=HESSEN, C=DE" ID="ID_SIGNER_A_21">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PEAK-SYSTEM TECHNIK GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_21" />
+    </Signer>
+    <Signer Name="Block brave browser by publisher" ID="ID_SIGNER_A_22">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="&quot;Brave Software&quot;" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_22" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: KOBIL SYSTEMS GMBH MIDENTITYSTARTER signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_23">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_23" />
+    </Signer>
+    <Signer Name="TOTALCMD.EXE, version 8.5.1.1 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_24">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_24" />
+    </Signer>
+    <Signer Name="ECAD Executables: by O=DOCWARE GMBH, L=FUERTH, S=BAYERN, C=DE" ID="ID_SIGNER_A_25">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="DOCWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_25" />
+    </Signer>
+    <Signer Name="FIREFOX, from O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CALIFORNIA, C=US" ID="ID_SIGNER_A_26">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_26" />
+    </Signer>
+    <Signer Name="usbstick_commerzbank: KOBIL MIDENTITY UPDTR signed by O=KOBIL SYSTEMS GMBH, L=WORMS, S=RHEINLAND-PFALZ, C=DE" ID="ID_SIGNER_A_27">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="KOBIL SYSTEMS GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_27" />
+    </Signer>
+    <Signer Name="CCLEANER, from O=PIRIFORM SOFTWARE LTD, L=LONDON, C=GB" ID="ID_SIGNER_A_28">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PIRIFORM SOFTWARE LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_28" />
+    </Signer>
+    <Signer Name="Wuerth: WUERT SHOP APPLICATION signed by O=ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG, L=COLOGNE, S=NORTH RHINE WESTPHALIA, C=DE" ID="ID_SIGNER_A_29">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="ADVANCED PANMOBIL SYSTEMS GMBH &amp; CO KG" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_29" />
+    </Signer>
+    <Signer Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ID="ID_SIGNER_A_30">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_30" />
+    </Signer>
+    <Signer Name="TOTALCMD64.EXE, version 8.0.1.0 exactly, in TOTAL COMMANDER, from O=GHISLER SOFTWARE GMBH, L=BOLLIGEN, S=BERN, C=CH" ID="ID_SIGNER_A_31">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="GHISLER SOFTWARE GMBH" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_31" />
+    </Signer>
+    <Signer Name="IEXPLORE.EXE, version 10.0.9200.17183 and below, in WINDOWS® INTERNET EXPLORER, from O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US" ID="ID_SIGNER_A_32">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MICROSOFT CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_32" />
+    </Signer>
+    <Signer Name="Netlock: FIREFOX signed by O=MOZILLA CORPORATION, L=MOUNTAIN VIEW, S=CA, C=US" ID="ID_SIGNER_A_33">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="MOZILLA CORPORATION" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_33" />
+    </Signer>
+    <Signer Name="CCLEANER, from O=PIRIFORM LTD, L=LONDON, S=LONDON, C=GB" ID="ID_SIGNER_A_34">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="PIRIFORM LTD" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_34" />
+    </Signer>
+    <Signer Name="DONTSLEEP, from O=NENAD HRG, L=TAUFKIRCHEN, S=BAYERN, C=DE" ID="ID_SIGNER_A_35">
+      <CertRoot Type="Wellknown" Value="00" />
+      <CertPublisher Value="NENAD HRG" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_A_35" />
+    </Signer>
+  </Signers>
+  <SigningScenarios>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 2022-05-15" Value="131">
+      <ProductSigners />
+    </SigningScenario>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 2022-05-15" Value="12">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_A_0" />
+          <AllowedSigner SignerId="ID_SIGNER_A_2" />
+          <AllowedSigner SignerId="ID_SIGNER_A_3" />
+          <AllowedSigner SignerId="ID_SIGNER_A_4" />
+          <AllowedSigner SignerId="ID_SIGNER_A_5" />
+          <AllowedSigner SignerId="ID_SIGNER_A_11" />
+          <AllowedSigner SignerId="ID_SIGNER_A_12" />
+          <AllowedSigner SignerId="ID_SIGNER_A_13" />
+          <AllowedSigner SignerId="ID_SIGNER_A_15" />
+          <AllowedSigner SignerId="ID_SIGNER_A_18" />
+          <AllowedSigner SignerId="ID_SIGNER_A_19" />
+          <AllowedSigner SignerId="ID_SIGNER_A_20" />
+          <AllowedSigner SignerId="ID_SIGNER_A_23" />
+          <AllowedSigner SignerId="ID_SIGNER_A_25" />
+          <AllowedSigner SignerId="ID_SIGNER_A_27" />
+          <AllowedSigner SignerId="ID_SIGNER_A_29" />
+          <AllowedSigner SignerId="ID_SIGNER_A_33" />
+        </AllowedSigners>
+        <DeniedSigners>
+          <DeniedSigner SignerId="ID_SIGNER_A_1" />
+          <DeniedSigner SignerId="ID_SIGNER_A_6" />
+          <DeniedSigner SignerId="ID_SIGNER_A_7" />
+          <DeniedSigner SignerId="ID_SIGNER_A_8" />
+          <DeniedSigner SignerId="ID_SIGNER_A_9" />
+          <DeniedSigner SignerId="ID_SIGNER_A_10" />
+          <DeniedSigner SignerId="ID_SIGNER_A_14" />
+          <DeniedSigner SignerId="ID_SIGNER_A_16" />
+          <DeniedSigner SignerId="ID_SIGNER_A_17" />
+          <DeniedSigner SignerId="ID_SIGNER_A_21" />
+          <DeniedSigner SignerId="ID_SIGNER_A_22" />
+          <DeniedSigner SignerId="ID_SIGNER_A_24" />
+          <DeniedSigner SignerId="ID_SIGNER_A_26" />
+          <DeniedSigner SignerId="ID_SIGNER_A_28" />
+          <DeniedSigner SignerId="ID_SIGNER_A_30" />
+          <DeniedSigner SignerId="ID_SIGNER_A_31" />
+          <DeniedSigner SignerId="ID_SIGNER_A_32" />
+          <DeniedSigner SignerId="ID_SIGNER_A_34" />
+          <DeniedSigner SignerId="ID_SIGNER_A_35" />
+        </DeniedSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_DENY_C_0" />
+          <FileRuleRef RuleID="ID_DENY_C_1" />
+          <FileRuleRef RuleID="ID_DENY_C_2" />
+          <FileRuleRef RuleID="ID_DENY_C_3" />
+          <FileRuleRef RuleID="ID_DENY_C_4" />
+          <FileRuleRef RuleID="ID_DENY_C_5" />
+          <FileRuleRef RuleID="ID_DENY_C_6" />
+          <FileRuleRef RuleID="ID_DENY_C_7" />
+          <FileRuleRef RuleID="ID_DENY_C_8" />
+          <FileRuleRef RuleID="ID_DENY_C_9" />
+          <FileRuleRef RuleID="ID_DENY_C_10" />
+          <FileRuleRef RuleID="ID_ALLOW_C_11" />
+          <FileRuleRef RuleID="ID_DENY_C_12" />
+          <FileRuleRef RuleID="ID_DENY_C_13" />
+          <FileRuleRef RuleID="ID_DENY_C_14" />
+          <FileRuleRef RuleID="ID_DENY_C_15" />
+          <FileRuleRef RuleID="ID_DENY_C_16" />
+          <FileRuleRef RuleID="ID_ALLOW_B_0_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_1_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_2_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_3_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_4_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_5_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_6_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_7_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_8_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_9_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_10_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_11_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_12_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_13_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_14_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_15_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_16_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_17_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_18_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_19_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_20_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_21_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_22_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_23_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_24_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_25_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_26_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_27_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_28_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_29_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_30_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_31_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_32_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_33_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_34_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_35_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_36_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_37_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_38_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_39_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_40_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_41_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_42_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_43_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_44_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_45_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_46_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_47_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_48_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_49_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_50_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_51_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_52_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_53_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_54_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_55_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_56_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_57_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_58_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_B_59_SHA256" />
+        </FileRulesRef>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners />
+  <CiSigners />
+  <HvciOptions>0</HvciOptions>
+</SiPolicy>
