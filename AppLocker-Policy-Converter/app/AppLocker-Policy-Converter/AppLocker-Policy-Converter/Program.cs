@@ -208,7 +208,7 @@ namespace AppLocker_Policy_Converter
                 {
                     Console.WriteLine(String.Format("\r\nERROR converting {0} with exception: {1}", appLockerPolicy.Item2, e));
                 }
-                Console.WriteLine("Successfully converted " + appLockerPolicy.Item2);
+                Console.WriteLine("\r\nSuccessfully converted " + appLockerPolicy.Item2);
             }
             Console.WriteLine("\r\nSuccessfully converted AppLocker policies to WDAC Policy at location " + outputPath);
             return wdacPolicy;
@@ -228,6 +228,11 @@ namespace AppLocker_Policy_Converter
 
             foreach(RuleCollectionType ruleCollection in appLockerPolicy.RuleCollection)
             {
+                if(ruleCollection.Items == null)
+                {
+                    break; 
+                }
+
                 for(int i = 0; i < ruleCollection.Items.Length; i++)
                 {
                     // Skip the Managed Installer rule collection

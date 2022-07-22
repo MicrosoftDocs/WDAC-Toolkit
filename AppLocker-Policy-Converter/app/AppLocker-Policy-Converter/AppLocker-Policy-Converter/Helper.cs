@@ -133,9 +133,13 @@ namespace AppLocker_Policy_Converter
 
             // Handle exceptions, if any
             List<object> exceptionsList = new List<object>();
+            List<ExceptAllowRule> exceptAllowRulesList = new List<ExceptAllowRule>(); 
+            List<ExceptDenyRule> exceptDenyRulesList = new List<ExceptDenyRule>(); 
+
+
             if(filePubRule.Exceptions != null)
             {
-                exceptionsList = CreateExceptions(filePubRule);
+                (exceptAllowRulesList, exceptDenyRulesList, siPolicy) = CreateExceptions(filePubRule, siPolicy);
             }
 
             // Create new CertPublisher object and add CertPublisher field
@@ -168,10 +172,7 @@ namespace AppLocker_Policy_Converter
             {
                 fileAttrib.ProductName = productName; 
             }
-            if(exceptionsList.Count > 0)
-            {
-                fileAttrib.Exc
-            }
+
             // Add the FileAttributeReference to SiPolicy
             siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
             cFileAttribRules++;
@@ -195,13 +196,27 @@ namespace AppLocker_Policy_Converter
             {
                 // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
                 // Add to CiSigners section to indicate that this is a valid Enterprise signer
-                siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
+                if(exceptDenyRulesList.Count > 0)
+                {
+                    siPolicy = AddSiPolicyAllowSigner(signer, siPolicy, exceptDenyRulesList);
+                }
+                else
+                {
+                    siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
+                }
                 siPolicy = AddCiSigner(signer, siPolicy);
             }
             else
             {
                 // Add the deny signer to Signers and the product signers section with Windows Signing Scenario
-                siPolicy = AddSiPolicyDenySigner(signer, siPolicy);
+                if (exceptAllowRulesList.Count > 0)
+                {
+                    siPolicy = AddSiPolicyDenySigner(signer, siPolicy, exceptAllowRulesList);
+                }
+                else
+                {
+                    siPolicy = AddSiPolicyDenySigner(signer, siPolicy);
+                }
                 siPolicy = AddCiSigner(signer, siPolicy);
             }
             
@@ -361,8 +376,8 @@ namespace AppLocker_Policy_Converter
             // while having a strict exe allowlist. This would result in an allow all WDAC policy with unintended consequences
             if(path == "*")
             {
-                Console.WriteLine("\r\nWARNING: SKIPPING <FilePathCondition Path=\"*\" />. ALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED " +
-                    "YOUR WDAC POLICY.");
+                Console.WriteLine(String.Format("\r\nWARNING: SKIPPING <FilePathCondition Path=\"*\" /> from rule ID = {0}. \r\nALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED " +
+                    "YOUR WDAC POLICY.", filePathRule.Id));
             }
 
             if (siPolicy.FileRules == null)
@@ -411,27 +426,60 @@ namespace AppLocker_Policy_Converter
         }
 
 
-        public static List<object> CreateExceptions(FilePublisherRuleType filePubRule)
+        public static (List<ExceptAllowRule>, List<ExceptDenyRule>, SiPolicy) CreateExceptions(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
         {
-            List<object> exceptionObjects = new List<object>();
+            List <ExceptAllowRule> exceptAllowRules = new List<ExceptAllowRule>();
+            List<ExceptDenyRule> exceptDenyRules = new List<ExceptDenyRule>();
+
+            //
+            ExceptAllowRule exceptAllowRule = new ExceptAllowRule();
+            ExceptDenyRule exceptDenyRule = new ExceptDenyRule();
+
             string action = filePubRule.Action.ToString(); 
 
             foreach (var exceptionItem in filePubRule.Exceptions.Items)
             {
-                if (exceptionItem.GetType() == typeof(FileHashRuleConditionsType))
+                if (exceptionItem.GetType() == typeof(FileHashConditionType))
                 {
-                    FileHashRuleConditionsType exception = (FileHashRuleConditionsType)exceptionItem;
-                    //exception.da
+                    FileHashConditionType exception = (FileHashConditionType)exceptionItem;
+                    foreach(var hashVal in exception.FileHash)
+                    {
+                        if(action == "Allow")
+                        {
+                            // Create a Deny rule to except an Allow rule
+                            Deny deny = new Deny();
+                            deny.Hash = ConvertHashStringToByte(hashVal.Data);
+                            string algo = hashVal.Type.ToString(); //e.g. Type = SHA256
+                            deny.ID = String.Format("ID_DENY_B_{0}_{1}", cFileHashRules, algo);
+
+                            siPolicy = AddSiPolicyDenyRule(deny, siPolicy, true);
+                            exceptDenyRule.DenyRuleID = deny.ID; 
+                            exceptDenyRules.Add(exceptDenyRule);
+                            cFileHashRules++;
+                        }
+                        else
+                        {
+                            Allow allow = new Allow();
+                            allow.Hash = ConvertHashStringToByte(hashVal.Data);
+                            string algo = hashVal.Type.ToString(); //e.g. Type = SHA256
+                            allow.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
+
+                            siPolicy = AddSiPolicyAllowRule(allow, siPolicy, true);
+                            exceptAllowRule.AllowRuleID = allow.ID;
+                            exceptAllowRules.Add(exceptAllowRule);
+                            cFileHashRules++;
+                        }
+                    }
 
                 }
-                else if (exceptionItem.GetType() == typeof(FilePathRuleConditionsType))
+                else if (exceptionItem.GetType() == typeof(FilePathConditionType))
                 {
-                    FilePathRuleConditionsType exception = (FilePathRuleConditionsType)exceptionItem;
+                    FilePathConditionType exception = (FilePathConditionType)exceptionItem;
                     if(action == "Allow")
                     {
                         // Create a Deny rule to except an Allow rule
                         Deny deny = new Deny();
-                        string wdacPath = MakeValidPathRule(exception.FilePathCondition.Path);
+                        string wdacPath = MakeValidPathRule(exception.Path);
                         if(String.IsNullOrEmpty(wdacPath))
                         {
                             // Skip exception, path rule cannot be converted
@@ -440,14 +488,16 @@ namespace AppLocker_Policy_Converter
                         deny.FilePath = wdacPath;
                         deny.ID = "ID_DENY_C_" + cFilePathRules.ToString();
 
-                        exceptionObjects.Add(deny);
+                        siPolicy = AddSiPolicyDenyRule(deny, siPolicy, true);
+                        exceptDenyRule.DenyRuleID = deny.ID;
+                        exceptDenyRules.Add(exceptDenyRule);
                         cFilePathRules++;
                     }
                     else
                     {
                         // Create an Allow rule
                         Allow allow = new Allow();
-                        string wdacPath = MakeValidPathRule(exception.FilePathCondition.Path);
+                        string wdacPath = MakeValidPathRule(exception.Path);
                         if (String.IsNullOrEmpty(wdacPath))
                         {
                             // Skip exception, path rule cannot be converted
@@ -456,18 +506,20 @@ namespace AppLocker_Policy_Converter
                         allow.FilePath = wdacPath;
                         allow.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
 
-                        exceptionObjects.Add(allow);
+                        siPolicy = AddSiPolicyAllowRule(allow, siPolicy, true);
+                        exceptAllowRule.AllowRuleID = allow.ID;
+                        exceptAllowRules.Add(exceptAllowRule);
                         cFilePathRules++;
                     }
                 }
                 else if (exceptionItem.GetType() == typeof(FilePublisherConditionType))
                 {
-                    FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
-                    exceptionsList.Add(exception);
+                    // FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
+                    // exceptionObjects.Add(exception);
                 }
             }
 
-            return exceptionsList;
+            return (exceptAllowRules, exceptDenyRules, siPolicy);
         }
 
         /// <summary>
@@ -640,7 +692,7 @@ namespace AppLocker_Policy_Converter
         /// <param name="allowRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddSiPolicyAllowRule(Allow allowRule, SiPolicy siPolicy)
+        private static SiPolicy AddSiPolicyAllowRule(Allow allowRule, SiPolicy siPolicy,bool isException= false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
             // FileRules always initalized - no need to check if null
@@ -654,26 +706,31 @@ namespace AppLocker_Policy_Converter
             siPolicy.FileRules = fileRulesCopy;
 
             // Copy and replace the FileRulesRef section to add to Signing Scenarios
-            FileRulesRef refCopy = new FileRulesRef();
-            if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
+            // If this is an exception, don't add to FileRulesRef section
+            if(!isException)
             {
-                refCopy.FileRuleRef = new FileRuleRef[1];
-                refCopy.FileRuleRef[0] = new FileRuleRef();
-                refCopy.FileRuleRef[0].RuleID = allowRule.ID;
-            }
-            else
-            {
-                refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
-                for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                FileRulesRef refCopy = new FileRulesRef();
+                if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
                 {
-                    refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                    refCopy.FileRuleRef = new FileRuleRef[1];
+                    refCopy.FileRuleRef[0] = new FileRuleRef();
+                    refCopy.FileRuleRef[0].RuleID = allowRule.ID;
+                }
+                else
+                {
+                    refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                    for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                    {
+                        refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                    }
+
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = allowRule.ID;
                 }
 
-                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
-                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = allowRule.ID;
+                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             }
-
-            siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+            
             return siPolicy; 
         }
 
@@ -683,7 +740,7 @@ namespace AppLocker_Policy_Converter
         /// <param name="denyRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddSiPolicyDenyRule(Deny denyRule, SiPolicy siPolicy)
+        private static SiPolicy AddSiPolicyDenyRule(Deny denyRule, SiPolicy siPolicy, bool isException=false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
             // FileRules always initalized - no need to check if null
@@ -697,26 +754,31 @@ namespace AppLocker_Policy_Converter
             siPolicy.FileRules = fileRulesCopy;
 
             // Copy and replace the FileRulesRef section to add to Signing Scenarios
-            FileRulesRef refCopy = new FileRulesRef();
-            if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
+            // If this is an exception, don't add to FileRulesRef section
+            if(!isException)
             {
-                refCopy.FileRuleRef = new FileRuleRef[1];
-                refCopy.FileRuleRef[0] = new FileRuleRef();
-                refCopy.FileRuleRef[0].RuleID = denyRule.ID;
-            }
-            else
-            {
-                refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
-                for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                FileRulesRef refCopy = new FileRulesRef();
+                if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
                 {
-                    refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                    refCopy.FileRuleRef = new FileRuleRef[1];
+                    refCopy.FileRuleRef[0] = new FileRuleRef();
+                    refCopy.FileRuleRef[0].RuleID = denyRule.ID;
+                }
+                else
+                {
+                    refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                    for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                    {
+                        refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                    }
+
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = denyRule.ID;
                 }
 
-                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
-                refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = denyRule.ID;
+                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             }
-
-            siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+           
             return siPolicy; 
         }
 
@@ -726,7 +788,7 @@ namespace AppLocker_Policy_Converter
         /// <param name="signer"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddSiPolicyAllowSigner(Signer signer, SiPolicy siPolicy)
+        private static SiPolicy AddSiPolicyAllowSigner(Signer signer, SiPolicy siPolicy, List<ExceptDenyRule> denyRuleIDs=null)
         {
             // Copy the SiPolicy signer object and add the signer param to the field
             Signer[] signersCopy = new Signer[siPolicy.Signers.Length + 1];
@@ -742,8 +804,20 @@ namespace AppLocker_Policy_Converter
             AllowedSigner allowedSigner = new AllowedSigner();
             allowedSigner.SignerId = signer.ID;
 
+            // Add exception rules if applicable
+            if(denyRuleIDs != null)
+            {
+                ExceptDenyRule[] denyRules = new ExceptDenyRule[denyRuleIDs.Count];
+                for (int i = 0; i < denyRuleIDs.Count; i++)
+                {
+                    denyRules[i] = new ExceptDenyRule();
+                    denyRules[i].DenyRuleID = denyRuleIDs[i].DenyRuleID;
+                }
+                allowedSigner.ExceptDenyRule = denyRules;
+            }
+
             // Copy and replace
-            if(siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
+            if (siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
             {
                 siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners = new AllowedSigners();
                 siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
@@ -766,35 +840,12 @@ namespace AppLocker_Policy_Converter
         }
 
         /// <summary>
-        /// Adds a CiSigner object to the CiSigners section in the WDAC policy
-        /// </summary>
-        /// <param name="ciSigner"></param>
-        /// <param name="siPolicy"></param>
-        private static SiPolicy AddCiSigner(Signer signer, SiPolicy siPolicy)
-        {
-            // Add to the CiSigners section of the policy as well
-            // Copy the SiPolicy signer object and add the signer param to the field
-            CiSigner[] ciSignersCopy = new CiSigner[siPolicy.CiSigners.Length + 1];
-            for (int i = 0; i < ciSignersCopy.Length - 1; i++)
-            {
-                ciSignersCopy[i] = siPolicy.CiSigners[i];
-            }
-
-            ciSignersCopy[ciSignersCopy.Length - 1] = new CiSigner();
-            ciSignersCopy[ciSignersCopy.Length - 1].SignerId = signer.ID;
-            siPolicy.CiSigners = ciSignersCopy;
-
-            return siPolicy;
-        }
-
-
-        /// <summary>
         /// Handles adding the new DenySigner object to the provided siPolicy
         /// </summary>
         /// <param name="signer"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddSiPolicyDenySigner(Signer signer, SiPolicy siPolicy)
+        private static SiPolicy AddSiPolicyDenySigner(Signer signer, SiPolicy siPolicy, List<ExceptAllowRule> allowRuleIDs = null)
         {
             // Copy the SiPolicy signer object and add the signer param to the field
             Signer[] signersCopy = new Signer[siPolicy.Signers.Length + 1];
@@ -809,6 +860,18 @@ namespace AppLocker_Policy_Converter
             // Create an AllowedSigner object to add to the SiPolicy ProductSigners section
             DeniedSigner deniedSigner = new DeniedSigner();
             deniedSigner.SignerId = signer.ID;
+
+            // Add exception allow rules
+            if(allowRuleIDs != null)
+            {
+                ExceptAllowRule[] allowRules = new ExceptAllowRule[allowRuleIDs.Count];
+                for(int i = 0; i < allowRuleIDs.Count; i++)
+                {
+                    allowRules[i] = new ExceptAllowRule();
+                    allowRules[i].AllowRuleID = allowRuleIDs[i].AllowRuleID; 
+                }
+                deniedSigner.ExceptAllowRule = allowRules; 
+            }
 
             // Copy and replace
             if (siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners == null)
@@ -840,6 +903,29 @@ namespace AppLocker_Policy_Converter
         /// <param name="fileAttrib"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
+
+        /// <summary>
+        /// Adds a CiSigner object to the CiSigners section in the WDAC policy
+        /// </summary>
+        /// <param name="ciSigner"></param>
+        /// <param name="siPolicy"></param>
+        private static SiPolicy AddCiSigner(Signer signer, SiPolicy siPolicy)
+        {
+            // Add to the CiSigners section of the policy as well
+            // Copy the SiPolicy signer object and add the signer param to the field
+            CiSigner[] ciSignersCopy = new CiSigner[siPolicy.CiSigners.Length + 1];
+            for (int i = 0; i < ciSignersCopy.Length - 1; i++)
+            {
+                ciSignersCopy[i] = siPolicy.CiSigners[i];
+            }
+
+            ciSignersCopy[ciSignersCopy.Length - 1] = new CiSigner();
+            ciSignersCopy[ciSignersCopy.Length - 1].SignerId = signer.ID;
+            siPolicy.CiSigners = ciSignersCopy;
+
+            return siPolicy;
+        }
+
         private static SiPolicy AddSiPolicyFileAttrib(FileAttrib fileAttrib, SiPolicy siPolicy)
         {
             // Copy and replace FileRules section in SiPolicy
