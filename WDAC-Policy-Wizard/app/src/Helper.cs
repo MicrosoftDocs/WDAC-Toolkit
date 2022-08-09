@@ -56,7 +56,7 @@ namespace WDAC_Wizard
 
             Regex regex = new Regex("\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\", RegexOptions.IgnoreCase);
             Match match = regex.Match(NTPath);
-            if(match.Success)
+            if (match.Success)
             {
                 string dosPath = NTPath.Replace(match.Value, logicalDisk);
                 return dosPath;
@@ -75,14 +75,14 @@ namespace WDAC_Wizard
         /// <returns>String list of file paths if paths found and user clicks OK. Null otherwise</returns>
         public static List<string> BrowseForMultiFiles(string displayTitle, BrowseFileType browseFileType)
         {
-            List<string> policyPaths = new List<string>(); 
+            List<string> policyPaths = new List<string>();
 
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = displayTitle;
             openFileDialog.CheckPathExists = true;
 
-            if(browseFileType == BrowseFileType.Policy)
+            if (browseFileType == BrowseFileType.Policy)
             {
                 openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
             }
@@ -92,7 +92,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                openFileDialog.Filter = "All Files (*.)|*."; 
+                openFileDialog.Filter = "All Files (*.)|*.";
             }
             openFileDialog.RestoreDirectory = true;
             openFileDialog.Multiselect = true;
@@ -106,7 +106,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                return null; 
+                return null;
             }
         }
 
@@ -123,7 +123,7 @@ namespace WDAC_Wizard
             openFileDialog.Title = displayTitle;
             openFileDialog.CheckPathExists = true;
 
-            if(browseFile.Equals(BrowseFileType.PEFile))
+            if (browseFile.Equals(BrowseFileType.PEFile))
             {
                 openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
                 "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS;*.JS|" +
@@ -133,14 +133,14 @@ namespace WDAC_Wizard
 
                 openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
             }
-            else if(browseFile.Equals(BrowseFileType.Policy))
+            else if (browseFile.Equals(BrowseFileType.Policy))
             {
                 openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
             }
             else
             {
                 openFileDialog.Filter = "All Files (*.)|*.";
-            }            
+            }
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -157,14 +157,14 @@ namespace WDAC_Wizard
         /// <returns>>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
         public static string SaveSingleFile(string displayTitle, BrowseFileType browseFile)
         {
-            string saveLocationPath = String.Empty; 
+            string saveLocationPath = String.Empty;
 
             // Save dialog box pressed
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = displayTitle;
             saveFileDialog.CheckPathExists = true;
 
-            if(browseFile == BrowseFileType.Policy)
+            if (browseFile == BrowseFileType.Policy)
             {
                 saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
             }
@@ -175,10 +175,10 @@ namespace WDAC_Wizard
             saveFileDialog.RestoreDirectory = true;
 
             saveFileDialog.ShowDialog();
-            saveLocationPath = saveFileDialog.FileName; 
+            saveLocationPath = saveFileDialog.FileName;
             saveFileDialog.Dispose();
 
-            return saveLocationPath; 
+            return saveLocationPath;
         }
 
         //
@@ -233,10 +233,10 @@ namespace WDAC_Wizard
         /// <returns>SiPolicy object</returns>
         public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
         {
-            SiPolicy siPolicy; 
-            if(xmlPath == null)
+            SiPolicy siPolicy;
+            if (xmlPath == null)
             {
-                return null; 
+                return null;
             }
             try
             {
@@ -245,12 +245,12 @@ namespace WDAC_Wizard
                 siPolicy = (SiPolicy)serializer.Deserialize(reader);
                 reader.Close();
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
-                return null; 
+                return null;
             }
 
-            return siPolicy; 
+            return siPolicy;
         }
 
         /// <summary>
@@ -290,9 +290,9 @@ namespace WDAC_Wizard
         /// <param name="xmlPath">Path to serialize the SiPolicy to</param>
         public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
         {
-            if(siPolicy == null || xmlPath == null)
+            if (siPolicy == null || xmlPath == null)
             {
-                return; 
+                return;
             }
 
             // Serialize policy to XML file
@@ -307,12 +307,12 @@ namespace WDAC_Wizard
         // TODO: simply parse for CN only
         public static bool IsValidPublisher(string publisher)
         {
-            if(String.IsNullOrEmpty(publisher))
+            if (String.IsNullOrEmpty(publisher))
             {
-                return false; 
+                return false;
             }
 
-            var pubParts = publisher.Split('='); 
+            var pubParts = publisher.Split('=');
             if (pubParts.Length > 2)
             {
                 return false;
@@ -326,21 +326,21 @@ namespace WDAC_Wizard
             string formattedPub;
 
             var pubParts = publisher.Split('=');
-            if(pubParts.Length == 2)
+            if (pubParts.Length == 2)
             {
                 // Ex) ["CN =", "   Contoso Corporation"]
-                formattedPub = pubParts[1]; 
+                formattedPub = pubParts[1];
             }
             else
             {
-                formattedPub = publisher; 
+                formattedPub = publisher;
             }
 
             // Remove any prepended whitespace
             char[] charsToTrim = { ' ', '\'' };
-            formattedPub = formattedPub.Trim(charsToTrim); 
+            formattedPub = formattedPub.Trim(charsToTrim);
 
-            return formattedPub; 
+            return formattedPub;
         }
 
         // Check that version has 4 parts (follows ww.xx.yy.zz format)
@@ -348,12 +348,12 @@ namespace WDAC_Wizard
         public static bool IsValidVersion(string version)
         {
             var versionParts = version.Split('.');
-            if(versionParts.Length != 4)
+            if (versionParts.Length != 4)
             {
-                return false; 
+                return false;
             }
 
-            foreach(var part in versionParts)
+            foreach (var part in versionParts)
             {
                 try
                 {
@@ -363,20 +363,20 @@ namespace WDAC_Wizard
                         return false;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    return false; 
+                    return false;
                 }
             }
-            return true; 
+            return true;
         }
 
         public static int CompareVersions(string minVersion, string maxVersion)
         {
             var minversionParts = minVersion.Split('.');
-            var maxversionParts = maxVersion.Split('.'); 
+            var maxversionParts = maxVersion.Split('.');
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 int minVerPart = Convert.ToInt32(minversionParts[i]);
                 int maxVerPart = Convert.ToInt32(maxversionParts[i]);
@@ -391,13 +391,13 @@ namespace WDAC_Wizard
                 }
             }
 
-            return 0; 
+            return 0;
         }
 
         public static bool IsValidPathRule(string customPath)
         {
             // Check for at most 1 wildcard param (*)
-            if(customPath.Contains("*"))
+            if (customPath.Contains("*"))
             {
                 var wildCardParts = customPath.Split('*');
                 if (wildCardParts.Length > 2)
@@ -418,9 +418,9 @@ namespace WDAC_Wizard
                     }
                 }
             }
-            
+
             // Check for macros (%OSDRIVE%, %WINDIR%, %SYSTEM32%)
-            if(customPath.Contains("%"))
+            if (customPath.Contains("%"))
             {
                 var macroParts = customPath.Split('%');
                 if (macroParts.Length == 3)
@@ -440,7 +440,7 @@ namespace WDAC_Wizard
                     return false;
                 }
             }
-            return true; 
+            return true;
         }
 
         public static string GetEnvPath(string _path)
@@ -455,8 +455,8 @@ namespace WDAC_Wizard
 
             if (upperPath.Contains(sys)) // C:/WINDOWS/system32/foo/bar --> %SYSTEM32%/foo/bar
             {
-                envPath = "%SYSTEM32%" + _path.Substring(sys.Length); 
-                return envPath; 
+                envPath = "%SYSTEM32%" + _path.Substring(sys.Length);
+                return envPath;
             }
             else if (upperPath.Contains(win)) // WINDIR
             {
@@ -465,7 +465,7 @@ namespace WDAC_Wizard
             }
             else if (upperPath.Contains(os)) // OSDRIVE
             {
-                envPath = "%OSDRIVE%\\" + _path.Substring(os.Length); 
+                envPath = "%OSDRIVE%\\" + _path.Substring(os.Length);
                 return envPath;
             }
             else
@@ -514,51 +514,51 @@ namespace WDAC_Wizard
             // Parse the SystemDriver cmdlet output for the scanPath only
             string scriptOutput = sBuilder.ToString();
             var packages = scriptOutput.Split(':');
-            int OFFSET = 21; 
+            int OFFSET = 21;
 
             try
             {
-                foreach(var package in packages)
+                foreach (var package in packages)
                 {
-                    if(package.Contains("\r\nPublisher       "))
+                    if (package.Contains("\r\nPublisher       "))
                     {
-                        string pkgName = package.Substring(1, package.Length - OFFSET); 
-                        if(!output.ContainsKey(pkgName))
+                        string pkgName = package.Substring(1, package.Length - OFFSET);
+                        if (!output.ContainsKey(pkgName))
                         {
-                            output[pkgName] = ""; 
+                            output[pkgName] = "";
                         }
                     }
                 }
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
 
             }
 
-            return output; 
+            return output;
         }
 
         // Dump all of the package family names for the custom rules table
         public static string GetListofPackages(PolicyCustomRules policyCustomRule)
         {
             string output = String.Empty;
-            
-            if(policyCustomRule.PackagedFamilyNames == null)
+
+            if (policyCustomRule.PackagedFamilyNames == null)
             {
-                return String.Empty; 
+                return String.Empty;
             }
-            if(policyCustomRule.PackagedFamilyNames.Count == 0)
+            if (policyCustomRule.PackagedFamilyNames.Count == 0)
             {
-                return String.Empty; 
+                return String.Empty;
             }
 
-            foreach(var package in policyCustomRule.PackagedFamilyNames)
+            foreach (var package in policyCustomRule.PackagedFamilyNames)
             {
-                output += String.Format("{0}, ", package); 
+                output += String.Format("{0}, ", package);
             }
 
             output = output.Substring(0, output.Length - 2); // Trim off trailing whitespace and comma
-            return output; 
+            return output;
         }
 
         /// <summary>
@@ -581,25 +581,25 @@ namespace WDAC_Wizard
 
             var ekuParts = stringEku.Split('.');
 
-            if(ekuParts == null || ekuParts.Length < 2)
+            if (ekuParts == null || ekuParts.Length < 2)
             {
-                return null; 
+                return null;
             }
 
             // Ensure properly formatted oids provided
-            foreach(var ekuPart in ekuParts)
+            foreach (var ekuPart in ekuParts)
             {
                 try
                 {
-                    int.Parse(ekuPart); 
+                    int.Parse(ekuPart);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine("Bad oid format. NAN values provided.");
-                    return null; 
+                    return null;
                 }
             }
-            
+
             encodedEku.Add(FormatHexString(N_EKU));
             encodedEku.Add(FormatHexString(ekuParts.Length.ToString("X")));
 
@@ -607,15 +607,15 @@ namespace WDAC_Wizard
             int firstByteD = 40 * int.Parse(ekuParts[0]) + int.Parse(ekuParts[1]);
             string firstByteHex = FormatHexString(firstByteD.ToString("X"));
 
-            encodedEku.Add(firstByteHex); 
+            encodedEku.Add(firstByteHex);
 
             // Convert the rest of the EKU/OID from pos 2 to end
             foreach (var ekuPart in ekuParts.Skip(2))
             {
-                List<string> ekuOctet = GetEKUOctet(int.Parse(ekuPart)); 
-                foreach(var octet in ekuOctet)
+                List<string> ekuOctet = GetEKUOctet(int.Parse(ekuPart));
+                foreach (var octet in ekuOctet)
                 {
-                    encodedEku.Add(octet); 
+                    encodedEku.Add(octet);
                 }
             }
 
@@ -624,12 +624,12 @@ namespace WDAC_Wizard
 
         public static List<string> GetEKUOctet(int node)
         {
-            List<string> octet = new List<string>(); 
+            List<string> octet = new List<string>();
             const int MAX_EKU_VAL = 127;
             const int MSB = 0;
-            const int IGNORE_POS = 9; 
+            const int IGNORE_POS = 9;
 
-            if(node > MAX_EKU_VAL)
+            if (node > MAX_EKU_VAL)
             {
                 // Node values greater than or equal to 128 are encoded on multiple bytes.
                 // Bit 7 of the leftmost byte is set to one.
@@ -659,10 +659,10 @@ namespace WDAC_Wizard
             else
             {
                 // Node values less than or equal to 127 are encoded on one byte.
-                octet.Add(FormatHexString(node.ToString("X"))); 
+                octet.Add(FormatHexString(node.ToString("X")));
             }
 
-            return octet; 
+            return octet;
         }
 
         /// <summary>
@@ -672,17 +672,17 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public static string FormatHexString(string hex_in)
         {
-            if(String.IsNullOrEmpty(hex_in))
+            if (String.IsNullOrEmpty(hex_in))
             {
-                return String.Empty; 
+                return String.Empty;
             }
-            if(hex_in.Length == 1)
+            if (hex_in.Length == 1)
             {
-                return "0" + hex_in; 
+                return "0" + hex_in;
             }
             else
             {
-                return hex_in; 
+                return hex_in;
             }
         }
 
@@ -694,18 +694,18 @@ namespace WDAC_Wizard
         public static List<string> DecodeBitArray(int[] bits)
         {
             List<string> octet = new List<string>();
-            int val = 0; 
+            int val = 0;
 
-            for(int i= 0; i<bits.Length; i++)
+            for (int i = 0; i < bits.Length; i++)
             {
-                if(i % 4 == 0)
+                if (i % 4 == 0)
                 {
                     val = 0;
-                    val += 8 * bits[i]; 
+                    val += 8 * bits[i];
                 }
-                else if(i % 4 == 1)
+                else if (i % 4 == 1)
                 {
-                    val += 4 * bits[i]; 
+                    val += 4 * bits[i];
                 }
                 else if (i % 4 == 2)
                 {
@@ -714,11 +714,11 @@ namespace WDAC_Wizard
                 else if (i % 4 == 3)
                 {
                     val += 1 * bits[i];
-                    octet.Add(val.ToString("X")); 
+                    octet.Add(val.ToString("X"));
                 }
             }
 
-            return octet; 
+            return octet;
         }
 
         /// <summary>
@@ -728,18 +728,39 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public static string ConvertHash(byte[] hashByte)
         {
-            if(hashByte == null)
+            if (hashByte == null)
             {
-                return string.Empty; 
+                return string.Empty;
             }
 
-            string hashstring = string.Empty; 
-            for(int i = 0; i < hashByte.Length; i++)
+            string hashstring = string.Empty;
+            for (int i = 0; i < hashByte.Length; i++)
             {
                 hashstring += hashByte[i].ToString("X");
             }
 
             return hashstring;
+        }
+
+        /// <summary>
+        /// Takes in an AppLocker hash string value and returns an SiPolicy hash
+        /// </summary>
+        /// <param name="sHash"></param>
+        /// <returns></returns>
+        public static byte[] ConvertHashStringToByte(string sHash)
+        {
+            sHash = sHash.Substring(2); // Trim the first "0x" off the string
+            byte[] bHash = new byte[sHash.Length / 2];
+            int _base = 16;
+            string sValue;  //chunk into 2's
+
+            for (int i = 0; i < sHash.Length; i += 2)
+            {
+                sValue = "" + sHash[i] + sHash[i + 1];
+                bHash[i / 2] = Convert.ToByte(sValue, _base);
+            }
+
+            return bHash;
         }
 
         /// <summary>
@@ -791,8 +812,231 @@ namespace WDAC_Wizard
             return DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH-mm-ss");
         }
 
+        /*
+         * 
+         *  CIPolicy Object Helper Methods
+         * 
+         */
 
-    }
+        // Counts of file rules created to pipe into IDs
+        static public int cFileAllowRules = 0;
+        static public int cFileDenyRules = 0;
+
+        public static SiPolicy CreateAllowHashRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Iterate through the hashes
+            foreach(var hash in customRule.CustomValues.Hashes)
+            {
+                Allow allowRule = new Allow();
+
+                allowRule.Hash = Helper.ConvertHashStringToByte(hash);
+                allowRule.FriendlyName = String.Format("Allow hash: {0}", hash);
+                allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
+                cFileAllowRules++;
+
+                // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddAllowRule(allowRule, siPolicy);
+            }
+            
+            return siPolicy;
+        }
+
+        public static SiPolicy CreateDenyHashRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Iterate through the hashes
+            foreach (var hash in customRule.CustomValues.Hashes)
+            {
+                Deny denyRule = new Deny();
+                denyRule.Hash = Helper.ConvertHashStringToByte(hash);
+                denyRule.FriendlyName = String.Format("Deny hash: {0}", hash);
+                denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
+                cFileDenyRules++;
+
+                // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddDenyRule(denyRule, siPolicy);
+            }
+
+            return siPolicy;
+        }
+
+        public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            Allow allowRule = new Allow();
+
+            allowRule.FilePath = customRule.CustomValues.Path; 
+            allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
+            allowRule.ID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
+            cFileAllowRules++;
+
+            // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+            siPolicy = AddAllowRule(allowRule, siPolicy);
+            return siPolicy;
+        }
+
+        public static SiPolicy CreateDenyPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            Deny denyRule = new Deny();
+            denyRule.FilePath = customRule.CustomValues.Path;
+            denyRule.FriendlyName = String.Format("Deny custom path: {0}", denyRule.FilePath);
+            denyRule.ID = String.Format("ID_DENY_PATH_{0}", cFileDenyRules);
+            cFileDenyRules++;
+
+            // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+            siPolicy = AddDenyRule(denyRule, siPolicy);
+
+            return siPolicy;
+        }
+
+        public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+
+            if (customRule.CustomValues.PackageFamilyNames.Count > 0)
+            {
+                foreach(var pfn in customRule.CustomValues.PackageFamilyNames)
+                {
+                    Allow allowRule = new Allow();
+                    allowRule.PackageFamilyName = pfn;
+                    allowRule.FriendlyName = String.Format("Allow packaged app by Package Family Name (PFN): {0}", pfn);
+                    allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
+                    cFileAllowRules++;
+
+                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddAllowRule(allowRule, siPolicy);
+                }
+            }
+            else
+            {
+                Allow allowRule = new Allow();
+                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+                allowRule.ProductName = customRule.CustomValues.ProductName == null ? customRule.CustomValues.ProductName : String.Empty;
+                allowRule.InternalName = customRule.CustomValues.InternalName == null ? customRule.CustomValues.InternalName : String.Empty;
+                allowRule.FileDescription = customRule.CustomValues.PackageFamilyNames == null ? customRule.CustomValues.Description : String.Empty;
+                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+
+                allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
+                allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
+                cFileAllowRules++;
+
+                // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddAllowRule(allowRule, siPolicy);
+            }
+
+            
+            return siPolicy;
+        }
+
+        public static SiPolicy CreateDenyFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Iterate through the hashes
+            foreach (var hash in customRule.CustomValues.Hashes)
+            {
+                Deny denyRule = new Deny();
+                denyRule.FilePath = customRule.CustomValues.Path;
+                denyRule.FriendlyName = String.Format("Allow custom path: {0}", denyRule.FilePath);
+                denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
+                cFileDenyRules++;
+
+                // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                siPolicy = AddDenyRule(denyRule, siPolicy);
+            }
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Handles adding the new Allow Rule object to the provided siPolicy
+        /// </summary>
+        /// <param name="allowRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddAllowRule(Allow allowRule, SiPolicy siPolicy, bool isException = false)
+        {
+            // Copy and replace the FileRules obj[] in siPolicy
+            if(siPolicy.FileRules == null)
+            {
+                siPolicy.FileRules = new object[1];
+                siPolicy.FileRules[0] = allowRule; 
+            }
+            else
+            {
+                object[] existingRules = siPolicy.FileRules;
+                Array.Resize(ref existingRules, existingRules.Length + 1);
+                existingRules[existingRules.Length - 1] = allowRule;
+                siPolicy.FileRules = existingRules;
+            }
+            
+            // Add the filerule reference
+            siPolicy = AddFileRulesRef(allowRule.ID, siPolicy, isException);
+
+            return siPolicy;
+        }
+
+
+        /// <summary>
+        /// Handles adding the new Allow Rule object to the provided siPolicy
+        /// </summary>
+        /// <param name="allowRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        private static SiPolicy AddDenyRule(Deny denyRule, SiPolicy siPolicy, bool isException = false)
+        {
+            // Copy and replace the FileRules obj[] in siPolicy
+            if (siPolicy.FileRules == null)
+            {
+                siPolicy.FileRules = new object[1];
+                siPolicy.FileRules[0] = denyRule;
+            }
+            else
+            {
+                object[] existingRules = siPolicy.FileRules;
+                Array.Resize(ref existingRules, existingRules.Length + 1);
+                existingRules[existingRules.Length - 1] = denyRule;
+                siPolicy.FileRules = existingRules;
+            }
+
+            // Add the filerule reference
+            siPolicy = AddFileRulesRef(denyRule.ID, siPolicy, isException);
+
+            return siPolicy;
+        }
+
+        private static SiPolicy AddFileRulesRef(string ruleID, SiPolicy siPolicy, bool isException = false)
+        {
+            // Copy and replace the FileRulesRef section to add to Signing Scenarios
+            // If this is an exception, don't add to FileRulesRef section
+            if (!isException)
+            {
+                FileRulesRef refCopy = new FileRulesRef();
+                if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
+                {
+                    refCopy.FileRuleRef = new FileRuleRef[1];
+                    refCopy.FileRuleRef[0] = new FileRuleRef();
+                    refCopy.FileRuleRef[0].RuleID = ruleID;
+                }
+                else
+                {
+                    refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                    for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                    {
+                        refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+                    }
+
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = ruleID;
+                }
+
+                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+            }
+            return siPolicy;
+        }
+
+
+
+
+        // End of SiPolicy Helper methods
+
+    } // End of static class Helper
 
     public class packedInfo
     {

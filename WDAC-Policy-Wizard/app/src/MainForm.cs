@@ -44,6 +44,8 @@ namespace WDAC_Wizard
         // Runspace param to access all PS Variables and eliminate overhead opening each time
         private Runspace runspace;
         private int RulesNumber;
+        private int nCustomValueRules;
+
         public string TempFolderPath { get; set; }
         public string ExeFolderPath { get; set; }
 
@@ -70,6 +72,7 @@ namespace WDAC_Wizard
             this.ConfigInProcess = false;
             this.CurrentPage = 0;
             this.RulesNumber = 0;
+            this.nCustomValueRules = 0;
 
             this.Policy = new WDAC_Policy();
             this.CiEvents = new List<CiEvent>(); 
@@ -800,10 +803,10 @@ namespace WDAC_Wizard
             
             if(this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
             {
-                // Handle Policy Rule-Options
-                CreatePolicyRuleOptions(worker);
+                // Handle custom value rules: 
+                ProcessCustomValueRules(worker);
 
-                // Handle custom rules:
+                // Handle user created rules:
                 List<string> customRulesPathList = ProcessCustomRules(worker);
                 
                 // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
@@ -812,6 +815,12 @@ namespace WDAC_Wizard
                       
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
+
+            if (this.Policy._PolicyType != WDAC_Policy.PolicyType.Merge)
+            {
+                // Handle Policy Rule-Options
+                SetPolicyRuleOptions(worker);
+            }
 
             // Set additional parameters, for instance, policy name, GUIDs, version, etc
             SetAdditionalParameters(worker);
@@ -895,150 +904,159 @@ namespace WDAC_Wizard
         /// Create the policy rule-option pairings the user has set and creates a seperate CI policy just for the pairings. 
         /// Also removes all of the rule-options for the template policy such that there is no merge conflict. 
         /// </summary>
-        public void CreatePolicyRuleOptions(BackgroundWorker worker)
+        public void SetPolicyRuleOptions(BackgroundWorker worker)
         {
-            // Set-RuleOption: https://docs.microsoft.com/powershell/module/configci/set-ruleoption?view=win10-ps
-            // Inputs: -FilePath <string> required existing, -Option <Int32>: indices of rules options
-
             this.Log.AddInfoMsg("--- Create Policy Rule Options --- ");
 
-            // Rules - read in the ConfigRules dictionary
-            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
-            Runspace policyRuleOptsRunspace = RunspaceFactory.CreateRunspace();
-            policyRuleOptsRunspace.Open();
-            Pipeline pipeline = policyRuleOptsRunspace.CreatePipeline();
+            //Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
+            SiPolicy finalPolicy = new SiPolicy();
 
             // Make a copy of the Template policy and REMOVE ALL of its rule options
             // That way we ensure we take the set rule-options from ConfigRules
             try
             {
-                string templateCopyPath = Path.Combine(this.TempFolderPath, "TemplateCopy.xml");
-                File.Copy(this.Policy.TemplatePath, templateCopyPath, true);
-                this.Policy.TemplatePath = templateCopyPath;
-
+                finalPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
             }
             catch (Exception e)
             {
-                this.Log.AddErrorMsg("Create Policy Rule Options -- copying Template Policy encountered the following error ", e); 
+                this.Log.AddErrorMsg("Create Policy Rule Options -- parsing OutputSchema.xml encountered the following error ", e); 
             }
-            
-            // Iterate through all the RuleOptions (20) to remove each one
-            int N_Rules = 20; 
-            for(int i = 0; i <= N_Rules; i++)
-            {
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", this.Policy.TemplatePath, i));
-            }
-                            
 
-            foreach (string key in keys)
-            {
-                // Skip the unsupported rules -- they will throw an error when converting to .bin policy files
-                if (this.Policy.ConfigRules[key]["Supported"] == "False")
-                    continue; 
-
-                string ruleVal = this.Policy.ConfigRules[key]["CurrentValue"];
-                string allowedText = this.Policy.ConfigRules[key]["AllowedValue"];
-                string ruleOptNum = this.Policy.ConfigRules[key]["RuleNumber"];
-
-                if (ruleVal == allowedText && !String.IsNullOrEmpty(ruleOptNum)) //Value == xml allowable output - write
-                {
-                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} ",
-                        this.Policy.TemplatePath, ruleOptNum));
-                    this.Log.AddInfoMsg(String.Format("Adding rule-option pair: {0}:{1}", key, ruleVal));
-                }
-                //else skip - invalid value eg)  Disable:UMCI  so omitting it from setting accomplishes this
-            }
+            // Iterate through all the ruleoptions to remove each one
+            List<RuleType> ruleOptionsList = this.Policy.PolicyRuleOptions;
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
             if (this.Policy._Format == WDAC_Policy.Format.Legacy)
             {
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 17 -Delete", this.Policy.TemplatePath));
+                for(int i=0; i < ruleOptionsList.Count; i++)
+                {
+                    if(ruleOptionsList[i].Item == OptionType.EnabledAllowSupplementalPolicies)
+                    {
+                        ruleOptionsList.RemoveAt(i);
+                        break;
+                    }
+                }
             }
 
             // Assert unsigned CI policy (rule #6) - fixes issues with converting to binary where the policy is unsigned
             if (Properties.Settings.Default.convertPolicyToBinary)
             {
-                pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option 6", this.Policy.TemplatePath));
+                RuleType unsignedPolicyRule = new RuleType();
+                unsignedPolicyRule.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
+                ruleOptionsList.Add(unsignedPolicyRule);
             }
+
+            // Convert from List<RuleType> to RuleType[]
+            RuleType[] ruleOptions = new RuleType[ruleOptionsList.Count];
+            for(int i = 0; i< ruleOptions.Length; i++)
+            {
+                ruleOptions[i] = ruleOptionsList[i];
+            }
+
+            finalPolicy.Rules = ruleOptions;
 
             try
             {
-                Collection<PSObject> results = pipeline.Invoke();
+                Helper.SerializePolicytoXML(finalPolicy, this.Policy.SchemaPath);
             }
             catch (Exception e)
             {
-                this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", e);
+                this.Log.AddErrorMsg("Create Policy Rule Options -- serializing finalPolicy object back to OutputSchema.xml encountered the following error ", e);
             }
 
-            policyRuleOptsRunspace.Close();
-            worker.ReportProgress(10);
+            worker.ReportProgress(95);
         }
-
 
         /// <summary>
-        /// Creates the driver file objects in PowerShell. This should only be run when attempting to bulk add all driver objects, 
-        /// for instance running Get-SystemDrivers 
+        /// Sets the additonal parameters at the end of a policy: GUIDs, versions, etc
         /// </summary>
-        public void CreateDriverFiles(BackgroundWorker worker)
+        void SetAdditionalParameters(BackgroundWorker worker)
         {
-            this.Log.AddInfoMsg("--- Create Driver Files ---");
+            // Operations: Set HVCI options, policy version, policy ID values, GUIDs:
+            this.Log.AddInfoMsg("-- Set Additional Parameters --");
+            bool resetGuid = false;
 
-            PolicyCustomRules NewFileRule = new PolicyCustomRules();
-            List<PolicyCustomRules> CustomRulesCopy = this.Policy.CustomRules;
-            int nRules = CustomRulesCopy.Count;
+            // Create runspace, pipeline and runscript
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
 
-            // Get number of operations (purely for update worker):
-            int nOps = 0;
-            int completedOps = 0;
-
-            foreach (var CustomRule in CustomRulesCopy)
+            // The only time we should be reseting the GUID is NEW Base Policy
+            // Setting these will revert policy under edit to BasePolicy
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                if (CustomRule.Level == PolicyCustomRules.RuleLevel.Folder)
-                    nOps += CustomRule.FolderContents.Count;
-                else
-                    nOps++;
-            }
-
-            this.Log.AddInfoMsg(String.Format("Number of driver file ops: {0}", nOps.ToString()));
-
-            // Iterate through each CustomRule and call Get-SystemDriver cmdlet (pass through in GetSystemInfo()
-            for (int i = 0; i < nRules; i++)
-            {
-                var CustomRule = this.Policy.CustomRules[i];
-                if (CustomRule.Level == PolicyCustomRules.RuleLevel.Folder)
+                if (this.Policy.siPolicy != null)
                 {
-                    foreach (string filePath in CustomRule.FolderContents)
+                    if (this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                     {
-                        // Create a new rule foreach file in folder
-                        Dictionary<string, string> SystemFileInfo = GetSystemInfo(filePath);
-                        NewFileRule = new PolicyCustomRules(SystemFileInfo["PSVar"], SystemFileInfo["RuleIndex"], 
-                            filePath, CustomRule.GetRulePermission());
-                        this.Policy.CustomRules.Add(NewFileRule);
-
-                        // Update status:
-                        completedOps++;
-                        double prog = Math.Ceiling((double)completedOps / (double)nOps * (double)60);
-                        worker.ReportProgress((int)prog + 10); // Assumes this operation represents 60% of time requirements
+                        resetGuid = false;
+                    }
+                    else
+                    {
+                        resetGuid = true;
                     }
                 }
+            }
 
-                else
+            if (resetGuid)
+            {
+                // Set policy info - ID, Name
+                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+
+                // Reset the GUIDs s.t. does not mirror the policy GUID 
+                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
+
+                pipeline.Commands.AddScript(setIdInfoCmd);
+                pipeline.Commands.AddScript(resetGuidsCmd);
+            }
+
+            if (this.Policy.EnableHVCI)
+            {
+                // Set the HVCI value at the end of the xml document
+                string setHVCIOptsCmd = String.Format("Set-HVCIOptions -Enabled -FilePath \"{0}\"", this.Policy.SchemaPath);
+                pipeline.Commands.AddScript(setHVCIOptsCmd);
+            }
+
+            // If supplemental policy, set the Base policy guid
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -BasePolicyToSupplementPath \"{1}\"",
+                    this.Policy.SchemaPath, this.Policy.BaseToSupplementPath);
+                pipeline.Commands.AddScript(setBaseGuidCmd);
+            }
+
+            // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
+            {
+                string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
+                // Set policy info - ID, Name
+                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+
+                pipeline.Commands.AddScript(updateVersionCmd);
+                pipeline.Commands.AddScript(setIdInfoCmd);
+            }
+
+            if (pipeline.Commands.Count > 0)
+            {
+                this.Log.AddInfoMsg("Running the following Add Params Commands: ");
+                foreach (Command command in pipeline.Commands)
                 {
-                    string refFilePath = CustomRule.ReferenceFile;
-                    Dictionary<string, string> SystemInfo = GetSystemInfo(refFilePath);
+                    this.Log.AddInfoMsg(command.ToString());
+                }
 
-                    // Only params we need are the PS variable and its Rule Index from the Dict
-                    CustomRule.PSVariable = SystemInfo["PSVar"];
-                    CustomRule.RuleIndex = SystemInfo["RuleIndex"];
-
-                    // Update status:
-                    completedOps++;
-                    double prog = Math.Ceiling((double)completedOps / (double)nOps * (double)60);
-                    worker.ReportProgress((int)prog + 10); // Assumes this operation represents 60% of time requirements
-
+                try
+                {
+                    Collection<PSObject> results = pipeline.Invoke();
+                }
+                catch (Exception e)
+                {
+                    this.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
                 }
             }
+
+            runspace.Dispose();
         }
+
 
         /// <summary>
         /// Processes all of the custom rules defined by user. 
@@ -1055,8 +1073,14 @@ namespace WDAC_Wizard
             for (int i = 0; i < nCustomRules; i++)
             {
                 string createVarScript = "$Rules = ";
-
                 var customRule = this.Policy.CustomRules[i];
+
+                // Already handled custom value rules
+                if(customRule.UsingCustomValues)
+                {
+                    break;
+                }
+
                 customRule.PSVariable = i.ToString(); 
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
                 customRulesPathList.Add(tmpPolicyPath);
@@ -1064,13 +1088,6 @@ namespace WDAC_Wizard
                 createRuleScript = CreateCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
                 createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
-
-                // Process custom values in the file rules
-                if(customRule.UsingCustomValues)
-                {
-                    List<string> dm = HandleCustomValues(customRule);
-                    scriptCommands.AddRange(dm);
-                }
 
                 // Process PFN rules, if applicable
                 if(customRule.PackagedFamilyNames.Count > 0 && !customRule.UsingCustomValues)
@@ -1130,7 +1147,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
                                
                 // Update progress bar per completion of custom rule created
-                progressVal = 10 + i * 70 / nCustomRules; 
+                progressVal = i * 80 / nCustomRules; 
                 worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
                 try
                 {
@@ -1145,6 +1162,27 @@ namespace WDAC_Wizard
             //TODO: results check ensuring 
             runspace.Dispose();
             return customRulesPathList;
+        }
+
+        public void ProcessCustomValueRules(BackgroundWorker worker)
+        {
+            SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
+
+            // Iterate through all of the custom rules and update the progress bar    
+            foreach(var customRule in this.Policy.CustomRules)
+            {
+                if(customRule.UsingCustomValues)
+                {
+                    siPolicyCustomValueRules = HandleCustomValues(siPolicyCustomValueRules, customRule);
+                    this.nCustomValueRules++;
+                }
+            }
+
+            // If we created custom value rules, write to temp folder to merge with other policies
+            if(this.nCustomValueRules > 0)
+            {
+                Helper.SerializePolicytoXML(siPolicyCustomValueRules, System.IO.Path.Combine(this.TempFolderPath, "CustomValueRules.xml"));
+            }
         }
 
         /// <summary>
@@ -1173,13 +1211,12 @@ namespace WDAC_Wizard
         /// <summary>
         /// Processes all of the custom rules with custom values. E.g. custom version ranges, custom filenames, file paths
         /// </summary>
-        public List<string> HandleCustomValues(PolicyCustomRules customRule)
+        public SiPolicy HandleCustomValues(SiPolicy siPolicy, PolicyCustomRules customRule)
         {
-            List<string> customValueCommand = new List<string>();  
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
+               /* if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
                 {
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -ne \"FileAttrib\"){{$i.attributes[\"CertPublisher\"] = \"{1}\"}}}}",
                         customRule.PSVariable, customRule.CustomValues.Publisher));
@@ -1217,82 +1254,46 @@ namespace WDAC_Wizard
                     customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"EKU - {0}\"", customRule.CustomValues.EKUFriendly));
                     customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.Ekus += $ekuObj}}", customRule.PSVariable));
                 }
+               */
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
-                if(customRule.Level == PolicyCustomRules.RuleLevel.FileDescription)
+                if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileDescription\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.Description)); 
+                    siPolicy = Helper.CreateAllowFileAttributeRule(customRule, siPolicy);
                 }
-                else if (customRule.Level == PolicyCustomRules.RuleLevel.ProductName)
+                else
                 {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"ProductName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.ProductName));
+                    siPolicy = Helper.CreateDenyFileAttributeRule(customRule, siPolicy);
                 }
-                else if (customRule.Level == PolicyCustomRules.RuleLevel.OriginalFileName)
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"FileName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.FileName));
-                }
-                else if (customRule.Level == PolicyCustomRules.RuleLevel.InternalName)
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.attributes[\"InternalName\"] = \"{1}\"}}", customRule.PSVariable, customRule.CustomValues.InternalName));
-                }
-                else if (customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
-                {
-                    int i = 0;
-                    customValueCommand.Add("$Wizard_Package = Get-AppxPackage -Name *WDACWizard*");
-                    string mergeCommand = String.Empty; 
+            }
 
-                    foreach (var pfn in customRule.CustomValues.PackageFamilyNames)
-                    {
-                        // Create placeholder per custom hash Rule until can fix this overwrite bug
-                        if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-                        {
-                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package -Deny", customRule.PSVariable, i));
-                        }
-                        else
-                        {
-                            customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1} = New-CIPolicyRule -Package $Wizard_Package", customRule.PSVariable, i));
-                        }
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageFamilyName\"] = \"{2}\"", customRule.PSVariable, i, pfn));
-                        customValueCommand.Add(String.Format("$Rule_{0}_PFNRule_{1}.attributes[\"PackageVersion\"] = \"{2}\"", customRule.PSVariable, i, Resources.DefaultPFNVersion));
-
-                        customValueCommand.Add(String.Format("$Rule_{0} += $Rule_{0}_PFNRule_{1}", customRule.PSVariable, i));
-                        i++;
-                    }
+            else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
+            {
+                if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+                {
+                    siPolicy = Helper.CreateAllowPathRule(customRule, siPolicy);
+                }
+                else
+                {
+                    siPolicy = Helper.CreateDenyPathRule(customRule, siPolicy);
                 }
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.Hash)
             {
-                int i = 0;
-                string mergeCommand = String.Format("$Rule_{0} = ", customRule.PSVariable); 
-
-                foreach (var hash in customRule.CustomValues.Hashes)
+                if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    // Create placeholder per custom hash Rule until can fix this overwrite bug
-                    if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-                    {
-                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\" -Deny", customRule.PSVariable,
-                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
-                    }
-                    else
-                    {
-                        customValueCommand.Add(String.Format("$Rule_{0}_Template_{1} = New-CIPolicyRule -Level Hash -DriverFilePath \"{2}\"", customRule.PSVariable,
-                        i, GetExecutablePath(true))); // Pass in the path to the WdacWizard.exe - it will be on every device running this command
-                    }
-
-                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1} = $Rule_{0}_Template_{1}[1].PSObject.Copy()", customRule.PSVariable, i)); // Make a copy of the template
-                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.Id = $Rule_{0}_HashRule_{1}.Id + \"_{2}_{1}\"", customRule.PSVariable, i, hash.Substring(0,5))); // modify the ID to avoid collisions
-                    customValueCommand.Add(String.Format("$Rule_{0}_HashRule_{1}.attributes[\"Hash\"] = \"{2}\"", customRule.PSVariable, i, hash)); // Set the hash attribute to the hash value
-
-                    mergeCommand += String.Format("$Rule_{0}_HashRule_{1},", customRule.PSVariable, i);
-                    i++;
+                    siPolicy = Helper.CreateAllowHashRule(customRule, siPolicy);
                 }
-                customValueCommand.Add(mergeCommand.Substring(0,mergeCommand.Length-1));
+                else
+                {
+                    siPolicy = Helper.CreateDenyHashRule(customRule, siPolicy);
+                }
             }
 
-            return customValueCommand;
+            return siPolicy;
         }
 
         /// <summary>
@@ -1495,6 +1496,12 @@ namespace WDAC_Wizard
                     mergeScript += String.Format("\"{0}\",", path);
                 }
 
+                // If there are custom value rules, merge in siPolicy from /Temp/Custom
+                if(this.nCustomValueRules > 0)
+                {
+                    mergeScript += String.Format("\"{0}\",", System.IO.Path.Combine(this.TempFolderPath, "CustomValueRules.xml"));
+                }
+
                 // Remove last comma and add outputFilePath
                 mergeScript = mergeScript.Remove(mergeScript.Length - 1);
                 mergeScript += String.Format(" -OutputFilePath \"{0}\"", outputFilePath);
@@ -1660,99 +1667,9 @@ namespace WDAC_Wizard
             runspace.Dispose();
 
             //TODO: check output
-            worker.ReportProgress(95);
-
+            worker.ReportProgress(90);
         }
 
-        /// <summary>
-        /// Sets the additonal parameters at the end of a policy: GUIDs, versions, etc
-        /// </summary>
-        void SetAdditionalParameters(BackgroundWorker worker)
-        {
-            // Operations: Set HVCI options, policy version, policy ID values, GUIDs:
-            this.Log.AddInfoMsg("-- Set Additional Parameters --");
-            bool resetGuid = false; 
-
-            // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // The only time we should be reseting the GUID is NEW Base Policy
-            // Setting these will revert policy under edit to BasePolicy
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
-            {
-                if(this.Policy.siPolicy != null)
-                {
-                    if(this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
-                    {
-                        resetGuid = false;
-                    }
-                    else
-                    {
-                        resetGuid = true; 
-                    }
-                }
-            }
-
-            if(resetGuid)
-            {
-                // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
-
-                // Reset the GUIDs s.t. does not mirror the policy GUID 
-                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
-
-                pipeline.Commands.AddScript(setIdInfoCmd);
-                pipeline.Commands.AddScript(resetGuidsCmd);
-            }
-            
-            if (this.Policy.EnableHVCI)
-            {
-                // Set the HVCI value at the end of the xml document
-                string setHVCIOptsCmd = String.Format("Set-HVCIOptions -Enabled -FilePath \"{0}\"", this.Policy.SchemaPath);
-                pipeline.Commands.AddScript(setHVCIOptsCmd);
-            }
-
-            // If supplemental policy, set the Base policy guid
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-            {
-                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -BasePolicyToSupplementPath \"{1}\"", 
-                    this.Policy.SchemaPath, this.Policy.BaseToSupplementPath);
-                pipeline.Commands.AddScript(setBaseGuidCmd);
-            }
-
-            // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
-            {
-                string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
-                // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
-
-                pipeline.Commands.AddScript(updateVersionCmd);
-                pipeline.Commands.AddScript(setIdInfoCmd);
-            }
-
-            if (pipeline.Commands.Count > 0)
-            {
-                this.Log.AddInfoMsg("Running the following Add Params Commands: ");
-                foreach (Command command in pipeline.Commands)
-                {
-                    this.Log.AddInfoMsg(command.ToString());
-                }
-
-                try
-                {
-                    Collection<PSObject> results = pipeline.Invoke();
-                }
-                catch (Exception e)
-                {
-                    this.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
-                }
-            }
-            
-            runspace.Dispose();
-        }
 
         /// <summary>
         /// Method to convert the xml policy file into a binary CI policy file
