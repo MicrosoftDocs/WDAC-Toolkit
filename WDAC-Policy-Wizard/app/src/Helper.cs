@@ -890,39 +890,22 @@ namespace WDAC_Wizard
         public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
 
-            if (customRule.CustomValues.PackageFamilyNames.Count > 0)
-            {
-                foreach(var pfn in customRule.CustomValues.PackageFamilyNames)
-                {
-                    Allow allowRule = new Allow();
-                    allowRule.PackageFamilyName = pfn;
-                    allowRule.FriendlyName = String.Format("Allow packaged app by Package Family Name (PFN): {0}", pfn);
-                    allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
-                    cFileAllowRules++;
-
-                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                    siPolicy = AddAllowRule(allowRule, siPolicy);
-                }
-            }
-            else
-            {
-                Allow allowRule = new Allow();
-                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
-                allowRule.ProductName = customRule.CustomValues.ProductName == null ? customRule.CustomValues.ProductName : String.Empty;
-                allowRule.InternalName = customRule.CustomValues.InternalName == null ? customRule.CustomValues.InternalName : String.Empty;
-                allowRule.FileDescription = customRule.CustomValues.PackageFamilyNames == null ? customRule.CustomValues.Description : String.Empty;
-                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
-                allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
-
-                allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
-                allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
-                cFileAllowRules++;
-
-                // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddAllowRule(allowRule, siPolicy);
-            }
-
             
+            Allow allowRule = new Allow();
+            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+            allowRule.ProductName = customRule.CustomValues.ProductName == null ? customRule.CustomValues.ProductName : String.Empty;
+            allowRule.InternalName = customRule.CustomValues.InternalName == null ? customRule.CustomValues.InternalName : String.Empty;
+            allowRule.FileDescription = customRule.CustomValues.PackageFamilyNames == null ? customRule.CustomValues.Description : String.Empty;
+            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+
+            allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
+            allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
+            cFileAllowRules++;
+
+            // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+            siPolicy = AddAllowRule(allowRule, siPolicy);
+                        
             return siPolicy;
         }
 
@@ -942,6 +925,55 @@ namespace WDAC_Wizard
             }
 
             return siPolicy;
+        }
+
+        public static SiPolicy CreatePFNRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            List<string> pfnNames = new List<string>();
+
+            // Custom Value rules
+            if (customRule.CustomValues.PackageFamilyNames.Count > 0)
+            {
+                pfnNames = customRule.CustomValues.PackageFamilyNames;
+            }
+            else
+            {
+                // System generated PFN names
+                pfnNames = customRule.PackagedFamilyNames;
+            }
+
+            // Iterate through the PFNs supplied and create a PFN rule per PFN
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+            {
+                foreach (var pfn in pfnNames)
+                {
+                    Allow allowRule = new Allow();
+                    allowRule.PackageFamilyName = pfn;
+                    allowRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    allowRule.FriendlyName = String.Format("Allow packaged app by Package Family Name (PFN): {0}", pfn);
+                    allowRule.ID = String.Format("ID_ALLOW_PFN_{0}", cFileAllowRules);
+                    cFileAllowRules++;
+
+                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddAllowRule(allowRule, siPolicy);
+                }
+            }
+            else
+            {
+                foreach (var pfn in pfnNames)
+                {
+                    Deny denyRule = new Deny();
+                    denyRule.PackageFamilyName = pfn;
+                    denyRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    denyRule.FriendlyName = String.Format("Deny packaged app by Package Family Name (PFN): {0}", pfn);
+                    denyRule.ID = String.Format("ID_DENY_PFN_{0}", cFileDenyRules);
+                    cFileDenyRules++;
+
+                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddDenyRule(denyRule, siPolicy);
+                }
+            }
+            return siPolicy; 
         }
 
         /// <summary>
@@ -1271,6 +1303,7 @@ namespace WDAC_Wizard
             None,
             Publisher,
             FileAttributes,   // RuleLevel set to "FileName", gives way to additional switch "SpecificFileNameLevel"
+            PackagedApp,
             FilePath,
             Folder,
             Hash

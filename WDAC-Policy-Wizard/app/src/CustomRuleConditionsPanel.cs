@@ -571,7 +571,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "Packaged App":
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.PackagedApp);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
                     this.panelPackagedApps.Location = this.label_condition.Location;
                     this.panelPackagedApps.Visible = true;

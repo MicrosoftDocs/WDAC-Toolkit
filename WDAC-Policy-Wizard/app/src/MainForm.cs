@@ -1078,7 +1078,13 @@ namespace WDAC_Wizard
                 // Already handled custom value rules
                 if(customRule.UsingCustomValues)
                 {
-                    break;
+                    continue;
+                }
+
+                // Already handled PFN rules
+                if (customRule.PackagedFamilyNames.Count > 0)
+                {
+                    continue;
                 }
 
                 customRule.PSVariable = i.ToString(); 
@@ -1087,14 +1093,7 @@ namespace WDAC_Wizard
 
                 createRuleScript = CreateCustomRuleScript(customRule, false);
                 scriptCommands.Add(createRuleScript);
-                createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable); 
-
-                // Process PFN rules, if applicable
-                if(customRule.PackagedFamilyNames.Count > 0 && !customRule.UsingCustomValues)
-                {
-                    List<string> dm = ProcessPFNRules(customRule);
-                    scriptCommands = dm; // Replace with everything returned from ProcessPFNRules
-                }
+                createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable);
 
                 //  Process all exceptions, if applicable
                 if (customRule.ExceptionList.Count > 0)
@@ -1173,7 +1172,12 @@ namespace WDAC_Wizard
             {
                 if(customRule.UsingCustomValues)
                 {
-                    siPolicyCustomValueRules = HandleCustomValues(siPolicyCustomValueRules, customRule);
+                    siPolicyCustomValueRules = HandleCustomValues(customRule, siPolicyCustomValueRules);
+                    this.nCustomValueRules++;
+                }
+                else if(customRule.PackagedFamilyNames.Count > 0)
+                {
+                    siPolicyCustomValueRules = Helper.CreatePFNRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
             }
@@ -1186,32 +1190,9 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Processes all of the custom PFN rules by running Get-AppxPackage and New-CIPolicyRule. 
-        /// </summary>
-        public List<string> ProcessPFNRules(PolicyCustomRules customRule)
-        {
-            List<string> createPFNPackages = new List<string>();
-            foreach(var packageName in customRule.PackagedFamilyNames)
-            {
-                createPFNPackages.Add(String.Format("$Package_Rule_{0} = Get-AppxPackage -Name *{1}*", customRule.PSVariable, packageName));
-                if(customRule.Permission == PolicyCustomRules.RulePermission.Allow)
-                {
-                    createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i}}", customRule.PSVariable));
-                }
-                else
-                {
-                    createPFNPackages.Add(String.Format("foreach($i in $Package_Rule_{0}){{$Rule_{0} += New-CIPolicyRule -Package $i -Deny}}", customRule.PSVariable));
-                }
-                
-            }
-            
-            return createPFNPackages; 
-        }
-
-        /// <summary>
         /// Processes all of the custom rules with custom values. E.g. custom version ranges, custom filenames, file paths
         /// </summary>
-        public SiPolicy HandleCustomValues(SiPolicy siPolicy, PolicyCustomRules customRule)
+        public SiPolicy HandleCustomValues(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
@@ -1267,6 +1248,11 @@ namespace WDAC_Wizard
                 {
                     siPolicy = Helper.CreateDenyFileAttributeRule(customRule, siPolicy);
                 }
+            }
+
+            else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
+            {
+                siPolicy = Helper.CreatePFNRule(customRule, siPolicy);
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
@@ -1485,7 +1471,7 @@ namespace WDAC_Wizard
             Pipeline pipeline = runspace.CreatePipeline();
 
 
-            if (customRulesPathList.Count > 0)
+            if (customRulesPathList.Count > 0 || this.nCustomValueRules > 0)
             {
                 // Add all the merge paths
                 // First policy in the merge list of policies will determeine the output policy format
@@ -1508,13 +1494,6 @@ namespace WDAC_Wizard
 
                 pipeline.Commands.AddScript(mergeScript);
                 pipeline.Commands.Add("Out-String");
-
-                // Remove all of the policy rule-options so the rule-options set in template.xml persist when template.xml and FinalPolicy.xml are merged
-                int N_Rules = 19;
-                for (int i = 0; i <= N_Rules; i++)
-                {
-                    pipeline.Commands.AddScript(String.Format("Set-RuleOption -FilePath \"{0}\" -Option {1} -Delete ", outputFilePath, i));
-                }
 
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", mergeScript));
 
