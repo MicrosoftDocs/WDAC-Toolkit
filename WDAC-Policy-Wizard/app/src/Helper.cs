@@ -1313,6 +1313,29 @@ namespace WDAC_Wizard
             return siPolicy.Signers; 
         }
 
+        public static Setting[] SetPolicyInfo(string policyName, string policyId)
+        {
+            Setting[] settings = new Setting[2];
+            //PolicyInfo.Name
+            Setting settingName = new Setting();
+            settingName.Provider = "PolicyInfo";
+            settingName.Key = "Information";
+            settingName.ValueName = "Name";
+            settingName.Value = new SettingValueType(); 
+            settingName.Value.Item = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
+            settings[0] = settingName;
+            //PolicyInfo.ID
+            Setting settingID = new Setting();
+            settingID.Provider = "PolicyInfo";
+            settingID.Key = "Information";
+            settingID.ValueName = "Id";
+            settingID.Value = new SettingValueType();
+            settingID.Value.Item = String.IsNullOrEmpty(policyId)?String.Empty:policyId;
+            settings[1] = settingID;
+
+            return settings;
+        }
+
 
         // End of SiPolicy Helper methods
 

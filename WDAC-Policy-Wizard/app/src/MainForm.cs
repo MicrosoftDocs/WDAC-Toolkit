@@ -976,11 +976,6 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg("-- Set Additional Parameters --");
             bool resetGuid = false;
 
-            // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
             // The only time we should be reseting the GUID is NEW Base Policy
             // Setting these will revert policy under edit to BasePolicy
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
@@ -998,62 +993,60 @@ namespace WDAC_Wizard
                 }
             }
 
+            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
+
             if (resetGuid)
             {
                 // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
 
-                // Reset the GUIDs s.t. does not mirror the policy GUID 
-                string resetGuidsCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -ResetPolicyID", this.Policy.SchemaPath);
+                // Reset the GUIDs
+                siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+                siPolicy.PolicyID = siPolicy.BasePolicyID;
 
-                pipeline.Commands.AddScript(setIdInfoCmd);
-                pipeline.Commands.AddScript(resetGuidsCmd);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
+                this.Log.AddInfoMsg("Additional parameters set - PolicyID/BasePolicyID reset to " + siPolicy.PolicyID);
             }
+
 
             if (this.Policy.EnableHVCI)
             {
-                // Set the HVCI value at the end of the xml document
-                string setHVCIOptsCmd = String.Format("Set-HVCIOptions -Enabled -FilePath \"{0}\"", this.Policy.SchemaPath);
-                pipeline.Commands.AddScript(setHVCIOptsCmd);
+                // Enable HVCI since HVCI is not a Rule-Option
+                siPolicy.HvciOptions = 1;
+                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 1");
             }
 
             // If supplemental policy, set the Base policy guid
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                string setBaseGuidCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -BasePolicyToSupplementPath \"{1}\"",
-                    this.Policy.SchemaPath, this.Policy.BaseToSupplementPath);
-                pipeline.Commands.AddScript(setBaseGuidCmd);
+                SiPolicy baseSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath);
+                siPolicy.BasePolicyID = baseSiPolicy.BasePolicyID;
+
+                this.Log.AddInfoMsg("Additional parameters set - Supplemental policy BasePolicyID set to " + siPolicy.BasePolicyID);
             }
 
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
             {
-                string updateVersionCmd = String.Format("Set-CIPolicyVersion -FilePath \"{0}\" -Version \"{1}\"", this.Policy.SchemaPath, this.Policy.VersionNumber);
                 // Set policy info - ID, Name
-                string setIdInfoCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -PolicyID \"{1}\" -PolicyName \"{2}\"", this.Policy.SchemaPath, this.Policy.PolicyID, this.Policy.PolicyName);
+                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID); 
+                siPolicy.VersionEx = this.Policy.VersionNumber;
 
-                pipeline.Commands.AddScript(updateVersionCmd);
-                pipeline.Commands.AddScript(setIdInfoCmd);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
+                this.Log.AddInfoMsg("Additional parameters set - VersionEx " + siPolicy.VersionEx);
             }
 
-            if (pipeline.Commands.Count > 0)
+            try
             {
-                this.Log.AddInfoMsg("Running the following Add Params Commands: ");
-                foreach (Command command in pipeline.Commands)
-                {
-                    this.Log.AddInfoMsg(command.ToString());
-                }
-
-                try
-                {
-                    Collection<PSObject> results = pipeline.Invoke();
-                }
-                catch (Exception e)
-                {
-                    this.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
-                }
+                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
             }
-
+            catch (Exception e)
+            {
+                this.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
+            }
+            
             runspace.Dispose();
         }
 
@@ -1146,7 +1139,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
                                
                 // Update progress bar per completion of custom rule created
-                progressVal = i * 80 / nCustomRules; 
+                progressVal = 25 + i * 60 / nCustomRules; 
                 worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
                 try
                 {
@@ -1187,6 +1180,8 @@ namespace WDAC_Wizard
             {
                 Helper.SerializePolicytoXML(siPolicyCustomValueRules, System.IO.Path.Combine(this.TempFolderPath, "CustomValueRules.xml"));
             }
+
+            worker.ReportProgress(25);
         }
 
         /// <summary>
