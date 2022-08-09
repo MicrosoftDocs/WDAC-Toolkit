@@ -1167,7 +1167,7 @@ namespace WDAC_Wizard
         {
             SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
 
-            // Iterate through all of the custom rules and update the progress bar    
+            // Iterate through all of the custom rules and PFN rules and update the progress bar    
             foreach(var customRule in this.Policy.CustomRules)
             {
                 if(customRule.UsingCustomValues)
@@ -1197,45 +1197,7 @@ namespace WDAC_Wizard
 
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-               /* if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -ne \"FileAttrib\"){{$i.attributes[\"CertPublisher\"] = \"{1}\"}}}}",
-                        customRule.PSVariable, customRule.CustomValues.Publisher));
-                }
-
-                if (customRule.CustomValues.MinVersion != null && customRule.CustomValues.MinVersion != "*")
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MinimumFileVersion\"] = \"{1}\"}}}}", 
-                        customRule.PSVariable, customRule.CustomValues.MinVersion));
-                }
-
-                if (customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"MaximumFileVersion\"] = \"{1}\"}}}}",
-                        customRule.PSVariable, customRule.CustomValues.MaxVersion));
-                }
-
-                if (customRule.CustomValues.FileName != null && customRule.CustomValues.FileName != "*")
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"{1}\"}}}}",
-                        customRule.PSVariable, customRule.CustomValues.FileName));
-                }
-                else // will only impact SignedVersion rules
-                {
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{if($i.TypeId -eq \"FileAttrib\"){{$i.attributes[\"FileName\"] = \"*\"}}}}",
-                        customRule.PSVariable));
-                }
-
-                // Custom EKU Values
-
-                if(!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
-                {
-                    customValueCommand.Add("$ekuObj = new-object -TypeName Microsoft.SecureBoot.UserConfig.Eku");
-                    customValueCommand.Add(String.Format("$ekuObj.Value = \"{0}\"", customRule.CustomValues.EKUEncoded));
-                    customValueCommand.Add(String.Format("$ekuObj.FriendlyName = \"EKU - {0}\"", customRule.CustomValues.EKUFriendly));
-                    customValueCommand.Add(String.Format("foreach ($i in $Rule_{0}){{$i.Ekus += $ekuObj}}", customRule.PSVariable));
-                }
-               */
+                siPolicy = Helper.CreateFilePublisherRule(customRule, siPolicy);
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
@@ -2197,11 +2159,12 @@ namespace WDAC_Wizard
         private string CreateTempFolder()
         {
             //AppData + WDAC Temp folder
-            string tempFolder = Path.Combine("WDACWizard", "Temp", Helper.GetFormattedDateTime()); 
-            string tempFolderPath = Path.Combine(Path.GetTempPath(), tempFolder); 
+            string tempFolderPath = Helper.GetTempFolderPath(); 
 
             if (!Directory.Exists(tempFolderPath))
+            {
                 Directory.CreateDirectory(tempFolderPath);
+            }
 
             return tempFolderPath; 
         }

@@ -780,6 +780,25 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Returns the Temp folder where policy and log writing must occur
+        /// </summary>
+        /// <returns>Location of the WDACWizard Temp folder location</returns>
+        public static string GetTempFolderPath()
+        {
+            string tempFolder = Path.Combine("WDACWizard", "Temp", GetFormattedDateTime());
+            return Path.Combine(Path.GetTempPath(), tempFolder);
+        }
+
+        /// <summary>
+        /// Returns the Temp folder where policy and log writing must occur
+        /// </summary>
+        /// <returns>Location of the WDACWizard Temp folder location</returns>
+        public static string GetTempFolderPathRoot()
+        {
+            return Path.Combine(Path.GetTempPath(), "WDACWizard");
+        }
+
+        /// <summary>
         /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
         /// </summary>
         /// <returns>DateTime string in format YYYY-MM-DD</returns>
@@ -821,6 +840,8 @@ namespace WDAC_Wizard
         // Counts of file rules created to pipe into IDs
         static public int cFileAllowRules = 0;
         static public int cFileDenyRules = 0;
+        static public int cFileAttribRules = 0;
+        static public int cEKURules= 0;
 
         public static SiPolicy CreateAllowHashRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
@@ -887,10 +908,69 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+
+        public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Still need to run the PS cmd to generate the TBS hash for the signer(s)
+            Signer[] signers = CreateSignerFromPS(customRule); 
+            
+            if(signers == null)
+            {
+                // Failed to create signer rules
+                return siPolicy; 
+            }
+
+            // Handle the custom publisher fields on the signer 
+            if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
+            {
+                signers = SetSignersPublishers(signers, customRule);
+            }
+
+            // Handle the Custom EKU fields on the signer  
+            if (!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
+            {
+                EKU eku = new EKU();
+                eku.ID = "ID_EKU_A_" + cEKURules++;
+                eku.FriendlyName = customRule.CustomValues.EKUFriendly;
+                eku.Value = Helper.ConvertHashStringToByte(customRule.CustomValues.EKUEncoded);
+
+                signers = SetSignersEKUs(signers, eku);
+                siPolicy = AddSiPolicyEKUs(eku, siPolicy); 
+            }
+
+            // Create new FileAttrib object to link to signer
+            FileAttrib fileAttrib = new FileAttrib();
+            fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
+
+            // Set the fileattribute fields
+            if (customRule.CustomValues.MinVersion != null && customRule.CustomValues.MinVersion != "*")
+            {
+                fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion;
+            }
+
+            if (customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
+            {
+                fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion; 
+            }
+
+            if (customRule.CustomValues.FileName != null)// && customRule.CustomValues.FileName != "*")
+            {
+                fileAttrib.FileName = customRule.CustomValues.FileName;
+            }
+
+            // Add FileAttrib references
+            signers = AddFileAttribToSigners(fileAttrib, signers);
+            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
+
+            // Add signer references
+            siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission);
+
+            return siPolicy;            
+        }
+
+
         public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
-
-            
             Allow allowRule = new Allow();
             allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
             allowRule.ProductName = customRule.CustomValues.ProductName == null ? customRule.CustomValues.ProductName : String.Empty;
@@ -985,19 +1065,12 @@ namespace WDAC_Wizard
         private static SiPolicy AddAllowRule(Allow allowRule, SiPolicy siPolicy, bool isException = false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
-            if(siPolicy.FileRules == null)
-            {
-                siPolicy.FileRules = new object[1];
-                siPolicy.FileRules[0] = allowRule; 
-            }
-            else
-            {
-                object[] existingRules = siPolicy.FileRules;
-                Array.Resize(ref existingRules, existingRules.Length + 1);
-                existingRules[existingRules.Length - 1] = allowRule;
-                siPolicy.FileRules = existingRules;
-            }
-            
+            // FileRules always initalized - no need to check if null
+            object[] fileRulesCopy = siPolicy.FileRules;
+            Array.Resize(ref fileRulesCopy, fileRulesCopy.Length + 1);
+            fileRulesCopy[fileRulesCopy.Length - 1] = allowRule;
+            siPolicy.FileRules = fileRulesCopy;
+
             // Add the filerule reference
             siPolicy = AddFileRulesRef(allowRule.ID, siPolicy, isException);
 
@@ -1014,23 +1087,100 @@ namespace WDAC_Wizard
         private static SiPolicy AddDenyRule(Deny denyRule, SiPolicy siPolicy, bool isException = false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
-            if (siPolicy.FileRules == null)
-            {
-                siPolicy.FileRules = new object[1];
-                siPolicy.FileRules[0] = denyRule;
-            }
-            else
-            {
-                object[] existingRules = siPolicy.FileRules;
-                Array.Resize(ref existingRules, existingRules.Length + 1);
-                existingRules[existingRules.Length - 1] = denyRule;
-                siPolicy.FileRules = existingRules;
-            }
+            // FileRules always initalized - no need to check if null
+            object[] fileRulesCopy = siPolicy.FileRules;
+            Array.Resize(ref fileRulesCopy, fileRulesCopy.Length + 1);
+            fileRulesCopy[fileRulesCopy.Length - 1] = denyRule;
+            siPolicy.FileRules = fileRulesCopy;
 
             // Add the filerule reference
             siPolicy = AddFileRulesRef(denyRule.ID, siPolicy, isException);
 
             return siPolicy;
+        }
+
+        private static SiPolicy AddSiPolicyFileAttrib(FileAttrib fileAttrib, SiPolicy siPolicy)
+        {
+            // Copy and replace FileRules section in SiPolicy
+            // FileRules always initalized - no need to check if null
+            object[] fileRulesCopy = siPolicy.FileRules;
+            Array.Resize(ref fileRulesCopy, fileRulesCopy.Length + 1);
+            fileRulesCopy[fileRulesCopy.Length - 1] = fileAttrib;
+            siPolicy.FileRules = fileRulesCopy;
+
+            return siPolicy;
+        }
+
+        private static SiPolicy AddSiPolicyEKUs(EKU eku, SiPolicy siPolicy)
+        {
+            EKU[] ekuCopy = siPolicy.EKUs;
+            Array.Resize(ref ekuCopy, ekuCopy.Length + 1);
+            ekuCopy[ekuCopy.Length - 1] = eku;
+            siPolicy.EKUs = ekuCopy;
+            
+            return siPolicy; 
+        }
+
+        /// <summary>
+        /// Adds the FileAttrib object to the signers[] object
+        /// </summary>
+        /// <param name="fileAttrib"></param>
+        /// <param name="signers"></param>
+        /// <param name="customRule"></param>
+        /// <returns></returns>
+        private static Signer[] AddFileAttribToSigners(FileAttrib fileAttrib, Signer[] signers)
+        {
+            for (int i = 0; i < signers.Length; i++)
+            {
+                // Link the new FileAttrib object back to the signer
+                FileAttribRef fileAttribRef = new FileAttribRef();
+                fileAttribRef.RuleID = fileAttrib.ID;
+
+                signers[i].FileAttribRef = new FileAttribRef[1];
+                signers[i].FileAttribRef[0] = fileAttribRef; 
+            }
+
+            return signers; 
+        }
+
+        /// <summary>
+        /// Sets the Publisher field on the Signers object
+        /// </summary>
+        /// <param name="signers"></param>
+        /// <param name="customRule"></param>
+        /// <returns></returns>
+        private static Signer[] SetSignersPublishers(Signer[] signers, PolicyCustomRules customRule)
+        {
+            for (int i = 0; i < signers.Length; i++)
+            {
+                // Create new CertPublisher object and add CertPublisher field
+                CertPublisher cPub = new CertPublisher();
+                cPub.Value = customRule.CustomValues.Publisher;
+                signers[i].CertPublisher = cPub; 
+            }
+
+            return signers;
+        }
+
+
+        /// <summary>
+        /// Sets the EKU field on the Signers object
+        /// </summary>
+        /// <param name="signers"></param>
+        /// <param name="customRule"></param>
+        /// <returns></returns>
+        private static Signer[] SetSignersEKUs(Signer[] signers, EKU eku)
+        {
+            for (int i = 0; i < signers.Length; i++)
+            {
+                // Create new CertEKU[]
+                // TODO support >1 EKUS in the future
+                CertEKU[] certEKUs = new CertEKU[1];
+                certEKUs[0].ID = eku.ID; 
+                signers[i].CertEKU = certEKUs; 
+            }
+
+            return signers;
         }
 
         private static SiPolicy AddFileRulesRef(string ruleID, SiPolicy siPolicy, bool isException = false)
@@ -1063,7 +1213,105 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+        private static SiPolicy AddSiPolicySigner(Signer[] signers, SiPolicy siPolicy, PolicyCustomRules.RulePermission action)
+        {
+            // Copy the SiPolicy signer object and add the signer param to the field
+            Signer[] signersCopy = siPolicy.Signers;
+            Array.Resize(ref signersCopy, signersCopy.Length + signers.Length); 
+            for (int i=0; i < signers.Length; i++)
+            {
+                signersCopy[siPolicy.Signers.Length + i] = signers[i];
+            }
 
+            siPolicy.Signers = signersCopy;
+
+            if (action == PolicyCustomRules.RulePermission.Allow)
+            {
+                // Create an AllowedSigner object to add to the SiPolicy ProductSigners section
+                for (int i = 0; i < signers.Length; i++)
+                {
+                    AllowedSigner allowedSigner = new AllowedSigner();
+                    allowedSigner.SignerId = signers[i].ID;
+
+                    // Copy and replace
+                    if (siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
+                    {
+                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners = new AllowedSigners();
+                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
+                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner;
+                    }
+                    else
+                    {
+                        AllowedSigner[] allowedSignersCopy = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner;
+                        Array.Resize(ref allowedSignersCopy, allowedSignersCopy.Length + 1);
+                        allowedSignersCopy[allowedSignersCopy.Length - 1] = allowedSigner; 
+
+                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = allowedSignersCopy;
+                    }
+                }
+            }
+            else
+            {
+                // Create a DeniedSigner object to add to the SiPolicy ProductSigners section
+                for (int i = 0; i < signers.Length; i++)
+                {
+                    DeniedSigner deniedSigner = new DeniedSigner();
+                    deniedSigner.SignerId = signers[i].ID;
+
+                    // Copy and replace
+                    if (siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners == null)
+                    {
+                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners = new DeniedSigners();
+                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = new DeniedSigner[1];
+                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner[0] = deniedSigner;
+                    }
+                    else
+                    {
+                        DeniedSigner[] deniedSignersCopy = siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner;
+                        Array.Resize(ref deniedSignersCopy, deniedSignersCopy.Length + 1);
+                        deniedSignersCopy[deniedSignersCopy.Length - 1] = deniedSigner;
+
+                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
+                    }
+                }
+            }
+
+            return siPolicy; 
+        }
+
+
+        static private Signer[] CreateSignerFromPS(PolicyCustomRules customRule)
+        {
+            string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummySignersPolicy.xml");
+
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the TBS hash (or hashes) for the signers
+            pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\"", customRule.ReferenceFile));
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyPcaRule -FilePath \"{0}\"", DUMMYPATH));
+
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                return null; 
+            }
+            runspace.Dispose(); 
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = DeserializeXMLtoPolicy(DUMMYPATH);
+
+            // Remove dummy file
+            File.Delete(DUMMYPATH);
+            
+            return siPolicy.Signers; 
+        }
 
 
         // End of SiPolicy Helper methods
