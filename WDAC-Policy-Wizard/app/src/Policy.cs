@@ -50,11 +50,6 @@ namespace WDAC_Wizard
             MultiPolicy
         }
 
-        public enum RuleOptions
-        {
-
-        }
-
         // Policy Properties
         public PolicyType _PolicyType { get; set; }
         public NewPolicyTemplate _PolicyTemplate { get; set; }

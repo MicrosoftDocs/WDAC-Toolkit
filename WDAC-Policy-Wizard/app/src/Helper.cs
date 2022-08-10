@@ -343,6 +343,27 @@ namespace WDAC_Wizard
             return formattedPub;
         }
 
+        /// <summary>
+        /// Format the custom published input from the user
+        /// </summary>
+        /// <param name="certSubjectName"></param>
+        /// <returns></returns>
+        public static string FormatSubjectName(string certSubjectName)
+        {
+            // Remove unwanted info from the subject name (C= onwards)
+            int country_idx = certSubjectName.IndexOf("C=");
+            if (country_idx > 1)
+            {
+                int comma_idx = certSubjectName.IndexOf(',', country_idx);
+                if (comma_idx > 1)
+                {
+                    certSubjectName = certSubjectName.Substring(0, comma_idx);
+                }
+            }
+
+            return certSubjectName;
+        }
+
         // Check that version has 4 parts (follows ww.xx.yy.zz format)
         // And each part < 2^16
         public static bool IsValidVersion(string version)
@@ -972,16 +993,15 @@ namespace WDAC_Wizard
         public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Allow allowRule = new Allow();
-            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
-            allowRule.ProductName = customRule.CustomValues.ProductName == null ? customRule.CustomValues.ProductName : String.Empty;
-            allowRule.InternalName = customRule.CustomValues.InternalName == null ? customRule.CustomValues.InternalName : String.Empty;
-            allowRule.FileDescription = customRule.CustomValues.PackageFamilyNames == null ? customRule.CustomValues.Description : String.Empty;
-            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
-            allowRule.FileDescription = customRule.CustomValues.Description == null ? customRule.CustomValues.Description : String.Empty;
+            allowRule.FileName = customRule.CustomValues.FileName;
+            allowRule.FileDescription = customRule.CustomValues.Description;
+            allowRule.ProductName = customRule.CustomValues.ProductName;
+            allowRule.InternalName = customRule.CustomValues.InternalName;
 
-            allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
-            allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
-            cFileAllowRules++;
+
+            allowRule.FriendlyName = String.Format("Allow files based on file attributes: {0} {1} {2} {3}", allowRule.FileName, allowRule.FileDescription, 
+                allowRule.ProductName, allowRule.InternalName);
+            allowRule.ID = String.Format("ID_ALLOW_A_{0}", cFileAllowRules++);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddAllowRule(allowRule, siPolicy);
@@ -991,18 +1011,18 @@ namespace WDAC_Wizard
 
         public static SiPolicy CreateDenyFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
-            // Iterate through the hashes
-            foreach (var hash in customRule.CustomValues.Hashes)
-            {
-                Deny denyRule = new Deny();
-                denyRule.FilePath = customRule.CustomValues.Path;
-                denyRule.FriendlyName = String.Format("Allow custom path: {0}", denyRule.FilePath);
-                denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
-                cFileDenyRules++;
+            Deny denyRule = new Deny();
+            denyRule.FileName = customRule.CustomValues.FileName;
+            denyRule.FileDescription = customRule.CustomValues.Description;
+            denyRule.ProductName = customRule.CustomValues.ProductName;
+            denyRule.InternalName = customRule.CustomValues.InternalName;
 
-                // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddDenyRule(denyRule, siPolicy);
-            }
+            denyRule.FriendlyName = String.Format("Deny files based on file attributes: {0} {1} {2} {3}", denyRule.FileName, denyRule.FileDescription, 
+                denyRule.ProductName, denyRule.InternalName);
+            denyRule.ID = String.Format("ID_DENY_A_{0}", cFileDenyRules++);
+
+            // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+            siPolicy = AddDenyRule(denyRule, siPolicy);
 
             return siPolicy;
         }
@@ -1686,13 +1706,16 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Returns Allow or Deny rule type
+        /// Returns type Publisher, File/folder path, File Attributes, PFN or Hash
         /// </summary>
         public RuleType GetRuleType()
         {
             return this.Type;
         }
 
+        /// <summary>
+        /// Returns Allow or Deny rule type
+        /// </summary>
         public RulePermission GetRulePermission()
         {
             return this.Permission; 

@@ -111,7 +111,7 @@ namespace WDAC_Wizard
         {
             // Show the text fields now that user has selected base policy template:
             this.policyInfoPanel.Visible = true;
-            this._MainWindow.Display_info_text(0); 
+            this._MainWindow.DisplayInfoText(0); 
 
             // Force other switch buttons off
             this.allowMsft_Button.Tag = "untoggle";

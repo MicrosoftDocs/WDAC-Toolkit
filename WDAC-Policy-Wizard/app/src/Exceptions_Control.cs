@@ -180,14 +180,14 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
                     
-                    labelSlider_0.Text = "Issuing CA:";
-                    labelSlider_1.Text = "Publisher:";
-                    labelSlider_2.Text = "File version:";
-                    labelSlider_3.Text = "File name:";
-                    textBoxSlider_0.Text = ExceptionRule.FileInfo["PCACertificate"];
-                    textBoxSlider_1.Text = ExceptionRule.FileInfo["LeafCertificate"];
-                    textBoxSlider_2.Text = ExceptionRule.FileInfo["FileVersion"];
-                    textBoxSlider_3.Text = ExceptionRule.FileInfo["FileName"];
+                    this.labelSlider_0.Text = "Issuing CA:";
+                    this.labelSlider_1.Text = "Publisher:";
+                    this.labelSlider_2.Text = "File version:";
+                    this.labelSlider_3.Text = "File name:";
+                    this.textBoxSlider_0.Text = ExceptionRule.FileInfo["PCACertificate"];
+                    this.textBoxSlider_1.Text = ExceptionRule.FileInfo["LeafCertificate"];
+                    this.textBoxSlider_2.Text = ExceptionRule.FileInfo["FileVersion"];
+                    this.textBoxSlider_3.Text = ExceptionRule.FileInfo["FileName"];
 
                     textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240);
 
@@ -249,14 +249,14 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
 
-                    labelSlider_0.Text = "Original filename:";
-                    labelSlider_1.Text = "File description:";
-                    labelSlider_2.Text = "Product name:";
-                    labelSlider_3.Text = "Internal name:";
-                    textBoxSlider_0.Text = ExceptionRule.FileInfo["OriginalFilename"];
-                    textBoxSlider_1.Text = ExceptionRule.FileInfo["FileDescription"];
-                    textBoxSlider_2.Text = ExceptionRule.FileInfo["ProductName"];
-                    textBoxSlider_3.Text = ExceptionRule.FileInfo["InternalName"];
+                    this.labelSlider_0.Text = "Original filename:";
+                    this.labelSlider_1.Text = "File description:";
+                    this.labelSlider_2.Text = "Product name:";
+                    this.labelSlider_3.Text = "Internal name:";
+                    this.textBoxSlider_0.Text = ExceptionRule.FileInfo["OriginalFilename"];
+                    this.textBoxSlider_1.Text = ExceptionRule.FileInfo["FileDescription"];
+                    this.textBoxSlider_2.Text = ExceptionRule.FileInfo["ProductName"];
+                    this.textBoxSlider_3.Text = ExceptionRule.FileInfo["InternalName"];
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;

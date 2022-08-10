@@ -116,7 +116,7 @@ namespace WDAC_Wizard
                 // Working on other workflow - do you want to leave?
                 if (WantToAbandonWork())
                 {
-                    Display_info_text(0);
+                    DisplayInfoText(0);
                     this.ConfigInProcess = false;
                     Button_New_Click(sender, e);
                 }
@@ -150,7 +150,7 @@ namespace WDAC_Wizard
                 // If so, set the ConfigInProcess flag to false
                 if (WantToAbandonWork())
                 {
-                    Display_info_text(0);
+                    DisplayInfoText(0);
                     this.ConfigInProcess = false;
                     Button_Edit_Click(sender, e);
                 }
@@ -182,7 +182,7 @@ namespace WDAC_Wizard
                 // If so, set the ConfigInProcess flag to false
                 if (WantToAbandonWork())
                 {
-                    Display_info_text(0);
+                    DisplayInfoText(0);
                     this.ConfigInProcess = false;
                     Button_Merge_Click(sender, e);
                 }
@@ -270,9 +270,14 @@ namespace WDAC_Wizard
             }
                 
             else
-                Display_info_text(99); 
+                DisplayInfoText(99); 
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PageNButton_Click(object sender, EventArgs e)
         {
             // Get the button name, extract the number of page user wants, set to CurrPage
@@ -288,14 +293,13 @@ namespace WDAC_Wizard
             PageController(sender, e);
         }
 
-
         /// <summary>
         /// Controller mechanism to determine which UserControls to place ontop of the MainWindow WinForm.
         /// Method called by the Next and Back button.
         /// </summary>
         public void PageController(object sender, EventArgs e)
         {
-            Display_info_text(0);
+            DisplayInfoText(0);
             
             //RemoveControls(); 
 
@@ -520,7 +524,7 @@ namespace WDAC_Wizard
 
 
                         case WDAC_Policy.PolicyType.None:
-                            Display_info_text(98);
+                            DisplayInfoText(98);
                             this.CurrentPage--;
                             break;
                     }
@@ -953,10 +957,10 @@ namespace WDAC_Wizard
                 ruleOptions[i] = ruleOptionsList[i];
             }
 
-            finalPolicy.Rules = ruleOptions;
 
             try
             {
+                finalPolicy.Rules = ruleOptions;
                 Helper.SerializePolicytoXML(finalPolicy, this.Policy.SchemaPath);
             }
             catch (Exception e)
@@ -1156,6 +1160,10 @@ namespace WDAC_Wizard
             return customRulesPathList;
         }
 
+        /// <summary>
+        /// Processes all of the custom rules with user input fields
+        /// </summary>
+        /// <param name="worker"></param>
         public void ProcessCustomValueRules(BackgroundWorker worker)
         {
             SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
@@ -1371,26 +1379,6 @@ namespace WDAC_Wizard
             }
 
             return customRuleScript; 
-        }
-
-        /// <summary>
-        /// Creates the custom New-CIPolicy script
-        /// </summary>
-        public string CreatePolicyScript(PolicyCustomRules customRule, string tempPolicyPath)
-        {
-            string policyScript = string.Empty;
-
-            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
-            {
-                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
-            }
-
-            else
-            {
-                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rule_{1}", tempPolicyPath, customRule.PSVariable);
-            }
-                
-            return policyScript; 
         }
 
         /// <summary>
@@ -1657,162 +1645,6 @@ namespace WDAC_Wizard
             }
         }
 
-        //
-        // Summary:
-        //     Calls the Get-SystemDriver commandlet and parses the output for the driver variable
-        //     Requires scanPath input, 
-        //      $Files_{0} = Get-SystemDriver -ScanPath '{1}' -UserPEs -PathToCatroot ' '
-        //      
-        // Returns:
-        //     A dictionary of Get-SystemDriver PS command output
-        public Dictionary<string, string> GetSystemInfo(string scanPath)
-        {
-            this.Log.AddInfoMsg("-- Get System Info --");
-
-            Dictionary<string, string> systemInfo = new Dictionary<string, string>();
-            string scanFolderPath = scanPath.Substring(0, scanPath.LastIndexOf(@"\"));
-            string fileName = scanPath.Substring(scanPath.LastIndexOf(@"\"));
-            
-            // Command will omit sub folders (recurssively) to optimize perf
-            string sysInfoScript = String.Format("$Files_{0} = Get-SystemDriver -ScanPath \"{1}\" -UserPEs -PathToCatroot ' ' -OmitPaths \"{2}\"", 
-                this.RulesNumber, scanFolderPath, GetListSubFolders(scanFolderPath));
-            this.Log.AddInfoMsg(sysInfoScript);
-
-            // Create the PS pipeline
-            Pipeline pipeline = this.runspace.CreatePipeline();
-            pipeline.Commands.AddScript(sysInfoScript);
-            pipeline.Commands.AddScript(String.Format("$Files_{0}", this.RulesNumber));
-            pipeline.Commands.Add("Out-String");
-
-            // Run the pipeline and cast results into a stringbuilder obj
-            Collection<PSObject> results = pipeline.Invoke();
-            StringBuilder sBuilder = new StringBuilder();
-            foreach (PSObject psObject in results)
-                sBuilder.AppendLine(psObject.ToString());
-
-            // Parse the SystemDriver cmdlet output for the scanPath only
-            string scriptOutput = sBuilder.ToString();
-            systemInfo = ParseSystemInfo(scriptOutput, fileName);
-            systemInfo.Add("PSVar", this.RulesNumber.ToString());
-            this.RulesNumber++;
-
-            // Log the parsing results 
-            Dictionary<string, string>.KeyCollection keys = systemInfo.Keys;
-            foreach (string key in keys)
-            {
-                this.Log.AddInfoMsg(String.Format("{0} - {1}", key, systemInfo[key]));
-            }
-
-            return systemInfo;
-        }
-
-        //
-        // Summary:
-        //     Takes input of Powershell Get-SystemDriver ouput and parses the output for the desired object. 
-        //      
-        // Returns:
-        //     Returns dictionary of Powershell Get-SystemDriver output
-        private Dictionary<string, string> ParseSystemInfo(string scriptOutput, string scanPath)
-        {
-            // Find area we want to scan:
-            var dictStarts = new List<int>();
-            var searchPath = new List<int>();
-            Dictionary<string, string> Dict = new Dictionary<string, string>();
-            int ruleIndex = 0;
-
-            try
-            {
-                for (int i = scriptOutput.IndexOf("FilePath"); i > -1; i = scriptOutput.IndexOf("FilePath", i + 1))
-                    dictStarts.Add(i);
-                dictStarts.Add(scriptOutput.Length);
-
-                for (int i = 0; i < dictStarts.Count - 1; i++)
-                {
-                    string searchString = scriptOutput.Substring(dictStarts[i], dictStarts[i + 1] - dictStarts[i] - 1);
-                    if (searchString.Contains(scanPath))
-                    {
-                        searchPath.Add(dictStarts[i]);
-                        searchPath.Add(dictStarts[i + 1]);
-                        break;
-                    }
-                    ruleIndex++;
-                }
-
-                if (searchPath.Count == 0)
-                    return Dict;
-
-                // Find indices of colons - omit cases where its part of the PE path
-                scriptOutput = scriptOutput.Substring(searchPath[0], searchPath[1] - searchPath[0]);
-                var colonIndx = new List<int>();
-                var startIndx = new List<int>();
-                startIndx.Add(-2);
-                for (int i = scriptOutput.IndexOf("\r\n"); i > -1; i = scriptOutput.IndexOf("\r\n", i + 1))
-                {
-                    // Handle exceptions of file locations eg. "C:\\" or Prod name is a website eg. https://www. 
-                    // In either case we do not want to catch these colons
-                    //if (scriptOutput[i + 1].ToString() != @"\" && scriptOutput[i + 1].ToString() != "/")
-                    startIndx.Add(i);
-                }
-
-                for (int i = 0; i < startIndx.Count - 2; i++)
-                {
-                    int START = startIndx[i] + 2;
-                    int END = startIndx[i + 1];
-                    string subString = scriptOutput.Substring(START, END - START);
-
-                    int endofKey = subString.IndexOf(":");
-                    // If unable to locate key-value pairing, finished parsing
-                    if (endofKey < 0)
-                        break;
-                    string key = subString.Substring(0, endofKey);
-                    string value = subString.Substring(endofKey + 1);
-                    Dict.Add(RemoveWhitespace(key), value);
-                }
-
-                Dict.Add("RuleIndex", Convert.ToString(ruleIndex));
-            }
-            catch(Exception e)
-            {
-                var st = new StackTrace(e, true);
-                var frame = st.GetFrame(0);
-                // Get the line number from the stack frame
-                int line = frame.GetFileLineNumber();
-                this.Log.AddErrorMsg("Parse System Info () encountered the following error ", e, line);
-            }
-
-            
-            return Dict;
-        }
-
-        //
-        // Summary:
-        //     Removes the whitespace of an input string. Important for dict keys
-        //      
-        // Returns:
-        //     String without whitespace. Eg) "key name   " --> "keyname" 
-        public static string RemoveWhitespace(string input)
-        {
-            return new string(input.ToCharArray()
-                .Where(c => !Char.IsWhiteSpace(c)).ToArray());
-        }
-
-        public string GetListSubFolders(string folderPath)
-        {
-            var subFolderList = Directory.GetDirectories(folderPath);
-            if (subFolderList.Length > 0)
-            {
-                string subfolders = String.Empty;
-                foreach (var folder in subFolderList)
-                    subfolders += String.Format("'{0}', ", folder);
-
-                this.Log.AddInfoMsg(String.Format("Found the following subfolders for {0} -- {1}", folderPath, subfolders));
-                return subfolders.Substring(0, subfolders.Length - 2); //trim the trailing comma and space
-            }
-            else
-                return "' '"; 
-            
-        }
-
         // UI helper functions
 
         /// <summary>
@@ -1840,8 +1672,7 @@ namespace WDAC_Wizard
             {
                 this.Log.AddWarningMsg("Abandon Work returned Other.");
                 return false;
-            }
-                
+            }       
         }
 
         /// <summary>
@@ -2083,7 +1914,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Public method to set the text and visibility of the info text label at bottom-left of the form or user control.
         /// </summary>
-        public void Display_info_text(int infoN)
+        public void DisplayInfoText(int infoN)
         {
             label_Info.Visible = true;
             label_Info.ForeColor = Color.DeepSkyBlue;
@@ -2093,6 +1924,7 @@ namespace WDAC_Wizard
                 case 0:
                     // Reset label
                     label_Info.Text = " ";
+                    HideInfoLabel();
                     break;
 
                 case 1:
@@ -2134,15 +1966,14 @@ namespace WDAC_Wizard
             }
 
             label_Info.Focus();
-            label_Info.BringToFront();             
-            
-            Timer settingsUpdateNotificationTimer = new Timer();
-            settingsUpdateNotificationTimer.Interval = (5000); //3 secs
-            settingsUpdateNotificationTimer.Tick += new EventHandler(SettingUpdateTimer_Tick);
-            settingsUpdateNotificationTimer.Start();
-
+            label_Info.BringToFront();
         }
 
+        /// <summary>
+        /// Resets the logic flow to the home page by calling the Home Button Click method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ResetWorkflow(object sender, EventArgs e)
         {
             this.Home_Button_Click(sender, e); 
@@ -2180,9 +2011,13 @@ namespace WDAC_Wizard
             string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
             string folderPath = System.IO.Path.GetDirectoryName(executablePath);
             if (exePath)
+            {
                 return executablePath;
+            }
             else
-                return folderPath; 
+            {
+                return folderPath;
+            }
         }
 
         /// <summary>
@@ -2238,19 +2073,12 @@ namespace WDAC_Wizard
             }
         }
 
-        public int GetReleaseId()
-        {
-            return Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
-        }
-
         /// <summary>
         /// Hide info label on timer tick
         /// /// </summary>
-        private void SettingUpdateTimer_Tick(object sender, EventArgs e)
+        public void HideInfoLabel()
         {
             this.label_Info.Visible = false;
         }
-
-    }
-
+    } // End of MainForm class
 }
