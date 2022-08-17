@@ -388,7 +388,7 @@ with a version at or above this specified file version number.</value>
     <value>Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.</value>
   </data>
   <data name="InvalidAttributeSelection_Error" xml:space="preserve">
-    <value>The file attribute selected cannot be N/A. Please select another attribute or rule type</value>
+    <value>The file attribute selected cannot be N/A or empty. Please select another attribute or use custom values. </value>
   </data>
   <data name="InvalidPublisherFormat_Error" xml:space="preserve">
     <value>Invalid publisher CN input. Publisher input must follow format: 'CN=PublisherName' or 'PublisherName'. Other fields

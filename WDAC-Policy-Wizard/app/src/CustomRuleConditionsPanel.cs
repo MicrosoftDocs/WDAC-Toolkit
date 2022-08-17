@@ -32,7 +32,7 @@ namespace WDAC_Wizard
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
         private string[] DefaultValues;
-        private Dictionary<string,string> FoundPackages; 
+        private Dictionary<string,string> FoundPackages;
 
         private enum UIState
         {
@@ -58,8 +58,7 @@ namespace WDAC_Wizard
             this.redoRequired = false; 
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
-            this.FoundPackages = new Dictionary<string,string>(); 
-
+            this.FoundPackages = new Dictionary<string,string>();
         }
 
         /// <summary>
@@ -749,6 +748,13 @@ namespace WDAC_Wizard
                     this.checkBoxAttribute3.Checked = true;
                     this.checkBoxAttribute4.Checked = true;
 
+                    // Set checkbox struct
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+
                     this.checkBoxAttribute0.Text = "Issuing CA:";
                     this.checkBoxAttribute1.Text = "Publisher:";
                     this.checkBoxAttribute2.Text = "Product name:";
@@ -757,6 +763,10 @@ namespace WDAC_Wizard
 
                     // Version textbox should be set to normal size
                     this.textBoxSlider_4.Size = this.textBoxSlider_3.Size;
+
+                    // Show version boxes
+                    this.textBoxSlider_4.Visible = true;
+                    this.checkBoxAttribute4.Visible = true;
 
                     // Set defaults to restore to if custom values is ever reset
                     this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
@@ -840,8 +850,23 @@ namespace WDAC_Wizard
                     this.checkBoxAttribute2.Text = "Product name:";
                     this.checkBoxAttribute3.Text = "Internal name:";
 
-                    // Product Name textbox should be set to normal size
-                    this.textBoxSlider_4.Size = this.textBoxSlider_3.Size;
+                    // Set checkbox states to all disabled -- allow user to select the ones desired
+                    this.checkBoxAttribute0.Checked = false;
+                    this.checkBoxAttribute1.Checked = false;
+                    this.checkBoxAttribute2.Checked = false;
+                    this.checkBoxAttribute3.Checked = false;
+                    this.checkBoxAttribute4.Checked = false;
+
+                    // Set checkbox struct
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+
+                    // Hide version boxes
+                    this.textBoxSlider_4.Visible = false;
+                    this.checkBoxAttribute4.Visible = false;
 
                     // Set defaults to restore to if custom values is ever reset
                     this.DefaultValues[0] = PolicyCustomRule.FileInfo["OriginalFilename"];
@@ -1030,18 +1055,7 @@ namespace WDAC_Wizard
         /// <returns>Returns the full path of the folder</returns>
         private string GetFolderLocation()
         {
-            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-            openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
-
-            if (openFolderDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFolderDialog.Dispose();
-                return openFolderDialog.SelectedPath;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            return Helper.GetFolderPath("Browse for a folder to use as a reference for the rule.");
         }
 
         /// <summary>
@@ -1878,34 +1892,129 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CustomValues.EKUFriendly = this.textBoxEKU.Text; 
         }
 
-        private void CheckBoxAttrib5CheckChanged(object sender, EventArgs e)
-        {
+       private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
+       {
+            // Version
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                if(this.checkBoxAttribute4.Checked)
+                {
+                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBoxSlider_4.Text))
+                    {
+                        this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+                        return; 
+                    }
+                    else
+                    { 
+                        SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                    }
+                }
+            }
 
-        }
-
-        private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
-        {
-
-        }
+            this.checkBoxAttribute4.Checked = false;
+            this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+       }
 
         private void CheckBoxAttrib3CheckChanged(object sender, EventArgs e)
         {
+            // File name || Internal name
 
+            ClearLabel_ErrorText();
+            if (this.checkBoxAttribute3.Checked)
+            {
+                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBoxSlider_3.Text))
+                {
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
+                    return; 
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBoxAttribute3.Checked = false;
+            this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
         }
 
         private void CheckBoxAttrib2CheckChanged(object sender, EventArgs e)
         {
+            // Product name (Pub rule)
 
+            ClearLabel_ErrorText();
+            if (this.checkBoxAttribute2.Checked)
+            {
+                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString || 
+                    String.IsNullOrEmpty(this.textBoxSlider_2.Text))
+                {
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBoxAttribute2.Checked = false;
+            this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
         }
 
         private void CheckBoxAttrib1CheckChanged(object sender, EventArgs e)
         {
+            // Publisher
 
+            ClearLabel_ErrorText();
+            if (this.checkBoxAttribute1.Checked)
+            {
+                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBoxSlider_1.Text))
+                {
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBoxAttribute1.Checked = false;
+            this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
         }
 
         private void CheckBoxAttrib0CheckChanged(object sender, EventArgs e)
         {
+            // PCA Certificate
 
+            ClearLabel_ErrorText(); 
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                // Cannot uncheck Issuing CA checkbox. Rule must include a root
+                this.checkBoxAttribute0.Checked = true;
+                this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+            }
+            else // Original Filename
+            {
+                if (this.checkBoxAttribute0.Checked)
+                {
+                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBoxSlider_0.Text))
+                    {
+                        this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+                        return; 
+                    }
+                    else
+                    {
+                        SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                    }
+                }
+
+                this.checkBoxAttribute0.Checked = false;
+                this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+            }
         }
     }
 }   

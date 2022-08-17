@@ -408,7 +408,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file attribute selected cannot be N/A. Please select another attribute or rule type.
+        ///   Looks up a localized string similar to The file attribute selected cannot be N/A or empty. Please select another attribute or use custom values. .
         /// </summary>
         internal static string InvalidAttributeSelection_Error {
             get {

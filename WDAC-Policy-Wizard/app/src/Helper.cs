@@ -152,6 +152,27 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Browse for foler path using the FolderBrowserDialog
+        /// </summary>
+        /// <param name="displayTitle"></param>
+        /// <returns></returns>
+        public static string GetFolderPath(string displayTitle)
+        {
+            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
+            openFolderDialog.Description = displayTitle;
+
+            if (openFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                openFolderDialog.Dispose();
+                return openFolderDialog.SelectedPath;
+            }
+            else
+            {
+                return String.Empty;
+            }
+        }
+
+        /// <summary>
         /// Open SaveFileDialog for a single file
         /// </summary>
         /// <returns>>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
@@ -942,7 +963,7 @@ namespace WDAC_Wizard
             }
 
             // Handle the custom publisher fields on the signer 
-            if (customRule.CustomValues.Publisher != null && customRule.CustomValues.Publisher != "*")
+            if (customRule.CheckboxCheckStates.checkBox1)
             {
                 signers = SetSignersPublishers(signers, customRule);
             }
@@ -963,20 +984,26 @@ namespace WDAC_Wizard
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
 
-            // Set the fileattribute fields
-            if (customRule.CustomValues.MinVersion != null && customRule.CustomValues.MinVersion != "*")
+            // Set the fileattribute fields based on the checkbox states
+            if (customRule.CheckboxCheckStates.checkBox4)
             {
                 fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion;
             }
 
-            if (customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
+            if (customRule.CheckboxCheckStates.checkBox4 && 
+                customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
             {
                 fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion; 
             }
 
-            if (customRule.CustomValues.FileName != null)// && customRule.CustomValues.FileName != "*")
+            if (customRule.CheckboxCheckStates.checkBox3)
             {
                 fileAttrib.FileName = customRule.CustomValues.FileName;
+            }
+
+            if (customRule.CheckboxCheckStates.checkBox2)
+            {
+                fileAttrib.ProductName = customRule.CustomValues.ProductName;
             }
 
             // Add FileAttrib references
@@ -993,14 +1020,35 @@ namespace WDAC_Wizard
         public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Allow allowRule = new Allow();
-            allowRule.FileName = customRule.CustomValues.FileName;
-            allowRule.FileDescription = customRule.CustomValues.Description;
-            allowRule.ProductName = customRule.CustomValues.ProductName;
-            allowRule.InternalName = customRule.CustomValues.InternalName;
+            string friendlyName = "Allow files based on file attributes: "; 
+
+            // Add only the checked attributes
+            if (customRule.CheckboxCheckStates.checkBox0)
+            {
+                allowRule.FileName = customRule.CustomValues.FileName;
+                friendlyName += allowRule.FileName + " and "; 
+            }
+            
+            if(customRule.CheckboxCheckStates.checkBox1)
+            {
+                allowRule.FileDescription = customRule.CustomValues.Description;
+                friendlyName += allowRule.FileDescription + " and ";
+            }
+            
+            if(customRule.CheckboxCheckStates.checkBox2)
+            {
+                allowRule.ProductName = customRule.CustomValues.ProductName;
+                friendlyName += allowRule.ProductName + " and ";
+            }
+            
+            if(customRule.CheckboxCheckStates.checkBox3)
+            {
+                allowRule.InternalName = customRule.CustomValues.InternalName;
+                friendlyName += allowRule.InternalName + " and ";
+            }
 
 
-            allowRule.FriendlyName = String.Format("Allow files based on file attributes: {0} {1} {2} {3}", allowRule.FileName, allowRule.FileDescription, 
-                allowRule.ProductName, allowRule.InternalName);
+            allowRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); 
             allowRule.ID = String.Format("ID_ALLOW_A_{0}", cFileAllowRules++);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
@@ -1012,19 +1060,65 @@ namespace WDAC_Wizard
         public static SiPolicy CreateDenyFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Deny denyRule = new Deny();
-            denyRule.FileName = customRule.CustomValues.FileName;
-            denyRule.FileDescription = customRule.CustomValues.Description;
-            denyRule.ProductName = customRule.CustomValues.ProductName;
-            denyRule.InternalName = customRule.CustomValues.InternalName;
+            string friendlyName = "Allow files based on file attributes: ";
 
-            denyRule.FriendlyName = String.Format("Deny files based on file attributes: {0} {1} {2} {3}", denyRule.FileName, denyRule.FileDescription, 
-                denyRule.ProductName, denyRule.InternalName);
+            // Add only the checked attributes
+            if (customRule.CheckboxCheckStates.checkBox0)
+            {
+                denyRule.FileName = customRule.CustomValues.FileName;
+                friendlyName += denyRule.FileName + " and ";
+            }
+
+            if (customRule.CheckboxCheckStates.checkBox1)
+            {
+                denyRule.FileDescription = customRule.CustomValues.Description;
+                friendlyName += denyRule.FileDescription + " and ";
+            }
+
+            if (customRule.CheckboxCheckStates.checkBox2)
+            {
+                denyRule.ProductName = customRule.CustomValues.ProductName;
+                friendlyName += denyRule.ProductName + " and ";
+            }
+
+            if (customRule.CheckboxCheckStates.checkBox3)
+            {
+                denyRule.InternalName = customRule.CustomValues.InternalName;
+                friendlyName += denyRule.InternalName + " and ";
+            }
+
+
+            denyRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5);
             denyRule.ID = String.Format("ID_DENY_A_{0}", cFileDenyRules++);
 
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddDenyRule(denyRule, siPolicy);
 
             return siPolicy;
+        }
+
+        /// <summary>
+        /// Creates a File Attribute rule from PE header defined data
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateNonCustomFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Format like a custom rule and pass into the custom rule handler methods
+            customRule.CustomValues.FileName = customRule.FileInfo["OriginalFilename"];
+            customRule.CustomValues.Description = customRule.FileInfo["FileDescription"];
+            customRule.CustomValues.ProductName = customRule.FileInfo["ProductName"];
+            customRule.CustomValues.InternalName = customRule.FileInfo["InternalName"];
+
+            if(customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+            {
+                return CreateAllowFileAttributeRule(customRule, siPolicy); 
+            }
+            else
+            {
+                return CreateDenyFileAttributeRule(customRule, siPolicy);
+            }
         }
 
         public static SiPolicy CreatePFNRule(PolicyCustomRules customRule, SiPolicy siPolicy)
@@ -1619,13 +1713,23 @@ namespace WDAC_Wizard
             PackagedFamilyName // Packaged app rule
         }
 
+        public struct CheckboxStates
+        {
+            public bool checkBox0;
+            public bool checkBox1;
+            public bool checkBox2;
+            public bool checkBox3;
+            public bool checkBox4;
+        }
+
+        public CheckboxStates CheckboxCheckStates;
+
         public enum RulePermission { Allow, Deny };
 
         // enums: 
         public RuleLevel Level { get; set; }
         public RuleType Type { get; set; }
         public RulePermission Permission { get; set; }
-
 
         public string ReferenceFile { get; set; }
         public Dictionary<string, string> FileInfo { get; set; } //
@@ -1658,7 +1762,15 @@ namespace WDAC_Wizard
 
             this.UsingCustomValues = false;
             this.CustomValues = new CustomValue();
-            this.PackagedFamilyNames = new List<string>(); 
+            this.PackagedFamilyNames = new List<string>();
+
+            // Set checkbox states
+            this.CheckboxCheckStates = new CheckboxStates();
+            this.CheckboxCheckStates.checkBox0 = false;
+            this.CheckboxCheckStates.checkBox1 = false;
+            this.CheckboxCheckStates.checkBox2 = false;
+            this.CheckboxCheckStates.checkBox3 = false;
+            this.CheckboxCheckStates.checkBox4 = false;
         }
 
         /// <summary>

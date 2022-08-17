@@ -811,7 +811,7 @@ namespace WDAC_Wizard
                 ProcessCustomValueRules(worker);
 
                 // Handle user created rules:
-                List<string> customRulesPathList = ProcessCustomRules(worker);
+                List<string> customRulesPathList = ProcessSignerRules(worker);
                 
                 // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
                 MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
@@ -1054,11 +1054,10 @@ namespace WDAC_Wizard
             runspace.Dispose();
         }
 
-
         /// <summary>
-        /// Processes all of the custom rules defined by user. 
+        /// Processes all of the non-custom signer rules defined by user. 
         /// </summary>
-        public List<string> ProcessCustomRules(BackgroundWorker worker)
+        public List<string> ProcessSignerRules(BackgroundWorker worker)
         {
             List<string> customRulesPathList = new List<string>();
             List<string> scriptCommands = new List<string>();
@@ -1069,20 +1068,27 @@ namespace WDAC_Wizard
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
-                string createVarScript = "$Rules = ";
                 var customRule = this.Policy.CustomRules[i];
 
-                // Already handled custom value rules
+                // Skip; already handled custom value rules
                 if(customRule.UsingCustomValues)
                 {
                     continue;
                 }
 
-                // Already handled PFN rules
-                if (customRule.PackagedFamilyNames.Count > 0)
+                // Skip; already handled PFN/packaged app rules
+                if (customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
                 {
                     continue;
                 }
+
+                // Skip; already handled file attribute rules
+                if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    continue; 
+                }
+
+                string createVarScript = "$Rules = ";
 
                 customRule.PSVariable = i.ToString(); 
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
@@ -1176,9 +1182,14 @@ namespace WDAC_Wizard
                     siPolicyCustomValueRules = HandleCustomValues(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
-                else if(customRule.PackagedFamilyNames.Count > 0)
+                else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
                 {
                     siPolicyCustomValueRules = Helper.CreatePFNRule(customRule, siPolicyCustomValueRules);
+                    this.nCustomValueRules++;
+                }
+                else if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    siPolicyCustomValueRules = Helper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
             }
@@ -1594,7 +1605,6 @@ namespace WDAC_Wizard
             worker.ReportProgress(90);
         }
 
-
         /// <summary>
         /// Method to convert the xml policy file into a binary CI policy file
         /// </summary>
@@ -1896,7 +1906,6 @@ namespace WDAC_Wizard
 
         }
 
-   
         /// <summary>
         /// Empties this.Controls based on contents of PageList.
         /// </summary> 
@@ -1910,7 +1919,6 @@ namespace WDAC_Wizard
             this.PageList.Clear(); 
         }
 
-        
         /// <summary>
         /// Public method to set the text and visibility of the info text label at bottom-left of the form or user control.
         /// </summary>
