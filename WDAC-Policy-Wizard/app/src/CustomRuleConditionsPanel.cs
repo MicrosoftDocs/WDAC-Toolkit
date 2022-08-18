@@ -69,7 +69,8 @@ namespace WDAC_Wizard
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
             if (this.PolicyCustomRule.ReferenceFile == null)
             {
-                if(this.PolicyCustomRule.UsingCustomValues || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                if(this.PolicyCustomRule.UsingCustomValues || 
+                    this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
                     
                 }
@@ -80,23 +81,63 @@ namespace WDAC_Wizard
                     this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
                     return;
                 }
-                
             }
 
+            // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
+            bool warnUser = false;
+
+            // Publisher and File Attribute checks
             // Check to make sure none of the fields are invalid
-            // If the selected attribute is not found (UI will show Properties.Resources.DefaultFileAttributeString), do not allow creation
-            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher ||
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
-                if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.None || 
-                    this.textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString)
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    label_Error.Visible = true;
-                    label_Error.Text = Properties.Resources.InvalidAttributeSelection_Error;
-                    this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
+                    {
+                        warnUser = true; 
+                        this.Log.AddWarningMsg("PCACertificate field with null attribute");
+                    }
+
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(this.textBoxSlider_1.Text))
+                    {
+                        warnUser = true;
+                        this.Log.AddWarningMsg("Publisher field with null attribute");
+                    }
+
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4 && !Helper.IsValidText(this.textBoxSlider_4.Text))
+                    {
+                        ShowInvalidErrorLabel();
+                        return;
+                    }
+                }
+                else
+                {
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
+                    {
+                        ShowInvalidErrorLabel();
+                        return;
+                    }
+
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(this.textBoxSlider_1.Text))
+                    {
+                        ShowInvalidErrorLabel();
+                        return;
+                    }
+                }
+
+                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(this.textBoxSlider_2.Text))
+                {
+                    ShowInvalidErrorLabel();
+                    return;
+                }
+
+                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(this.textBoxSlider_3.Text))
+                {
+                    ShowInvalidErrorLabel();
                     return;
                 }
             }
-            
 
             // Packaged family name apps. Set the list of apps at button create time
             if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
@@ -119,13 +160,12 @@ namespace WDAC_Wizard
                     }
                 }
             }
-            // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
-            bool warnUser = false;
-
-            // Ensure custom values are valid
+            
+            // Check custom rules
             if (this.PolicyCustomRule.UsingCustomValues)
             {
-                if(this.PolicyCustomRule.CustomValues.Publisher != null)
+                // Check custom publisher field
+                if(this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
                 {
                     if (!Helper.IsValidPublisher(this.PolicyCustomRule.CustomValues.Publisher))
                     {
@@ -141,36 +181,53 @@ namespace WDAC_Wizard
                     }
                 }
 
-                if(this.PolicyCustomRule.CustomValues.MinVersion != null && this.PolicyCustomRule.CustomValues.MinVersion != "*") 
+                // Check custom product field
+                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(this.textBoxSlider_2.Text))
+                {
+                    ShowInvalidErrorLabel();
+                    return;
+                }
+
+                // Check custom original filename
+                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(this.textBoxSlider_3.Text))
+                {
+                    ShowInvalidErrorLabel();
+                    return;
+                }
+
+                // Check custom versions
+                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4) 
                 {
                     if(!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidVersionFormat_Error; 
-                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion", this.PolicyCustomRule.CustomValues.MinVersion));
+                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MinVersion));
                         return;
+                    }
+
+                    // Check MaxVersion
+                    if (this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                    {
+                        if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
+                        {
+                            label_Error.Visible = true;
+                            label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
+                            this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMaxVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
+                            return;
+                        }
+
+                        if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
+                        {
+                            label_Error.Visible = true;
+                            label_Error.Text = Properties.Resources.InvalidVersionRange_Error;
+                            this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
+                            return;
+                        }
                     }
                 }
 
-                if (this.PolicyCustomRule.CustomValues.MaxVersion != null && this.PolicyCustomRule.CustomValues.MaxVersion != "*")
-                {
-                    if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
-                    {
-                        label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
-                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
-                        return;
-                    }
-
-                    if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
-                    {
-                        label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidVersionRange_Error; 
-                        this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
-                        return;
-                    }
-                }
-
+                // Check custom path
                 if (this.PolicyCustomRule.CustomValues.Path != null)
                 {
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
@@ -182,7 +239,7 @@ namespace WDAC_Wizard
                     }
                 }
 
-                // Check custom EKU value to ensure 
+                // Check custom EKU value 
                 if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
                 {
                     string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKUFriendly); 
@@ -227,75 +284,9 @@ namespace WDAC_Wizard
                     }
 
                 }
-
-                // Check for N/A's only in the PCA and Publisher section 
-                switch (this.PolicyCustomRule.Level)
-                {
-                    case PolicyCustomRules.RuleLevel.PcaCertificate:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
-                        }
-                        break;
-
-                    case PolicyCustomRules.RuleLevel.Publisher:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
-                        }
-                        break;
-                }
             }
-            else
-            // Check for N/A's if not using custom rules only
-            {
-                switch (this.PolicyCustomRule.Level)
-                {
-                    case PolicyCustomRules.RuleLevel.PcaCertificate:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString)
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.PCACertificate rule attempt with null attribute");
-                        }
-                        break;
-
-                    case PolicyCustomRules.RuleLevel.Publisher:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString)
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.Publisher rule attempt with null attribute(s)");
-                        }
-                        break;
-
-                    case PolicyCustomRules.RuleLevel.SignedVersion:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
-                        // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
-                        // Wizard will enforce null versions falling back to hash
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.SignedVersion rule attempt with null attribute(s)");
-                        }
-                        break;
-
-                    case PolicyCustomRules.RuleLevel.FilePublisher:
-                        if (this.PolicyCustomRule.FileInfo["PCACertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["LeafCertificate"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString ||
-                            this.PolicyCustomRule.FileInfo["FileName"] == Properties.Resources.DefaultFileAttributeString)
-                        {
-                            warnUser = true;
-                            this.Log.AddWarningMsg("RuleLevel.FilePublisher rule attempt with null attribute(s)");
-                        }
-                        break;
-                }
-            }
-
+            
+            // Show warning message to user to notify that a signing chain was not found; may result in a hash rule created
             if(warnUser)
             {
                 DialogResult res = MessageBox.Show("One or more of the file attributes could not be found. Creating this rule may result in a hash rule if unsuccessful. " +
@@ -675,6 +666,10 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Retrieves the file attribute and signer info
+        /// </summary>
+        /// <param name="refPath"></param>
         private void SetFileSignerInfo(string refPath)
         {
             this.PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
@@ -726,7 +721,10 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
         }
 
-
+        /// <summary>
+        /// Sets the default state of the textboxes and checkboxes based on the rule type
+        /// </summary>
+        /// <param name="ruleType"></param>
         private void SetDefaultUIState(PolicyCustomRules.RuleType ruleType)
         {
             switch (ruleType)
@@ -925,105 +923,6 @@ namespace WDAC_Wizard
             {
                 Button_Browse_Click(sender, e);
             }
-        }
-
-        /// <summary>
-        /// Gets the location of the trackbar and sets the Rule Level 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
-        {
-            label_Error.Visible = false; // Clear error label
-
-            switch (this.PolicyCustomRule.Type)
-            {
-               case PolicyCustomRules.RuleType.FileAttributes:
-                    {
-                        // Setting the trackBar values snaps the cursor to one of the four options
-                        textBoxSlider_3.Text = "*"; //@"Internal name:";
-                        textBoxSlider_4.Text = "*"; //@"Product name:";
-                        textBoxSlider_1.Text = "*"; //@"File description
-                        textBoxSlider_0.Text = "*"; //@"Original file name:";
-
-                                                
-                        if(this.checkBoxAttribute0.Checked) //Original filename
-                        {
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
-                            textBoxSlider_0.Text = this.PolicyCustomRule.FileInfo["OriginalFilename"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_0.Text == Properties.Resources.DefaultFileAttributeString)
-                            {
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            }
-                            publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
-                        }
-
-                        if (this.checkBoxAttribute1.Checked) //File description
-                        {
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
-                            textBoxSlider_1.Text = this.PolicyCustomRule.FileInfo["FileDescription"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_1.Text == Properties.Resources.DefaultFileAttributeString)
-                            {
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            }
-                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_1.Text));
-                        }
-
-                        if (this.checkBoxAttribute2.Checked) // Product name
-                        {
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
-                            textBoxSlider_4.Text = this.PolicyCustomRule.FileInfo["ProductName"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_4.Text == Properties.Resources.DefaultFileAttributeString)
-                            {
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            }
-                            publisherInfoLabel.Text = "Rule applies to all files with this product name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to product name: {0}", textBoxSlider_4.Text));
-                        }
-
-                        if (checkBoxAttribute3.Checked) // Internal name
-                        {
-                            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
-                            textBoxSlider_3.Text = this.PolicyCustomRule.FileInfo["InternalName"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString)
-                            {
-                                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            }
-                            publisherInfoLabel.Text = "Rule applies to all files with this internal name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file internal name: {0}", textBoxSlider_3.Text));
-                        }
-
-                    }
-                    break;
-            }
-
-            // Returned from exceptions user control to modify the level of the publisher rule
-            if (this.exceptionsControl != null)
-            {
-                this.redoRequired = true;
-            }
-        }
-
-        /// <summary>
-        /// Sets the checkbox check states to unchecked
-        /// </summary>
-        private void ClearFileAttributeCheckboxes()
-        {
-            this.checkBoxAttribute0.Checked = false;
-            this.checkBoxAttribute1.Checked = false;
-            this.checkBoxAttribute2.Checked = false;
-            this.checkBoxAttribute3.Checked = false;
-            this.checkBoxAttribute4.Checked = false;
         }
 
         /// <summary>
@@ -1304,6 +1203,16 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Shows the invalid error label when a checkbox is selected with invalid text
+        /// </summary>
+        private void ShowInvalidErrorLabel()
+        {
+            label_Error.Visible = true;
+            label_Error.Text = Properties.Resources.InvalidAttributeSelection_Error;
+            this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+        }
+
+        /// <summary>
         /// Add exception button clicked. 
         /// </summary>
         /// <param name="sender"></param>
@@ -1359,12 +1268,24 @@ namespace WDAC_Wizard
             {
                 if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
-                    SetTextBoxStates(true, PolicyCustomRules.RuleType.FileAttributes); 
+                    SetTextBoxStates(true, PolicyCustomRules.RuleType.FileAttributes);
+
+                    // Set the custom values based on existing
+                    this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
+                    this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+                    this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                    this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
                 }
                 else
                 {
                     // Set textbox states to write, enabled, and white back color
                     SetTextBoxStates(true);
+
+                    // Set the custom values based on existing
+                    this.PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
+                    this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                    this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
+                    this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
                 }
 
                 this.PolicyCustomRule.UsingCustomValues = true; 

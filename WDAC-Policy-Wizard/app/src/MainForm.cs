@@ -1258,11 +1258,11 @@ namespace WDAC_Wizard
             {
                 if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    siPolicy = Helper.CreateAllowHashRule(customRule, siPolicy);
+                    siPolicy = Helper.CreateAllowHashRule(siPolicy, customRule);
                 }
                 else
                 {
-                    siPolicy = Helper.CreateDenyHashRule(customRule, siPolicy);
+                    siPolicy = Helper.CreateDenyHashRule(siPolicy, customRule);
                 }
             }
 

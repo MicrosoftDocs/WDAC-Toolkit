@@ -364,6 +364,22 @@ namespace WDAC_Wizard
             return formattedPub;
         }
 
+        public static bool IsValidText(string text)
+        {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+            else if(text == Properties.Resources.DefaultFileAttributeString)
+            {
+                return false; 
+            }
+            else
+            {
+                return true; 
+            }
+        }
+
         /// <summary>
         /// Format the custom published input from the user
         /// </summary>
@@ -885,33 +901,59 @@ namespace WDAC_Wizard
         static public int cFileAttribRules = 0;
         static public int cEKURules= 0;
 
-        public static SiPolicy CreateAllowHashRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        /// <summary>
+        /// Creates an Allow rule based on a provided hash string
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateAllowHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Allow allow=null)
         {
-            // Iterate through the hashes
-            foreach(var hash in customRule.CustomValues.Hashes)
+            if(allow != null)
             {
                 Allow allowRule = new Allow();
-
-                allowRule.Hash = Helper.ConvertHashStringToByte(hash);
-                allowRule.FriendlyName = String.Format("Allow hash: {0}", hash);
+                allowRule.Hash = allow.Hash;
+                allowRule.FriendlyName = allow.FriendlyName;
                 allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
                 cFileAllowRules++;
 
-                // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
                 siPolicy = AddAllowRule(allowRule, siPolicy);
+            }
+
+            if(customRule != null)
+            {
+                // Iterate through the hashes
+                foreach (var hash in customRule.CustomValues.Hashes)
+                {
+                    Allow allowRule = new Allow();
+
+                    allowRule.Hash = Helper.ConvertHashStringToByte(hash);
+                    allowRule.FriendlyName = String.Format("Allow hash: {0}", hash);
+                    allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
+                    cFileAllowRules++;
+
+                    // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddAllowRule(allowRule, siPolicy);
+                }
             }
             
             return siPolicy;
         }
 
-        public static SiPolicy CreateDenyHashRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        /// <summary>
+        /// Creates a Deny rule based on a provided hash string
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateDenyHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Deny deny=null)
         {
-            // Iterate through the hashes
-            foreach (var hash in customRule.CustomValues.Hashes)
+            if(deny != null)
             {
                 Deny denyRule = new Deny();
-                denyRule.Hash = Helper.ConvertHashStringToByte(hash);
-                denyRule.FriendlyName = String.Format("Deny hash: {0}", hash);
+                denyRule.Hash = deny.Hash;
+                denyRule.FriendlyName = deny.FriendlyName;
                 denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
                 cFileDenyRules++;
 
@@ -919,9 +961,54 @@ namespace WDAC_Wizard
                 siPolicy = AddDenyRule(denyRule, siPolicy);
             }
 
+            if (customRule != null)
+            {
+                // Iterate through the hashes
+                foreach (var hash in customRule.CustomValues.Hashes)
+                {
+                    Deny denyRule = new Deny();
+                    denyRule.Hash = Helper.ConvertHashStringToByte(hash);
+                    denyRule.FriendlyName = String.Format("Deny hash: {0}", hash);
+                    denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
+                    cFileDenyRules++;
+
+                    // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
+                    siPolicy = AddDenyRule(denyRule, siPolicy);
+                }
+            }
+
             return siPolicy;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hashSiPolicy"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateHashFallbackRules(SiPolicy hashSiPolicy, SiPolicy siPolicy)
+        {
+            foreach(object hashRule in hashSiPolicy.FileRules)
+            {
+                if(hashRule.GetType() == typeof(Allow))
+                {
+                    siPolicy = CreateAllowHashRule(siPolicy, null, (Allow)hashRule);
+                }
+                else
+                {
+                    siPolicy = CreateDenyHashRule(siPolicy, null, (Deny)hashRule);
+                }
+            }
+
+            return siPolicy; 
+        }
+
+        /// <summary>
+        /// Creates an Allow rule based on a filepath
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Allow allowRule = new Allow();
@@ -944,6 +1031,12 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+        /// <summary>
+        ///  Creates a Deny rule based on a filepath
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreateDenyPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Deny denyRule = new Deny();
@@ -970,11 +1063,22 @@ namespace WDAC_Wizard
         public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
-            Signer[] signers = CreateSignerFromPS(customRule); 
-            
-            if(signers == null)
+            SiPolicy tempSiPolicy = CreateSignerFromPS(customRule);
+
+            if(tempSiPolicy == null)
             {
-                // Failed to create signer rules
+                return siPolicy;
+            }
+
+            Signer[] signers = tempSiPolicy.Signers; 
+            if (signers == null || signers.Length == 0)
+            {
+                // Failed to create signer rules. Fallback to hash rules
+                if(tempSiPolicy.FileRules.Length > 0)
+                {
+                    siPolicy = CreateHashFallbackRules(tempSiPolicy, siPolicy);
+                }
+
                 return siPolicy; 
             }
 
@@ -1032,7 +1136,12 @@ namespace WDAC_Wizard
             return siPolicy;            
         }
 
-
+        /// <summary>
+        /// Creates an Allow File Attribute rule based on Original Filename, Description, Product and Internal filename
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Allow allowRule = new Allow();
@@ -1073,6 +1182,12 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+        /// <summary>
+        /// Creates a Deny File Attribute rule based on Original Filename, Description, Product and Internal filename
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreateDenyFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Deny denyRule = new Deny();
@@ -1430,8 +1545,7 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
-
-        static private Signer[] CreateSignerFromPS(PolicyCustomRules customRule)
+        static private SiPolicy CreateSignerFromPS(PolicyCustomRules customRule)
         {
             string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummySignersPolicy.xml");
 
@@ -1441,7 +1555,7 @@ namespace WDAC_Wizard
             Pipeline pipeline = runspace.CreatePipeline();
 
             // Scan the file to extract the TBS hash (or hashes) for the signers
-            pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\"", customRule.ReferenceFile));
+            pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile));
             pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyPcaRule -FilePath \"{0}\"", DUMMYPATH));
 
 
@@ -1460,8 +1574,8 @@ namespace WDAC_Wizard
 
             // Remove dummy file
             File.Delete(DUMMYPATH);
-            
-            return siPolicy.Signers; 
+
+            return siPolicy; 
         }
 
         public static Setting[] SetPolicyInfo(string policyName, string policyId)
