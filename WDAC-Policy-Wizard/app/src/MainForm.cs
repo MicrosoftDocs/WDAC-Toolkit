@@ -1088,6 +1088,12 @@ namespace WDAC_Wizard
                     continue; 
                 }
 
+                // Skip; already handled path rules
+                if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    continue; 
+                }
+
                 string createVarScript = "$Rules = ";
 
                 customRule.PSVariable = i.ToString(); 
@@ -1190,6 +1196,11 @@ namespace WDAC_Wizard
                 else if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
                     siPolicyCustomValueRules = Helper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
+                    this.nCustomValueRules++;
+                }
+                else if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    siPolicyCustomValueRules = Helper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
             }
@@ -1305,64 +1316,6 @@ namespace WDAC_Wizard
                             " -Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
                         }
                         
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleType.FilePath:
-                    {
-                        if(customRule.UsingCustomValues)
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
-                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
-                        }
-                        else
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FilePath -DriverFilePath \"{1}\"" +
-                            " -Fallback Hash -UserWriteablePaths", rulePrefix, customRule.ReferenceFile); // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
-                        }
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleType.Folder:
-                    {
-                        if (customRule.UsingCustomValues)
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\" -UserWriteablePaths", rulePrefix, customRule.CustomValues.Path); 
-                            // -UserWriteablePaths allows all paths (userWriteable and non) to be added as filepath rules
-                        }
-                        else
-                        {
-                            // Check if part of the folder path can be replaced with an env variable eg. %OSDRIVE% == "C:\"
-                            if (Properties.Settings.Default.useEnvVars)
-                            {
-                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, Helper.GetEnvPath(customRule.ReferenceFile));
-                            }
-                            else
-                            {
-                                customRuleScript = String.Format("{0} = New-CIPolicyRule -FilePathRule \"{1}\"", rulePrefix, customRule.ReferenceFile);
-                            }
-                        }
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleType.FileAttributes:
-                    {
-                        if(customRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName )
-                        {
-                            if(customRule.UsingCustomValues)
-                            {
-                                return String.Empty;
-                            }
-                            else
-                            {
-                                customRuleScript = String.Format("{0} = New-CIPolicyRule -Package $Package_{0}", rulePrefix);
-                            }
-                        }
-                        else
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level FileName -SpecificFileNameLevel {1} -DriverFilePath \"{2}\" " +
-                            "-Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
-                        }
                     }
                     break;
 

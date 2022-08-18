@@ -926,8 +926,16 @@ namespace WDAC_Wizard
         {
             Allow allowRule = new Allow();
 
-            allowRule.FilePath = customRule.CustomValues.Path; 
-            allowRule.FriendlyName = String.Format("Allow custom path: {0}", allowRule.FilePath);
+            if (Properties.Settings.Default.useEnvVars)
+            {
+                allowRule.FilePath = Helper.GetEnvPath(customRule.CustomValues.Path);
+            }
+            else
+            {
+                allowRule.FilePath = customRule.CustomValues.Path;
+            }
+
+            allowRule.FriendlyName = String.Format("Allow by path: {0}", allowRule.FilePath);
             allowRule.ID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
             cFileAllowRules++;
 
@@ -939,8 +947,16 @@ namespace WDAC_Wizard
         public static SiPolicy CreateDenyPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             Deny denyRule = new Deny();
-            denyRule.FilePath = customRule.CustomValues.Path;
-            denyRule.FriendlyName = String.Format("Deny custom path: {0}", denyRule.FilePath);
+
+            if (Properties.Settings.Default.useEnvVars)
+            {
+                denyRule.FilePath = Helper.GetEnvPath(customRule.CustomValues.Path);
+            }
+            else
+            {
+                denyRule.FilePath = customRule.CustomValues.Path;
+            }
+            denyRule.FriendlyName = String.Format("Deny by path: {0}", denyRule.FilePath);
             denyRule.ID = String.Format("ID_DENY_PATH_{0}", cFileDenyRules);
             cFileDenyRules++;
 
@@ -1118,6 +1134,27 @@ namespace WDAC_Wizard
             else
             {
                 return CreateDenyFileAttributeRule(customRule, siPolicy);
+            }
+        }
+
+        /// <summary>
+        /// Creates a File Attribute rule from the OpenFile/OpenFolder returned path defined data
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateNonCustomFilePathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        {
+            // Format like a custom rule and pass into the custom rule handler methods
+            customRule.CustomValues.Path = customRule.ReferenceFile; 
+
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+            {
+                return CreateAllowPathRule(customRule, siPolicy);
+            }
+            else
+            {
+                return CreateDenyPathRule(customRule, siPolicy);
             }
         }
 
