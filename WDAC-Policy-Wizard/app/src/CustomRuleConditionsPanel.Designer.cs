@@ -58,7 +58,6 @@
             this.textBoxSlider_1 = new System.Windows.Forms.TextBox();
             this.textBoxSlider_0 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
             this.radioButton_File = new System.Windows.Forms.RadioButton();
@@ -101,7 +100,6 @@
             this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
             this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label1);
-            this.panel_CustomRules.Controls.Add(this.publisherInfoLabel);
             this.panel_CustomRules.Controls.Add(this.panel_FileFolder);
             this.panel_CustomRules.Controls.Add(this.label_Info);
             this.panel_CustomRules.Controls.Add(this.label9);
@@ -115,7 +113,7 @@
             this.panel_CustomRules.Location = new System.Drawing.Point(123, 0);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             this.panel_CustomRules.Name = "panel_CustomRules";
-            this.panel_CustomRules.Size = new System.Drawing.Size(615, 738);
+            this.panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             this.panel_CustomRules.TabIndex = 86;
             // 
             // panelPackagedApps
@@ -234,7 +232,7 @@
             this.richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
             this.richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
             this.richTextBox_CustomHashes.TabIndex = 114;
-            this.richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode Hashes";
+            this.richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode/PE Hashes";
             this.richTextBox_CustomHashes.Visible = false;
             this.richTextBox_CustomHashes.Click += new System.EventHandler(this.RichTextBox_CustomHashes_Click);
             // 
@@ -455,20 +453,6 @@
             this.label1.Text = "Select the rule type, browse for the reference file and choose whether to allow \r" +
     "\nor deny. ";
             // 
-            // publisherInfoLabel
-            // 
-            this.publisherInfoLabel.AutoSize = true;
-            this.publisherInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(12, 698);
-            this.publisherInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.publisherInfoLabel.Name = "publisherInfoLabel";
-            this.publisherInfoLabel.Size = new System.Drawing.Size(472, 36);
-            this.publisherInfoLabel.TabIndex = 106;
-            this.publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this  \r\nfi" +
-    "le name with a version at or above the specified version number.";
-            this.publisherInfoLabel.Visible = false;
-            // 
             // panel_FileFolder
             // 
             this.panel_FileFolder.Controls.Add(this.radioButton_Folder);
@@ -638,7 +622,7 @@
             // label_Error
             // 
             this.label_Error.AutoSize = true;
-            this.label_Error.Location = new System.Drawing.Point(125, 760);
+            this.label_Error.Location = new System.Drawing.Point(130, 742);
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(78, 17);
             this.label_Error.TabIndex = 87;
@@ -853,7 +837,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel_CustomRules;
-        private System.Windows.Forms.Label publisherInfoLabel;
         private System.Windows.Forms.Button button_CreateRule;
         private System.Windows.Forms.Panel panel_FileFolder;
         private System.Windows.Forms.RadioButton radioButton_Folder;

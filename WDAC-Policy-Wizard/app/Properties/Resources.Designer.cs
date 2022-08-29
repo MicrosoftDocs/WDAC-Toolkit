@@ -666,16 +666,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support path rule exceptions. 
-        ///Please select the  &apos;Create Rule&apos; button..
-        /// </summary>
-        internal static string PathRuleNoExceptionAllowed {
-            get {
-                return ResourceManager.GetString("PathRuleNoExceptionAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {
@@ -776,6 +766,16 @@ namespace WDAC_Wizard.Properties {
         internal static string RevokedAsUnsigned_Info {
             get {
                 return ResourceManager.GetString("RevokedAsUnsigned_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support rule exceptions for this rule type.
+        ///Please select the  &apos;Create Rule&apos; button..
+        /// </summary>
+        internal static string RuleTypeNoExceptionAllowed {
+            get {
+                return ResourceManager.GetString("RuleTypeNoExceptionAllowed", resourceCulture);
             }
         }
         

@@ -607,7 +607,6 @@ namespace WDAC_Wizard
             // Clear all of UI updates we make based on the type of rule so that the Custom Rules Panel is clear
             //Publisher:
             panel_Publisher_Scroll.Visible = false;
-            publisherInfoLabel.Visible = false;
 
             //File Path:
             panel_FileFolder.Visible = false;
@@ -782,9 +781,6 @@ namespace WDAC_Wizard
                     this.textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); // Grayed out; cannot be overwritten by custom values
 
                     panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo;
                     break;
 
                 case PolicyCustomRules.RuleType.Folder:
@@ -878,10 +874,6 @@ namespace WDAC_Wizard
                     this.textBoxSlider_3.Text = this.DefaultValues[3];
 
                     panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-
                     break;
 
                 case PolicyCustomRules.RuleType.Hash:
@@ -1001,33 +993,13 @@ namespace WDAC_Wizard
         {
             // Assert not a path rule since path rules cannot be excepted in WDAC
             if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath)
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath || 
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
                 label_Error.Visible = true;
-                label_Error.Text = Properties.Resources.PathRuleNoExceptionAllowed;
-                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path rules cannot be excepted.");
+                label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
+                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path and hash rules cannot be excepted.");
                 return;
-            }
-
-            // Check custom values first before proceeding
-            // Ensure custom values are valid
-            if (this.PolicyCustomRule.UsingCustomValues)
-            {
-                if (this.PolicyCustomRule.CustomValues.MinVersion != null)
-                {
-                    if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
-                    {
-                        label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidVersion_Error;
-                        this.Log.AddWarningMsg("Invalid version format for CustomMinVersion");
-                        return;
-                    }
-                }
-
-                if (this.PolicyCustomRule.CustomValues.FileName != null)
-                {
-                    // Some check here - do not know what at the momemnt
-                }
             }
 
             // Check required fields - that a reference file is selected
@@ -1824,6 +1796,7 @@ namespace WDAC_Wizard
                     String.IsNullOrEmpty(this.textBoxSlider_4.Text))
                     {
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+                        ClearLabel_ErrorText();
                         return; 
                     }
                     else
@@ -1841,13 +1814,13 @@ namespace WDAC_Wizard
         {
             // File name || Internal name
 
-            ClearLabel_ErrorText();
             if (this.checkBoxAttribute3.Checked)
             {
                 if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString ||
                     String.IsNullOrEmpty(this.textBoxSlider_3.Text))
                 {
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
+                    ClearLabel_ErrorText();
                     return; 
                 }
                 else
@@ -1862,14 +1835,14 @@ namespace WDAC_Wizard
 
         private void CheckBoxAttrib2CheckChanged(object sender, EventArgs e)
         {
-            // Product name (Pub rule)
+            // Product name (Pub rule) || Product name
 
-            ClearLabel_ErrorText();
             if (this.checkBoxAttribute2.Checked)
             {
                 if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString || 
                     String.IsNullOrEmpty(this.textBoxSlider_2.Text))
                 {
+                    ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
                     return;
                 }
@@ -1885,14 +1858,14 @@ namespace WDAC_Wizard
 
         private void CheckBoxAttrib1CheckChanged(object sender, EventArgs e)
         {
-            // Publisher
+            // Publisher || File description
 
-            ClearLabel_ErrorText();
             if (this.checkBoxAttribute1.Checked)
             {
                 if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString ||
                     String.IsNullOrEmpty(this.textBoxSlider_1.Text))
                 {
+                    ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
                     return;
                 }
@@ -1908,9 +1881,8 @@ namespace WDAC_Wizard
 
         private void CheckBoxAttrib0CheckChanged(object sender, EventArgs e)
         {
-            // PCA Certificate
+            // PCA Certificate || Original filename
 
-            ClearLabel_ErrorText(); 
             if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 // Cannot uncheck Issuing CA checkbox. Rule must include a root
@@ -1924,6 +1896,7 @@ namespace WDAC_Wizard
                     if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString ||
                     String.IsNullOrEmpty(this.textBoxSlider_0.Text))
                     {
+                        ClearLabel_ErrorText();
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
                         return; 
                     }

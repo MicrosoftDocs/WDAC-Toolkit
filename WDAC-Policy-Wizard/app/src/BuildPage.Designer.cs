@@ -62,10 +62,9 @@ namespace WDAC_Wizard
             this.label_WaitMsg.ForeColor = System.Drawing.Color.Black;
             this.label_WaitMsg.Location = new System.Drawing.Point(164, 203);
             this.label_WaitMsg.Name = "label_WaitMsg";
-            this.label_WaitMsg.Size = new System.Drawing.Size(579, 18);
+            this.label_WaitMsg.Size = new System.Drawing.Size(481, 18);
             this.label_WaitMsg.TabIndex = 81;
-            this.label_WaitMsg.Text = "The wizard is building your WDAC Code Integrity policy. This may take several min" +
-    "utes.";
+            this.label_WaitMsg.Text = "The wizard is building your WDAC policy. This may take several minutes.";
             // 
             // progressBar
             // 

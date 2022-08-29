@@ -849,7 +849,7 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring custom policy file rules ...";
+                process = "Configuring WDAC policy signer and file rules ...";
             else if (progressPercent <= 80)
                 process = "Building custom policy file rules ...";
             else if (progressPercent <= 85)
@@ -1001,6 +1001,8 @@ namespace WDAC_Wizard
 
             if (resetGuid)
             {
+                ResetGuidPs(this.Policy.SchemaPath);
+
                 // Set policy info - ID, Name
                 siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
 
@@ -1019,6 +1021,11 @@ namespace WDAC_Wizard
                 // Enable HVCI since HVCI is not a Rule-Option
                 siPolicy.HvciOptions = 1;
                 this.Log.AddInfoMsg("Additional parameters set - HVCI set to 1");
+            }
+            else
+            {
+                siPolicy.HvciOptions = 0;
+                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
             }
 
             // If supplemental policy, set the Base policy guid
@@ -1060,110 +1067,57 @@ namespace WDAC_Wizard
         public List<string> ProcessSignerRules(BackgroundWorker worker)
         {
             List<string> customRulesPathList = new List<string>();
-            List<string> scriptCommands = new List<string>();
-            string createRuleScript = string.Empty; 
             int nCustomRules = this.Policy.CustomRules.Count;
             int progressVal = 0;
 
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
+                progressVal = 25 + i * 60 / nCustomRules;
+                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
+
                 var customRule = this.Policy.CustomRules[i];
 
-                // Skip; already handled custom value rules
+                // Skip; already handled ALL custom value rules
                 if(customRule.UsingCustomValues)
                 {
                     continue;
                 }
 
-                // Skip; already handled PFN/packaged app rules
-                if (customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
+                // Skip the following rules that are handled by custom rules method -
+                // File Attributes, PFN rules, file/folder path rules
+                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher || 
+                    customRule.Type == PolicyCustomRules.RuleType.Hash))
                 {
                     continue;
                 }
 
-                // Skip; already handled file attribute rules
-                if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
-                {
-                    continue; 
-                }
-
-                // Skip; already handled path rules
-                if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
-                {
-                    continue; 
-                }
-
-                string createVarScript = "$Rules = ";
-
-                customRule.PSVariable = i.ToString(); 
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
-                customRulesPathList.Add(tmpPolicyPath);
 
-                createRuleScript = CreateCustomRuleScript(customRule, false);
-                scriptCommands.Add(createRuleScript);
-                createVarScript += String.Format("$Rule_{0} + ", customRule.PSVariable);
-
-                //  Process all exceptions, if applicable
-                if (customRule.ExceptionList.Count > 0)
+                // Create a single policy per rule using the Powershell cmdlets with Level=PCACertificate or Publisher
+                // and add the additional attributes like OriginalFilename and version by serializing the
+                // policy to reduce the complexity of the PS scripting
+                if (customRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    // Determine if rule is UMCI and KMCI by attempting to access Rule_0[1].Exceptions = ''
-                    // If error, there is only 1 index to update
-                    string exceptionCommand = String.Empty; 
-                    for(int j = 0; j < customRule.ExceptionList.Count; j++ )
+                    SiPolicy signerSiPolicy = Helper.CreateSignerPolicyFromPS(customRule, tmpPolicyPath);
+
+                    if (signerSiPolicy != null)
                     {
-                        var exceptionRule = customRule.ExceptionList[j];
-                        exceptionRule.PSVariable = j.ToString();
-                        
-                        exceptionCommand = CreateCustomRuleScript(exceptionRule, true, customRule.PSVariable);
-                        if (!String.IsNullOrEmpty(exceptionCommand))
-                        {
-                            scriptCommands.Add(exceptionCommand);
-                        }
-
-                        // Add required exceptions IDs and FileException = 1
-                        scriptCommands.Add(String.Format("foreach($i in $Exception_{0}_Rule_{1}) {{ $i.FileException = 1 }}", exceptionRule.PSVariable, customRule.PSVariable));
-                        scriptCommands.Add(String.Format("foreach($j in $Rule_{0}) {{ $j.Exceptions += $Exception_{1}_Rule_{2}.ID }}", customRule.PSVariable, exceptionRule.PSVariable, customRule.PSVariable));
-
-
-                        createVarScript += String.Format("$Exception_{0}_Rule_{1} + ", exceptionRule.PSVariable, customRule.PSVariable);
+                        signerSiPolicy = Helper.AddSignerRuleAttributes(customRule, signerSiPolicy);
+                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
+                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
                     }
                 }
-
-                // Create the real pipeline
-                Pipeline pipeline = this.runspace.CreatePipeline();
-
-                // Run the rule creation commands
-                foreach (var script in scriptCommands)
+                
+                // Hash Rules -- Invoke Powershell cmd to generate 
+                if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
-                    if(String.IsNullOrEmpty(script))
+                    SiPolicy signerSiPolicy = Helper.CreateHashPolicyFromPS(customRule, tmpPolicyPath);
+                    if (signerSiPolicy != null)
                     {
-                        continue; 
+                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
+                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
                     }
-                    pipeline.Commands.AddScript(script);
-                    this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", script));
-                }
-
-                // Generic $rule var creation to ensure exceptions get bundled into policy
-                createVarScript = createVarScript.Substring(0, createVarScript.Length - 3);
-                pipeline.Commands.AddScript(createVarScript);
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", createVarScript));
-
-                // Run the policy creation script
-                string policyScript = CreatePolicyScript(tmpPolicyPath); 
-                pipeline.Commands.AddScript(policyScript);
-                this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", policyScript));
-                               
-                // Update progress bar per completion of custom rule created
-                progressVal = 25 + i * 60 / nCustomRules; 
-                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
-                try
-                {
-                    Collection<PSObject> results = pipeline.Invoke();
-                }
-                catch (Exception e)
-                {
-                    this.Log.AddErrorMsg("CreatePolicyFileRuleOptions() caught the following exception ", e);
                 }
             }
 
@@ -1270,99 +1224,29 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Processes all of the custom rules with arbitrary custom values. E.g. custom version ranges, custom filenames, file paths
+        /// Runs the PS Set-CIPolicyIdInfo -Reset command to force the policy into multiple policy format
         /// </summary>
-        public string CreateCustomRuleScript(PolicyCustomRules customRule, bool isException, string ruleIdx = "0")
+        /// <param name="path"></param>
+        public void ResetGuidPs(string path)
         {
-            string customRuleScript = string.Empty;
-            string rulePrefix = string.Empty;
+            // Create runspace, pipeline and runscript
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
 
-            if (isException)
+            string resetCmd = "Set-CIPolicyIdInfo -ResetPolicyID " + path;
+
+            pipeline.Commands.AddScript(resetCmd);
+            this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", resetCmd));
+
+            try
             {
-                rulePrefix = String.Format("$Exception_{0}_Rule_{1}", customRule.PSVariable, ruleIdx); 
+                Collection<PSObject> results = pipeline.Invoke();
             }
-            else
+            catch (Exception e)
             {
-                rulePrefix = String.Format("$Rule_{0}", customRule.PSVariable); 
+                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
             }
-
-            // There is a bug in the cmdlets where SignedVersion rules will be created with a null version. 
-            // Wizard will enforce null versions falling back to hash
-            // Remove this section once the PS cmdlet bug is fixed
-
-            if (customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion && customRule.FileInfo["FileVersion"] == Properties.Resources.DefaultFileAttributeString)
-            {
-                if(String.IsNullOrEmpty(customRule.CustomValues.MinVersion))
-                {
-                    customRule.Level = PolicyCustomRules.RuleLevel.Hash;
-                }
-            }
-
-            // Create new CI Rule: https://docs.microsoft.com/powershell/module/configci/new-cipolicyrule
-            switch (customRule.Type)
-            {
-                case PolicyCustomRules.RuleType.Publisher:
-                    {
-                        if(customRule.Level == PolicyCustomRules.RuleLevel.SignedVersion)
-                        {
-                            // Signed Version rules, for some odd reason, cannot set custom version ranges. 
-                            // To solve this problem, force set the Level to FilePublisher and set the FileName field to "*"
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level \"FilePublisher\" -DriverFilePath \'{1}\'" +
-                            " -Fallback Hash", rulePrefix, customRule.ReferenceFile);
-                        }
-                        else
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \'{2}\'" +
-                            " -Fallback Hash", rulePrefix, customRule.Level, customRule.ReferenceFile);
-                        }
-                        
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleType.Hash:
-                    {
-                        if(customRule.UsingCustomValues)
-                        {
-                            return String.Empty; 
-                        }
-                        else
-                        {
-                            customRuleScript = String.Format("{0} = New-CIPolicyRule -Level {1} -DriverFilePath \"{2}\"", rulePrefix, customRule.Level,
-                            customRule.ReferenceFile);
-                        }
-                        
-                    }
-                    break;
-            }
-
-            // If this is a deny rule, append the Deny switch
-            // TODO: exception rule not having the level set currently
-            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                customRuleScript += " -Deny";
-            }
-
-            return customRuleScript; 
-        }
-
-        /// <summary>
-        /// Creates a unique CI Policy file per custom rule defined in the SigningRules_Control. Writes to a unique filepath.
-        /// </summary>
-        public string CreatePolicyScript(string tempPolicyPath)
-        {
-            string policyScript = string.Empty;
-
-            if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
-            {
-                policyScript = String.Format("New-CIPolicy -MultiplePolicyFormat -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
-            }
-
-            else
-            {
-                policyScript = String.Format("New-CIPolicy -FilePath \"{0}\" -Rules $Rules", tempPolicyPath);
-            }
-
-            return policyScript;
         }
 
         /// <summary>

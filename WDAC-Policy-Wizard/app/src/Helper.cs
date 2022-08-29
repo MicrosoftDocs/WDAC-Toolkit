@@ -807,7 +807,6 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public static byte[] ConvertHashStringToByte(string sHash)
         {
-            sHash = sHash.Substring(2); // Trim the first "0x" off the string
             byte[] bHash = new byte[sHash.Length / 2];
             int _base = 16;
             string sValue;  //chunk into 2's
@@ -1059,7 +1058,12 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
-
+        /// <summary>
+        /// Handles creating and adding a File Publisher signer rule with user-defined custom values
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
@@ -1343,7 +1347,6 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
-
         /// <summary>
         /// Handles adding the new Allow Rule object to the provided siPolicy
         /// </summary>
@@ -1545,6 +1548,11 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Creates a dummy signer rule and policy to calculate the TBS hash for custom value signer rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <returns></returns>
         static private SiPolicy CreateSignerFromPS(PolicyCustomRules customRule)
         {
             string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummySignersPolicy.xml");
@@ -1557,7 +1565,6 @@ namespace WDAC_Wizard
             // Scan the file to extract the TBS hash (or hashes) for the signers
             pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile));
             pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyPcaRule -FilePath \"{0}\"", DUMMYPATH));
-
 
             try
             {
@@ -1576,6 +1583,150 @@ namespace WDAC_Wizard
             File.Delete(DUMMYPATH);
 
             return siPolicy; 
+        }
+
+        /// <summary>
+        /// Creates a WDAC policy for a signer rule to be used in signer rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="policyPath"></param>
+        /// <returns></returns>
+        public static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        {
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the TBS hash (or hashes for fallback) and, optionally, the CN for the signer rules
+            string newPolicyRuleCmd = string.Empty; 
+            if(customRule.CheckboxCheckStates.checkBox1)
+            {
+                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
+            }
+            else
+            {
+                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
+            }
+
+            if(customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                newPolicyRuleCmd += " -Deny"; 
+            }
+
+            pipeline.Commands.AddScript(newPolicyRuleCmd);
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = DeserializeXMLtoPolicy(policyPath);
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="signerSiPolicy"></param>
+        public static SiPolicy AddSignerRuleAttributes(PolicyCustomRules customRule, SiPolicy signerSiPolicy)
+        {
+            // If none of the extra attributes are to be added, skip creating a FileAttrib rule
+            if(!(customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4))
+            {
+                return signerSiPolicy;
+            }
+
+            // Get signers and check if Wizard fell back to hash rules
+            Signer[] signers = signerSiPolicy.Signers;
+            if (signers == null || signers.Length == 0)
+            {
+                // Failed to create signer rules and fellback to hash rules. There are no signers to which to add file attributes
+                return signerSiPolicy;
+            }
+            // Create new FileAttrib object to link to signers
+            FileAttrib fileAttrib = new FileAttrib();
+            fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
+
+            // Set the fileattribute fields based on the checkbox states
+            // Version
+            if (customRule.CheckboxCheckStates.checkBox4)
+            {
+                fileAttrib.MinimumFileVersion = customRule.FileInfo["FileVersion"];
+            }
+
+            // Original Filename
+            if (customRule.CheckboxCheckStates.checkBox3)
+            {
+                fileAttrib.FileName = customRule.FileInfo["OriginalFilename"];
+            }
+
+            if (customRule.CheckboxCheckStates.checkBox2)
+            {
+                fileAttrib.ProductName = customRule.FileInfo["ProductName"];
+            }
+
+            // Add FileAttrib references
+            signers = AddFileAttribToSigners(fileAttrib, signers);
+            signerSiPolicy = AddSiPolicyFileAttrib(fileAttrib, signerSiPolicy);
+
+            // Add signer references
+            signerSiPolicy = AddSiPolicySigner(signers, signerSiPolicy, customRule.Permission);
+
+            // TODO: process exceptions
+            if (customRule.ExceptionList.Count > 0)
+            {
+                
+            }
+
+            return signerSiPolicy;
+        }
+
+        /// <summary>
+        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="signerSiPolicy"></param>
+        public static SiPolicy CreateHashPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        {
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the hashes for rules
+            string newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                newPolicyRuleCmd += " -Deny";
+            }
+
+            pipeline.Commands.AddScript(newPolicyRuleCmd);
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = DeserializeXMLtoPolicy(policyPath);
+            return siPolicy;
         }
 
         public static Setting[] SetPolicyInfo(string policyName, string policyId)
