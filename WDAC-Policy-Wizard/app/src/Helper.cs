@@ -1008,7 +1008,7 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Allow allowRule = new Allow();
 
@@ -1026,7 +1026,7 @@ namespace WDAC_Wizard
             cFileAllowRules++;
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddAllowRule(allowRule, siPolicy);
+            siPolicy = AddAllowRule(allowRule, siPolicy, isException);
             return siPolicy;
         }
 
@@ -1146,7 +1146,7 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        public static SiPolicy CreateAllowFileAttributeRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Allow allowRule = new Allow();
             string friendlyName = "Allow files based on file attributes: "; 
@@ -1176,12 +1176,11 @@ namespace WDAC_Wizard
                 friendlyName += allowRule.InternalName + " and ";
             }
 
-
             allowRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); 
             allowRule.ID = String.Format("ID_ALLOW_A_{0}", cFileAllowRules++);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddAllowRule(allowRule, siPolicy);
+            siPolicy = AddAllowRule(allowRule, siPolicy, isException);
                         
             return siPolicy;
         }
@@ -1479,6 +1478,7 @@ namespace WDAC_Wizard
 
                 siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
             }
+
             return siPolicy;
         }
 
@@ -1500,7 +1500,7 @@ namespace WDAC_Wizard
                 for (int i = 0; i < signers.Length; i++)
                 {
                     AllowedSigner allowedSigner = new AllowedSigner();
-                    allowedSigner.SignerId = signers[i].ID;
+                    allowedSigner.SignerId = signers[i].ID;                    
 
                     // Copy and replace
                     if (siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
@@ -1546,6 +1546,90 @@ namespace WDAC_Wizard
             }
 
             return siPolicy; 
+        }
+
+        static private ExceptAllowRule[] CreateExceptAllowRules(List<PolicyCustomRules> exceptionsList, SiPolicy siPolicy)
+        {
+            ExceptAllowRule[] exceptAllowRules = new ExceptAllowRule[exceptionsList.Count];
+            int i = 0; 
+
+            foreach(var exceptAllowRule in exceptionsList)
+            {
+                if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
+                }
+                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
+                    siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);                    
+                }
+                else
+                {
+                    // Hash rule
+                    // Create
+                    // CreateAllowHashRule(siPolicy, null, allow)
+                    // Add
+                }
+            }
+
+            return exceptAllowRules; 
+        }
+
+        static private ExceptDenyRule[] CreateExceptDenyRules(List<PolicyCustomRules> exceptionsList, SiPolicy siPolicy)
+        {
+            ExceptDenyRule[] exceptDenyRules = new ExceptDenyRule[exceptionsList.Count];
+            int i = 0;
+
+            foreach (var exceptAllowRule in exceptionsList)
+            {
+                if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                {
+                    siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
+                }
+                else if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    exceptDenyRules[i++].DenyRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
+                    siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);
+                }
+                else
+                {
+                    // Hash rule
+                    // Create
+                    // CreateAllowHashRule(siPolicy, null, allow)
+                    // Add
+                }
+            }
+
+            return exceptDenyRules;
+        }
+
+        static private SiPolicy AddExceptionsToAllowSigners(ExceptDenyRule[] exceptDenyRules, SiPolicy siPolicy)
+        {
+            // Add ExceptDenyRule IDs to signing scenarios
+            for(int i = 0; i <= siPolicy.SigningScenarios.Length; i++)
+            {
+                for (int j = 0; j <= siPolicy.SigningScenarios[i].ProductSigners.AllowedSigners.AllowedSigner.Length; j++)
+                {
+                    siPolicy.SigningScenarios[i].ProductSigners.AllowedSigners.AllowedSigner[j].ExceptDenyRule = exceptDenyRules;
+                }
+            }
+
+            return siPolicy; 
+        }
+
+        static private SiPolicy AddExceptionsToDeniedSigners(ExceptAllowRule[] exceptAllowRules, SiPolicy siPolicy)
+        {
+            // Add ExceptAllowRule IDs to signing scenarios
+            for (int i = 0; i <= siPolicy.SigningScenarios.Length; i++)
+            {
+                for (int j = 0; j <= siPolicy.SigningScenarios[i].ProductSigners.DeniedSigners.DeniedSigner.Length; j++)
+                {
+                    siPolicy.SigningScenarios[i].ProductSigners.DeniedSigners.DeniedSigner[j].ExceptAllowRule = exceptAllowRules;
+                }
+            }
+
+            return siPolicy;
         }
 
         /// <summary>
@@ -1685,7 +1769,18 @@ namespace WDAC_Wizard
             // TODO: process exceptions
             if (customRule.ExceptionList.Count > 0)
             {
-                
+                if(customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+                {
+                    // Create except deny rules to add to allowed signers
+                    ExceptDenyRule[] exceptDenyRules = CreateExceptDenyRules(customRule.ExceptionList, signerSiPolicy);
+                    signerSiPolicy = AddExceptionsToAllowSigners(exceptDenyRules, signerSiPolicy);
+                }
+                else
+                {
+                    // Create except Allowrules
+                    ExceptAllowRule[] exceptAllowRules = CreateExceptAllowRules(customRule.ExceptionList, signerSiPolicy);
+                    signerSiPolicy = AddExceptionsToDeniedSigners(exceptAllowRules, signerSiPolicy);
+                }
             }
 
             return signerSiPolicy;
@@ -2159,14 +2254,6 @@ namespace WDAC_Wizard
                 // Log error or something
             }
         }
-    }
-
-    public class RuleException : PolicyCustomRules
-    {
-        public string ExceptionType { get; set; } // Publisher, Path, Hash 
-        public uint ExceptionLevel { get; set; } // 0= Publisher, 1=Prod name, 2=Filename
-        public string[] ExceptionFileInfo { get; set; }
-        public string ExceptionReferenceFile { get; set; } // 
     }
 
     public class Logger
