@@ -1176,6 +1176,12 @@ namespace WDAC_Wizard
                 friendlyName += allowRule.InternalName + " and ";
             }
 
+            if(customRule.CheckboxCheckStates.checkBox4 && isException)
+            {
+                allowRule.MinimumFileVersion = customRule.CustomValues.MinVersion;
+                friendlyName += allowRule.MinimumFileVersion + " and ";
+            }
+
             allowRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); 
             allowRule.ID = String.Format("ID_ALLOW_A_{0}", cFileAllowRules++);
 
@@ -1799,14 +1805,14 @@ namespace WDAC_Wizard
             Pipeline pipeline = runspace.CreatePipeline();
 
             // Scan the file to extract the hashes for rules
-            string newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
+            string newPolicyRuleCmd = String.Format("$DummyHashrRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
             if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
             {
                 newPolicyRuleCmd += " -Deny";
             }
 
             pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", policyPath));
 
             try
             {

@@ -743,7 +743,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Begins executing the worer thread and creating the policy created by users. 
+        /// Begins executing the worker thread and creating the policy created by users. 
         /// Creates the temp directory path to write all of the temp data.  
         /// </summary>
         private void ProcessPolicy()
@@ -920,6 +920,10 @@ namespace WDAC_Wizard
             try
             {
                 finalPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
+                if(finalPolicy == null)
+                {
+                    return;
+                }
             }
             catch (Exception e)
             {
@@ -956,7 +960,6 @@ namespace WDAC_Wizard
             {
                 ruleOptions[i] = ruleOptionsList[i];
             }
-
 
             try
             {

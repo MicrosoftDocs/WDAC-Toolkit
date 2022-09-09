@@ -417,6 +417,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zero attributes are selected. Please select at least one attribute to add to the rule..
+        /// </summary>
+        internal static string InvalidCheckboxState {
+            get {
+                return ResourceManager.GetString("InvalidCheckboxState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid custom rule. Please set the rule type and reference file before proceeding..
         /// </summary>
         internal static string InvalidCustomRule_Error {

@@ -86,12 +86,25 @@ namespace WDAC_Wizard
             // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
             bool warnUser = false;
 
+
+
             // Publisher and File Attribute checks
             // Check to make sure none of the fields are invalid
             if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher ||
                 this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
-                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                // Assert one checkbox needs to be selected
+                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1 ||
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3 ||
+                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = Properties.Resources.InvalidCheckboxState;
+                    this.Log.AddWarningMsg("Invalid checkbox state. No checkboxes selected.");
+                    return;
+                }
+
+                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
                     if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
                     {
@@ -165,7 +178,7 @@ namespace WDAC_Wizard
             if (this.PolicyCustomRule.UsingCustomValues)
             {
                 // Check custom publisher field
-                if(this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher && this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
                 {
                     if (!Helper.IsValidPublisher(this.PolicyCustomRule.CustomValues.Publisher))
                     {
@@ -739,11 +752,12 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
 
-                    // Set all fields checked by default, except for product to match legacy (slider bar) behavior
-                    this.checkBoxAttribute0.Checked = true; 
-                    this.checkBoxAttribute1.Checked = true;
-                    this.checkBoxAttribute3.Checked = true;
-                    this.checkBoxAttribute4.Checked = true;
+                    // Set defaults to restore to if custom values is ever reset
+                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
+                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
+                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
+                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
+                    this.DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
 
                     // Set checkbox struct
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
@@ -751,6 +765,24 @@ namespace WDAC_Wizard
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+
+                    // Set all fields checked by default, except for product to match legacy (slider bar) behavior unless null original filename or version
+                    this.checkBoxAttribute0.Checked = true; 
+                    this.checkBoxAttribute1.Checked = true;
+                    this.checkBoxAttribute3.Checked = true;
+                    this.checkBoxAttribute4.Checked = true;
+
+                    if (this.DefaultValues[3] == Properties.Resources.DefaultFileAttributeString)
+                    {
+                        this.checkBoxAttribute3.Checked = false;
+                        this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
+                    }
+
+                    if (this.DefaultValues[4] == Properties.Resources.DefaultFileAttributeString)
+                    {
+                        this.checkBoxAttribute3.Checked = false;
+                        this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+                    }
 
                     this.checkBoxAttribute0.Text = "Issuing CA:";
                     this.checkBoxAttribute1.Text = "Publisher:";
@@ -764,13 +796,6 @@ namespace WDAC_Wizard
                     // Show version boxes
                     this.textBoxSlider_4.Visible = true;
                     this.checkBoxAttribute4.Visible = true;
-
-                    // Set defaults to restore to if custom values is ever reset
-                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
-                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
-                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
-                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
-                    this.DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
 
                     this.textBoxSlider_0.Text = this.DefaultValues[0];
                     this.textBoxSlider_1.Text = this.DefaultValues[1];
@@ -1276,10 +1301,12 @@ namespace WDAC_Wizard
                 this.textBox_MaxVersion.Visible = false;
                 this.label_To.Visible = false;
 
+                // Re-populate the text boxes
                 this.textBoxSlider_0.Text = this.DefaultValues[0];
                 this.textBoxSlider_1.Text = this.DefaultValues[1];
-                this.textBoxSlider_4.Text = this.DefaultValues[2];
+                this.textBoxSlider_2.Text = this.DefaultValues[2];
                 this.textBoxSlider_3.Text = this.DefaultValues[3];
+                this.textBoxSlider_4.Text = this.DefaultValues[4];
 
                 this.PolicyCustomRule.UsingCustomValues = false;
             }
@@ -1371,6 +1398,27 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void TextBoxSlider_4_TextChanged(object sender, EventArgs e)
+        {
+            // Filename (publisher) or InternalName (file attributes)
+            // Break if not using custom values. This will be reached during setting values once proto file is chosen
+
+            if (!this.PolicyCustomRule.UsingCustomValues)
+            {
+                return;
+            }
+
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            {
+                this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
+            }
+        }
+
+        /// <summary>
+        /// Third textbox text has been modified by the user. Picks up the input 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBoxSlider_3_TextChanged(object sender, EventArgs e)
         {
             // Filename (publisher) or InternalName (file attributes)
@@ -1391,8 +1439,9 @@ namespace WDAC_Wizard
                 this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
             }
         }
+
         /// <summary>
-        /// Third textbox text has been modified by the user. Picks up the input 
+        /// Second textbox text has been modified by the user. Picks up the input 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1408,12 +1457,12 @@ namespace WDAC_Wizard
 
             if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
+                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
             }
             else
             {
                 this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
-                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_4.Text;
+                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
             }
         }
 

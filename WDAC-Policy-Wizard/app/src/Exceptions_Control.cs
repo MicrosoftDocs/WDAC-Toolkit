@@ -181,10 +181,8 @@ namespace WDAC_Wizard
                         break;
                     }
 
-                    // Custom rule in progress
-                    //this._MainWindow.CustomRuleinProgress = true;
-
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if(this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -192,8 +190,6 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
                     
-                    //ProcessAllFiles(ExceptionRule.ReferenceFile);
-                    //ExceptionRule.FolderContents = this.AllFilesinFolder; 
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break;
 
@@ -205,6 +201,7 @@ namespace WDAC_Wizard
                     // UI updates
                     radioButton_File.Checked = true;
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if(this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -220,6 +217,7 @@ namespace WDAC_Wizard
 
                     // UI 
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if (this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -233,7 +231,7 @@ namespace WDAC_Wizard
                     this.DefaultValues[3] = ExceptionRule.FileInfo["InternalName"];
                     this.DefaultValues[4] = ExceptionRule.FileInfo["FileVersion"];
 
-                    this.textBox_Originalfilename.Text = this.DefaultValues[0]; 
+                    this.textBox_originalfilename.Text = this.DefaultValues[0]; 
                     this.textBox_filedescription.Text = this.DefaultValues[1];
                     this.textBox_product.Text = this.DefaultValues[2];
                     this.textBox_internalname.Text = this.DefaultValues[3];
@@ -285,8 +283,9 @@ namespace WDAC_Wizard
                 return openFolderDialog.SelectedPath;
             }
             else
+            {
                 return String.Empty;
-
+            }
         }
 
         /// <summary>
@@ -529,8 +528,8 @@ namespace WDAC_Wizard
         {
             if (this.checkBox_OriginalFilename.Checked)
             {
-                if (this.textBox_Originalfilename.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBox_Originalfilename.Text))
+                if (this.textBox_originalfilename.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_originalfilename.Text))
                 {
                     ClearLabel_ErrorText();
                     this.ExceptionRule.CheckboxCheckStates.checkBox0 = true;
@@ -655,7 +654,7 @@ namespace WDAC_Wizard
                 SetTextBoxStates(true);
 
                 // Set the custom values based on existing
-                this.ExceptionRule.CustomValues.FileName = textBox_Originalfilename.Text;
+                this.ExceptionRule.CustomValues.FileName = textBox_originalfilename.Text;
                 this.ExceptionRule.CustomValues.Description = textBox_filedescription.Text;
                 this.ExceptionRule.CustomValues.ProductName = textBox_product.Text;
                 this.ExceptionRule.CustomValues.InternalName = textBox_internalname.Text;
@@ -670,7 +669,7 @@ namespace WDAC_Wizard
 
                 // Set text values back to default
                 SetTextBoxStates(false);
-                this.textBox_Originalfilename.Text = this.DefaultValues[0];
+                this.textBox_originalfilename.Text = this.DefaultValues[0];
                 this.textBox_filedescription.Text = this.DefaultValues[1];
                 this.textBox_product.Text = this.DefaultValues[2];
                 this.textBox_internalname.Text = this.DefaultValues[3];
@@ -685,20 +684,20 @@ namespace WDAC_Wizard
             if (enabled)
             {
                 // If enabled, allow user input
-                this.textBox_Originalfilename.ReadOnly = false; 
+                this.textBox_originalfilename.ReadOnly = false; 
                 this.textBox_filedescription.ReadOnly = false;
                 this.textBox_product.ReadOnly = false;
                 this.textBox_internalname.ReadOnly = false;
                 this.textBox_minversion.ReadOnly = false;
 
-                this.textBox_Originalfilename.Enabled = true;
+                this.textBox_originalfilename.Enabled = true;
                 this.textBox_filedescription.Enabled = true;
                 this.textBox_product.Enabled = true;
                 this.textBox_internalname.Enabled = true;
                 this.textBox_minversion.Enabled = true;
 
                 // Set back color to white to help user determine boxes are userwriteable
-                this.textBox_Originalfilename.BackColor = Color.White;
+                this.textBox_originalfilename.BackColor = Color.White;
                 this.textBox_filedescription.BackColor = Color.White;
                 this.textBox_product.BackColor = Color.White;
                 this.textBox_internalname.BackColor = Color.White;
@@ -707,24 +706,43 @@ namespace WDAC_Wizard
             else
             {
                 // Set to read only if disabled
-                this.textBox_Originalfilename.ReadOnly = true;
+                this.textBox_originalfilename.ReadOnly = true;
                 this.textBox_filedescription.ReadOnly = true;
                 this.textBox_product.ReadOnly = true;
                 this.textBox_internalname.ReadOnly = true;
                 this.textBox_minversion.ReadOnly = true;
 
-                this.textBox_Originalfilename.Enabled = false;
+                this.textBox_originalfilename.Enabled = false;
                 this.textBox_filedescription.Enabled = false;
                 this.textBox_product.Enabled = false;
                 this.textBox_internalname.Enabled = false;
                 this.textBox_minversion.Enabled = false;
 
                 // Set back color to white to help user determine boxes are userwriteable
-                this.textBox_Originalfilename.BackColor = SystemColors.Control;
+                this.textBox_originalfilename.BackColor = SystemColors.Control;
                 this.textBox_filedescription.BackColor = SystemColors.Control;
                 this.textBox_product.BackColor = SystemColors.Control;
                 this.textBox_internalname.BackColor = SystemColors.Control;
                 this.textBox_minversion.BackColor = SystemColors.Control;
+            }
+        }
+
+        /// <summary>
+        /// Triggered by the user selecting either File or Folder. Sets the rule level
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileFolderButtonClick(object sender, EventArgs e)
+        {
+            if(this.radioButton_File.Checked)
+            {
+                this.ExceptionRule.Level = PolicyCustomRules.RuleLevel.FilePath;
+                this.ExceptionRule.Type = PolicyCustomRules.RuleType.FilePath;
+            }
+            else
+            {
+                this.ExceptionRule.Level = PolicyCustomRules.RuleLevel.Folder;
+                this.ExceptionRule.Type = PolicyCustomRules.RuleType.Folder;
             }
         }
     }
