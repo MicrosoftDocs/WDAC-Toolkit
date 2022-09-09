@@ -1002,9 +1002,17 @@ namespace WDAC_Wizard
 
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
 
+            if(siPolicy == null)
+            {
+                return;
+            }
+
             if (resetGuid)
             {
                 ResetGuidPs(this.Policy.SchemaPath);
+
+                // Deserialize again since Wizard reset the policy on disk to multi-policy
+                siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
 
                 // Set policy info - ID, Name
                 siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
@@ -1115,7 +1123,7 @@ namespace WDAC_Wizard
                 // Hash Rules -- Invoke Powershell cmd to generate 
                 if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
-                    SiPolicy signerSiPolicy = Helper.CreateHashPolicyFromPS(customRule, tmpPolicyPath);
+                    SiPolicy signerSiPolicy = CreateHashPolicyFromPS(customRule, tmpPolicyPath);
                     if (signerSiPolicy != null)
                     {
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
@@ -1176,7 +1184,6 @@ namespace WDAC_Wizard
         /// </summary>
         public SiPolicy HandleCustomValues(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
-
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 siPolicy = Helper.CreateFilePublisherRule(customRule, siPolicy);
@@ -1227,6 +1234,50 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="signerSiPolicy"></param>
+        public SiPolicy CreateHashPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        {
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the hashes for rules
+            string newPolicyRuleCmd = String.Format("$DummyHashRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                newPolicyRuleCmd += " -Deny";
+            }
+
+            pipeline.Commands.AddScript(newPolicyRuleCmd);
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", policyPath));
+
+            foreach(var cmd in pipeline.Commands)
+            {
+                this.Log.AddInfoMsg("Running the following commands: " + cmd);
+            }
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                this.Log.AddErrorMsg("CreateHashPolicyFromPS() encountered the following exception ", e);
+                return null;
+            }
+
+            runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
+            return siPolicy;
+        }
+
+        /// <summary>
         /// Runs the PS Set-CIPolicyIdInfo -Reset command to force the policy into multiple policy format
         /// </summary>
         /// <param name="path"></param>
@@ -1237,7 +1288,7 @@ namespace WDAC_Wizard
             runspace.Open();
             Pipeline pipeline = runspace.CreatePipeline();
 
-            string resetCmd = "Set-CIPolicyIdInfo -ResetPolicyID " + path;
+            string resetCmd = String.Format("Set-CIPolicyIdInfo -ResetPolicyID \"{0}\"", path);
 
             pipeline.Commands.AddScript(resetCmd);
             this.Log.AddInfoMsg(String.Format("Running the following commands: {0}", resetCmd));

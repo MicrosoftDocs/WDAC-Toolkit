@@ -610,9 +610,19 @@ namespace WDAC_Wizard
                 return String.Empty;
             }
 
-            foreach (var package in policyCustomRule.PackagedFamilyNames)
+            if(policyCustomRule.UsingCustomValues)
             {
-                output += String.Format("{0}, ", package);
+                foreach (var package in policyCustomRule.CustomValues.PackageFamilyNames)
+                {
+                    output += String.Format("{0}, ", package);
+                }
+            }
+            else
+            {
+                foreach (var package in policyCustomRule.PackagedFamilyNames)
+                {
+                    output += String.Format("{0}, ", package);
+                }
             }
 
             output = output.Substring(0, output.Length - 2); // Trim off trailing whitespace and comma
@@ -1760,6 +1770,7 @@ namespace WDAC_Wizard
                 fileAttrib.FileName = customRule.FileInfo["OriginalFilename"];
             }
 
+            // Product name
             if (customRule.CheckboxCheckStates.checkBox2)
             {
                 fileAttrib.ProductName = customRule.FileInfo["ProductName"];
@@ -1792,44 +1803,6 @@ namespace WDAC_Wizard
             return signerSiPolicy;
         }
 
-        /// <summary>
-        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <param name="signerSiPolicy"></param>
-        public static SiPolicy CreateHashPolicyFromPS(PolicyCustomRules customRule, string policyPath)
-        {
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // Scan the file to extract the hashes for rules
-            string newPolicyRuleCmd = String.Format("$DummyHashrRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
-            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                newPolicyRuleCmd += " -Deny";
-            }
-
-            pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", policyPath));
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-
-            runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = DeserializeXMLtoPolicy(policyPath);
-            return siPolicy;
-        }
-
         public static Setting[] SetPolicyInfo(string policyName, string policyId)
         {
             Setting[] settings = new Setting[2];
@@ -1841,6 +1814,7 @@ namespace WDAC_Wizard
             settingName.Value = new SettingValueType(); 
             settingName.Value.Item = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
             settings[0] = settingName;
+
             //PolicyInfo.ID
             Setting settingID = new Setting();
             settingID.Provider = "PolicyInfo";

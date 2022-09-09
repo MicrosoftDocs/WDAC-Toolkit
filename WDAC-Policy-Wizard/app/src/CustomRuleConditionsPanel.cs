@@ -298,9 +298,30 @@ namespace WDAC_Wizard
 
                 }
             }
-            
+
+            string[] displayString = FormatTableDisplayString(warnUser);
+
+            if (displayString == null)
+            {
+                return;
+            }
+
+            // Offboard this to signingRules_Condition
+            this.RuleInEdit = false;
+            this.SigningControl.AddRuleToTable(displayString, this.PolicyCustomRule, warnUser);
+
+            // Renew the custom rule instance
+            this.PolicyCustomRule = new PolicyCustomRules();
+
+            // Reset UI view
+            ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false;
+        }
+
+        private string[] FormatTableDisplayString(bool warnUser)
+        {
             // Show warning message to user to notify that a signing chain was not found; may result in a hash rule created
-            if(warnUser)
+            if (warnUser)
             {
                 DialogResult res = MessageBox.Show("One or more of the file attributes could not be found. Creating this rule may result in a hash rule if unsuccessful. " +
                     "\n\nWould you like to proceed anyway?", "Proceed with Rule Creation?",
@@ -308,11 +329,11 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.Yes)
                 {
-                    this.Log.AddInfoMsg("Proceeding with Rule Creation anyway. Rule may fallback to hash"); 
+                    this.Log.AddInfoMsg("Proceeding with Rule Creation anyway. Rule may fallback to hash");
                 }
                 else
                 {
-                    return; 
+                    return null;
                 }
             }
 
@@ -331,190 +352,136 @@ namespace WDAC_Wizard
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
             level = this.PolicyCustomRule.Type.ToString();
 
-            switch (this.PolicyCustomRule.Level)
+            // Format rule display string
+            switch (this.PolicyCustomRule.Type)
             {
-                case PolicyCustomRules.RuleLevel.PcaCertificate:
-
-                    name += String.Format("{0}: {1} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"]);
-                    break;
-                case PolicyCustomRules.RuleLevel.Publisher:
-                    
-                    if (this.PolicyCustomRule.UsingCustomValues)
+                // Signer rules
+                case PolicyCustomRules.RuleType.Publisher:
                     {
-                        name = String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher);
-                    }
-                    else
-                    {
-                        name += String.Format("{0}: {1} & CN={2}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.SignedVersion:
-                    
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}: {1}, CN={2} & versions {3} {4}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                            String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                        this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FilePublisher:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                         name = String.Format("{0}: {1}, CN={2} & versions {3} {4} with filename = {5}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.Publisher) ? this.PolicyCustomRule.FileInfo["LeafCertificate"] : this.PolicyCustomRule.CustomValues.Publisher,
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MinVersion) ? this.PolicyCustomRule.FileInfo["FileVersion"] : this.PolicyCustomRule.CustomValues.MinVersion,
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.MaxVersion) ? "and greater" : " up to " + this.PolicyCustomRule.CustomValues.MaxVersion,
-                             String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.FileName) ? this.PolicyCustomRule.FileInfo["FileName"] : this.PolicyCustomRule.CustomValues.FileName); 
-
-                    }
-                    else
-                    {
-                        name = String.Format("{0}: {1}, CN={2} & version {3} and greater with filename = {4} ", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["PCACertificate"],
-                       this.PolicyCustomRule.FileInfo["LeafCertificate"], this.PolicyCustomRule.FileInfo["FileVersion"], this.PolicyCustomRule.FileInfo["FileName"]);
-                    }
-                   
-                    break;
-
-                case PolicyCustomRules.RuleLevel.OriginalFileName:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.FileName); 
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["OriginalFilename"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.InternalName:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.InternalName);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["InternalName"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FileDescription:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Description);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["FileDescription"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.ProductName:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.ProductName);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.FileInfo["ProductName"]);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.PackagedFamilyName:
-                    
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.textBox_Packaged_App.Text);
-                    files = Helper.GetListofPackages(this.PolicyCustomRule); 
-                    break;
-
-                case PolicyCustomRules.RuleLevel.Folder:
-                    
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Path);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level,  this.PolicyCustomRule.ReferenceFile);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.FilePath:
-
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Path);
-                    }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleLevel.Hash:
-                    if (this.PolicyCustomRule.UsingCustomValues)
-                    {
-                        if(PolicyCustomRule.CustomValues.Hashes.Count > 1)
+                        name += "CA: " + this.textBoxSlider_0.Text; 
+                        if(this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
                         {
-                            name = String.Format("{0}; Custom Hash List: {1}, ...", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Hashes[0]);
+                            name += " & CN: " + this.textBoxSlider_1.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                        {
+                            name += " & Product: " + this.textBoxSlider_2.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                        {
+                            name += " & Filename: " + this.textBoxSlider_3.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4)
+                        {
+                            name += " & Min Version: " + this.textBoxSlider_4.Text;
+                        }
+                        if(this.PolicyCustomRule.UsingCustomValues && this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                        {
+                            name += " & Max Version: " + this.PolicyCustomRule.CustomValues.MaxVersion;
+                        }
+                        break;
+                    }
+
+                case PolicyCustomRules.RuleType.FileAttributes:
+                    {
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0)
+                        {
+                            name += " & Original Filename: " + this.textBoxSlider_0.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                        {
+                            name += " & File Description: " + this.textBoxSlider_1.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                        {
+                            name += " & Product: " + this.textBoxSlider_2.Text;
+                        }
+                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                        {
+                            name += " & Internal Name: " + this.textBoxSlider_3.Text;
+                        }
+                        name = name.Substring(3); // Offset by 3 to remove the first occurence of ' & '
+                        break; 
+                    }
+
+                case PolicyCustomRules.RuleType.PackagedApp:
+                    {
+                        name = "Packaged apps matching the Package Family Name (PFN) rules in the Files cell";
+                        files = Helper.GetListofPackages(this.PolicyCustomRule);
+                        break;
+                    }
+
+                case PolicyCustomRules.RuleType.Folder:
+                    {
+                        if (this.PolicyCustomRule.UsingCustomValues)
+                        {
+                            name = "Files under path: " + this.PolicyCustomRule.CustomValues.Path;
                         }
                         else
                         {
-                            name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.CustomValues.Hashes[0]);
+                            name = "Files under path: " + this.PolicyCustomRule.ReferenceFile;
                         }
+                        break;
                     }
-                    else
-                    {
-                        name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, this.PolicyCustomRule.ReferenceFile);
-                    }
-                    break;
 
-                default:
-                    name = String.Format("{0}; {1}", this.PolicyCustomRule.Level, String.IsNullOrEmpty(this.PolicyCustomRule.ReferenceFile) ? "Custom Rule" : this.PolicyCustomRule.ReferenceFile);
-                    break;
+                    
+
+                case PolicyCustomRules.RuleType.FilePath:
+                    {
+                        if (this.PolicyCustomRule.UsingCustomValues)
+                        {
+                            name = "Files matching: " + this.PolicyCustomRule.CustomValues.Path;
+                        }
+                        else
+                        {
+                            name = "Files matching: " + this.PolicyCustomRule.ReferenceFile;
+                        }
+                        break;
+                    }
+
+                case PolicyCustomRules.RuleType.Hash:
+                    {
+                        if (this.PolicyCustomRule.UsingCustomValues)
+                        {
+                            if (PolicyCustomRule.CustomValues.Hashes.Count > 1)
+                            {
+                                name = String.Format("Custom Hash List: {0}, ...", this.PolicyCustomRule.CustomValues.Hashes[0]);
+                            }
+                            else
+                            {
+                                name = "Custom Hash Value: " + this.PolicyCustomRule.CustomValues.Hashes[0];
+                            }
+                        }
+                        else
+                        {
+                            name = "File Hash Rule: " + this.PolicyCustomRule.ReferenceFile;
+                        }
+                        break;
+                    }
             }
 
             // Handle custom EKU
-            if(!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+            if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
             {
-                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly; 
+                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly;
             }
 
             // Handle exceptions
-            if(this.PolicyCustomRule.ExceptionList.Count > 0)
+            if (this.PolicyCustomRule.ExceptionList.Count > 0)
             {
-                foreach(var exception in this.PolicyCustomRule.ExceptionList)
+                foreach (var exception in this.PolicyCustomRule.ExceptionList)
                 {
                     string exceptionString = String.Format("{0}: {1} {2}; ", exception.Permission, exception.Level,
                         exception.ReferenceFile);
-                    exceptions += exceptionString; 
+                    exceptions += exceptionString;
                 }
 
                 // Remove trailing semi-colon
                 exceptions.Trim(';');
             }
 
-            this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} ", action, level, name));
-            string[] stringArr = new string[5] { action , level, name, files, exceptions};
-
-            // Offboard this to signingRules_Condition
-            this.RuleInEdit = false;
-            this.SigningControl.AddRuleToTable(stringArr, this.PolicyCustomRule, warnUser);
-
-            // Renew the custom rule instance
-            this.PolicyCustomRule = new PolicyCustomRules();
-
-            // Reset UI view
-            ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false;
+            this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} - {3} ", action, level, name, files));
+            return new string[5] { action, level, name, files, exceptions };
         }
 
         /// <summary>
@@ -772,6 +739,9 @@ namespace WDAC_Wizard
                     this.checkBoxAttribute3.Checked = true;
                     this.checkBoxAttribute4.Checked = true;
 
+                    // Do not check for N/As in PCA or publisher fields since the file may be cat
+                    // signed which the Wizard cannot handle right now
+
                     if (this.DefaultValues[3] == Properties.Resources.DefaultFileAttributeString)
                     {
                         this.checkBoxAttribute3.Checked = false;
@@ -780,7 +750,7 @@ namespace WDAC_Wizard
 
                     if (this.DefaultValues[4] == Properties.Resources.DefaultFileAttributeString)
                     {
-                        this.checkBoxAttribute3.Checked = false;
+                        this.checkBoxAttribute4.Checked = false;
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
                     }
 
@@ -1960,4 +1930,4 @@ namespace WDAC_Wizard
             }
         }
     }
-}   
+}
