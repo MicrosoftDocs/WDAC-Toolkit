@@ -15,9 +15,6 @@
       <Option>Enabled:UMCI</Option>
     </Rule>
     <Rule>
-      <Option>Enabled:Conditional Windows Lockdown Policy</Option>
-    </Rule>
-    <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
     </Rule>
     <Rule>
