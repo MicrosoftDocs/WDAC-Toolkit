@@ -1326,7 +1326,16 @@ namespace WDAC_Wizard
                 mergeScript = "Merge-CIPolicy -PolicyPaths ";
                 foreach (string path in customRulesPathList)
                 {
-                    mergeScript += String.Format("\"{0}\",", path);
+                    // If the xml was successfully generated in the previous step
+                    if (File.Exists(path))
+                    {
+                        mergeScript += String.Format("\"{0}\",", path);
+                    }
+                    else
+                    {
+                        //this.nCustomValueRules--;
+                        this.Log.AddErrorMsg("Wizard could not find " + path + ". Skipping merge step in MergeCustomRulesPolicy()");
+                    }
                 }
 
                 // If there are custom value rules, merge in siPolicy from /Temp/Custom
