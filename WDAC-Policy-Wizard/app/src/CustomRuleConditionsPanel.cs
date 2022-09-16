@@ -782,7 +782,7 @@ namespace WDAC_Wizard
 
                     // User wants to create rule by folder level
                     this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
-                    this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile;
+                    this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile + "\\*";
                     this.AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                     {
@@ -1552,7 +1552,15 @@ namespace WDAC_Wizard
                     this.textBox_ReferenceFile.ReadOnly = true;
                     this.textBox_ReferenceFile.Enabled = false;
                     this.textBox_ReferenceFile.BackColor = SystemColors.Control;
-                    this.textBox_ReferenceFile.Text = String.Empty; 
+
+                    // Set back to the reference file path
+                    if(this.DefaultValues[4] != null && this.DefaultValues[4].Length > 0)
+                    {
+                        this.textBox_ReferenceFile.Text = this.DefaultValues[4];
+
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
                 }
             }
            
