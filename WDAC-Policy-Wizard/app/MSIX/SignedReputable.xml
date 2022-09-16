@@ -30,6 +30,9 @@
     <Rule>
       <Option>Enabled:Audit Mode</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:Revoked Expired As Unsigned</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs>

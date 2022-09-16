@@ -138,7 +138,8 @@ namespace WDAC_Wizard
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
                         this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
 
-                        this.Policy.ConfigRules[key]["CurrentValue"] = this.Policy.ConfigRules[key]["AllowedValue"]; 
+                        this.Policy.ConfigRules[key]["CurrentValue"] = this.Policy.ConfigRules[key]["AllowedValue"];
+                        SetRuleOptionState(key); 
                     }
                     else
                     {
@@ -146,7 +147,8 @@ namespace WDAC_Wizard
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
                         this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
 
-                        this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]); 
+                        this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]);
+                        SetRuleOptionState(key, true);
                     }
 
                     this.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
@@ -361,9 +363,120 @@ namespace WDAC_Wizard
             string buttonName = ((Button)sender).Name;
             SetButtonVal(buttonName);
 
+
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
             this.Policy.EnableHVCI = this.Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
+        }
+
+        private void SetRuleOptionState(string key, bool removeOption=false)
+        {
+            RuleType ruleOption = new RuleType(); 
+            switch (key)
+            {
+                case "UMCI":
+                    ruleOption.Item = OptionType.EnabledUMCI;
+                    break;
+
+                case "BootMenuProtection":
+                    ruleOption.Item = OptionType.EnabledBootMenuProtection;
+                    break;
+
+                case "WHQL":
+                    ruleOption.Item = OptionType.RequiredWHQL;
+                    break;
+
+                case "AuditMode":
+                    ruleOption.Item = OptionType.EnabledAuditMode;
+                    break;
+
+                case "InheritDefaultPolicy":
+                    ruleOption.Item = OptionType.EnabledInheritDefaultPolicy;
+                    break;
+
+                case "UnsignedSystemIntegrityPolicy":
+                    ruleOption.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
+                    break;
+
+                case "AdvancedBootOptionsMenu":
+                    ruleOption.Item = OptionType.EnabledAdvancedBootOptionsMenu;
+                    break;
+
+                case "ScriptEnforcement":
+                    ruleOption.Item = OptionType.DisabledScriptEnforcement;
+                    break;
+
+                case "EnforceStoreApplications":
+                    ruleOption.Item = OptionType.RequiredEnforceStoreApplications;
+                    break;
+
+                case "ManagedInstaller":
+                    ruleOption.Item = OptionType.EnabledManagedInstaller;
+                    break;
+
+                case "IntelligentSecurityGraphAuthorization":
+                    ruleOption.Item = OptionType.EnabledIntelligentSecurityGraphAuthorization;
+                    break;
+
+                case "UpdatePolicyNoReboot":
+                    ruleOption.Item = OptionType.EnabledUpdatePolicyNoReboot;
+                    break;
+
+                case "AllowSupplementalPolicies":
+                    ruleOption.Item = OptionType.EnabledAllowSupplementalPolicies;
+                    break;
+
+                case "FlightSigning":
+                    ruleOption.Item = OptionType.DisabledFlightSigning;
+                    break;
+
+                case "Allow Debug Policy Augmented":
+                    //ruleOption.Item = OptionType.;
+                    break;
+
+                case "EVSigners":
+                    ruleOption.Item = OptionType.RequiredEVSigners;
+                    break;
+
+                case "BootAuditOnFailure":
+                    ruleOption.Item = OptionType.EnabledBootAuditOnFailure;
+                    break;
+
+                case "InvalidateEAsonReboot":
+                    ruleOption.Item = OptionType.EnabledInvalidateEAsonReboot;
+                    break;
+
+                case "RuntimeFilePathRuleProtection":
+                    ruleOption.Item = OptionType.DisabledRuntimeFilePathRuleProtection;
+                    break;
+
+                case "DynamicCodeSecurity":
+                    ruleOption.Item = OptionType.EnabledDynamicCodeSecurity;
+                    break;
+
+                case "RevokedExpiredAsUnsigned":
+                    ruleOption.Item = OptionType.EnabledRevokedExpiredAsUnsigned;
+                    break;
+
+                default:
+                    return;
+            }
+
+            if(removeOption)
+            {
+                for(int i=0; i < this._MainWindow.Policy.PolicyRuleOptions.Count; i++)
+                {
+                    if(this._MainWindow.Policy.PolicyRuleOptions[i].Item == ruleOption.Item)
+                    {
+                        this._MainWindow.Policy.PolicyRuleOptions.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                this._MainWindow.Policy.PolicyRuleOptions.Add(ruleOption);
+            }
         }
 
         /// <summary>
@@ -423,7 +536,10 @@ namespace WDAC_Wizard
                     "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
+                {
                     this._MainWindow.ResetWorkflow(sender, e);
+                }
+                   
                 return false;
             }
 
@@ -432,6 +548,8 @@ namespace WDAC_Wizard
             // Merge with configRules:
             foreach(var rule in this.Policy.siPolicy.Rules)
             {
+                this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+
                 string value = ParseRule(rule.Item.ToString())[0]; 
                 string name = ParseRule(rule.Item.ToString())[1];
 
@@ -457,7 +575,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0; 
+            this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0;
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI;
             this._MainWindow.Policy.siPolicy = this.Policy.siPolicy;

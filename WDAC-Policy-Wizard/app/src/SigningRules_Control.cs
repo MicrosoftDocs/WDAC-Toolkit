@@ -925,7 +925,7 @@ namespace WDAC_Wizard
             customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
             string action = displayObjectArray[0]; 
             string level = displayObjectArray[1];
-            string name = warnUser ? "*Hash* " + displayObjectArray[2] : displayObjectArray[2];
+            string name = warnUser ? "*Hash Fallback Possible* " + displayObjectArray[2] : displayObjectArray[2];
             string files = displayObjectArray[3];
             string exceptions = displayObjectArray[4];
 
@@ -944,8 +944,6 @@ namespace WDAC_Wizard
             // close the custom Rule Conditions Panel
             this.customRuleConditionsPanel.Close();
             this.customRuleConditionsPanel = null;
-            // this.label_AddCustomRules.Text = "+ Custom Rules";
-
         }
 
         /// <summary>

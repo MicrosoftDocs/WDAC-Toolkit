@@ -26,13 +26,17 @@ namespace WDAC_Wizard
         private int rowInEdit = -1;
         private DisplayObject displayObjectInEdit;
 
+        private string[] DefaultValues;
+
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
             InitializeComponent();
             this.ExceptionRule = new PolicyCustomRules();
             this.Log = pRuleConditionsPanel.Log;
             this.CustomRule = pRuleConditionsPanel.PolicyCustomRule;
-            this.ConditionsPanel = pRuleConditionsPanel; 
+            this.ConditionsPanel = pRuleConditionsPanel;
+
+            this.DefaultValues = new string[5];
         }
 
 
@@ -46,14 +50,13 @@ namespace WDAC_Wizard
             //Publisher:
             this.panel_Publisher_Scroll.Visible = false;
             this.publisherInfoLabel.Visible = false;
-            this.trackBar_Conditions.ResetText();
-            this.trackBar_Conditions.Value = 0; // default bottom position 
 
             //File Path:
             this.panel_FileFolder.Visible = false;
 
             //Other
             this.textBox_ReferenceFile.Clear();
+            ClearLabel_ErrorText(); 
 
             // Reset the rule type combobox
             if (clearComboBox)
@@ -100,7 +103,7 @@ namespace WDAC_Wizard
                 default:
                     break;
             }
-            this.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
+            this.Log.AddInfoMsg(String.Format("Exception File Rule Level Set to {0}", selectedOpt));
         }
 
 
@@ -169,31 +172,6 @@ namespace WDAC_Wizard
             // Set the landing UI depending on the Rule type
             switch (this.ExceptionRule.GetRuleType())
             {
-                case PolicyCustomRules.RuleType.Publisher:
-
-                    // UI
-                    this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
-                    // Show right side of the text
-                    if(this.textBox_ReferenceFile.TextLength > 0)
-                    {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
-                    }
-                    
-                    labelSlider_0.Text = "Issuing CA:";
-                    labelSlider_1.Text = "Publisher:";
-                    labelSlider_2.Text = "File version:";
-                    labelSlider_3.Text = "File name:";
-                    textBoxSlider_0.Text = ExceptionRule.FileInfo["PCACertificate"];
-                    textBoxSlider_1.Text = ExceptionRule.FileInfo["LeafCertificate"];
-                    textBoxSlider_2.Text = ExceptionRule.FileInfo["FileVersion"];
-                    textBoxSlider_3.Text = ExceptionRule.FileInfo["FileName"];
-
-                    textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240);
-
-                    panel_Publisher_Scroll.Visible = true;
-                    break;
-
                 case PolicyCustomRules.RuleType.Folder:
 
                     // User wants to create rule by folder level
@@ -203,10 +181,8 @@ namespace WDAC_Wizard
                         break;
                     }
 
-                    // Custom rule in progress
-                    //this._MainWindow.CustomRuleinProgress = true;
-
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if(this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -214,8 +190,6 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
                     
-                    //ProcessAllFiles(ExceptionRule.ReferenceFile);
-                    //ExceptionRule.FolderContents = this.AllFilesinFolder; 
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Folder);
                     break;
 
@@ -227,6 +201,7 @@ namespace WDAC_Wizard
                     // UI updates
                     radioButton_File.Checked = true;
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if(this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -242,6 +217,7 @@ namespace WDAC_Wizard
 
                     // UI 
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
+
                     // Show right side of the text
                     if (this.textBox_ReferenceFile.TextLength > 0)
                     {
@@ -249,19 +225,22 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
 
-                    labelSlider_0.Text = "Original filename:";
-                    labelSlider_1.Text = "File description:";
-                    labelSlider_2.Text = "Product name:";
-                    labelSlider_3.Text = "Internal name:";
-                    textBoxSlider_0.Text = ExceptionRule.FileInfo["OriginalFilename"];
-                    textBoxSlider_1.Text = ExceptionRule.FileInfo["FileDescription"];
-                    textBoxSlider_2.Text = ExceptionRule.FileInfo["ProductName"];
-                    textBoxSlider_3.Text = ExceptionRule.FileInfo["InternalName"];
+                    this.DefaultValues[0] = ExceptionRule.FileInfo["OriginalFilename"];
+                    this.DefaultValues[1] = ExceptionRule.FileInfo["FileDescription"];
+                    this.DefaultValues[2] = ExceptionRule.FileInfo["ProductName"];
+                    this.DefaultValues[3] = ExceptionRule.FileInfo["InternalName"];
+                    this.DefaultValues[4] = ExceptionRule.FileInfo["FileVersion"];
+
+                    this.textBox_originalfilename.Text = this.DefaultValues[0]; 
+                    this.textBox_filedescription.Text = this.DefaultValues[1];
+                    this.textBox_product.Text = this.DefaultValues[2];
+                    this.textBox_internalname.Text = this.DefaultValues[3];
+                    this.textBox_minversion.Text = this.DefaultValues[4];
 
                     panel_Publisher_Scroll.Visible = true;
                     publisherInfoLabel.Visible = true;
                     publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
+                    publisherInfoLabel.Text = "Rule applies to all files with these file description attributes.";
 
                     break;
 
@@ -304,8 +283,9 @@ namespace WDAC_Wizard
                 return openFolderDialog.SelectedPath;
             }
             else
+            {
                 return String.Empty;
-
+            }
         }
 
         /// <summary>
@@ -498,126 +478,6 @@ namespace WDAC_Wizard
             ClearCustomRulesPanel(true); 
         }
 
-        private void TrackBar_Conditions_Scroll(object sender, EventArgs e)
-        {
-            int pos = trackBar_Conditions.Value; //Publisher file rules conditions
-
-            switch (this.ExceptionRule.Type)
-            {
-                case PolicyCustomRules.RuleType.Publisher:
-                    {
-                        // Setting the trackBar values snaps the cursor to one of the four options
-                        if (pos <= 2)
-                        {
-                            // PCACert + LeafCert + Version + FileName = FilePublisher
-                            trackBar_Conditions.Value = 0;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher);
-                            textBoxSlider_3.Text = this.ExceptionRule.FileInfo["FileName"];
-                            publisherInfoLabel.Text = Properties.Resources.FilePublisherInfo;
-                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (0)");
-                        }
-                        else if (pos > 2 && pos <= 6)
-                        {
-                            // PCACert + LeafCert + Version = SignedVersion
-                            trackBar_Conditions.Value = 4;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.SignedVersion);
-                            textBoxSlider_2.Text = this.ExceptionRule.FileInfo["FileVersion"];
-                            textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = Properties.Resources.SignedVersionInfo;
-                            this.Log.AddInfoMsg("Publisher file rule level set to file publisher (4)");
-                        }
-                        else if (pos > 6 && pos <= 10)
-                        {
-                            // PCACert + LeafCert  = Publisher
-                            trackBar_Conditions.Value = 8;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Publisher);
-                            textBoxSlider_1.Text = this.ExceptionRule.FileInfo["LeafCertificate"];
-                            textBoxSlider_2.Text = "*";
-                            textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = Properties.Resources.PublisherInfo;
-                            this.Log.AddInfoMsg("Publisher file rule level set to publisher (8)");
-                        }
-                        else
-                        {
-                            // PCACert = PCACertificate
-                            trackBar_Conditions.Value = 12;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PcaCertificate);
-                            textBoxSlider_0.Text = this.ExceptionRule.FileInfo["PCACertificate"];
-                            textBoxSlider_1.Text = "*";
-                            textBoxSlider_2.Text = "*";
-                            textBoxSlider_3.Text = "*";
-                            publisherInfoLabel.Text = Properties.Resources.PCACertificateInfo;
-                            this.Log.AddInfoMsg("Publisher file rule level set to PCA certificate (12)");
-                        }
-                    }
-                    break;
-
-                case PolicyCustomRules.RuleType.FileAttributes:
-                    {
-                        // Setting the trackBar values snaps the cursor to one of the four options
-                        textBoxSlider_3.Text = "*"; //@"Internal name:";
-                        textBoxSlider_2.Text = "*"; //@"Product name:";
-                        textBoxSlider_1.Text = "*"; //@"File description
-                        textBoxSlider_0.Text = "*"; //@"Original file name:";
-
-                        if (pos <= 2)
-                        {
-                            // Internal name
-                            trackBar_Conditions.Value = 0;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
-                            textBoxSlider_3.Text = this.ExceptionRule.FileInfo["InternalName"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_3.Text == Properties.Resources.DefaultFileAttributeString)
-                                this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this internal name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file internal name: {0}", textBoxSlider_3.Text));
-                        }
-                        else if (pos > 2 && pos <= 6)
-                        {
-                            // Product name
-                            trackBar_Conditions.Value = 4;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
-                            textBoxSlider_2.Text = this.ExceptionRule.FileInfo["ProductName"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_2.Text == Properties.Resources.DefaultFileAttributeString)
-                                this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this product name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to product name: {0}", textBoxSlider_2.Text));
-                        }
-                        else if (pos > 6 && pos <= 10)
-                        {
-                            //File description
-                            trackBar_Conditions.Value = 8;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
-                            textBoxSlider_1.Text = this.ExceptionRule.FileInfo["FileDescription"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_1.Text == Properties.Resources.DefaultFileAttributeString)
-                                this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this file description attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to file description: {0}", textBoxSlider_1.Text));
-                        }
-                        else
-                        {
-                            //Original filename
-                            trackBar_Conditions.Value = 12;
-                            this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
-                            textBoxSlider_0.Text = this.ExceptionRule.FileInfo["OriginalFilename"];
-
-                            // If attribute is not applicable, set to RuleLevel = None to block from creating rule in button_Create_Click
-                            if (textBoxSlider_0.Text == Properties.Resources.DefaultFileAttributeString)
-                                this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.None);
-                            publisherInfoLabel.Text = "Rule applies to all files with this original file name attribute.";
-                            this.Log.AddInfoMsg(String.Format("Publisher file rule level set to original file name: {0}", textBoxSlider_0.Text));
-
-                        }
-                    }
-                    break;
-            }
-        }
-
         /// <summary>
         /// Called when DataGridView needs to paint data
         /// </summary>
@@ -662,6 +522,228 @@ namespace WDAC_Wizard
                     break;
             }
             
+        }
+
+        private void checkBox_OriginalFilename_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBox_OriginalFilename.Checked)
+            {
+                if (this.textBox_originalfilename.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_originalfilename.Text))
+                {
+                    ClearLabel_ErrorText();
+                    this.ExceptionRule.CheckboxCheckStates.checkBox0 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBox_OriginalFilename.Checked = false;
+            this.ExceptionRule.CheckboxCheckStates.checkBox0 = false;
+        }
+
+        private void checkBox_FileDescription_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBox_FileDescription.Checked)
+            {
+                if (this.textBox_filedescription.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_filedescription.Text))
+                {
+                    ClearLabel_ErrorText();
+                    this.ExceptionRule.CheckboxCheckStates.checkBox1 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBox_FileDescription.Checked = false;
+            this.ExceptionRule.CheckboxCheckStates.checkBox1 = false;
+        }
+
+        private void checkBox_Product_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBox_Product.Checked)
+            {
+                if (this.textBox_product.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_product.Text))
+                {
+                    ClearLabel_ErrorText();
+                    this.ExceptionRule.CheckboxCheckStates.checkBox2 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBox_Product.Checked = false;
+            this.ExceptionRule.CheckboxCheckStates.checkBox3 = false;
+        }
+
+        private void checkBox_InternalName_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBox_InternalName.Checked)
+            {
+                if (this.textBox_internalname.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_internalname.Text))
+                {
+                    ClearLabel_ErrorText();
+                    this.ExceptionRule.CheckboxCheckStates.checkBox3 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBox_InternalName.Checked = false;
+            this.ExceptionRule.CheckboxCheckStates.checkBox3 = false;
+        }
+
+        private void checkBox_MinVersion_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBox_MinVersion.Checked)
+            {
+                if (this.textBox_minversion.Text != Properties.Resources.DefaultFileAttributeString ||
+                    String.IsNullOrEmpty(this.textBox_minversion.Text))
+                {
+                    ClearLabel_ErrorText();
+                    this.ExceptionRule.CheckboxCheckStates.checkBox4 = true;
+                    return;
+                }
+                else
+                {
+                    SetLabel_ErrorText(Properties.Resources.InvalidAttributeSelection_Error);
+                }
+            }
+
+            this.checkBox_MinVersion.Checked = false;
+            this.ExceptionRule.CheckboxCheckStates.checkBox4 = false;
+        }
+
+        /// <summary>
+        /// Clear the error label text and set to invisible
+        /// </summary>
+        private void ClearLabel_ErrorText()
+        {
+            this.publisherInfoLabel.Text = "";
+            this.publisherInfoLabel.Visible = false;
+        }
+
+        private void SetLabel_ErrorText(string errorText)
+        {
+            this.publisherInfoLabel.Focus();
+            this.publisherInfoLabel.BringToFront();
+            this.publisherInfoLabel.Text = errorText;
+            this.publisherInfoLabel.Visible = true;
+        }
+
+        private void checkBoxCustomValues_CheckedChanged(object sender, EventArgs e)
+        {
+            // Set the UI first
+            if (this.checkBoxCustomValues.Checked)
+            {
+                SetTextBoxStates(true);
+
+                // Set the custom values based on existing
+                this.ExceptionRule.CustomValues.FileName = textBox_originalfilename.Text;
+                this.ExceptionRule.CustomValues.Description = textBox_filedescription.Text;
+                this.ExceptionRule.CustomValues.ProductName = textBox_product.Text;
+                this.ExceptionRule.CustomValues.InternalName = textBox_internalname.Text;
+                this.ExceptionRule.CustomValues.MinVersion = textBox_minversion.Text; 
+
+                this.ExceptionRule.UsingCustomValues = true;
+            }
+            else
+            {
+                // Clear error if applicable
+                this.ClearLabel_ErrorText();
+
+                // Set text values back to default
+                SetTextBoxStates(false);
+                this.textBox_originalfilename.Text = this.DefaultValues[0];
+                this.textBox_filedescription.Text = this.DefaultValues[1];
+                this.textBox_product.Text = this.DefaultValues[2];
+                this.textBox_internalname.Text = this.DefaultValues[3];
+                this.textBox_minversion.Text = this.DefaultValues[4];
+
+                this.ExceptionRule.UsingCustomValues = false;
+            }
+        }
+
+        private void SetTextBoxStates(bool enabled)
+        {
+            if (enabled)
+            {
+                // If enabled, allow user input
+                this.textBox_originalfilename.ReadOnly = false; 
+                this.textBox_filedescription.ReadOnly = false;
+                this.textBox_product.ReadOnly = false;
+                this.textBox_internalname.ReadOnly = false;
+                this.textBox_minversion.ReadOnly = false;
+
+                this.textBox_originalfilename.Enabled = true;
+                this.textBox_filedescription.Enabled = true;
+                this.textBox_product.Enabled = true;
+                this.textBox_internalname.Enabled = true;
+                this.textBox_minversion.Enabled = true;
+
+                // Set back color to white to help user determine boxes are userwriteable
+                this.textBox_originalfilename.BackColor = Color.White;
+                this.textBox_filedescription.BackColor = Color.White;
+                this.textBox_product.BackColor = Color.White;
+                this.textBox_internalname.BackColor = Color.White;
+                this.textBox_minversion.BackColor = Color.White;
+            }
+            else
+            {
+                // Set to read only if disabled
+                this.textBox_originalfilename.ReadOnly = true;
+                this.textBox_filedescription.ReadOnly = true;
+                this.textBox_product.ReadOnly = true;
+                this.textBox_internalname.ReadOnly = true;
+                this.textBox_minversion.ReadOnly = true;
+
+                this.textBox_originalfilename.Enabled = false;
+                this.textBox_filedescription.Enabled = false;
+                this.textBox_product.Enabled = false;
+                this.textBox_internalname.Enabled = false;
+                this.textBox_minversion.Enabled = false;
+
+                // Set back color to white to help user determine boxes are userwriteable
+                this.textBox_originalfilename.BackColor = SystemColors.Control;
+                this.textBox_filedescription.BackColor = SystemColors.Control;
+                this.textBox_product.BackColor = SystemColors.Control;
+                this.textBox_internalname.BackColor = SystemColors.Control;
+                this.textBox_minversion.BackColor = SystemColors.Control;
+            }
+        }
+
+        /// <summary>
+        /// Triggered by the user selecting either File or Folder. Sets the rule level
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileFolderButtonClick(object sender, EventArgs e)
+        {
+            if(this.radioButton_File.Checked)
+            {
+                this.ExceptionRule.Level = PolicyCustomRules.RuleLevel.FilePath;
+                this.ExceptionRule.Type = PolicyCustomRules.RuleType.FilePath;
+            }
+            else
+            {
+                this.ExceptionRule.Level = PolicyCustomRules.RuleLevel.Folder;
+                this.ExceptionRule.Type = PolicyCustomRules.RuleType.Folder;
+            }
         }
     }
 }

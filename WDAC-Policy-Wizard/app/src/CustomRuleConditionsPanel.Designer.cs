@@ -42,22 +42,22 @@
             this.label2 = new System.Windows.Forms.Label();
             this.richTextBox_CustomHashes = new System.Windows.Forms.RichTextBox();
             this.panel_Publisher_Scroll = new System.Windows.Forms.Panel();
+            this.textBoxSlider_2 = new System.Windows.Forms.TextBox();
+            this.checkBoxAttribute3 = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttribute4 = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttribute1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttribute2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttribute0 = new System.Windows.Forms.CheckBox();
             this.textBoxEKU = new System.Windows.Forms.TextBox();
             this.checkBoxEku = new System.Windows.Forms.CheckBox();
             this.checkBox_CustomValues = new System.Windows.Forms.CheckBox();
             this.label_To = new System.Windows.Forms.Label();
             this.textBox_MaxVersion = new System.Windows.Forms.TextBox();
             this.textBoxSlider_3 = new System.Windows.Forms.TextBox();
-            this.labelSlider_3 = new System.Windows.Forms.Label();
-            this.textBoxSlider_2 = new System.Windows.Forms.TextBox();
-            this.labelSlider_2 = new System.Windows.Forms.Label();
+            this.textBoxSlider_4 = new System.Windows.Forms.TextBox();
             this.textBoxSlider_1 = new System.Windows.Forms.TextBox();
-            this.labelSlider_1 = new System.Windows.Forms.Label();
             this.textBoxSlider_0 = new System.Windows.Forms.TextBox();
-            this.labelSlider_0 = new System.Windows.Forms.Label();
-            this.trackBar_Conditions = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
-            this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
             this.radioButton_File = new System.Windows.Forms.RadioButton();
@@ -88,7 +88,6 @@
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
             this.panel_Publisher_Scroll.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).BeginInit();
             this.panel_FileFolder.SuspendLayout();
             this.control_Panel.SuspendLayout();
             this.headerPanel.SuspendLayout();
@@ -101,7 +100,6 @@
             this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
             this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_CustomRules.Controls.Add(this.label1);
-            this.panel_CustomRules.Controls.Add(this.publisherInfoLabel);
             this.panel_CustomRules.Controls.Add(this.panel_FileFolder);
             this.panel_CustomRules.Controls.Add(this.label_Info);
             this.panel_CustomRules.Controls.Add(this.label9);
@@ -115,7 +113,7 @@
             this.panel_CustomRules.Location = new System.Drawing.Point(123, 0);
             this.panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             this.panel_CustomRules.Name = "panel_CustomRules";
-            this.panel_CustomRules.Size = new System.Drawing.Size(615, 701);
+            this.panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             this.panel_CustomRules.TabIndex = 86;
             // 
             // panelPackagedApps
@@ -189,7 +187,7 @@
             this.checkedListBoxPackagedApps.FormattingEnabled = true;
             this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
             this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 157);
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 140);
             this.checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
@@ -234,61 +232,130 @@
             this.richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
             this.richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
             this.richTextBox_CustomHashes.TabIndex = 114;
-            this.richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode Hashes";
+            this.richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode/PE Hashes";
             this.richTextBox_CustomHashes.Visible = false;
             this.richTextBox_CustomHashes.Click += new System.EventHandler(this.RichTextBox_CustomHashes_Click);
             // 
             // panel_Publisher_Scroll
             // 
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_2);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxAttribute3);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxAttribute4);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxAttribute1);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxAttribute2);
+            this.panel_Publisher_Scroll.Controls.Add(this.checkBoxAttribute0);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxEKU);
             this.panel_Publisher_Scroll.Controls.Add(this.checkBoxEku);
             this.panel_Publisher_Scroll.Controls.Add(this.checkBox_CustomValues);
             this.panel_Publisher_Scroll.Controls.Add(this.label_To);
             this.panel_Publisher_Scroll.Controls.Add(this.textBox_MaxVersion);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_3);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_3);
-            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_2);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_2);
+            this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_4);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_1);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_1);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
-            this.panel_Publisher_Scroll.Controls.Add(this.labelSlider_0);
-            this.panel_Publisher_Scroll.Controls.Add(this.trackBar_Conditions);
             this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 255);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(510, 309);
             this.panel_Publisher_Scroll.TabIndex = 103;
             this.panel_Publisher_Scroll.Visible = false;
+            // 
+            // textBoxSlider_2
+            // 
+            this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_2.Enabled = false;
+            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_2.Location = new System.Drawing.Point(139, 100);
+            this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_2.Name = "textBoxSlider_2";
+            this.textBoxSlider_2.ReadOnly = true;
+            this.textBoxSlider_2.Size = new System.Drawing.Size(355, 26);
+            this.textBoxSlider_2.TabIndex = 120;
+            this.textBoxSlider_2.TextChanged += new System.EventHandler(this.TextBoxSlider_2_TextChanged);
+            // 
+            // checkBoxAttribute3
+            // 
+            this.checkBoxAttribute3.AutoSize = true;
+            this.checkBoxAttribute3.Location = new System.Drawing.Point(6, 145);
+            this.checkBoxAttribute3.Name = "checkBoxAttribute3";
+            this.checkBoxAttribute3.Size = new System.Drawing.Size(95, 21);
+            this.checkBoxAttribute3.TabIndex = 119;
+            this.checkBoxAttribute3.Text = "File name:";
+            this.checkBoxAttribute3.UseVisualStyleBackColor = true;
+            this.checkBoxAttribute3.CheckedChanged += new System.EventHandler(this.CheckBoxAttrib3CheckChanged);
+            // 
+            // checkBoxAttribute4
+            // 
+            this.checkBoxAttribute4.AutoSize = true;
+            this.checkBoxAttribute4.Location = new System.Drawing.Point(6, 187);
+            this.checkBoxAttribute4.Name = "checkBoxAttribute4";
+            this.checkBoxAttribute4.Size = new System.Drawing.Size(112, 21);
+            this.checkBoxAttribute4.TabIndex = 118;
+            this.checkBoxAttribute4.Text = "Min. Version:";
+            this.checkBoxAttribute4.UseVisualStyleBackColor = true;
+            this.checkBoxAttribute4.CheckedChanged += new System.EventHandler(this.CheckBoxAttrib4CheckChanged);
+            // 
+            // checkBoxAttribute1
+            // 
+            this.checkBoxAttribute1.AutoSize = true;
+            this.checkBoxAttribute1.Location = new System.Drawing.Point(6, 61);
+            this.checkBoxAttribute1.Name = "checkBoxAttribute1";
+            this.checkBoxAttribute1.Size = new System.Drawing.Size(93, 21);
+            this.checkBoxAttribute1.TabIndex = 117;
+            this.checkBoxAttribute1.Text = "Publisher:";
+            this.checkBoxAttribute1.UseVisualStyleBackColor = true;
+            this.checkBoxAttribute1.CheckedChanged += new System.EventHandler(this.CheckBoxAttrib1CheckChanged);
+            // 
+            // checkBoxAttribute2
+            // 
+            this.checkBoxAttribute2.AutoSize = true;
+            this.checkBoxAttribute2.Location = new System.Drawing.Point(6, 103);
+            this.checkBoxAttribute2.Name = "checkBoxAttribute2";
+            this.checkBoxAttribute2.Size = new System.Drawing.Size(83, 21);
+            this.checkBoxAttribute2.TabIndex = 116;
+            this.checkBoxAttribute2.Text = "Product:";
+            this.checkBoxAttribute2.UseVisualStyleBackColor = true;
+            this.checkBoxAttribute2.CheckedChanged += new System.EventHandler(this.CheckBoxAttrib2CheckChanged);
+            // 
+            // checkBoxAttribute0
+            // 
+            this.checkBoxAttribute0.AutoSize = true;
+            this.checkBoxAttribute0.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxAttribute0.Name = "checkBoxAttribute0";
+            this.checkBoxAttribute0.Size = new System.Drawing.Size(100, 21);
+            this.checkBoxAttribute0.TabIndex = 115;
+            this.checkBoxAttribute0.Text = "Issuing CA:";
+            this.checkBoxAttribute0.UseVisualStyleBackColor = true;
+            this.checkBoxAttribute0.CheckedChanged += new System.EventHandler(this.CheckBoxAttrib0CheckChanged);
             // 
             // textBoxEKU
             // 
             this.textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxEKU.Enabled = false;
             this.textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxEKU.Location = new System.Drawing.Point(159, 196);
+            this.textBoxEKU.Location = new System.Drawing.Point(139, 239);
             this.textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxEKU.Name = "textBoxEKU";
             this.textBoxEKU.ReadOnly = true;
-            this.textBoxEKU.Size = new System.Drawing.Size(327, 26);
+            this.textBoxEKU.Size = new System.Drawing.Size(355, 26);
             this.textBoxEKU.TabIndex = 114;
             this.textBoxEKU.TextChanged += new System.EventHandler(this.TextBoxEKU_TextChanged);
             // 
             // checkBoxEku
             // 
             this.checkBoxEku.AutoSize = true;
-            this.checkBoxEku.Location = new System.Drawing.Point(6, 200);
+            this.checkBoxEku.Location = new System.Drawing.Point(6, 241);
             this.checkBoxEku.Name = "checkBoxEku";
-            this.checkBoxEku.Size = new System.Drawing.Size(120, 21);
+            this.checkBoxEku.Size = new System.Drawing.Size(124, 21);
             this.checkBoxEku.TabIndex = 113;
-            this.checkBoxEku.Text = "Add EKU Rule";
+            this.checkBoxEku.Text = "Add EKU Rule:";
             this.checkBoxEku.UseVisualStyleBackColor = true;
             this.checkBoxEku.CheckedChanged += new System.EventHandler(this.CheckBoxEkuStateChanged);
             // 
             // checkBox_CustomValues
             // 
             this.checkBox_CustomValues.AutoSize = true;
-            this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 226);
+            this.checkBox_CustomValues.Location = new System.Drawing.Point(7, 279);
             this.checkBox_CustomValues.Name = "checkBox_CustomValues";
             this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
             this.checkBox_CustomValues.TabIndex = 111;
@@ -299,10 +366,10 @@
             // label_To
             // 
             this.label_To.AutoSize = true;
-            this.label_To.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_To.Location = new System.Drawing.Point(314, 105);
+            this.label_To.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_To.Location = new System.Drawing.Point(305, 185);
             this.label_To.Name = "label_To";
-            this.label_To.Size = new System.Drawing.Size(16, 21);
+            this.label_To.Size = new System.Drawing.Size(20, 27);
             this.label_To.TabIndex = 112;
             this.label_To.Text = "-";
             this.label_To.Visible = false;
@@ -313,11 +380,11 @@
             this.textBox_MaxVersion.Enabled = false;
             this.textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.textBox_MaxVersion.Location = new System.Drawing.Point(334, 102);
+            this.textBox_MaxVersion.Location = new System.Drawing.Point(344, 185);
             this.textBox_MaxVersion.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_MaxVersion.Name = "textBox_MaxVersion";
             this.textBox_MaxVersion.ReadOnly = true;
-            this.textBox_MaxVersion.Size = new System.Drawing.Size(152, 26);
+            this.textBox_MaxVersion.Size = new System.Drawing.Size(150, 26);
             this.textBox_MaxVersion.TabIndex = 105;
             this.textBox_MaxVersion.Text = "Max version";
             this.textBox_MaxVersion.Visible = false;
@@ -328,114 +395,52 @@
             this.textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxSlider_3.Enabled = false;
             this.textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_3.Location = new System.Drawing.Point(159, 144);
+            this.textBoxSlider_3.Location = new System.Drawing.Point(139, 142);
             this.textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_3.Name = "textBoxSlider_3";
             this.textBoxSlider_3.ReadOnly = true;
-            this.textBoxSlider_3.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_3.Size = new System.Drawing.Size(355, 26);
             this.textBoxSlider_3.TabIndex = 5;
             this.textBoxSlider_3.TextChanged += new System.EventHandler(this.TextBoxSlider_3_TextChanged);
             // 
-            // labelSlider_3
+            // textBoxSlider_4
             // 
-            this.labelSlider_3.AutoSize = true;
-            this.labelSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_3.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_3.Location = new System.Drawing.Point(36, 147);
-            this.labelSlider_3.Name = "labelSlider_3";
-            this.labelSlider_3.Size = new System.Drawing.Size(75, 18);
-            this.labelSlider_3.TabIndex = 104;
-            this.labelSlider_3.Text = "File name:";
-            this.labelSlider_3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // textBoxSlider_2
-            // 
-            this.textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxSlider_2.Enabled = false;
-            this.textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_2.Location = new System.Drawing.Point(159, 102);
-            this.textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxSlider_2.Name = "textBoxSlider_2";
-            this.textBoxSlider_2.ReadOnly = true;
-            this.textBoxSlider_2.Size = new System.Drawing.Size(152, 26);
-            this.textBoxSlider_2.TabIndex = 4;
-            this.textBoxSlider_2.TextChanged += new System.EventHandler(this.TextBoxSlider_2_TextChanged);
-            // 
-            // labelSlider_2
-            // 
-            this.labelSlider_2.AutoSize = true;
-            this.labelSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_2.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_2.Location = new System.Drawing.Point(36, 106);
-            this.labelSlider_2.Name = "labelSlider_2";
-            this.labelSlider_2.Size = new System.Drawing.Size(86, 18);
-            this.labelSlider_2.TabIndex = 102;
-            this.labelSlider_2.Text = "Min version:";
-            this.labelSlider_2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.textBoxSlider_4.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxSlider_4.Enabled = false;
+            this.textBoxSlider_4.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSlider_4.Location = new System.Drawing.Point(139, 184);
+            this.textBoxSlider_4.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSlider_4.Name = "textBoxSlider_4";
+            this.textBoxSlider_4.ReadOnly = true;
+            this.textBoxSlider_4.Size = new System.Drawing.Size(150, 26);
+            this.textBoxSlider_4.TabIndex = 4;
+            this.textBoxSlider_4.TextChanged += new System.EventHandler(this.TextBoxSlider_4_TextChanged);
             // 
             // textBoxSlider_1
             // 
             this.textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxSlider_1.Enabled = false;
             this.textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_1.Location = new System.Drawing.Point(159, 60);
+            this.textBoxSlider_1.Location = new System.Drawing.Point(139, 58);
             this.textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_1.Name = "textBoxSlider_1";
             this.textBoxSlider_1.ReadOnly = true;
-            this.textBoxSlider_1.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_1.Size = new System.Drawing.Size(355, 26);
             this.textBoxSlider_1.TabIndex = 3;
             this.textBoxSlider_1.TextChanged += new System.EventHandler(this.TextBoxSlider_1_TextChanged);
-            // 
-            // labelSlider_1
-            // 
-            this.labelSlider_1.AutoSize = true;
-            this.labelSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_1.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_1.Location = new System.Drawing.Point(36, 62);
-            this.labelSlider_1.Name = "labelSlider_1";
-            this.labelSlider_1.Size = new System.Drawing.Size(69, 18);
-            this.labelSlider_1.TabIndex = 100;
-            this.labelSlider_1.Text = "Publisher:";
-            this.labelSlider_1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // textBoxSlider_0
             // 
             this.textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxSlider_0.Enabled = false;
             this.textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSlider_0.Location = new System.Drawing.Point(159, 19);
+            this.textBoxSlider_0.Location = new System.Drawing.Point(139, 16);
             this.textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSlider_0.Name = "textBoxSlider_0";
             this.textBoxSlider_0.ReadOnly = true;
-            this.textBoxSlider_0.Size = new System.Drawing.Size(327, 26);
+            this.textBoxSlider_0.Size = new System.Drawing.Size(355, 26);
             this.textBoxSlider_0.TabIndex = 2;
             this.textBoxSlider_0.TextChanged += new System.EventHandler(this.TextBoxSlider_0_TextChanged);
-            // 
-            // labelSlider_0
-            // 
-            this.labelSlider_0.AutoSize = true;
-            this.labelSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.labelSlider_0.ForeColor = System.Drawing.Color.Black;
-            this.labelSlider_0.Location = new System.Drawing.Point(36, 21);
-            this.labelSlider_0.Name = "labelSlider_0";
-            this.labelSlider_0.Size = new System.Drawing.Size(82, 18);
-            this.labelSlider_0.TabIndex = 98;
-            this.labelSlider_0.Text = "Issuing CA:";
-            this.labelSlider_0.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // trackBar_Conditions
-            // 
-            this.trackBar_Conditions.LargeChange = 4;
-            this.trackBar_Conditions.Location = new System.Drawing.Point(2, 13);
-            this.trackBar_Conditions.Margin = new System.Windows.Forms.Padding(2);
-            this.trackBar_Conditions.Maximum = 12;
-            this.trackBar_Conditions.Name = "trackBar_Conditions";
-            this.trackBar_Conditions.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar_Conditions.Size = new System.Drawing.Size(56, 165);
-            this.trackBar_Conditions.SmallChange = 4;
-            this.trackBar_Conditions.TabIndex = 96;
-            this.trackBar_Conditions.TickFrequency = 4;
-            this.trackBar_Conditions.Scroll += new System.EventHandler(this.TrackBar_Conditions_Scroll);
             // 
             // label1
             // 
@@ -448,20 +453,6 @@
             this.label1.TabIndex = 110;
             this.label1.Text = "Select the rule type, browse for the reference file and choose whether to allow \r" +
     "\nor deny. ";
-            // 
-            // publisherInfoLabel
-            // 
-            this.publisherInfoLabel.AutoSize = true;
-            this.publisherInfoLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherInfoLabel.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(12, 655);
-            this.publisherInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.publisherInfoLabel.Name = "publisherInfoLabel";
-            this.publisherInfoLabel.Size = new System.Drawing.Size(472, 36);
-            this.publisherInfoLabel.TabIndex = 106;
-            this.publisherInfoLabel.Text = "Rule applies to all files signed by this Issuing CA and publisher with this  \r\nfi" +
-    "le name with a version at or above the specified version number.";
-            this.publisherInfoLabel.Visible = false;
             // 
             // panel_FileFolder
             // 
@@ -632,7 +623,7 @@
             // label_Error
             // 
             this.label_Error.AutoSize = true;
-            this.label_Error.Location = new System.Drawing.Point(125, 726);
+            this.label_Error.Location = new System.Drawing.Point(130, 742);
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(78, 17);
             this.label_Error.TabIndex = 87;
@@ -681,7 +672,7 @@
             this.control_Panel.Location = new System.Drawing.Point(0, 61);
             this.control_Panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.control_Panel.Name = "control_Panel";
-            this.control_Panel.Size = new System.Drawing.Size(123, 640);
+            this.control_Panel.Size = new System.Drawing.Size(123, 677);
             this.control_Panel.TabIndex = 108;
             // 
             // workflow_Label
@@ -833,7 +824,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).EndInit();
             this.panel_Publisher_Scroll.ResumeLayout(false);
             this.panel_Publisher_Scroll.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_Conditions)).EndInit();
             this.panel_FileFolder.ResumeLayout(false);
             this.panel_FileFolder.PerformLayout();
             this.control_Panel.ResumeLayout(false);
@@ -848,7 +838,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel_CustomRules;
-        private System.Windows.Forms.Label publisherInfoLabel;
         private System.Windows.Forms.Button button_CreateRule;
         private System.Windows.Forms.Panel panel_FileFolder;
         private System.Windows.Forms.RadioButton radioButton_Folder;
@@ -856,14 +845,9 @@
         private System.Windows.Forms.Label label_Info;
         private System.Windows.Forms.Panel panel_Publisher_Scroll;
         private System.Windows.Forms.TextBox textBoxSlider_3;
-        private System.Windows.Forms.Label labelSlider_3;
-        private System.Windows.Forms.TextBox textBoxSlider_2;
-        private System.Windows.Forms.Label labelSlider_2;
+        private System.Windows.Forms.TextBox textBoxSlider_4;
         private System.Windows.Forms.TextBox textBoxSlider_1;
-        private System.Windows.Forms.Label labelSlider_1;
         private System.Windows.Forms.TextBox textBoxSlider_0;
-        private System.Windows.Forms.Label labelSlider_0;
-        private System.Windows.Forms.TrackBar trackBar_Conditions;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBox_RuleType;
         private System.Windows.Forms.RadioButton radioButton_Deny;
@@ -897,9 +881,15 @@
         private System.Windows.Forms.Panel panel_Progress;
         private System.Windows.Forms.Label label_Progress;
         private System.Windows.Forms.PictureBox pictureBox_Progress;
-        private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.Windows.Forms.CheckBox checkBox_CustomPFN;
         private System.Windows.Forms.CheckBox checkBoxEku;
+        private System.Windows.Forms.TextBox textBoxSlider_2;
+        private System.Windows.Forms.CheckBox checkBoxAttribute3;
+        private System.Windows.Forms.CheckBox checkBoxAttribute4;
+        private System.Windows.Forms.CheckBox checkBoxAttribute1;
+        private System.Windows.Forms.CheckBox checkBoxAttribute2;
+        private System.Windows.Forms.CheckBox checkBoxAttribute0;
         private System.Windows.Forms.TextBox textBoxEKU;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }

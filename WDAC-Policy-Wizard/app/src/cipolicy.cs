@@ -102,11 +102,11 @@ public enum OptionType {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlEnumAttribute("Enabled:UMCI")]
-    EnabledUMCI,
+    EnabledUMCI = 0,
     
     /// <remarks/>
     [System.Xml.Serialization.XmlEnumAttribute("Enabled:Boot Menu Protection")]
-    EnabledBootMenuProtection,
+    EnabledBootMenuProtection = 1,
     
     /// <remarks/>
     [System.Xml.Serialization.XmlEnumAttribute("Enabled:Intelligent Security Graph Authorization")]

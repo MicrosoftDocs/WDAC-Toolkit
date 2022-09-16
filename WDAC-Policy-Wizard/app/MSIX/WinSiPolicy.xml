@@ -15,9 +15,6 @@
       <Option>Enabled:UMCI</Option>
     </Rule>
     <Rule>
-      <Option>Enabled:Conditional Windows Lockdown Policy</Option>
-    </Rule>
-    <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
     </Rule>
     <Rule>
@@ -86,6 +83,7 @@
     <Deny ID="ID_DENY_RUNSCRIPTHELPER" FriendlyName="runscripthelper.exe" FileName="runscripthelper.exe" MinimumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_PWRSHLCUSTOMHOST" FriendlyName="powershellcustomhost.exe" FileName="powershellcustomhost.exe" MinimumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_MWFC" FriendlyName="Microsoft.Workflow.Compiler.exe" FileName="Microsoft.Workflow.Compiler.exe" MinimumFileVersion="65535.65535.65535.65535" />
+	<FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
   </FileRules>
   <!--Signers-->
   <Signers>
@@ -170,6 +168,11 @@
     </Signer>
     <Signer ID="ID_SIGNER_EMPTY" Name="Empty">
       <CertRoot Type="TBS" Value="0000000000000000000000000000000000000000000000000000000000000000" />
+    </Signer>
+	<Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
+      <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
+      <CertPublisher Value="Microsoft Corporation" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_REFRESH_POLICY" />
     </Signer>
   </Signers>
   <SigningScenarios>
@@ -319,6 +322,7 @@
           <AllowedSigner SignerId="ID_SIGNER_AM" />
           <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />
           <AllowedSigner SignerId="ID_SIGNER_RT_STANDARD" />
+		  <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
           <AllowedSigner SignerId="ID_SIGNER_PCA2010_AM" />
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010">

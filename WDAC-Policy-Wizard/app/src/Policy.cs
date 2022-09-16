@@ -54,6 +54,7 @@ namespace WDAC_Wizard
         public PolicyType _PolicyType { get; set; }
         public NewPolicyTemplate _PolicyTemplate { get; set; }
         public Format _Format { get; set; }
+        public List<RuleType> PolicyRuleOptions;
 
         public string PolicyName { get; set; }          // User entered friendly name for policy
         public string PolicyID { get; set; }
@@ -97,6 +98,7 @@ namespace WDAC_Wizard
             this._PolicyTemplate = NewPolicyTemplate.None;
             this._PolicyType = PolicyType.None;
             this._Format = Format.None;
+            this.PolicyRuleOptions = new List<RuleType>();
 
             this.EnableHVCI = false;
             this.EnableAudit = true;

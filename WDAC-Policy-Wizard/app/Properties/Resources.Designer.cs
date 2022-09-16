@@ -408,11 +408,20 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file attribute selected cannot be N/A. Please select another attribute or rule type.
+        ///   Looks up a localized string similar to The file attribute selected cannot be N/A or empty. Please select another attribute or use custom values. .
         /// </summary>
         internal static string InvalidAttributeSelection_Error {
             get {
                 return ResourceManager.GetString("InvalidAttributeSelection_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zero attributes are selected. Please select at least one attribute to add to the rule..
+        /// </summary>
+        internal static string InvalidCheckboxState {
+            get {
+                return ResourceManager.GetString("InvalidCheckboxState", resourceCulture);
             }
         }
         
@@ -666,16 +675,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support path rule exceptions. 
-        ///Please select the  &apos;Create Rule&apos; button..
-        /// </summary>
-        internal static string PathRuleNoExceptionAllowed {
-            get {
-                return ResourceManager.GetString("PathRuleNoExceptionAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {
@@ -776,6 +775,16 @@ namespace WDAC_Wizard.Properties {
         internal static string RevokedAsUnsigned_Info {
             get {
                 return ResourceManager.GetString("RevokedAsUnsigned_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support rule exceptions for this rule type.
+        ///Please select the  &apos;Create Rule&apos; button..
+        /// </summary>
+        internal static string RuleTypeNoExceptionAllowed {
+            get {
+                return ResourceManager.GetString("RuleTypeNoExceptionAllowed", resourceCulture);
             }
         }
         

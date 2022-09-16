@@ -378,7 +378,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("CreatePolicyRuleOptions() caught the following exception ", exp);
+                this.Log.AddErrorMsg("SetPolicyRuleOptions() caught the following exception ", exp);
                 return false; 
             }
         }
