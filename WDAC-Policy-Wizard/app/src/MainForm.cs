@@ -1510,26 +1510,29 @@ namespace WDAC_Wizard
             Pipeline pipeline = runspace.CreatePipeline();
 
             // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
-            string binaryFileName = string.Empty;
-            SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
-
-            if (finalSiPolicy != null)
+            string binaryFileName; 
+            if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
             {
-                if(finalSiPolicy.BasePolicyID != null)
-                
+                SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
+                if(finalSiPolicy != null)
                 {
                     binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
                 }
                 else
                 {
-                    binaryFileName = "SiPolicy.p7b";
+                    binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) + ".bin";
                 }
+            }
+            else
+            {
+                //stripped the path remove the .xml --> .bin
+                binaryFileName = Path.GetFileNameWithoutExtension(this.Policy.SchemaPath) +".bin";
+            }
 
-                this.Policy.BinPath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);
-                string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, this.Policy.BinPath);
+            this.Policy.BinPath = Path.Combine(Path.GetDirectoryName(this.Policy.SchemaPath), binaryFileName);  
+            string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"", this.Policy.SchemaPath, this.Policy.BinPath);
 
-                pipeline.Commands.AddScript(binConvertCmd);
-            }           
+            pipeline.Commands.AddScript(binConvertCmd);
 
             try
             {
