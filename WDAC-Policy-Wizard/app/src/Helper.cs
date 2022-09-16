@@ -641,7 +641,6 @@ namespace WDAC_Wizard
             // CONST
             const string N_EKU = "01"; // Only support 1 EKU at a time
 
-
             if (String.IsNullOrEmpty(stringEku))
             {
                 return null;
@@ -1103,12 +1102,12 @@ namespace WDAC_Wizard
             }
 
             // Handle the Custom EKU fields on the signer  
-            if (!String.IsNullOrEmpty(customRule.CustomValues.EKUEncoded))
+            if (!String.IsNullOrEmpty(customRule.EKUEncoded))
             {
                 EKU eku = new EKU();
                 eku.ID = "ID_EKU_A_" + cEKURules++;
-                eku.FriendlyName = customRule.CustomValues.EKUFriendly;
-                eku.Value = Helper.ConvertHashStringToByte(customRule.CustomValues.EKUEncoded);
+                eku.FriendlyName = customRule.EKUFriendly;
+                eku.Value = Helper.ConvertHashStringToByte(customRule.EKUEncoded);
 
                 signers = SetSignersEKUs(signers, eku);
                 siPolicy = AddSiPolicyEKUs(eku, siPolicy); 
@@ -1460,6 +1459,7 @@ namespace WDAC_Wizard
                 // Create new CertEKU[]
                 // TODO support >1 EKUS in the future
                 CertEKU[] certEKUs = new CertEKU[1];
+                certEKUs[0] = new CertEKU();
                 certEKUs[0].ID = eku.ID; 
                 signers[i].CertEKU = certEKUs; 
             }
@@ -1783,6 +1783,19 @@ namespace WDAC_Wizard
 
             fileAttrib.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); // remove trailing " and "
 
+            // Handle the Custom EKU fields on the signer  
+            if (!String.IsNullOrEmpty(customRule.EKUEncoded))
+            {
+                EKU eku = new EKU();
+                eku.ID = "ID_EKU_A_" + cEKURules++;
+                eku.FriendlyName = customRule.EKUFriendly;
+                eku.Value = Helper.ConvertHashStringToByte(customRule.EKUEncoded);
+
+                signers = SetSignersEKUs(signers, eku);
+                signerSiPolicy = AddSiPolicyEKUs(eku, signerSiPolicy);
+            }
+
+
             // Add FileAttrib references
             signers = AddFileAttribToSigners(fileAttrib, signers);
             signerSiPolicy = AddSiPolicyFileAttrib(fileAttrib, signerSiPolicy);
@@ -2053,8 +2066,6 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
-        public string EKUFriendly;
-        public string EKUEncoded;
         public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 
@@ -2126,6 +2137,10 @@ namespace WDAC_Wizard
         public bool UsingCustomValues { get; set; }
         public CustomValue CustomValues { get; set; }
         public List<string> PackagedFamilyNames { get; set; }
+
+        // EKU Attributes
+        public string EKUFriendly { get; set; }
+        public string EKUEncoded { get; set; }
 
         // Filepath params
         public List<string> FolderContents { get; set; }

@@ -123,6 +123,23 @@ namespace WDAC_Wizard
                         ShowInvalidErrorLabel();
                         return;
                     }
+
+                    // Check custom EKU value if applicable
+                    if (!String.IsNullOrEmpty(this.PolicyCustomRule.EKUFriendly))
+                    {
+                        string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.EKUFriendly.Trim());
+                        if (String.IsNullOrEmpty(ekuTLVEncoded))
+                        {
+                            this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " + this.PolicyCustomRule.EKUFriendly);
+                            label_Error.Visible = true;
+                            label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
+                            return;
+                        }
+                        else
+                        {
+                            this.PolicyCustomRule.EKUEncoded = ekuTLVEncoded;
+                        }
+                    }
                 }
                 else
                 {
@@ -249,24 +266,6 @@ namespace WDAC_Wizard
                         label_Error.Text = Properties.Resources.InvalidWildcardPath_Error;
                         this.Log.AddWarningMsg("Invalid custom path rule");
                         return;
-                    }
-                }
-
-                // Check custom EKU value 
-                if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
-                {
-                    string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.CustomValues.EKUFriendly); 
-                    if(String.IsNullOrEmpty(ekuTLVEncoded))
-                    {
-                        this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " +
-                            this.PolicyCustomRule.CustomValues.EKUFriendly);
-                        label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
-                        return; 
-                    }
-                    else
-                    {
-                        this.PolicyCustomRule.CustomValues.EKUEncoded = ekuTLVEncoded; 
                     }
                 }
 
@@ -461,9 +460,9 @@ namespace WDAC_Wizard
             }
 
             // Handle custom EKU
-            if (!String.IsNullOrEmpty(this.PolicyCustomRule.CustomValues.EKUFriendly))
+            if (!String.IsNullOrEmpty(this.PolicyCustomRule.EKUFriendly))
             {
-                files += "EKU: " + this.PolicyCustomRule.CustomValues.EKUFriendly;
+                files += "EKU: " + this.PolicyCustomRule.EKUFriendly;
             }
 
             // Handle exceptions
@@ -1783,8 +1782,8 @@ namespace WDAC_Wizard
             {
                 this.textBoxEKU.Enabled = true;
                 this.textBoxEKU.ReadOnly = false;
-                this.textBoxEKU.BackColor = Color.White; 
-                this.PolicyCustomRule.UsingCustomValues = true; 
+                this.textBoxEKU.BackColor = Color.White;
+                this.PolicyCustomRule.EKUFriendly = String.Empty;
             }
             else
             {
@@ -1792,7 +1791,7 @@ namespace WDAC_Wizard
                 this.textBoxEKU.ReadOnly = true;
                 this.textBoxEKU.BackColor = SystemColors.Control;
                 this.textBoxEKU.Text = String.Empty;
-                this.PolicyCustomRule.CustomValues.EKUFriendly = String.Empty; 
+                this.PolicyCustomRule.EKUFriendly = String.Empty; 
 
                 // Reset the UsingCustomValues field iff not set custom using the checkbox
                 if (!this.checkBox_CustomValues.Checked)
@@ -1809,7 +1808,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxEKU_TextChanged(object sender, EventArgs e)
         {
-            this.PolicyCustomRule.CustomValues.EKUFriendly = this.textBoxEKU.Text; 
+            this.PolicyCustomRule.EKUFriendly = this.textBoxEKU.Text; 
         }
 
        private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
