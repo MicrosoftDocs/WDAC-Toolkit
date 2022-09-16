@@ -1121,13 +1121,13 @@ namespace WDAC_Wizard
             // Set the fileattribute fields based on the checkbox states
             if (customRule.CheckboxCheckStates.checkBox4)
             {
-                fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion;
+                fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion.Trim();
             }
 
             if (customRule.CheckboxCheckStates.checkBox4 && 
                 customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
             {
-                fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion; 
+                fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion.Trim(); 
             }
 
             if (customRule.CheckboxCheckStates.checkBox3)
@@ -1756,25 +1756,32 @@ namespace WDAC_Wizard
             // Create new FileAttrib object to link to signers
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
+            
+            string friendlyName = customRule.Permission.ToString() + " files based on file attributes: ";
 
             // Set the fileattribute fields based on the checkbox states
             // Version
             if (customRule.CheckboxCheckStates.checkBox4)
             {
                 fileAttrib.MinimumFileVersion = customRule.FileInfo["FileVersion"];
+                friendlyName += fileAttrib.MinimumFileVersion + " and ";
             }
 
             // Original Filename
             if (customRule.CheckboxCheckStates.checkBox3)
             {
                 fileAttrib.FileName = customRule.FileInfo["OriginalFilename"];
+                friendlyName += fileAttrib.FileName + " and ";
             }
 
             // Product name
             if (customRule.CheckboxCheckStates.checkBox2)
             {
                 fileAttrib.ProductName = customRule.FileInfo["ProductName"];
+                friendlyName += fileAttrib.ProductName + " and ";
             }
+
+            fileAttrib.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); // remove trailing " and "
 
             // Add FileAttrib references
             signers = AddFileAttribToSigners(fileAttrib, signers);

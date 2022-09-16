@@ -655,13 +655,13 @@ namespace WDAC_Wizard
             FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
 
             this.PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-            this.PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
-            this.PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
-            this.PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
-            this.PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileVersion.Replace(',', '.')); // Replace misleading commas in version with '.'
-            this.PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
-            this.PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
-            this.PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
+            this.PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName.Trim());
+            this.PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName.Trim());
+            this.PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+            this.PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileVersion.Trim().Replace(',', '.')); // Replace misleading commas in version with '.'
+            this.PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+            this.PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription.Trim());
+            this.PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName.Trim());
 
             // Get cert chain info to be shown to the user if type is publisher. Otherwise, we don't check or try to build the cert chain
             string leafCertSubjectName = "";
@@ -1370,7 +1370,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxSlider_4_TextChanged(object sender, EventArgs e)
         {
-            // Filename (publisher) or InternalName (file attributes)
+            // Min version (publisher) or InternalName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
             if (!this.PolicyCustomRule.UsingCustomValues)
