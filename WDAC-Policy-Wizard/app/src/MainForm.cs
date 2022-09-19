@@ -1326,7 +1326,6 @@ namespace WDAC_Wizard
                     }
                     else
                     {
-                        //this.nCustomValueRules--;
                         this.Log.AddErrorMsg("Wizard could not find " + path + ". Skipping merge step in MergeCustomRulesPolicy()");
                     }
                 }
