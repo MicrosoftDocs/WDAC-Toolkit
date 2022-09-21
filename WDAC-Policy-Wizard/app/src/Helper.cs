@@ -1882,12 +1882,6 @@ namespace WDAC_Wizard
         /// <param name="signerSiPolicy"></param>
         public static SiPolicy AddSignerRuleAttributes(PolicyCustomRules customRule, SiPolicy signerSiPolicy)
         {
-            // If none of the extra attributes are to be added, skip creating a FileAttrib rule
-            if(!(customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4))
-            {
-                return signerSiPolicy;
-            }
-
             // Get signers and check if Wizard fell back to hash rules
             Signer[] signers = signerSiPolicy.Signers;
             if (signers == null || signers.Length == 0)
@@ -1895,6 +1889,18 @@ namespace WDAC_Wizard
                 // Failed to create signer rules and fellback to hash rules. There are no signers to which to add file attributes
                 return signerSiPolicy;
             }
+
+            // Serialize a new policy so signing scenarios are not pre-filled resulting in duplicate signer references
+            SiPolicy siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.EmptyWDAC);
+
+            // If none of the extra attributes are to be added, skip creating a FileAttrib rule
+            if (!(customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4))
+            {
+                // Add signer references
+                siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
+                return siPolicy;
+            }
+
             // Create new FileAttrib object to link to signers
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
@@ -1940,29 +1946,29 @@ namespace WDAC_Wizard
 
             // Add FileAttrib references
             signers = AddFileAttribToSigners(fileAttrib, signers);
-            signerSiPolicy = AddSiPolicyFileAttrib(fileAttrib, signerSiPolicy);
+            siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
 
             // Add signer references
-            signerSiPolicy = AddSiPolicySigner(signers, signerSiPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
+            siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
 
-            // TODO: process exceptions
+            // Process exceptions
             if (customRule.ExceptionList.Count > 0)
             {
                 if(customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
                     // Create except deny rules to add to allowed signers
-                    ExceptDenyRule[] exceptDenyRules = CreateExceptDenyRules(customRule.ExceptionList, signerSiPolicy);
-                    signerSiPolicy = AddExceptionsToAllowSigners(exceptDenyRules, signerSiPolicy);
+                    ExceptDenyRule[] exceptDenyRules = CreateExceptDenyRules(customRule.ExceptionList, siPolicy);
+                    siPolicy = AddExceptionsToAllowSigners(exceptDenyRules, siPolicy);
                 }
                 else
                 {
                     // Create except Allowrules
-                    ExceptAllowRule[] exceptAllowRules = CreateExceptAllowRules(customRule.ExceptionList, signerSiPolicy);
-                    signerSiPolicy = AddExceptionsToDeniedSigners(exceptAllowRules, signerSiPolicy);
+                    ExceptAllowRule[] exceptAllowRules = CreateExceptAllowRules(customRule.ExceptionList, siPolicy);
+                    siPolicy = AddExceptionsToDeniedSigners(exceptAllowRules, siPolicy);
                 }
             }
 
-            return signerSiPolicy;
+            return siPolicy;
         }
 
         public static Setting[] SetPolicyInfo(string policyName, string policyId)
