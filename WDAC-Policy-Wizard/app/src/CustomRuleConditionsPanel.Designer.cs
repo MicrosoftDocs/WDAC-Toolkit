@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.checkBox_kernelMode = new System.Windows.Forms.CheckBox();
             this.checkBox_userMode = new System.Windows.Forms.CheckBox();
             this.panelPackagedApps = new System.Windows.Forms.Panel();
@@ -85,8 +87,6 @@
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.panel_CustomRules.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
             this.panel_Progress.SuspendLayout();
@@ -123,6 +123,30 @@
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             this.panel_CustomRules.TabIndex = 86;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(4, 135);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(84, 18);
+            this.label5.TabIndex = 124;
+            this.label5.Text = "Rule Scope:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(4, 175);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 18);
+            this.label4.TabIndex = 123;
+            this.label4.Text = "Rule Action:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // checkBox_kernelMode
             // 
@@ -829,30 +853,6 @@
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerCompleted);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(4, 175);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 18);
-            this.label4.TabIndex = 123;
-            this.label4.Text = "Rule Action:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(4, 135);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(84, 18);
-            this.label5.TabIndex = 124;
-            this.label5.Text = "Rule Scope:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -873,6 +873,7 @@
             this.Name = "CustomRuleConditionsPanel";
             this.Text = "Custom Rules ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);

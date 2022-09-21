@@ -2023,5 +2023,25 @@ namespace WDAC_Wizard
                 this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
             }
         }
+
+        /// <summary>
+        /// Sets the default UI for the panel on loading
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            // If the policy does not support UMCI, uncheck umci and check kmci
+            if(!Helper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+            {
+                this.checkBox_kernelMode.Checked = true;
+                this.checkBox_userMode.Checked = false;
+            }
+            else
+            {
+                this.checkBox_kernelMode.Checked = false;
+                this.checkBox_userMode.Checked = true;
+            }
+        }
     }
 }
