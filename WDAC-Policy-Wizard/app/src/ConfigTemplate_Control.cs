@@ -95,25 +95,24 @@ namespace WDAC_Wizard
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
                 if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy ||  this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                 { 
-                    switch(this.Policy.ConfigRules[key]["ValidSupplemental"])
-                    {
-                        case "True":
-                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
-                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
-                            break;
+                    switch(this.Policy.ConfigRules[key]["ValidSupplemental"]){
+                    case "True":
+                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
+                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                        break;
 
-                        case "False":
-                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
-                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
-                            break;
+                    case "False":
+                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
+                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                        break;
 
-                        case "False-NoInherit":
-                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed-NoInherit";
-                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
-                            break; 
+                    case "False-NoInherit":
+                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed-NoInherit";
+                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                        break; 
                     }
                 }
             }
@@ -186,95 +185,94 @@ namespace WDAC_Wizard
                 return;
             }
 
-            switch (((Label)sender).Text)
-            {
-                case "User Mode Code Integrity":
-                    label_Info.Text = Resources.UMCI_Info;
-                    break;
+            switch (((Label)sender).Text){
+            case "User Mode Code Integrity":
+                label_Info.Text = Resources.UMCI_Info;
+                break;
 
-                case "Boot Menu Protection":
-                    label_Info.Text = Resources.UnsupportedRule_Info;
-                    break;
+            case "Boot Menu Protection":
+                label_Info.Text = Resources.UnsupportedRule_Info;
+                break;
 
-                case "Require WHQL":
-                    label_Info.Text = Resources.WHQL_Info;
-                    break;
+            case "Require WHQL":
+                label_Info.Text = Resources.WHQL_Info;
+                break;
 
-                case "Inherit Default Policy":
-                    label_Info.Text = Resources.UnsupportedRule_Info;
-                    break;
+            case "Inherit Default Policy":
+                label_Info.Text = Resources.UnsupportedRule_Info;
+                break;
 
-                case "Unsigned System Integrity Policy":
-                    label_Info.Text = Resources.UnsignedPolicy_Info;
-                    break;
+            case "Unsigned System Integrity Policy":
+                label_Info.Text = Resources.UnsignedPolicy_Info;
+                break;
 
-                case "Advanced Boot Options Menu":
-                    label_Info.Text = Resources.AdvancedBootOpts_Info;
-                    break;
+            case "Advanced Boot Options Menu":
+                label_Info.Text = Resources.AdvancedBootOpts_Info;
+                break;
 
-                case "Disable Script Enforcement":
-                    label_Info.Text = Resources.ScriptEnforcement_Info;
-                    break;
+            case "Disable Script Enforcement":
+                label_Info.Text = Resources.ScriptEnforcement_Info;
+                break;
 
-                case "Enforce Store Applications":
-                    label_Info.Text = Resources.StoreApps_Info;
-                    break;
+            case "Enforce Store Applications":
+                label_Info.Text = Resources.StoreApps_Info;
+                break;
 
-                case "Managed Installer":
-                    label_Info.Text = Resources.ManagedInst_Info;
-                    break;
+            case "Managed Installer":
+                label_Info.Text = Resources.ManagedInst_Info;
+                break;
 
-                case "Intelligent Security Graph":
-                    label_Info.Text = Resources.ISG_Info;
-                    break;
+            case "Intelligent Security Graph":
+                label_Info.Text = Resources.ISG_Info;
+                break;
 
-                case "Update Policy without Rebooting":
-                    label_Info.Text = Resources.NoReboot_Info;
-                    break;
+            case "Update Policy without Rebooting":
+                label_Info.Text = Resources.NoReboot_Info;
+                break;
 
-                case "Allow Supplemental Policies":
-                    label_Info.Text = Resources.SuppPolicies_Info;
-                    break;
+            case "Allow Supplemental Policies":
+                label_Info.Text = Resources.SuppPolicies_Info;
+                break;
 
-                case "Hypervisor-protected Code Integrity    ":
-                    label_Info.Text = Resources.HVCI_Info;
-                    break;
+            case "Hypervisor-protected Code Integrity    ":
+                label_Info.Text = Resources.HVCI_Info;
+                break;
 
-                case "Disable Flight Signing":
-                    label_Info.Text = Resources.FlightSigning_Info;
-                    break;
+            case "Disable Flight Signing":
+                label_Info.Text = Resources.FlightSigning_Info;
+                break;
 
-                case "Allow Debug Policy Augmented":
-                    label_Info.Text = Resources.UnsupportedRule_Info;
-                    break;
+            case "Allow Debug Policy Augmented":
+                label_Info.Text = Resources.UnsupportedRule_Info;
+                break;
 
-                case "Require EV Signers":
-                    label_Info.Text = Resources.EVSigners_Info;
-                    break;
+            case "Require EV Signers":
+                label_Info.Text = Resources.EVSigners_Info;
+                break;
 
-                case "Boot Audit on Failure":
-                    label_Info.Text = Resources.BootAudit_Info;
-                    break;
+            case "Boot Audit on Failure":
+                label_Info.Text = Resources.BootAudit_Info;
+                break;
 
-                case "Invalidate EAs on Reboot":
-                    label_Info.Text = Resources.InvalidateEAs_Info;
-                    break;
+            case "Invalidate EAs on Reboot":
+                label_Info.Text = Resources.InvalidateEAs_Info;
+                break;
 
-                case "Disable Runtime Filepath Rules":
-                    label_Info.Text = Resources.RuntimeRules;
-                    break;
+            case "Disable Runtime Filepath Rules":
+                label_Info.Text = Resources.RuntimeRules;
+                break;
 
-                case "Dynamic Code Security":
-                    label_Info.Text = Resources.DynamicSecurity_Info;
-                    break;
+            case "Dynamic Code Security":
+                label_Info.Text = Resources.DynamicSecurity_Info;
+                break;
 
-                case "Treat Revoked as Unsigned":
-                    label_Info.Text = Resources.RevokedAsUnsigned_Info;
-                    break; 
+            case "Treat Revoked as Unsigned":
+                label_Info.Text = Resources.RevokedAsUnsigned_Info;
+                break; 
 
-                default:
-                    label_Info.Text = "";
-                    break; 
+            default:
+                label_Info.Text = "";
+                break; 
             }
 
             // Format the label to fit at the bottom of the page.
@@ -369,97 +367,101 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
         }
 
+        /// <summary>
+        /// Maps the rule-option name to OptionType
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="removeOption"></param>
         private void SetRuleOptionState(string key, bool removeOption=false)
         {
             RuleType ruleOption = new RuleType(); 
-            switch (key)
-            {
-                case "UMCI":
-                    ruleOption.Item = OptionType.EnabledUMCI;
-                    break;
+            switch (key){
+            case "UMCI":
+                ruleOption.Item = OptionType.EnabledUMCI;
+                break;
 
-                case "BootMenuProtection":
-                    ruleOption.Item = OptionType.EnabledBootMenuProtection;
-                    break;
+            case "BootMenuProtection":
+                ruleOption.Item = OptionType.EnabledBootMenuProtection;
+                break;
 
-                case "WHQL":
-                    ruleOption.Item = OptionType.RequiredWHQL;
-                    break;
+            case "WHQL":
+                ruleOption.Item = OptionType.RequiredWHQL;
+                break;
 
-                case "AuditMode":
-                    ruleOption.Item = OptionType.EnabledAuditMode;
-                    break;
+            case "AuditMode":
+                ruleOption.Item = OptionType.EnabledAuditMode;
+                break;
 
-                case "InheritDefaultPolicy":
-                    ruleOption.Item = OptionType.EnabledInheritDefaultPolicy;
-                    break;
+            case "InheritDefaultPolicy":
+                ruleOption.Item = OptionType.EnabledInheritDefaultPolicy;
+                break;
 
-                case "UnsignedSystemIntegrityPolicy":
-                    ruleOption.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
-                    break;
+            case "UnsignedSystemIntegrityPolicy":
+                ruleOption.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
+                break;
 
-                case "AdvancedBootOptionsMenu":
-                    ruleOption.Item = OptionType.EnabledAdvancedBootOptionsMenu;
-                    break;
+            case "AdvancedBootOptionsMenu":
+                ruleOption.Item = OptionType.EnabledAdvancedBootOptionsMenu;
+                break;
 
-                case "ScriptEnforcement":
-                    ruleOption.Item = OptionType.DisabledScriptEnforcement;
-                    break;
+            case "ScriptEnforcement":
+                ruleOption.Item = OptionType.DisabledScriptEnforcement;
+                break;
 
-                case "EnforceStoreApplications":
-                    ruleOption.Item = OptionType.RequiredEnforceStoreApplications;
-                    break;
+            case "EnforceStoreApplications":
+                ruleOption.Item = OptionType.RequiredEnforceStoreApplications;
+                break;
 
-                case "ManagedInstaller":
-                    ruleOption.Item = OptionType.EnabledManagedInstaller;
-                    break;
+            case "ManagedInstaller":
+                ruleOption.Item = OptionType.EnabledManagedInstaller;
+                break;
 
-                case "IntelligentSecurityGraphAuthorization":
-                    ruleOption.Item = OptionType.EnabledIntelligentSecurityGraphAuthorization;
-                    break;
+            case "IntelligentSecurityGraphAuthorization":
+                ruleOption.Item = OptionType.EnabledIntelligentSecurityGraphAuthorization;
+                break;
 
-                case "UpdatePolicyNoReboot":
-                    ruleOption.Item = OptionType.EnabledUpdatePolicyNoReboot;
-                    break;
+            case "UpdatePolicyNoReboot":
+                ruleOption.Item = OptionType.EnabledUpdatePolicyNoReboot;
+                break;
 
-                case "AllowSupplementalPolicies":
-                    ruleOption.Item = OptionType.EnabledAllowSupplementalPolicies;
-                    break;
+            case "AllowSupplementalPolicies":
+                ruleOption.Item = OptionType.EnabledAllowSupplementalPolicies;
+                break;
 
-                case "FlightSigning":
-                    ruleOption.Item = OptionType.DisabledFlightSigning;
-                    break;
+            case "FlightSigning":
+                ruleOption.Item = OptionType.DisabledFlightSigning;
+                break;
 
-                case "Allow Debug Policy Augmented":
-                    //ruleOption.Item = OptionType.;
-                    break;
+            case "Allow Debug Policy Augmented":
+                //ruleOption.Item = OptionType.;
+                break;
 
-                case "EVSigners":
-                    ruleOption.Item = OptionType.RequiredEVSigners;
-                    break;
+            case "EVSigners":
+                ruleOption.Item = OptionType.RequiredEVSigners;
+                break;
 
-                case "BootAuditOnFailure":
-                    ruleOption.Item = OptionType.EnabledBootAuditOnFailure;
-                    break;
+            case "BootAuditOnFailure":
+                ruleOption.Item = OptionType.EnabledBootAuditOnFailure;
+                break;
 
-                case "InvalidateEAsonReboot":
-                    ruleOption.Item = OptionType.EnabledInvalidateEAsonReboot;
-                    break;
+            case "InvalidateEAsonReboot":
+                ruleOption.Item = OptionType.EnabledInvalidateEAsonReboot;
+                break;
 
-                case "RuntimeFilePathRuleProtection":
-                    ruleOption.Item = OptionType.DisabledRuntimeFilePathRuleProtection;
-                    break;
+            case "RuntimeFilePathRuleProtection":
+                ruleOption.Item = OptionType.DisabledRuntimeFilePathRuleProtection;
+                break;
 
-                case "DynamicCodeSecurity":
-                    ruleOption.Item = OptionType.EnabledDynamicCodeSecurity;
-                    break;
+            case "DynamicCodeSecurity":
+                ruleOption.Item = OptionType.EnabledDynamicCodeSecurity;
+                break;
 
-                case "RevokedExpiredAsUnsigned":
-                    ruleOption.Item = OptionType.EnabledRevokedExpiredAsUnsigned;
-                    break;
+            case "RevokedExpiredAsUnsigned":
+                ruleOption.Item = OptionType.EnabledRevokedExpiredAsUnsigned;
+                break;
 
-                default:
-                    return;
+            default:
+                return;
             }
 
             if(removeOption)
@@ -505,23 +507,47 @@ namespace WDAC_Wizard
             }
             else
             {
-                switch (this.Policy._PolicyTemplate)
+                if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
                 {
+                    // Multi-policy Format Policy Templates
+                    switch (this.Policy._PolicyTemplate){
                     case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
-                        // Windows Works Mode 
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "DefaultWindows_Audit.xml");
+                            // Windows Works Mode 
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);// "DefaultWindows_Audit.xml");
                         break;
 
                     case WDAC_Policy.NewPolicyTemplate.SignedReputable:
-                        // Signed and Reputable Mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "SignedReputable.xml");
-                        break;
+                            // Signed and Reputable Mode
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate); //"SignedReputable.xml");
+                            break;
 
                     case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                         // Allow Microsoft mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "AllowMicrosoft.xml");
-                        break;
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate );// "AllowMicrosoft.xml");
+                            break;
+                    }
                 }
+                else
+                {
+                    // Legacy/single-policy Format Policy Templates
+                    switch (this.Policy._PolicyTemplate){
+                    case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
+                        // Windows Works Mode 
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate); //"DefaultWindows_Audit - SingleFormat.xml");
+                            break;
+
+                    case WDAC_Policy.NewPolicyTemplate.SignedReputable:
+                        // Signed and Reputable Mode
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate); //"SignedReputable - SingleFormat.xml");
+                            break;
+
+                    case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
+                        // Allow Microsoft mode
+                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate); //"AllowMicrosoft - SingleFormat.xml");
+                            break;
+                    }
+                }
+                
             }
                 
             this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
@@ -611,23 +637,22 @@ namespace WDAC_Wizard
         {
             string oppOption = "";
 
-            switch(allowedOption)
-            {
-                case "Enabled":
-                    oppOption =  "Disabled";
-                    break;
+            switch(allowedOption){
+            case "Enabled":
+                oppOption =  "Disabled";
+                break;
 
-                case "Disabled":
-                    oppOption =  "Enabled";
-                    break;
+            case "Disabled":
+                oppOption =  "Enabled";
+                break;
 
-                case "Required":
-                    oppOption =  "Disabled";
-                    break;
+            case "Required":
+                oppOption =  "Disabled";
+                break;
 
-                case "Allowed":
-                    oppOption = "Disabled";
-                    break; 
+            case "Allowed":
+                oppOption = "Disabled";
+                break; 
             }
 
             return oppOption; 

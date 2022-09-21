@@ -447,4 +447,22 @@ Please select the  'Create Rule' button.</value>
   <data name="InvalidCheckboxState" xml:space="preserve">
     <value>Zero attributes are selected. Please select at least one attribute to add to the rule.</value>
   </data>
+  <data name="MicrosoftSingleTemplate" xml:space="preserve">
+    <value>AllowMicrosoft - SingleFormat.xml</value>
+  </data>
+  <data name="MicrosoftTemplate" xml:space="preserve">
+    <value>AllowMicrosoft.xml</value>
+  </data>
+  <data name="SACSingleTemplate" xml:space="preserve">
+    <value>SignedReputable - SingleFormat.xml</value>
+  </data>
+  <data name="SACTemplate" xml:space="preserve">
+    <value>SignedReputable.xml</value>
+  </data>
+  <data name="WindowsSingleTemplate" xml:space="preserve">
+    <value>DefaultWindows_Audit - SingleFormat.xml</value>
+  </data>
+  <data name="WindowsTemplate" xml:space="preserve">
+    <value>DefaultWindows_Audit.xml</value>
+  </data>
 </root>
