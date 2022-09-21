@@ -578,6 +578,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AllowMicrosoft - SingleFormat.xml.
+        /// </summary>
+        internal static string MicrosoftSingleTemplate {
+            get {
+                return ResourceManager.GetString("MicrosoftSingleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AllowMicrosoft.xml.
+        /// </summary>
+        internal static string MicrosoftTemplate {
+            get {
+                return ResourceManager.GetString("MicrosoftTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap minus_button {
@@ -798,6 +816,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SignedReputable - SingleFormat.xml.
+        /// </summary>
+        internal static string SACSingleTemplate {
+            get {
+                return ResourceManager.GetString("SACSingleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SignedReputable.xml.
+        /// </summary>
+        internal static string SACTemplate {
+            get {
+                return ResourceManager.GetString("SACTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose a Location to Save your WDAC Policy.
         /// </summary>
         internal static string SaveXMLFileDialogTitle {
@@ -827,7 +863,7 @@ namespace WDAC_Wizard.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot;&gt;
+        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; PolicyType=&quot;Base Policy&quot;&gt;
         ///  &lt;VersionEx&gt;10.0.0.0&lt;/VersionEx&gt;
         ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
         ///  &lt;Rules&gt;
@@ -841,8 +877,7 @@ namespace WDAC_Wizard.Properties {
         ///      &lt;Option&gt;Enabled:UMCI&lt;/Option&gt;
         ///    &lt;/Rule&gt;
         ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Inherit Default Policy&lt;/Option&gt;
-        ///  [rest of string was truncated]&quot;;.
+        ///      &lt;Option&gt;Enabled:Inherit D [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SignedReputable {
             get {
@@ -1089,6 +1124,24 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("windows_logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DefaultWindows_Audit - SingleFormat.xml.
+        /// </summary>
+        internal static string WindowsSingleTemplate {
+            get {
+                return ResourceManager.GetString("WindowsSingleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DefaultWindows_Audit.xml.
+        /// </summary>
+        internal static string WindowsTemplate {
+            get {
+                return ResourceManager.GetString("WindowsTemplate", resourceCulture);
             }
         }
     }

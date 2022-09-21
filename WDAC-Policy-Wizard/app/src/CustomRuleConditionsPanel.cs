@@ -352,111 +352,110 @@ namespace WDAC_Wizard
             level = this.PolicyCustomRule.Type.ToString();
 
             // Format rule display string
-            switch (this.PolicyCustomRule.Type)
-            {
-                // Signer rules
-                case PolicyCustomRules.RuleType.Publisher:
+            switch (this.PolicyCustomRule.Type){
+            // Signer rules
+            case PolicyCustomRules.RuleType.Publisher:
+                {
+                    name += "CA: " + this.textBoxSlider_0.Text; 
+                    if(this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
                     {
-                        name += "CA: " + this.textBoxSlider_0.Text; 
-                        if(this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
-                        {
-                            name += " & CN: " + this.textBoxSlider_1.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
-                        {
-                            name += " & Product: " + this.textBoxSlider_2.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
-                        {
-                            name += " & Filename: " + this.textBoxSlider_3.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4)
-                        {
-                            name += " & Min Version: " + this.textBoxSlider_4.Text;
-                        }
-                        if(this.PolicyCustomRule.UsingCustomValues && this.PolicyCustomRule.CustomValues.MaxVersion != null)
-                        {
-                            name += " & Max Version: " + this.PolicyCustomRule.CustomValues.MaxVersion;
-                        }
-                        break;
+                        name += " & CN: " + this.textBoxSlider_1.Text;
                     }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                    {
+                        name += " & Product: " + this.textBoxSlider_2.Text;
+                    }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                    {
+                        name += " & Filename: " + this.textBoxSlider_3.Text;
+                    }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4)
+                    {
+                        name += " & Min Version: " + this.textBoxSlider_4.Text;
+                    }
+                    if(this.PolicyCustomRule.UsingCustomValues && this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                    {
+                        name += " & Max Version: " + this.PolicyCustomRule.CustomValues.MaxVersion;
+                    }
+                    break;
+                }
 
-                case PolicyCustomRules.RuleType.FileAttributes:
+            case PolicyCustomRules.RuleType.FileAttributes:
+                {
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0)
                     {
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0)
-                        {
-                            name += " & Original Filename: " + this.textBoxSlider_0.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
-                        {
-                            name += " & File Description: " + this.textBoxSlider_1.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
-                        {
-                            name += " & Product: " + this.textBoxSlider_2.Text;
-                        }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
-                        {
-                            name += " & Internal Name: " + this.textBoxSlider_3.Text;
-                        }
-                        name = name.Substring(3); // Offset by 3 to remove the first occurence of ' & '
-                        break; 
+                        name += " & Original Filename: " + this.textBoxSlider_0.Text;
                     }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                    {
+                        name += " & File Description: " + this.textBoxSlider_1.Text;
+                    }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                    {
+                        name += " & Product: " + this.textBoxSlider_2.Text;
+                    }
+                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                    {
+                        name += " & Internal Name: " + this.textBoxSlider_3.Text;
+                    }
+                    name = name.Substring(3); // Offset by 3 to remove the first occurence of ' & '
+                    break; 
+                }
 
-                case PolicyCustomRules.RuleType.PackagedApp:
-                    {
-                        name = "Packaged apps matching the Package Family Name (PFN) rules in the Files cell";
-                        files = Helper.GetListofPackages(this.PolicyCustomRule);
-                        break;
-                    }
+            case PolicyCustomRules.RuleType.PackagedApp:
+                {
+                    name = "Packaged apps matching the Package Family Name (PFN) rules in the Files cell";
+                    files = Helper.GetListofPackages(this.PolicyCustomRule);
+                    break;
+                }
 
-                case PolicyCustomRules.RuleType.Folder:
+            case PolicyCustomRules.RuleType.Folder:
+                {
+                    if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
-                        {
-                            name = "Files under path: " + this.PolicyCustomRule.CustomValues.Path;
-                        }
-                        else
-                        {
-                            name = "Files under path: " + this.PolicyCustomRule.ReferenceFile;
-                        }
-                        break;
+                        name = "Files under path: " + this.PolicyCustomRule.CustomValues.Path;
                     }
+                    else
+                    {
+                        name = "Files under path: " + this.PolicyCustomRule.ReferenceFile;
+                    }
+                    break;
+                }
 
                     
 
-                case PolicyCustomRules.RuleType.FilePath:
+            case PolicyCustomRules.RuleType.FilePath:
+                {
+                    if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
-                        {
-                            name = "Files matching: " + this.PolicyCustomRule.CustomValues.Path;
-                        }
-                        else
-                        {
-                            name = "Files matching: " + this.PolicyCustomRule.ReferenceFile;
-                        }
-                        break;
+                        name = "Files matching: " + this.PolicyCustomRule.CustomValues.Path;
                     }
+                    else
+                    {
+                        name = "Files matching: " + this.PolicyCustomRule.ReferenceFile;
+                    }
+                    break;
+                }
 
-                case PolicyCustomRules.RuleType.Hash:
+            case PolicyCustomRules.RuleType.Hash:
+                {
+                    if (this.PolicyCustomRule.UsingCustomValues)
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
+                        if (PolicyCustomRule.CustomValues.Hashes.Count > 1)
                         {
-                            if (PolicyCustomRule.CustomValues.Hashes.Count > 1)
-                            {
-                                name = String.Format("Custom Hash List: {0}, ...", this.PolicyCustomRule.CustomValues.Hashes[0]);
-                            }
-                            else
-                            {
-                                name = "Custom Hash Value: " + this.PolicyCustomRule.CustomValues.Hashes[0];
-                            }
+                            name = String.Format("Custom Hash List: {0}, ...", this.PolicyCustomRule.CustomValues.Hashes[0]);
                         }
                         else
                         {
-                            name = "File Hash Rule: " + this.PolicyCustomRule.ReferenceFile;
+                            name = "Custom Hash Value: " + this.PolicyCustomRule.CustomValues.Hashes[0];
                         }
-                        break;
                     }
+                    else
+                    {
+                        name = "File Hash Rule: " + this.PolicyCustomRule.ReferenceFile;
+                    }
+                    break;
+                }
             }
 
             // Handle custom EKU
