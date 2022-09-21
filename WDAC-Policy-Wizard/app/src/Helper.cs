@@ -2001,15 +2001,15 @@ namespace WDAC_Wizard
         /// <param name="siPolicy"></param>
         /// <param name="optionType"></param>
         /// <returns></returns>
-        public static bool PolicyHasRule( SiPolicy siPolicy, OptionType targetRuleOption)
+        public static bool PolicyHasRule(List<RuleType> siPolicyRuleOptions, OptionType targetRuleOption)
         {
-            if(siPolicy == null || siPolicy.Rules == null)
+            if(siPolicyRuleOptions == null)
             {
                 return false; 
             }
 
             // Check each rule option for the target rule option
-            foreach(var ruleOption in siPolicy.Rules)
+            foreach(var ruleOption in siPolicyRuleOptions)
             {
                 if(ruleOption.Item == targetRuleOption)
                 {

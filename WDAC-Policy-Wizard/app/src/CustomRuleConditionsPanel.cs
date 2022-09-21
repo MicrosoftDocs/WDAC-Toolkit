@@ -1966,7 +1966,7 @@ namespace WDAC_Wizard
             // If the policy doesn't support UMCI, prompt the user and set it
             if(this.checkBox_userMode.Checked)
             {
-                if(!Helper.PolicyHasRule(this.Policy.siPolicy, OptionType.EnabledUMCI))
+                if(!Helper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
                 {
                     DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
                         "Proceed with UMCI Rule Creation?",
