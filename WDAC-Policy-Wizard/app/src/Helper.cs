@@ -926,7 +926,7 @@ namespace WDAC_Wizard
                 cFileAllowRules++;
 
                 // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddAllowRule(allowRule, siPolicy);
+                siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates);
             }
 
             if(customRule != null)
@@ -942,7 +942,7 @@ namespace WDAC_Wizard
                     cFileAllowRules++;
 
                     // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                    siPolicy = AddAllowRule(allowRule, siPolicy);
+                    siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates);
                 }
             }
             
@@ -966,7 +966,7 @@ namespace WDAC_Wizard
                 cFileDenyRules++;
 
                 // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddDenyRule(denyRule, siPolicy);
+                siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
             }
 
             if (customRule != null)
@@ -981,7 +981,7 @@ namespace WDAC_Wizard
                     cFileDenyRules++;
 
                     // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                    siPolicy = AddDenyRule(denyRule, siPolicy);
+                    siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
                 }
             }
 
@@ -994,17 +994,17 @@ namespace WDAC_Wizard
         /// <param name="hashSiPolicy"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateHashFallbackRules(SiPolicy hashSiPolicy, SiPolicy siPolicy)
+        public static SiPolicy CreateHashFallbackRules(SiPolicy hashSiPolicy, SiPolicy siPolicy, PolicyCustomRules customRule)
         {
             foreach(object hashRule in hashSiPolicy.FileRules)
             {
                 if(hashRule.GetType() == typeof(Allow))
                 {
-                    siPolicy = CreateAllowHashRule(siPolicy, null, (Allow)hashRule);
+                    siPolicy = CreateAllowHashRule(siPolicy, customRule, (Allow)hashRule);
                 }
                 else
                 {
-                    siPolicy = CreateDenyHashRule(siPolicy, null, (Deny)hashRule);
+                    siPolicy = CreateDenyHashRule(siPolicy, customRule, (Deny)hashRule);
                 }
             }
 
@@ -1035,7 +1035,7 @@ namespace WDAC_Wizard
             cFileAllowRules++;
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddAllowRule(allowRule, siPolicy, isException);
+            siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
             return siPolicy;
         }
 
@@ -1062,7 +1062,7 @@ namespace WDAC_Wizard
             cFileDenyRules++;
 
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddDenyRule(denyRule, siPolicy);
+            siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
 
             return siPolicy;
         }
@@ -1089,7 +1089,7 @@ namespace WDAC_Wizard
                 // Failed to create signer rules. Fallback to hash rules
                 if(tempSiPolicy.FileRules.Length > 0)
                 {
-                    siPolicy = CreateHashFallbackRules(tempSiPolicy, siPolicy);
+                    siPolicy = CreateHashFallbackRules(tempSiPolicy, siPolicy, customRule);
                 }
 
                 return siPolicy; 
@@ -1144,7 +1144,7 @@ namespace WDAC_Wizard
             siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
 
             // Add signer references
-            siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission);
+            siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
 
             return siPolicy;            
         }
@@ -1195,7 +1195,7 @@ namespace WDAC_Wizard
             allowRule.ID = String.Format("ID_ALLOW_A_{0}", cFileAllowRules++);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddAllowRule(allowRule, siPolicy, isException);
+            siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
                         
             return siPolicy;
         }
@@ -1241,7 +1241,7 @@ namespace WDAC_Wizard
             denyRule.ID = String.Format("ID_DENY_A_{0}", cFileDenyRules++);
 
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddDenyRule(denyRule, siPolicy);
+            siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
 
             return siPolicy;
         }
@@ -1291,6 +1291,12 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Handles the creation of PFN rules and addition to the SiPolicy object
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         public static SiPolicy CreatePFNRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             List<string> pfnNames = new List<string>();
@@ -1319,7 +1325,7 @@ namespace WDAC_Wizard
                     cFileAllowRules++;
 
                     // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                    siPolicy = AddAllowRule(allowRule, siPolicy);
+                    siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates);
                 }
             }
             else
@@ -1334,7 +1340,7 @@ namespace WDAC_Wizard
                     cFileDenyRules++;
 
                     // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                    siPolicy = AddDenyRule(denyRule, siPolicy);
+                    siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
                 }
             }
             return siPolicy; 
@@ -1346,7 +1352,7 @@ namespace WDAC_Wizard
         /// <param name="allowRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddAllowRule(Allow allowRule, SiPolicy siPolicy, bool isException = false)
+        private static SiPolicy AddAllowRule(Allow allowRule, SiPolicy siPolicy, PolicyCustomRules.SigningScenarioStates scenarioStates, bool isException = false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
             // FileRules always initalized - no need to check if null
@@ -1356,7 +1362,7 @@ namespace WDAC_Wizard
             siPolicy.FileRules = fileRulesCopy;
 
             // Add the filerule reference
-            siPolicy = AddFileRulesRef(allowRule.ID, siPolicy, isException);
+            siPolicy = AddFileRulesRef(allowRule.ID, siPolicy, scenarioStates, isException);
 
             return siPolicy;
         }
@@ -1367,7 +1373,7 @@ namespace WDAC_Wizard
         /// <param name="allowRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        private static SiPolicy AddDenyRule(Deny denyRule, SiPolicy siPolicy, bool isException = false)
+        private static SiPolicy AddDenyRule(Deny denyRule, SiPolicy siPolicy, PolicyCustomRules.SigningScenarioStates scenarioStates, bool isException = false)
         {
             // Copy and replace the FileRules obj[] in siPolicy
             // FileRules always initalized - no need to check if null
@@ -1377,11 +1383,17 @@ namespace WDAC_Wizard
             siPolicy.FileRules = fileRulesCopy;
 
             // Add the filerule reference
-            siPolicy = AddFileRulesRef(denyRule.ID, siPolicy, isException);
+            siPolicy = AddFileRulesRef(denyRule.ID, siPolicy, scenarioStates, isException);
 
             return siPolicy;
         }
 
+        /// <summary>
+        /// Adds an SiPolicy FileAttrib to the policy
+        /// </summary>
+        /// <param name="fileAttrib"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         private static SiPolicy AddSiPolicyFileAttrib(FileAttrib fileAttrib, SiPolicy siPolicy)
         {
             // Copy and replace FileRules section in SiPolicy
@@ -1394,6 +1406,12 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+        /// <summary>
+        /// Adds an EKU to the siPolicy object
+        /// </summary>
+        /// <param name="eku"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         private static SiPolicy AddSiPolicyEKUs(EKU eku, SiPolicy siPolicy)
         {
             EKU[] ekuCopy = siPolicy.EKUs;
@@ -1467,38 +1485,86 @@ namespace WDAC_Wizard
             return signers;
         }
 
-        private static SiPolicy AddFileRulesRef(string ruleID, SiPolicy siPolicy, bool isException = false)
+        /// <summary>
+        /// Creates a new FileRuleRef and adds the rule ID
+        /// </summary>
+        /// <param name="ruleID"></param>
+        /// <param name="siPolicy"></param>
+        /// <param name="isException"></param>
+        /// <returns></returns>
+        private static SiPolicy AddFileRulesRef(string ruleID, SiPolicy siPolicy, PolicyCustomRules.SigningScenarioStates scenarioStates, bool isException = false)
         {
             // Copy and replace the FileRulesRef section to add to Signing Scenarios
             // If this is an exception, don't add to FileRulesRef section
             if (!isException)
             {
                 FileRulesRef refCopy = new FileRulesRef();
-                if (siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef == null)
+
+                for (int i = 0; i < siPolicy.SigningScenarios.Length; i++)
                 {
-                    refCopy.FileRuleRef = new FileRuleRef[1];
-                    refCopy.FileRuleRef[0] = new FileRuleRef();
-                    refCopy.FileRuleRef[0].RuleID = ruleID;
-                }
-                else
-                {
-                    refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
-                    for (int i = 0; i < refCopy.FileRuleRef.Length - 1; i++)
+                    // Kernel mode (131)
+                    if (siPolicy.SigningScenarios[i].Value == 131 && scenarioStates.kmciEnabled)
                     {
-                        refCopy.FileRuleRef[i] = siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef[i];
+
+                        if (siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef == null)
+                        {
+                            refCopy.FileRuleRef = new FileRuleRef[1];
+                            refCopy.FileRuleRef[0] = new FileRuleRef();
+                            refCopy.FileRuleRef[0].RuleID = ruleID;
+                        }
+                        else
+                        {
+                            refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                            for (int j = 0; j < refCopy.FileRuleRef.Length - 1; j++)
+                            {
+                                refCopy.FileRuleRef[j] = siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef[j];
+                            }
+
+                            refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                            refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = ruleID;
+                        }
+
+                        siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef = refCopy;
                     }
 
-                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
-                    refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = ruleID;
-                }
+                    // User mode (12)
+                    if (siPolicy.SigningScenarios[i].Value == 12 && scenarioStates.umciEnabled)
+                    {
+                        if (siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef == null)
+                        {
+                            refCopy.FileRuleRef = new FileRuleRef[1];
+                            refCopy.FileRuleRef[0] = new FileRuleRef();
+                            refCopy.FileRuleRef[0].RuleID = ruleID;
+                        }
+                        else
+                        {
+                            refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
+                            for (int j = 0; j < refCopy.FileRuleRef.Length - j; j++)
+                            {
+                                refCopy.FileRuleRef[j] = siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef[j];
+                            }
 
-                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef = refCopy;
+                            refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1] = new FileRuleRef();
+                            refCopy.FileRuleRef[refCopy.FileRuleRef.Length - 1].RuleID = ruleID;
+                        }
+
+                        siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef = refCopy;
+                    }
+                }
             }
 
             return siPolicy;
         }
 
-        private static SiPolicy AddSiPolicySigner(Signer[] signers, SiPolicy siPolicy, PolicyCustomRules.RulePermission action)
+        /// <summary>
+        /// Adds an Allow Signer or Deny Signer to the siPolicy signing scenario
+        /// </summary>
+        /// <param name="signers"></param>
+        /// <param name="siPolicy"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        private static SiPolicy AddSiPolicySigner(Signer[] signers, SiPolicy siPolicy, PolicyCustomRules.RulePermission action, 
+            PolicyCustomRules.SigningScenarioStates scenarioStates)
         {
             // Copy the SiPolicy signer object and add the signer param to the field
             Signer[] signersCopy = siPolicy.Signers;
@@ -1518,20 +1584,46 @@ namespace WDAC_Wizard
                     AllowedSigner allowedSigner = new AllowedSigner();
                     allowedSigner.SignerId = signers[i].ID;                    
 
-                    // Copy and replace
-                    if (siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners == null)
+                    // Iterate through all SigningScenarios
+                    for(int j = 0; j < siPolicy.SigningScenarios.Length; j++)
                     {
-                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners = new AllowedSigners();
-                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
-                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner;
-                    }
-                    else
-                    {
-                        AllowedSigner[] allowedSignersCopy = siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner;
-                        Array.Resize(ref allowedSignersCopy, allowedSignersCopy.Length + 1);
-                        allowedSignersCopy[allowedSignersCopy.Length - 1] = allowedSigner; 
+                        if(siPolicy.SigningScenarios[j].Value == 131 && scenarioStates.kmciEnabled) // Kernel mode (131)
+                        {
+                            // Copy and replace
+                            if (siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners == null)
+                            {
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners = new AllowedSigners();
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner;
+                            }
+                            else
+                            {
+                                AllowedSigner[] allowedSignersCopy = siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner;
+                                Array.Resize(ref allowedSignersCopy, allowedSignersCopy.Length + 1);
+                                allowedSignersCopy[allowedSignersCopy.Length - 1] = allowedSigner;
 
-                        siPolicy.SigningScenarios[1].ProductSigners.AllowedSigners.AllowedSigner = allowedSignersCopy;
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner = allowedSignersCopy;
+                            }
+                        }
+
+                        if (siPolicy.SigningScenarios[j].Value == 12 && scenarioStates.umciEnabled) // User mode (12)
+                        {
+                            // Copy and replace
+                            if (siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners == null)
+                            {
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners = new AllowedSigners();
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner = new AllowedSigner[1];
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner[0] = allowedSigner;
+                            }
+                            else
+                            {
+                                AllowedSigner[] allowedSignersCopy = siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner;
+                                Array.Resize(ref allowedSignersCopy, allowedSignersCopy.Length + 1);
+                                allowedSignersCopy[allowedSignersCopy.Length - 1] = allowedSigner;
+
+                                siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners.AllowedSigner = allowedSignersCopy;
+                            }
+                        }
                     }
                 }
             }
@@ -1543,20 +1635,46 @@ namespace WDAC_Wizard
                     DeniedSigner deniedSigner = new DeniedSigner();
                     deniedSigner.SignerId = signers[i].ID;
 
-                    // Copy and replace
-                    if (siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners == null)
+                    // Iterate through all SigningScenarios
+                    for (int j = 0; j < siPolicy.SigningScenarios.Length; j++)
                     {
-                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners = new DeniedSigners();
-                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = new DeniedSigner[1];
-                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner[0] = deniedSigner;
-                    }
-                    else
-                    {
-                        DeniedSigner[] deniedSignersCopy = siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner;
-                        Array.Resize(ref deniedSignersCopy, deniedSignersCopy.Length + 1);
-                        deniedSignersCopy[deniedSignersCopy.Length - 1] = deniedSigner;
+                        if (siPolicy.SigningScenarios[j].Value == 131 && scenarioStates.kmciEnabled) // Kernel mode (131)
+                        {
+                            // Copy and replace
+                            if (siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners == null)
+                            {
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners = new DeniedSigners();
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner = new DeniedSigner[1];
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner[0] = deniedSigner;
+                            }
+                            else
+                            {
+                                DeniedSigner[] deniedSignersCopy = siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner;
+                                Array.Resize(ref deniedSignersCopy, deniedSignersCopy.Length + 1);
+                                deniedSignersCopy[deniedSignersCopy.Length - 1] = deniedSigner;
 
-                        siPolicy.SigningScenarios[1].ProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
+                            }
+                        }
+
+                        if (siPolicy.SigningScenarios[j].Value == 12 && scenarioStates.umciEnabled) // User mode (12)
+                        {
+                            // Copy and replace
+                            if (siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners == null)
+                            {
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners = new DeniedSigners();
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner = new DeniedSigner[1];
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner[0] = deniedSigner;
+                            }
+                            else
+                            {
+                                DeniedSigner[] deniedSignersCopy = siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner;
+                                Array.Resize(ref deniedSignersCopy, deniedSignersCopy.Length + 1);
+                                deniedSignersCopy[deniedSignersCopy.Length - 1] = deniedSigner;
+
+                                siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
+                            }
+                        }
                     }
                 }
             }
@@ -1564,6 +1682,12 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Creates exception rules of type ALLOW
+        /// </summary>
+        /// <param name="exceptionsList"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         static private ExceptAllowRule[] CreateExceptAllowRules(List<PolicyCustomRules> exceptionsList, SiPolicy siPolicy)
         {
             ExceptAllowRule[] exceptAllowRules = new ExceptAllowRule[exceptionsList.Count];
@@ -1592,6 +1716,12 @@ namespace WDAC_Wizard
             return exceptAllowRules; 
         }
 
+        /// <summary>
+        /// Creates exception rules of type DENY
+        /// </summary>
+        /// <param name="exceptionsList"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         static private ExceptDenyRule[] CreateExceptDenyRules(List<PolicyCustomRules> exceptionsList, SiPolicy siPolicy)
         {
             ExceptDenyRule[] exceptDenyRules = new ExceptDenyRule[exceptionsList.Count];
@@ -1620,6 +1750,12 @@ namespace WDAC_Wizard
             return exceptDenyRules;
         }
 
+        /// <summary>
+        /// Adds the exceptions list to the policy's allowed signers
+        /// </summary>
+        /// <param name="exceptDenyRules"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         static private SiPolicy AddExceptionsToAllowSigners(ExceptDenyRule[] exceptDenyRules, SiPolicy siPolicy)
         {
             // Add ExceptDenyRule IDs to signing scenarios
@@ -1634,6 +1770,12 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Adds exception list to the policy's denied signers
+        /// </summary>
+        /// <param name="exceptAllowRules"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
         static private SiPolicy AddExceptionsToDeniedSigners(ExceptAllowRule[] exceptAllowRules, SiPolicy siPolicy)
         {
             // Add ExceptAllowRule IDs to signing scenarios
@@ -1801,7 +1943,7 @@ namespace WDAC_Wizard
             signerSiPolicy = AddSiPolicyFileAttrib(fileAttrib, signerSiPolicy);
 
             // Add signer references
-            signerSiPolicy = AddSiPolicySigner(signers, signerSiPolicy, customRule.Permission);
+            signerSiPolicy = AddSiPolicySigner(signers, signerSiPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
 
             // TODO: process exceptions
             if (customRule.ExceptionList.Count > 0)
@@ -1847,6 +1989,30 @@ namespace WDAC_Wizard
             return settings;
         }
 
+        /// <summary>
+        /// Checks the SiPolicy to see if a particular OptionType is set
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <param name="optionType"></param>
+        /// <returns></returns>
+        public static bool PolicyHasRule( SiPolicy siPolicy, OptionType targetRuleOption)
+        {
+            if(siPolicy == null || siPolicy.Rules == null)
+            {
+                return false; 
+            }
+
+            // Check each rule option for the target rule option
+            foreach(var ruleOption in siPolicy.Rules)
+            {
+                if(ruleOption.Item == targetRuleOption)
+                {
+                    return true; 
+                }
+            }
+
+            return false;
+        }
 
         // End of SiPolicy Helper methods
 
@@ -2119,6 +2285,16 @@ namespace WDAC_Wizard
 
         public CheckboxStates CheckboxCheckStates;
 
+        public struct SigningScenarioStates
+        {
+            public bool umciEnabled;
+            public bool kmciEnabled;
+        }
+
+        public SigningScenarioStates SigningScenarioCheckStates;
+
+
+
         public enum RulePermission { Allow, Deny };
 
         // enums: 
@@ -2170,6 +2346,11 @@ namespace WDAC_Wizard
             this.CheckboxCheckStates.checkBox2 = false;
             this.CheckboxCheckStates.checkBox3 = false;
             this.CheckboxCheckStates.checkBox4 = false;
+
+            // Set signing scenario states
+            this.SigningScenarioCheckStates = new SigningScenarioStates();
+            this.SigningScenarioCheckStates.umciEnabled = true;
+            this.SigningScenarioCheckStates.kmciEnabled = false;
         }
 
         /// <summary>

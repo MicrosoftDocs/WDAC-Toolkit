@@ -465,4 +465,10 @@ Please select the  'Create Rule' button.</value>
   <data name="WindowsTemplate" xml:space="preserve">
     <value>DefaultWindows_Audit.xml</value>
   </data>
+  <data name="InvalidKMCIRule" xml:space="preserve">
+    <value>Kernel mode components cannot be allowed or denied using packaged app or path rules.</value>
+  </data>
+  <data name="InvalidSigningScenarioCheckboxState" xml:space="preserve">
+    <value>At least one of Usermode Rule or Kernel Rule checkboxes must be checked</value>
+  </data>
 </root>

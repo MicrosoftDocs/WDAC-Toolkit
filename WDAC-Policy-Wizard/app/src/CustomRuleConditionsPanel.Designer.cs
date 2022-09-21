@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
+            this.checkBox_kernelMode = new System.Windows.Forms.CheckBox();
+            this.checkBox_userMode = new System.Windows.Forms.CheckBox();
             this.panelPackagedApps = new System.Windows.Forms.Panel();
             this.checkBox_CustomPFN = new System.Windows.Forms.CheckBox();
             this.panel_Progress = new System.Windows.Forms.Panel();
@@ -83,6 +85,8 @@
             this.button_AddException = new System.Windows.Forms.Button();
             this.button_Back = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel_CustomRules.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
             this.panel_Progress.SuspendLayout();
@@ -96,6 +100,10 @@
             // panel_CustomRules
             // 
             this.panel_CustomRules.BackColor = System.Drawing.Color.White;
+            this.panel_CustomRules.Controls.Add(this.label5);
+            this.panel_CustomRules.Controls.Add(this.label4);
+            this.panel_CustomRules.Controls.Add(this.checkBox_kernelMode);
+            this.panel_CustomRules.Controls.Add(this.checkBox_userMode);
             this.panel_CustomRules.Controls.Add(this.panelPackagedApps);
             this.panel_CustomRules.Controls.Add(this.richTextBox_CustomHashes);
             this.panel_CustomRules.Controls.Add(this.panel_Publisher_Scroll);
@@ -115,6 +123,32 @@
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             this.panel_CustomRules.TabIndex = 86;
+            // 
+            // checkBox_kernelMode
+            // 
+            this.checkBox_kernelMode.AutoSize = true;
+            this.checkBox_kernelMode.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox_kernelMode.Location = new System.Drawing.Point(227, 134);
+            this.checkBox_kernelMode.Name = "checkBox_kernelMode";
+            this.checkBox_kernelMode.Size = new System.Drawing.Size(97, 21);
+            this.checkBox_kernelMode.TabIndex = 122;
+            this.checkBox_kernelMode.Text = "Kernel Rule";
+            this.checkBox_kernelMode.UseVisualStyleBackColor = true;
+            this.checkBox_kernelMode.CheckedChanged += new System.EventHandler(this.checkBox_kernelMode_CheckedChanged);
+            // 
+            // checkBox_userMode
+            // 
+            this.checkBox_userMode.AutoSize = true;
+            this.checkBox_userMode.Checked = true;
+            this.checkBox_userMode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_userMode.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox_userMode.Location = new System.Drawing.Point(96, 134);
+            this.checkBox_userMode.Name = "checkBox_userMode";
+            this.checkBox_userMode.Size = new System.Drawing.Size(122, 21);
+            this.checkBox_userMode.TabIndex = 121;
+            this.checkBox_userMode.Text = "Usermode Rule";
+            this.checkBox_userMode.UseVisualStyleBackColor = true;
+            this.checkBox_userMode.CheckedChanged += new System.EventHandler(this.checkBox_userMode_CheckedChanged);
             // 
             // panelPackagedApps
             // 
@@ -253,7 +287,7 @@
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_4);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_1);
             this.panel_Publisher_Scroll.Controls.Add(this.textBoxSlider_0);
-            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(10, 389);
+            this.panel_Publisher_Scroll.Location = new System.Drawing.Point(4, 389);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
             this.panel_Publisher_Scroll.Size = new System.Drawing.Size(510, 309);
@@ -500,7 +534,7 @@
             this.label_Info.AutoSize = true;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label_Info.Location = new System.Drawing.Point(9, 245);
+            this.label_Info.Location = new System.Drawing.Point(4, 248);
             this.label_Info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_Info.Name = "label_Info";
             this.label_Info.Size = new System.Drawing.Size(76, 18);
@@ -513,7 +547,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.Black;
-            this.label9.Location = new System.Drawing.Point(9, 179);
+            this.label9.Location = new System.Drawing.Point(4, 215);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(79, 18);
             this.label9.TabIndex = 89;
@@ -530,7 +564,7 @@
             "File Attributes",
             "Packaged App",
             "File Hash"});
-            this.comboBox_RuleType.Location = new System.Drawing.Point(10, 208);
+            this.comboBox_RuleType.Location = new System.Drawing.Point(96, 211);
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox_RuleType.Name = "comboBox_RuleType";
             this.comboBox_RuleType.Size = new System.Drawing.Size(187, 26);
@@ -540,12 +574,12 @@
             // radioButton_Deny
             // 
             this.radioButton_Deny.AutoSize = true;
-            this.radioButton_Deny.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_Deny.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_Deny.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_Deny.Location = new System.Drawing.Point(88, 130);
+            this.radioButton_Deny.Location = new System.Drawing.Point(167, 173);
             this.radioButton_Deny.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_Deny.Name = "radioButton_Deny";
-            this.radioButton_Deny.Size = new System.Drawing.Size(69, 25);
+            this.radioButton_Deny.Size = new System.Drawing.Size(63, 22);
             this.radioButton_Deny.TabIndex = 2;
             this.radioButton_Deny.TabStop = true;
             this.radioButton_Deny.Text = "Deny";
@@ -556,12 +590,12 @@
             // 
             this.radioButton_Allow.AutoSize = true;
             this.radioButton_Allow.Checked = true;
-            this.radioButton_Allow.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_Allow.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioButton_Allow.ForeColor = System.Drawing.Color.Black;
-            this.radioButton_Allow.Location = new System.Drawing.Point(8, 130);
+            this.radioButton_Allow.Location = new System.Drawing.Point(96, 173);
             this.radioButton_Allow.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_Allow.Name = "radioButton_Allow";
-            this.radioButton_Allow.Size = new System.Drawing.Size(72, 25);
+            this.radioButton_Allow.Size = new System.Drawing.Size(60, 22);
             this.radioButton_Allow.TabIndex = 1;
             this.radioButton_Allow.TabStop = true;
             this.radioButton_Allow.Text = "Allow";
@@ -572,11 +606,11 @@
             // 
             this.textBox_ReferenceFile.Enabled = false;
             this.textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_ReferenceFile.Location = new System.Drawing.Point(12, 334);
+            this.textBox_ReferenceFile.Location = new System.Drawing.Point(4, 334);
             this.textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReferenceFile.Name = "textBox_ReferenceFile";
             this.textBox_ReferenceFile.ReadOnly = true;
-            this.textBox_ReferenceFile.Size = new System.Drawing.Size(448, 26);
+            this.textBox_ReferenceFile.Size = new System.Drawing.Size(456, 26);
             this.textBox_ReferenceFile.TabIndex = 88;
             this.textBox_ReferenceFile.TextChanged += new System.EventHandler(this.ReferenceFileTextChanged);
             // 
@@ -601,7 +635,7 @@
             this.label_condition.AutoSize = true;
             this.label_condition.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_condition.ForeColor = System.Drawing.Color.Black;
-            this.label_condition.Location = new System.Drawing.Point(12, 310);
+            this.label_condition.Location = new System.Drawing.Point(4, 310);
             this.label_condition.Name = "label_condition";
             this.label_condition.Size = new System.Drawing.Size(104, 18);
             this.label_condition.TabIndex = 87;
@@ -795,6 +829,30 @@
             this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerCompleted);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(4, 175);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 18);
+            this.label4.TabIndex = 123;
+            this.label4.Text = "Rule Action:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(4, 135);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(84, 18);
+            this.label5.TabIndex = 124;
+            this.label5.Text = "Rule Scope:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // CustomRuleConditionsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -891,5 +949,9 @@
         private System.Windows.Forms.CheckBox checkBoxAttribute0;
         private System.Windows.Forms.TextBox textBoxEKU;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
+        private System.Windows.Forms.CheckBox checkBox_kernelMode;
+        private System.Windows.Forms.CheckBox checkBox_userMode;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }

@@ -66,6 +66,25 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
+            // Assert one of umci or kmci must be set
+            if(!(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
+                this.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
+                return;
+            }
+
+            // Assert KMCI cannot be set for PFN or path rules
+            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
+                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidKMCIRule;
+                this.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
+                return;
+            }
+
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
             if (this.PolicyCustomRule.ReferenceFile == null)
             {
@@ -1933,6 +1952,75 @@ namespace WDAC_Wizard
 
                 this.checkBoxAttribute0.Checked = false;
                 this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the signing scenario state for custom rules to affect user mode signing scenarios
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox_userMode_CheckedChanged(object sender, EventArgs e)
+        {
+            // Set the state for the custom rule
+            // If the policy doesn't support UMCI, prompt the user and set it
+            if(this.checkBox_userMode.Checked)
+            {
+                if(!Helper.PolicyHasRule(this.Policy.siPolicy, OptionType.EnabledUMCI))
+                {
+                    DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
+                        "Proceed with UMCI Rule Creation?",
+                        MessageBoxButtons.YesNo, 
+                        MessageBoxIcon.Question);
+
+                    // Set UMCI
+                    if(res == DialogResult.Yes)
+                    {
+                        RuleType umciRule = new RuleType();
+                        umciRule.Item = OptionType.EnabledUMCI;
+                        this._MainWindow.Policy.PolicyRuleOptions.Add(umciRule);
+                    }
+                }
+
+                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = true; 
+            }
+            else
+            {
+                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the signing scenario state for custom rules to affect kernel signing scenarios
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox_kernelMode_CheckedChanged(object sender, EventArgs e)
+        {
+            // Set the state for the custom rule
+            // Assert path rules and packaged app rules cannot be used for kernel mode
+            if(this.checkBox_kernelMode.Checked)
+            {
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
+                        "Unsupported Kernel Rule Type",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+
+                    this.checkBox_kernelMode.Checked = false;
+                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
+                }
+                else
+                {
+                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = true;
+                }
+            }
+            else
+            {
+                this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
             }
         }
     }
