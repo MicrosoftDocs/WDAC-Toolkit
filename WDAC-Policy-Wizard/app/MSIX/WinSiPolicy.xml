@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" FriendlyName="Windows 10 S Lockdown Policy" PolicyType="Base Policy">
-  <VersionEx>10.0.15039.0</VersionEx>
+  <VersionEx>10.0.25200.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <PolicyID>{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}</PolicyID>
   <BasePolicyID>{5951A96A-E0B5-4D3D-8FB8-3E5B61030784}</BasePolicyID>
@@ -30,10 +30,7 @@
       <Option>Enabled:Audit Mode</Option>
     </Rule>
     <Rule>
-      <Option>Enabled:Managed Installer</Option>
-    </Rule>
-    <Rule>
-      <Option>Enabled:Intelligent Security Graph Authorization</Option>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
     </Rule>
   </Rules>
   <!--EKUS-->
@@ -83,7 +80,7 @@
     <Deny ID="ID_DENY_RUNSCRIPTHELPER" FriendlyName="runscripthelper.exe" FileName="runscripthelper.exe" MinimumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_PWRSHLCUSTOMHOST" FriendlyName="powershellcustomhost.exe" FileName="powershellcustomhost.exe" MinimumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_MWFC" FriendlyName="Microsoft.Workflow.Compiler.exe" FileName="Microsoft.Workflow.Compiler.exe" MinimumFileVersion="65535.65535.65535.65535" />
-	<FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
+    <FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
   </FileRules>
   <!--Signers-->
   <Signers>
@@ -169,7 +166,7 @@
     <Signer ID="ID_SIGNER_EMPTY" Name="Empty">
       <CertRoot Type="TBS" Value="0000000000000000000000000000000000000000000000000000000000000000" />
     </Signer>
-	<Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
+    <Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
       <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
       <CertPublisher Value="Microsoft Corporation" />
       <FileAttribRef RuleID="ID_FILEATTRIB_REFRESH_POLICY" />
@@ -322,7 +319,7 @@
           <AllowedSigner SignerId="ID_SIGNER_AM" />
           <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />
           <AllowedSigner SignerId="ID_SIGNER_RT_STANDARD" />
-		  <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
           <AllowedSigner SignerId="ID_SIGNER_PCA2010_AM" />
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010">
@@ -365,32 +362,13 @@
       </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
-  <UpdatePolicySigners>
-    <UpdatePolicySigner SignerId="ID_SIGNER_WINDOWS_PRODUCTION_PCA2011" />
-  </UpdatePolicySigners>
   <!--
-
-    This is used for compatibility with the 19h1 version of winload.
-    without it, the 19h1 version of winload will reject the 10S policy and
-    as a result, devices will be kicked out of S-Mode if they ever revert
-    to 19h1.
-
-    Authorization is not performed on this signer at all, and this signer
-    will never be considered for this purpose.
-
-   -->
-  <SupplementalPolicySigners>
-    <SupplementalPolicySigner SignerId="ID_SIGNER_EMPTY" />
-  </SupplementalPolicySigners>
-  <!-- 
-
     CiSigners are signers that ConfigCI asks CI to trust for all builds, include 
     retail builds.
     
     Normally CiSigners is empty or only includes production signers. For enterprise
     ConfigCI policy, you may need to include enterprise signers. Just make sure it
     is understood that CiSigners will be trusted by CI for all builds.
-
 -->
   <CiSigners>
     <!--
@@ -408,7 +386,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>Windows10SPolicySupplementable.10.0.18314.0</String>
+        <String>Windows10SPolicySupplementable.10.0.25200.0</String>
       </Value>
     </Setting>
   </Settings>
