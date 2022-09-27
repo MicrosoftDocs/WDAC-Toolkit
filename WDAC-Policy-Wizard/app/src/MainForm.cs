@@ -1090,8 +1090,8 @@ namespace WDAC_Wizard
 
                 // Skip the following rules that are handled by custom rules method -
                 // File Attributes, PFN rules, file/folder path rules
-                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher || 
-                    customRule.Type == PolicyCustomRules.RuleType.Hash))
+                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
+                        || customRule.Type == PolicyCustomRules.RuleType.Hash))
                 {
                     continue;
                 }
@@ -1553,9 +1553,9 @@ namespace WDAC_Wizard
         {
             this.Log.AddWarningMsg("Abandon Work Entered.");
             DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", 
-                "Confirmation", 
-                MessageBoxButtons.OKCancel, 
-                MessageBoxIcon.Information);
+                                                "Confirmation", 
+                                                MessageBoxButtons.OKCancel, 
+                                                MessageBoxIcon.Information);
 
             if (res == DialogResult.OK)
             {

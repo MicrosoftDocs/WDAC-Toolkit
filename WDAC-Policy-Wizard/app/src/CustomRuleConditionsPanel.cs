@@ -66,11 +66,32 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
+            // Assert one of umci or kmci must be set
+            if(!(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
+                this.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
+                return;
+            }
+
+            // Assert KMCI cannot be set for PFN or path rules
+            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled 
+                && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp 
+                ||this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidKMCIRule;
+                this.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
+                return;
+            }
+
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
             if (this.PolicyCustomRule.ReferenceFile == null)
             {
-                if(this.PolicyCustomRule.UsingCustomValues || 
-                    this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                if(this.PolicyCustomRule.UsingCustomValues 
+                    || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
                     
                 }
@@ -94,9 +115,9 @@ namespace WDAC_Wizard
                 this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
                 // Assert one checkbox needs to be selected
-                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1 ||
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3 ||
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
+                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1 
+                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3 
+                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.InvalidCheckboxState;
@@ -323,8 +344,9 @@ namespace WDAC_Wizard
             if (warnUser)
             {
                 DialogResult res = MessageBox.Show("One or more of the file attributes could not be found. Creating this rule may result in a hash rule if unsuccessful. " +
-                    "\n\nWould you like to proceed anyway?", "Proceed with Rule Creation?",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                                    "\n\nWould you like to proceed anyway?", 
+                                                    "Proceed with Rule Creation?",
+                                                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (res == DialogResult.Yes)
                 {
@@ -951,8 +973,10 @@ namespace WDAC_Wizard
         {
             if (this.RuleInEdit)
             {
-                DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?", "Confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?", 
+                                                    "Confirmation",
+                                                    MessageBoxButtons.YesNo, 
+                                                    MessageBoxIcon.Question);
 
                 if (res == DialogResult.Yes)
                 {
@@ -985,9 +1009,9 @@ namespace WDAC_Wizard
         private void Button_Next_Click(object sender, EventArgs e)
         {
             // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath || 
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
@@ -1745,8 +1769,10 @@ namespace WDAC_Wizard
             {
                 if(this.checkedListBoxPackagedApps.Items.Count > 0)
                 {
-                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", "Confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", 
+                                                        "Confirmation",
+                                                        MessageBoxButtons.YesNo, 
+                                                        MessageBoxIcon.Question);
 
                     if (res == DialogResult.Yes)
                     {
@@ -1810,15 +1836,20 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.EKUFriendly = this.textBoxEKU.Text; 
         }
 
-       private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
-       {
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox4 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
+        {
             // Version
             if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 if(this.checkBoxAttribute4.Checked)
                 {
-                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_4.Text))
+                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString 
+                        || String.IsNullOrEmpty(this.textBoxSlider_4.Text))
                     {
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
                         ClearLabel_ErrorText();
@@ -1833,16 +1864,21 @@ namespace WDAC_Wizard
 
             this.checkBoxAttribute4.Checked = false;
             this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
-       }
+        }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox3 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib3CheckChanged(object sender, EventArgs e)
         {
             // File name || Internal name
 
             if (this.checkBoxAttribute3.Checked)
             {
-                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_3.Text))
+                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_3.Text))
                 {
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
                     ClearLabel_ErrorText();
@@ -1858,14 +1894,19 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox2 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib2CheckChanged(object sender, EventArgs e)
         {
             // Product name (Pub rule) || Product name
 
             if (this.checkBoxAttribute2.Checked)
             {
-                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString || 
-                    String.IsNullOrEmpty(this.textBoxSlider_2.Text))
+                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_2.Text))
                 {
                     ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
@@ -1881,14 +1922,19 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox1 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib1CheckChanged(object sender, EventArgs e)
         {
             // Publisher || File description
 
             if (this.checkBoxAttribute1.Checked)
             {
-                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_1.Text))
+                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_1.Text))
                 {
                     ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
@@ -1904,6 +1950,11 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox0 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib0CheckChanged(object sender, EventArgs e)
         {
             // PCA Certificate || Original filename
@@ -1918,8 +1969,8 @@ namespace WDAC_Wizard
             {
                 if (this.checkBoxAttribute0.Checked)
                 {
-                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_0.Text))
+                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString 
+                        || String.IsNullOrEmpty(this.textBoxSlider_0.Text))
                     {
                         ClearLabel_ErrorText();
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
@@ -1933,6 +1984,95 @@ namespace WDAC_Wizard
 
                 this.checkBoxAttribute0.Checked = false;
                 this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the signing scenario state for custom rules to affect user mode signing scenarios
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox_userMode_CheckedChanged(object sender, EventArgs e)
+        {
+            // Set the state for the custom rule
+            // If the policy doesn't support UMCI, prompt the user and set it
+            if(this.checkBox_userMode.Checked)
+            {
+                if(!Helper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+                {
+                    DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
+                                                        "Proceed with UMCI Rule Creation?",
+                                                        MessageBoxButtons.YesNo, 
+                                                        MessageBoxIcon.Question);
+
+                    // Set UMCI
+                    if(res == DialogResult.Yes)
+                    {
+                        RuleType umciRule = new RuleType();
+                        umciRule.Item = OptionType.EnabledUMCI;
+                        this._MainWindow.Policy.PolicyRuleOptions.Add(umciRule);
+                    }
+                }
+
+                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = true; 
+            }
+            else
+            {
+                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the signing scenario state for custom rules to affect kernel signing scenarios
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox_kernelMode_CheckedChanged(object sender, EventArgs e)
+        {
+            // Set the state for the custom rule
+            // Assert path rules and packaged app rules cannot be used for kernel mode
+            if(this.checkBox_kernelMode.Checked)
+            {
+                if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder)
+                {
+                    DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
+                                                        "Unsupported Kernel Rule Type",
+                                                        MessageBoxButtons.OK,
+                                                        MessageBoxIcon.Exclamation);
+
+                    this.checkBox_kernelMode.Checked = false;
+                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
+                }
+                else
+                {
+                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = true;
+                }
+            }
+            else
+            {
+                this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the default UI for the panel on loading
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            // If the policy does not support UMCI, uncheck umci and check kmci
+            if(!Helper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+            {
+                this.checkBox_kernelMode.Checked = true;
+                this.checkBox_userMode.Checked = false;
+            }
+            else
+            {
+                this.checkBox_kernelMode.Checked = false;
+                this.checkBox_userMode.Checked = true;
             }
         }
     }

@@ -450,8 +450,8 @@ namespace WDAC_Wizard
             }
 
             // Check that fields are valid, otherwise break and show error msg
-            if(this.ExceptionRule == null || this.ExceptionRule.ReferenceFile == null ||
-                this.ExceptionRule.Level == PolicyCustomRules.RuleLevel.None)
+            if(this.ExceptionRule == null || this.ExceptionRule.ReferenceFile == null 
+                || this.ExceptionRule.Level == PolicyCustomRules.RuleLevel.None)
             {
                 this.ConditionsPanel.SetLabel_ErrorText("Invalid exception selection. Please select a level and reference file");
                 return; 
