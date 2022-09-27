@@ -342,8 +342,9 @@ namespace WDAC_Wizard
             if (warnUser)
             {
                 DialogResult res = MessageBox.Show("One or more of the file attributes could not be found. Creating this rule may result in a hash rule if unsuccessful. " +
-                    "\n\nWould you like to proceed anyway?", "Proceed with Rule Creation?",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                                    "\n\nWould you like to proceed anyway?", 
+                                                    "Proceed with Rule Creation?",
+                                                    MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (res == DialogResult.Yes)
                 {
@@ -970,8 +971,10 @@ namespace WDAC_Wizard
         {
             if (this.RuleInEdit)
             {
-                DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?", "Confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?", 
+                                                    "Confirmation",
+                                                    MessageBoxButtons.YesNo, 
+                                                    MessageBoxIcon.Question);
 
                 if (res == DialogResult.Yes)
                 {
@@ -1764,8 +1767,10 @@ namespace WDAC_Wizard
             {
                 if(this.checkedListBoxPackagedApps.Items.Count > 0)
                 {
-                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", "Confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?", 
+                                                        "Confirmation",
+                                                        MessageBoxButtons.YesNo, 
+                                                        MessageBoxIcon.Question);
 
                     if (res == DialogResult.Yes)
                     {
@@ -1969,9 +1974,9 @@ namespace WDAC_Wizard
                 if(!Helper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
                 {
                     DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
-                        "Proceed with UMCI Rule Creation?",
-                        MessageBoxButtons.YesNo, 
-                        MessageBoxIcon.Question);
+                                                        "Proceed with UMCI Rule Creation?",
+                                                        MessageBoxButtons.YesNo, 
+                                                        MessageBoxIcon.Question);
 
                     // Set UMCI
                     if(res == DialogResult.Yes)
@@ -2006,9 +2011,9 @@ namespace WDAC_Wizard
                     this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder)
                 {
                     DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
-                        "Unsupported Kernel Rule Type",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation);
+                                                        "Unsupported Kernel Rule Type",
+                                                        MessageBoxButtons.OK,
+                                                        MessageBoxIcon.Exclamation);
 
                     this.checkBox_kernelMode.Checked = false;
                     this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;

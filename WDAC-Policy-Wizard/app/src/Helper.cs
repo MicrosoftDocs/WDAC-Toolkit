@@ -36,6 +36,9 @@ namespace WDAC_Wizard
         const string AUDIT_POLICY_PATH = "AuditEvents_Policy.xml";
         const string AUDIT_LOG_PATH = "AuditEvents_Log.txt";
 
+        // Signing Scenario Constants
+        const int KMCISCN = 131;
+        const int UMCISCN = 12; 
         public enum BrowseFileType
         {
             Policy = 0,     // -Show .xml files
@@ -1503,7 +1506,7 @@ namespace WDAC_Wizard
                 for (int i = 0; i < siPolicy.SigningScenarios.Length; i++)
                 {
                     // Kernel mode (131)
-                    if (siPolicy.SigningScenarios[i].Value == 131 && scenarioStates.kmciEnabled)
+                    if (siPolicy.SigningScenarios[i].Value == KMCISCN && scenarioStates.kmciEnabled)
                     {
 
                         if (siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef == null)
@@ -1528,7 +1531,7 @@ namespace WDAC_Wizard
                     }
 
                     // User mode (12)
-                    if (siPolicy.SigningScenarios[i].Value == 12 && scenarioStates.umciEnabled)
+                    if (siPolicy.SigningScenarios[i].Value == UMCISCN && scenarioStates.umciEnabled)
                     {
                         if (siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef == null)
                         {
@@ -1587,7 +1590,7 @@ namespace WDAC_Wizard
                     // Iterate through all SigningScenarios
                     for(int j = 0; j < siPolicy.SigningScenarios.Length; j++)
                     {
-                        if(siPolicy.SigningScenarios[j].Value == 131 && scenarioStates.kmciEnabled) // Kernel mode (131)
+                        if(siPolicy.SigningScenarios[j].Value == KMCISCN && scenarioStates.kmciEnabled) // Kernel mode (131)
                         {
                             // Copy and replace
                             if (siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners == null)
@@ -1606,7 +1609,7 @@ namespace WDAC_Wizard
                             }
                         }
 
-                        if (siPolicy.SigningScenarios[j].Value == 12 && scenarioStates.umciEnabled) // User mode (12)
+                        if (siPolicy.SigningScenarios[j].Value == UMCISCN && scenarioStates.umciEnabled) // User mode (12)
                         {
                             // Copy and replace
                             if (siPolicy.SigningScenarios[j].ProductSigners.AllowedSigners == null)
@@ -1638,7 +1641,7 @@ namespace WDAC_Wizard
                     // Iterate through all SigningScenarios
                     for (int j = 0; j < siPolicy.SigningScenarios.Length; j++)
                     {
-                        if (siPolicy.SigningScenarios[j].Value == 131 && scenarioStates.kmciEnabled) // Kernel mode (131)
+                        if (siPolicy.SigningScenarios[j].Value == KMCISCN && scenarioStates.kmciEnabled) // Kernel mode (131)
                         {
                             // Copy and replace
                             if (siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners == null)
@@ -1657,7 +1660,7 @@ namespace WDAC_Wizard
                             }
                         }
 
-                        if (siPolicy.SigningScenarios[j].Value == 12 && scenarioStates.umciEnabled) // User mode (12)
+                        if (siPolicy.SigningScenarios[j].Value == UMCISCN && scenarioStates.umciEnabled) // User mode (12)
                         {
                             // Copy and replace
                             if (siPolicy.SigningScenarios[j].ProductSigners.DeniedSigners == null)

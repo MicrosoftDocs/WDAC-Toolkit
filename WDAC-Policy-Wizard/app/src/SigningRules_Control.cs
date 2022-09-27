@@ -74,10 +74,11 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("DisplayRules() encountered an exception.", exp);
                 DialogResult res = MessageBox.Show("The Wizard is unable to read all the rules in your CI policy xml file. The policy XML is likely corrupted. " +
-                    "Try converting the policy to binary to locate the issue in the XML.",
-                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    "Try converting the policy to binary to locate the issue in the XML.",
+                                                    "Parsing Error", 
+                                                    MessageBoxButtons.OK, 
+                                                    MessageBoxIcon.Error);
             }
-            
 
             // Set recommended blocklist states
             SetBlocklistStates(); 
@@ -413,7 +414,9 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
-                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    "Parsing Error", 
+                                                    MessageBoxButtons.OK, 
+                                                    MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
                     this._MainWindow.ResetWorkflow(sender, e);
@@ -533,7 +536,10 @@ namespace WDAC_Wizard
             }
 
             // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(userPromptMsg, "Rule Deletion Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res = MessageBox.Show(userPromptMsg, 
+                                                "Rule Deletion Confirmation", 
+                                                MessageBoxButtons.YesNo, 
+                                                MessageBoxIcon.Question);
 
             if (res == DialogResult.No)
             {

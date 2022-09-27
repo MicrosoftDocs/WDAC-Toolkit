@@ -1553,9 +1553,9 @@ namespace WDAC_Wizard
         {
             this.Log.AddWarningMsg("Abandon Work Entered.");
             DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", 
-                "Confirmation", 
-                MessageBoxButtons.OKCancel, 
-                MessageBoxIcon.Information);
+                                                "Confirmation", 
+                                                MessageBoxButtons.OKCancel, 
+                                                MessageBoxIcon.Information);
 
             if (res == DialogResult.OK)
             {
