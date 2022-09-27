@@ -1090,8 +1090,8 @@ namespace WDAC_Wizard
 
                 // Skip the following rules that are handled by custom rules method -
                 // File Attributes, PFN rules, file/folder path rules
-                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher || 
-                    customRule.Type == PolicyCustomRules.RuleType.Hash))
+                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
+                        || customRule.Type == PolicyCustomRules.RuleType.Hash))
                 {
                     continue;
                 }

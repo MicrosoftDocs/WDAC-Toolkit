@@ -296,8 +296,8 @@ namespace WDAC_Wizard
             this.PublisherUIState[3] = this.versionCheckBox.Checked == true ? 1 : 0;
             this.PublisherUIState[4] = this.productCheckBox.Checked == true ? 1 : 0;
 
-            if(String.IsNullOrEmpty(this.issuerTextBox.Text) ||
-                this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
+            if(String.IsNullOrEmpty(this.issuerTextBox.Text) 
+                || this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
             {
                 // Log exception error and throw error to user
                 MessageBox.Show(String.Format("The Issuer is invalid for rule creation. The issuer cannot be empty or '{0}'", Properties.Resources.BadEventPubValue), 
@@ -308,8 +308,8 @@ namespace WDAC_Wizard
                 return false; 
             }
 
-            if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) || 
-                this.publisherTextBox.Text == Properties.Resources.BadEventPubValue))
+            if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) 
+                || this.publisherTextBox.Text == Properties.Resources.BadEventPubValue))
             {
                 MessageBox.Show(String.Format("The Publisher is invalid for rule creation. The Publisher cannot be empty '{0}'", Properties.Resources.BadEventPubValue),
                     "New Rule Creation Error",

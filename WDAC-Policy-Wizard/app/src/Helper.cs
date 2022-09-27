@@ -2436,8 +2436,10 @@ namespace WDAC_Wizard
 
         public void AddException(PolicyCustomRules ruleException)
         {
-            if(ruleException.Type != PolicyCustomRules.RuleType.None || ruleException.Level != PolicyCustomRules.RuleLevel.None
-                || ruleException.FileInfo != null || ruleException.ReferenceFile!= null)
+            if(ruleException.Type != PolicyCustomRules.RuleType.None 
+                || ruleException.Level != PolicyCustomRules.RuleLevel.None
+                || ruleException.FileInfo != null 
+                || ruleException.ReferenceFile!= null)
             {
                 this.ExceptionList.Add(ruleException);
             }

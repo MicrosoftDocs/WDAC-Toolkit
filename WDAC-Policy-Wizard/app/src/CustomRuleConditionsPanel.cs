@@ -76,8 +76,10 @@ namespace WDAC_Wizard
             }
 
             // Assert KMCI cannot be set for PFN or path rules
-            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled 
+                && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp 
+                ||this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidKMCIRule;
@@ -88,8 +90,8 @@ namespace WDAC_Wizard
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
             if (this.PolicyCustomRule.ReferenceFile == null)
             {
-                if(this.PolicyCustomRule.UsingCustomValues || 
-                    this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                if(this.PolicyCustomRule.UsingCustomValues 
+                    || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
                     
                 }
@@ -113,9 +115,9 @@ namespace WDAC_Wizard
                 this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
                 // Assert one checkbox needs to be selected
-                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1 ||
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3 ||
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
+                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1 
+                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3 
+                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.InvalidCheckboxState;
@@ -1007,9 +1009,9 @@ namespace WDAC_Wizard
         private void Button_Next_Click(object sender, EventArgs e)
         {
             // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder ||
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath || 
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
@@ -1834,15 +1836,20 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.EKUFriendly = this.textBoxEKU.Text; 
         }
 
-       private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
-       {
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox4 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
+        {
             // Version
             if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 if(this.checkBoxAttribute4.Checked)
                 {
-                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_4.Text))
+                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString 
+                        || String.IsNullOrEmpty(this.textBoxSlider_4.Text))
                     {
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
                         ClearLabel_ErrorText();
@@ -1857,16 +1864,21 @@ namespace WDAC_Wizard
 
             this.checkBoxAttribute4.Checked = false;
             this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
-       }
+        }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox3 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib3CheckChanged(object sender, EventArgs e)
         {
             // File name || Internal name
 
             if (this.checkBoxAttribute3.Checked)
             {
-                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_3.Text))
+                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_3.Text))
                 {
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
                     ClearLabel_ErrorText();
@@ -1882,14 +1894,19 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox2 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib2CheckChanged(object sender, EventArgs e)
         {
             // Product name (Pub rule) || Product name
 
             if (this.checkBoxAttribute2.Checked)
             {
-                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString || 
-                    String.IsNullOrEmpty(this.textBoxSlider_2.Text))
+                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_2.Text))
                 {
                     ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
@@ -1905,14 +1922,19 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox1 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib1CheckChanged(object sender, EventArgs e)
         {
             // Publisher || File description
 
             if (this.checkBoxAttribute1.Checked)
             {
-                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_1.Text))
+                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString 
+                    || String.IsNullOrEmpty(this.textBoxSlider_1.Text))
                 {
                     ClearLabel_ErrorText();
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
@@ -1928,6 +1950,11 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
         }
 
+        /// <summary>
+        /// Sets the PolicyCustomRule Checkbox0 state based on change in state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAttrib0CheckChanged(object sender, EventArgs e)
         {
             // PCA Certificate || Original filename
@@ -1942,8 +1969,8 @@ namespace WDAC_Wizard
             {
                 if (this.checkBoxAttribute0.Checked)
                 {
-                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString ||
-                    String.IsNullOrEmpty(this.textBoxSlider_0.Text))
+                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString 
+                        || String.IsNullOrEmpty(this.textBoxSlider_0.Text))
                     {
                         ClearLabel_ErrorText();
                         this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
