@@ -23,7 +23,8 @@ namespace WDAC_Wizard
 
         // Signature Event
         const int SIG_INFO_ID = 3089;
-        const int APP_SIG_INFO_ID = 8038; 
+        const int APP_SIG_INFO_ID = 8038;
+        const string BAD_SIG_PUBNAME = "Unknown"; 
 
         // AppLocker
         const int AUDIT_SCRIPT_ID = 8028;
@@ -278,7 +279,8 @@ namespace WDAC_Wizard
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in ciSignerEvents)
                 {
-                    if (signer.CorrelationId == ciEvent.CorrelationId)
+                    if (signer.CorrelationId == ciEvent.CorrelationId
+                        && IsValidSigner(signer))
                     {
                         ciEvent.SignerInfo = signer;
                         ciEvents.Add(ciEvent);
@@ -558,6 +560,22 @@ namespace WDAC_Wizard
             }
 
             return false; 
+        }
+
+        /// <summary>
+        /// Checks whether the SignerEvent is valid and not "Unknown"/TBSHash = {0}
+        /// </summary>
+        /// <param name="signer"></param>
+        /// <returns></returns>
+        private static bool IsValidSigner(SignerEvent signer)
+        {
+            if(signer.PublisherName == BAD_SIG_PUBNAME
+                && signer.IssuerName == BAD_SIG_PUBNAME)
+            {
+                return false; 
+            }
+
+            return true; 
         }
     }
 
