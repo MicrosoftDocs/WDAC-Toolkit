@@ -433,6 +433,20 @@ namespace WDAC_Wizard
         /// </summary>
         private void SetBlocklistStates()
         {
+            // Determine whether to show the checkboxes - hide if new/editing a supplemental policy
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                this.checkBox_KernelList.Visible = false;
+                this.checkBox_UserModeList.Visible = false;
+                return; 
+            }
+            else
+            {
+                this.checkBox_KernelList.Visible = true;
+                this.checkBox_UserModeList.Visible = true;
+            }
+
+            // Recommended Kernel Driver Blocklist
             if(Properties.Settings.Default.useDriverBlockRules)
             {
                 this.checkBox_KernelList.Checked = true; 
@@ -442,6 +456,7 @@ namespace WDAC_Wizard
                 this.checkBox_KernelList.Checked = false; 
             }
 
+            // Recommended User Mode Blocklist
             if (Properties.Settings.Default.useUsermodeBlockRules)
             {
                 this.checkBox_UserModeList.Checked = true;

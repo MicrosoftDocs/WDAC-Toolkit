@@ -495,7 +495,7 @@ namespace WDAC_Wizard
 
             // If we are editing a policy, read the EditPolicyPath
             // We need to know whether we are editing a base or supplemental policy
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
             }

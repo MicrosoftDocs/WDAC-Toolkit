@@ -1218,6 +1218,16 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void RadioButton_Deny_Click(object sender, EventArgs e)
         {
+            // Assert that supplemental policy edit/new workflow cannot create deny rules
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                var res = MessageBox.Show(Properties.Resources.SupplementalPolicyDenyRuleError,
+                                          "Invalid Option",
+                                          MessageBoxButtons.OK,
+                                          MessageBoxIcon.Exclamation);
+                return; 
+            }
+
             this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
             this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
 

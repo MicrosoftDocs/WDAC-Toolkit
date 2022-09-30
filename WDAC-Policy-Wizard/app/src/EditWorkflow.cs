@@ -40,18 +40,6 @@ namespace WDAC_Wizard
             ArbitraryEventLog = 2
         }
 
-        private enum RuleLevel
-        {
-            None = -1,
-            RootCertificate = 0, 
-            PCACertificate = 1, 
-            Publisher = 2, 
-            SignedVersion = 3, 
-            FilePublisher = 4, 
-            FileName = 5, 
-            Hash = 6 
-        }
-
         public EditWorkflow(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -59,7 +47,6 @@ namespace WDAC_Wizard
             this._MainWindow = pMainWindow;
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.Edit;
             this.Policy = this._MainWindow.Policy; 
             this.Log = this._MainWindow.Log;
             this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
