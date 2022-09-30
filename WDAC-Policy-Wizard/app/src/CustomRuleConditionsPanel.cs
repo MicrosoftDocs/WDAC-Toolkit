@@ -1225,6 +1225,8 @@ namespace WDAC_Wizard
                                           "Invalid Option",
                                           MessageBoxButtons.OK,
                                           MessageBoxIcon.Exclamation);
+                this.radioButton_Deny.Checked = false;
+                this.radioButton_Allow.Checked = true; 
                 return; 
             }
 
