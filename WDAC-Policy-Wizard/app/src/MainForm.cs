@@ -105,6 +105,7 @@ namespace WDAC_Wizard
                 this.ConfigInProcess = true;
                 this.RedoFlowRequired = false;
                 this.Policy.PolicyWorkflow = WDAC_Policy.Workflow.New;
+                this.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
 
                 PageController(sender, e); 
                 button_Next.Visible = true; 
@@ -629,6 +630,8 @@ namespace WDAC_Wizard
                                 ProcessPolicy();
                             }
                         }
+
+                        ShowControlPanel(sender, e);
                     }
 
                 break;
@@ -819,7 +822,7 @@ namespace WDAC_Wizard
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
             
-            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+            if(this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
                 // Handle custom value rules: 
                 ProcessCustomValueRules(worker);
@@ -834,7 +837,7 @@ namespace WDAC_Wizard
             // Merge all of the unique CI policies with template and/or base policy:
             MergeTemplatesPolicy(MERGEPATH, worker);
 
-            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+            if (this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
                 // Handle Policy Rule-Options
                 SetPolicyRuleOptions(worker);
