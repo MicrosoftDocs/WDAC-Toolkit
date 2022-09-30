@@ -86,10 +86,9 @@ namespace WDAC_Wizard
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(530, 494);
-            this.addButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addButton.Location = new System.Drawing.Point(442, 412);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(156, 36);
+            this.addButton.Size = new System.Drawing.Size(130, 30);
             this.addButton.TabIndex = 0;
             this.addButton.Text = "Add Allow Rule";
             this.addButton.UseVisualStyleBackColor = true;
@@ -107,60 +106,54 @@ namespace WDAC_Wizard
             this.publisherRulePanel.Controls.Add(this.filenameCheckBox);
             this.publisherRulePanel.Controls.Add(this.publisherCheckBox);
             this.publisherRulePanel.Controls.Add(this.issuerCheckBox);
-            this.publisherRulePanel.Location = new System.Drawing.Point(200, 536);
-            this.publisherRulePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.publisherRulePanel.Location = new System.Drawing.Point(167, 447);
             this.publisherRulePanel.Name = "publisherRulePanel";
-            this.publisherRulePanel.Size = new System.Drawing.Size(859, 228);
+            this.publisherRulePanel.Size = new System.Drawing.Size(716, 190);
             this.publisherRulePanel.TabIndex = 9;
             // 
             // productTextBox
             // 
             this.productTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.productTextBox.Location = new System.Drawing.Point(122, 191);
-            this.productTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.productTextBox.Location = new System.Drawing.Point(102, 159);
             this.productTextBox.Name = "productTextBox";
             this.productTextBox.ReadOnly = true;
-            this.productTextBox.Size = new System.Drawing.Size(503, 32);
+            this.productTextBox.Size = new System.Drawing.Size(420, 28);
             this.productTextBox.TabIndex = 20;
             // 
             // versionTextBox
             // 
             this.versionTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.versionTextBox.Location = new System.Drawing.Point(122, 144);
-            this.versionTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.versionTextBox.Location = new System.Drawing.Point(102, 120);
             this.versionTextBox.Name = "versionTextBox";
             this.versionTextBox.ReadOnly = true;
-            this.versionTextBox.Size = new System.Drawing.Size(503, 32);
+            this.versionTextBox.Size = new System.Drawing.Size(420, 28);
             this.versionTextBox.TabIndex = 19;
             // 
             // filenameTextBox
             // 
             this.filenameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filenameTextBox.Location = new System.Drawing.Point(121, 97);
-            this.filenameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.filenameTextBox.Location = new System.Drawing.Point(101, 81);
             this.filenameTextBox.Name = "filenameTextBox";
             this.filenameTextBox.ReadOnly = true;
-            this.filenameTextBox.Size = new System.Drawing.Size(504, 32);
+            this.filenameTextBox.Size = new System.Drawing.Size(421, 28);
             this.filenameTextBox.TabIndex = 18;
             // 
             // publisherTextBox
             // 
             this.publisherTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherTextBox.Location = new System.Drawing.Point(124, 50);
-            this.publisherTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.publisherTextBox.Location = new System.Drawing.Point(103, 42);
             this.publisherTextBox.Name = "publisherTextBox";
             this.publisherTextBox.ReadOnly = true;
-            this.publisherTextBox.Size = new System.Drawing.Size(503, 32);
+            this.publisherTextBox.Size = new System.Drawing.Size(420, 28);
             this.publisherTextBox.TabIndex = 17;
             // 
             // issuerTextBox
             // 
             this.issuerTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.issuerTextBox.Location = new System.Drawing.Point(124, 4);
-            this.issuerTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.issuerTextBox.Location = new System.Drawing.Point(103, 3);
             this.issuerTextBox.Name = "issuerTextBox";
             this.issuerTextBox.ReadOnly = true;
-            this.issuerTextBox.Size = new System.Drawing.Size(503, 32);
+            this.issuerTextBox.Size = new System.Drawing.Size(420, 28);
             this.issuerTextBox.TabIndex = 16;
             // 
             // productCheckBox
@@ -168,10 +161,9 @@ namespace WDAC_Wizard
             this.productCheckBox.AutoSize = true;
             this.productCheckBox.Enabled = false;
             this.productCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.productCheckBox.Location = new System.Drawing.Point(4, 191);
-            this.productCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.productCheckBox.Location = new System.Drawing.Point(3, 159);
             this.productCheckBox.Name = "productCheckBox";
-            this.productCheckBox.Size = new System.Drawing.Size(110, 28);
+            this.productCheckBox.Size = new System.Drawing.Size(94, 25);
             this.productCheckBox.TabIndex = 15;
             this.productCheckBox.Text = "Product:";
             this.productCheckBox.UseVisualStyleBackColor = true;
@@ -181,10 +173,9 @@ namespace WDAC_Wizard
             this.versionCheckBox.AutoSize = true;
             this.versionCheckBox.Enabled = false;
             this.versionCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.versionCheckBox.Location = new System.Drawing.Point(2, 144);
-            this.versionCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.versionCheckBox.Location = new System.Drawing.Point(2, 120);
             this.versionCheckBox.Name = "versionCheckBox";
-            this.versionCheckBox.Size = new System.Drawing.Size(109, 28);
+            this.versionCheckBox.Size = new System.Drawing.Size(93, 25);
             this.versionCheckBox.TabIndex = 14;
             this.versionCheckBox.Text = "Version:";
             this.versionCheckBox.UseVisualStyleBackColor = true;
@@ -194,10 +185,9 @@ namespace WDAC_Wizard
             this.filenameCheckBox.AutoSize = true;
             this.filenameCheckBox.Enabled = false;
             this.filenameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filenameCheckBox.Location = new System.Drawing.Point(4, 97);
-            this.filenameCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.filenameCheckBox.Location = new System.Drawing.Point(3, 81);
             this.filenameCheckBox.Name = "filenameCheckBox";
-            this.filenameCheckBox.Size = new System.Drawing.Size(124, 28);
+            this.filenameCheckBox.Size = new System.Drawing.Size(105, 25);
             this.filenameCheckBox.TabIndex = 13;
             this.filenameCheckBox.Text = "Filename:";
             this.filenameCheckBox.UseVisualStyleBackColor = true;
@@ -207,10 +197,9 @@ namespace WDAC_Wizard
             this.publisherCheckBox.AutoSize = true;
             this.publisherCheckBox.Enabled = false;
             this.publisherCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherCheckBox.Location = new System.Drawing.Point(4, 50);
-            this.publisherCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.publisherCheckBox.Location = new System.Drawing.Point(3, 42);
             this.publisherCheckBox.Name = "publisherCheckBox";
-            this.publisherCheckBox.Size = new System.Drawing.Size(124, 28);
+            this.publisherCheckBox.Size = new System.Drawing.Size(105, 25);
             this.publisherCheckBox.TabIndex = 12;
             this.publisherCheckBox.Text = "Publisher:";
             this.publisherCheckBox.UseVisualStyleBackColor = true;
@@ -222,10 +211,9 @@ namespace WDAC_Wizard
             this.issuerCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.issuerCheckBox.Enabled = false;
             this.issuerCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.issuerCheckBox.Location = new System.Drawing.Point(5, 4);
-            this.issuerCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.issuerCheckBox.Location = new System.Drawing.Point(4, 3);
             this.issuerCheckBox.Name = "issuerCheckBox";
-            this.issuerCheckBox.Size = new System.Drawing.Size(97, 28);
+            this.issuerCheckBox.Size = new System.Drawing.Size(84, 25);
             this.issuerCheckBox.TabIndex = 10;
             this.issuerCheckBox.Text = "Issuer:";
             this.issuerCheckBox.UseVisualStyleBackColor = true;
@@ -234,10 +222,9 @@ namespace WDAC_Wizard
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(196, 498);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(163, 415);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(106, 24);
+            this.label3.Size = new System.Drawing.Size(90, 21);
             this.label3.TabIndex = 8;
             this.label3.Text = "Rule Type:";
             // 
@@ -251,10 +238,9 @@ namespace WDAC_Wizard
             "File Attributes",
             "Packaged App",
             "File Hash"});
-            this.ruleTypeComboBox.Location = new System.Drawing.Point(311, 494);
-            this.ruleTypeComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ruleTypeComboBox.Location = new System.Drawing.Point(259, 412);
             this.ruleTypeComboBox.Name = "ruleTypeComboBox";
-            this.ruleTypeComboBox.Size = new System.Drawing.Size(195, 32);
+            this.ruleTypeComboBox.Size = new System.Drawing.Size(163, 29);
             this.ruleTypeComboBox.TabIndex = 3;
             this.ruleTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.RuleTypeChanged);
             // 
@@ -270,61 +256,55 @@ namespace WDAC_Wizard
             this.fileAttributeRulePanel.Controls.Add(this.prodNameCheckBox);
             this.fileAttributeRulePanel.Controls.Add(this.fileDescCheckBox);
             this.fileAttributeRulePanel.Controls.Add(this.origFileNameCheckBox);
-            this.fileAttributeRulePanel.Location = new System.Drawing.Point(1225, 119);
-            this.fileAttributeRulePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fileAttributeRulePanel.Location = new System.Drawing.Point(1021, 99);
             this.fileAttributeRulePanel.Name = "fileAttributeRulePanel";
-            this.fileAttributeRulePanel.Size = new System.Drawing.Size(661, 228);
+            this.fileAttributeRulePanel.Size = new System.Drawing.Size(551, 190);
             this.fileAttributeRulePanel.TabIndex = 21;
             this.fileAttributeRulePanel.Visible = false;
             // 
             // pfnTextBox
             // 
             this.pfnTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pfnTextBox.Location = new System.Drawing.Point(206, 191);
-            this.pfnTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pfnTextBox.Location = new System.Drawing.Point(172, 159);
             this.pfnTextBox.Name = "pfnTextBox";
             this.pfnTextBox.ReadOnly = true;
-            this.pfnTextBox.Size = new System.Drawing.Size(420, 32);
+            this.pfnTextBox.Size = new System.Drawing.Size(351, 28);
             this.pfnTextBox.TabIndex = 20;
             // 
             // intFileNameTextBox
             // 
             this.intFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intFileNameTextBox.Location = new System.Drawing.Point(206, 144);
-            this.intFileNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.intFileNameTextBox.Location = new System.Drawing.Point(172, 120);
             this.intFileNameTextBox.Name = "intFileNameTextBox";
             this.intFileNameTextBox.ReadOnly = true;
-            this.intFileNameTextBox.Size = new System.Drawing.Size(420, 32);
+            this.intFileNameTextBox.Size = new System.Drawing.Size(351, 28);
             this.intFileNameTextBox.TabIndex = 19;
             // 
             // prodNameTextBox
             // 
             this.prodNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.prodNameTextBox.Location = new System.Drawing.Point(205, 97);
-            this.prodNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.prodNameTextBox.Location = new System.Drawing.Point(171, 81);
             this.prodNameTextBox.Name = "prodNameTextBox";
             this.prodNameTextBox.ReadOnly = true;
-            this.prodNameTextBox.Size = new System.Drawing.Size(422, 32);
+            this.prodNameTextBox.Size = new System.Drawing.Size(352, 28);
             this.prodNameTextBox.TabIndex = 18;
             // 
             // fileDescTextBox
             // 
             this.fileDescTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileDescTextBox.Location = new System.Drawing.Point(208, 50);
-            this.fileDescTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fileDescTextBox.Location = new System.Drawing.Point(173, 42);
             this.fileDescTextBox.Name = "fileDescTextBox";
             this.fileDescTextBox.ReadOnly = true;
-            this.fileDescTextBox.Size = new System.Drawing.Size(420, 32);
+            this.fileDescTextBox.Size = new System.Drawing.Size(351, 28);
             this.fileDescTextBox.TabIndex = 17;
             // 
             // origFileNameTextBox
             // 
             this.origFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.origFileNameTextBox.Location = new System.Drawing.Point(208, 4);
-            this.origFileNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.origFileNameTextBox.Location = new System.Drawing.Point(173, 3);
             this.origFileNameTextBox.Name = "origFileNameTextBox";
             this.origFileNameTextBox.ReadOnly = true;
-            this.origFileNameTextBox.Size = new System.Drawing.Size(420, 32);
+            this.origFileNameTextBox.Size = new System.Drawing.Size(351, 28);
             this.origFileNameTextBox.TabIndex = 16;
             // 
             // pfnCheckBox
@@ -332,10 +312,9 @@ namespace WDAC_Wizard
             this.pfnCheckBox.AutoSize = true;
             this.pfnCheckBox.Enabled = false;
             this.pfnCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pfnCheckBox.Location = new System.Drawing.Point(4, 191);
-            this.pfnCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pfnCheckBox.Location = new System.Drawing.Point(3, 159);
             this.pfnCheckBox.Name = "pfnCheckBox";
-            this.pfnCheckBox.Size = new System.Drawing.Size(175, 28);
+            this.pfnCheckBox.Size = new System.Drawing.Size(147, 25);
             this.pfnCheckBox.TabIndex = 15;
             this.pfnCheckBox.Text = "Package Name:";
             this.pfnCheckBox.UseVisualStyleBackColor = true;
@@ -345,10 +324,9 @@ namespace WDAC_Wizard
             this.intFileNameCheckBox.AutoSize = true;
             this.intFileNameCheckBox.Enabled = false;
             this.intFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intFileNameCheckBox.Location = new System.Drawing.Point(2, 144);
-            this.intFileNameCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.intFileNameCheckBox.Location = new System.Drawing.Point(2, 120);
             this.intFileNameCheckBox.Name = "intFileNameCheckBox";
-            this.intFileNameCheckBox.Size = new System.Drawing.Size(200, 28);
+            this.intFileNameCheckBox.Size = new System.Drawing.Size(168, 25);
             this.intFileNameCheckBox.TabIndex = 14;
             this.intFileNameCheckBox.Text = "Internal Filename:";
             this.intFileNameCheckBox.UseVisualStyleBackColor = true;
@@ -358,10 +336,9 @@ namespace WDAC_Wizard
             this.prodNameCheckBox.AutoSize = true;
             this.prodNameCheckBox.Enabled = false;
             this.prodNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.prodNameCheckBox.Location = new System.Drawing.Point(4, 97);
-            this.prodNameCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.prodNameCheckBox.Location = new System.Drawing.Point(3, 81);
             this.prodNameCheckBox.Name = "prodNameCheckBox";
-            this.prodNameCheckBox.Size = new System.Drawing.Size(168, 28);
+            this.prodNameCheckBox.Size = new System.Drawing.Size(142, 25);
             this.prodNameCheckBox.TabIndex = 13;
             this.prodNameCheckBox.Text = "Product Name:";
             this.prodNameCheckBox.UseVisualStyleBackColor = true;
@@ -371,10 +348,9 @@ namespace WDAC_Wizard
             this.fileDescCheckBox.AutoSize = true;
             this.fileDescCheckBox.Enabled = false;
             this.fileDescCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileDescCheckBox.Location = new System.Drawing.Point(4, 50);
-            this.fileDescCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fileDescCheckBox.Location = new System.Drawing.Point(3, 42);
             this.fileDescCheckBox.Name = "fileDescCheckBox";
-            this.fileDescCheckBox.Size = new System.Drawing.Size(180, 28);
+            this.fileDescCheckBox.Size = new System.Drawing.Size(153, 25);
             this.fileDescCheckBox.TabIndex = 12;
             this.fileDescCheckBox.Text = "File Description:";
             this.fileDescCheckBox.UseVisualStyleBackColor = true;
@@ -384,10 +360,9 @@ namespace WDAC_Wizard
             this.origFileNameCheckBox.AutoSize = true;
             this.origFileNameCheckBox.Enabled = false;
             this.origFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.origFileNameCheckBox.Location = new System.Drawing.Point(5, 4);
-            this.origFileNameCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.origFileNameCheckBox.Location = new System.Drawing.Point(4, 3);
             this.origFileNameCheckBox.Name = "origFileNameCheckBox";
-            this.origFileNameCheckBox.Size = new System.Drawing.Size(199, 28);
+            this.origFileNameCheckBox.Size = new System.Drawing.Size(167, 25);
             this.origFileNameCheckBox.TabIndex = 10;
             this.origFileNameCheckBox.Text = "Original Filename:";
             this.origFileNameCheckBox.UseVisualStyleBackColor = true;
@@ -405,7 +380,7 @@ namespace WDAC_Wizard
             this.productColumn,
             this.policyColumn,
             this.publisherColumn});
-            this.eventsDataGridView.Location = new System.Drawing.Point(200, 121);
+            this.eventsDataGridView.Location = new System.Drawing.Point(167, 101);
             this.eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.eventsDataGridView.MultiSelect = false;
             this.eventsDataGridView.Name = "eventsDataGridView";
@@ -414,11 +389,12 @@ namespace WDAC_Wizard
             this.eventsDataGridView.RowHeadersWidth = 70;
             this.eventsDataGridView.RowTemplate.Height = 24;
             this.eventsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventsDataGridView.Size = new System.Drawing.Size(1075, 344);
+            this.eventsDataGridView.Size = new System.Drawing.Size(896, 287);
             this.eventsDataGridView.TabIndex = 4;
             this.eventsDataGridView.VirtualMode = true;
-            this.eventsDataGridView.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.EventRowClick);
+            this.eventsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EventRowClick);
             this.eventsDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EventsDataGrid_CellValueNeeded);
+            this.eventsDataGridView.SelectionChanged += new System.EventHandler(this.RowSelectionChanged);
             // 
             // addedColumn
             // 
@@ -428,7 +404,6 @@ namespace WDAC_Wizard
             this.addedColumn.Name = "addedColumn";
             this.addedColumn.ReadOnly = true;
             this.addedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.addedColumn.Width = 134;
             // 
             // eventIdColumn
             // 
@@ -438,7 +413,7 @@ namespace WDAC_Wizard
             this.eventIdColumn.Name = "eventIdColumn";
             this.eventIdColumn.ReadOnly = true;
             this.eventIdColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.eventIdColumn.Width = 86;
+            this.eventIdColumn.Width = 82;
             // 
             // filenameColumn
             // 
@@ -448,6 +423,7 @@ namespace WDAC_Wizard
             this.filenameColumn.Name = "filenameColumn";
             this.filenameColumn.ReadOnly = true;
             this.filenameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.filenameColumn.Width = 94;
             // 
             // productColumn
             // 
@@ -457,7 +433,7 @@ namespace WDAC_Wizard
             this.productColumn.Name = "productColumn";
             this.productColumn.ReadOnly = true;
             this.productColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.productColumn.Width = 90;
+            this.productColumn.Width = 86;
             // 
             // policyColumn
             // 
@@ -467,7 +443,7 @@ namespace WDAC_Wizard
             this.policyColumn.Name = "policyColumn";
             this.policyColumn.ReadOnly = true;
             this.policyColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.policyColumn.Width = 112;
+            this.policyColumn.Width = 106;
             // 
             // publisherColumn
             // 
@@ -477,15 +453,15 @@ namespace WDAC_Wizard
             this.publisherColumn.Name = "publisherColumn";
             this.publisherColumn.ReadOnly = true;
             this.publisherColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.publisherColumn.Width = 96;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(194, 35);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(162, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(342, 34);
+            this.label1.Size = new System.Drawing.Size(292, 29);
             this.label1.TabIndex = 6;
             this.label1.Text = "Configure Event Log Rules";
             // 
@@ -493,10 +469,9 @@ namespace WDAC_Wizard
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(197, 85);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(164, 71);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(467, 22);
+            this.label2.Size = new System.Drawing.Size(391, 18);
             this.label2.TabIndex = 7;
             this.label2.Text = "Create custom rules based on the WDAC event log events";
             // 
@@ -510,10 +485,9 @@ namespace WDAC_Wizard
             this.hashRulePanel.Controls.Add(this.sha2TextBox);
             this.hashRulePanel.Controls.Add(this.sha1PageTextBox);
             this.hashRulePanel.Controls.Add(this.sha1TextBox);
-            this.hashRulePanel.Location = new System.Drawing.Point(1225, 587);
-            this.hashRulePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hashRulePanel.Location = new System.Drawing.Point(1021, 489);
             this.hashRulePanel.Name = "hashRulePanel";
-            this.hashRulePanel.Size = new System.Drawing.Size(724, 197);
+            this.hashRulePanel.Size = new System.Drawing.Size(603, 164);
             this.hashRulePanel.TabIndex = 22;
             this.hashRulePanel.Visible = false;
             // 
@@ -521,10 +495,9 @@ namespace WDAC_Wizard
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(14, 149);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(12, 124);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(188, 24);
+            this.label7.Size = new System.Drawing.Size(157, 21);
             this.label7.TabIndex = 26;
             this.label7.Text = "SHA256 Page Hash:";
             // 
@@ -532,10 +505,9 @@ namespace WDAC_Wizard
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(14, 55);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(12, 46);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(166, 24);
+            this.label6.Size = new System.Drawing.Size(139, 21);
             this.label6.TabIndex = 25;
             this.label6.Text = "SHA1 Page Hash:";
             // 
@@ -543,10 +515,9 @@ namespace WDAC_Wizard
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(14, 102);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(12, 85);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(166, 24);
+            this.label5.Size = new System.Drawing.Size(140, 21);
             this.label5.TabIndex = 24;
             this.label5.Text = "SHA256 PE Hash:";
             // 
@@ -554,51 +525,46 @@ namespace WDAC_Wizard
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(14, 8);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(12, 7);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(144, 24);
+            this.label4.Size = new System.Drawing.Size(122, 21);
             this.label4.TabIndex = 23;
             this.label4.Text = "SHA1 PE Hash:";
             // 
             // sha2PageTextBox
             // 
             this.sha2PageTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha2PageTextBox.Location = new System.Drawing.Point(206, 144);
-            this.sha2PageTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sha2PageTextBox.Location = new System.Drawing.Point(172, 120);
             this.sha2PageTextBox.Name = "sha2PageTextBox";
             this.sha2PageTextBox.ReadOnly = true;
-            this.sha2PageTextBox.Size = new System.Drawing.Size(477, 29);
+            this.sha2PageTextBox.Size = new System.Drawing.Size(398, 26);
             this.sha2PageTextBox.TabIndex = 19;
             // 
             // sha2TextBox
             // 
             this.sha2TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha2TextBox.Location = new System.Drawing.Point(205, 97);
-            this.sha2TextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sha2TextBox.Location = new System.Drawing.Point(171, 81);
             this.sha2TextBox.Name = "sha2TextBox";
             this.sha2TextBox.ReadOnly = true;
-            this.sha2TextBox.Size = new System.Drawing.Size(478, 29);
+            this.sha2TextBox.Size = new System.Drawing.Size(399, 26);
             this.sha2TextBox.TabIndex = 18;
             // 
             // sha1PageTextBox
             // 
             this.sha1PageTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha1PageTextBox.Location = new System.Drawing.Point(208, 50);
-            this.sha1PageTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sha1PageTextBox.Location = new System.Drawing.Point(173, 42);
             this.sha1PageTextBox.Name = "sha1PageTextBox";
             this.sha1PageTextBox.ReadOnly = true;
-            this.sha1PageTextBox.Size = new System.Drawing.Size(476, 29);
+            this.sha1PageTextBox.Size = new System.Drawing.Size(397, 26);
             this.sha1PageTextBox.TabIndex = 17;
             // 
             // sha1TextBox
             // 
             this.sha1TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha1TextBox.Location = new System.Drawing.Point(208, 4);
-            this.sha1TextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sha1TextBox.Location = new System.Drawing.Point(173, 3);
             this.sha1TextBox.Name = "sha1TextBox";
             this.sha1TextBox.ReadOnly = true;
-            this.sha1TextBox.Size = new System.Drawing.Size(476, 29);
+            this.sha1TextBox.Size = new System.Drawing.Size(397, 26);
             this.sha1TextBox.TabIndex = 16;
             // 
             // filePathRulePanel
@@ -607,31 +573,28 @@ namespace WDAC_Wizard
             this.filePathRulePanel.Controls.Add(this.folderPathTextBox);
             this.filePathRulePanel.Controls.Add(this.folderPathCheckBox);
             this.filePathRulePanel.Controls.Add(this.filePathCheckBox);
-            this.filePathRulePanel.Location = new System.Drawing.Point(1225, 400);
-            this.filePathRulePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.filePathRulePanel.Location = new System.Drawing.Point(1021, 333);
             this.filePathRulePanel.Name = "filePathRulePanel";
-            this.filePathRulePanel.Size = new System.Drawing.Size(892, 112);
+            this.filePathRulePanel.Size = new System.Drawing.Size(743, 93);
             this.filePathRulePanel.TabIndex = 22;
             this.filePathRulePanel.Visible = false;
             // 
             // filePathTextBox
             // 
             this.filePathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathTextBox.Location = new System.Drawing.Point(208, 6);
-            this.filePathTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.filePathTextBox.Location = new System.Drawing.Point(173, 5);
             this.filePathTextBox.Name = "filePathTextBox";
             this.filePathTextBox.ReadOnly = true;
-            this.filePathTextBox.Size = new System.Drawing.Size(618, 32);
+            this.filePathTextBox.Size = new System.Drawing.Size(516, 28);
             this.filePathTextBox.TabIndex = 18;
             // 
             // folderPathTextBox
             // 
             this.folderPathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathTextBox.Location = new System.Drawing.Point(208, 50);
-            this.folderPathTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.folderPathTextBox.Location = new System.Drawing.Point(173, 42);
             this.folderPathTextBox.Name = "folderPathTextBox";
             this.folderPathTextBox.ReadOnly = true;
-            this.folderPathTextBox.Size = new System.Drawing.Size(618, 32);
+            this.folderPathTextBox.Size = new System.Drawing.Size(516, 28);
             this.folderPathTextBox.TabIndex = 17;
             // 
             // folderPathCheckBox
@@ -640,10 +603,9 @@ namespace WDAC_Wizard
             this.folderPathCheckBox.Checked = true;
             this.folderPathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.folderPathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathCheckBox.Location = new System.Drawing.Point(4, 53);
-            this.folderPathCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.folderPathCheckBox.Location = new System.Drawing.Point(3, 44);
             this.folderPathCheckBox.Name = "folderPathCheckBox";
-            this.folderPathCheckBox.Size = new System.Drawing.Size(144, 28);
+            this.folderPathCheckBox.Size = new System.Drawing.Size(122, 25);
             this.folderPathCheckBox.TabIndex = 12;
             this.folderPathCheckBox.Text = "Folder Path:";
             this.folderPathCheckBox.UseVisualStyleBackColor = true;
@@ -654,17 +616,16 @@ namespace WDAC_Wizard
             this.filePathCheckBox.Checked = true;
             this.filePathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.filePathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathCheckBox.Location = new System.Drawing.Point(5, 8);
-            this.filePathCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.filePathCheckBox.Location = new System.Drawing.Point(4, 7);
             this.filePathCheckBox.Name = "filePathCheckBox";
-            this.filePathCheckBox.Size = new System.Drawing.Size(120, 28);
+            this.filePathCheckBox.Size = new System.Drawing.Size(102, 25);
             this.filePathCheckBox.TabIndex = 10;
             this.filePathCheckBox.Text = "File Path:";
             this.filePathCheckBox.UseVisualStyleBackColor = true;
             // 
             // EventLogRuleConfiguration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.publisherRulePanel);
@@ -677,9 +638,9 @@ namespace WDAC_Wizard
             this.Controls.Add(this.label1);
             this.Controls.Add(this.eventsDataGridView);
             this.Controls.Add(this.addButton);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "EventLogRuleConfiguration";
-            this.Size = new System.Drawing.Size(1450, 938);
+            this.Size = new System.Drawing.Size(1208, 782);
             this.Load += new System.EventHandler(this.EventLogRuleConfiguration_Load);
             this.publisherRulePanel.ResumeLayout(false);
             this.publisherRulePanel.PerformLayout();

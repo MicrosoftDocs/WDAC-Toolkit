@@ -282,8 +282,19 @@ namespace WDAC_Wizard
                     if (signer.CorrelationId == ciEvent.CorrelationId
                         && IsValidSigner(signer))
                     {
-                        ciEvent.SignerInfo = signer;
-                        ciEvents.Add(ciEvent);
+                        // If first/only signer, set the SignerInfo attribute to signer
+                        // otherwise, duplicate ciEvent and append to ciEvents
+                        if(ciEvent.SignerInfo.CorrelationId == null)
+                        {
+                            ciEvent.SignerInfo = signer;
+                            ciEvents.Add(ciEvent);
+                        }
+                        else
+                        {
+                            CiEvent ciEventCopy = ciEvent.Clone();
+                            ciEventCopy.SignerInfo = signer;
+                            ciEvents.Add(ciEventCopy);
+                        }
                     }
                 }
 
@@ -341,10 +352,22 @@ namespace WDAC_Wizard
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in ciSignerEvents)
                 {
-                    if (signer.CorrelationId == ciEvent.CorrelationId)
+                    if (signer.CorrelationId == ciEvent.CorrelationId
+                        && IsValidSigner(signer))
                     {
-                        ciEvent.SignerInfo = signer;
-                        ciEvents.Add(ciEvent);
+                        // If first/only signer, set the SignerInfo attribute to signer
+                        // otherwise, duplicate ciEvent and append to ciEvents
+                        if (ciEvent.SignerInfo.CorrelationId == null)
+                        {
+                            ciEvent.SignerInfo = signer;
+                            ciEvents.Add(ciEvent);
+                        }
+                        else
+                        {
+                            CiEvent ciEventCopy = ciEvent.Clone();
+                            ciEventCopy.SignerInfo = signer;
+                            ciEvents.Add(ciEventCopy);
+                        }
                     }
                 }
 
@@ -391,10 +414,22 @@ namespace WDAC_Wizard
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in appSignerEvents)
                 {
-                    if (signer.CorrelationId == ciEvent.CorrelationId)
+                    if (signer.CorrelationId == ciEvent.CorrelationId
+                        && IsValidSigner(signer))
                     {
-                        ciEvent.SignerInfo = signer;
-                        ciEvents.Add(ciEvent);
+                        // If first/only signer, set the SignerInfo attribute to signer
+                        // otherwise, duplicate ciEvent and append to ciEvents
+                        if (ciEvent.SignerInfo.CorrelationId == null)
+                        {
+                            ciEvent.SignerInfo = signer;
+                            ciEvents.Add(ciEvent);
+                        }
+                        else
+                        {
+                            CiEvent ciEventCopy = ciEvent.Clone();
+                            ciEventCopy.SignerInfo = signer;
+                            ciEvents.Add(ciEventCopy);
+                        }
                     }
                 }
 
@@ -439,10 +474,22 @@ namespace WDAC_Wizard
                 // This will be the only thing to allow on to by pass this block event
                 foreach (SignerEvent signer in ciSignerEvents)
                 {
-                    if (signer.CorrelationId == ciEvent.CorrelationId)
+                    if (signer.CorrelationId == ciEvent.CorrelationId
+                        && IsValidSigner(signer))
                     {
-                        ciEvent.SignerInfo = signer;
-                        ciEvents.Add(ciEvent);
+                        // If first/only signer, set the SignerInfo attribute to signer
+                        // otherwise, duplicate ciEvent and append to ciEvents
+                        if (ciEvent.SignerInfo.CorrelationId == null)
+                        {
+                            ciEvent.SignerInfo = signer;
+                            ciEvents.Add(ciEvent);
+                        }
+                        else
+                        {
+                            CiEvent ciEventCopy = ciEvent.Clone();
+                            ciEventCopy.SignerInfo = signer;
+                            ciEvents.Add(ciEventCopy);
+                        }
                     }
                 }
 
@@ -620,6 +667,12 @@ namespace WDAC_Wizard
             this.PolicyName = String.Empty;
 
             this.SignerInfo = new SignerEvent();
+        }
+
+        // Memberwise clone the CiEvent for case of multiple unique signatures
+        public CiEvent Clone()
+        {
+            return (CiEvent)this.MemberwiseClone();
         }
     }
 
