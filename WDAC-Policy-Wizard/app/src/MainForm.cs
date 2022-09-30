@@ -1032,13 +1032,21 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
             }
 
-            // If supplemental policy, set the Base policy guid
+            // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
             if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
+                // Set BasePolicyID to match the Id of the linked base policy
                 SiPolicy baseSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath);
                 siPolicy.BasePolicyID = baseSiPolicy.BasePolicyID;
-
                 this.Log.AddInfoMsg("Additional parameters set - Supplemental policy BasePolicyID set to " + siPolicy.BasePolicyID);
+
+                // Set the PolicyName defined by the user on PolicyType page
+                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
+                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
+
+                // Force SiPolicy PolicyType to Supplemental
+                siPolicy.PolicyType = global::PolicyType.SupplementalPolicy;
             }
 
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
