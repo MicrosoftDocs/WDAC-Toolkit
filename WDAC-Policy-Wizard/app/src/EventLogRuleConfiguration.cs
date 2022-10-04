@@ -160,12 +160,11 @@ namespace WDAC_Wizard
 
             // Set the UI
             ResetCustomRulesPanel();
-            SetPublisherPanel(
-                this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                this.CiEvents[selectedRow].OriginalFilename,
-                this.CiEvents[selectedRow].FileVersion,
-                this.CiEvents[selectedRow].ProductName);
+            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
+                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
+                              this.CiEvents[selectedRow].OriginalFilename,
+                              this.CiEvents[selectedRow].FileVersion,
+                              this.CiEvents[selectedRow].ProductName);
 
             this.SelectedRow = selectedRow;
         }
@@ -193,12 +192,11 @@ namespace WDAC_Wizard
                 return;
             }
             
-            SetPublisherPanel(
-                this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                this.CiEvents[selectedRow].OriginalFilename,
-                this.CiEvents[selectedRow].FileVersion,
-                this.CiEvents[selectedRow].ProductName);
+            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
+                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
+                              this.CiEvents[selectedRow].OriginalFilename,
+                              this.CiEvents[selectedRow].FileVersion,
+                              this.CiEvents[selectedRow].ProductName);
 
             this.SelectedRow = selectedRow;
         }
@@ -607,36 +605,31 @@ namespace WDAC_Wizard
             switch (this.ruleTypeComboBox.SelectedIndex)
             {
                 case 0: // Publisher
-                    SetPublisherPanel(
-                        this.CiEvents[this.SelectedRow].SignerInfo.IssuerName,
-                        this.CiEvents[this.SelectedRow].SignerInfo.PublisherName,
-                        this.CiEvents[this.SelectedRow].OriginalFilename,
-                        this.CiEvents[this.SelectedRow].FileVersion,
-                        this.CiEvents[this.SelectedRow].ProductName);
+                    SetPublisherPanel(this.CiEvents[this.SelectedRow].SignerInfo.IssuerName,
+                                      this.CiEvents[this.SelectedRow].SignerInfo.PublisherName,
+                                      this.CiEvents[this.SelectedRow].OriginalFilename,
+                                      this.CiEvents[this.SelectedRow].FileVersion,
+                                      this.CiEvents[this.SelectedRow].ProductName);
                     break;
 
                 case 1: // Path
-                    SetFilePathPanel(
-                        this.CiEvents[this.SelectedRow].FilePath);
+                    SetFilePathPanel(this.CiEvents[this.SelectedRow].FilePath);
                     break;
 
                 case 2: // File Attributes
-                case 3:
-                    SetFileAttributesPanel(
-                        this.CiEvents[this.SelectedRow].OriginalFilename,
-                        this.CiEvents[this.SelectedRow].FileDescription,
-                        this.CiEvents[this.SelectedRow].ProductName,
-                        this.CiEvents[this.SelectedRow].InternalFilename,
-                        this.CiEvents[this.SelectedRow].PackageFamilyName);
-
+                case 3: // Package Family Name
+                    SetFileAttributesPanel(this.CiEvents[this.SelectedRow].OriginalFilename,
+                                           this.CiEvents[this.SelectedRow].FileDescription,
+                                           this.CiEvents[this.SelectedRow].ProductName,
+                                           this.CiEvents[this.SelectedRow].InternalFilename,
+                                           this.CiEvents[this.SelectedRow].PackageFamilyName);
                     break;
 
                 case 4: //FileHash
-                    SetFileHashPanel(
-                        this.CiEvents[this.SelectedRow].SHA1,
-                        this.CiEvents[this.SelectedRow].SHA1Page,
-                        this.CiEvents[this.SelectedRow].SHA2,
-                        this.CiEvents[this.SelectedRow].SHA2Page);
+                    SetFileHashPanel(this.CiEvents[this.SelectedRow].SHA1,
+                                     this.CiEvents[this.SelectedRow].SHA1Page,
+                                     this.CiEvents[this.SelectedRow].SHA2,
+                                     this.CiEvents[this.SelectedRow].SHA2Page);
                     break; 
             }
         }
