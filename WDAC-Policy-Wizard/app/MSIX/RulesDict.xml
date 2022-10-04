@@ -29,7 +29,7 @@
     AllowedValue="Enabled"
     Supported="True"
     RuleNumber="3"
-    ValidSupplemental="True"
+    ValidSupplemental="False-NoInherit"
 	  ButtonMapping="button_6">
   </Rule>
   <Rule

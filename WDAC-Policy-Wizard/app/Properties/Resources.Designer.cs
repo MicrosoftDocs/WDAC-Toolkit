@@ -923,6 +923,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deny rules are ignored in supplemental policies by WDAC. Since supplemental policies are meant to expand what the base policy trusts, only allow rules are supported in supplemental policies. .
+        /// </summary>
+        internal static string SupplementalPolicyDenyRuleError {
+            get {
+                return ResourceManager.GetString("SupplementalPolicyDenyRuleError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this option on a base policy to allow supplemental policies to expand it..
         /// </summary>
         internal static string SuppPolicies_Info {

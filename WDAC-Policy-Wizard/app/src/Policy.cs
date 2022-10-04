@@ -25,7 +25,26 @@ namespace WDAC_Wizard
             None, 
             BasePolicy, 
             SupplementalPolicy, 
-            Edit, 
+        }
+
+        /// <summary>
+        /// The base policy format. Can be either legacy (single policy) or multiple policy (19H1+)
+        /// </summary>
+        public enum Format
+        {
+            None,
+            Legacy,
+            MultiPolicy
+        }
+
+        /// <summary>
+        /// Tracks the workflow the user has selected. New policy, editing policy or merging policies
+        /// </summary>
+        public enum Workflow
+        {
+            None,
+            New,
+            Edit,
             Merge
         }
 
@@ -40,19 +59,10 @@ namespace WDAC_Wizard
             SignedReputable, 
         }
 
-        /// <summary>
-        /// The base policy format. Can be either legacy (single policy) or multiple policy (19H1+)
-        /// </summary>
-        public enum Format
-        {
-            None,
-            Legacy, 
-            MultiPolicy
-        }
-
         // Policy Properties
         public PolicyType _PolicyType { get; set; }
         public NewPolicyTemplate _PolicyTemplate { get; set; }
+        public Workflow PolicyWorkflow { get; set; }
         public Format _Format { get; set; }
         public List<RuleType> PolicyRuleOptions;
 
@@ -94,10 +104,6 @@ namespace WDAC_Wizard
         public WDAC_Policy()
         {
             this.siPolicy = null; 
-
-            this._PolicyTemplate = NewPolicyTemplate.None;
-            this._PolicyType = PolicyType.None;
-            this._Format = Format.None;
             this.PolicyRuleOptions = new List<RuleType>();
 
             this.EnableHVCI = false;

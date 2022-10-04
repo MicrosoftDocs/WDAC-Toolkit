@@ -65,14 +65,18 @@ namespace WDAC_Wizard
 
             // Set HVCI option value
             if (this.Policy.EnableHVCI)
-                this.Policy.ConfigRules["HVCI"]["CurrentValue"] = this.Policy.ConfigRules["HVCI"]["AllowedValue"]; 
+            {
+                this.Policy.ConfigRules["HVCI"]["CurrentValue"] = this.Policy.ConfigRules["HVCI"]["AllowedValue"];
+            }
 
             Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
                 // If unsupported, skip
                 if (!Convert.ToBoolean(this.Policy.ConfigRules[key]["Supported"]))
+                {
                     continue;
+                }
 
                 // Get the button (UI element) name to modify the state of the button
                 string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
@@ -93,7 +97,7 @@ namespace WDAC_Wizard
                 }
 
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy ||  this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 { 
                     switch(this.Policy.ConfigRules[key]["ValidSupplemental"]){
                     case "True":
@@ -491,65 +495,7 @@ namespace WDAC_Wizard
             // Template policy schema file IF NEW policy selected
             // Pre-existing base policy IF EDIT policy selected
 
-            string xmlPathToRead = "";
-
-            // If we are editing a policy, read the EditPolicyPath
-            // We need to know whether we are editing a base or supplemental policy
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.Edit)
-            {
-                xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
-            }
-                
-            // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
-            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-            {
-                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
-            }
-            else
-            {
-                if(this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
-                {
-                    // Multi-policy Format Policy Templates
-                    switch (this.Policy._PolicyTemplate){
-                    case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
-                            // Windows Works Mode 
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);// "DefaultWindows_Audit.xml");
-                        break;
-
-                    case WDAC_Policy.NewPolicyTemplate.SignedReputable:
-                            // Signed and Reputable Mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate); //"SignedReputable.xml");
-                            break;
-
-                    case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
-                        // Allow Microsoft mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate );// "AllowMicrosoft.xml");
-                            break;
-                    }
-                }
-                else
-                {
-                    // Legacy/single-policy Format Policy Templates
-                    switch (this.Policy._PolicyTemplate){
-                    case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
-                        // Windows Works Mode 
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate); //"DefaultWindows_Audit - SingleFormat.xml");
-                            break;
-
-                    case WDAC_Policy.NewPolicyTemplate.SignedReputable:
-                        // Signed and Reputable Mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate); //"SignedReputable - SingleFormat.xml");
-                            break;
-
-                    case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
-                        // Allow Microsoft mode
-                        xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate); //"AllowMicrosoft - SingleFormat.xml");
-                            break;
-                    }
-                }
-                
-            }
-                
+            string xmlPathToRead = GetTemplatePath();
             this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
 
             // Read File
@@ -557,9 +503,12 @@ namespace WDAC_Wizard
             if(sipolicy == null)
             {
                 this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy failed during ReadSetRules");
+                
                 // Prompt user for additional confirmation
-                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
-                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML may be corrupted. ",
+                                                    "Parsing Error",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
                 {
@@ -581,7 +530,7 @@ namespace WDAC_Wizard
 
                 if (this.Policy.ConfigRules.ContainsKey(name))
                 {
-                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy  ||  this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                     {
                         // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
                         // Set the value to not enabled (Get Opposite Value)
@@ -623,8 +572,76 @@ namespace WDAC_Wizard
                 this._MainWindow.Policy.TemplatePath = xmlPathToRead; 
             }
             
-
             return true; 
+        }
+
+        /// <summary>
+        /// Looks up the policy xml path to parse the rule-options
+        /// </summary>
+        /// <returns></returns>
+        private string GetTemplatePath()
+        {
+            string xmlPathToRead = String.Empty;
+
+            // If we are editing a policy, read the EditPolicyPath
+            // We need to know whether we are editing a base or supplemental policy
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+            {
+                xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
+            }
+
+            // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
+            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
+            }
+            else
+            {
+                if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+                {
+                    // Multi-policy Format Policy Templates
+                    switch (this.Policy._PolicyTemplate)
+                    {
+                        case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
+                            // Windows Works Mode 
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);
+                            break;
+
+                        case WDAC_Policy.NewPolicyTemplate.SignedReputable:
+                            // Signed and Reputable Mode
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate);
+                            break;
+
+                        case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
+                            // Allow Microsoft mode
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);
+                            break;
+                    }
+                }
+                else
+                {
+                    // Legacy/single-policy Format Policy Templates
+                    switch (this.Policy._PolicyTemplate)
+                    {
+                        case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
+                            // Windows Works Mode 
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate);
+                            break;
+
+                        case WDAC_Policy.NewPolicyTemplate.SignedReputable:
+                            // Signed and Reputable Mode
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate);
+                            break;
+
+                        case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
+                            // Allow Microsoft mode
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate);
+                            break;
+                    }
+                }
+            }
+
+            return xmlPathToRead;
         }
 
         /// <summary>
