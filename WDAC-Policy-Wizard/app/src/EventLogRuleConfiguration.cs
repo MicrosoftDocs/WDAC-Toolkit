@@ -59,9 +59,6 @@ namespace WDAC_Wizard
             this.ruleTypeComboBox.SelectedIndex = 0;
             this.publisherRulePanel.Visible = true;
 
-            // Highlight/select the first row in the table
-
-
             // Set the table, let's eat
             DisplayEvents();
         }
@@ -142,7 +139,38 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Populates the custom rules panel UI with the contents from the CiEvent list
+        /// Populates the custom rules panel with CiEvent on table row highlight event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RowSelectionChanged(object sender, EventArgs e)
+        {
+            // Try to cast sender as Datagrid. If successful, the user highlighted (arrow keys or mouse click) a new row
+            var grid = sender as DataGridView;
+            if (grid == null)
+            {
+                return;
+            }
+
+            int selectedRow = grid.CurrentRow.Index;
+            if (selectedRow >= this.CiEvents.Count)
+            {
+                return;
+            }
+
+            // Set the UI
+            ResetCustomRulesPanel();
+            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
+                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
+                              this.CiEvents[selectedRow].OriginalFilename,
+                              this.CiEvents[selectedRow].FileVersion,
+                              this.CiEvents[selectedRow].ProductName);
+
+            this.SelectedRow = selectedRow;
+        }
+
+        /// <summary>
+        /// Populates the custom rules panel UI with the contents from the CiEvent list on row mouse click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -164,12 +192,11 @@ namespace WDAC_Wizard
                 return;
             }
             
-            SetPublisherPanel(
-                this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                this.CiEvents[selectedRow].OriginalFilename,
-                this.CiEvents[selectedRow].FileVersion,
-                this.CiEvents[selectedRow].ProductName);
+            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
+                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
+                              this.CiEvents[selectedRow].OriginalFilename,
+                              this.CiEvents[selectedRow].FileVersion,
+                              this.CiEvents[selectedRow].ProductName);
 
             this.SelectedRow = selectedRow;
         }
@@ -183,7 +210,7 @@ namespace WDAC_Wizard
         {
             // If the list is not sorted by the desired column, sort the list
             // Otherwise, simply reverse the list of objects to change from ascending --> descending --> ascending
-            if(this.eventsDataGridView.Columns[e.ColumnIndex].Tag != (object) "Sorted")
+            if (this.eventsDataGridView.Columns[e.ColumnIndex].Tag != (object)"Sorted")
             {
                 SortDisplayObjects(e.ColumnIndex, false);
                 ResetColTags();
@@ -195,6 +222,8 @@ namespace WDAC_Wizard
             }
             this.eventsDataGridView.Refresh();
         }
+
+
 
         private void SortDisplayObjects(int columnToSort, bool isSorted)
         {
@@ -576,36 +605,31 @@ namespace WDAC_Wizard
             switch (this.ruleTypeComboBox.SelectedIndex)
             {
                 case 0: // Publisher
-                    SetPublisherPanel(
-                        this.CiEvents[this.SelectedRow].SignerInfo.IssuerName,
-                        this.CiEvents[this.SelectedRow].SignerInfo.PublisherName,
-                        this.CiEvents[this.SelectedRow].OriginalFilename,
-                        this.CiEvents[this.SelectedRow].FileVersion,
-                        this.CiEvents[this.SelectedRow].ProductName);
+                    SetPublisherPanel(this.CiEvents[this.SelectedRow].SignerInfo.IssuerName,
+                                      this.CiEvents[this.SelectedRow].SignerInfo.PublisherName,
+                                      this.CiEvents[this.SelectedRow].OriginalFilename,
+                                      this.CiEvents[this.SelectedRow].FileVersion,
+                                      this.CiEvents[this.SelectedRow].ProductName);
                     break;
 
                 case 1: // Path
-                    SetFilePathPanel(
-                        this.CiEvents[this.SelectedRow].FilePath);
+                    SetFilePathPanel(this.CiEvents[this.SelectedRow].FilePath);
                     break;
 
                 case 2: // File Attributes
-                case 3:
-                    SetFileAttributesPanel(
-                        this.CiEvents[this.SelectedRow].OriginalFilename,
-                        this.CiEvents[this.SelectedRow].FileDescription,
-                        this.CiEvents[this.SelectedRow].ProductName,
-                        this.CiEvents[this.SelectedRow].InternalFilename,
-                        this.CiEvents[this.SelectedRow].PackageFamilyName);
-
+                case 3: // Package Family Name
+                    SetFileAttributesPanel(this.CiEvents[this.SelectedRow].OriginalFilename,
+                                           this.CiEvents[this.SelectedRow].FileDescription,
+                                           this.CiEvents[this.SelectedRow].ProductName,
+                                           this.CiEvents[this.SelectedRow].InternalFilename,
+                                           this.CiEvents[this.SelectedRow].PackageFamilyName);
                     break;
 
                 case 4: //FileHash
-                    SetFileHashPanel(
-                        this.CiEvents[this.SelectedRow].SHA1,
-                        this.CiEvents[this.SelectedRow].SHA1Page,
-                        this.CiEvents[this.SelectedRow].SHA2,
-                        this.CiEvents[this.SelectedRow].SHA2Page);
+                    SetFileHashPanel(this.CiEvents[this.SelectedRow].SHA1,
+                                     this.CiEvents[this.SelectedRow].SHA1Page,
+                                     this.CiEvents[this.SelectedRow].SHA2,
+                                     this.CiEvents[this.SelectedRow].SHA2Page);
                     break; 
             }
         }
@@ -1113,6 +1137,5 @@ namespace WDAC_Wizard
             this.PolicyName = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
             this.Publisher = String.IsNullOrEmpty(publisher) ? String.Empty : publisher;
         }
-
     }
 }
