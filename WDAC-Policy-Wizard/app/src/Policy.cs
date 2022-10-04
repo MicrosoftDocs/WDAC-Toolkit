@@ -104,11 +104,6 @@ namespace WDAC_Wizard
         public WDAC_Policy()
         {
             this.siPolicy = null; 
-
-            this._PolicyTemplate = NewPolicyTemplate.None;
-            this._PolicyType = PolicyType.None;
-            this._Format = Format.None;
-            this.PolicyWorkflow = Workflow.None;
             this.PolicyRuleOptions = new List<RuleType>();
 
             this.EnableHVCI = false;

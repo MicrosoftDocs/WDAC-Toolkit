@@ -604,17 +604,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);// "DefaultWindows_Audit.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate); //"SignedReputable.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);// "AllowMicrosoft.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);
                             break;
                     }
                 }
@@ -625,17 +625,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate); //"DefaultWindows_Audit - SingleFormat.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate); //"SignedReputable - SingleFormat.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate); //"AllowMicrosoft - SingleFormat.xml");
+                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate);
                             break;
                     }
                 }
