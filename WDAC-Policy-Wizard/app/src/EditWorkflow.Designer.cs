@@ -137,7 +137,7 @@ namespace WDAC_Wizard
             this.policyInfoPanel.Location = new System.Drawing.Point(2, 64);
             this.policyInfoPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.policyInfoPanel.Name = "policyInfoPanel";
-            this.policyInfoPanel.Size = new System.Drawing.Size(648, 173);
+            this.policyInfoPanel.Size = new System.Drawing.Size(648, 189);
             this.policyInfoPanel.TabIndex = 111;
             this.policyInfoPanel.Visible = false;
             // 
@@ -331,7 +331,7 @@ namespace WDAC_Wizard
             this.panel_EventLog_Conversion.Controls.Add(this.label6);
             this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
             this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
-            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 249);
+            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 265);
             this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
             this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 388);
             this.panel_EventLog_Conversion.TabIndex = 1;
@@ -422,7 +422,7 @@ namespace WDAC_Wizard
             this.panel_Edit_XML.Controls.Add(this.textBoxPolicyPath);
             this.panel_Edit_XML.Location = new System.Drawing.Point(3, 3);
             this.panel_Edit_XML.Name = "panel_Edit_XML";
-            this.panel_Edit_XML.Size = new System.Drawing.Size(857, 240);
+            this.panel_Edit_XML.Size = new System.Drawing.Size(857, 256);
             this.panel_Edit_XML.TabIndex = 0;
             // 
             // label3
@@ -455,7 +455,7 @@ namespace WDAC_Wizard
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(23, 119);
+            this.label7.Location = new System.Drawing.Point(23, 134);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(222, 19);
             this.label7.TabIndex = 113;
@@ -467,7 +467,7 @@ namespace WDAC_Wizard
             this.buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNewSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
             this.buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 138);
+            this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 153);
             this.buttonNewSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonNewSaveLocation.Name = "buttonNewSaveLocation";
             this.buttonNewSaveLocation.Size = new System.Drawing.Size(110, 28);
@@ -479,7 +479,7 @@ namespace WDAC_Wizard
             // textBoxSaveLocation
             // 
             this.textBoxSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 139);
+            this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 154);
             this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxSaveLocation.Name = "textBoxSaveLocation";
             this.textBoxSaveLocation.ReadOnly = true;
