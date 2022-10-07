@@ -147,6 +147,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a location to save your edited WDAC Policy.
+        /// </summary>
+        internal static string BrowseForXmlSaveLoc {
+            get {
+                return ResourceManager.GetString("BrowseForXmlSaveLoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap cancel {
@@ -895,7 +904,7 @@ namespace WDAC_Wizard.Properties {
         ///      &lt;Option&gt;Enabled:UMCI&lt;/Option&gt;
         ///    &lt;/Rule&gt;
         ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Inherit D [rest of string was truncated]&quot;;.
+        ///      &lt;Option&gt;Enabled:Inherit Default Policy&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SignedReputable {
             get {

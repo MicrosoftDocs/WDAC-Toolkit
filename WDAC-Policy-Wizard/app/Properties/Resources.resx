@@ -474,4 +474,7 @@ Please select the  'Create Rule' button.</value>
   <data name="SupplementalPolicyDenyRuleError" xml:space="preserve">
     <value>Deny rules are ignored in supplemental policies by WDAC. Since supplemental policies are meant to expand what the base policy trusts, only allow rules are supported in supplemental policies. </value>
   </data>
+  <data name="BrowseForXmlSaveLoc" xml:space="preserve">
+    <value>Choose a location to save your edited WDAC Policy</value>
+  </data>
 </root>

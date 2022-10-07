@@ -362,5 +362,23 @@ namespace WDAC_Wizard
             Point urPoint = new Point(PAD_X, PAD_Y);
             this.panel_EventLog_Conversion.Location = urPoint;
         }
+
+        /// <summary>
+        /// Sets the save location (SchemaPath) for a file under edit 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonNewSaveLocation_Pressed(object sender, EventArgs e)
+        {
+            string saveLocation = Helper.SaveSingleFile(Properties.Resources.BrowseForXmlSaveLoc, Helper.BrowseFileType.Policy); 
+            if(!String.IsNullOrEmpty(saveLocation))
+            {
+                this.textBoxSaveLocation.Text = saveLocation;
+                this.textBoxSaveLocation.SelectionStart = this.textBoxSaveLocation.TextLength - 1;
+                this.textBoxSaveLocation.ScrollToCaret();
+
+                this._MainWindow.Policy.SchemaPath = saveLocation; 
+            }
+        }
     }
 }

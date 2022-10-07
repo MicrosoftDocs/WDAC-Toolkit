@@ -64,6 +64,9 @@ namespace WDAC_Wizard
             this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label_Error = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.buttonNewSaveLocation = new System.Windows.Forms.Button();
+            this.textBoxSaveLocation = new System.Windows.Forms.TextBox();
             this.policyInfoPanel.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
@@ -123,15 +126,18 @@ namespace WDAC_Wizard
             // 
             // policyInfoPanel
             // 
+            this.policyInfoPanel.Controls.Add(this.label7);
             this.policyInfoPanel.Controls.Add(this.label5);
+            this.policyInfoPanel.Controls.Add(this.buttonNewSaveLocation);
             this.policyInfoPanel.Controls.Add(this.textBox_PolicyName);
+            this.policyInfoPanel.Controls.Add(this.textBoxSaveLocation);
             this.policyInfoPanel.Controls.Add(this.label_policyName);
             this.policyInfoPanel.Controls.Add(this.textBox_PolicyID);
             this.policyInfoPanel.Controls.Add(this.label_fileLocation);
             this.policyInfoPanel.Location = new System.Drawing.Point(2, 64);
             this.policyInfoPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.policyInfoPanel.Name = "policyInfoPanel";
-            this.policyInfoPanel.Size = new System.Drawing.Size(648, 125);
+            this.policyInfoPanel.Size = new System.Drawing.Size(648, 173);
             this.policyInfoPanel.TabIndex = 111;
             this.policyInfoPanel.Visible = false;
             // 
@@ -325,7 +331,7 @@ namespace WDAC_Wizard
             this.panel_EventLog_Conversion.Controls.Add(this.label6);
             this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
             this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
-            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 214);
+            this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 249);
             this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
             this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 388);
             this.panel_EventLog_Conversion.TabIndex = 1;
@@ -416,7 +422,7 @@ namespace WDAC_Wizard
             this.panel_Edit_XML.Controls.Add(this.textBoxPolicyPath);
             this.panel_Edit_XML.Location = new System.Drawing.Point(3, 3);
             this.panel_Edit_XML.Name = "panel_Edit_XML";
-            this.panel_Edit_XML.Size = new System.Drawing.Size(857, 198);
+            this.panel_Edit_XML.Size = new System.Drawing.Size(857, 240);
             this.panel_Edit_XML.TabIndex = 0;
             // 
             // label3
@@ -443,6 +449,43 @@ namespace WDAC_Wizard
             this.label_Error.Text = "Convert the device\'s Code Integrity event log or an arbitrary log file to a WDAC " +
     "policy XML file";
             this.label_Error.Visible = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(23, 119);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(222, 19);
+            this.label7.TabIndex = 113;
+            this.label7.Text = "New Save Location (optional):";
+            // 
+            // buttonNewSaveLocation
+            // 
+            this.buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
+            this.buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonNewSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 138);
+            this.buttonNewSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.buttonNewSaveLocation.Name = "buttonNewSaveLocation";
+            this.buttonNewSaveLocation.Size = new System.Drawing.Size(110, 28);
+            this.buttonNewSaveLocation.TabIndex = 114;
+            this.buttonNewSaveLocation.Text = "Browse";
+            this.buttonNewSaveLocation.UseVisualStyleBackColor = true;
+            this.buttonNewSaveLocation.Click += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
+            // 
+            // textBoxSaveLocation
+            // 
+            this.textBoxSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 139);
+            this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBoxSaveLocation.Name = "textBoxSaveLocation";
+            this.textBoxSaveLocation.ReadOnly = true;
+            this.textBoxSaveLocation.Size = new System.Drawing.Size(462, 26);
+            this.textBoxSaveLocation.TabIndex = 112;
+            this.textBoxSaveLocation.DoubleClick += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
             // 
             // EditWorkflow
             // 
@@ -512,5 +555,8 @@ namespace WDAC_Wizard
         private System.Windows.Forms.PictureBox parseresult_PictureBox;
         private System.Windows.Forms.Label parseResults_Label;
         private System.Windows.Forms.TextBox textBox_EventLog;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonNewSaveLocation;
+        private System.Windows.Forms.TextBox textBoxSaveLocation;
     }
 }

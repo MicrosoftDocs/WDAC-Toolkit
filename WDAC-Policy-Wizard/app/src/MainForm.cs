@@ -1400,23 +1400,32 @@ namespace WDAC_Wizard
             //             merge results from MergeCustomRulesPolicy (if applicable) into policy 
             //             defined by user: Path: this.SchemaPath
 
-            // If Edit mode is selected, this.SchemaPath is null while this.TemplatePath points to the .xml file 
-            // the user would like to edit. Since we don't explicitly prompt the user for a new path. copy the TemplatePath
-            // and append '_Edit' to the file path.
+            // If Edit mode is selected, since the 'New Save Location' field is optional, the Policy.SchemaPath can either be set or null.  
+            // If the field is null, set the save locaiton to the same location as the EditPolicyPath.
+            // Otherwise, keep Policy.SchemaPath as is
+            
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
-                if(this.Policy.EditPathContainsVersionInfo())
+                if(String.IsNullOrEmpty(this.Policy.SchemaPath))
                 {
-                    int sOFFSET = 14;
-                    this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(0,
-                        this.Policy.EditPolicyPath.Length - sOFFSET),this.Policy.UpdateVersion());
+                    // Since we don't have a new save location, copy the TemplatePath
+                    // and append '_Edit' to the file path.
+                    // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
+                    if (this.Policy.EditPathContainsVersionInfo())
+                    {
+                        int sOFFSET = 14;
+                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(0,
+                            this.Policy.EditPolicyPath.Length - sOFFSET), this.Policy.UpdateVersion());
+                    }
+                    else
+                    {
+                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
+                        0, this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
+                    }
                 }
-
                 else
                 {
-                    this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
-                    0, this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
+                    this.Policy.UpdateVersion(); 
                 }
             }
 
