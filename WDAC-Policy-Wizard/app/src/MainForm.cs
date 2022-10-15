@@ -951,7 +951,8 @@ namespace WDAC_Wizard
             List<RuleType> ruleOptionsList = this.Policy.PolicyRuleOptions;
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
-            if (this.Policy._Format == WDAC_Policy.Format.Legacy)
+            if (this.Policy._Format == WDAC_Policy.Format.Legacy 
+                && Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies))
             {
                 for(int i=0; i < ruleOptionsList.Count; i++)
                 {
@@ -963,8 +964,10 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Assert unsigned CI policy (rule #6) - fixes issues with converting to binary where the policy is unsigned
-            if (Properties.Settings.Default.convertPolicyToBinary)
+            // Assert unsigned CI policy (rule #6)
+            // Fixes issues with converting to binary where the policy does not specify PolicySigners
+            if (Properties.Settings.Default.convertPolicyToBinary 
+                && !Policy.HasRuleOption(OptionType.EnabledUnsignedSystemIntegrityPolicy))
             {
                 RuleType unsignedPolicyRule = new RuleType();
                 unsignedPolicyRule.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
