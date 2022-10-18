@@ -131,7 +131,7 @@ namespace WDAC_Wizard
             this.panelSuppl_Base.Controls.Add(this.label2);
             this.panelSuppl_Base.Location = new System.Drawing.Point(3, 101);
             this.panelSuppl_Base.Name = "panelSuppl_Base";
-            this.panelSuppl_Base.Size = new System.Drawing.Size(688, 143);
+            this.panelSuppl_Base.Size = new System.Drawing.Size(805, 143);
             this.panelSuppl_Base.TabIndex = 96;
             this.panelSuppl_Base.Visible = false;
             // 
@@ -142,7 +142,7 @@ namespace WDAC_Wizard
             this.basePolicyValidation_Panel.Location = new System.Drawing.Point(10, 87);
             this.basePolicyValidation_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.basePolicyValidation_Panel.Name = "basePolicyValidation_Panel";
-            this.basePolicyValidation_Panel.Size = new System.Drawing.Size(449, 35);
+            this.basePolicyValidation_Panel.Size = new System.Drawing.Size(793, 35);
             this.basePolicyValidation_Panel.TabIndex = 99;
             this.basePolicyValidation_Panel.Visible = false;
             // 
@@ -161,12 +161,12 @@ namespace WDAC_Wizard
             // Verified_Label
             // 
             this.Verified_Label.AutoSize = true;
-            this.Verified_Label.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.Verified_Label.Font = new System.Drawing.Font("Tahoma", 9F);
             this.Verified_Label.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.Verified_Label.Location = new System.Drawing.Point(37, 8);
             this.Verified_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Verified_Label.Name = "Verified_Label";
-            this.Verified_Label.Size = new System.Drawing.Size(332, 19);
+            this.Verified_Label.Size = new System.Drawing.Size(297, 18);
             this.Verified_Label.TabIndex = 16;
             this.Verified_Label.Text = "This base policy allows supplemental policies.";
             this.Verified_Label.Visible = false;

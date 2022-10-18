@@ -523,8 +523,6 @@ namespace WDAC_Wizard
             // Merge with configRules:
             foreach(var rule in this.Policy.siPolicy.Rules)
             {
-                this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
-
                 string value = ParseRule(rule.Item.ToString())[0]; 
                 string name = ParseRule(rule.Item.ToString())[1];
 
@@ -541,11 +539,13 @@ namespace WDAC_Wizard
                         else
                         {
                             this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
                         }
                     }
                     else
                     {
                         this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                        this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
                     }
                 }
             }

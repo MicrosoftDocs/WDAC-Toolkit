@@ -212,5 +212,23 @@ namespace WDAC_Wizard
 
             return false; 
         }
+
+        /// <summary>
+        /// Checks if a given rule option is already specified in the Policy
+        /// </summary>
+        /// <param name="targetRuleOption">Rule OptionType to query the Policy object for</param>
+        /// <returns></returns>
+        public bool HasRuleType(OptionType targetRuleOption)
+        {
+            foreach (var ruleOption in this.siPolicy.Rules)
+            {
+                if (ruleOption.Item == targetRuleOption)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
