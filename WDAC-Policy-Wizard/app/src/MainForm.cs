@@ -1413,14 +1413,14 @@ namespace WDAC_Wizard
                     // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
                     if (this.Policy.EditPathContainsVersionInfo())
                     {
-                        int sOFFSET = 14;
+                        const int sOFFSET = 14;
                         this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(0,
-                            this.Policy.EditPolicyPath.Length - sOFFSET), this.Policy.UpdateVersion());
+                                                               this.Policy.EditPolicyPath.Length - sOFFSET), this.Policy.UpdateVersion());
                     }
                     else
                     {
-                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(
-                        0, this.Policy.EditPolicyPath.Length - 4), this.Policy.UpdateVersion());
+                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", Path.GetFileNameWithoutExtension(this.Policy.EditPolicyPath), 
+                                                               this.Policy.UpdateVersion());
                     }
                 }
                 else
