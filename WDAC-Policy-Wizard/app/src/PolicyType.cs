@@ -184,7 +184,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                this.Verified_Label.Text = "This policy is not a base policy. Please select a base policy to supplement.";
+                this.Verified_Label.Text = "This policy does not support supplemental policies. Please select a multi-policy format base policy to supplement.";
                 this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
                 this._MainWindow.ErrorMsg = "Selected base policy is not a base policy.";
@@ -200,13 +200,15 @@ namespace WDAC_Wizard
         /// <returns>Returns true if the GUID allows supplemental policies</returns>
         private int IsPolicyExtendable(string basePolPath)
         {
-            // Checks that this policy is 1) a base policy, 2) has the allow supplemental policy rule-option
-            WDAC_Policy _BasePolicy = new WDAC_Policy();
+            // Checks that this policy is
+            // 1) a multi-policy format base policy
+            // 2) has the allow supplemental policy rule-option
+            WDAC_Policy policyToSupplement = new WDAC_Policy();
             bool allowsSupplemental = false; 
             // Read File
             try
             {
-                _BasePolicy.siPolicy = Helper.DeserializeXMLtoPolicy(basePolPath);
+                policyToSupplement.siPolicy = Helper.DeserializeXMLtoPolicy(basePolPath);
             }
             catch (Exception exp)
             {
@@ -218,23 +220,25 @@ namespace WDAC_Wizard
                 return 99;
             }
 
-            this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", _BasePolicy.siPolicy.PolicyType.ToString()));
+            this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", policyToSupplement.siPolicy.PolicyType.ToString()));
             
-            if(_BasePolicy.siPolicy.PolicyType.ToString().Contains("Supplemental"))
+            if(policyToSupplement.siPolicy.PolicyType.ToString().Contains("Supplemental"))
             {
                 // Policy is not base -- not going to fix this case
                 this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2");
                 return 2;
             }
 
-            foreach(var rule in _BasePolicy.siPolicy.Rules)
+            // Policy is not multi-policy format -- not going to fix this case
+            if(String.IsNullOrEmpty(policyToSupplement.siPolicy.PolicyID))
             {
-                if(rule.Item == OptionType.EnabledAllowSupplementalPolicies)
-                {
-                    allowsSupplemental = true;
-                    this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- {0}: True", rule.ToString())); 
-                    break; 
-                }
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 3");
+                return 3;
+            }
+
+            if(policyToSupplement.HasRuleType(OptionType.EnabledAllowSupplementalPolicies))
+            {
+                allowsSupplemental = true;
             }
 
             // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
