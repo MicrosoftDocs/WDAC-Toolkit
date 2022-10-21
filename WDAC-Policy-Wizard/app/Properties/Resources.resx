@@ -480,4 +480,7 @@ Please select the  'Create Rule' button.</value>
   <data name="EventLogCodeIntegrity" xml:space="preserve">
     <value>Microsoft-Windows-CodeIntegrity/Operational</value>
   </data>
+  <data name="UnsuccessfulEventLogConversionZeroEvents" xml:space="preserve">
+    <value>The Wizard did not parse any WDAC events from the selected .evtx files.</value>
+  </data>
 </root>

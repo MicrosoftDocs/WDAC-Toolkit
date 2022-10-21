@@ -290,7 +290,7 @@ namespace WDAC_Wizard
             else if(this._MainWindow.CiEvents.Count < 1)
             {
                 this.Log.AddErrorMsg("Zero CiEvents were created.");
-                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion;
+                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true; 
             }

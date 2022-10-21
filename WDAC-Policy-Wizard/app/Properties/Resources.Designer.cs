@@ -1025,6 +1025,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Wizard did not parse any WDAC events from the selected .evtx files..
+        /// </summary>
+        internal static string UnsuccessfulEventLogConversionZeroEvents {
+            get {
+                return ResourceManager.GetString("UnsuccessfulEventLogConversionZeroEvents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This option is not currently supported ....
         /// </summary>
         internal static string UnsupportedRule_Info {
