@@ -530,6 +530,12 @@ namespace WDAC_Wizard
                 {
                     if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                     {
+                        // If valid supplemental, add to PolicyRuleOptions struct to be set during policy build
+                        if(this.Policy.ConfigRules[name]["ValidSupplemental"] == "True")
+                        {
+                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                        }
+
                         // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
                         // Set the value to not enabled (Get Opposite Value)
                         if(this.Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
@@ -539,7 +545,6 @@ namespace WDAC_Wizard
                         else
                         {
                             this.Policy.ConfigRules[name]["CurrentValue"] = value;
-                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
                         }
                     }
                     else
