@@ -215,15 +215,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft-Windows-CodeIntegrity/Operational.
-        /// </summary>
-        internal static string CILogEvtPath {
-            get {
-                return ResourceManager.GetString("CILogEvtPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap circular_shape_silhouette {

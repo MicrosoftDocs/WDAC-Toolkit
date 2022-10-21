@@ -202,10 +202,10 @@ namespace WDAC_Wizard
                 return; 
             }
 
-            this.EventLogPaths = eventLogPaths; 
+            this.EventLogPaths = eventLogPaths;
 
             // Prep UI
-            this.textBox_EventLogFilePath.Text = string.Join(", ", eventLogPaths.ToArray()); 
+            this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
@@ -354,8 +354,6 @@ namespace WDAC_Wizard
             // User wants to convert an event log to a WDAC policy. Prepare the UI accordingly
             this.panel_Edit_XML.Visible = false;
             this.panel_EventLog_Conversion.Visible = true;
-            this.textBox_EventLog.Text = Properties.Resources.CILogEvtPath;
-
             this._MainWindow.EditWorkflow = MainWindow.EditWorkflowType.EventLog;
 
             // Bring edit xml panel to upper-right corner of page panel

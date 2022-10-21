@@ -37,8 +37,11 @@ namespace WDAC_Wizard
             this.browseButton = new System.Windows.Forms.Button();
             this.textBoxPolicyPath = new System.Windows.Forms.TextBox();
             this.policyInfoPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.buttonNewSaveLocation = new System.Windows.Forms.Button();
             this.textBox_PolicyName = new System.Windows.Forms.TextBox();
+            this.textBoxSaveLocation = new System.Windows.Forms.TextBox();
             this.label_policyName = new System.Windows.Forms.Label();
             this.textBox_PolicyID = new System.Windows.Forms.TextBox();
             this.label_fileLocation = new System.Windows.Forms.Label();
@@ -64,9 +67,6 @@ namespace WDAC_Wizard
             this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label_Error = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.buttonNewSaveLocation = new System.Windows.Forms.Button();
-            this.textBoxSaveLocation = new System.Windows.Forms.TextBox();
             this.policyInfoPanel.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
@@ -141,6 +141,17 @@ namespace WDAC_Wizard
             this.policyInfoPanel.TabIndex = 111;
             this.policyInfoPanel.Visible = false;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(23, 134);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(222, 19);
+            this.label7.TabIndex = 113;
+            this.label7.Text = "New Save Location (optional):";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -152,6 +163,21 @@ namespace WDAC_Wizard
             this.label5.TabIndex = 11;
             this.label5.Text = "Edit the policy name and ID, if you would like.\r\n";
             // 
+            // buttonNewSaveLocation
+            // 
+            this.buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
+            this.buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonNewSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 153);
+            this.buttonNewSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.buttonNewSaveLocation.Name = "buttonNewSaveLocation";
+            this.buttonNewSaveLocation.Size = new System.Drawing.Size(110, 28);
+            this.buttonNewSaveLocation.TabIndex = 114;
+            this.buttonNewSaveLocation.Text = "Browse";
+            this.buttonNewSaveLocation.UseVisualStyleBackColor = true;
+            this.buttonNewSaveLocation.Click += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
+            // 
             // textBox_PolicyName
             // 
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F);
@@ -161,6 +187,17 @@ namespace WDAC_Wizard
             this.textBox_PolicyName.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyName.TabIndex = 2;
             this.textBox_PolicyName.TextChanged += new System.EventHandler(this.TextBox_PolicyName_TextChanged);
+            // 
+            // textBoxSaveLocation
+            // 
+            this.textBoxSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 154);
+            this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBoxSaveLocation.Name = "textBoxSaveLocation";
+            this.textBoxSaveLocation.ReadOnly = true;
+            this.textBoxSaveLocation.Size = new System.Drawing.Size(462, 26);
+            this.textBoxSaveLocation.TabIndex = 112;
+            this.textBoxSaveLocation.DoubleClick += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
             // 
             // label_policyName
             // 
@@ -198,7 +235,7 @@ namespace WDAC_Wizard
             // 
             this.button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_ParseEventLog.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 76);
+            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 91);
             this.button_ParseEventLog.Name = "button_ParseEventLog";
             this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
             this.button_ParseEventLog.TabIndex = 112;
@@ -212,7 +249,7 @@ namespace WDAC_Wizard
             this.button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Parse_LogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.button_Parse_LogFile.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 182);
+            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 193);
             this.button_Parse_LogFile.Name = "button_Parse_LogFile";
             this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
             this.button_Parse_LogFile.TabIndex = 113;
@@ -342,10 +379,13 @@ namespace WDAC_Wizard
             this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLog.Location = new System.Drawing.Point(23, 46);
             this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox_EventLog.Multiline = true;
             this.textBox_EventLog.Name = "textBox_EventLog";
             this.textBox_EventLog.ReadOnly = true;
-            this.textBox_EventLog.Size = new System.Drawing.Size(453, 26);
+            this.textBox_EventLog.Size = new System.Drawing.Size(453, 43);
             this.textBox_EventLog.TabIndex = 123;
+            this.textBox_EventLog.Text = "Microsoft-Windows-CodeIntegrity/Operational\r\nMicrosoft-Windows-Applocker/MSI and " +
+    "Script";
             // 
             // eventLogParsing_Result_Panel
             // 
@@ -386,9 +426,11 @@ namespace WDAC_Wizard
             this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 152);
             this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox_EventLogFilePath.Multiline = true;
             this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
             this.textBox_EventLogFilePath.ReadOnly = true;
-            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 26);
+            this.textBox_EventLogFilePath.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 37);
             this.textBox_EventLogFilePath.TabIndex = 118;
             this.textBox_EventLogFilePath.Text = "Select Event Log Files";
             // 
@@ -449,43 +491,6 @@ namespace WDAC_Wizard
             this.label_Error.Text = "Convert the device\'s Code Integrity event log or an arbitrary log file to a WDAC " +
     "policy XML file";
             this.label_Error.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(23, 134);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(222, 19);
-            this.label7.TabIndex = 113;
-            this.label7.Text = "New Save Location (optional):";
-            // 
-            // buttonNewSaveLocation
-            // 
-            this.buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonNewSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 153);
-            this.buttonNewSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.buttonNewSaveLocation.Name = "buttonNewSaveLocation";
-            this.buttonNewSaveLocation.Size = new System.Drawing.Size(110, 28);
-            this.buttonNewSaveLocation.TabIndex = 114;
-            this.buttonNewSaveLocation.Text = "Browse";
-            this.buttonNewSaveLocation.UseVisualStyleBackColor = true;
-            this.buttonNewSaveLocation.Click += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
-            // 
-            // textBoxSaveLocation
-            // 
-            this.textBoxSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 154);
-            this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.textBoxSaveLocation.Name = "textBoxSaveLocation";
-            this.textBoxSaveLocation.ReadOnly = true;
-            this.textBoxSaveLocation.Size = new System.Drawing.Size(462, 26);
-            this.textBoxSaveLocation.TabIndex = 112;
-            this.textBoxSaveLocation.DoubleClick += new System.EventHandler(this.ButtonNewSaveLocation_Pressed);
             // 
             // EditWorkflow
             // 
