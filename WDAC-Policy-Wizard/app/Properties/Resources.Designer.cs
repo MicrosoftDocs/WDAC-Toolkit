@@ -303,6 +303,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft-Windows-Applocker/MSI and Script.
+        /// </summary>
+        internal static string EventLogAppLocker {
+            get {
+                return ResourceManager.GetString("EventLogAppLocker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft-Windows-CodeIntegrity/Operational.
+        /// </summary>
+        internal static string EventLogCodeIntegrity {
+            get {
+                return ResourceManager.GetString("EventLogCodeIntegrity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The WDAC Wizard successfully parsed all of the WDAC Event Logs.
         /// </summary>
         internal static string EventLogConversionSuccess {
@@ -904,7 +922,7 @@ namespace WDAC_Wizard.Properties {
         ///      &lt;Option&gt;Enabled:UMCI&lt;/Option&gt;
         ///    &lt;/Rule&gt;
         ///    &lt;Rule&gt;
-        ///      &lt;Option&gt;Enabled:Inherit Default Policy&lt;/ [rest of string was truncated]&quot;;.
+        ///      &lt;Option&gt;Enabled:Inherit D [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SignedReputable {
             get {

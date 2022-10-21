@@ -477,4 +477,10 @@ Please select the  'Create Rule' button.</value>
   <data name="BrowseForXmlSaveLoc" xml:space="preserve">
     <value>Choose a location to save your edited WDAC Policy</value>
   </data>
+  <data name="EventLogAppLocker" xml:space="preserve">
+    <value>Microsoft-Windows-Applocker/MSI and Script</value>
+  </data>
+  <data name="EventLogCodeIntegrity" xml:space="preserve">
+    <value>Microsoft-Windows-CodeIntegrity/Operational</value>
+  </data>
 </root>
