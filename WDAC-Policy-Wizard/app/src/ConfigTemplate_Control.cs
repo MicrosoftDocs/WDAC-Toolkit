@@ -97,7 +97,8 @@ namespace WDAC_Wizard
                 }
 
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                    || this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                 { 
                     switch(this.Policy.ConfigRules[key]["ValidSupplemental"]){
                     case "True":
