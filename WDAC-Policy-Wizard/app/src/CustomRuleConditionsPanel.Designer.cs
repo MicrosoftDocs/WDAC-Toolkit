@@ -30,6 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             this.panel_CustomRules = new System.Windows.Forms.Panel();
+            this.panelComObject = new System.Windows.Forms.Panel();
+            this.labelLearnMoreCom = new System.Windows.Forms.Label();
+            this.panelComKey = new System.Windows.Forms.Panel();
+            this.textBoxObjectKey = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxComKeyType = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBoxComProvider = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.checkBox_kernelMode = new System.Windows.Forms.CheckBox();
@@ -88,6 +98,8 @@
             this.button_Back = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel_CustomRules.SuspendLayout();
+            this.panelComObject.SuspendLayout();
+            this.panelComKey.SuspendLayout();
             this.panelPackagedApps.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
@@ -100,6 +112,7 @@
             // panel_CustomRules
             // 
             this.panel_CustomRules.BackColor = System.Drawing.Color.White;
+            this.panel_CustomRules.Controls.Add(this.panelComObject);
             this.panel_CustomRules.Controls.Add(this.label5);
             this.panel_CustomRules.Controls.Add(this.label4);
             this.panel_CustomRules.Controls.Add(this.checkBox_kernelMode);
@@ -123,6 +136,138 @@
             this.panel_CustomRules.Name = "panel_CustomRules";
             this.panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             this.panel_CustomRules.TabIndex = 86;
+            // 
+            // panelComObject
+            // 
+            this.panelComObject.Controls.Add(this.labelLearnMoreCom);
+            this.panelComObject.Controls.Add(this.panelComKey);
+            this.panelComObject.Controls.Add(this.label10);
+            this.panelComObject.Controls.Add(this.label7);
+            this.panelComObject.Controls.Add(this.comboBoxComKeyType);
+            this.panelComObject.Controls.Add(this.label6);
+            this.panelComObject.Controls.Add(this.comboBoxComProvider);
+            this.panelComObject.Location = new System.Drawing.Point(348, 86);
+            this.panelComObject.Name = "panelComObject";
+            this.panelComObject.Size = new System.Drawing.Size(611, 274);
+            this.panelComObject.TabIndex = 125;
+            this.panelComObject.Visible = false;
+            // 
+            // labelLearnMoreCom
+            // 
+            this.labelLearnMoreCom.AutoSize = true;
+            this.labelLearnMoreCom.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.labelLearnMoreCom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.labelLearnMoreCom.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.labelLearnMoreCom.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelLearnMoreCom.Location = new System.Drawing.Point(14, 55);
+            this.labelLearnMoreCom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelLearnMoreCom.Name = "labelLearnMoreCom";
+            this.labelLearnMoreCom.Size = new System.Drawing.Size(313, 18);
+            this.labelLearnMoreCom.TabIndex = 112;
+            this.labelLearnMoreCom.Text = "Learn more about COM object registration      ";
+            this.labelLearnMoreCom.Click += new System.EventHandler(this.LabelLearnMoreCom_Click);
+            // 
+            // panelComKey
+            // 
+            this.panelComKey.Controls.Add(this.textBoxObjectKey);
+            this.panelComKey.Controls.Add(this.label8);
+            this.panelComKey.Location = new System.Drawing.Point(14, 190);
+            this.panelComKey.Name = "panelComKey";
+            this.panelComKey.Size = new System.Drawing.Size(502, 49);
+            this.panelComKey.TabIndex = 111;
+            this.panelComKey.Visible = false;
+            // 
+            // textBoxObjectKey
+            // 
+            this.textBoxObjectKey.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxObjectKey.Location = new System.Drawing.Point(163, 13);
+            this.textBoxObjectKey.Name = "textBoxObjectKey";
+            this.textBoxObjectKey.Size = new System.Drawing.Size(330, 26);
+            this.textBoxObjectKey.TabIndex = 95;
+            this.textBoxObjectKey.Text = "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}";
+            this.textBoxObjectKey.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ComKeyMouseClick);
+            this.textBoxObjectKey.TextChanged += new System.EventHandler(this.ComKeyTextChanged);
+            this.textBoxObjectKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ComKeyNewKey);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(0, 15);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(86, 18);
+            this.label8.TabIndex = 94;
+            this.label8.Text = "Object Key:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
+            this.label10.ForeColor = System.Drawing.Color.Black;
+            this.label10.Location = new System.Drawing.Point(13, 21);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(207, 21);
+            this.label10.TabIndex = 110;
+            this.label10.Text = "COM Object Conditions";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(14, 154);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(125, 18);
+            this.label7.TabIndex = 93;
+            this.label7.Text = "Object Key Type:";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // comboBoxComKeyType
+            // 
+            this.comboBoxComKeyType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxComKeyType.FormattingEnabled = true;
+            this.comboBoxComKeyType.Items.AddRange(new object[] {
+            "All Keys",
+            "Custom Key"});
+            this.comboBoxComKeyType.Location = new System.Drawing.Point(176, 150);
+            this.comboBoxComKeyType.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxComKeyType.Name = "comboBoxComKeyType";
+            this.comboBoxComKeyType.Size = new System.Drawing.Size(187, 26);
+            this.comboBoxComKeyType.TabIndex = 92;
+            this.comboBoxComKeyType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxComKeyTypeChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Black;
+            this.label6.Location = new System.Drawing.Point(14, 112);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(113, 18);
+            this.label6.TabIndex = 91;
+            this.label6.Text = "Object Provider:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // comboBoxComProvider
+            // 
+            this.comboBoxComProvider.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxComProvider.FormattingEnabled = true;
+            this.comboBoxComProvider.Items.AddRange(new object[] {
+            "PowerShell",
+            "WSH",
+            "IE",
+            "VBA",
+            "MSI",
+            "AllHostIds"});
+            this.comboBoxComProvider.Location = new System.Drawing.Point(176, 108);
+            this.comboBoxComProvider.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxComProvider.Name = "comboBoxComProvider";
+            this.comboBoxComProvider.Size = new System.Drawing.Size(187, 26);
+            this.comboBoxComProvider.TabIndex = 90;
+            this.comboBoxComProvider.SelectedIndexChanged += new System.EventHandler(this.ComboBoxComProviderChanged);
             // 
             // label5
             // 
@@ -183,7 +328,7 @@
             this.panelPackagedApps.Controls.Add(this.buttonSearch);
             this.panelPackagedApps.Controls.Add(this.textBox_Packaged_App);
             this.panelPackagedApps.Controls.Add(this.label2);
-            this.panelPackagedApps.Location = new System.Drawing.Point(576, 282);
+            this.panelPackagedApps.Location = new System.Drawing.Point(585, 447);
             this.panelPackagedApps.Name = "panelPackagedApps";
             this.panelPackagedApps.Size = new System.Drawing.Size(609, 402);
             this.panelPackagedApps.TabIndex = 115;
@@ -587,7 +732,8 @@
             "Path",
             "File Attributes",
             "Packaged App",
-            "File Hash"});
+            "File Hash",
+            "COM Object"});
             this.comboBox_RuleType.Location = new System.Drawing.Point(96, 211);
             this.comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox_RuleType.Name = "comboBox_RuleType";
@@ -876,6 +1022,10 @@
             this.Load += new System.EventHandler(this.OnLoad);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
+            this.panelComObject.ResumeLayout(false);
+            this.panelComObject.PerformLayout();
+            this.panelComKey.ResumeLayout(false);
+            this.panelComKey.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);
             this.panelPackagedApps.PerformLayout();
             this.panel_Progress.ResumeLayout(false);
@@ -954,5 +1104,15 @@
         private System.Windows.Forms.CheckBox checkBox_userMode;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panelComObject;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBoxComProvider;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBoxComKeyType;
+        private System.Windows.Forms.Panel panelComKey;
+        private System.Windows.Forms.TextBox textBoxObjectKey;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label labelLearnMoreCom;
     }
 }

@@ -1349,6 +1349,39 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        public static SiPolicy CreateComRule(SiPolicy siPolicy)
+        {
+            Setting comObject = new Setting();
+            comObject.Key = "TEST_KEY";
+            comObject.Provider = "TEST_PROVIDER";
+            comObject.ValueName = "Boolean";
+            comObject.Value = new SettingValueType(); 
+            comObject.Value.Item = true;
+
+            siPolicy = AddComRule(siPolicy, comObject); 
+
+            return siPolicy; 
+        }
+
+        private static SiPolicy AddComRule(SiPolicy siPolicy, Setting comObject)
+        {
+            if(siPolicy.Settings != null)
+            {
+                Setting[] settingsCopy = siPolicy.Settings;
+                Array.Resize(ref settingsCopy, settingsCopy.Length + 1);
+                settingsCopy[settingsCopy.Length - 1] = comObject;
+
+                siPolicy.Settings = settingsCopy;
+            }
+            else
+            {
+                siPolicy.Settings = new Setting[1];
+                siPolicy.Settings[0] = comObject; 
+            }
+            
+            return siPolicy; 
+        }
+
         /// <summary>
         /// Handles adding the new Allow Rule object to the provided siPolicy
         /// </summary>
@@ -2261,7 +2294,8 @@ namespace WDAC_Wizard
             PackagedApp,
             FilePath,
             Folder,
-            Hash
+            Hash, 
+            Com
         }
 
         public enum RuleLevel
@@ -2333,6 +2367,9 @@ namespace WDAC_Wizard
         // Exception Params -- currently not supporting
         public List<PolicyCustomRules> ExceptionList { get; set; }
 
+        // COM Object
+        public COM COMObject { get; set; }
+
         // Constructors
         public PolicyCustomRules()
         {
@@ -2360,6 +2397,8 @@ namespace WDAC_Wizard
             this.SigningScenarioCheckStates = new SigningScenarioStates();
             this.SigningScenarioCheckStates.umciEnabled = true;
             this.SigningScenarioCheckStates.kmciEnabled = false;
+
+            this.COMObject = new COM(); 
         }
 
         /// <summary>

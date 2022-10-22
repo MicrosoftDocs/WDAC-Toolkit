@@ -1173,8 +1173,10 @@ namespace WDAC_Wizard
         {
             SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
 
+            siPolicyCustomValueRules = Helper.CreateComRule( siPolicyCustomValueRules);
+
             // Iterate through all of the custom rules and PFN rules and update the progress bar    
-            foreach(var customRule in this.Policy.CustomRules)
+            foreach (var customRule in this.Policy.CustomRules)
             {
                 if(customRule.UsingCustomValues)
                 {
@@ -1195,6 +1197,10 @@ namespace WDAC_Wizard
                 {
                     siPolicyCustomValueRules = Helper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
+                }
+                else if(customRule.Type == PolicyCustomRules.RuleType.Com)
+                {
+                    //siPolicyCustomValueRules = Helper.CreateComRule(customRule, siPolicyCustomValueRules);
                 }
             }
 

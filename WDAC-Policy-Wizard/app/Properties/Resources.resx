@@ -477,4 +477,16 @@ Please select the  'Create Rule' button.</value>
   <data name="BrowseForXmlSaveLoc" xml:space="preserve">
     <value>Choose a location to save your edited WDAC Policy</value>
   </data>
+  <data name="ComInitialGuid" xml:space="preserve">
+    <value>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}</value>
+  </data>
+  <data name="ComInvalidGuid" xml:space="preserve">
+    <value>The COM Object Guid is invalid. Please see the docs for more information.</value>
+  </data>
+  <data name="ComObjectAllKeys" xml:space="preserve">
+    <value>All Keys</value>
+  </data>
+  <data name="MSDocLink_ComObjects" xml:space="preserve">
+    <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/allow-com-object-registration-in-windows-defender-application-control-policy</value>
+  </data>
 </root>

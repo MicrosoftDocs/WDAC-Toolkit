@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions; 
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
@@ -33,6 +33,10 @@ namespace WDAC_Wizard
         private bool redoRequired;
         private string[] DefaultValues;
         private Dictionary<string,string> FoundPackages;
+
+        // Previous state of the COM Guid
+        private string PrevComText = String.Empty;
+        private bool IgnoreInput = false; 
 
         private enum UIState
         {
@@ -66,48 +70,33 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
-            // Assert one of umci or kmci must be set
-            if(!(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
+            // Check COM Object rule for valid GUID
+            // Skip scenario and reference file states for COM rules
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
             {
-                label_Error.Visible = true;
-                label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
-                this.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
-                return;
-            }
-
-            // Assert KMCI cannot be set for PFN or path rules
-            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled 
-                && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp 
-                ||this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
-            {
-                label_Error.Visible = true;
-                label_Error.Text = Properties.Resources.InvalidKMCIRule;
-                this.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
-                return;
-            }
-
-            // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
-            if (this.PolicyCustomRule.ReferenceFile == null)
-            {
-                if(this.PolicyCustomRule.UsingCustomValues 
-                    || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
-                {
-                    
-                }
-                else
+                // Remove whitespace
+                this.PolicyCustomRule.COMObject.Guid = Regex.Replace(this.PolicyCustomRule.COMObject.Guid, @"\s", "");
+                if (!this.PolicyCustomRule.COMObject.IsValidRule())
                 {
                     label_Error.Visible = true;
-                    label_Error.Text = Properties.Resources.InvalidRule_Error;
-                    this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
+                    label_Error.Text = Properties.Resources.ComInvalidGuid;
+                    this.Log.AddWarningMsg("Invalid COM Object Guid " + this.PolicyCustomRule.COMObject.Guid);
+                    return; 
+                }
+            }
+
+            // Validate KMCI scenario settings and reference file state where applicable
+            else
+            {
+                if (!ValidRuleState())
+                {
                     return;
                 }
             }
+            
 
             // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
             bool warnUser = false;
-
-
 
             // Publisher and File Attribute checks
             // Check to make sure none of the fields are invalid
@@ -338,6 +327,54 @@ namespace WDAC_Wizard
             this._MainWindow.CustomRuleinProgress = false;
         }
 
+        private bool ValidRuleState()
+        {
+            // Assert one of umci or kmci must be set
+            if (!(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
+                this.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
+                return false;
+            }
+
+            // Assert KMCI cannot be set for PFN or path rules
+            if (this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled
+                && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = Properties.Resources.InvalidKMCIRule;
+                this.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
+                return false;
+            }
+
+            // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
+            if (this.PolicyCustomRule.ReferenceFile == null)
+            {
+                if (this.PolicyCustomRule.UsingCustomValues
+                    || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                {
+
+                }
+                else
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = Properties.Resources.InvalidRule_Error;
+                    this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
+                    return false;
+                }
+            }
+
+            return true; 
+        }
+
+        /// <summary>
+        /// Creates the data structure to provide to the data table to view the state of the custom rule
+        /// </summary>
+        /// <param name="warnUser">Flag indicating whether to warn user that rule created may fallback to hash rule</param>
+        /// <returns></returns>
         private string[] FormatTableDisplayString(bool warnUser)
         {
             // Show warning message to user to notify that a signing chain was not found; may result in a hash rule created
@@ -478,6 +515,14 @@ namespace WDAC_Wizard
                     }
                     break;
                 }
+
+                case PolicyCustomRules.RuleType.Com:
+                    {
+                        name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
+                        files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
+                        level = "COM Object"; 
+                        break; 
+                    }
             }
 
             // Handle custom EKU
@@ -532,6 +577,7 @@ namespace WDAC_Wizard
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.Checked = false;
             this.panelPackagedApps.Visible = false;
+            this.panelComObject.Visible = false; 
 
             switch (selectedOpt)
             {
@@ -575,10 +621,18 @@ namespace WDAC_Wizard
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
                         "Select the file for which you wish to create a hash rule.";
-                    
                     this.checkBox_CustomPath.Visible = true;
                     this.checkBox_CustomPath.Text = "Use Custom Hash Values"; 
                     break;
+
+                case "COM Object":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Com);
+                    label_Info.Text = "Creates a rule for COM object and software provider.";
+                    this.panelComObject.Location = this.label_condition.Location;
+                    this.panelComObject.Visible = true;
+                    this.panelComObject.BringToFront(); 
+                    break; 
+
                 default:
                     break;
             }
@@ -589,6 +643,12 @@ namespace WDAC_Wizard
             if(this.exceptionsControl != null)
             {
                 this.redoRequired = true; 
+            }
+
+            // Break if Com Object; nothing else is needed to proceed in rule creation
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
+            {
+                return; 
             }
 
             // Show new UI based on the rule type selected if the user has already selected a reference file
@@ -2086,6 +2146,224 @@ namespace WDAC_Wizard
                 this.checkBox_kernelMode.Checked = false;
                 this.checkBox_userMode.Checked = true;
             }
+        }
+
+        /// <summary>
+        /// Shows the MS Doc article for COM Objects
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LabelLearnMoreCom_Click(object sender, EventArgs e)
+        {
+            // Label for learn more about policy options clicked. Launch msft docs page. 
+            try
+            {
+                System.Diagnostics.Process.Start(Properties.Resources.MSDocLink_ComObjects);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", Properties.Resources.MSDocLink_ComObjects), exp);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxComProviderChanged(object sender, EventArgs e)
+        {
+            switch(this.comboBoxComProvider.SelectedIndex)
+            {
+                case 0:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.PowerShell; 
+                    break;
+
+                case 1:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.WSH; 
+                    break;
+
+                case 2:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.IE; 
+                    break;
+
+                case 3:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.VBA; 
+                    break;
+
+                case 4:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.MSI; 
+                    break;
+
+                case 5:
+                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.AllHostIds;
+                    break; 
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxComKeyTypeChanged(object sender, EventArgs e)
+        {
+            // All Keys
+            if (this.comboBoxComKeyType.SelectedItem == comboBoxComKeyType.Items[0])
+            {
+                this.PolicyCustomRule.COMObject.Guid = Properties.Resources.ComObjectAllKeys;
+                this.panelComKey.Visible = false; 
+            }
+            // Custom Key
+            else
+            {
+                this.panelComKey.Visible = true; 
+            }
+        }
+
+
+        /// <summary>
+        /// Fires when the textbox is mouse clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComKeyMouseClick(object sender, MouseEventArgs e)
+        {
+            // Clear the textbox when the user selects it
+            if(String.Equals(this.textBoxObjectKey.Text, Properties.Resources.ComInitialGuid))
+            {
+                this.textBoxObjectKey.Clear(); 
+            }
+        }
+
+        private void ComKeyTextChanged(object sender, EventArgs e)
+        {
+            return; 
+            // Try to cast sender as textbox. If null, sender was not textbox; return
+            TextBox _textBox = sender as TextBox; 
+            if(_textBox == null)
+            {
+                return; 
+            }
+
+            // Check if need to ignore input
+            // Reset and return
+            if(this.IgnoreInput)
+            {
+                this.IgnoreInput = false;
+                return; 
+            }
+
+
+            int textLoc = this.textBoxObjectKey.Text.Length; 
+
+            switch (_textBox.Text)
+            {
+                case "":
+                    // Remove "-" or "{}"
+                    Console.WriteLine("Back");
+                    break;
+
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    // Add "-" or "{}"
+                    if(textLoc == 1)
+                    {
+                        this.IgnoreInput = true; 
+                        this.textBoxObjectKey.Text = "{" + this.textBoxObjectKey.Text; 
+                    }
+                    break;
+
+                case "{":
+                case "}":
+                    // Do nothing
+                    break; 
+
+                default:
+                    // Ignore input; not valid input
+                    this.textBoxObjectKey.Text = this.PrevComText;
+                    return;
+            }
+
+            // Set COM Object Guid
+            this.PolicyCustomRule.COMObject.Guid = this.textBoxObjectKey.Text; 
+
+            // Update prev com text
+            this.PrevComText = this.textBoxObjectKey.Text;
+        }
+
+        private void ComKeyNewKey(object sender, PreviewKeyDownEventArgs e)
+        {
+            // Try to cast sender as textbox. If null, sender was not textbox; return
+            TextBox _textBox = sender as TextBox;
+            if (_textBox == null)
+            {
+                return;
+            }
+
+            // Check if need to ignore input
+            // Reset and return
+            if (this.IgnoreInput)
+            {
+                this.IgnoreInput = false;
+                return;
+            }
+
+
+            int textLoc = this.textBoxObjectKey.Text.Length;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Back:
+                    // Remove "-" or "{}"
+                    Console.WriteLine("Back");
+                    break;
+
+                case Keys.D0:
+                case Keys.D1:
+                case Keys.D2:
+                case Keys.D3:
+                case Keys.D4:
+                case Keys.D5:
+                case Keys.D6:
+                case Keys.D7:
+                case Keys.D8:
+                case Keys.D9:
+                case Keys.NumPad0:
+                case Keys.NumPad1:
+                case Keys.NumPad2:
+                case Keys.NumPad3:
+                case Keys.NumPad4:
+                case Keys.NumPad5:
+                case Keys.NumPad6:
+                case Keys.NumPad7:
+                case Keys.NumPad8:
+                case Keys.NumPad9:
+                    // Add "-" or "{}"
+                    if (textLoc == 0)
+                    {
+                        //this.IgnoreInput = true;
+                        this.textBoxObjectKey.Text = "{" + this.textBoxObjectKey.Text;
+                    }
+                    break;
+
+
+                default:
+                    // Ignore input; not valid input
+                    this.textBoxObjectKey.Text = this.PrevComText;
+                    return;
+            }
+
+            // Update prev com text
+            this.PrevComText = this.textBoxObjectKey.Text;
         }
     }
 }
