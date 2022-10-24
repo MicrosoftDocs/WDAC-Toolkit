@@ -186,8 +186,6 @@
             this.textBoxObjectKey.TabIndex = 95;
             this.textBoxObjectKey.Text = "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}";
             this.textBoxObjectKey.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ComKeyMouseClick);
-            this.textBoxObjectKey.TextChanged += new System.EventHandler(this.ComKeyTextChanged);
-            this.textBoxObjectKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ComKeyNewKey);
             // 
             // label8
             // 
