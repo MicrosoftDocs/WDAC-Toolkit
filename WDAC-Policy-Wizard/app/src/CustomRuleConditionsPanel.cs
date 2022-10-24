@@ -36,7 +36,7 @@ namespace WDAC_Wizard
 
         // Previous state of the COM Guid
         private string PrevComText = String.Empty;
-        private bool IgnoreInput = false; 
+        private bool IgnoreInput = false;
 
         private enum UIState
         {
@@ -74,14 +74,28 @@ namespace WDAC_Wizard
             // Skip scenario and reference file states for COM rules
             if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
             {
-                // Remove whitespace
-                this.PolicyCustomRule.COMObject.Guid = Regex.Replace(this.PolicyCustomRule.COMObject.Guid, @"\s", "");
+                // Snap GUID at time of rule creation and remove whitespace
+                if(this.comboBoxComKeyType.SelectedItem.ToString() != Properties.Resources.ComObjectAllKeys)
+                {
+                    this.PolicyCustomRule.COMObject.Guid = Regex.Replace(this.textBoxObjectKey.Text, @"\s", "");
+                }
+                
                 if (!this.PolicyCustomRule.COMObject.IsValidRule())
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.ComInvalidGuid;
                     this.Log.AddWarningMsg("Invalid COM Object Guid " + this.PolicyCustomRule.COMObject.Guid);
                     return; 
+                }
+
+                // Set COM Object value to state of the rule
+                if (this.PolicyCustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
+                {
+                    this.PolicyCustomRule.COMObject.ValueItem = true; 
+                }
+                else
+                {
+                    this.PolicyCustomRule.COMObject.ValueItem = false; 
                 }
             }
 

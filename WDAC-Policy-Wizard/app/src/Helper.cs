@@ -1349,20 +1349,40 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
-        public static SiPolicy CreateComRule(SiPolicy siPolicy)
+        /// <summary>
+        /// Creates a COM object instance and adds to the provided WDAC SiPolicy object
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object to manipulate and add the COM objects to</param>
+        /// <param name="comObjectList">List of COM object instances to parse and add to siPolicy</param>
+        /// <returns></returns>
+        public static SiPolicy CreateComRule(SiPolicy siPolicy, List<COM> comObjectList)
         {
-            Setting comObject = new Setting();
-            comObject.Key = "TEST_KEY";
-            comObject.Provider = "TEST_PROVIDER";
-            comObject.ValueName = "Boolean";
-            comObject.Value = new SettingValueType(); 
-            comObject.Value.Item = true;
+            if(comObjectList == null || comObjectList.Count == 0)
+            {
+                return siPolicy; 
+            }
 
-            siPolicy = AddComRule(siPolicy, comObject); 
+            foreach(COM customComObj in comObjectList)
+            {
+                Setting comObject = new Setting();
+                comObject.Key = customComObj.Guid;
+                comObject.Provider = customComObj.Provider.ToString();
+                comObject.ValueName = customComObj.ValueName;
+                comObject.Value = new SettingValueType();
+                comObject.Value.Item = customComObj.ValueItem;
+
+                siPolicy = AddComRule(siPolicy, comObject);
+            }
 
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Adds a COM object as a SiPolicy Setting. Returns SiPolicy with the Setting. 
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object to add the COM object Setting to</param>
+        /// <param name="comObject">COM object SiPolicy Setting which is added to the SiPolicy object</param>
+        /// <returns></returns>
         private static SiPolicy AddComRule(SiPolicy siPolicy, Setting comObject)
         {
             if(siPolicy.Settings != null)
@@ -2007,28 +2027,64 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
-        public static Setting[] SetPolicyInfo(string policyName, string policyId)
+        /// <summary>
+        /// Returns a new SiPolicy Setting array with custom Policy Name and Policy ID
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <param name="policyName"></param>
+        /// <param name="policyId"></param>
+        /// <returns></returns>
+        public static Setting[] SetPolicyInfo(Setting[] existingSettings, string policyName, string policyId)
         {
-            Setting[] settings = new Setting[2];
-            //PolicyInfo.Name
+            // If the policy does not have a Settings element, trivial addition case
+            if (existingSettings == null)
+            {
+                Setting[] newSettings = new Setting[2];
+                newSettings[0] = CreatePolicyNameSetting(policyName);
+                newSettings[1] = CreatePolicyIdSetting(policyId);
+                return newSettings; 
+            }
+            // If there are Policy Id and/or Policy Name and/or COM objects, prepend new Policy ID and Name
+            else
+            {
+                List<Setting> settingList = new List<Setting>();
+                settingList.Add(CreatePolicyNameSetting(policyName));
+                settingList.Add(CreatePolicyIdSetting(policyId));
+
+                // Also append all other non-PolicyInfo provider settings i.e. COM objects
+                foreach(var setting in existingSettings)
+                {
+                    if(!(setting.Provider == "PolicyInfo" 
+                        && (setting.ValueName == "Name" || setting.ValueName == "Id"))) 
+                    {
+                        settingList.Add(setting); 
+                    }
+                }
+
+                return settingList.ToArray(); 
+            }
+        }
+
+        public static Setting CreatePolicyNameSetting(string policyName)
+        {
             Setting settingName = new Setting();
             settingName.Provider = "PolicyInfo";
             settingName.Key = "Information";
             settingName.ValueName = "Name";
-            settingName.Value = new SettingValueType(); 
+            settingName.Value = new SettingValueType();
             settingName.Value.Item = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
-            settings[0] = settingName;
+            return settingName; 
+        }
 
-            //PolicyInfo.ID
+        public static Setting CreatePolicyIdSetting(string policyId)
+        {
             Setting settingID = new Setting();
             settingID.Provider = "PolicyInfo";
             settingID.Key = "Information";
             settingID.ValueName = "Id";
             settingID.Value = new SettingValueType();
-            settingID.Value.Item = String.IsNullOrEmpty(policyId)?String.Empty:policyId;
-            settings[1] = settingID;
-
-            return settings;
+            settingID.Value.Item = String.IsNullOrEmpty(policyId) ? String.Empty : policyId;
+            return settingID;
         }
 
         /// <summary>

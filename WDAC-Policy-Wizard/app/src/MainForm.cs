@@ -841,6 +841,9 @@ namespace WDAC_Wizard
             {
                 // Handle Policy Rule-Options
                 SetPolicyRuleOptions(worker);
+
+                // Handle COM rules
+                CreateComObjectRules(worker);
             }
 
             // Set additional parameters, for instance, policy name, GUIDs, version, etc
@@ -994,6 +997,44 @@ namespace WDAC_Wizard
             worker.ReportProgress(95);
         }
 
+        public void CreateComObjectRules(BackgroundWorker worker)
+        {
+            // Iterate through all the custom rules for the COM object rules only
+            List<COM> comObjectRules = new List<COM>();
+            foreach(var rule in this.Policy.CustomRules)
+            {
+                if(rule.COMObject.Guid != null)
+                {
+                    comObjectRules.Add(rule.COMObject);
+                    this.Log.AddInfoMsg(String.Format("Creating COM {0} Rule for Provider={1} and Key={2}",
+                                                       rule.COMObject.ValueItem.ToString(),
+                                                       rule.COMObject.Provider.ToString(),
+                                                       rule.COMObject.Guid));
+                }
+            }
+
+            // Return if no COM rules were created
+            if(comObjectRules.Count == 0)
+            {
+                worker.ReportProgress(99); 
+                return; 
+            }
+
+            // Manipulate the final policy on disk as oppposed to any temp policies
+            SiPolicy policy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
+            policy = Helper.CreateComRule(policy, comObjectRules);
+
+            try
+            {
+                Helper.SerializePolicytoXML(policy, this.Policy.SchemaPath);
+            }
+            catch (Exception e)
+            {
+                this.Log.AddErrorMsg(String.Format("Exception encountered in CreateComObjectRules(): {0}", e));
+            }
+
+        }
+
         /// <summary>
         /// Sets the additonal parameters at the end of a policy: GUIDs, versions, etc
         /// </summary>
@@ -1035,7 +1076,7 @@ namespace WDAC_Wizard
                 siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
 
                 // Set policy info - ID, Name
-                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
+                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
 
                 // Reset the GUIDs
                 siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
@@ -1068,7 +1109,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Additional parameters set - Supplemental policy BasePolicyID set to " + siPolicy.BasePolicyID);
 
                 // Set the PolicyName defined by the user on PolicyType page
-                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID);
+                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
                 this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
                 this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
 
@@ -1080,7 +1121,7 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 // Set policy info - ID, Name
-                siPolicy.Settings = Helper.SetPolicyInfo(this.Policy.PolicyName, this.Policy.PolicyID); 
+                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID); 
                 siPolicy.VersionEx = this.Policy.VersionNumber;
 
                 this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
@@ -1173,8 +1214,6 @@ namespace WDAC_Wizard
         {
             SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
 
-            siPolicyCustomValueRules = Helper.CreateComRule( siPolicyCustomValueRules);
-
             // Iterate through all of the custom rules and PFN rules and update the progress bar    
             foreach (var customRule in this.Policy.CustomRules)
             {
@@ -1197,10 +1236,6 @@ namespace WDAC_Wizard
                 {
                     siPolicyCustomValueRules = Helper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
-                }
-                else if(customRule.Type == PolicyCustomRules.RuleType.Com)
-                {
-                    //siPolicyCustomValueRules = Helper.CreateComRule(customRule, siPolicyCustomValueRules);
                 }
             }
 
@@ -1465,7 +1500,7 @@ namespace WDAC_Wizard
                     policyPaths.Add(this.Policy.TemplatePath);
                 }
 
-                if (this.Policy.CustomRules.Count > 0)
+                if (this.Policy.CustomRules.Count > 0 && File.Exists(customRulesMergePath))
                 {
                     policyPaths.Add(customRulesMergePath);
                 }
@@ -1473,7 +1508,7 @@ namespace WDAC_Wizard
             else
             {
                 // Merge issue #87 is here - non zero custom rules
-                if (this.Policy.CustomRules.Count > 0)
+                if (this.Policy.CustomRules.Count > 0 && File.Exists(customRulesMergePath))
                 {
                     policyPaths.Add(customRulesMergePath);
                 }
