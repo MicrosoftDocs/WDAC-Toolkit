@@ -124,48 +124,11 @@ namespace WDAC_Wizard
             SaveSetting();
         }
 
-        private void Telemetry_CheckBox_Click(object sender, EventArgs e)
-        {
-            PictureBox checkBox = ((PictureBox)sender);
-
-            // Toggle the UI and set the setting
-            // Currently true, set to false
-            if (Properties.Settings.Default.allowTelemetry)
-            {
-                DialogResult res = MessageBox.Show("Turning this off will not allow developers to improve this tool or help debug your case."
-                + "\r\nAre you sure you want to disable this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (res == DialogResult.No)
-                {
-                    return; // will exit before Settings.Default[settingName] change
-                }
-                else
-                {
-                    // Final log :(
-                    this.Log.AddNewSeparationLine("Logging Disabled");
-                    this.Log.UploadLog();
-
-                    // new log object since upload closes and flushes current object
-                    this._MainWindow.Log = new Logger(this._MainWindow.TempFolderPath);
-                    this.Log = this._MainWindow.Log; 
-                }
-
-                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
-                checkBox.Tag = "Unchecked";
-                Properties.Settings.Default.allowTelemetry = false;
-
-            }
-            else // false, set to true
-            {
-                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
-                checkBox.Tag = "Checked";
-                Properties.Settings.Default.allowTelemetry = true;
-            }
-
-            // Save setting and show update message to user
-            SaveSetting();
-        }
-
+        /// <summary>
+        /// Sets the state for the Kernel Mode Recommended blocklist setting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KernelmodeRecList_checkBox_Click(object sender, EventArgs e)
         {
             // Toggle the UI and set the setting
@@ -189,6 +152,11 @@ namespace WDAC_Wizard
             SaveSetting();
         }
 
+        /// <summary>
+        /// /// Sets the state for the User Mode Recommended blocklist setting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UsermodeRecList_checkBox_Click(object sender, EventArgs e)
         {
             // Toggle the UI and set the setting
@@ -212,6 +180,9 @@ namespace WDAC_Wizard
             SaveSetting();
         }
 
+        /// <summary>
+        /// Saves the Wizard Setting and displays the update label
+        /// </summary>
         private void SaveSetting()
         {
             // Save settings and show settings update to user
@@ -224,12 +195,11 @@ namespace WDAC_Wizard
             settingsUpdateNotificationTimer.Start();
         }
 
-        //
-        // Summary:
-        //     Method to launch the terms of use page 
-        //      
-        // Returns:
-        //     None.
+        /// <summary>
+        /// /// Opens the EULA page on the WDAC Toolkit Github page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Terms_Label_Click(object sender, EventArgs e)
         {
             // Launch the terms of use page
@@ -245,6 +215,11 @@ namespace WDAC_Wizard
 
         }
 
+        /// <summary>
+        /// Opens the privacy page on the WDAC Toolkit Github page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Privacy_Label_Click(object sender, EventArgs e)
         {
             // Launch the privacy agreement page
@@ -260,6 +235,11 @@ namespace WDAC_Wizard
 
         }
 
+        /// <summary>
+        /// Resets all Wizard settings to their shipping default when the Reset button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetButton_Click(object sender, EventArgs e)
         {
             // Prompt user for additional confirmation
@@ -286,15 +266,14 @@ namespace WDAC_Wizard
 
                 SetSettingsValues(this.SettingsDict);
                 Properties.Settings.Default.Reset();
-
-
-                // if(this.Log.isClosed)
-                
-
             }
         }
 
-
+        /// <summary>
+        /// Fires on the load event for the Settings Page and sets the SettingsDict
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingsPage_Load(object sender, EventArgs e)
         {
             // On load, configure UI to match the app settings
@@ -302,7 +281,6 @@ namespace WDAC_Wizard
 
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
-            this.SettingsDict.Add("allowTelemetry", (bool)Properties.Settings.Default.allowTelemetry);
             this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
             this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
             this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
@@ -316,6 +294,10 @@ namespace WDAC_Wizard
             SetSettingsValues(this.SettingsDict); 
         }
 
+        /// <summary>
+        /// Sets the UI state foreach Settings Dictionary key value pair
+        /// </summary>
+        /// <param name="settingDict"></param>
         private void SetSettingsValues(Dictionary<string, bool> settingDict)
         {
             // if the setting is set to false, otherwise keep the default UI state of checked
@@ -344,18 +326,27 @@ namespace WDAC_Wizard
             }            
         }
 
+        /// <summary>
+        /// Hides the Update Label at the end of the timer countdown
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
             this.Update_Label.Visible = false; 
         }
 
+        /// <summary>
+        /// Changes the color of the checkbox when the setting checkbox is hovered
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingCheckBox_Hover(object sender, EventArgs e)
         {
             // Change the background color when mouse is hovering above checkbox
             PictureBox checkBox = ((PictureBox)sender);
             checkBox.BackColor = Color.FromArgb(190, 230, 253);
         }
-
 
         /// <summary>
         /// Sets the back color to white for the checkbox picturebox when the user is no longer hovering the mouse over a checkbox.  
@@ -367,6 +358,11 @@ namespace WDAC_Wizard
             checkBox.BackColor = Color.White;
         }
 
+        /// <summary>
+        /// Opens the recommended driver blocklist MS Doc
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LabelDriverBlock_Click(object sender, EventArgs e)
         {
             // Launch the WDAC recommended blocklist page
@@ -381,6 +377,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Opens the recommended user mode blocklist MS Doc
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Label_UsermodeBlock_Click(object sender, EventArgs e)
         {
             // Launch the WDAC recommended blocklist page

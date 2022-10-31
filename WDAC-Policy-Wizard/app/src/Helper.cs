@@ -2027,29 +2027,6 @@ namespace WDAC_Wizard
 
     } // End of static class Helper
 
-    public class packedInfo
-    {
-        static public byte[] blobDeets = {
-            0x44, 0x65, 0x66, 0x61, 0x75, 0x6C, 0x74, 0x45, 0x6E, 0x64, 0x70, 0x6F,
-            0x69, 0x6E, 0x74, 0x73, 0x50, 0x72, 0x6F, 0x74, 0x6F, 0x63, 0x6F, 0x6C,
-            0x3D, 0x68, 0x74, 0x74, 0x70, 0x73, 0x3B, 0x41, 0x63, 0x63, 0x6F, 0x75,
-            0x6E, 0x74, 0x4E, 0x61, 0x6D, 0x65, 0x3D, 0x77, 0x64, 0x61, 0x63, 0x77,
-            0x69, 0x7A, 0x61, 0x72, 0x64, 0x62, 0x6C, 0x6F, 0x62, 0x73, 0x74, 0x6F,
-            0x72, 0x61, 0x67, 0x65, 0x3B, 0x41, 0x63, 0x63, 0x6F, 0x75, 0x6E, 0x74,
-            0x4B, 0x65, 0x79, 0x3D, 0x30, 0x4B, 0x4C, 0x6A, 0x37, 0x64, 0x47, 0x4D,
-            0x6D, 0x6C, 0x47, 0x7A, 0x74, 0x61, 0x31, 0x4E, 0x43, 0x57, 0x70, 0x6B,
-            0x38, 0x45, 0x64, 0x61, 0x42, 0x6F, 0x45, 0x34, 0x2B, 0x58, 0x4A, 0x61,
-            0x6E, 0x30, 0x6E, 0x6D, 0x4B, 0x69, 0x76, 0x34, 0x43, 0x54, 0x6B, 0x45,
-            0x57, 0x30, 0x64, 0x59, 0x30, 0x6B, 0x4C, 0x34, 0x35, 0x63, 0x53, 0x70,
-            0x69, 0x7A, 0x47, 0x77, 0x4D, 0x2B, 0x4A, 0x7A, 0x39, 0x44, 0x5A, 0x4B,
-            0x68, 0x2F, 0x59, 0x55, 0x6C, 0x6E, 0x58, 0x59, 0x67, 0x35, 0x76, 0x6D,
-            0x4D, 0x62, 0x39, 0x56, 0x35, 0x77, 0x3D, 0x3D, 0x3B, 0x45, 0x6E, 0x64,
-            0x70, 0x6F, 0x69, 0x6E, 0x74, 0x53, 0x75, 0x66, 0x66, 0x69, 0x78, 0x3D,
-            0x63, 0x6F, 0x72, 0x65, 0x2E, 0x77, 0x69, 0x6E, 0x64, 0x6F, 0x77, 0x73,
-            0x2E, 0x6E, 0x65, 0x74
-        };
-    }
-
     public class WDACSigner
     {
         public string ID { get; set; }
@@ -2454,7 +2431,6 @@ namespace WDAC_Wizard
     {
         public StreamWriter Log;
         public string FileName;
-        private SHA256 Sha256 = SHA256.Create();
 
         // Singleton pattern here we only allow one instance of the class. 
 
@@ -2470,12 +2446,6 @@ namespace WDAC_Wizard
 
             this.Log.AutoFlush = true;
             this.AddBoilerPlate(); 
-        }
-
-
-        public string GetPath()
-        {
-            return this.FileName; 
         }
 
         public void AddInfoMsg(string info)
@@ -2530,71 +2500,18 @@ namespace WDAC_Wizard
             return fileName;
         }
 
+        /// <summary>
+        /// Closes the Log StreamWriter object
+        /// </summary>
         public void CloseLogger()
         {
             //this.Log.Flush();
             this.Log.Close(); 
         }
 
-        public bool UploadLog()
-        {
-            // Upload the log file to Azure Blob storage if data option is enabled
-            try
-            {
-                // Flush and close logger before upload
-                this.CloseLogger();
-
-                // Create reference to the Azure Storage Account
-                var blobBytes = packedInfo.blobDeets; 
-                String blobString = System.Text.Encoding.Default.GetString(blobBytes);
-                CloudStorageAccount storageacc = CloudStorageAccount.Parse(blobString);
-
-                // Create Azure blob and container reference
-                CloudBlobClient blobClient = storageacc.CreateCloudBlobClient();
-
-                String blobContainerName = Properties.Resources.BlobContainerString;
-                CloudBlobContainer container = blobClient.GetContainerReference(blobContainerName);
-                container.CreateIfNotExists();
-
-                // Get name for blob upload -- Date + Hash of contents
-                String blobBlockName;
-
-                blobBlockName = Path.GetFileNameWithoutExtension(this.FileName) + "__" + GetHashFromFile(this.FileName) + ".txt";
-
-                // Upload log to storage with container set to container name
-                CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(blobBlockName);
-
-                using (var filestream = System.IO.File.OpenRead(this.FileName))
-                {
-                    cloudBlockBlob.UploadFromStream(filestream);
-                }
-                return true; 
-            }
-
-            catch(Exception e)
-            {
-                return false; 
-            }
-            
-        }
-        // Private
-
-        private string GetHashFromFile(string fileName)
-        {
-            Byte[] logHash;
-            using (FileStream stream = File.OpenRead(this.FileName))
-            {
-                logHash = Sha256.ComputeHash(stream);
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < logHash.Length/2; i++)
-            {
-                sb.Append(logHash[i].ToString("x2"));
-            }
-            return sb.ToString();
-        }
-
+        /// <summary>
+        /// Adds information on the Wizard and OS like their versions
+        /// </summary>
         private void AddBoilerPlate()
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
