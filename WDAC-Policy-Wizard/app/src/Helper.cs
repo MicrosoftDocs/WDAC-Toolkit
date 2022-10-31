@@ -1954,6 +1954,15 @@ namespace WDAC_Wizard
             // Add signer references
             siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
 
+            // Add CiSigner - Github Issue #161
+            // Usermode rule you are creating a rule for, you need to add signer to cisigners.
+            // Kernel mode rule, don't add signer to cisigners
+            // If you don't know always add to cisigners.
+            if (customRule.SigningScenarioCheckStates.umciEnabled)
+            {
+                siPolicy = AddSiPolicyCiSigner(signers, siPolicy);
+            }
+
             // Process exceptions
             if (customRule.ExceptionList.Count > 0)
             {
@@ -1972,6 +1981,35 @@ namespace WDAC_Wizard
             }
 
             return siPolicy;
+        }
+
+        /// <summary>
+        /// Adds the signer ID to the CiSigners Section for user mode rules so that enterprise signers can be passed
+        /// </summary>
+        /// <param name="signers"></param>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy AddSiPolicyCiSigner(Signer[] signers, SiPolicy siPolicy)
+        {
+            // Populate the ciSignerIds from the signers array
+            CiSigner[] newCiSigners = new CiSigner[signers.Length]; 
+
+            for(int i= 0; i< signers.Length; i++)
+            {
+                newCiSigners[i] = new CiSigner();
+                newCiSigners[i].SignerId = signers[i].ID; 
+            }
+
+            // Copy the SiPolicy signer object and add the array of CI Signer IDs
+            CiSigner[] cisignersCopy = siPolicy.CiSigners;
+            Array.Resize(ref cisignersCopy, cisignersCopy.Length + newCiSigners.Length);
+            for (int i = 0; i < signers.Length; i++)
+            {
+                cisignersCopy[siPolicy.CiSigners.Length + i] = newCiSigners[i];
+            }
+
+            siPolicy.CiSigners = cisignersCopy;
+            return siPolicy; 
         }
 
         public static Setting[] SetPolicyInfo(string policyName, string policyId)

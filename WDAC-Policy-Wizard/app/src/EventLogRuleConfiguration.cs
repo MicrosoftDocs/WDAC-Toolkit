@@ -849,6 +849,13 @@ namespace WDAC_Wizard
             // Add the allow signer to Signers and the product signers section with Windows Signing Scenario
             siPolicy = AddSiPolicyAllowSigner(signer, siPolicy);
 
+            // Add CiSigner - Github Issue #161
+            // Usermode rule you are creating a rule for, you need to add signer to cisigners.
+            // Kernel mode rule, don't add signer to cisigners
+            // If you don't know always add to cisigners.
+            Signer[] signers = new Signer[] { signer };
+            siPolicy = Helper.AddSiPolicyCiSigner(signers, siPolicy);
+
             return siPolicy;
         }
 
