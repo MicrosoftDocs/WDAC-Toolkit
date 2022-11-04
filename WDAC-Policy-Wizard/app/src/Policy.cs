@@ -231,4 +231,49 @@ namespace WDAC_Wizard
             return false;
         }
     }
+
+    public class COM
+    {
+        const string COMVALUENAME = "EnterpriseDefinedClsId";
+
+        public enum ProviderType
+        {
+            None,
+            PowerShell,
+            WSH,
+            IE,
+            VBA,
+            MSI,
+            AllHostIds
+        }
+
+        public string Guid { get; set; }
+        public ProviderType Provider { get; set; }
+
+        public bool ValueItem { get; set; }
+        public string ValueName { get; }
+
+        public COM()
+        {
+            this.Provider = ProviderType.None;
+            this.ValueName = COMVALUENAME;
+        }
+
+        /// <summary>
+        /// Checks whether the COM Guid is valid. Returns true if "All Keys" or custom Guid is properly formed with or without {}
+        /// </summary>
+        /// <returns>True/False</returns>
+        public bool IsValidRule()
+        {
+            // Possible solution 1: All Keys
+            if(this.Guid.Equals(Properties.Resources.ComObjectAllKeys))
+            {
+                return true; 
+            }
+
+            // Possible solution 2: Valid GUID Format
+            System.Guid _guid = System.Guid.NewGuid(); 
+            return System.Guid.TryParse(this.Guid, out _guid); 
+        }
+    }
 }

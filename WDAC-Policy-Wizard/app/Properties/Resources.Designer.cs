@@ -225,6 +225,33 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
+        /// </summary>
+        internal static string ComInitialGuid {
+            get {
+                return ResourceManager.GetString("ComInitialGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The COM Object Guid is invalid. Please see the docs for more information..
+        /// </summary>
+        internal static string ComInvalidGuid {
+            get {
+                return ResourceManager.GetString("ComInvalidGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Keys.
+        /// </summary>
+        internal static string ComObjectAllKeys {
+            get {
+                return ResourceManager.GetString("ComObjectAllKeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N/A.
         /// </summary>
         internal static string DefaultFileAttributeString {
@@ -638,6 +665,15 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("minus-button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/allow-com-object-registration-in-windows-defender-application-control-policy.
+        /// </summary>
+        internal static string MSDocLink_ComObjects {
+            get {
+                return ResourceManager.GetString("MSDocLink_ComObjects", resourceCulture);
             }
         }
         

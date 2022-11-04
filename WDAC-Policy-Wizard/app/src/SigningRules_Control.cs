@@ -274,7 +274,6 @@ namespace WDAC_Wizard
                 }
             } // end of scenarios
 
-           
              // Write all "File Rules" rules
             if (this.Policy.siPolicy.FileRules != null)
             {
@@ -380,6 +379,25 @@ namespace WDAC_Wizard
                     if (!fileExceptionsDict.ContainsKey(fileRuleID))
                     {
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, fileRuleID));
+                        this.rulesDataGrid.RowCount += 1;
+                    }
+                }
+            }
+
+            // Finally, show any COM Object rules
+            if(this.Policy.siPolicy.Settings != null)
+            {
+                foreach(var setting in this.Policy.siPolicy.Settings)
+                {
+                    // Don't show Policy.Id or Policy.Name settings
+                    if (!(setting.Provider == "PolicyInfo"
+                        && (setting.ValueName == "Name" || setting.ValueName == "Id")))
+                    {
+                        this.displayObjects.Add(new DisplayObject(setting.Value.Item.ToString() == "True" ? "Allow" : "Deny",
+                                                                  "COM Object",
+                                                                  "Provider: " + setting.Provider,
+                                                                  "Key: " + setting.Key,
+                                                                  ""));
                         this.rulesDataGrid.RowCount += 1;
                     }
                 }
@@ -605,6 +623,7 @@ namespace WDAC_Wizard
             string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
             string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
             string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
+            string ruleKey = (String)this.rulesDataGrid["Column_Files", rowIdx].Value;
 
             this.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
 
@@ -653,11 +672,48 @@ namespace WDAC_Wizard
                         return;
                     }
                 }
+
+                // Handle COM object deletion from xml policy under edit
+                else if (ruleType == "COM Object")
+                {
+                    string key = ruleKey.Split(':')[1].Trim();
+                    string provider = ruleName.Split(':')[1].Trim();
+                    int settingIdx = -1;
+                    int numIdx = 0;
+
+                    // Find matching COM object rule
+                    foreach (var comRule in this.Policy.siPolicy.Settings)
+                    {
+                        if (comRule.Provider == provider && comRule.Key == key)
+                        {
+                            settingIdx = numIdx; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
+                            this.Log.AddInfoMsg(String.Format("Removing COM rule - {0}.{1}", provider, key));
+                            break;
+                        }
+                        else
+                        {
+                            numIdx++;
+                        }
+                    }
+
+                    // Check if we assigned a value to settingIdx, remove that COM rule from the Settings[] array
+                    if (settingIdx != -1)
+                    {
+                        Setting[] tempSettings = this.Policy.siPolicy.Settings;
+                        // Move all indices to the left 1 starting at settingIdx. Finish by resizing the Settings array
+                        for (int i = settingIdx; i < tempSettings.Length - 1; i++)
+                        {
+                            tempSettings[i] = tempSettings[i + 1];
+                        }
+                        Array.Resize(ref tempSettings, tempSettings.Length - 1);
+                        this.Policy.siPolicy.Settings = tempSettings;
+                    }
+                }
             }
 
             // Not a custom rule -- Try to remove from signers -- 
             // use ID to remove from scenarios (Allowed/Denied signer)
-            if (ruleType.Equals("Publisher"))
+            else if (ruleType.Equals("Publisher"))
             {
                 numIdex = 0;
 
