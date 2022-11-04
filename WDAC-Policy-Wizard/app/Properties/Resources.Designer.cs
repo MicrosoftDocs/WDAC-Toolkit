@@ -215,15 +215,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft-Windows-CodeIntegrity/Operational.
-        /// </summary>
-        internal static string CILogEvtPath {
-            get {
-                return ResourceManager.GetString("CILogEvtPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap circular_shape_silhouette {
@@ -326,6 +317,24 @@ namespace WDAC_Wizard.Properties {
         internal static string EmptyWDAC {
             get {
                 return ResourceManager.GetString("EmptyWDAC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft-Windows-Applocker/MSI and Script.
+        /// </summary>
+        internal static string EventLogAppLocker {
+            get {
+                return ResourceManager.GetString("EventLogAppLocker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft-Windows-CodeIntegrity/Operational.
+        /// </summary>
+        internal static string EventLogCodeIntegrity {
+            get {
+                return ResourceManager.GetString("EventLogCodeIntegrity", resourceCulture);
             }
         }
         
@@ -1048,6 +1057,15 @@ namespace WDAC_Wizard.Properties {
         internal static string UnsuccessfulEventLogConversion {
             get {
                 return ResourceManager.GetString("UnsuccessfulEventLogConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Wizard did not parse any WDAC events from the selected .evtx files..
+        /// </summary>
+        internal static string UnsuccessfulEventLogConversionZeroEvents {
+            get {
+                return ResourceManager.GetString("UnsuccessfulEventLogConversionZeroEvents", resourceCulture);
             }
         }
         

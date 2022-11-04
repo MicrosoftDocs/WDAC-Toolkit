@@ -124,9 +124,6 @@
   <data name="next" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\next.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CILogEvtPath" xml:space="preserve">
-    <value>Microsoft-Windows-CodeIntegrity/Operational</value>
-  </data>
   <data name="InvalidateEAs_Info" xml:space="preserve">
     <value>When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation.</value>
   </data>
@@ -488,5 +485,14 @@ Please select the  'Create Rule' button.</value>
   </data>
   <data name="MSDocLink_ComObjects" xml:space="preserve">
     <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/allow-com-object-registration-in-windows-defender-application-control-policy</value>
+  </data>
+  <data name="EventLogAppLocker" xml:space="preserve">
+    <value>Microsoft-Windows-Applocker/MSI and Script</value>
+  </data>
+  <data name="EventLogCodeIntegrity" xml:space="preserve">
+    <value>Microsoft-Windows-CodeIntegrity/Operational</value>
+  </data>
+  <data name="UnsuccessfulEventLogConversionZeroEvents" xml:space="preserve">
+    <value>The Wizard did not parse any WDAC events from the selected .evtx files.</value>
   </data>
 </root>

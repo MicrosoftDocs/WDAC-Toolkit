@@ -29,30 +29,53 @@ namespace WDAC_Wizard
         // AppLocker
         const int AUDIT_SCRIPT_ID = 8028;
         const int BLOCK_SCRIPT_ID = 8029;
-        const int SOME_ID = 8036; 
-
+        // const int COM_OBJ_ID = 8036; 
 
         /// <summary>
-        /// Parses the events logs from the auditLogPaths paths into CiEvent objects
+        /// Returns the events logs from the on disk .evtx file paths into CiEvent objects
         /// </summary>
-        /// <param name="auditLogPaths"></param>
-        /// <returns></returns>
-        public static List<CiEvent> ReadArbitraryEventLogs(List<string> auditLogPaths)
+        /// <param name="logPaths">List of .evtx file paths to parse</param>
+        /// <returns>List of CiEvent objects</returns>
+        public static List<CiEvent> ReadArbitraryEventLogs(List<string> logPaths)
+        {
+            // Get CiEvents from evtx files on disk
+            List<CiEvent> ciEvents = ParseEventLogs(logPaths, PathType.FilePath); 
+            return ciEvents;
+        }
+
+        /// <summary>
+        /// Returns the events logs from the system event logs into CiEvent objects
+        /// </summary>
+        /// <param ></param>
+        /// <returns>List of CiEvent objects</returns>
+        public static List<CiEvent> ReadSystemEventLogs()
+        {
+            List<string> logPaths = new List<string>();
+            logPaths.Add(Properties.Resources.EventLogCodeIntegrity);
+            logPaths.Add(Properties.Resources.EventLogAppLocker);
+
+            // Get CiEvents from system logs
+            List<CiEvent> ciEvents = ParseEventLogs(logPaths, PathType.LogName); 
+            return ciEvents;
+        }
+
+        /// <summary>
+        /// Parses the Code Integrity and AppLocker MSI and Script events into CiEvent objects
+        /// </summary>
+        /// <param name="logPaths">List of event log names to retrieve events from, or list of paths to the event log
+        //     file to retrieve events from.</param>
+        /// <param name="pathType">Specifies whether the string used in the path parameter specifies the name of
+        //     an event log, or the path to an event log file.</param>
+        /// <returns>List of CiEvent objects</returns>
+        public static List<CiEvent> ParseEventLogs(List<string> logPaths, PathType pathType)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             List<SignerEvent> ciSignerEvents = new List<SignerEvent>();
             List<SignerEvent> appSignerEvents = new List<SignerEvent>();
 
-
-            foreach (var auditLogPath in auditLogPaths)
+            foreach (var logPath in logPaths)
             {
-                // Check that path provided is an evtx log
-                if (Path.GetExtension(auditLogPath) != ".evtx")
-                {
-                    continue; // do something here? Log?
-                }
-
-                EventLogReader log = new EventLogReader(auditLogPath, PathType.FilePath);
+                EventLogReader log = new EventLogReader(logPath, pathType);
 
                 // Read Signature Events first to prepopulate for correlation with audit/block events
                 for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
@@ -60,12 +83,12 @@ namespace WDAC_Wizard
                     if (entry.Id == SIG_INFO_ID) // CI Signature events
                     {
                         SignerEvent signerEvent = ReadSignatureEvent(entry);
-                        if(signerEvent != null)
+                        if (signerEvent != null)
                         {
                             ciSignerEvents.Add(signerEvent);
                         }
                     }
-                    else if(entry.Id == APP_SIG_INFO_ID) // AppLocker Eignature events
+                    else if (entry.Id == APP_SIG_INFO_ID) // AppLocker Signature events
                     {
                         SignerEvent signerEvent = ReadAppLockerSignatureEvent(entry);
                         if (signerEvent != null)
@@ -75,7 +98,8 @@ namespace WDAC_Wizard
                     }
                 }
 
-                log = new EventLogReader(auditLogPath, PathType.FilePath);
+                log = new EventLogReader(logPath, pathType);
+
                 // Read all other audit/block events
                 for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
                 {
@@ -84,7 +108,7 @@ namespace WDAC_Wizard
                     {
                         List<CiEvent> auditEvents = ReadPEAuditEvent(entry, ciSignerEvents);
 
-                        foreach(CiEvent auditEvent in auditEvents)
+                        foreach (CiEvent auditEvent in auditEvents)
                         {
                             if (auditEvent != null)
                             {
@@ -95,8 +119,9 @@ namespace WDAC_Wizard
                             }
                         }
                     }
+
                     // Block 3077's
-                    else if(entry.Id == BLOCK_PE_ID)
+                    else if (entry.Id == BLOCK_PE_ID)
                     {
                         List<CiEvent> blockEvents = ReadPEBlockEvent(entry, ciSignerEvents);
                         foreach (CiEvent blockEvent in blockEvents)
@@ -128,96 +153,6 @@ namespace WDAC_Wizard
                     }
 
                     // Block 3033's
-                    else if(entry.Id == BLOCK_SIG_LEVEL_ID)
-                    {
-                        List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, ciSignerEvents);
-
-                        foreach(CiEvent blockSLEvent in blockSLEvents)
-                        {
-                            if (blockSLEvent != null)
-                            {
-                                if (!IsDuplicateEvent(blockSLEvent, ciEvents))
-                                {
-                                    ciEvents.Add(blockSLEvent);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return ciEvents;
-        }
-
-        /// <summary>
-        /// Parses the events logs from the auditLogPaths paths into CiEvent objects
-        /// </summary>
-        /// <param name="auditLogPaths"></param>
-        /// <returns></returns>
-        public static List<CiEvent> ReadSystemEventLogs()
-        {
-            List<CiEvent> ciEvents = new List<CiEvent>();
-            List<SignerEvent> ciSignerEvents = new List<SignerEvent>();
-
-            List<string> logPaths = new List<string>();
-            logPaths.Add("Microsoft-Windows-CodeIntegrity/Operational");
-            logPaths.Add("Microsoft-Windows-Applocker/MSI and Script");
-
-            // Loop through the CI and AppLocker logs
-            foreach (var logPath in logPaths)
-            {
-                EventLogReader log = new EventLogReader(logPath, PathType.LogName);
-
-                // Read Signature Events first to prepopulate for correlation with audit/block events
-                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
-                {
-                    if (entry.Id == SIG_INFO_ID)
-                    {
-                        SignerEvent signerEvent = ReadSignatureEvent(entry);
-                        if (signerEvent != null)
-                        {
-                            ciSignerEvents.Add(signerEvent);
-                        }
-                    }
-                }
-
-                log = new EventLogReader(logPath, PathType.LogName);
-                // Read all other audit/block events
-                for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
-                {
-                    // Audit 3076's
-                    if (entry.Id == AUDIT_PE_ID)
-                    {
-                        List<CiEvent> auditEvents = ReadPEAuditEvent(entry, ciSignerEvents);
-
-                        foreach (CiEvent auditEvent in auditEvents)
-                        {
-                            if (auditEvent != null)
-                            {
-                                if (!IsDuplicateEvent(auditEvent, ciEvents))
-                                {
-                                    ciEvents.Add(auditEvent);
-                                }
-                            }
-                        }
-                    }
-                    // Block 3077's
-                    else if (entry.Id == BLOCK_PE_ID)
-                    {
-                        List<CiEvent> blockEvents = ReadPEBlockEvent(entry, ciSignerEvents);
-                        foreach (CiEvent blockEvent in blockEvents)
-                        {
-                            if (blockEvent != null)
-                            {
-                                if (!IsDuplicateEvent(blockEvent, ciEvents))
-                                {
-                                    ciEvents.Add(blockEvent);
-                                }
-                            }
-                        }
-                    }
-
-                    // Block 3033's
                     else if (entry.Id == BLOCK_SIG_LEVEL_ID)
                     {
                         List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, ciSignerEvents);
@@ -236,7 +171,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            return ciEvents;
+            return ciEvents; 
         }
 
         /// <summary>
