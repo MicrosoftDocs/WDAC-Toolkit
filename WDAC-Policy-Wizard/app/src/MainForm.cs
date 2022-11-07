@@ -779,12 +779,9 @@ namespace WDAC_Wizard
                 {
                     this.Log.AddErrorMsg("Event Log SiPolicy serialization failed with error: ", e);
                 }
-                
-                // Upload log file if customer consents
-                if (Properties.Settings.Default.allowTelemetry)
-                {
-                    this.Log.UploadLog();
-                }
+
+                // Close log file 
+                this.Log.CloseLogger(); 
 
                 // Build Page:
                 this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to WDAC Policy");
@@ -896,12 +893,10 @@ namespace WDAC_Wizard
             }
             this.Log.AddNewSeparationLine("Workflow -- DONE");
 
-            // Upload log file if customer consents
-            if (Properties.Settings.Default.allowTelemetry)
-            {
-                this.Log.UploadLog();
-            }
+            // Close the log file.At the end of the workflow
+            this.Log.CloseLogger(); 
 
+            // Check for error and show the error UI on the build page
             if (e.Error != null)
             {
                 this._BuildPage.ShowError();

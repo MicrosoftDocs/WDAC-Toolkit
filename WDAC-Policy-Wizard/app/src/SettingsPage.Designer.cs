@@ -48,8 +48,6 @@ namespace WDAC_Wizard
             this.useDriverBlockRules_CheckBox = new System.Windows.Forms.PictureBox();
             this.convertPolicyToBinary_CheckBox = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.allowTelemetry_CheckBox = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.useEnvVars_CheckBox = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -61,7 +59,6 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.useUsermodeBlockRules_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useDriverBlockRules_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -191,8 +188,6 @@ namespace WDAC_Wizard
             this.panel1.Controls.Add(this.useDriverBlockRules_CheckBox);
             this.panel1.Controls.Add(this.convertPolicyToBinary_CheckBox);
             this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.allowTelemetry_CheckBox);
-            this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.useEnvVars_CheckBox);
             this.panel1.Controls.Add(this.label8);
@@ -299,34 +294,6 @@ namespace WDAC_Wizard
             this.label7.TabIndex = 18;
             this.label7.Text = "Convert policy to binary after xml creation";
             // 
-            // allowTelemetry_CheckBox
-            // 
-            this.allowTelemetry_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
-            this.allowTelemetry_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.allowTelemetry_CheckBox.Location = new System.Drawing.Point(38, 290);
-            this.allowTelemetry_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.allowTelemetry_CheckBox.Name = "allowTelemetry_CheckBox";
-            this.allowTelemetry_CheckBox.Size = new System.Drawing.Size(23, 26);
-            this.allowTelemetry_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.allowTelemetry_CheckBox.TabIndex = 17;
-            this.allowTelemetry_CheckBox.TabStop = false;
-            this.allowTelemetry_CheckBox.Tag = "Checked";
-            this.allowTelemetry_CheckBox.Click += new System.EventHandler(this.Telemetry_CheckBox_Click);
-            this.allowTelemetry_CheckBox.MouseLeave += new System.EventHandler(this.SettingCheckBox_Leave);
-            this.allowTelemetry_CheckBox.MouseHover += new System.EventHandler(this.SettingCheckBox_Hover);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(70, 293);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(197, 21);
-            this.label10.TabIndex = 16;
-            this.label10.Text = "Share logs with Microsoft";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -422,7 +389,6 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.useUsermodeBlockRules_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useDriverBlockRules_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.allowTelemetry_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -444,8 +410,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.PictureBox useEnvVars_CheckBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.PictureBox allowTelemetry_CheckBox;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Label Update_Label;
         private System.Windows.Forms.PictureBox convertPolicyToBinary_CheckBox;
