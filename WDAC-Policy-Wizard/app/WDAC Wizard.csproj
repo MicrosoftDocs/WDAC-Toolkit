@@ -421,6 +421,12 @@
     <None Include="Resources\radio_off.png" />
     <None Include="Resources\imgs\eventlog_progress.gif" />
     <None Include="Resources\imgs\loading.gif" />
+    <Content Include="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml" />
+    <Content Include="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml" />
+    <Content Include="Resources\policyTemplates\DefaultWindows_Audit.xml" />
+    <Content Include="Resources\policyTemplates\Recommended_Driver_Blocklist.xml" />
+    <Content Include="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml" />
+    <Content Include="Resources\policyTemplates\SignedReputable - SingleFormat.xml" />
     <Content Include="Resources\RulesDict.xml" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <None Include="Resources\imgs\blank-check-box_32.png" />
@@ -461,7 +467,6 @@
     <Content Include="Resources\imgs\windows-logo.png" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
-    <Content Include="Resources\policyTemplates\DefaultWindows_Enforced.xml" />
     <None Include="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
     </None>

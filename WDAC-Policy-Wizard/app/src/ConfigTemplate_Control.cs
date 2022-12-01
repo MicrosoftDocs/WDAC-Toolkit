@@ -57,12 +57,6 @@ namespace WDAC_Wizard
             if (!this.ReadSetRules(sender, e))
                 return; 
 
-            // Enable audit mode by default
-            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
-            {
-                this.Policy.ConfigRules["AuditMode"]["CurrentValue"] = "Enabled";
-            }
-
             // Set HVCI option value
             if (this.Policy.EnableHVCI)
             {
