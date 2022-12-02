@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.0.2.0</VersionEx>
+  <VersionEx>10.0.3.0</VersionEx>
   <PolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</PolicyID>
   <BasePolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
@@ -29,6 +29,9 @@
     <Rule>
       <Option>Enabled:Revoked Expired As Unsigned</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs>
@@ -43,7 +46,6 @@
   </EKUs>
   <!--File Rules-->
   <FileRules>
-    <Allow ID="ID_ALLOW_WDAC_WIZARD" FriendlyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe FileRule" MinimumFileVersion="0.0.0.0" PackageFamilyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe" PackageVersion="1.6.4.0" />
     <FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
   </FileRules>
   <!--Signers-->
@@ -218,9 +220,6 @@
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010_USER" />
         </AllowedSigners>
-        <FileRulesRef>
-          <FileRuleRef RuleID="ID_ALLOW_WDAC_WIZARD" />
-        </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
@@ -252,7 +251,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>092421</String>
+        <String>12022022</String>
       </Value>
     </Setting>
   </Settings>
