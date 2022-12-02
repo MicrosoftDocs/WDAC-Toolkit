@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.1.0</VersionEx>
-  <PolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyID>
-  <BasePolicyID>{A244370E-44C9-4C06-B551-F6016E563076}</BasePolicyID>
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
+  <VersionEx>10.0.4.0</VersionEx>
+  <PolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</PolicyID>
+  <BasePolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
@@ -18,7 +18,13 @@
       <Option>Enabled:Inherit Default Policy</Option>
     </Rule>
     <Rule>
+      <Option>Enabled:Dynamic Code Security</Option>
+    </Rule>
+    <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Allow Supplemental Policies</Option>
     </Rule>
     <Rule>
       <Option>Enabled:Audit Mode</Option>
@@ -28,6 +34,10 @@
   <EKUs>
     <EKU ID="ID_EKU_STORE" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1 Windows Store" Value="010a2b0601040182374c0301" />
   </EKUs>
+  <!--File Rules-->
+  <FileRules>
+    <FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
+  </FileRules>
   <!--Signers-->
   <Signers>
     <Signer ID="ID_SIGNER_MICROSOFT_PRODUCT_1997" Name="MincryptKnownRootMicrosoftProductRoot1997">
@@ -83,6 +93,11 @@
       <CertRoot Type="TBS" Value="FC9EDE3DCCA09186B2D3BF9B738A2050CB1A554DA2DCADB55F3F72EE17721378" />
       <CertEKU ID="ID_EKU_STORE" />
     </Signer>
+    <Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
+      <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
+      <CertPublisher Value="Microsoft Corporation" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_REFRESH_POLICY" />
+    </Signer>
   </Signers>
   <SigningScenarios>
     <!--Kernel Mode Signing Scenario-->
@@ -113,6 +128,7 @@
           <AllowedSigner SignerId="ID_SIGNER_DRM_UMCI" />
           <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_FLIGHT_2014_UMCI" />
           <AllowedSigner SignerId="ID_SIGNER_STORE" />
+          <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010_UMCI" />
         </AllowedSigners>
@@ -140,6 +156,11 @@
   </CiSigners>
   <HvciOptions>0</HvciOptions>
   <Settings>
+    <Setting Provider="AllHostIds" Key="{0468C085-CA5B-11D0-AF08-00609797F0E0}" ValueName="EnterpriseDefinedClsId">
+      <Value>
+        <Boolean>true</Boolean>
+      </Value>
+    </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
       <Value>
         <String>DefaultMicrosoftEnforced</String>
@@ -147,7 +168,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>041317</String>
+        <String>12022022</String>
       </Value>
     </Setting>
   </Settings>

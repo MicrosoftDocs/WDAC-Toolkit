@@ -29,9 +29,6 @@
     <Rule>
       <Option>Enabled:Revoked Expired As Unsigned</Option>
     </Rule>
-    <Rule>
-      <Option>Enabled:Allow Supplemental Policies</Option>
-    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs>
@@ -46,6 +43,7 @@
   </EKUs>
   <!--File Rules-->
   <FileRules>
+    <Allow ID="ID_ALLOW_WDAC_WIZARD" FriendlyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe FileRule" MinimumFileVersion="0.0.0.0" PackageFamilyName="Microsoft.WDAC.WDACWizard_8wekyb3d8bbwe" PackageVersion="1.6.4.0" />
     <FileAttrib ID="ID_FILEATTRIB_REFRESH_POLICY" FriendlyName="RefreshPolicy.exe FileAttribute" FileName="RefreshPolicy.exe" MinimumFileVersion="10.0.19042.0" />
   </FileRules>
   <!--Signers-->
@@ -220,6 +218,9 @@
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010_USER" />
         </AllowedSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_WDAC_WIZARD" />
+        </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
   </SigningScenarios>
@@ -251,7 +252,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>022422</String>
+        <String>12022022</String>
       </Value>
     </Setting>
   </Settings>

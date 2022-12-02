@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.0.2.0</VersionEx>
+  <VersionEx>10.0.3.0</VersionEx>
   <PolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</PolicyID>
   <BasePolicyID>{E0ABDA1F-CCF0-468E-8855-3E0F08B02D6A}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
@@ -252,7 +252,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>092421</String>
+        <String>12022022</String>
       </Value>
     </Setting>
   </Settings>
