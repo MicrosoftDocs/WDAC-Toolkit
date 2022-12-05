@@ -1035,27 +1035,15 @@ namespace WDAC_Wizard
         /// </summary>
         void SetAdditionalParameters(BackgroundWorker worker)
         {
-            // Operations: Set HVCI options, policy version, policy ID values, GUIDs:
+            // Operations:
+            // 1. Set Policy GUIDs (PolicyID, BasePolicyID)
+            // 2. Settings PolicyInfo.Name and PolicyInfo.Id
+            // 3. VersionExpolicy 
+            // 4. HVCI state
+
             this.Log.AddInfoMsg("-- Set Additional Parameters --");
-            bool resetGuid = false;
 
-            // The only time we should be reseting the GUID is NEW Base Policy
-            // Setting these will revert policy under edit to BasePolicy
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
-            {
-                if (this.Policy.siPolicy != null)
-                {
-                    if (this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
-                    {
-                        resetGuid = false;
-                    }
-                    else
-                    {
-                        resetGuid = true;
-                    }
-                }
-            }
-
+            
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
 
             if(siPolicy == null)
@@ -1063,53 +1051,49 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (resetGuid)
+            // The only time we should be reseting the GUID is NEW multi-policy Base or Supplemental Policy
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
             {
-                ResetGuidPs(this.Policy.SchemaPath);
-
-                // Deserialize again since Wizard reset the policy on disk to multi-policy
-                siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
-
                 // Set policy info - ID, Name
                 siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
 
-                // Reset the GUIDs
-                siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
-                siPolicy.PolicyID = siPolicy.BasePolicyID;
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy 
+                    && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+                {
+                    // Run Set-CIPolicyIdInfo -ResetPolicyID to force the policy into multiple policy format
+                    ResetGuidPs(this.Policy.SchemaPath);
 
-                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
-                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
-                this.Log.AddInfoMsg("Additional parameters set - PolicyID/BasePolicyID reset to " + siPolicy.PolicyID);
-            }
+                    // Deserialize again since Wizard reset the policy on disk to multi-policy
+                    siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
 
+                    // Reset the GUIDs
+                    siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+                    siPolicy.PolicyID = siPolicy.BasePolicyID;
+                }
 
-            if (this.Policy.EnableHVCI)
-            {
-                // Enable HVCI since HVCI is not a Rule-Option
-                siPolicy.HvciOptions = 1;
-                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 1");
-            }
-            else
-            {
-                siPolicy.HvciOptions = 0;
-                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
-            }
+                // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
+                else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                {
+                    // Set BasePolicyID to match the Id of the linked base policy
+                    siPolicy.BasePolicyID = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath).BasePolicyID;
 
-            // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-            {
-                // Set BasePolicyID to match the Id of the linked base policy
-                SiPolicy baseSiPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath);
-                siPolicy.BasePolicyID = baseSiPolicy.BasePolicyID;
-                this.Log.AddInfoMsg("Additional parameters set - Supplemental policy BasePolicyID set to " + siPolicy.BasePolicyID);
+                    // Reset the PolicyID guid so it is unique
+                    siPolicy.PolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
 
-                // Set the PolicyName defined by the user on PolicyType page
-                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
-                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
-                this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
+                    // Force SiPolicy PolicyType to Supplemental
+                    siPolicy.PolicyType = global::PolicyType.SupplementalPolicy;
+                }
 
-                // Force SiPolicy PolicyType to Supplemental
-                siPolicy.PolicyType = global::PolicyType.SupplementalPolicy;
+                // Log information set for debugging
+                this.Log.AddInfoMsg("Additional parameters set - BasePolicyID: " + siPolicy.BasePolicyID);
+                this.Log.AddInfoMsg("Additional parameters set - PolicyID: " + siPolicy.PolicyID);
+
+                // Log Policy settings set by the Wizard
+                foreach(var setting in siPolicy.Settings)
+                {
+                    this.Log.AddInfoMsg(String.Format("Additional parameters set - Provider:{0} - Key:{1} - ValueName: {2} - Value:{3} ", 
+                        setting.Provider, setting.Key, setting.ValueName, setting.Value.Item));
+                }
             }
 
             // Update the version number on the edited policies. If not specified, version defaults to 10.0.0.0
@@ -1122,6 +1106,19 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
                 this.Log.AddInfoMsg("Additional parameters set - Info.PolicyID to " + siPolicy.Settings[1].Value.Item);
                 this.Log.AddInfoMsg("Additional parameters set - VersionEx " + siPolicy.VersionEx);
+            }
+
+            // Lastly, set HVCI state
+            if (this.Policy.EnableHVCI)
+            {
+                // Enable HVCI since HVCI is not a Rule-Option
+                siPolicy.HvciOptions = 1;
+                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 1");
+            }
+            else
+            {
+                siPolicy.HvciOptions = 0;
+                this.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
             }
 
             try
@@ -1363,7 +1360,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
-                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
+                this.Log.AddErrorMsg(String.Format("Exception encountered in ResetGuidPs(): {0}", e));
             }
         }
 
