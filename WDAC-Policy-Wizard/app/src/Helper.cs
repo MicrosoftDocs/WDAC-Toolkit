@@ -1595,7 +1595,7 @@ namespace WDAC_Wizard
                         else
                         {
                             refCopy.FileRuleRef = new FileRuleRef[siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef.Length + 1];
-                            for (int j = 0; j < refCopy.FileRuleRef.Length - j; j++)
+                            for (int j = 0; j < refCopy.FileRuleRef.Length - 1; j++)
                             {
                                 refCopy.FileRuleRef[j] = siPolicy.SigningScenarios[i].ProductSigners.FileRulesRef.FileRuleRef[j];
                             }
