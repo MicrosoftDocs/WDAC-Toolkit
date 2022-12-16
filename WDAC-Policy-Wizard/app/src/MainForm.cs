@@ -1224,7 +1224,7 @@ namespace WDAC_Wizard
                     siPolicyCustomValueRules = Helper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
-                else if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
+                else if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     siPolicyCustomValueRules = Helper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
@@ -1267,7 +1267,7 @@ namespace WDAC_Wizard
                 siPolicy = Helper.CreatePFNRule(customRule, siPolicy);
             }
 
-            else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.Folder)
+            else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
             {
                 if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {

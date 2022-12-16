@@ -356,7 +356,7 @@ namespace WDAC_Wizard
             if (this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled
                 && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidKMCIRule;
@@ -482,7 +482,7 @@ namespace WDAC_Wizard
                     break;
                 }
 
-            case PolicyCustomRules.RuleType.Folder:
+            case PolicyCustomRules.RuleType.FolderPath:
                 {
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
@@ -591,7 +591,8 @@ namespace WDAC_Wizard
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.Checked = false;
             this.panelPackagedApps.Visible = false;
-            this.panelComObject.Visible = false; 
+            this.panelComObject.Visible = false;
+            this.label_condition.Text = "Reference File:";
 
             switch (selectedOpt)
             {
@@ -645,7 +646,15 @@ namespace WDAC_Wizard
                     this.panelComObject.Location = this.label_condition.Location;
                     this.panelComObject.Visible = true;
                     this.panelComObject.BringToFront(); 
-                    break; 
+                    break;
+
+                case "Folder Scan":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
+                    label_Info.Text = "Creates a file rule for each file found in the scanned directory and it's subdirectories.";
+                    panel_FileFolder.Visible = false;
+                    this.checkBox_CustomPath.Visible = false;
+                    this.label_condition.Text = "Scan Path:";
+                    break;
 
                 default:
                     break;
@@ -712,7 +721,8 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Folder)
+            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderPath
+                && this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderScan)
             {
                 string refPath = GetFileLocation();
                 if (refPath == String.Empty)
@@ -872,7 +882,7 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = true;
                     break;
 
-                case PolicyCustomRules.RuleType.Folder:
+                case PolicyCustomRules.RuleType.FolderPath:
 
                     // User wants to create rule by folder level
                     this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
@@ -978,6 +988,19 @@ namespace WDAC_Wizard
                     }
 
                     break;
+
+                case PolicyCustomRules.RuleType.FolderScan:
+
+                    // User wants to create rules for each file in the selected folder
+                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
+                    if (PolicyCustomRule.ReferenceFile == String.Empty)
+                    {
+                        break;
+                    }
+
+                    this.AllFilesinFolder = Helper.FindAllFilesInDirectory(this.PolicyCustomRule.ReferenceFile);
+
+                    break;
             }
         }
 
@@ -996,7 +1019,7 @@ namespace WDAC_Wizard
             else
             {
                 this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.Folder;
-                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.Folder;
+                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.FolderPath;
             }
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
@@ -1083,7 +1106,7 @@ namespace WDAC_Wizard
         private void Button_Next_Click(object sender, EventArgs e)
         {
             // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder 
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath 
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
@@ -2121,7 +2144,7 @@ namespace WDAC_Wizard
             {
                 if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
                     this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
-                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder)
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
                                                         "Unsupported Kernel Rule Type",

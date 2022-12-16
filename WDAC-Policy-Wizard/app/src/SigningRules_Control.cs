@@ -486,34 +486,6 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// A reccursive function to list all of the PE files in a folder and subfolders to create allow and 
-        /// deny rules on folder path rules. Stores filepaths in this.AllFilesinFolder. 
-        /// </summary>
-        /// <param name="folder">The folder path </param>
-        private void ProcessAllFiles(string folder)
-        {
-            // All extensions we look for
-            var ext = new List<string> { ".exe", ".ps1", ".bat", ".vbs", ".js" };
-            foreach (var file in Directory.GetFiles(folder,"*.*").Where(s => ext.Contains(Path.GetExtension(s))))
-                this.AllFilesinFolder.Add(file);
-
-            // Reccursively grab files from sub dirs
-            foreach (string subDir in Directory.GetDirectories(folder))
-            {
-                try
-                {
-                    ProcessAllFiles(subDir);
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine(String.Format("Exception found: {0} ", e));
-                }
-            }
-
-            //PolicyCustomRule.FolderContents = Directory.GetFiles(PolicyCustomRule.ReferenceFile, "*.*", SearchOption.AllDirectories)
-        }
-
-        /// <summary>
         /// Method to set all of the MainWindow objects to the local instances of the Policy helper class objects.
         /// </summary>
         private void BubbleUp()

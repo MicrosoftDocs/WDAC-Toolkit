@@ -118,7 +118,7 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.Folder)
+            if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.FolderPath)
             {
                 string refPath = GetFileLocation();
 
@@ -172,7 +172,7 @@ namespace WDAC_Wizard
             // Set the landing UI depending on the Rule type
             switch (this.ExceptionRule.GetRuleType())
             {
-                case PolicyCustomRules.RuleType.Folder:
+                case PolicyCustomRules.RuleType.FolderPath:
 
                     // User wants to create rule by folder level
                     ExceptionRule.ReferenceFile = GetFolderLocation();
@@ -742,7 +742,7 @@ namespace WDAC_Wizard
             else
             {
                 this.ExceptionRule.Level = PolicyCustomRules.RuleLevel.Folder;
-                this.ExceptionRule.Type = PolicyCustomRules.RuleType.Folder;
+                this.ExceptionRule.Type = PolicyCustomRules.RuleType.FolderPath;
             }
         }
     }

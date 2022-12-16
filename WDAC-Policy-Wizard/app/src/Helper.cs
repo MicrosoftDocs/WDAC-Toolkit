@@ -163,6 +163,7 @@ namespace WDAC_Wizard
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.Description = displayTitle;
+            openFolderDialog.RootFolder = Environment.SpecialFolder.System; 
 
             if (openFolderDialog.ShowDialog() == DialogResult.OK)
             {
@@ -248,6 +249,39 @@ namespace WDAC_Wizard
             }
 
             return newUniquePath;
+        }
+
+        /// <summary>
+        /// A reccursive function to list all of the PE files in a folder and subfolders to create allow and 
+        /// deny rules on folder path rules. Stores filepaths in this.AllFilesinFolder. 
+        /// </summary>
+        /// <param name="folder">The folder path </param>
+        public static List<string> FindAllFilesInDirectory(string folder)
+        {
+            List<string> allFilesinFolder = new List<string>(); 
+            // All extensions we look for
+            var ext = new List<string> { "EXE", "DLL", "RLL", "BIN", "PS1", "BAT", "VBS", "JS", "MSI", "MSIX", "APPX",
+                                         "SYS", "HXS", "MUI", "LEX", "MOF" };
+
+            foreach (var file in Directory.GetFiles(folder, "*.*").Where(s => ext.Contains(Path.GetExtension(s))))
+            {
+                allFilesinFolder.Add(file);
+            }
+
+            // Reccursively grab files from sub dirs
+            foreach (string subDir in Directory.GetDirectories(folder))
+            {
+                try
+                {
+                    FindAllFilesInDirectory(subDir);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(String.Format("Exception found: {0} ", e));
+                }
+            }
+
+            return allFilesinFolder; 
         }
 
         /// <summary>
@@ -1755,7 +1789,7 @@ namespace WDAC_Wizard
                 {
                     siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
                 }
-                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
                     siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);                    
@@ -1789,7 +1823,7 @@ namespace WDAC_Wizard
                 {
                     siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
                 }
-                else if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                else if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     exceptDenyRules[i++].DenyRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
                     siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);
@@ -2363,9 +2397,10 @@ namespace WDAC_Wizard
             FileAttributes,   // RuleLevel set to "FileName", gives way to additional switch "SpecificFileNameLevel"
             PackagedApp,
             FilePath,
-            Folder,
+            FolderPath,
             Hash, 
-            Com
+            Com, 
+            FolderScan
         }
 
         public enum RuleLevel
