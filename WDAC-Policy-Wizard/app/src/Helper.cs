@@ -432,6 +432,25 @@ namespace WDAC_Wizard
             return true;
         }
 
+        /// <summary>
+        /// Concatenates the file version parts (major, minor, build and private)
+        /// </summary>
+        /// <param name="fileVersionInfo"></param>
+        /// <returns>Major.Minor.Build.Private if file version exists. Null, otherwise.</returns>
+        public static string ConcatFileVersion(FileVersionInfo fileVersionInfo)
+        {
+            if(fileVersionInfo.FileMajorPart == null
+                || fileVersionInfo.FileMinorPart == null
+                || fileVersionInfo.FileBuildPart == null
+                || fileVersionInfo.FilePrivatePart == null)
+            {
+                return null; 
+            }
+
+            return String.Format("{0}.{1}.{2}.{3}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart,
+                                   fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
+        }
+
         public static int CompareVersions(string minVersion, string maxVersion)
         {
             var minversionParts = minVersion.Split('.');
