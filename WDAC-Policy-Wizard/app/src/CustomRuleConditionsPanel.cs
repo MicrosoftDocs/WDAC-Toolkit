@@ -527,8 +527,6 @@ namespace WDAC_Wizard
                     break;
                 }
 
-                    
-
             case PolicyCustomRules.RuleType.FilePath:
                 {
                     if (this.PolicyCustomRule.UsingCustomValues)
@@ -564,10 +562,27 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.Com:
                     {
+                        level = "COM Object";
                         name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
                         files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
-                        level = "COM Object"; 
+                         
                         break; 
+                    }
+
+                case PolicyCustomRules.RuleType.FolderScan:
+                    {
+                        level = this.PolicyCustomRule.Scan.Levels[0];
+                        name = "Folder Scan - " + this.PolicyCustomRule.ReferenceFile;
+                        if (this.PolicyCustomRule.Scan.Levels.Count > 1)
+                        {
+                            files = "Level Fallback to "; 
+                            for(int i=1; i< this.PolicyCustomRule.Scan.Levels.Count; i++)
+                            {
+                                files += this.PolicyCustomRule.Scan.Levels[i] + ", ";
+                            }
+                            files = files.Substring(0, files.Length - 2);
+                        }
+                        break;
                     }
             }
 
@@ -2341,6 +2356,35 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", 
                                      Properties.Resources.MSDocLink_RuleLevels), exp);
             }
+        }
+
+        /// <summary>
+        /// Fires when the row is selected down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RuleLevelsList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (this.checkedListBoxRuleLevels.SelectedItem == null || e.X < 15 || (e.X > 150 && e.X < 165)) return; // e.X < 15 - left most column checkboxes. 150 < e.X < 165 - right most checkboxes
+            this.checkedListBoxRuleLevels.DoDragDrop(this.checkedListBoxRuleLevels.SelectedItem, DragDropEffects.Move);
+        }
+
+        private void RuleLevelsList_DragDropDone(object sender, DragEventArgs e)
+        { 
+            Point point = checkedListBoxRuleLevels.PointToClient(new Point(e.X, e.Y));
+            int index = this.checkedListBoxRuleLevels.IndexFromPoint(point);
+            if (index < 0) index = this.checkedListBoxRuleLevels.Items.Count - 1;
+            bool isChecked = checkedListBoxRuleLevels.GetItemChecked(index);
+
+            object data = checkedListBoxRuleLevels.SelectedItem;
+            this.checkedListBoxRuleLevels.Items.Remove(data);
+            this.checkedListBoxRuleLevels.Items.Insert(index, data);
+            this.checkedListBoxRuleLevels.SetItemChecked(index, isChecked);
+        }
+
+        private void RuleLevelsList_DragInProgress(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
         }
     }
 }

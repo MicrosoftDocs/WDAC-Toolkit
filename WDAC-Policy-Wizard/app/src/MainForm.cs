@@ -1159,7 +1159,8 @@ namespace WDAC_Wizard
                 // Skip the following rules that are handled by custom rules method -
                 // File Attributes, PFN rules, file/folder path rules
                 if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
-                        || customRule.Type == PolicyCustomRules.RuleType.Hash))
+                        || customRule.Type == PolicyCustomRules.RuleType.Hash
+                        || customRule.Type == PolicyCustomRules.RuleType.FolderScan))
                 {
                     continue;
                 }
@@ -1185,6 +1186,17 @@ namespace WDAC_Wizard
                 if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
                     SiPolicy signerSiPolicy = CreateHashPolicyFromPS(customRule, tmpPolicyPath);
+                    if (signerSiPolicy != null)
+                    {
+                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
+                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
+                    }
+                }
+
+                // Folder Scan -- Invoke the New-CiPolicy PS cmd to generate a CI policy
+                if(customRule.Type == PolicyCustomRules.RuleType.FolderScan)
+                {
+                    SiPolicy signerSiPolicy = CreateScannedPolicyFromPS(customRule, tmpPolicyPath);
                     if (signerSiPolicy != null)
                     {
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
@@ -1328,6 +1340,75 @@ namespace WDAC_Wizard
             catch (Exception e)
             {
                 this.Log.AddErrorMsg("CreateHashPolicyFromPS() encountered the following exception ", e);
+                return null;
+            }
+
+            runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="signerSiPolicy"></param>
+        public SiPolicy CreateScannedPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        {
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the hashes for rules
+            string newPolicyRuleCmd = String.Format("New-CIPolicy -ScanPath \"{0}\" -Level \"{1}\" -FilePath \"{2}\"", 
+                                                    customRule.ReferenceFile, customRule.Scan.Levels[0], policyPath);
+            // Add fallback levels, if applicable
+            if(customRule.Scan.Levels.Count > 1)
+            {
+                newPolicyRuleCmd += " -Fallback ";
+                for(int i=1; i <customRule.Scan.Levels.Count; i++)
+                {
+                    newPolicyRuleCmd += customRule.Scan.Levels[i] + ", "; 
+                }
+                newPolicyRuleCmd = newPolicyRuleCmd.Substring(0, newPolicyRuleCmd.Length - 2); // trim trailing comma + whitespace
+            }
+
+            // Add omit paths, if applicable
+            if (customRule.Scan.OmitPaths.Count > 0)
+            {
+                newPolicyRuleCmd += " -OmitPaths ";
+                for (int i = 0; i < customRule.Scan.OmitPaths.Count; i++)
+                {
+                    newPolicyRuleCmd += customRule.Scan.OmitPaths[i] + ", ";
+                }
+                newPolicyRuleCmd = newPolicyRuleCmd.Substring(0, newPolicyRuleCmd.Length - 2); // trim trailing comma + whitespace
+            }
+
+            // Handle User mode PEs, if applicable
+            if(customRule.SigningScenarioCheckStates.umciEnabled)
+            {
+                newPolicyRuleCmd += " -UserPEs";
+            }
+
+            // Handle Deny rules, if applicable
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                newPolicyRuleCmd += " -Deny";
+            }
+
+            pipeline.Commands.AddScript(newPolicyRuleCmd);
+            this.Log.AddInfoMsg("Running the following commands: " + newPolicyRuleCmd);
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                this.Log.AddErrorMsg("CreateScannedPolicyFromPS() encountered the following exception ", e);
                 return null;
             }
 

@@ -163,7 +163,6 @@ namespace WDAC_Wizard
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.Description = displayTitle;
-            openFolderDialog.RootFolder = Environment.SpecialFolder.System; 
 
             if (openFolderDialog.ShowDialog() == DialogResult.OK)
             {

@@ -215,6 +215,7 @@
             // 
             // checkedListBoxRuleLevels
             // 
+            this.checkedListBoxRuleLevels.AllowDrop = true;
             this.checkedListBoxRuleLevels.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBoxRuleLevels.FormattingEnabled = true;
             this.checkedListBoxRuleLevels.Items.AddRange(new object[] {
@@ -230,13 +231,16 @@
             this.checkedListBoxRuleLevels.Name = "checkedListBoxRuleLevels";
             this.checkedListBoxRuleLevels.Size = new System.Drawing.Size(341, 88);
             this.checkedListBoxRuleLevels.TabIndex = 111;
+            this.checkedListBoxRuleLevels.DragDrop += new System.Windows.Forms.DragEventHandler(this.RuleLevelsList_DragDropDone);
+            this.checkedListBoxRuleLevels.DragOver += new System.Windows.Forms.DragEventHandler(this.RuleLevelsList_DragInProgress);
+            this.checkedListBoxRuleLevels.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RuleLevelsList_MouseDown);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(13, 9);
+            this.label13.Location = new System.Drawing.Point(1, 9);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(207, 21);
