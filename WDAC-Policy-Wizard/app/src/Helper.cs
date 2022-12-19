@@ -251,39 +251,6 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// A reccursive function to list all of the PE files in a folder and subfolders to create allow and 
-        /// deny rules on folder path rules. Stores filepaths in this.AllFilesinFolder. 
-        /// </summary>
-        /// <param name="folder">The folder path </param>
-        public static List<string> FindAllFilesInDirectory(string folder)
-        {
-            List<string> allFilesinFolder = new List<string>(); 
-            // All extensions we look for
-            var ext = new List<string> { "EXE", "DLL", "RLL", "BIN", "PS1", "BAT", "VBS", "JS", "MSI", "MSIX", "APPX",
-                                         "SYS", "HXS", "MUI", "LEX", "MOF" };
-
-            foreach (var file in Directory.GetFiles(folder, "*.*").Where(s => ext.Contains(Path.GetExtension(s))))
-            {
-                allFilesinFolder.Add(file);
-            }
-
-            // Reccursively grab files from sub dirs
-            foreach (string subDir in Directory.GetDirectories(folder))
-            {
-                try
-                {
-                    FindAllFilesInDirectory(subDir);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(String.Format("Exception found: {0} ", e));
-                }
-            }
-
-            return allFilesinFolder; 
-        }
-
-        /// <summary>
         /// Deserialize the xml policy on disk to SiPolicy
         /// </summary>
         /// <param name="xmlPath"></param>
