@@ -4,10 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text.RegularExpressions; 
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.IO;
 using System.Windows.Forms;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
 using System.Management.Automation.Runspaces;
@@ -193,7 +192,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Packaged family name apps. Set the list of apps at button create time
+            // Packaged family name apps
+            // Set the list of apps at button create time
             if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
             {
                 // Assert >=1 packaged apps must be selected
@@ -214,7 +214,39 @@ namespace WDAC_Wizard
                     }
                 }
             }
-            
+
+            // Folder Scan 
+            // Set the list of omitted paths at button create time
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderScan)
+            {
+                // Assert >=1 rule levels must be selected
+                if (this.checkedListBoxRuleLevels.CheckedItems.Count < 1)
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = Properties.Resources.RuleLevelEmptyList_Error;
+                    this.Log.AddWarningMsg("Create button rule selected with an empty folder scan rule level list.");
+                    return;
+                }
+                // Set the rule level ordered list
+                else
+                {
+                    for (int i = 0; i < this.checkedListBoxRuleLevels.CheckedItems.Count; i++)
+                    {
+                        this.PolicyCustomRule.Scan.Levels.Add(this.checkedListBoxRuleLevels.CheckedItems[i].ToString());
+                    }
+                }
+                
+                // Check for Omit Scan Paths
+                if(this.checkedListBoxOmitPaths.CheckedItems.Count > 1)
+                {
+                    // Using for loop to avoid System.InvalidOperationException despite list not changing
+                    for (int i = 0; i < this.checkedListBoxOmitPaths.CheckedItems.Count; i++)
+                    {
+                        this.PolicyCustomRule.Scan.OmitPaths.Add(this.checkedListBoxOmitPaths.CheckedItems[i].ToString());
+                    }
+                }
+            }
+
             // Check custom rules
             if (this.PolicyCustomRule.UsingCustomValues)
             {
@@ -592,6 +624,7 @@ namespace WDAC_Wizard
             this.checkBox_CustomPath.Checked = false;
             this.panelPackagedApps.Visible = false;
             this.panelComObject.Visible = false;
+            this.panelFolderScanConditions.Visible = false; 
             this.label_condition.Text = "Reference File:";
 
             switch (selectedOpt)
@@ -651,8 +684,8 @@ namespace WDAC_Wizard
                 case "Folder Scan":
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
                     label_Info.Text = "Creates a file rule for each file found in the scanned directory and it's subdirectories.";
-                    panel_FileFolder.Visible = false;
-                    this.checkBox_CustomPath.Visible = false;
+                    this.panelFolderScanConditions.Location = this.checkBox_CustomPath.Location;
+                    this.panelFolderScanConditions.Visible = true; 
                     this.label_condition.Text = "Scan Path:";
                     break;
 
@@ -998,7 +1031,25 @@ namespace WDAC_Wizard
                         break;
                     }
 
-                    this.AllFilesinFolder = Helper.FindAllFilesInDirectory(this.PolicyCustomRule.ReferenceFile);
+                    // UI updates
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+
+                    // Show right side of the text
+                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+
+                    // Populate the Omit Paths CheckedListBox with the sub-directories found
+                    string[] subPaths = Directory.GetDirectories(this.PolicyCustomRule.ReferenceFile);
+                    if(subPaths.Length != 0)
+                    {
+                        foreach (string subPath in subPaths)
+                        {
+                            this.checkedListBoxOmitPaths.Items.Add(subPath, false); // set to unchecked by default
+                        }
+                    }                    
 
                     break;
             }
@@ -2270,6 +2321,25 @@ namespace WDAC_Wizard
             if(String.Equals(this.textBoxObjectKey.Text, Properties.Resources.ComInitialGuid))
             {
                 this.textBoxObjectKey.Clear(); 
+            }
+        }
+
+        /// <summary>
+        /// Fires when user clicks on the learn more. Opens the WDAC file rule level webpage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LabelFolderScanLearnMore_Click(object sender, EventArgs e)
+        {
+            // Label for learn more about policy options clicked. Launch msft docs page. 
+            try
+            {
+                System.Diagnostics.Process.Start(Properties.Resources.MSDocLink_RuleLevels);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", 
+                                     Properties.Resources.MSDocLink_RuleLevels), exp);
             }
         }
     }

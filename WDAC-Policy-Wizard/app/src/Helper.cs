@@ -2450,6 +2450,7 @@ namespace WDAC_Wizard
         public RuleType Type { get; set; }
         public RulePermission Permission { get; set; }
 
+        // Variables:
         public string ReferenceFile { get; set; }
         public Dictionary<string, string> FileInfo { get; set; } //
         public string PSVariable { get; set; }
@@ -2474,6 +2475,9 @@ namespace WDAC_Wizard
 
         // COM Object
         public COM COMObject { get; set; }
+
+        // Folder Scan
+        public FolderScan Scan { get; set; }
 
         // Constructors
         public PolicyCustomRules()
@@ -2503,7 +2507,8 @@ namespace WDAC_Wizard
             this.SigningScenarioCheckStates.umciEnabled = true;
             this.SigningScenarioCheckStates.kmciEnabled = false;
 
-            this.COMObject = new COM(); 
+            this.COMObject = new COM();
+            this.Scan = new FolderScan(); 
         }
 
         /// <summary>

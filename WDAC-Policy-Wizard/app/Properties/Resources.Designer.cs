@@ -678,6 +678,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#table-1-windows-defender-application-control-policy---policy-rule-options.
+        /// </summary>
+        internal static string MSDocLink_RuleLevels {
+            get {
+                return ResourceManager.GetString("MSDocLink_RuleLevels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap newPolicy {
@@ -869,6 +878,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The list of selected rule levels is empty. Please select at least 1 rule level to use while 
+        ///scanning the folder..
+        /// </summary>
+        internal static string RuleLevelEmptyList_Error {
+            get {
+                return ResourceManager.GetString("RuleLevelEmptyList_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to proceed to Exceptions Panel. WDAC does not support rule exceptions for this rule type.
         ///Please select the  &apos;Create Rule&apos; button..
         /// </summary>
@@ -936,7 +955,7 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; PolicyType=&quot;Base Policy&quot;&gt;
-        ///  &lt;VersionEx&gt;10.0.0.0&lt;/VersionEx&gt;
+        ///  &lt;VersionEx&gt;10.0.1.0&lt;/VersionEx&gt;
         ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
         ///  &lt;Rules&gt;
         ///    &lt;Rule&gt;

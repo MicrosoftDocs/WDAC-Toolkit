@@ -276,4 +276,21 @@ namespace WDAC_Wizard
             return System.Guid.TryParse(this.Guid, out _guid); 
         }
     }
+
+    public class FolderScan
+    {
+        // Rule Levels. The first in the list will be passed in as the -Level
+        // The rest will be passed in as -Fallback
+        public List<string> Levels { get; set; }
+        
+        // Struct to store the paths to omit while scanning
+        public List<string> OmitPaths { get; set; }
+
+        public FolderScan()
+        {
+            this.Levels = new List<string>();
+            this.OmitPaths = new List<string>(); 
+        }
+    }
+
 }
