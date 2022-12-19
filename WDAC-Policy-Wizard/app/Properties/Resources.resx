@@ -496,7 +496,7 @@ Please select the  'Create Rule' button.</value>
     <value>The Wizard did not parse any WDAC events from the selected .evtx files.</value>
   </data>
   <data name="MSDocLink_RuleLevels" xml:space="preserve">
-    <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#table-1-windows-defender-application-control-policy---policy-rule-options</value>
+    <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-file-rule-levels</value>
   </data>
   <data name="RuleLevelEmptyList_Error" xml:space="preserve">
     <value>The list of selected rule levels is empty. Please select at least 1 rule level to use while 

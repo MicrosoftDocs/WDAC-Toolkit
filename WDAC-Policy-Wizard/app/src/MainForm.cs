@@ -1382,7 +1382,7 @@ namespace WDAC_Wizard
                 newPolicyRuleCmd += " -OmitPaths ";
                 for (int i = 0; i < customRule.Scan.OmitPaths.Count; i++)
                 {
-                    newPolicyRuleCmd += customRule.Scan.OmitPaths[i] + ", ";
+                    newPolicyRuleCmd += "\"" + customRule.Scan.OmitPaths[i] + "\", ";
                 }
                 newPolicyRuleCmd = newPolicyRuleCmd.Substring(0, newPolicyRuleCmd.Length - 2); // trim trailing comma + whitespace
             }
