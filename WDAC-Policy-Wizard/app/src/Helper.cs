@@ -442,7 +442,8 @@ namespace WDAC_Wizard
             if(fileVersionInfo.FileMajorPart == null
                 || fileVersionInfo.FileMinorPart == null
                 || fileVersionInfo.FileBuildPart == null
-                || fileVersionInfo.FilePrivatePart == null)
+                || fileVersionInfo.FilePrivatePart == null
+                || fileVersionInfo.FileVersion == null)
             {
                 return null; 
             }
