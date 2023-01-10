@@ -57,8 +57,9 @@ namespace WDAC_Wizard
                     // Assert the following columns must be present
                     if (records[0].ActionType == null
                        || records[0].FileName == null
-                       || records[0].FolderPath == null)
-                    // || records[0].AdditionalFields == null)
+                       || records[0].FolderPath == null
+                       || records[0].SHA1 == null
+                       || records[0].IssuerTBSHash == null)
                     {
                         throw new Exception(HEADERRECORDS_EXC);
                     }

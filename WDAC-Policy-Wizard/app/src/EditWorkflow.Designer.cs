@@ -62,6 +62,7 @@ namespace WDAC_Wizard
             this.label8 = new System.Windows.Forms.Label();
             this.textBox_EventLog = new System.Windows.Forms.TextBox();
             this.eventLogParsing_Result_Panel = new System.Windows.Forms.Panel();
+            this.ahParsingLearnMore_Label = new System.Windows.Forms.Label();
             this.parseresult_PictureBox = new System.Windows.Forms.PictureBox();
             this.parseResults_Label = new System.Windows.Forms.Label();
             this.textBox_EventLogFilePath = new System.Windows.Forms.TextBox();
@@ -238,7 +239,7 @@ namespace WDAC_Wizard
             // 
             this.button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_ParseEventLog.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 91);
+            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 72);
             this.button_ParseEventLog.Name = "button_ParseEventLog";
             this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
             this.button_ParseEventLog.TabIndex = 112;
@@ -252,7 +253,7 @@ namespace WDAC_Wizard
             this.button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Parse_LogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.button_Parse_LogFile.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 193);
+            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 174);
             this.button_Parse_LogFile.Name = "button_Parse_LogFile";
             this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
             this.button_Parse_LogFile.TabIndex = 113;
@@ -271,7 +272,7 @@ namespace WDAC_Wizard
             // 
             this.panel_Progress.Controls.Add(this.label_Progress);
             this.panel_Progress.Controls.Add(this.pictureBox_Progress);
-            this.panel_Progress.Location = new System.Drawing.Point(533, 30);
+            this.panel_Progress.Location = new System.Drawing.Point(533, 11);
             this.panel_Progress.Name = "panel_Progress";
             this.panel_Progress.Size = new System.Drawing.Size(280, 193);
             this.panel_Progress.TabIndex = 114;
@@ -386,7 +387,7 @@ namespace WDAC_Wizard
             this.button_Parse_MDE_AH_Logs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Parse_MDE_AH_Logs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.button_Parse_MDE_AH_Logs.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button_Parse_MDE_AH_Logs.Location = new System.Drawing.Point(342, 292);
+            this.button_Parse_MDE_AH_Logs.Location = new System.Drawing.Point(342, 273);
             this.button_Parse_MDE_AH_Logs.Name = "button_Parse_MDE_AH_Logs";
             this.button_Parse_MDE_AH_Logs.Size = new System.Drawing.Size(133, 27);
             this.button_Parse_MDE_AH_Logs.TabIndex = 124;
@@ -397,7 +398,7 @@ namespace WDAC_Wizard
             // textBox_AdvancedHuntingPaths
             // 
             this.textBox_AdvancedHuntingPaths.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_AdvancedHuntingPaths.Location = new System.Drawing.Point(22, 251);
+            this.textBox_AdvancedHuntingPaths.Location = new System.Drawing.Point(22, 232);
             this.textBox_AdvancedHuntingPaths.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_AdvancedHuntingPaths.Multiline = true;
             this.textBox_AdvancedHuntingPaths.Name = "textBox_AdvancedHuntingPaths";
@@ -412,7 +413,7 @@ namespace WDAC_Wizard
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(15, 229);
+            this.label8.Location = new System.Drawing.Point(15, 210);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(349, 18);
             this.label8.TabIndex = 125;
@@ -421,7 +422,7 @@ namespace WDAC_Wizard
             // textBox_EventLog
             // 
             this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_EventLog.Location = new System.Drawing.Point(23, 46);
+            this.textBox_EventLog.Location = new System.Drawing.Point(23, 27);
             this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLog.Multiline = true;
             this.textBox_EventLog.Name = "textBox_EventLog";
@@ -433,14 +434,31 @@ namespace WDAC_Wizard
             // 
             // eventLogParsing_Result_Panel
             // 
+            this.eventLogParsing_Result_Panel.Controls.Add(this.ahParsingLearnMore_Label);
             this.eventLogParsing_Result_Panel.Controls.Add(this.parseresult_PictureBox);
             this.eventLogParsing_Result_Panel.Controls.Add(this.parseResults_Label);
-            this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(17, 324);
+            this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(17, 305);
             this.eventLogParsing_Result_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.eventLogParsing_Result_Panel.Name = "eventLogParsing_Result_Panel";
-            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(817, 47);
+            this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(817, 64);
             this.eventLogParsing_Result_Panel.TabIndex = 122;
             this.eventLogParsing_Result_Panel.Visible = false;
+            // 
+            // ahParsingLearnMore_Label
+            // 
+            this.ahParsingLearnMore_Label.AutoSize = true;
+            this.ahParsingLearnMore_Label.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.ahParsingLearnMore_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.ahParsingLearnMore_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
+            this.ahParsingLearnMore_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ahParsingLearnMore_Label.Location = new System.Drawing.Point(4, 41);
+            this.ahParsingLearnMore_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.ahParsingLearnMore_Label.Name = "ahParsingLearnMore_Label";
+            this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(349, 18);
+            this.ahParsingLearnMore_Label.TabIndex = 127;
+            this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting logs    ";
+            this.ahParsingLearnMore_Label.Visible = false;
+            this.ahParsingLearnMore_Label.Click += new System.EventHandler(this.AHLearnMoreLabel_Click);
             // 
             // parseresult_PictureBox
             // 
@@ -468,7 +486,7 @@ namespace WDAC_Wizard
             // textBox_EventLogFilePath
             // 
             this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 152);
+            this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 133);
             this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLogFilePath.Multiline = true;
             this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
@@ -483,7 +501,7 @@ namespace WDAC_Wizard
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(16, 130);
+            this.label4.Location = new System.Drawing.Point(16, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(274, 18);
             this.label4.TabIndex = 117;
@@ -494,7 +512,7 @@ namespace WDAC_Wizard
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(17, 25);
+            this.label6.Location = new System.Drawing.Point(17, 6);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(432, 18);
             this.label6.TabIndex = 116;
@@ -610,5 +628,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Button button_Parse_MDE_AH_Logs;
         private System.Windows.Forms.TextBox textBox_AdvancedHuntingPaths;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label ahParsingLearnMore_Label;
     }
 }

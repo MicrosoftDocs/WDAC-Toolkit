@@ -210,6 +210,7 @@ namespace WDAC_Wizard
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
+            this.ahParsingLearnMore_Label.Visible = false; 
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
             // Create background worker to display updates to UI
@@ -230,7 +231,8 @@ namespace WDAC_Wizard
             // Afterwards, set the editPath to the temp location of the xml
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
-            this.eventLogParsing_Result_Panel.Visible = false; 
+            this.eventLogParsing_Result_Panel.Visible = false;
+            this.ahParsingLearnMore_Label.Visible = false;
             this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
             this.Workflow = WorkflowType.DeviceEventLog; 
 
@@ -263,6 +265,7 @@ namespace WDAC_Wizard
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
+            this.ahParsingLearnMore_Label.Visible = false;
             this.Workflow = WorkflowType.AdvancedHunting;
 
             // Create background worker to display updates to UI
@@ -322,6 +325,14 @@ namespace WDAC_Wizard
                 this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
+            }
+            else if(this._MainWindow.CiEvents == null)
+            {
+                this.Log.AddErrorMsg(AdvancedHunting.GetLastError());
+                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
+                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                this._MainWindow.ErrorOnPage = true;
+                this.ahParsingLearnMore_Label.Visible = true; 
             }
             else if(this._MainWindow.CiEvents.Count < 1)
             {
@@ -412,6 +423,24 @@ namespace WDAC_Wizard
                 this.textBoxSaveLocation.ScrollToCaret();
 
                 this._MainWindow.Policy.SchemaPath = saveLocation; 
+            }
+        }
+
+        /// <summary>
+        /// Opens the WDAC Wizard docs page for parsing MDE Advanced Hunting events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AHLearnMoreLabel_Click(object sender, EventArgs e)
+        {
+            string webpage = "https://aka.ms/wdacWizardAHParsing";
+            try
+            {
+                System.Diagnostics.Process.Start(webpage);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Launching {0} encountered the following error", webpage), exp);
             }
         }
     }
