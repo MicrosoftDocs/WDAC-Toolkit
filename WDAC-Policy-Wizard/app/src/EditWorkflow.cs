@@ -37,7 +37,8 @@ namespace WDAC_Wizard
         {
             Edit = 0, 
             DeviceEventLog = 1, 
-            ArbitraryEventLog = 2
+            ArbitraryEventLog = 2,
+            AdvancedHunting = 3
         }
 
         public EditWorkflow(MainWindow pMainWindow)
@@ -240,6 +241,32 @@ namespace WDAC_Wizard
             }
         }
 
+        private void ParseMDEAHLogs_ButtonClick(object sender, EventArgs e)
+        {
+            string dspTitle = "Choose MDE Advanced Hunting WDAC CSV Export Files to convert to policy";
+            List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.CsvFile);
+
+            if (eventLogPaths == null)
+            {
+                return;
+            }
+
+            this.EventLogPaths = eventLogPaths;
+
+            // Prep UI
+            this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray();
+            this.panel_Progress.Visible = true;
+            this.label_Error.Visible = false;
+            this.eventLogParsing_Result_Panel.Visible = false;
+            this.Workflow = WorkflowType.AdvancedHunting;
+
+            // Create background worker to display updates to UI
+            if (!this.backgroundWorker.IsBusy)
+            {
+                this.backgroundWorker.RunWorkerAsync();
+            }
+        }
+
         /// <summary>
         /// Parses the event logs provided by the user
         /// </summary>
@@ -251,6 +278,10 @@ namespace WDAC_Wizard
             if(this.Workflow == WorkflowType.ArbitraryEventLog)
             {
                 this._MainWindow.CiEvents = EventLog.ReadArbitraryEventLogs(this.EventLogPaths);
+            }
+            else if(this.Workflow == WorkflowType.AdvancedHunting)
+            {
+                this._MainWindow.CiEvents = AdvancedHunting.ReadAdvancedHuntingCsvFiles(this.EventLogPaths);
             }
             else
             {

@@ -34,38 +34,46 @@ namespace WDAC_Wizard
         /// Parses the CSV file to CiEvent fields
         /// </summary>
         /// <param name="filepath"></param>
-        public static List<CiEvent> ParseCSV(string filepath)
+        public static List<CiEvent> ReadAdvancedHuntingCsvFiles(List<string> filepaths)
         {
+            List<CiEvent> ciEvents = new List<CiEvent>(); 
+
             var fileHelperEngine = new FileHelperEngine<AdvancedHunting.Record>();
             fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
 
-            try
+            // Parse each CSV File provided by the user
+            foreach (var filepath in filepaths)
             {
-                var records = fileHelperEngine.ReadFile(filepath);
-
-                // Assert csv must have a header and 1 row of data
-                if(records.Length < 2)
+                try
                 {
-                    throw new Exception(NORECORDS_EXC);
-                }
+                    var records = fileHelperEngine.ReadFile(filepath);
 
-                // Assert the following columns must be present
-                if(records[0].ActionType == null
-                   || records[0].FileName == null
-                   || records[0].FolderPath == null)
-                   // || records[0].AdditionalFields == null)
+                    // Assert csv must have a header and 1 row of data
+                    if (records.Length < 2)
+                    {
+                        throw new Exception(NORECORDS_EXC);
+                    }
+
+                    // Assert the following columns must be present
+                    if (records[0].ActionType == null
+                       || records[0].FileName == null
+                       || records[0].FolderPath == null)
+                    // || records[0].AdditionalFields == null)
+                    {
+                        throw new Exception(HEADERRECORDS_EXC);
+                    }
+
+                    ciEvents.AddRange(ParseRecordsIntoCiEvents(records));
+
+                }
+                catch (Exception e)
                 {
-                    throw new Exception(HEADERRECORDS_EXC);
+                    LastError = e.Message;
+                    return null;
                 }
-
-                return ParseRecordsIntoCiEvents(records);
-
             }
-            catch (Exception e)
-            {
-                LastError = e.Message;
-                return null;
-            }
+
+            return ciEvents;
         }
 
         /// <summary>
@@ -291,7 +299,7 @@ namespace WDAC_Wizard
 
         // AH KQL Query must follow:
         /*
-         DeviceEvents 
+        DeviceEvents 
         | where ActionType startswith 'AppControlCodeIntegrity' 
         // SigningInfo Fields
         | extend IssuerName = parsejson(AdditionalFields).IssuerName
@@ -303,7 +311,7 @@ namespace WDAC_Wizard
         | extend PolicyId = parsejson(AdditionalFields).PolicyID
         | extend PolicyName = parsejson(AdditionalFields).PolicyName
         // Keep only actionable info for the Wizard
-        | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash, AdditionalFields
+        | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName
          */
     }
 }

@@ -94,6 +94,10 @@ namespace WDAC_Wizard
             {
                 openFileDialog.Filter = "Event Log Files (*.evtx)|*.evtx";
             }
+            else if(browseFileType == BrowseFileType.CsvFile)
+            {
+                openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
+            }
             else
             {
                 openFileDialog.Filter = "All Files (*.)|*.";
@@ -143,7 +147,7 @@ namespace WDAC_Wizard
             }
             else if (browseFile.Equals(BrowseFileType.CsvFile))
             {
-                openFileDialog.Filter = "AH CSV Files (*.csv)|*.csv";
+                openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
             }
             else
             {

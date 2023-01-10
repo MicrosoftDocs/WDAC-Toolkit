@@ -67,6 +67,9 @@ namespace WDAC_Wizard
             this.panel_Edit_XML = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label_Error = new System.Windows.Forms.Label();
+            this.button_Parse_MDE_AH_Logs = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.policyInfoPanel.SuspendLayout();
             this.panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Progress)).BeginInit();
@@ -239,7 +242,7 @@ namespace WDAC_Wizard
             this.button_ParseEventLog.Name = "button_ParseEventLog";
             this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
             this.button_ParseEventLog.TabIndex = 112;
-            this.button_ParseEventLog.Text = "Parse Event Log";
+            this.button_ParseEventLog.Text = "Parse Event Logs";
             this.button_ParseEventLog.UseVisualStyleBackColor = true;
             this.button_ParseEventLog.Click += new System.EventHandler(this.ParseSystemLog_ButtonClick);
             // 
@@ -253,7 +256,7 @@ namespace WDAC_Wizard
             this.button_Parse_LogFile.Name = "button_Parse_LogFile";
             this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
             this.button_Parse_LogFile.TabIndex = 113;
-            this.button_Parse_LogFile.Text = "Parse Log File";
+            this.button_Parse_LogFile.Text = "Parse Log File(s)";
             this.button_Parse_LogFile.UseVisualStyleBackColor = true;
             this.button_Parse_LogFile.Click += new System.EventHandler(this.ParseLog_ButtonClick);
             // 
@@ -360,6 +363,9 @@ namespace WDAC_Wizard
             // 
             // panel_EventLog_Conversion
             // 
+            this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_MDE_AH_Logs);
+            this.panel_EventLog_Conversion.Controls.Add(this.textBox1);
+            this.panel_EventLog_Conversion.Controls.Add(this.label8);
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLog);
             this.panel_EventLog_Conversion.Controls.Add(this.eventLogParsing_Result_Panel);
             this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_LogFile);
@@ -391,7 +397,7 @@ namespace WDAC_Wizard
             // 
             this.eventLogParsing_Result_Panel.Controls.Add(this.parseresult_PictureBox);
             this.eventLogParsing_Result_Panel.Controls.Add(this.parseResults_Label);
-            this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(22, 240);
+            this.eventLogParsing_Result_Panel.Location = new System.Drawing.Point(520, 241);
             this.eventLogParsing_Result_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.eventLogParsing_Result_Panel.Name = "eventLogParsing_Result_Panel";
             this.eventLogParsing_Result_Panel.Size = new System.Drawing.Size(817, 47);
@@ -492,6 +498,44 @@ namespace WDAC_Wizard
     "policy XML file";
             this.label_Error.Visible = false;
             // 
+            // button_Parse_MDE_AH_Logs
+            // 
+            this.button_Parse_MDE_AH_Logs.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.button_Parse_MDE_AH_Logs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Parse_MDE_AH_Logs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.button_Parse_MDE_AH_Logs.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button_Parse_MDE_AH_Logs.Location = new System.Drawing.Point(342, 292);
+            this.button_Parse_MDE_AH_Logs.Name = "button_Parse_MDE_AH_Logs";
+            this.button_Parse_MDE_AH_Logs.Size = new System.Drawing.Size(133, 27);
+            this.button_Parse_MDE_AH_Logs.TabIndex = 124;
+            this.button_Parse_MDE_AH_Logs.Text = "Parse Log File(s)";
+            this.button_Parse_MDE_AH_Logs.UseVisualStyleBackColor = true;
+            this.button_Parse_MDE_AH_Logs.Click += new System.EventHandler(this.ParseMDEAHLogs_ButtonClick);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.textBox1.Location = new System.Drawing.Point(22, 251);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(453, 37);
+            this.textBox1.TabIndex = 126;
+            this.textBox1.Text = "Select MDE AH CSV Files";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(15, 229);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(236, 18);
+            this.label8.TabIndex = 125;
+            this.label8.Text = "Parse MDE AH Events to Policy";
+            // 
             // EditWorkflow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -563,5 +607,8 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button buttonNewSaveLocation;
         private System.Windows.Forms.TextBox textBoxSaveLocation;
+        private System.Windows.Forms.Button button_Parse_MDE_AH_Logs;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label8;
     }
 }
