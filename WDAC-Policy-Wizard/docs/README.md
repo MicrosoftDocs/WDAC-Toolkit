@@ -22,6 +22,7 @@ feature team to enable IT professionals in creating powerful WDAC policies for d
 * [Creating Supplemental Base Policies](using/supplemental-policy.md) - processes to create a new supplemental WDAC policy to extend an exisiting 
 base policy. 
 * [Editing an Exisiting Base or Supplemental Policy](using/edit-policy.md) - documents how to edit an existing WDAC policy and modify specific components of the policy. 
+* [Creating a Policy from Advanced Hunting Events](using/advanced-hunting.md) - documents how to use the MDE Advanced Hunting csv parsing functionality in the Wizard.
 * [Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
 
 ## Contributing

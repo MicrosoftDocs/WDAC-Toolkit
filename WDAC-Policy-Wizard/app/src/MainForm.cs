@@ -2017,5 +2017,17 @@ namespace WDAC_Wizard
         {
             this.label_Info.Visible = false;
         }
+
+        // TODO: remove this function. This is for testing only
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string csvFilePath = Helper.BrowseForSingleFile("Browse for the MDE Advanced Hunting CSV File", Helper.BrowseFileType.CsvFile);
+            List<CiEvent> ciEvents = AdvancedHunting.ParseCSV(csvFilePath);
+
+            if(ciEvents == null)
+            {
+                Console.WriteLine(AdvancedHunting.GetLastError());
+            }
+        }
     } // End of MainForm class
 }

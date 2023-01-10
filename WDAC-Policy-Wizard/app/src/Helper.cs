@@ -44,7 +44,8 @@ namespace WDAC_Wizard
             Policy = 0,     // -Show .xml files
             EventLog = 1,   // -Show .evtx files
             PEFile = 2,     // -Show PE (.exe, .dll, .sys) files
-            All = 3         // -Show . all files
+            CsvFile = 3,    // -Show Csv file
+            All = 4         // -Show . all files
         }
 
         public static string GetDOSPath(string NTPath)
@@ -139,6 +140,10 @@ namespace WDAC_Wizard
             else if (browseFile.Equals(BrowseFileType.Policy))
             {
                 openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
+            }
+            else if (browseFile.Equals(BrowseFileType.CsvFile))
+            {
+                openFileDialog.Filter = "AH CSV Files (*.csv)|*.csv";
             }
             else
             {

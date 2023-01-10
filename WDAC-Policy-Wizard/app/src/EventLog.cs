@@ -568,6 +568,9 @@ namespace WDAC_Wizard
         /// </summary>
         public int EventId { get; set; }
         public string CorrelationId { get; set; }
+        // AH Correlation:
+        public string Timestamp { get; set; }
+        public string DeviceId { get; set; }
 
         // File related info
         public string FileName { get; set; }
@@ -623,6 +626,10 @@ namespace WDAC_Wizard
         public string IssuerName { get; set; }
         public byte[] IssuerTBSHash { get; set; }
         public string PublisherName { get; set; }
+
+        // AH Device Specific
+        public string Timestamp { get; set; }
+        public string DeviceId { get; set; }
 
         public SignerEvent()
         {
