@@ -241,6 +241,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Runs the Advanced Hunting CSV parsing logic
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ParseMDEAHLogs_ButtonClick(object sender, EventArgs e)
         {
             string dspTitle = "Choose MDE Advanced Hunting WDAC CSV Export Files to convert to policy";
@@ -254,7 +259,7 @@ namespace WDAC_Wizard
             this.EventLogPaths = eventLogPaths;
 
             // Prep UI
-            this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray();
+            this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
             this.panel_Progress.Visible = true;
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;

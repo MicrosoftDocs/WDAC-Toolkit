@@ -121,11 +121,14 @@ namespace WDAC_Wizard
             ciEvent.PolicyGUID = record.PolicyId;
             ciEvent.PolicyName = record.PolicyName; 
             ciEvent.FileName = record.FileName;
-            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath);
+            // MDE AH FolderPath is the dir path without the filename
+            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
             ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1);
             ciEvent.SHA2 = Helper.ConvertHashStringToByte(record.SHA256);
             ciEvent.Timestamp = record.Timestamp;
             ciEvent.DeviceId = record.DeviceId;
+            ciEvent.PolicyId = record.PolicyId;
+            ciEvent.PolicyName = record.PolicyName;
 
             return ciEvent;
         }
@@ -140,11 +143,14 @@ namespace WDAC_Wizard
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = AUDIT_EVENT_ID;
             ciEvent.FileName = record.FileName;
-            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath);
+            // MDE AH FolderPath is the dir path without the filename
+            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
             ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1);
             ciEvent.SHA2 = Helper.ConvertHashStringToByte(record.SHA256);
             ciEvent.Timestamp = record.Timestamp;
             ciEvent.DeviceId = record.DeviceId;
+            ciEvent.PolicyId = record.PolicyId;
+            ciEvent.PolicyName = record.PolicyName; 
 
             return ciEvent;
         }
@@ -160,11 +166,14 @@ namespace WDAC_Wizard
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = BLOCK_EVENT_ID;
             ciEvent.FileName = record.FileName;
-            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath);
+            // MDE AH FolderPath is the dir path without the filename
+            ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
             ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1);
             ciEvent.SHA2 = Helper.ConvertHashStringToByte(record.SHA256);
             ciEvent.Timestamp = record.Timestamp;
-            ciEvent.DeviceId = record.DeviceId; 
+            ciEvent.DeviceId = record.DeviceId;
+            ciEvent.PolicyId = record.PolicyId;
+            ciEvent.PolicyName = record.PolicyName;
 
             return ciEvent; 
         }
@@ -200,9 +209,9 @@ namespace WDAC_Wizard
             // Correlated signer and ci events appear to share the same timestamp to the 23rd-24th position.
             // Example:
             // Timestamp	DeviceId	DeviceName	ActionType	FileName
-            // 2023-01-09T21:49:44.1989403Z    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegrityPolicyAudited GoogleUpdate.exe
-            // 2023-01-09T21:49:44.1989495Z    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
-            // 2023-01-09T21:49:44.1989539Z    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
+            // 2023-01-09T21:49:44.19[89403Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegrityPolicyAudited GoogleUpdate.exe
+            // 2023-01-09T21:49:44.19[89495Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
+            // 2023-01-09T21:49:44.19[89539Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
 
             List<CiEvent> correlatedCiEvents = new List<CiEvent>(); 
 
@@ -213,7 +222,7 @@ namespace WDAC_Wizard
                 {
                     // If there is a DeviceId and timestamp match - correlated events
                     if(signerEvent.DeviceId == ciEvent.DeviceId
-                        && IsTimestampMatch(signerEvent.Timestamp, ciEvent.Timestamp)
+                        && DoTimestampsMatch(signerEvent.Timestamp, ciEvent.Timestamp)
                         && IsValidSigner(signerEvent))
                     {
                         // If first/only signer, set the SignerInfo attribute to signer
@@ -242,7 +251,13 @@ namespace WDAC_Wizard
             return correlatedCiEvents; 
         }
 
-        private static bool IsTimestampMatch(string timestampA, string timestampB)
+        /// <summary>
+        /// Checks that the 2 timestamps are within 10ms of each other indicating the events are likely correlated
+        /// </summary>
+        /// <param name="timestampA"></param>
+        /// <param name="timestampB"></param>
+        /// <returns></returns>
+        private static bool DoTimestampsMatch(string timestampA, string timestampB)
         {
             return string.CompareOrdinal(timestampA.Substring(0, TIMESMP_LNG),
                                   timestampB.Substring(0, TIMESMP_LNG)) == 0;

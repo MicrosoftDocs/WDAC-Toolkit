@@ -64,13 +64,9 @@ namespace WDAC_Wizard
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.hashRulePanel = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.sha2PageTextBox = new System.Windows.Forms.TextBox();
             this.sha2TextBox = new System.Windows.Forms.TextBox();
-            this.sha1PageTextBox = new System.Windows.Forms.TextBox();
             this.sha1TextBox = new System.Windows.Forms.TextBox();
             this.filePathRulePanel = new System.Windows.Forms.Panel();
             this.filePathTextBox = new System.Windows.Forms.TextBox();
@@ -477,45 +473,21 @@ namespace WDAC_Wizard
             // 
             // hashRulePanel
             // 
-            this.hashRulePanel.Controls.Add(this.label7);
-            this.hashRulePanel.Controls.Add(this.label6);
             this.hashRulePanel.Controls.Add(this.label5);
             this.hashRulePanel.Controls.Add(this.label4);
-            this.hashRulePanel.Controls.Add(this.sha2PageTextBox);
             this.hashRulePanel.Controls.Add(this.sha2TextBox);
-            this.hashRulePanel.Controls.Add(this.sha1PageTextBox);
             this.hashRulePanel.Controls.Add(this.sha1TextBox);
-            this.hashRulePanel.Location = new System.Drawing.Point(1021, 489);
+            this.hashRulePanel.Location = new System.Drawing.Point(997, 596);
             this.hashRulePanel.Name = "hashRulePanel";
-            this.hashRulePanel.Size = new System.Drawing.Size(603, 164);
+            this.hashRulePanel.Size = new System.Drawing.Size(603, 93);
             this.hashRulePanel.TabIndex = 22;
             this.hashRulePanel.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(12, 124);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(157, 21);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "SHA256 Page Hash:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 46);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(139, 21);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "SHA1 Page Hash:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 85);
+            this.label5.Location = new System.Drawing.Point(12, 55);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(140, 21);
             this.label5.TabIndex = 24;
@@ -525,43 +497,25 @@ namespace WDAC_Wizard
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 7);
+            this.label4.Location = new System.Drawing.Point(12, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(122, 21);
             this.label4.TabIndex = 23;
             this.label4.Text = "SHA1 PE Hash:";
             // 
-            // sha2PageTextBox
-            // 
-            this.sha2PageTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha2PageTextBox.Location = new System.Drawing.Point(172, 120);
-            this.sha2PageTextBox.Name = "sha2PageTextBox";
-            this.sha2PageTextBox.ReadOnly = true;
-            this.sha2PageTextBox.Size = new System.Drawing.Size(398, 26);
-            this.sha2PageTextBox.TabIndex = 19;
-            // 
             // sha2TextBox
             // 
             this.sha2TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha2TextBox.Location = new System.Drawing.Point(171, 81);
+            this.sha2TextBox.Location = new System.Drawing.Point(173, 51);
             this.sha2TextBox.Name = "sha2TextBox";
             this.sha2TextBox.ReadOnly = true;
             this.sha2TextBox.Size = new System.Drawing.Size(399, 26);
             this.sha2TextBox.TabIndex = 18;
             // 
-            // sha1PageTextBox
-            // 
-            this.sha1PageTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha1PageTextBox.Location = new System.Drawing.Point(173, 42);
-            this.sha1PageTextBox.Name = "sha1PageTextBox";
-            this.sha1PageTextBox.ReadOnly = true;
-            this.sha1PageTextBox.Size = new System.Drawing.Size(397, 26);
-            this.sha1PageTextBox.TabIndex = 17;
-            // 
             // sha1TextBox
             // 
             this.sha1TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha1TextBox.Location = new System.Drawing.Point(173, 3);
+            this.sha1TextBox.Location = new System.Drawing.Point(173, 14);
             this.sha1TextBox.Name = "sha1TextBox";
             this.sha1TextBox.ReadOnly = true;
             this.sha1TextBox.Size = new System.Drawing.Size(397, 26);
@@ -573,7 +527,7 @@ namespace WDAC_Wizard
             this.filePathRulePanel.Controls.Add(this.folderPathTextBox);
             this.filePathRulePanel.Controls.Add(this.folderPathCheckBox);
             this.filePathRulePanel.Controls.Add(this.filePathCheckBox);
-            this.filePathRulePanel.Location = new System.Drawing.Point(1021, 333);
+            this.filePathRulePanel.Location = new System.Drawing.Point(997, 489);
             this.filePathRulePanel.Name = "filePathRulePanel";
             this.filePathRulePanel.Size = new System.Drawing.Size(743, 93);
             this.filePathRulePanel.TabIndex = 22;
@@ -582,7 +536,7 @@ namespace WDAC_Wizard
             // filePathTextBox
             // 
             this.filePathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathTextBox.Location = new System.Drawing.Point(173, 5);
+            this.filePathTextBox.Location = new System.Drawing.Point(173, 16);
             this.filePathTextBox.Name = "filePathTextBox";
             this.filePathTextBox.ReadOnly = true;
             this.filePathTextBox.Size = new System.Drawing.Size(516, 28);
@@ -591,7 +545,7 @@ namespace WDAC_Wizard
             // folderPathTextBox
             // 
             this.folderPathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathTextBox.Location = new System.Drawing.Point(173, 42);
+            this.folderPathTextBox.Location = new System.Drawing.Point(173, 53);
             this.folderPathTextBox.Name = "folderPathTextBox";
             this.folderPathTextBox.ReadOnly = true;
             this.folderPathTextBox.Size = new System.Drawing.Size(516, 28);
@@ -603,7 +557,7 @@ namespace WDAC_Wizard
             this.folderPathCheckBox.Checked = true;
             this.folderPathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.folderPathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathCheckBox.Location = new System.Drawing.Point(3, 44);
+            this.folderPathCheckBox.Location = new System.Drawing.Point(3, 55);
             this.folderPathCheckBox.Name = "folderPathCheckBox";
             this.folderPathCheckBox.Size = new System.Drawing.Size(122, 25);
             this.folderPathCheckBox.TabIndex = 12;
@@ -616,7 +570,7 @@ namespace WDAC_Wizard
             this.filePathCheckBox.Checked = true;
             this.filePathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.filePathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathCheckBox.Location = new System.Drawing.Point(4, 7);
+            this.filePathCheckBox.Location = new System.Drawing.Point(3, 18);
             this.filePathCheckBox.Name = "filePathCheckBox";
             this.filePathCheckBox.Size = new System.Drawing.Size(102, 25);
             this.filePathCheckBox.TabIndex = 10;
@@ -687,13 +641,9 @@ namespace WDAC_Wizard
         private System.Windows.Forms.CheckBox fileDescCheckBox;
         private System.Windows.Forms.CheckBox origFileNameCheckBox;
         private System.Windows.Forms.Panel hashRulePanel;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox sha2PageTextBox;
         private System.Windows.Forms.TextBox sha2TextBox;
-        private System.Windows.Forms.TextBox sha1PageTextBox;
         private System.Windows.Forms.TextBox sha1TextBox;
         private System.Windows.Forms.Panel filePathRulePanel;
         private System.Windows.Forms.TextBox folderPathTextBox;
