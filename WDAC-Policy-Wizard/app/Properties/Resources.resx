@@ -499,7 +499,9 @@ Please select the  'Create Rule' button.</value>
     <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-file-rule-levels</value>
   </data>
   <data name="RuleLevelEmptyList_Error" xml:space="preserve">
-    <value>The list of selected rule levels is empty. Please select at least 1 rule level to use while 
-scanning the folder.</value>
+    <value>The list of selected rule levels is empty. Please select at least 1 rule level to use while scanning the folder.</value>
+  </data>
+  <data name="UnsuccessfulAdvancedHuntingLogConversion" xml:space="preserve">
+    <value>The Wizard could not parse any Advanced Hunting events from the CSV file(s).</value>
   </data>
 </root>

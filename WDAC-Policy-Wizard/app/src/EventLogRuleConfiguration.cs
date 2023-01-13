@@ -514,11 +514,9 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public bool IsValidHashRuleUiState()
         {
-            // Nothing selected
-            if (String.IsNullOrEmpty(this.sha1TextBox.Text) ||
-                String.IsNullOrEmpty(this.sha2TextBox.Text) ||
-                String.IsNullOrEmpty(this.sha1PageTextBox.Text) ||
-                String.IsNullOrEmpty(this.sha2PageTextBox.Text))
+            // Need at least 1 non-null hash value
+            if (String.IsNullOrEmpty(this.sha1TextBox.Text)
+                && String.IsNullOrEmpty(this.sha2TextBox.Text))
             {
                 MessageBox.Show(String.Format("Hash values cannot be empty in order to create a hash-based rule"),
                     "New Rule Creation Error",
@@ -627,9 +625,7 @@ namespace WDAC_Wizard
 
                 case 4: //FileHash
                     SetFileHashPanel(this.CiEvents[this.SelectedRow].SHA1,
-                                     this.CiEvents[this.SelectedRow].SHA1Page,
-                                     this.CiEvents[this.SelectedRow].SHA2,
-                                     this.CiEvents[this.SelectedRow].SHA2Page);
+                                     this.CiEvents[this.SelectedRow].SHA2);
                     break; 
             }
         }
@@ -740,12 +736,10 @@ namespace WDAC_Wizard
         /// <param name="productName"></param>
         /// <param name="internalFilename"></param>
         /// <param name="packagedAppName"></param>
-        private void SetFileHashPanel(byte[] sha1, byte[] sha1page, byte[] sha2, byte[] sha2page)
+        private void SetFileHashPanel(byte[] sha1, byte[] sha2)
         {
             this.sha1TextBox.Text = Helper.ConvertHash(sha1);
-            this.sha1PageTextBox.Text = Helper.ConvertHash(sha1page);
             this.sha2TextBox.Text = Helper.ConvertHash(sha2);
-            this.sha2PageTextBox.Text = Helper.ConvertHash(sha2page);
 
             // Unhide the panel
             this.hashRulePanel.Visible = true;
@@ -796,8 +790,7 @@ namespace WDAC_Wizard
             cRoot.Value = ciEvent.SignerInfo.IssuerTBSHash;
             signer.CertRoot = cRoot;
 
-            signer.Name = String.Format("Issuing CA = {0} ({1})",
-                    ciEvent.SignerInfo.IssuerName, Helper.ConvertHash(ciEvent.SignerInfo.IssuerTBSHash));
+            signer.Name = String.Format("Issuing CA = {0}", ciEvent.SignerInfo.IssuerName);
 
             // Create new CertPublisher object and add CertPublisher field
             if (uiState[1] == 1) // CertPub CN
@@ -806,8 +799,8 @@ namespace WDAC_Wizard
                 cPub.Value = ciEvent.SignerInfo.PublisherName;
                 signer.CertPublisher = cPub;
 
-                signer.Name = String.Format("Allow CN = {0} issued by {1} ({2})", ciEvent.SignerInfo.PublisherName,
-                    ciEvent.SignerInfo.IssuerName, Helper.ConvertHash(ciEvent.SignerInfo.IssuerTBSHash));
+                signer.Name = String.Format("Allow CN = {0} issued by {1}", ciEvent.SignerInfo.PublisherName,
+                                            ciEvent.SignerInfo.IssuerName);
             }
 
             // Create new FileAttrib object to link to signer
@@ -871,8 +864,17 @@ namespace WDAC_Wizard
             List<Allow> allowFileAttributeRules = new List<Allow>();
 
             Allow allowRule = new Allow();
-            allowRule.FriendlyName = String.Format("Allow {0} by file attributes; Correlation Id: {1}",
-                ciEvent.FileName, ciEvent.CorrelationId);
+            if(!String.IsNullOrEmpty(ciEvent.CorrelationId))
+            {
+                allowRule.FriendlyName = String.Format("Allow {0} by file attributes; Correlation Id: {1}",
+                                                        ciEvent.FileName, ciEvent.CorrelationId);
+            }
+            else
+            {
+                allowRule.FriendlyName = String.Format("Allow {0} by file attributes; Reference Device Id: {1}; Timestamp: {2}",
+                                                        ciEvent.FileName, ciEvent.DeviceId, ciEvent.Timestamp);
+            }
+            
             allowRule.ID = "ID_ALLOW_B_" + cFileAttribRules.ToString();
             cFileAttribRules++;
 
@@ -928,7 +930,17 @@ namespace WDAC_Wizard
             {
                 Allow allowRule = new Allow();
                 allowRule.FilePath = ciEvent.FilePath;
-                allowRule.FriendlyName = String.Format("Allow path: {0}; Correlation Id: {1}", allowRule.FilePath, ciEvent.CorrelationId);
+                if (!String.IsNullOrEmpty(ciEvent.CorrelationId))
+                {
+                    allowRule.FriendlyName = String.Format("Allow path: {0}; Correlation Id: {1}",
+                                                            allowRule.FilePath, ciEvent.CorrelationId);
+                }
+                else
+                {
+                    allowRule.FriendlyName = String.Format("Allow path: {0}; Reference Device Id: {1}; Timestamp: {2}",
+                                                            allowRule.FilePath, ciEvent.DeviceId, ciEvent.Timestamp);
+                }
+
                 allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
                 cFilePathRules++;
                 allowPathRules.Add(allowRule);
@@ -939,7 +951,16 @@ namespace WDAC_Wizard
             {
                 Allow allowRule = new Allow();
                 allowRule.FilePath = Path.GetDirectoryName(ciEvent.FilePath) + "\\*";
-                allowRule.FriendlyName = String.Format("Allow path: {0}; Correlation Id: {1}", allowRule.FilePath, ciEvent.CorrelationId);
+                if (!String.IsNullOrEmpty(ciEvent.CorrelationId))
+                {
+                    allowRule.FriendlyName = String.Format("Allow path: {0}; Correlation Id: {1}",
+                                                            allowRule.FilePath, ciEvent.CorrelationId);
+                }
+                else
+                {
+                    allowRule.FriendlyName = String.Format("Allow path: {0}; Reference Device Id: {1}; Timestamp: {2}",
+                                                            allowRule.FilePath, ciEvent.DeviceId, ciEvent.Timestamp);
+                }
                 allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
                 cFilePathRules++;
                 allowPathRules.Add(allowRule);
@@ -960,36 +981,37 @@ namespace WDAC_Wizard
         {
             List<Allow> allowHashRules = new List<Allow>();
             
-            // SHA1
+            // SHA1 PE Hash
             Allow allowRule = new Allow();
             allowRule.Hash = ciEvent.SHA1;
-            allowRule.FriendlyName = String.Format("{0} hash rule; Correlation Id: {1}", ciEvent.FileName, ciEvent.CorrelationId);
+            if (!String.IsNullOrEmpty(ciEvent.CorrelationId))
+            {
+                allowRule.FriendlyName = String.Format("{0} SHA1 hash allow rule; Correlation Id: {1}",
+                                                        ciEvent.FileName, ciEvent.CorrelationId);
+            }
+            else
+            {
+                allowRule.FriendlyName = String.Format("{0} SHA1 hash allow rule; Reference Device Id: {1}; Timestamp: {2}",
+                                                        ciEvent.FileName, ciEvent.DeviceId, ciEvent.Timestamp);
+            }
             allowRule.ID = String.Format("ID_ALLOW_E_{0}_{1}", cFileHashRules, "SHA1");
             allowHashRules.Add(allowRule);
             cFileHashRules++;
 
-            // SHA1 Page
-            allowRule = new Allow();
-            allowRule.Hash = ciEvent.SHA1Page;
-            allowRule.FriendlyName = String.Format("{0} hash rule; Correlation Id: {1}", ciEvent.FileName, ciEvent.CorrelationId);
-            allowRule.ID = String.Format("ID_ALLOW_E_{0}_{1}", cFileHashRules, "SHA1_PAGE");
-            allowHashRules.Add(allowRule);
-            cFileHashRules++;
-
-
-            // SHA2
+            // SHA256 PE Hash
             allowRule = new Allow();
             allowRule.Hash = ciEvent.SHA2;
-            allowRule.FriendlyName = String.Format("{0} hash rule; Correlation Id: {1}", ciEvent.FileName, ciEvent.CorrelationId);
-            allowRule.ID = String.Format("ID_ALLOW_E_{0}_{1}", cFileHashRules, "SHA2");
-            allowHashRules.Add(allowRule);
-            cFileHashRules++;
-
-            // SHA2 Page
-            allowRule = new Allow();
-            allowRule.Hash = ciEvent.SHA1Page;
-            allowRule.FriendlyName = String.Format("{0} hash rule; Correlation Id: {1}", ciEvent.FileName, ciEvent.CorrelationId);
-            allowRule.ID = String.Format("ID_ALLOW_E_{0}_{1}", cFileHashRules, "SHA2_PAGE");
+            if (!String.IsNullOrEmpty(ciEvent.CorrelationId))
+            {
+                allowRule.FriendlyName = String.Format("{0} SHA256 hash allow rule; Correlation Id: {1}",
+                                                        ciEvent.FileName, ciEvent.CorrelationId);
+            }
+            else
+            {
+                allowRule.FriendlyName = String.Format("{0} SHA256 hash allow rule; Reference Device Id: {1}; Timestamp: {2}",
+                                                        ciEvent.FileName, ciEvent.DeviceId, ciEvent.Timestamp);
+            }
+            allowRule.ID = String.Format("ID_ALLOW_E_{0}_{1}", cFileHashRules, "SHA256");
             allowHashRules.Add(allowRule);
             cFileHashRules++;
 

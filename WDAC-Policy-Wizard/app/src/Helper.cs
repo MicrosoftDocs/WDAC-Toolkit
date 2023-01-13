@@ -44,7 +44,8 @@ namespace WDAC_Wizard
             Policy = 0,     // -Show .xml files
             EventLog = 1,   // -Show .evtx files
             PEFile = 2,     // -Show PE (.exe, .dll, .sys) files
-            All = 3         // -Show . all files
+            CsvFile = 3,    // -Show Csv file
+            All = 4         // -Show . all files
         }
 
         public static string GetDOSPath(string NTPath)
@@ -93,6 +94,10 @@ namespace WDAC_Wizard
             {
                 openFileDialog.Filter = "Event Log Files (*.evtx)|*.evtx";
             }
+            else if(browseFileType == BrowseFileType.CsvFile)
+            {
+                openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
+            }
             else
             {
                 openFileDialog.Filter = "All Files (*.)|*.";
@@ -139,6 +144,10 @@ namespace WDAC_Wizard
             else if (browseFile.Equals(BrowseFileType.Policy))
             {
                 openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
+            }
+            else if (browseFile.Equals(BrowseFileType.CsvFile))
+            {
+                openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
             }
             else
             {
@@ -430,6 +439,26 @@ namespace WDAC_Wizard
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Concatenates the file version parts (major, minor, build and private)
+        /// </summary>
+        /// <param name="fileVersionInfo"></param>
+        /// <returns>Major.Minor.Build.Private if file version exists. Null, otherwise.</returns>
+        public static string ConcatFileVersion(FileVersionInfo fileVersionInfo)
+        {
+            if(fileVersionInfo.FileMajorPart == null
+                || fileVersionInfo.FileMinorPart == null
+                || fileVersionInfo.FileBuildPart == null
+                || fileVersionInfo.FilePrivatePart == null
+                || fileVersionInfo.FileVersion == null)
+            {
+                return null; 
+            }
+
+            return String.Format("{0}.{1}.{2}.{3}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart,
+                                   fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
         }
 
         public static int CompareVersions(string minVersion, string maxVersion)

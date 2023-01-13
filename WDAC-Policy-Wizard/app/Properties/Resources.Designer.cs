@@ -1071,6 +1071,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Wizard could not parse any Advanced Hunting events from the CSV file(s)..
+        /// </summary>
+        internal static string UnsuccessfulAdvancedHuntingLogConversion {
+            get {
+                return ResourceManager.GetString("UnsuccessfulAdvancedHuntingLogConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Conversion of the event log to a WDAC Policy XML file was unsuccessful. Please try another file. .
         /// </summary>
         internal static string UnsuccessfulEventLogConversion {
