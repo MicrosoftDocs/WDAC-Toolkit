@@ -936,7 +936,7 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; PolicyType=&quot;Base Policy&quot;&gt;
-        ///  &lt;VersionEx&gt;10.0.0.0&lt;/VersionEx&gt;
+        ///  &lt;VersionEx&gt;10.0.1.0&lt;/VersionEx&gt;
         ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
         ///  &lt;Rules&gt;
         ///    &lt;Rule&gt;
@@ -1048,6 +1048,15 @@ namespace WDAC_Wizard.Properties {
         internal static string UnsignedPolicy_Info {
             get {
                 return ResourceManager.GetString("UnsignedPolicy_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Wizard could not parse any Advanced Hunting events from the CSV file(s)..
+        /// </summary>
+        internal static string UnsuccessfulAdvancedHuntingLogConversion {
+            get {
+                return ResourceManager.GetString("UnsuccessfulAdvancedHuntingLogConversion", resourceCulture);
             }
         }
         

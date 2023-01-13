@@ -195,10 +195,8 @@ namespace WDAC_Wizard
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[12].Value;
-                ciEvent.SHA1Page = (byte[])entry.Properties[8].Value;
-                ciEvent.SHA2 = (byte[])entry.Properties[14].Value;
-                ciEvent.SHA2Page = (byte[])entry.Properties[10].Value;
+                ciEvent.SHA1 = (byte[])entry.Properties[8].Value; // SHA1 Flat Hash - 12; SHA256 Flat Hash - 14
+                ciEvent.SHA2 = (byte[])entry.Properties[10].Value;
                 ciEvent.OriginalFilename = entry.Properties[24].Value.ToString();
                 ciEvent.InternalFilename = entry.Properties[26].Value.ToString();
                 ciEvent.FileDescription = entry.Properties[28].Value.ToString();
@@ -268,10 +266,8 @@ namespace WDAC_Wizard
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[12].Value;
-                ciEvent.SHA1Page = (byte[])entry.Properties[8].Value;
-                ciEvent.SHA2 = (byte[])entry.Properties[14].Value;
-                ciEvent.SHA2Page = (byte[])entry.Properties[10].Value;
+                ciEvent.SHA1 = (byte[])entry.Properties[8].Value; // SHA1 Flat Hash - 12; SHA256 Flat Hash - 14
+                ciEvent.SHA2 = (byte[])entry.Properties[10].Value;
                 ciEvent.OriginalFilename = entry.Properties[24].Value.ToString();
                 ciEvent.InternalFilename = entry.Properties[26].Value.ToString();
                 ciEvent.FileDescription = entry.Properties[28].Value.ToString();
@@ -341,10 +337,8 @@ namespace WDAC_Wizard
                 string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[2].Value;
-                ciEvent.SHA1Page = (byte[])entry.Properties[6].Value;
-                ciEvent.SHA2 = (byte[])entry.Properties[3].Value;
-                ciEvent.SHA2Page = (byte[])entry.Properties[7].Value;
+                ciEvent.SHA1 = (byte[])entry.Properties[2].Value; // SHA1 PE Hash
+                ciEvent.SHA2 = (byte[])entry.Properties[3].Value; // SHA256 PE Hash
 
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in appSignerEvents)
@@ -568,14 +562,15 @@ namespace WDAC_Wizard
         /// </summary>
         public int EventId { get; set; }
         public string CorrelationId { get; set; }
+        // AH Correlation:
+        public string Timestamp { get; set; }
+        public string DeviceId { get; set; }
 
         // File related info
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public byte[] SHA1 { get; set; }
-        public byte[] SHA1Page { get; set; }
         public byte[] SHA2 { get; set; }
-        public byte[] SHA2Page { get; set; }
 
         public string OriginalFilename { get; set; }
         public string InternalFilename { get; set; }
@@ -623,6 +618,10 @@ namespace WDAC_Wizard
         public string IssuerName { get; set; }
         public byte[] IssuerTBSHash { get; set; }
         public string PublisherName { get; set; }
+
+        // AH Device Specific
+        public string Timestamp { get; set; }
+        public string DeviceId { get; set; }
 
         public SignerEvent()
         {

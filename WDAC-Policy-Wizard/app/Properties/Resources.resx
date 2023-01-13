@@ -495,4 +495,7 @@ Please select the  'Create Rule' button.</value>
   <data name="UnsuccessfulEventLogConversionZeroEvents" xml:space="preserve">
     <value>The Wizard did not parse any WDAC events from the selected .evtx files.</value>
   </data>
+  <data name="UnsuccessfulAdvancedHuntingLogConversion" xml:space="preserve">
+    <value>The Wizard could not parse any Advanced Hunting events from the CSV file(s).</value>
+  </data>
 </root>
