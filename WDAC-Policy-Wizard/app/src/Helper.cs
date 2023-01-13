@@ -1784,7 +1784,7 @@ namespace WDAC_Wizard
                 {
                     siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
                 }
-                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
                     siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);                    
@@ -1818,7 +1818,7 @@ namespace WDAC_Wizard
                 {
                     siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
                 }
-                else if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.Folder)
+                else if (exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath || exceptAllowRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     exceptDenyRules[i++].DenyRuleID = String.Format("ID_ALLOW_PATH_{0}", cFileAllowRules);
                     siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);
@@ -2392,9 +2392,10 @@ namespace WDAC_Wizard
             FileAttributes,   // RuleLevel set to "FileName", gives way to additional switch "SpecificFileNameLevel"
             PackagedApp,
             FilePath,
-            Folder,
+            FolderPath,
             Hash, 
-            Com
+            Com, 
+            FolderScan
         }
 
         public enum RuleLevel
@@ -2444,6 +2445,7 @@ namespace WDAC_Wizard
         public RuleType Type { get; set; }
         public RulePermission Permission { get; set; }
 
+        // Variables:
         public string ReferenceFile { get; set; }
         public Dictionary<string, string> FileInfo { get; set; } //
         public string PSVariable { get; set; }
@@ -2468,6 +2470,9 @@ namespace WDAC_Wizard
 
         // COM Object
         public COM COMObject { get; set; }
+
+        // Folder Scan
+        public FolderScan Scan { get; set; }
 
         // Constructors
         public PolicyCustomRules()
@@ -2497,7 +2502,8 @@ namespace WDAC_Wizard
             this.SigningScenarioCheckStates.umciEnabled = true;
             this.SigningScenarioCheckStates.kmciEnabled = false;
 
-            this.COMObject = new COM(); 
+            this.COMObject = new COM();
+            this.Scan = new FolderScan(); 
         }
 
         /// <summary>

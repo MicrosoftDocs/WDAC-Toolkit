@@ -4,10 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text.RegularExpressions; 
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.IO;
 using System.Windows.Forms;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
 using System.Management.Automation.Runspaces;
@@ -193,7 +192,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Packaged family name apps. Set the list of apps at button create time
+            // Packaged family name apps
+            // Set the list of apps at button create time
             if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
             {
                 // Assert >=1 packaged apps must be selected
@@ -214,7 +214,39 @@ namespace WDAC_Wizard
                     }
                 }
             }
-            
+
+            // Folder Scan 
+            // Set the list of omitted paths at button create time
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderScan)
+            {
+                // Assert >=1 rule levels must be selected
+                if (this.checkedListBoxRuleLevels.CheckedItems.Count < 1)
+                {
+                    label_Error.Visible = true;
+                    label_Error.Text = Properties.Resources.RuleLevelEmptyList_Error;
+                    this.Log.AddWarningMsg("Create button rule selected with an empty folder scan rule level list.");
+                    return;
+                }
+                // Set the rule level ordered list
+                else
+                {
+                    for (int i = 0; i < this.checkedListBoxRuleLevels.CheckedItems.Count; i++)
+                    {
+                        this.PolicyCustomRule.Scan.Levels.Add(this.checkedListBoxRuleLevels.CheckedItems[i].ToString());
+                    }
+                }
+                
+                // Check for Omit Scan Paths
+                if(this.checkedListBoxOmitPaths.CheckedItems.Count > 1)
+                {
+                    // Using for loop to avoid System.InvalidOperationException despite list not changing
+                    for (int i = 0; i < this.checkedListBoxOmitPaths.CheckedItems.Count; i++)
+                    {
+                        this.PolicyCustomRule.Scan.OmitPaths.Add(this.checkedListBoxOmitPaths.CheckedItems[i].ToString());
+                    }
+                }
+            }
+
             // Check custom rules
             if (this.PolicyCustomRule.UsingCustomValues)
             {
@@ -356,7 +388,7 @@ namespace WDAC_Wizard
             if (this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled
                 && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder))
+                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidKMCIRule;
@@ -482,7 +514,7 @@ namespace WDAC_Wizard
                     break;
                 }
 
-            case PolicyCustomRules.RuleType.Folder:
+            case PolicyCustomRules.RuleType.FolderPath:
                 {
                     if (this.PolicyCustomRule.UsingCustomValues)
                     {
@@ -494,8 +526,6 @@ namespace WDAC_Wizard
                     }
                     break;
                 }
-
-                    
 
             case PolicyCustomRules.RuleType.FilePath:
                 {
@@ -532,10 +562,27 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.Com:
                     {
+                        level = "COM Object";
                         name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
                         files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
-                        level = "COM Object"; 
+                         
                         break; 
+                    }
+
+                case PolicyCustomRules.RuleType.FolderScan:
+                    {
+                        level = this.PolicyCustomRule.Scan.Levels[0];
+                        name = "Folder Scan - " + this.PolicyCustomRule.ReferenceFile;
+                        if (this.PolicyCustomRule.Scan.Levels.Count > 1)
+                        {
+                            files = "Level Fallback to "; 
+                            for(int i=1; i< this.PolicyCustomRule.Scan.Levels.Count; i++)
+                            {
+                                files += this.PolicyCustomRule.Scan.Levels[i] + ", ";
+                            }
+                            files = files.Substring(0, files.Length - 2);
+                        }
+                        break;
                     }
             }
 
@@ -591,7 +638,9 @@ namespace WDAC_Wizard
             this.checkBox_CustomPath.Visible = false;
             this.checkBox_CustomPath.Checked = false;
             this.panelPackagedApps.Visible = false;
-            this.panelComObject.Visible = false; 
+            this.panelComObject.Visible = false;
+            this.panelFolderScanConditions.Visible = false; 
+            this.label_condition.Text = "Reference File:";
 
             switch (selectedOpt)
             {
@@ -645,7 +694,15 @@ namespace WDAC_Wizard
                     this.panelComObject.Location = this.label_condition.Location;
                     this.panelComObject.Visible = true;
                     this.panelComObject.BringToFront(); 
-                    break; 
+                    break;
+
+                case "Folder Scan":
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
+                    label_Info.Text = "Creates a file rule for each file found in the scanned directory and it's subdirectories.";
+                    this.panelFolderScanConditions.Location = this.checkBox_CustomPath.Location;
+                    this.panelFolderScanConditions.Visible = true; 
+                    this.label_condition.Text = "Scan Path:";
+                    break;
 
                 default:
                     break;
@@ -712,7 +769,8 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Folder)
+            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderPath
+                && this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderScan)
             {
                 string refPath = GetFileLocation();
                 if (refPath == String.Empty)
@@ -873,7 +931,7 @@ namespace WDAC_Wizard
                     panel_Publisher_Scroll.Visible = true;
                     break;
 
-                case PolicyCustomRules.RuleType.Folder:
+                case PolicyCustomRules.RuleType.FolderPath:
 
                     // User wants to create rule by folder level
                     this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
@@ -979,6 +1037,37 @@ namespace WDAC_Wizard
                     }
 
                     break;
+
+                case PolicyCustomRules.RuleType.FolderScan:
+
+                    // User wants to create rules for each file in the selected folder
+                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
+                    if (PolicyCustomRule.ReferenceFile == String.Empty)
+                    {
+                        break;
+                    }
+
+                    // UI updates
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+
+                    // Show right side of the text
+                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+
+                    // Populate the Omit Paths CheckedListBox with the sub-directories found
+                    string[] subPaths = Directory.GetDirectories(this.PolicyCustomRule.ReferenceFile);
+                    if(subPaths.Length != 0)
+                    {
+                        foreach (string subPath in subPaths)
+                        {
+                            this.checkedListBoxOmitPaths.Items.Add(subPath, false); // set to unchecked by default
+                        }
+                    }                    
+
+                    break;
             }
         }
 
@@ -997,7 +1086,7 @@ namespace WDAC_Wizard
             else
             {
                 this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.Folder;
-                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.Folder;
+                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.FolderPath;
             }
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
@@ -1084,7 +1173,7 @@ namespace WDAC_Wizard
         private void Button_Next_Click(object sender, EventArgs e)
         {
             // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder 
+            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath 
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
                 || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
@@ -2122,7 +2211,7 @@ namespace WDAC_Wizard
             {
                 if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
                     this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
-                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Folder)
+                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
                                                         "Unsupported Kernel Rule Type",
@@ -2249,6 +2338,54 @@ namespace WDAC_Wizard
             {
                 this.textBoxObjectKey.Clear(); 
             }
+        }
+
+        /// <summary>
+        /// Fires when user clicks on the learn more. Opens the WDAC file rule level webpage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LabelFolderScanLearnMore_Click(object sender, EventArgs e)
+        {
+            // Label for learn more about policy options clicked. Launch msft docs page. 
+            try
+            {
+                System.Diagnostics.Process.Start(Properties.Resources.MSDocLink_RuleLevels);
+            }
+            catch (Exception exp)
+            {
+                this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", 
+                                     Properties.Resources.MSDocLink_RuleLevels), exp);
+            }
+        }
+
+        /// <summary>
+        /// Fires when the row is selected down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RuleLevelsList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (this.checkedListBoxRuleLevels.SelectedItem == null || e.X < 15 || (e.X > 150 && e.X < 165)) return; // e.X < 15 - left most column checkboxes. 150 < e.X < 165 - right most checkboxes
+            this.checkedListBoxRuleLevels.DoDragDrop(this.checkedListBoxRuleLevels.SelectedItem, DragDropEffects.Move);
+        }
+
+        private void RuleLevelsList_DragDropDone(object sender, DragEventArgs e)
+        { 
+            Point point = checkedListBoxRuleLevels.PointToClient(new Point(e.X, e.Y));
+            int index = this.checkedListBoxRuleLevels.IndexFromPoint(point);
+            if (index < 0) index = this.checkedListBoxRuleLevels.Items.Count - 1;
+            bool isChecked = checkedListBoxRuleLevels.GetItemChecked(index);
+
+            object data = checkedListBoxRuleLevels.SelectedItem;
+            this.checkedListBoxRuleLevels.Items.Remove(data);
+            this.checkedListBoxRuleLevels.Items.Insert(index, data);
+            this.checkedListBoxRuleLevels.SetItemChecked(index, isChecked);
+        }
+
+        private void RuleLevelsList_DragInProgress(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
         }
     }
 }

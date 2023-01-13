@@ -678,6 +678,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-file-rule-levels.
+        /// </summary>
+        internal static string MSDocLink_RuleLevels {
+            get {
+                return ResourceManager.GetString("MSDocLink_RuleLevels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap newPolicy {
@@ -865,6 +874,16 @@ namespace WDAC_Wizard.Properties {
         internal static string RevokedAsUnsigned_Info {
             get {
                 return ResourceManager.GetString("RevokedAsUnsigned_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list of selected rule levels is empty. Please select at least 1 rule level to use while 
+        ///scanning the folder..
+        /// </summary>
+        internal static string RuleLevelEmptyList_Error {
+            get {
+                return ResourceManager.GetString("RuleLevelEmptyList_Error", resourceCulture);
             }
         }
         
