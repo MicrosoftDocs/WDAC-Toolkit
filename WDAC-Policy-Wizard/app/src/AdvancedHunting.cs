@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileHelpers;
 
 namespace WDAC_Wizard
@@ -89,21 +86,23 @@ namespace WDAC_Wizard
 
             foreach (var record in records)
             {
-                if(record.ActionType == DRIVER_REV_EVENT_NAME)
+                switch (record.ActionType)
                 {
-                    ciEvents.Add(Create3023Event(record));
-                }
-                else if (record.ActionType == AUDIT_EVENT_NAME)
-                {
-                    ciEvents.Add(Create3076Event(record));
-                }
-                else if (record.ActionType == BLOCK_EVENT_NAME)
-                {
-                    ciEvents.Add(Create3077Event(record));
-                }
-                else if(record.ActionType == SIGNING_EVENT_NAME)
-                {
-                    signerEvents.Add(Create3089Event(record));
+                    case DRIVER_REV_EVENT_NAME:
+                        ciEvents.Add(Create3023Event(record));
+                        break;
+
+                    case AUDIT_EVENT_NAME:
+                        ciEvents.Add(Create3076Event(record));
+                        break;
+
+                    case BLOCK_EVENT_NAME:
+                        ciEvents.Add(Create3077Event(record));
+                        break;
+
+                    case SIGNING_EVENT_NAME:
+                        signerEvents.Add(Create3089Event(record));
+                        break;
                 }
             }
 
@@ -193,7 +192,6 @@ namespace WDAC_Wizard
             signerEvent.PublisherName = record.PublisherName;
             signerEvent.DeviceId = record.DeviceId;
             signerEvent.Timestamp = record.Timestamp; 
-
 
             return signerEvent;
         }
