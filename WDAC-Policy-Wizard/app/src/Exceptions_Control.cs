@@ -412,8 +412,7 @@ namespace WDAC_Wizard
             // Check that fields are valid, otherwise break and show error msg
             if(this.ExceptionRule == null 
                 || String.IsNullOrEmpty(this.ExceptionRule.ReferenceFile)
-                || this.ExceptionRule.Type == PolicyCustomRules.RuleType.None
-                || !this.ExceptionRule.IsAnyBoxChecked())
+                || this.ExceptionRule.Type == PolicyCustomRules.RuleType.None)
             {
                 this.ConditionsPanel.SetLabel_ErrorText("Invalid exception selection. Please select a level and reference file");
                 return; 
@@ -422,6 +421,12 @@ namespace WDAC_Wizard
             // Get the values from the textboxes for the file attributes rule
             if(this.ExceptionRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
+                if(!this.ExceptionRule.IsAnyBoxChecked())
+                {
+                    this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.InvalidCheckboxState);
+                    return;
+                }
+
                 this.ExceptionRule.CustomValues.FileName = textBox_originalfilename.Text;
                 this.ExceptionRule.CustomValues.Description = textBox_filedescription.Text;
                 this.ExceptionRule.CustomValues.ProductName = textBox_product.Text;

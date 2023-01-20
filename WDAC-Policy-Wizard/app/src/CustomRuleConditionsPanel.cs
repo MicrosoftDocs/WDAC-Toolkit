@@ -1171,10 +1171,8 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void Button_Next_Click(object sender, EventArgs e)
         {
-            // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath 
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+            // Assert only signer rules can be excepted in WDAC
+            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;

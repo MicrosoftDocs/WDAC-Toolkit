@@ -948,18 +948,25 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateAllowHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Allow allow=null)
+        public static SiPolicy CreateAllowHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Allow allow=null, bool isException = false)
         {
             if(allow != null)
             {
                 Allow allowRule = new Allow();
                 allowRule.Hash = allow.Hash;
                 allowRule.FriendlyName = allow.FriendlyName;
-                allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules);
-                cFileAllowRules++;
-
+                
+                if(!isException)
+                {
+                    allowRule.ID = String.Format("ID_ALLOW_HASH_{0}", cFileAllowRules++);
+                }
+                else
+                {
+                    allowRule.ID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions++);
+                }
+                
                 // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates);
+                siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
             }
 
             if(customRule != null)
@@ -988,18 +995,24 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateDenyHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Deny deny=null)
+        public static SiPolicy CreateDenyHashRule(SiPolicy siPolicy, PolicyCustomRules customRule = null, Deny deny=null, bool isException = false)
         {
             if(deny != null)
             {
                 Deny denyRule = new Deny();
                 denyRule.Hash = deny.Hash;
                 denyRule.FriendlyName = deny.FriendlyName;
-                denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules);
-                cFileDenyRules++;
-
+                if(!isException)
+                {
+                    denyRule.ID = String.Format("ID_DENY_HASH_{0}", cFileDenyRules++);
+                }
+                else
+                {
+                    denyRule.ID = String.Format("ID_DENY_EX_{0}", cFileExceptions++);
+                }
+                
                 // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-                siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
+                siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
             }
 
             if (customRule != null)
@@ -1840,25 +1853,37 @@ namespace WDAC_Wizard
 
             foreach(var exceptAllowRule in exceptionsList)
             {
-                if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                switch (exceptAllowRule.Type)
                 {
-                    exceptAllowRules[i] = new ExceptAllowRule();
-                    exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
-                    siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
-                }
-                else if(exceptAllowRule.Type == PolicyCustomRules.RuleType.FilePath 
-                        || exceptAllowRule.Type == PolicyCustomRules.RuleType.FolderPath)
-                {
-                    exceptAllowRules[i] = new ExceptAllowRule(); 
-                    exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions);
-                    siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);                    
-                }
-                else
-                {
-                    // Hash rule
-                    // Create
-                    // CreateAllowHashRule(siPolicy, null, allow)
-                    // Add
+                    case PolicyCustomRules.RuleType.FileAttributes:
+                        {
+                            exceptAllowRules[i] = new ExceptAllowRule();
+                            exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                            siPolicy = CreateAllowFileAttributeRule(exceptAllowRule, siPolicy, true);
+                            break;
+                        }
+
+                    case PolicyCustomRules.RuleType.FilePath:
+                    case PolicyCustomRules.RuleType.FolderPath:
+                        {
+                            exceptAllowRules[i] = new ExceptAllowRule();
+                            exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                            siPolicy = CreateAllowPathRule(exceptAllowRule, siPolicy, true);
+                            break;
+                        }
+
+                    case PolicyCustomRules.RuleType.Hash:
+                        {
+                            object[] hashRules = CreateHashRulesFromPS(exceptAllowRule);
+                            Array.Resize(ref exceptAllowRules, exceptAllowRules.Length + hashRules.Length - 1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
+                            foreach (object hashRule in hashRules)
+                            {
+                                exceptAllowRules[i] = new ExceptAllowRule();
+                                exceptAllowRules[i++].AllowRuleID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                                siPolicy = CreateAllowHashRule(siPolicy, exceptAllowRule, (Allow)hashRule, true);
+                            }
+                            break;
+                        }
                 }
             }
 
@@ -1882,25 +1907,37 @@ namespace WDAC_Wizard
 
             foreach (var exceptDenyRule in exceptionsList)
             {
-                if (exceptDenyRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                switch (exceptDenyRule.Type)
                 {
-                    exceptDenyRules[i] = new ExceptDenyRule();
-                    exceptDenyRules[i++].DenyRuleID = String.Format("ID_DENY_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
-                    siPolicy = CreateDenyFileAttributeRule(exceptDenyRule, siPolicy, true);
-                }
-                else if (exceptDenyRule.Type == PolicyCustomRules.RuleType.FilePath 
-                         || exceptDenyRule.Type == PolicyCustomRules.RuleType.FolderPath)
-                {
-                    exceptDenyRules[i] = new ExceptDenyRule();
-                    exceptDenyRules[i++].DenyRuleID = String.Format("ID_DENY_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
-                    siPolicy = CreateDenyPathRule(exceptDenyRule, siPolicy, true);
-                }
-                else
-                {
-                    // Hash rule
-                    // Create
-                    // CreateAllowHashRule(siPolicy, null, allow)
-                    // Add
+                    case PolicyCustomRules.RuleType.FileAttributes:
+                        {
+                            exceptDenyRules[i] = new ExceptDenyRule();
+                            exceptDenyRules[i++].DenyRuleID = String.Format("ID_DENY_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                            siPolicy = CreateDenyFileAttributeRule(exceptDenyRule, siPolicy, true);
+                            break;
+                        }
+
+                    case PolicyCustomRules.RuleType.FilePath:
+                    case PolicyCustomRules.RuleType.FolderPath:
+                        {
+                            exceptDenyRules[i] = new ExceptDenyRule();
+                            exceptDenyRules[i++].DenyRuleID = String.Format("ID_DENY_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                            siPolicy = CreateDenyPathRule(exceptDenyRule, siPolicy, true);
+                            break;
+                        }
+
+                    case PolicyCustomRules.RuleType.Hash:
+                        {
+                            object[] hashRules = CreateHashRulesFromPS(exceptDenyRule);
+                            Array.Resize(ref exceptDenyRules, exceptDenyRules.Length + hashRules.Length-1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
+                            foreach (object hashRule in hashRules)
+                            {
+                                exceptDenyRules[i] = new ExceptDenyRule();
+                                exceptDenyRules[i++].DenyRuleID = String.Format("ID_DENY_EX_{0}", cFileExceptions); // Don't increment cFileExceptions
+                                siPolicy = CreateDenyHashRule(siPolicy, exceptDenyRule, (Deny)hashRule, true);
+                            }
+                            break;
+                        }
                 }
             }
 
@@ -2008,6 +2045,53 @@ namespace WDAC_Wizard
             File.Delete(DUMMYPATH);
 
             return siPolicy; 
+        }
+
+        /// <summary>
+        /// Creates a list of hash rules to be used in the exceptions creation workflow. Calls the PS command to generate the hashes.
+        /// </summary>
+        /// <returns></returns>
+        static private object[] CreateHashRulesFromPS(PolicyCustomRules exceptRule)
+        {
+            // 1. Create a Deny Rule of the requested type (file attibutes, path, hash)
+            // 2. Add the Deny Rule to the SiPolicy.FileRules section
+            // 3. Return the ExceptDenyRule[] which contain the IDs of the Allow rules to add to the Signer.Exceptions
+
+            string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummyHashPolicy.xml");
+
+            // Create runspace, pipeline and run script
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            // Scan the file to extract the TBS hash (or hashes) for the signers
+            string createRuleCmd = String.Format("$DummyHashRule += New-CIPolicyRule -Level Hash " +
+                "-DriverFilePath \"{0}\"", exceptRule.ReferenceFile);
+
+            if(exceptRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                createRuleCmd += " -Deny";
+            }
+            pipeline.Commands.AddScript(createRuleCmd); 
+            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", DUMMYPATH));
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy tempSiPolicy = DeserializeXMLtoPolicy(DUMMYPATH);
+
+            // Remove dummy file
+            File.Delete(DUMMYPATH);
+
+            return tempSiPolicy.FileRules; 
         }
 
         /// <summary>
