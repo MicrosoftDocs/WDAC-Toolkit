@@ -107,7 +107,6 @@ namespace WDAC_Wizard
                 }
             }
             
-
             // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
             bool warnUser = false;
 

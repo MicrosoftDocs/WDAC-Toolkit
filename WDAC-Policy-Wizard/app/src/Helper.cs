@@ -1280,30 +1280,40 @@ namespace WDAC_Wizard
             string friendlyName = "Deny files based on file attributes: ";
 
             // Add only the checked attributes
+            // Original filename
             if (customRule.CheckboxCheckStates.checkBox0)
             {
                 denyRule.FileName = customRule.CustomValues.FileName;
                 friendlyName += denyRule.FileName + " and ";
             }
 
+            // File description
             if (customRule.CheckboxCheckStates.checkBox1)
             {
                 denyRule.FileDescription = customRule.CustomValues.Description;
                 friendlyName += denyRule.FileDescription + " and ";
             }
 
+            // Product name
             if (customRule.CheckboxCheckStates.checkBox2)
             {
                 denyRule.ProductName = customRule.CustomValues.ProductName;
                 friendlyName += denyRule.ProductName + " and ";
             }
 
+            // Internal name
             if (customRule.CheckboxCheckStates.checkBox3)
             {
                 denyRule.InternalName = customRule.CustomValues.InternalName;
                 friendlyName += denyRule.InternalName + " and ";
             }
 
+            // Min Version
+            if (customRule.CheckboxCheckStates.checkBox4 && isException)
+            {
+                denyRule.MinimumFileVersion = customRule.CustomValues.MinVersion;
+                friendlyName += denyRule.MinimumFileVersion + " and ";
+            }
 
             denyRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5);
             if(!isException)
@@ -1316,7 +1326,7 @@ namespace WDAC_Wizard
             }
 
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
-            siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates);
+            siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
 
             return siPolicy;
         }
@@ -2678,19 +2688,24 @@ namespace WDAC_Wizard
             this.ExceptionList.Add(ruleException);
         }
 
+        /// <summary>
+        /// Adds the PolicyCustomRule exception to the ExceptionsList list
+        /// </summary>
+        /// <param name="ruleException"></param>
         public void AddException(PolicyCustomRules ruleException)
         {
-            if(ruleException.Type != PolicyCustomRules.RuleType.None 
-                || ruleException.Level != PolicyCustomRules.RuleLevel.None
-                || ruleException.FileInfo != null 
-                || ruleException.ReferenceFile!= null)
-            {
-                this.ExceptionList.Add(ruleException);
-            }
-            else
-            {
-                // Log error or something
-            }
+            this.ExceptionList.Add(ruleException);
+        }
+
+        /// <summary>
+        /// Returns true if at least one checkbox is checked. False, otherwise. 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAnyBoxChecked()
+        {
+            return this.CheckboxCheckStates.checkBox0 || this.CheckboxCheckStates.checkBox1
+                || this.CheckboxCheckStates.checkBox2 || this.CheckboxCheckStates.checkBox3 
+                || this.CheckboxCheckStates.checkBox4;
         }
     }
 
