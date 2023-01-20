@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.publisherInfoLabel = new System.Windows.Forms.Label();
             this.panel_ExceptionRule = new System.Windows.Forms.Panel();
             this.ruleCondition_Label = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
@@ -57,28 +56,19 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
+            this.errorLabel = new System.Windows.Forms.Label();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Exceptions)).BeginInit();
             this.SuspendLayout();
             // 
-            // publisherInfoLabel
-            // 
-            this.publisherInfoLabel.AutoSize = true;
-            this.publisherInfoLabel.Location = new System.Drawing.Point(9, 769);
-            this.publisherInfoLabel.Name = "publisherInfoLabel";
-            this.publisherInfoLabel.Size = new System.Drawing.Size(124, 17);
-            this.publisherInfoLabel.TabIndex = 106;
-            this.publisherInfoLabel.Text = "publisherInfoLabel";
-            this.publisherInfoLabel.Visible = false;
-            // 
             // panel_ExceptionRule
             // 
             this.panel_ExceptionRule.BackColor = System.Drawing.Color.White;
+            this.panel_ExceptionRule.Controls.Add(this.errorLabel);
             this.panel_ExceptionRule.Controls.Add(this.ruleCondition_Label);
             this.panel_ExceptionRule.Controls.Add(this.panel_FileFolder);
-            this.panel_ExceptionRule.Controls.Add(this.publisherInfoLabel);
             this.panel_ExceptionRule.Controls.Add(this.panel_Publisher_Scroll);
             this.panel_ExceptionRule.Controls.Add(this.dataGridView_Exceptions);
             this.panel_ExceptionRule.Controls.Add(this.ruleCondition_static_Label);
@@ -164,14 +154,14 @@
             this.panel_Publisher_Scroll.Location = new System.Drawing.Point(8, 492);
             this.panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             this.panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 261);
+            this.panel_Publisher_Scroll.Size = new System.Drawing.Size(494, 254);
             this.panel_Publisher_Scroll.TabIndex = 108;
             this.panel_Publisher_Scroll.Visible = false;
             // 
             // checkBoxCustomValues
             // 
             this.checkBoxCustomValues.AutoSize = true;
-            this.checkBoxCustomValues.Location = new System.Drawing.Point(9, 237);
+            this.checkBoxCustomValues.Location = new System.Drawing.Point(9, 227);
             this.checkBoxCustomValues.Name = "checkBoxCustomValues";
             this.checkBoxCustomValues.Size = new System.Drawing.Size(153, 21);
             this.checkBoxCustomValues.TabIndex = 126;
@@ -422,6 +412,16 @@
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // errorLabel
+            // 
+            this.errorLabel.AutoSize = true;
+            this.errorLabel.Location = new System.Drawing.Point(7, 787);
+            this.errorLabel.Name = "errorLabel";
+            this.errorLabel.Size = new System.Drawing.Size(74, 17);
+            this.errorLabel.TabIndex = 110;
+            this.errorLabel.Text = "errorLabel";
+            this.errorLabel.Visible = false;
+            // 
             // Exceptions_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -443,7 +443,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label publisherInfoLabel;
         private System.Windows.Forms.Panel panel_ExceptionRule;
         private System.Windows.Forms.Panel panel_FileFolder;
         private System.Windows.Forms.RadioButton radioButton_Folder;
@@ -472,5 +471,6 @@
         private System.Windows.Forms.CheckBox checkBox_Product;
         private System.Windows.Forms.CheckBox checkBox_OriginalFilename;
         private System.Windows.Forms.CheckBox checkBoxCustomValues;
+        private System.Windows.Forms.Label errorLabel;
     }
 }

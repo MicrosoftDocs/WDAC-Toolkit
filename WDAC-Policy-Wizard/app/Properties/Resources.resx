@@ -504,4 +504,8 @@ Please select the  'Create Rule' button.</value>
   <data name="UnsuccessfulAdvancedHuntingLogConversion" xml:space="preserve">
     <value>The Wizard could not parse any Advanced Hunting events from the CSV file(s).</value>
   </data>
+  <data name="RuleExceptionInProgressText" xml:space="preserve">
+    <value>There is an exception rule in progress.
+Are you sure you want to abandon the exception rule creation workflow?</value>
+  </data>
 </root>

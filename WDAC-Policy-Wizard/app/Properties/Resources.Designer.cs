@@ -878,8 +878,17 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The list of selected rule levels is empty. Please select at least 1 rule level to use while 
-        ///scanning the folder..
+        ///   Looks up a localized string similar to There is an exception rule in progress.
+        ///Are you sure you want to abandon the exception rule creation workflow?.
+        /// </summary>
+        internal static string RuleExceptionInProgressText {
+            get {
+                return ResourceManager.GetString("RuleExceptionInProgressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list of selected rule levels is empty. Please select at least 1 rule level to use while scanning the folder..
         /// </summary>
         internal static string RuleLevelEmptyList_Error {
             get {

@@ -27,6 +27,9 @@ namespace WDAC_Wizard
         private DisplayObject displayObjectInEdit;
 
         private string[] DefaultValues;
+        
+        // Flag indicating a rule is in progress; the rule has not been added to the table
+        private bool fRuleInProgress; 
 
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
@@ -37,6 +40,7 @@ namespace WDAC_Wizard
             this.ConditionsPanel = pRuleConditionsPanel;
 
             this.DefaultValues = new string[5];
+            this.fRuleInProgress = false; 
         }
 
 
@@ -48,8 +52,8 @@ namespace WDAC_Wizard
         {
             // Clear all of UI updates we make based on the type of rule so that the Custom Rules Panel is clear
             //Publisher:
-            this.panel_Publisher_Scroll.Visible = false;
-            this.publisherInfoLabel.Visible = false;
+            panel_Publisher_Scroll.Visible = false;
+            errorLabel.Visible = false;
 
             // File attribute:
             checkBox_OriginalFilename.Checked = false;
@@ -79,6 +83,11 @@ namespace WDAC_Wizard
             // Check if the selected item is null (this occurs after reseting it - rule creation)
             if (this.comboBox_ExceptionType.SelectedIndex < 0)
                 return;
+
+            ClearLabel_ErrorText();
+
+            // Set rule in progress flag
+            this.fRuleInProgress = true; 
 
             string selectedOpt = this.comboBox_ExceptionType.SelectedItem.ToString();
             ClearCustomRulesPanel(false);
@@ -214,10 +223,7 @@ namespace WDAC_Wizard
                     this.textBox_minversion.Text = this.DefaultValues[4];
 
                     panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files with these file description attributes.";
-
+                    SetLabel_ErrorText("Rule applies to all files with these file description attributes.");
                     break;
 
                 case PolicyCustomRules.RuleType.Hash:
@@ -394,12 +400,22 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Returns the rule in progress flag back to the CustomRuleConditions panel in case user accidentally clicks the Create 
+        /// Rule button instead of the Add Exception button. 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRuleInProgress()
+        {
+            return this.fRuleInProgress;
+        }
+
+        /// <summary>
         /// Triggered by Add Exception button click on custom rule conditions panel. 
         /// Add exception to the exception table
         /// </summary>
         public void AddException()
         {
-            //Set ExceptionRule.Level to opposite of the PolicyCustomRule.Level
+            // Set ExceptionRule.Level to opposite of the PolicyCustomRule.Level
             if(this.CustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
             {
                 this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Deny; 
@@ -407,6 +423,15 @@ namespace WDAC_Wizard
             else
             {
                 this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Allow; 
+            }
+
+            // Assert that file path rules are not valid exceptions in the kernel
+            if(this.CustomRule.SigningScenarioCheckStates.kmciEnabled && 
+                (this.ExceptionRule.Type == PolicyCustomRules.RuleType.FilePath
+                || this.ExceptionRule.Type == PolicyCustomRules.RuleType.FolderPath))
+            {
+                this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.InvalidKMCIRule);
+                return;
             }
 
             // Check that fields are valid, otherwise break and show error msg
@@ -448,8 +473,10 @@ namespace WDAC_Wizard
 
             // Scroll to bottom to see new rule added to list
             this.dataGridView_Exceptions.FirstDisplayedScrollingRowIndex = this.dataGridView_Exceptions.RowCount - 1;
-
             this.ExceptionRule = new PolicyCustomRules();
+
+            // Reset rule in progress flag
+            this.fRuleInProgress = false; 
 
             // Reset the UI
             ClearCustomRulesPanel(true); 
@@ -636,8 +663,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ClearLabel_ErrorText()
         {
-            this.publisherInfoLabel.Text = "";
-            this.publisherInfoLabel.Visible = false;
+            this.ConditionsPanel.ClearLabel_ErrorText();
         }
 
         /// <summary>
@@ -646,10 +672,7 @@ namespace WDAC_Wizard
         /// <param name="errorText"></param>
         private void SetLabel_ErrorText(string errorText)
         {
-            this.publisherInfoLabel.Focus();
-            this.publisherInfoLabel.BringToFront();
-            this.publisherInfoLabel.Text = errorText;
-            this.publisherInfoLabel.Visible = true;
+            this.ConditionsPanel.SetLabel_ErrorText(errorText);
         }
 
         private void checkBoxCustomValues_CheckedChanged(object sender, EventArgs e)
@@ -671,7 +694,7 @@ namespace WDAC_Wizard
             else
             {
                 // Clear error if applicable
-                this.ClearLabel_ErrorText();
+                ClearLabel_ErrorText();
 
                 // Set text values back to default
                 SetTextBoxStates(false);

@@ -69,6 +69,19 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
+            // Verify first that an exception flow is not in progress
+            if(this.exceptionsControl.IsRuleInProgress())
+            {
+                DialogResult res = MessageBox.Show(Properties.Resources.RuleExceptionInProgressText,
+                                                   "Confirmation",
+                                                   MessageBoxButtons.YesNo,
+                                                   MessageBoxIcon.Question);
+                if(res == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             // Check COM Object rule for valid GUID
             // Skip scenario and reference file states for COM rules
             if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
