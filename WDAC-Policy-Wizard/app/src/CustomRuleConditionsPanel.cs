@@ -1465,9 +1465,14 @@ namespace WDAC_Wizard
 
                 // Format the version text boxes
                 this.textBoxSlider_4.Size = this.textBoxSlider_0.Size;
-                this.checkBoxAttribute1.Text = "Min version:";
                 this.textBox_MaxVersion.Visible = false;
                 this.label_To.Visible = false;
+
+                // Flip the label back to Min Version (from Version Range) if Pubisher rule
+                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                {
+                    this.checkBoxAttribute4.Text = "Min version:";
+                }
 
                 // Re-populate the text boxes
                 this.textBoxSlider_0.Text = this.DefaultValues[0];
