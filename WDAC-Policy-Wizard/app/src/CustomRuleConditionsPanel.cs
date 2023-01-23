@@ -70,7 +70,8 @@ namespace WDAC_Wizard
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
             // Verify first that an exception flow is not in progress
-            if(this.exceptionsControl.IsRuleInProgress())
+            if(this.exceptionsControl != null
+                && this.exceptionsControl.IsRuleInProgress())
             {
                 DialogResult res = MessageBox.Show(Properties.Resources.RuleExceptionInProgressText,
                                                    "Confirmation",
