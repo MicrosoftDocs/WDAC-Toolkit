@@ -816,37 +816,35 @@ namespace WDAC_Wizard
             this.PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription.Trim());
             this.PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName.Trim());
 
-            // Get cert chain info to be shown to the user if type is publisher. Otherwise, we don't check or try to build the cert chain
+            // Get cert chain info to be shown to the user irrespective of the initial type.
+            // Otherwise, we don't check or try to build the cert chain
             string leafCertSubjectName = "";
             string pcaCertSubjectName = "";
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            try
             {
-                try
+                var signer = X509Certificate.CreateFromSignedFile(refPath);
+
+                var cert = new X509Certificate2(signer);
+                var certChain = new X509Chain();
+                var certChainIsValid = certChain.Build(cert);
+
+                leafCertSubjectName = cert.SubjectName.Name;
+                leafCertSubjectName = Helper.FormatSubjectName(leafCertSubjectName);
+
+                if (certChain.ChainElements.Count > 1)
                 {
-                    var signer = X509Certificate.CreateFromSignedFile(refPath);
-
-                    var cert = new X509Certificate2(signer);
-                    var certChain = new X509Chain();
-                    var certChainIsValid = certChain.Build(cert);
-
-                    leafCertSubjectName = cert.SubjectName.Name;
-                    leafCertSubjectName = Helper.FormatSubjectName(leafCertSubjectName);
-
-                    if (certChain.ChainElements.Count > 1)
-                    {
-                        pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
-                        // Remove everything past C=..
-                        pcaCertSubjectName = Helper.FormatSubjectName(pcaCertSubjectName);
-                    }
+                    pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
+                    // Remove everything past C=..
+                    pcaCertSubjectName = Helper.FormatSubjectName(pcaCertSubjectName);
                 }
+            }
 
-                catch (Exception exp)
-                {
-                    this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
-                    this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
-                    this.label_Error.Visible = true;
-                }
+            catch (Exception exp)
+            {
+                this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
+                this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
+                this.label_Error.Visible = true;
             }
 
             this.PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
