@@ -1375,6 +1375,11 @@ namespace WDAC_Wizard
                 }
                 newPolicyRuleCmd = newPolicyRuleCmd.Substring(0, newPolicyRuleCmd.Length - 2); // trim trailing comma + whitespace
             }
+            else
+            {
+                // By default, fall back to hash
+                newPolicyRuleCmd += " -Fallback Hash";
+            }
 
             // Add omit paths, if applicable
             if (customRule.Scan.OmitPaths.Count > 0)
@@ -1416,6 +1421,10 @@ namespace WDAC_Wizard
 
             // De-serialize the dummy policy to get the signer objects
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
+
+            // Remove all the default policy rules
+            siPolicy.Rules = null;
+
             return siPolicy;
         }
 
