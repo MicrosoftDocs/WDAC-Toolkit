@@ -27,6 +27,9 @@ namespace WDAC_Wizard
         private DisplayObject displayObjectInEdit;
 
         private string[] DefaultValues;
+        
+        // Flag indicating a rule is in progress; the rule has not been added to the table
+        private bool fRuleInProgress; 
 
         public Exceptions_Control(CustomRuleConditionsPanel pRuleConditionsPanel)
         {
@@ -37,6 +40,7 @@ namespace WDAC_Wizard
             this.ConditionsPanel = pRuleConditionsPanel;
 
             this.DefaultValues = new string[5];
+            this.fRuleInProgress = false; 
         }
 
 
@@ -48,8 +52,16 @@ namespace WDAC_Wizard
         {
             // Clear all of UI updates we make based on the type of rule so that the Custom Rules Panel is clear
             //Publisher:
-            this.panel_Publisher_Scroll.Visible = false;
-            this.publisherInfoLabel.Visible = false;
+            panel_Publisher_Scroll.Visible = false;
+            errorLabel.Visible = false;
+
+            // File attribute:
+            checkBox_OriginalFilename.Checked = false;
+            checkBox_FileDescription.Checked = false;
+            checkBox_Product.Checked = false;
+            checkBox_InternalName.Checked = false;
+            checkBox_MinVersion.Checked = false;
+            checkBoxCustomValues.Checked = false;
 
             //File Path:
             this.panel_FileFolder.Visible = false;
@@ -72,17 +84,16 @@ namespace WDAC_Wizard
             if (this.comboBox_ExceptionType.SelectedIndex < 0)
                 return;
 
+            ClearLabel_ErrorText();
+
+            // Set rule in progress flag
+            this.fRuleInProgress = true; 
+
             string selectedOpt = this.comboBox_ExceptionType.SelectedItem.ToString();
             ClearCustomRulesPanel(false);
 
             switch (selectedOpt)
             {
-                case "Publisher":
-                    // TODO: figure out why publisher exceptions are not compatible with publisher rules
-                    this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
-                    this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
-                    break;
-
                 case "File Path":
                     this.ExceptionRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
                     this.ExceptionRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
@@ -106,7 +117,11 @@ namespace WDAC_Wizard
             this.Log.AddInfoMsg(String.Format("Exception File Rule Level Set to {0}", selectedOpt));
         }
 
-
+        /// <summary>
+        /// Fires on Browse Button click. Gets the location of the file or folder provided by the file dialog. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Browse_Click(object sender, EventArgs e)
         {
             // Browse button for reference file:
@@ -120,53 +135,24 @@ namespace WDAC_Wizard
 
             if (this.ExceptionRule.GetRuleType() != PolicyCustomRules.RuleType.FolderPath)
             {
-                string refPath = GetFileLocation();
+                // Open file dialog to get file or folder path
+                string refPath = Helper.BrowseForSingleFile(Properties.Resources.OpenPEFileDialogTitle, Helper.BrowseFileType.PEFile);
 
                 if (refPath == String.Empty)
                     return;
-
-                // Custom rule in progress
-               // this._MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
                 ExceptionRule.FileInfo = new Dictionary<string, string>(); // Reset dict
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
                 ExceptionRule.ReferenceFile = fileInfo.FileName; // Returns the file path
-                ExceptionRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName);
-                ExceptionRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName);
-                ExceptionRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename);
-                ExceptionRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileInfo.FileVersion) ? "0.0.0.0" : fileInfo.FileVersion);
-                ExceptionRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename); // WDAC configCI uses original filename 
-                ExceptionRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription);
-                ExceptionRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName);
-
-                // Get cert chain info to be shown to the user
-                string leafCertSubjectName = "";
-                string pcaCertSubjectName = "";
-
-                if(this.ExceptionRule.Type == PolicyCustomRules.RuleType.Publisher)
-                {
-                    try
-                    {
-                        var signer = X509Certificate.CreateFromSignedFile(refPath);
-                        var cert = new X509Certificate2(signer);
-                        var certChain = new X509Chain();
-                        var certChainIsValid = certChain.Build(cert);
-
-                        leafCertSubjectName = cert.SubjectName.Name;
-                        if (certChain.ChainElements.Count > 1)
-                            pcaCertSubjectName = certChain.ChainElements[1].Certificate.SubjectName.Name;
-
-                    }
-                    catch (Exception exp)
-                    {
-                        // Set labelError text in CustomRuleConditionsPanel
-                        this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.CertificateBuild_Error + fileInfo.FileName);
-                    }
-                }
-                
-                ExceptionRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
-                ExceptionRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
+                string fileVersion = Helper.ConcatFileVersion(fileInfo);
+                ExceptionRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName.Trim());
+                ExceptionRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName.Trim());
+                ExceptionRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+                ExceptionRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileVersion) ? Properties.Resources.DefaultFileAttributeString : fileVersion);
+                ExceptionRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+                ExceptionRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription.Trim());
+                ExceptionRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName.Trim());
             }
 
             // Set the landing UI depending on the Rule type
@@ -213,7 +199,6 @@ namespace WDAC_Wizard
                     break;
 
                 case PolicyCustomRules.RuleType.FileAttributes:
-                    // Creates a rule -Level FileName -SpecificFileNameLevel InternalName, FileDescription
 
                     // UI 
                     this.textBox_ReferenceFile.Text = ExceptionRule.ReferenceFile;
@@ -238,10 +223,7 @@ namespace WDAC_Wizard
                     this.textBox_minversion.Text = this.DefaultValues[4];
 
                     panel_Publisher_Scroll.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Visible = true;
-                    publisherInfoLabel.Text = "Rule applies to all files with these file description attributes.";
-
+                    SetLabel_ErrorText("Rule applies to all files with these file description attributes.");
                     break;
 
                 case PolicyCustomRules.RuleType.Hash:
@@ -260,13 +242,6 @@ namespace WDAC_Wizard
             }
         }
 
-        private void Button_CreateException_Click(object sender, EventArgs e)
-        {
-            // Add the exception to the table
-            this.CustomRule.AddException(this.ExceptionRule);
-            this.ExceptionRule = null; 
-        }
-
         /// <summary>
         /// Opens the folder dialog and grabs the folder path. Requires Folder to be toggled when Browse button 
         /// is selected. 
@@ -274,30 +249,14 @@ namespace WDAC_Wizard
         /// <returns>Returns the full path of the folder</returns>
         private string GetFolderLocation()
         {
-            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-            openFolderDialog.Description = "Browse for a folder to use as a reference for the rule.";
-
-            if (openFolderDialog.ShowDialog() == DialogResult.OK)
-            {
-                openFolderDialog.Dispose();
-                return openFolderDialog.SelectedPath;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            return Helper.GetFolderPath("Browse for a folder to use as a reference for the rule.");
         }
 
         /// <summary>
-        /// Opens the file dialog and grabs the file path for PEs only and checks if path exists. 
+        /// Sets the UI upon loading the exceptions control panel
         /// </summary>
-        /// <returns>Returns the full path+name of the file</returns>
-        private string GetFileLocation()
-        {
-            // Open file dialog to get file or folder path
-            return Helper.BrowseForSingleFile(Properties.Resources.OpenPEFileDialogTitle, Helper.BrowseFileType.PEFile);
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Exceptions_Control_Load(object sender, EventArgs e)
         {
             // On load, set the rule condition label
@@ -375,6 +334,11 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Formats the Rule Condition text at the top of the page
+        /// </summary>
+        /// <param name="ruleConditionString"></param>
+        /// <returns></returns>
         public string FormatText(string ruleConditionString)
         {
             int MAX_LEN = 100;
@@ -435,11 +399,23 @@ namespace WDAC_Wizard
             return ruleConditionString; 
         }
 
-        // Triggered by Add Exception button click on custom rule conditions panel. 
-        // Add exception to the exception table
+        /// <summary>
+        /// Returns the rule in progress flag back to the CustomRuleConditions panel in case user accidentally clicks the Create 
+        /// Rule button instead of the Add Exception button. 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRuleInProgress()
+        {
+            return this.fRuleInProgress;
+        }
+
+        /// <summary>
+        /// Triggered by Add Exception button click on custom rule conditions panel. 
+        /// Add exception to the exception table
+        /// </summary>
         public void AddException()
         {
-            //Set ExceptionRule.Level to opposite of the PolicyCustomRule.Level
+            // Set ExceptionRule.Level to opposite of the PolicyCustomRule.Level
             if(this.CustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
             {
                 this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Deny; 
@@ -449,12 +425,38 @@ namespace WDAC_Wizard
                 this.ExceptionRule.Permission = PolicyCustomRules.RulePermission.Allow; 
             }
 
+            // Assert that file path rules are not valid exceptions in the kernel
+            if(this.CustomRule.SigningScenarioCheckStates.kmciEnabled && 
+                (this.ExceptionRule.Type == PolicyCustomRules.RuleType.FilePath
+                || this.ExceptionRule.Type == PolicyCustomRules.RuleType.FolderPath))
+            {
+                this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.InvalidKMCIRule);
+                return;
+            }
+
             // Check that fields are valid, otherwise break and show error msg
-            if(this.ExceptionRule == null || this.ExceptionRule.ReferenceFile == null 
-                || this.ExceptionRule.Level == PolicyCustomRules.RuleLevel.None)
+            if(this.ExceptionRule == null 
+                || String.IsNullOrEmpty(this.ExceptionRule.ReferenceFile)
+                || this.ExceptionRule.Type == PolicyCustomRules.RuleType.None)
             {
                 this.ConditionsPanel.SetLabel_ErrorText("Invalid exception selection. Please select a level and reference file");
                 return; 
+            }
+
+            // Get the values from the textboxes for the file attributes rule
+            if(this.ExceptionRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+            {
+                if(!this.ExceptionRule.IsAnyBoxChecked())
+                {
+                    this.ConditionsPanel.SetLabel_ErrorText(Properties.Resources.InvalidCheckboxState);
+                    return;
+                }
+
+                this.ExceptionRule.CustomValues.FileName = textBox_originalfilename.Text;
+                this.ExceptionRule.CustomValues.Description = textBox_filedescription.Text;
+                this.ExceptionRule.CustomValues.ProductName = textBox_product.Text;
+                this.ExceptionRule.CustomValues.InternalName = textBox_internalname.Text; 
+                this.ExceptionRule.CustomValues.MinVersion= textBox_minversion.Text;
             }
 
             // Add the exception to the custom rule and table
@@ -463,7 +465,7 @@ namespace WDAC_Wizard
             // New Display object
             DisplayObject displayObject = new DisplayObject();
             displayObject.Action = this.ExceptionRule.Permission.ToString();
-            displayObject.Level = this.ExceptionRule.Level.ToString();
+            displayObject.Level = this.ExceptionRule.Type.ToString();
             displayObject.Name = Path.GetFileName(this.ExceptionRule.ReferenceFile.ToString());
 
             this.displayObjects.Add(displayObject);
@@ -471,8 +473,10 @@ namespace WDAC_Wizard
 
             // Scroll to bottom to see new rule added to list
             this.dataGridView_Exceptions.FirstDisplayedScrollingRowIndex = this.dataGridView_Exceptions.RowCount - 1;
-
             this.ExceptionRule = new PolicyCustomRules();
+
+            // Reset rule in progress flag
+            this.fRuleInProgress = false; 
 
             // Reset the UI
             ClearCustomRulesPanel(true); 
@@ -524,6 +528,11 @@ namespace WDAC_Wizard
             
         }
 
+        /// <summary>
+        /// Checkbox state for Original Filename was updated.Modify the checkbox state struct. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBox_OriginalFilename_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBox_OriginalFilename.Checked)
@@ -545,6 +554,11 @@ namespace WDAC_Wizard
             this.ExceptionRule.CheckboxCheckStates.checkBox0 = false;
         }
 
+        /// <summary>
+        /// Checkbox state for File Description was updated. Modify the checkbox state struct. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBox_FileDescription_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBox_FileDescription.Checked)
@@ -566,6 +580,11 @@ namespace WDAC_Wizard
             this.ExceptionRule.CheckboxCheckStates.checkBox1 = false;
         }
 
+        /// <summary>
+        /// Checkbox state for product name was updated. Modify the checkbox state struct. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBox_Product_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBox_Product.Checked)
@@ -587,6 +606,11 @@ namespace WDAC_Wizard
             this.ExceptionRule.CheckboxCheckStates.checkBox3 = false;
         }
 
+        /// <summary>
+        /// Checkbox state for internal name was updated. Modify the checkbox state struct. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBox_InternalName_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBox_InternalName.Checked)
@@ -608,6 +632,11 @@ namespace WDAC_Wizard
             this.ExceptionRule.CheckboxCheckStates.checkBox3 = false;
         }
 
+        /// <summary>
+        /// Checkbox state for minimum version was updated. Modify the checkbox state struct. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBox_MinVersion_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBox_MinVersion.Checked)
@@ -634,16 +663,16 @@ namespace WDAC_Wizard
         /// </summary>
         private void ClearLabel_ErrorText()
         {
-            this.publisherInfoLabel.Text = "";
-            this.publisherInfoLabel.Visible = false;
+            this.ConditionsPanel.ClearLabel_ErrorText();
         }
 
+        /// <summary>
+        /// Sets the label to visible and the text to errorText
+        /// </summary>
+        /// <param name="errorText"></param>
         private void SetLabel_ErrorText(string errorText)
         {
-            this.publisherInfoLabel.Focus();
-            this.publisherInfoLabel.BringToFront();
-            this.publisherInfoLabel.Text = errorText;
-            this.publisherInfoLabel.Visible = true;
+            this.ConditionsPanel.SetLabel_ErrorText(errorText);
         }
 
         private void checkBoxCustomValues_CheckedChanged(object sender, EventArgs e)
@@ -665,7 +694,7 @@ namespace WDAC_Wizard
             else
             {
                 // Clear error if applicable
-                this.ClearLabel_ErrorText();
+                ClearLabel_ErrorText();
 
                 // Set text values back to default
                 SetTextBoxStates(false);

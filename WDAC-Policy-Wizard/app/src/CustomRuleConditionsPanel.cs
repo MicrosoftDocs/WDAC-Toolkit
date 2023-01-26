@@ -69,6 +69,20 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
+            // Verify first that an exception flow is not in progress
+            if(this.exceptionsControl != null
+                && this.exceptionsControl.IsRuleInProgress())
+            {
+                DialogResult res = MessageBox.Show(Properties.Resources.RuleExceptionInProgressText,
+                                                   "Confirmation",
+                                                   MessageBoxButtons.YesNo,
+                                                   MessageBoxIcon.Question);
+                if(res == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             // Check COM Object rule for valid GUID
             // Skip scenario and reference file states for COM rules
             if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
@@ -107,7 +121,6 @@ namespace WDAC_Wizard
                 }
             }
             
-
             // Flag to warn user that N/A's in the CustomRules pane may result in a hash rule
             bool warnUser = false;
 
@@ -1170,10 +1183,8 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void Button_Next_Click(object sender, EventArgs e)
         {
-            // Assert not a path rule since path rules cannot be excepted in WDAC
-            if(this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath 
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath 
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+            // Assert only signer rules can be excepted in WDAC
+            if(this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
