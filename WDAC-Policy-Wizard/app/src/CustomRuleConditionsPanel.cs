@@ -773,6 +773,9 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_Browse_Click(object sender, EventArgs e)
         {
+            // Clear any error messages
+            ClearLabel_ErrorText(); 
+
             // Browse button for reference file:
             if (comboBox_RuleType.SelectedItem == null)
             {
@@ -884,11 +887,14 @@ namespace WDAC_Wizard
                     }
 
                     // Set defaults to restore to if custom values is ever reset
-                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
-                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
-                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
-                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
-                    this.DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
+                    if(PolicyCustomRule.FileInfo != null && PolicyCustomRule.FileInfo.Count > 0)
+                    {
+                        this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
+                        this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
+                        this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
+                        this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
+                        this.DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
+                    }
 
                     // Set checkbox struct
                     this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
@@ -905,7 +911,6 @@ namespace WDAC_Wizard
 
                     // Do not check for N/As in PCA or publisher fields since the file may be cat
                     // signed which the Wizard cannot handle right now
-
                     if (this.DefaultValues[3] == Properties.Resources.DefaultFileAttributeString)
                     {
                         this.checkBoxAttribute3.Checked = false;
