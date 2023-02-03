@@ -61,18 +61,6 @@ namespace WDAC_Wizard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool showMultiplePolicyDefault {
-            get {
-                return ((bool)(this["showMultiplePolicyDefault"]));
-            }
-            set {
-                this["showMultiplePolicyDefault"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool useDriverBlockRules {
             get {

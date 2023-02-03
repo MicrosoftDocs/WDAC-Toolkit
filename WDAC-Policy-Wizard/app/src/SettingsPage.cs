@@ -303,15 +303,15 @@ namespace WDAC_Wizard
             // if the setting is set to false, otherwise keep the default UI state of checked
             foreach (var settingName in settingDict.Keys)
             {
+                string checkBoxName = settingName + "_CheckBox";
+
                 // Skip this setting, there is no checkbox to update
-                if(settingName.Contains("showMultiplePolicyDefault"))
+                if (this.Controls.Find(checkBoxName, true).Length < 1)
                 {
                     continue; 
                 }
-                
-                string checkBoxName = settingName + "_CheckBox"; 
-                
-                if(!settingDict[settingName]) //False case
+
+                if (!settingDict[settingName]) //False case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
