@@ -82,5 +82,17 @@ namespace WDAC_Wizard.Properties {
                 this["useUsermodeBlockRules"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showMultiplePolicyDefault {
+            get {
+                return ((bool)(this["showMultiplePolicyDefault"]));
+            }
+            set {
+                this["showMultiplePolicyDefault"] = value;
+            }
+        }
     }
 }

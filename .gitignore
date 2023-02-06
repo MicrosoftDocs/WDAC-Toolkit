@@ -334,3 +334,6 @@ AppLocker-Policy-Converter/app/test-policies/WDACPolicy_Test_AuthRoot.xml
 *.cip
 AppLocker-Policy-Converter/app/test-policies/WDACPolicy.xml
 WDAC-Policy-Wizard/app/MSIX/WDAC Wizard.exe
+
+# Test policies
+AppLocker-Policy-Converter/app/test-policies/*
