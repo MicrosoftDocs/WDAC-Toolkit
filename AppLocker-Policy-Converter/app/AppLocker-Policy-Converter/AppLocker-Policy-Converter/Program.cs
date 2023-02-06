@@ -239,7 +239,7 @@ namespace AppLocker_Policy_Converter
             {
                 if(ruleCollection.Items == null)
                 {
-                    break; 
+                    continue; 
                 }
 
                 for(int i = 0; i < ruleCollection.Items.Length; i++)
