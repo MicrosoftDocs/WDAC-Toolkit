@@ -407,6 +407,12 @@ namespace WDAC_Wizard
             {
                 this._MainWindow.ErrorOnPage = false;
             }
+
+            // Update redo required flag
+            if (this._MainWindow.CiEvents != null && this._MainWindow.CiEvents.Count > 0)
+            {
+                this._MainWindow.RedoFlowRequired = true;
+            }
         }
 
         /// <summary>
@@ -434,6 +440,12 @@ namespace WDAC_Wizard
             else
             {
                 this._MainWindow.ErrorOnPage = false;
+            }
+
+            // Update redo required flag
+            if (!String.IsNullOrEmpty(this._MainWindow.Policy.EditPolicyPath))
+            {
+                this._MainWindow.RedoFlowRequired = true;
             }
         }
 
