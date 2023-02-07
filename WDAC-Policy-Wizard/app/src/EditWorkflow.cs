@@ -39,7 +39,8 @@ namespace WDAC_Wizard
             InitializeComponent();
 
             this._MainWindow = pMainWindow;
-            this._MainWindow.ErrorOnPage = false;
+            this._MainWindow.ErrorOnPage = true;
+            this._MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
             this._MainWindow.RedoFlowRequired = false;
             this.Policy = this._MainWindow.Policy; 
             this.Log = this._MainWindow.Log;
@@ -87,7 +88,11 @@ namespace WDAC_Wizard
                     this._MainWindow.Policy.EditPolicyPath = this.EditPath;
 
                     // If user has returned to this page and updated the policy, must proceed to page 2
-                    this._MainWindow.RedoFlowRequired = true; 
+                    this._MainWindow.RedoFlowRequired = true;
+
+                    // Clear error flag to advance to the next page
+                    this._MainWindow.ErrorOnPage = false;
+                    this._MainWindow.DisplayInfoText(0);
                 }
             }
 
@@ -201,10 +206,13 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
             this.panel_Progress.Visible = true;
+            this.Workflow = WorkflowType.ArbitraryEventLog;
+
+            // Clear error labels if applicable
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
-            this.ahParsingLearnMore_Label.Visible = false; 
-            this.Workflow = WorkflowType.ArbitraryEventLog;
+            this.ahParsingLearnMore_Label.Visible = false;
+            this._MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
             if (!this.backgroundWorker.IsBusy)
@@ -223,11 +231,14 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
             this.panel_Progress.Visible = true;
+            this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
+            this.Workflow = WorkflowType.DeviceEventLog;
+
+            // Clear error labels if applicable
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
             this.ahParsingLearnMore_Label.Visible = false;
-            this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
-            this.Workflow = WorkflowType.DeviceEventLog; 
+            this._MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
             if (!this.backgroundWorker.IsBusy)
@@ -256,10 +267,13 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
             this.panel_Progress.Visible = true;
+            this.Workflow = WorkflowType.AdvancedHunting;
+
+            // Clear error labels if applicable
             this.label_Error.Visible = false;
             this.eventLogParsing_Result_Panel.Visible = false;
             this.ahParsingLearnMore_Label.Visible = false;
-            this.Workflow = WorkflowType.AdvancedHunting;
+            this._MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
             if (!this.backgroundWorker.IsBusy)
@@ -381,7 +395,18 @@ namespace WDAC_Wizard
 
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
-            this.panel_Edit_XML.Location = urPoint; 
+            this.panel_Edit_XML.Location = urPoint;
+
+            // Update error flag and message
+            this._MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
+            if(String.IsNullOrEmpty(this._MainWindow.Policy.EditPolicyPath))
+            {
+                this._MainWindow.ErrorOnPage = true;
+            }
+            else
+            {
+                this._MainWindow.ErrorOnPage = false;
+            }
         }
 
         /// <summary>
@@ -399,6 +424,17 @@ namespace WDAC_Wizard
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
             this.panel_EventLog_Conversion.Location = urPoint;
+
+            // Update the error flag and message
+            this._MainWindow.ErrorMsg = Properties.Resources.ChooseEventLog_Error;
+            if(this._MainWindow.CiEvents == null || this._MainWindow.CiEvents.Count < 1)
+            {
+                this._MainWindow.ErrorOnPage = true; 
+            }
+            else
+            {
+                this._MainWindow.ErrorOnPage = false;
+            }
         }
 
         /// <summary>
