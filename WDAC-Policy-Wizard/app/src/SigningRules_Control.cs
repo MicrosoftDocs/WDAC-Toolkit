@@ -699,6 +699,9 @@ namespace WDAC_Wizard
                         // Remove the signer from Signing Scenarios
                         RemoveSignerIdFromSigningScenario(signer.ID);
 
+                        // Remove from CiSigners, if applicable
+                        RemoveSignerIdFromCiSigners(signer.ID);
+
                         // Remove any associted FileAttributeRef refrences
                         if (signer.FileAttribRef != null)
                         {
@@ -743,6 +746,7 @@ namespace WDAC_Wizard
                     }
                     else
                     {
+                        numIdex++;
                         continue;
                     }
 
@@ -750,6 +754,7 @@ namespace WDAC_Wizard
                     {
                         this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
                         ruleIDsToRemove.Add(fileRuleID);
+                        break;
                     }
                     else
                     {
@@ -819,7 +824,7 @@ namespace WDAC_Wizard
         /// Helper function which removes a signer rule ID from all signing scenarios
         /// </summary>
         /// <param name="ruleId"></param>
-        private void RemoveSignerIdFromSigningScenario(string ruleId)
+        private void RemoveSignerIdFromSigningScenario(string signerId)
         {
             foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
             {
@@ -829,7 +834,7 @@ namespace WDAC_Wizard
                 {
                     foreach (var allowedSigner in scenario.ProductSigners.AllowedSigners.AllowedSigner)
                     {
-                        if (allowedSigner.SignerId.Equals(ruleId))
+                        if (allowedSigner.SignerId.Equals(signerId))
                         {
                             scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
                                 .Where((val, idx) => idx != numIdex).ToArray();
@@ -854,7 +859,7 @@ namespace WDAC_Wizard
                 {
                     foreach (var deniedSigner in scenario.ProductSigners.DeniedSigners.DeniedSigner)
                     {
-                        if (deniedSigner.SignerId.Equals(ruleId))
+                        if (deniedSigner.SignerId.Equals(signerId))
                         {
                             scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
                                 .Where((val, idx) => idx != numIdex).ToArray();
@@ -870,6 +875,44 @@ namespace WDAC_Wizard
                         else
                             numIdex++;
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper function which removes a signer rule ID from the Ci Signers section
+        /// </summary>
+        /// <param name="ruleId"></param>
+        private void RemoveSignerIdFromCiSigners(string signerId)
+        {
+            // Verify that CiSigners is not null. Few policies have a CiSigners section
+            if(this.Policy.siPolicy.CiSigners == null)
+            {
+                return; 
+            }
+
+            int numIdex = 0;
+
+            // Remove the SignerId reference from the CiSigners section
+            foreach (CiSigner ciSigner in this.Policy.siPolicy.CiSigners)
+            {
+                if (ciSigner.SignerId == signerId)
+                {
+                    this.Policy.siPolicy.CiSigners = this.Policy.siPolicy.CiSigners
+                        .Where((val, idx) => idx != numIdex).ToArray();
+                    
+                    // If removed the last CiSigners ref, set the CiSigners to null to serialize
+                    if (this.Policy.siPolicy.CiSigners.Length == 0)
+                    {
+                        this.Policy.siPolicy.CiSigners = null;
+                    }
+
+                    this.Log.AddInfoMsg(String.Format("Removing {0} from CiSigners", signerId));
+                    break;
+                }
+                else
+                {
+                    numIdex++;
                 }
             }
         }
