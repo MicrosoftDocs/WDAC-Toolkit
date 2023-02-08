@@ -382,8 +382,8 @@ namespace AppLocker_Policy_Converter
             // while having a strict exe allowlist. This would result in an allow all WDAC policy with unintended consequences
             if(path == "*")
             {
-                WarningMessages.Add(String.Format("WARNING: SKIPPING <FilePathCondition Path=\"*\" /> from rule ID = {0}. ALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED " +
-                                    "YOUR WDAC POLICY.", filePathRule.Id));
+                ErrorMessages.Add(String.Format("ERROR: <FilePathCondition Path=\"*\" /> from rule ID = {0} cannot be converted. " +
+                    "ALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED YOUR WDAC POLICY.", filePathRule.Id));
                 return siPolicy; 
             }
 
