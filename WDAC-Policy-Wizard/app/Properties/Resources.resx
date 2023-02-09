@@ -508,4 +508,10 @@ Please select the  'Create Rule' button.</value>
     <value>There is an exception rule in progress.
 Are you sure you want to abandon the exception rule creation workflow?</value>
   </data>
+  <data name="ChooseEventLog_Error" xml:space="preserve">
+    <value>Please select a WDAC event log source to parse before continuing</value>
+  </data>
+  <data name="ChoosePolicyToEdit_Error" xml:space="preserve">
+    <value>Please select a policy XML file to edit before continuing</value>
+  </data>
 </root>

@@ -215,6 +215,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a WDAC event log source to parse before continuing.
+        /// </summary>
+        internal static string ChooseEventLog_Error {
+            get {
+                return ResourceManager.GetString("ChooseEventLog_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a policy XML file to edit before continuing.
+        /// </summary>
+        internal static string ChoosePolicyToEdit_Error {
+            get {
+                return ResourceManager.GetString("ChoosePolicyToEdit_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap circular_shape_silhouette {
