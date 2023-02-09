@@ -46,11 +46,21 @@ namespace AppLocker_Policy_Converter
                 return -1;
             }
 
+            // Parse the AppLocker policies to AppLockerPolicy objects
             List<(AppLockerPolicy, string)> appLockerPolicies = ParseAppLockerPolicies(applockerPolicyPaths);
+
+            // Convert each rule from the AppLocker policy objects to SiPolicy/WDAC policy objects
             SiPolicy wdacPolicy = ConvertPolicies(appLockerPolicies, outputPath);
 
+            // Set new policy GUIDs in the WDAC policy and friendly names
             wdacPolicy = FormatPolicy(wdacPolicy);
+
+            // Write the WDAC XML policy to disk at outputPath
             Helper.SerializePolicytoXML(wdacPolicy, outputPath);
+
+            // Dump all the warnings and errors created 
+            Helper.DumpWarningMsgs();
+            Helper.DumpErrorMsgs();
 
             return 0; 
         }
@@ -239,7 +249,7 @@ namespace AppLocker_Policy_Converter
             {
                 if(ruleCollection.Items == null)
                 {
-                    break; 
+                    continue; 
                 }
 
                 for(int i = 0; i < ruleCollection.Items.Length; i++)

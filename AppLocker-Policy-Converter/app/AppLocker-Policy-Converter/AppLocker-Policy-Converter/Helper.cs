@@ -27,8 +27,14 @@ namespace AppLocker_Policy_Converter
         static public int cFileAttribRules = 0;
         static public int cFilePathRules = 0; 
         static public int cFileHashRules = 0;
-        static public string LastError = string.Empty; 
-       
+
+        static public Dictionary<string, string> supportedMacros = new Dictionary<string, string> {
+                    { "OSDRIVE", "" }, { "WINDIR", "" }, { "SYSTEM32", "" } };
+
+        // Warning and error msgs structs
+        static private List<string> WarningMessages = new List<string>();
+        static private List<string> ErrorMessages = new List<string>();
+
         public static AppLockerPolicy SerializeAppLockerPolicy(string xmlPath)
         {
             AppLockerPolicy appLockerPolicy;
@@ -168,7 +174,7 @@ namespace AppLocker_Policy_Converter
             {
                 fileAttrib.MaximumFileVersion = maxVersion;
             }
-            if(productName != "*" || !String.IsNullOrEmpty(productName))
+            if(!String.IsNullOrEmpty(productName) && productName != "*")
             {
                 fileAttrib.ProductName = productName; 
             }
@@ -376,8 +382,9 @@ namespace AppLocker_Policy_Converter
             // while having a strict exe allowlist. This would result in an allow all WDAC policy with unintended consequences
             if(path == "*")
             {
-                Console.WriteLine(String.Format("\r\nWARNING: SKIPPING <FilePathCondition Path=\"*\" /> from rule ID = {0}. \r\nALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED " +
-                    "YOUR WDAC POLICY.", filePathRule.Id));
+                ErrorMessages.Add(String.Format("ERROR: <FilePathCondition Path=\"*\" /> from rule ID = {0} cannot be converted. " +
+                    "ALLOW OR DENY \"*\" RULES MUST BE MANUALLY ADDED YOUR WDAC POLICY.", filePathRule.Id));
+                return siPolicy; 
             }
 
             if (siPolicy.FileRules == null)
@@ -385,6 +392,8 @@ namespace AppLocker_Policy_Converter
                 siPolicy.FileRules = new object[1]; 
             }
 
+            // Validate the path rule confirms to the WDAC path rule format
+            // Else, try to convert to a WDAC path rule
             string wdacPathRule = MakeValidPathRule(path);
 
             // Unable to convert to valid WDAC path rule, return
@@ -417,7 +426,7 @@ namespace AppLocker_Policy_Converter
             // Path rule exceptions are not currently supported in WDAC
             if(filePathRule.Exceptions != null)
             {
-                Console.WriteLine(String.Format("\r\nWARNING: Skipping exceptions for {0} rule.\r\nPath rule exceptions " +
+                WarningMessages.Add(String.Format("WARNING: Skipping exceptions for {0} rule.Path rule exceptions " +
                     "are not supported in WDAC.", wdacPathRule));
             }
 
@@ -519,8 +528,8 @@ namespace AppLocker_Policy_Converter
                 else if (exceptionItem.GetType() == typeof(FilePublisherConditionType))
                 {
                     FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
-                    Console.WriteLine(String.Format("\r\nWARNING: SKIPPING RULE EXCEPTION {0}. Id = {1}" +
-                        "\r\nPublisher rules cannot be used to except publisher rules in WDAC.", exception.PublisherName, filePubRule.Id));
+                    WarningMessages.Add(String.Format("WARNING: SKIPPING RULE EXCEPTION {0}. Id = {1}" +
+                        "Publisher rules cannot be used to except publisher rules in WDAC.", exception.PublisherName, filePubRule.Id));
                 }
             }
 
@@ -579,36 +588,40 @@ namespace AppLocker_Policy_Converter
             // WDAC only supports a handful of macros - %OSDRIVE%, %WINDIR%, %SYSTEM32%
             if (appLockerPathRule.Contains("%"))
             {
-                Dictionary<string, string> supportedMacros = new Dictionary<string, string> { 
-                    { "OSDRIVE", "" }, { "WINDIR", "" }, { "SYSTEM32", "" } };
-
                 var macroParts = appLockerPathRule.Split("%");
                 if (macroParts.Length != 3)
                 {
-                    Console.WriteLine(String.Format("\r\nWARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
+                    ErrorMessages.Add(String.Format("ERROR: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule.", appLockerPathRule));
                     return null;
                 }
 
-                // This macro is supported in WDAC. This is a valid path rule in WDAC
-                if (supportedMacros.ContainsKey(macroParts[1]))
+                // This macro is NOT supported in WDAC - try converting
+                // Need to still check valid rules for wildcarding - goto wildcard check
+                if (!supportedMacros.ContainsKey(macroParts[1]))
                 {
-                    return appLockerPathRule;
-                }
+                    // Else, unsupported path rule 
+                    if (String.IsNullOrEmpty(macroParts[0]))
+                    {
+                        if(macroParts[2] == @"\*")
+                        {
+                            // E.g.  %PROGRAMFILES%\* would result in Path=*\* or just Path="*" which we do not want to create
+                            ErrorMessages.Add(String.Format("ERROR: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule.", appLockerPathRule));
+                            return null;
+                        }
 
-                // Else, unsupported path rule - try converting
-                if(String.IsNullOrEmpty(macroParts[0]))
-                {
-                    wdacPathRule = "*" + macroParts[2];
-                }
-                else
-                {
-                    wdacPathRule = macroParts[0] + macroParts[2]; // Keep only the outside edges
-                }
+                        wdacPathRule = "*" + macroParts[2];
+                    }
+                    else
+                    {
+                        // Keep only the outside edges
+                        wdacPathRule = macroParts[0] + macroParts[2]; 
+                    }
 
-                Console.WriteLine(String.Format("\r\nWARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
-                Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
+                    WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. Replacing with the " +
+                        "following Path Rule: \"{1}\"", appLockerPathRule, wdacPathRule));
 
-                return wdacPathRule; 
+                    return wdacPathRule;
+                }
             }
 
             int cWildcards = appLockerPathRule.Count(f => (f == '*'));
@@ -619,47 +632,37 @@ namespace AppLocker_Policy_Converter
                 int idx = appLockerPathRule.IndexOf('*'); 
                 if (idx == 0 || idx == appLockerPathRule.Length-1)
                 {
+                    // Wildcard is at the front or end of the path
                     // This is a valid position for the 1 wildcard
+                    // E.g. *\Folder1\Folder2\Tool.exe
+                    // E.g. %WINDIR%\Folder1\Folder2\Folder3\*
                 }
                 else
                 {
-                    var parts = appLockerPathRule.Split('*');
+                    // 1 Wildcard is in the middle of the path
+                    // This is NOT SUPPORTED in WDAC - truncate the path
+                    // E.g. %WINDIR%\Folder1\*\FolderX\tool.dll -->
+                    // *\FolderX\tool.dll
+                    // This way, the intended binaries are still allowed/blocked
+                    // without being too permissive E.g. %WINDIR%\Folder1\*
 
-                    foreach (string subString in parts)
-                        wdacPathRule += subString;
+                    wdacPathRule = "*" + appLockerPathRule.Substring(idx+1);
 
-                    Console.WriteLine(String.Format("\r\nWARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
-                    Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
+                    WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. Replacing " +
+                        "with the following Path Rule: \"{1}\"", appLockerPathRule, wdacPathRule));
 
                     return wdacPathRule;
                 }
             }
 
-            // WDAC supports at most 1 wildcard * in the path
+            // WDAC supports at most 1 wildcard * in the path. This type of rule is not supported
+            // Throw an error
             if (cWildcards > 1)
             {
-                var parts = appLockerPathRule.Split('*');
-                if (parts.Length > 2)
-                {
-                    foreach (string subString in parts)
-                        wdacPathRule += subString;
-
-                    // Keep the leading wildcard
-                    if(String.IsNullOrEmpty(parts[0]))
-                    {
-                        wdacPathRule = "*" + wdacPathRule; 
-                    }
-                    else 
-                    {
-                        // Else, keep the trailing the wildcard
-                        wdacPathRule += "*"; 
-                    }
-
-                    Console.WriteLine(String.Format("\r\nWARNING: AppLocker Path Rule {0} is not a valid WDAC Path Rule.", appLockerPathRule));
-                    Console.WriteLine(String.Format("Replacing with the following Path Rule: {0}", wdacPathRule));
-
-                    return wdacPathRule; 
-                }
+                ErrorMessages.Add(String.Format("ERROR: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. " +
+                                                "It will need to be manually converted.", appLockerPathRule));
+                
+                return null; 
             }
             
             return appLockerPathRule; 
@@ -959,12 +962,37 @@ namespace AppLocker_Policy_Converter
         }
 
         /// <summary>
-        /// Returns the last error encountered by the Helper method
+        /// Dumps all the warning messages as well as the count into the console
         /// </summary>
-        /// <returns></returns>
-        public static string GetLastError()
+        public static void DumpWarningMsgs()
         {
-            return LastError;
+            if(WarningMessages.Count == 0)
+            {
+                return; 
+            }
+
+            Console.WriteLine(String.Format("\r\nPolicy Conversion finished with {0} WARNINGS: ", WarningMessages.Count)); 
+            foreach(string warningMsg in WarningMessages)
+            {
+                Console.WriteLine(warningMsg);
+            }
+        }
+
+        /// <summary>
+        /// Dumps all the warning messages as well as the count into the console
+        /// </summary>
+        public static void DumpErrorMsgs()
+        {
+            if (ErrorMessages.Count == 0)
+            {
+                return;
+            }
+
+            Console.WriteLine(String.Format("\r\nPolicy Conversion finished with {0} ERRORS: ", ErrorMessages.Count));
+            foreach (string errorMsg in ErrorMessages)
+            {
+                Console.WriteLine(errorMsg);
+            }
         }
     }
 }
