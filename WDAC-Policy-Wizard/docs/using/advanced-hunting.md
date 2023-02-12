@@ -46,4 +46,5 @@ CSV files without the required fields, or with additional fields, may fail to pr
 
 Select the export button to extract the MDE AH events to a csv file.
 
+TODO: How do you use this file in the WDAC wizard
 
