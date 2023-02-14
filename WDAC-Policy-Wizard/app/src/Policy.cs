@@ -5,10 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32;
-//using Windows.UI.Xaml;
+using System.IO;
 
 namespace WDAC_Wizard
 {
@@ -135,7 +132,7 @@ namespace WDAC_Wizard
             int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
             for (int i = versionIdx.Length-1; i > 0; i--)
             {
-                if (versionIdx[i] >= 9)
+                if (versionIdx[i] >= UInt16.MaxValue)
                 {
                     versionIdx[i] = 0;
                     versionIdx[i - 1]++;
@@ -146,53 +143,55 @@ namespace WDAC_Wizard
                     break;  
                 }
             }
+
+            // 65535.65535.65535.65535 will roll to 0.0.0.0
+            if(versionIdx[0] > UInt16.MaxValue)
+            {
+                versionIdx[0] = 0; 
+            }
+
             // Convert int[] --> this.VersionNumber string
             this.VersionNumber = ""; // reset string 
             foreach(var vIdx in versionIdx)
+            {
                 this.VersionNumber += String.Format("{0}.", vIdx.ToString());
+            } 
             this.VersionNumber = this.VersionNumber.Substring(0, this.VersionNumber.Length - 1); //remove trailing period
 
             return this.VersionNumber; 
         }
 
         /// <summary>
-        /// Determines whether the policy file contains a version number and the name needs to be updated along with the policy xml version.
+        /// Determines whether the policy file contains a version number and position.
         /// </summary>
-        public bool EditPathContainsVersionInfo()
+        /// <returns>Position of the _v_ in the filename. Returns 0 if the filename does not contain version number.</returns>
+        public int EditPathContainsVersionInfo()
         {
-            int START = 14;
-            int periodCount = 0;
-
-            if (this.EditPolicyPath == null | this.EditPolicyPath.Length < START)
+            // Min length based on min version (0.0.0.0)
+            int minFileNameLen = 7; 
+            if (this.EditPolicyPath == null || this.EditPolicyPath.Length < minFileNameLen)
             {
-                return false;
+                return 0;
             }
 
-            string editPathEnd = this.EditPolicyPath.Substring(this.EditPolicyPath.Length - START); 
-
-            if(editPathEnd.Contains("_v"))
+            // Find last instance of "_v" substring 
+            string fileName = Path.GetFileNameWithoutExtension(this.EditPolicyPath);
+            int index = fileName.LastIndexOf("_v"); 
+            if (index < 0)
             {
-                // Must contain _v + 3 periods to denote -- _v10.x.y.z.xml
-                foreach(char _char in editPathEnd)
-                {
-                    if(_char.Equals('.'))
-                    {
-                        periodCount++; 
-                    }
-                }
-
-                if(periodCount == 4)
-                {
-                    return true; 
-                }
+                return 0; 
             }
 
-            else
+            // Assert 3 dots to denote version
+            var parts = fileName.Substring(index).Split('.');
+            if(parts.Length < 4)
             {
-                return false; 
+                // Fewer than 3 version fields
+                return 0;
             }
 
-            return false; 
+            // Return the index pos + length of dir
+            return index + Path.GetDirectoryName(this.EditPolicyPath).Length + 1; 
         }
 
         /// <summary>

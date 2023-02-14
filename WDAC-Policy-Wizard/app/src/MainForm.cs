@@ -1537,16 +1537,17 @@ namespace WDAC_Wizard
                     // Since we don't have a new save location, copy the TemplatePath
                     // and append '_Edit' to the file path.
                     // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
-                    if (this.Policy.EditPathContainsVersionInfo())
+                    int versionNumPos = this.Policy.EditPathContainsVersionInfo(); 
+                    if (versionNumPos > 0)
                     {
-                        const int sOFFSET = 14;
-                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", this.Policy.EditPolicyPath.Substring(0,
-                                                               this.Policy.EditPolicyPath.Length - sOFFSET), this.Policy.UpdateVersion());
+                        string filePathWithoutVer = this.Policy.EditPolicyPath.Substring(0, versionNumPos);
+                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", filePathWithoutVer, this.Policy.UpdateVersion());
                     }
                     else
                     {
-                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", Path.GetFileNameWithoutExtension(this.Policy.EditPolicyPath), 
-                                                               this.Policy.UpdateVersion());
+                        string filePathWithoutExt = Path.Combine(Path.GetDirectoryName(this.Policy.EditPolicyPath), 
+                                                                 Path.GetFileNameWithoutExtension(this.Policy.EditPolicyPath));
+                        this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", filePathWithoutExt, this.Policy.UpdateVersion());
                     }
                 }
                 else
