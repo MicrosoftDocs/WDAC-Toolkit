@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using FileHelpers;
 
@@ -84,20 +85,36 @@ namespace WDAC_Wizard
             List<CiEvent> ciEvents = new List<CiEvent>();
             List<SignerEvent> signerEvents = new List<SignerEvent>();
 
+            // Tmp variables
+            CiEvent ciEvent = new CiEvent();
+            SignerEvent signerEvent = new SignerEvent();
+
             foreach (var record in records)
             {
                 switch (record.ActionType)
                 {
                     case DRIVER_REV_EVENT_NAME:
-                        ciEvents.Add(Create3023Event(record));
+                        ciEvent = Create3023Event(record);
+                        if(!IsDuplicateEvent(ciEvent, ciEvents)) // De-duplicate audit and block events
+                        {
+                            ciEvents.Add(ciEvent);
+                        }
                         break;
 
                     case AUDIT_EVENT_NAME:
-                        ciEvents.Add(Create3076Event(record));
+                        ciEvent = Create3076Event(record);
+                        if (!IsDuplicateEvent(ciEvent, ciEvents))
+                        {
+                            ciEvents.Add(ciEvent);
+                        }
                         break;
 
                     case BLOCK_EVENT_NAME:
-                        ciEvents.Add(Create3077Event(record));
+                        ciEvent = Create3077Event(record);
+                        if (!IsDuplicateEvent(ciEvent, ciEvents))
+                        {
+                            ciEvents.Add(ciEvent);
+                        }
                         break;
 
                     case SIGNING_EVENT_NAME:
@@ -286,7 +303,41 @@ namespace WDAC_Wizard
             return LastError; 
         }
 
+        /// <summary>
+        /// Determines whether the new ciEvent created is unique or a duplicate within the event logs
+        /// </summary>
+        /// <param name="newEvent"></param>
+        /// <param name="existingEvents"></param>
+        /// <returns></returns>
+        private static bool IsDuplicateEvent(CiEvent newEvent, List<CiEvent> existingEvents)
+        {
+            if (existingEvents.Count == 0)
+            {
+                return false;
+            }
 
+            // Check file identifiers only. No signature event at this point
+            byte[] fileHash = newEvent.SHA2 != null ? newEvent.SHA2 : new byte[] { 0 };
+            string filePath = newEvent.FilePath;
+            int eventId = newEvent.EventId;
+
+            // Check policy hash - could be blocked by different policies in the evtx
+            string policyId= newEvent.PolicyId;
+
+            foreach (CiEvent existingEvent in existingEvents)
+            {
+                byte[] existingEventSHA2 = existingEvent.SHA2 != null ? existingEvent.SHA2 : new byte[] { 0 };
+                if (eventId == existingEvent.EventId
+                    && filePath == existingEvent.FilePath
+                    && policyId == existingEvent.PolicyId
+                    && fileHash.SequenceEqual(existingEventSHA2))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
