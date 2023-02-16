@@ -46,4 +46,6 @@ CSV files without the required fields, or with additional fields, may fail to pr
 
 Select the export button to extract the MDE AH events to a csv file.
 
+## 2. Using the Wizard to extract MDE events 
 
+To extract the MDE events in the Wizard and build policies off the audit and block event data, follow the instructions documented on the [MS Docs page](https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-parsing-event-logs#mde-advanced-hunting-wdac-event-parsing)
