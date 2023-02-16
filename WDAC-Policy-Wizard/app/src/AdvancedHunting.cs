@@ -179,7 +179,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a 3077 CiEvent from the fields in the AH Record
+        /// Creates a 3089 Ci SignerEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
@@ -241,7 +241,7 @@ namespace WDAC_Wizard
                 }
 
                 // In the case where the file is unsigned
-                if (ciEvents.Count == 0)
+                if (ciEvent.SignerInfo.DeviceId == null)
                 {
                     correlatedCiEvents.Add(ciEvent);
                 }
