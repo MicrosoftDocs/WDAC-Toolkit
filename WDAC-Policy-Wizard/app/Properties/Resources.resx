@@ -514,4 +514,7 @@ Are you sure you want to abandon the exception rule creation workflow?</value>
   <data name="ChoosePolicyToEdit_Error" xml:space="preserve">
     <value>Please select a policy XML file to edit before continuing</value>
   </data>
+  <data name="UnsupportedCrypto_Error" xml:space="preserve">
+    <value>The Wizard has detected cryto in the signed file that is not supported in WDAC. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
+  </data>
 </root>

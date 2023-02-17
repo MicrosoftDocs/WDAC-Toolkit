@@ -9,13 +9,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq; 
 using System.Diagnostics;
-using System.Collections; 
-using System.Security.Cryptography;
 using System.Xml.Serialization;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Win32;
-using System.Diagnostics.Eventing.Reader;
+using System.Security.Cryptography.X509Certificates;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
@@ -35,6 +31,20 @@ namespace WDAC_Wizard
 
         const string AUDIT_POLICY_PATH = "AuditEvents_Policy.xml";
         const string AUDIT_LOG_PATH = "AuditEvents_Log.txt";
+
+        // Unsupported Crypto OIDs
+        // Oids and friendly names
+        static Dictionary<string, string> UnsupportedOIDs = new Dictionary<string, string> 
+        { 
+            { "1.3.132.0.34", "ECC_P384" },
+            {  "1.3.132.0.35", "ECC_P512" },
+            {  "1.2.840.10045.3.1.7", "ECC_P256" },
+            {  "1.2.840.10045.4.1", "ECDSA_SHA1" },
+            {  "1.2.840.10045.4.3", "ECDSA_SPECIFIED" },
+            {  "1.2.840.10045.4.3.2", "ECDSA_SHA256" },
+            {  "1.2.840.10045.4.3.3", "ECDSA_SHA384" },
+            {  "1.2.840.10045.4.3.4", "ECDSA_SH512" }
+        };
 
         // Signing Scenario Constants
         const int KMCISCN = 131;
@@ -411,6 +421,23 @@ namespace WDAC_Wizard
             }
 
             return certSubjectName;
+        }
+
+        /// <summary>
+        /// Checks for unsupported crypto oids (ECC, ECSDA)
+        /// </summary>
+        /// <returns>True, if unsupported crypto oids are parsed</returns>
+        public static bool IsCertChainInvalid(X509Chain certChain)
+        {
+            foreach(var cert in certChain.ChainElements)
+            {
+                if(UnsupportedOIDs.ContainsKey(cert.Certificate.SignatureAlgorithm.Value))
+                {
+                    return true;
+                }
+            }
+
+            return false; 
         }
 
         // Check that version has 4 parts (follows ww.xx.yy.zz format)
