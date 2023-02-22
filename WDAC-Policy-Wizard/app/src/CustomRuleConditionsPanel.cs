@@ -875,7 +875,7 @@ namespace WDAC_Wizard
                 {
                     this.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName)); 
                     DialogResult res = MessageBox.Show(Properties.Resources.UnsupportedCrypto_Error ,
-                                                        "Unsuported Crypto Algorithm Detected",
+                                                        "Unsupported Cryptographic Algorithm Found",
                                                         MessageBoxButtons.OK, 
                                                         MessageBoxIcon.Error);
                     return false; 
