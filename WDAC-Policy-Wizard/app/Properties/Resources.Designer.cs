@@ -1125,6 +1125,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Wizard has detected cryto in the signed file that is not supported in WDAC. Unfortunately, a publisher rule cannot be used to allow or deny this file. .
+        /// </summary>
+        internal static string UnsupportedCrypto_Error {
+            get {
+                return ResourceManager.GetString("UnsupportedCrypto_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This option is not currently supported ....
         /// </summary>
         internal static string UnsupportedRule_Info {

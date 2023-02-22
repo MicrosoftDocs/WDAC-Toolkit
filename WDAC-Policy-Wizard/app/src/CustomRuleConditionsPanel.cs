@@ -800,7 +800,21 @@ namespace WDAC_Wizard
                 this._MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
-                SetFileSignerInfo(refPath);
+                bool status = SetFileSignerInfo(refPath);
+
+                // Unsupported crypto or antother issue with the file
+                // Start over
+                if(!status)
+                {
+                    // Renew the custom rule instance
+                    this.PolicyCustomRule = new PolicyCustomRules();
+
+                    // Reset UI view
+                    ClearCustomRulesPanel(true);
+                    this._MainWindow.CustomRuleinProgress = false;
+
+                    return;
+                }
             }
 
             // Set the landing UI depending on the Rule type
@@ -817,7 +831,8 @@ namespace WDAC_Wizard
         /// Retrieves the file attribute and signer info
         /// </summary>
         /// <param name="refPath"></param>
-        private void SetFileSignerInfo(string refPath)
+        /// <returns>True if successful. False otherwise. </returns>
+        private bool SetFileSignerInfo(string refPath)
         {
             this.PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
             FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
@@ -854,6 +869,17 @@ namespace WDAC_Wizard
                     // Remove everything past C=..
                     pcaCertSubjectName = Helper.FormatSubjectName(pcaCertSubjectName);
                 }
+
+                // Check that the parsed certificate chain uses supported crytpo
+                if(Helper.IsCertChainInvalid(certChain))
+                {
+                    this.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName)); 
+                    DialogResult res = MessageBox.Show(Properties.Resources.UnsupportedCrypto_Error ,
+                                                        "Unsupported Cryptographic Algorithm Found",
+                                                        MessageBoxButtons.OK, 
+                                                        MessageBoxIcon.Error);
+                    return false; 
+                }
             }
 
             catch (Exception exp)
@@ -865,6 +891,8 @@ namespace WDAC_Wizard
 
             this.PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
             this.PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
+
+            return true;
         }
 
         /// <summary>
