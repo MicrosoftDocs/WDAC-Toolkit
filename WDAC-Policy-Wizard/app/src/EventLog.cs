@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 
 
@@ -510,26 +511,27 @@ namespace WDAC_Wizard
             }
 
             // Check file identifiers
-            byte[] fileHash = newEvent.SHA2;
+            byte[] fileHash = newEvent.SHA2 != null ? newEvent.SHA2 : new byte[] { 0 };
             string filePath = newEvent.FilePath; // could be same file but different path
             int eventId = newEvent.EventId;
 
             string publisher = newEvent.SignerInfo.PublisherName;
 
             // Check policy hash - could be blocked by different policies in the evtx
-            byte[] policyHash = newEvent.PolicyHash; 
+            string policyId = newEvent.PolicyId; 
 
             foreach(CiEvent existingEvent in existingEvents)
             {
-                if(fileHash == existingEvent.SHA2 &&
-                    filePath == existingEvent.FilePath && 
-                    policyHash == existingEvent.PolicyHash &&
-                    publisher == existingEvent.SignerInfo.PublisherName &&
-                    eventId == existingEvent.EventId)
-                {
-                    return true; 
-                }
+                byte[] existingEventSHA2 = existingEvent.SHA2 != null ? existingEvent.SHA2 : new byte[] { 0 };
 
+                if (eventId == existingEvent.EventId
+                    && fileHash.SequenceEqual(existingEventSHA2)
+                    && filePath == existingEvent.FilePath
+                    && policyId == existingEvent.PolicyId
+                    && publisher == existingEvent.SignerInfo.PublisherName)
+                {
+                    return true;
+                }
             }
 
             return false; 
