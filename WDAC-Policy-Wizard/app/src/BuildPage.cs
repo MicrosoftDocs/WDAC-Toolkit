@@ -85,6 +85,12 @@ namespace WDAC_Wizard
         /// </summary>
         public string FormatText(string longstring)
         {
+            // Check null/empty and break
+            if(String.IsNullOrEmpty(longstring))
+            {
+                return longstring;
+            }
+
             if(longstring.Length > PATH_LENGTH_LIMIT)
             {
                 // Get the last instance of the \ between the start and the path limit (80)
