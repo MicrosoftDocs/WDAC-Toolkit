@@ -109,7 +109,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to build the policy file.
+        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
         ///
         ///Please check the log file in .
         /// </summary>
@@ -1332,7 +1332,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
+        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to build the policy file.
         ///
         ///Please check the log file in .
         /// </summary>

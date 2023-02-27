@@ -517,7 +517,7 @@ Are you sure you want to abandon the exception rule creation workflow?</value>
   <data name="UnsupportedCrypto_Error" xml:space="preserve">
     <value>A cryptographic algorithm that isn't supported by WDAC was found. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
   </data>
-  <data name="BINFileOpen_Error" xml:space="preserve">
+  <data name="XMLFileOpen_Error" xml:space="preserve">
     <value>The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to build the policy file.
 
 Please check the log file in </value>
@@ -531,8 +531,8 @@ Please check the log file in </value>
 
 Please check the log file in </value>
   </data>
-  <data name="XMLFileOpen_Error" xml:space="preserve">
-    <value>The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
+  <data name="BINFileOpen_Error" xml:space="preserve">
+    <value>The WDAC Wizard could not open the WDAC BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
 
 Please check the log file in </value>
   </data>
