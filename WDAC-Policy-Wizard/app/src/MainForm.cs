@@ -1159,8 +1159,8 @@ namespace WDAC_Wizard
                 // Skip the following rules that are handled by custom rules method -
                 // File Attributes, PFN rules, file/folder path rules
                 if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
-                        || customRule.Type == PolicyCustomRules.RuleType.Hash
-                        || customRule.Type == PolicyCustomRules.RuleType.FolderScan))
+                      || customRule.Type == PolicyCustomRules.RuleType.Hash
+                      || customRule.Type == PolicyCustomRules.RuleType.FolderScan))
                 {
                     continue;
                 }
@@ -1196,7 +1196,16 @@ namespace WDAC_Wizard
                 // Folder Scan -- Invoke the New-CiPolicy PS cmd to generate a CI policy
                 if(customRule.Type == PolicyCustomRules.RuleType.FolderScan)
                 {
-                    SiPolicy signerSiPolicy = CreateScannedPolicyFromPS(customRule, tmpPolicyPath);
+                    SiPolicy signerSiPolicy; 
+                    if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                    {
+                        signerSiPolicy = CreateScannedPolicyFromPS(customRule, tmpPolicyPath);
+                    }
+                    else
+                    {
+                        signerSiPolicy = CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
+                    }
+                    
                     if (signerSiPolicy != null)
                     {
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
@@ -1354,8 +1363,10 @@ namespace WDAC_Wizard
         /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
         /// </summary>
         /// <param name="customRule"></param>
-        /// <param name="signerSiPolicy"></param>
-        public SiPolicy CreateScannedPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        /// <param name="policyPath"></param>
+        /// <param name="basePolicyToSupplementPath">Path to the base policy that the supplemental policy extends</param>
+        /// <returns></returns>
+        public SiPolicy CreateScannedPolicyFromPS(PolicyCustomRules customRule, string policyPath, string basePolicyToSupplementPath= null)
         {
             // Create runspace, pipeline and run script
             Runspace runspace = RunspaceFactory.CreateRunspace();
@@ -1407,6 +1418,16 @@ namespace WDAC_Wizard
             pipeline.Commands.AddScript(newPolicyRuleCmd);
             this.Log.AddInfoMsg("Running the following commands: " + newPolicyRuleCmd);
 
+            // Set the supplemental-specific fields in the policy, if applicable
+            if (!string.IsNullOrEmpty(basePolicyToSupplementPath))
+            {
+                string supplementalPolicyIdCmd = String.Format("Set-CIPolicyIdInfo -FilePath \"{0}\" -BasePolicyToSupplementPath \"{1}\"",
+                                                                policyPath, basePolicyToSupplementPath);
+
+                pipeline.Commands.AddScript(supplementalPolicyIdCmd);
+                this.Log.AddInfoMsg("Running the following commands: " + supplementalPolicyIdCmd);
+            }
+
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
@@ -1423,7 +1444,9 @@ namespace WDAC_Wizard
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
 
             // Remove all the default policy rules
-            siPolicy.Rules = null;
+            // Do not set to null which causes invalid file at compilation time - Issue #218
+            
+            siPolicy.Rules = new RuleType[1];
 
             return siPolicy;
         }
