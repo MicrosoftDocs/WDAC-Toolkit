@@ -75,9 +75,9 @@ namespace WDAC_Wizard
             this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(162, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 29);
+            this.label1.Size = new System.Drawing.Size(220, 29);
             this.label1.TabIndex = 47;
-            this.label1.Text = "File Rules";
+            this.label1.Text = "Policy Signing Rules";
             // 
             // rulesDataGrid
             // 
@@ -112,7 +112,7 @@ namespace WDAC_Wizard
             this.column_Action.MinimumWidth = 6;
             this.column_Action.Name = "column_Action";
             this.column_Action.ReadOnly = true;
-            this.column_Action.Width = 76;
+            this.column_Action.Width = 85;
             // 
             // column_Level
             // 
@@ -121,7 +121,7 @@ namespace WDAC_Wizard
             this.column_Level.MinimumWidth = 6;
             this.column_Level.Name = "column_Level";
             this.column_Level.ReadOnly = true;
-            this.column_Level.Width = 71;
+            this.column_Level.Width = 78;
             // 
             // Column_Name
             // 
@@ -130,7 +130,7 @@ namespace WDAC_Wizard
             this.Column_Name.MinimumWidth = 6;
             this.Column_Name.Name = "Column_Name";
             this.Column_Name.ReadOnly = true;
-            this.Column_Name.Width = 74;
+            this.Column_Name.Width = 82;
             // 
             // Column_Files
             // 
@@ -139,7 +139,7 @@ namespace WDAC_Wizard
             this.Column_Files.MinimumWidth = 6;
             this.Column_Files.Name = "Column_Files";
             this.Column_Files.ReadOnly = true;
-            this.Column_Files.Width = 127;
+            this.Column_Files.Width = 148;
             // 
             // Column_Exceptions
             // 
@@ -148,7 +148,7 @@ namespace WDAC_Wizard
             this.Column_Exceptions.MinimumWidth = 6;
             this.Column_Exceptions.Name = "Column_Exceptions";
             this.Column_Exceptions.ReadOnly = true;
-            this.Column_Exceptions.Width = 105;
+            this.Column_Exceptions.Width = 120;
             // 
             // column_ID
             // 
@@ -157,7 +157,7 @@ namespace WDAC_Wizard
             this.column_ID.MinimumWidth = 8;
             this.column_ID.Name = "column_ID";
             this.column_ID.ReadOnly = true;
-            this.column_ID.Width = 77;
+            this.column_ID.Width = 72;
             // 
             // label8
             // 
@@ -178,10 +178,10 @@ namespace WDAC_Wizard
             this.label3.ForeColor = System.Drawing.Color.Black;
             this.label3.Location = new System.Drawing.Point(162, 70);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(591, 18);
+            this.label3.Size = new System.Drawing.Size(556, 18);
             this.label3.TabIndex = 80;
-            this.label3.Text = "Create allow or deny rules for files based on publisher, path, file attributes or" +
-    " hash values.";
+            this.label3.Text = "Create allow or deny rules for signed files based on its publisher, path or hash " +
+    "value.";
             // 
             // deleteButton
             // 
@@ -236,7 +236,7 @@ namespace WDAC_Wizard
             this.checkBox_KernelList.AutoSize = true;
             this.checkBox_KernelList.Location = new System.Drawing.Point(163, 634);
             this.checkBox_KernelList.Name = "checkBox_KernelList";
-            this.checkBox_KernelList.Size = new System.Drawing.Size(320, 21);
+            this.checkBox_KernelList.Size = new System.Drawing.Size(378, 24);
             this.checkBox_KernelList.TabIndex = 98;
             this.checkBox_KernelList.Text = "Merge with Recommended Kernel Block Rules";
             this.checkBox_KernelList.UseVisualStyleBackColor = true;
@@ -247,7 +247,7 @@ namespace WDAC_Wizard
             this.checkBox_UserModeList.AutoSize = true;
             this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 607);
             this.checkBox_UserModeList.Name = "checkBox_UserModeList";
-            this.checkBox_UserModeList.Size = new System.Drawing.Size(348, 21);
+            this.checkBox_UserModeList.Size = new System.Drawing.Size(412, 24);
             this.checkBox_UserModeList.TabIndex = 99;
             this.checkBox_UserModeList.Text = "Merge with Recommended User Mode Block Rules";
             this.checkBox_UserModeList.UseVisualStyleBackColor = true;
@@ -268,7 +268,7 @@ namespace WDAC_Wizard
             this.label_Progress.AutoSize = true;
             this.label_Progress.Location = new System.Drawing.Point(11, 2);
             this.label_Progress.Name = "label_Progress";
-            this.label_Progress.Size = new System.Drawing.Size(111, 17);
+            this.label_Progress.Size = new System.Drawing.Size(131, 20);
             this.label_Progress.TabIndex = 1;
             this.label_Progress.Text = "Removing Rules";
             this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
