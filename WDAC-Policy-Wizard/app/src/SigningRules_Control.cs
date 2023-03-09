@@ -329,7 +329,7 @@ namespace WDAC_Wizard
                         // Do nothing for FileAttribute rows
                         continue; 
                     }
-                    
+
 
                     // Determine the filerule type - Hash, FilePath, FileAttribute (Name, Product Name, Original FileNme)
 
@@ -343,36 +343,53 @@ namespace WDAC_Wizard
                         //}
                     }
 
-                    else if (filePath != null || fileName != null)
+                    // Filepath Rule
+                    else if (filePath != null)
                     {
                         level = "FilePath";
-                        fileAttrList = "FileName: " + fileAttrList; 
+                        fileAttrList = "Filepath: " + filePath;
                     }
 
+                    // Packaged App Rule
                     else if (packageFamilyName != null)
                     {
-                        level = "Package Name"; 
+                        level = "Package Name";
+                        fileAttrList = "Packaged Family Name (PFN): " + packageFamilyName;
                     }
 
+                    // Allow/Deny with File attributes rules
+                    // I.e. no publisher information
                     else
                     {
                         level = "FileAttributes";
 
                         // Precede the friendlyName with the Original FileName sub-level 
-                        if (fileName != null)
-                            friendlyName = String.Format("FileName; {0}", friendlyName);
+                        if (fileName != null) 
+                        { 
+                            fileAttrList += String.Format("FileName: {0}, ", fileName);
+                        }
 
-                        else if (productName != null)
-                            friendlyName = String.Format("ProductName; {0}", friendlyName);
+                        if (productName != null)
+                        {
+                            fileAttrList = String.Format("ProductName: {0}, ", productName);
+                        }
 
-                        else if (fileDescription != null)
-                            friendlyName = String.Format("FileDescription; {0}", friendlyName);
+                        if (fileDescription != null)
+                        {
+                            fileAttrList = String.Format("FileDescription: {0}, ", fileDescription);
+                        }
 
-                        else if (internalName != null)
-                            friendlyName = String.Format("InternalName; {0}", friendlyName);
+                        if (internalName != null)
+                        {
+                            fileAttrList = String.Format("InternalName: {0}, ", friendlyName);
+                        }
 
-                        else
-                            this.Log.AddWarningMsg("DisplayRules() could not detect a sub-level for FileAttributes ");
+                        // Remove trailing comma and whitespace
+                        if(!String.IsNullOrEmpty(fileAttrList))
+                        {
+                            char[] trimChars = { ',', ' ' };
+                            fileAttrList = fileAttrList.TrimEnd(trimChars);
+                        }
                     }
 
                     // Only display if ID not found in the fileExceptionsDict -- in otherwords, this is a file rule NOT an exception

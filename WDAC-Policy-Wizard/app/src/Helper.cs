@@ -1093,7 +1093,6 @@ namespace WDAC_Wizard
         public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Allow allowRule = new Allow();
-            allowRule.FriendlyName = String.Format("Allow by path: {0}", allowRule.FilePath);
             string path;
 
             if (!isException)
@@ -1104,7 +1103,7 @@ namespace WDAC_Wizard
             else
             {
                 allowRule.ID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions++);
-                path = customRule.ReferenceFile;
+                path = customRule.ReferenceFile; 
             }
 
             // If using env variables, convert the path to a macro
@@ -1116,6 +1115,8 @@ namespace WDAC_Wizard
             {
                 allowRule.FilePath = path;
             }
+
+            allowRule.FriendlyName = String.Format("Allow by path: {0}", allowRule.FilePath);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
@@ -1131,7 +1132,6 @@ namespace WDAC_Wizard
         public static SiPolicy CreateDenyPathRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Deny denyRule = new Deny();
-            denyRule.FriendlyName = String.Format("Deny by path: {0}", denyRule.FilePath);
             string path; 
 
             if (!isException)
@@ -1154,8 +1154,9 @@ namespace WDAC_Wizard
             {
                 denyRule.FilePath = path;
             }
-            
-            
+
+            denyRule.FriendlyName = String.Format("Deny by path: {0}", denyRule.FilePath);
+
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
 
