@@ -404,10 +404,8 @@ and &lt; 65535.65535.65535.65535</value>
   <data name="InvalidVersion_Error" xml:space="preserve">
     <value>Invalid input. Version input must follow w.x.y.z format and &lt; 65535.65535.65535.65535</value>
   </data>
-  <data name="InvalidWildcardPath_Error" xml:space="preserve">
-    <value>Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be
-located at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%
-are the supported macros.</value>
+  <data name="InvalidPath_Error" xml:space="preserve">
+    <value>Invalid path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32% are the only supported macros.</value>
   </data>
   <data name="PFNEmptyList_Error" xml:space="preserve">
     <value>The list of selected packaged apps is empty. Please select at least 1 packaged app</value>

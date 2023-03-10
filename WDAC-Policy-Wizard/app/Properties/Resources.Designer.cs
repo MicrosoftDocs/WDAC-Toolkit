@@ -517,6 +517,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32% are the only supported macros..
+        /// </summary>
+        internal static string InvalidPath_Error {
+            get {
+                return ResourceManager.GetString("InvalidPath_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid publisher CN input. Publisher input must follow format: &apos;CN=PublisherName&apos; or &apos;PublisherName&apos;. Other fields
         ///like &apos;O=&apos; or &apos;L=&apos; must be removed..
         /// </summary>
@@ -587,17 +596,6 @@ namespace WDAC_Wizard.Properties {
         internal static string InvalidVersionRange_Error {
             get {
                 return ResourceManager.GetString("InvalidVersionRange_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid path rule. Note: only one wildcard (*) is allowed per path rule. Wildcards can only be
-        ///located at the beginning or end of a path rule. %OSDRIVE%, %WINDIR%, %SYSTEM32%
-        ///are the supported macros..
-        /// </summary>
-        internal static string InvalidWildcardPath_Error {
-            get {
-                return ResourceManager.GetString("InvalidWildcardPath_Error", resourceCulture);
             }
         }
         
@@ -1125,7 +1123,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Wizard has detected cryto in the signed file that is not supported in WDAC. Unfortunately, a publisher rule cannot be used to allow or deny this file. .
+        ///   Looks up a localized string similar to A cryptographic algorithm that isn&apos;t supported by WDAC was found. Unfortunately, a publisher rule cannot be used to allow or deny this file. .
         /// </summary>
         internal static string UnsupportedCrypto_Error {
             get {

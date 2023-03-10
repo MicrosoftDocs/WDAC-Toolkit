@@ -332,8 +332,8 @@ namespace WDAC_Wizard
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
-                        label_Error.Text = Properties.Resources.InvalidWildcardPath_Error;
-                        this.Log.AddWarningMsg("Invalid custom path rule");
+                        label_Error.Text = Properties.Resources.InvalidPath_Error;
+                        this.Log.AddWarningMsg("Invalid custom path rule for path: " + this.PolicyCustomRule.CustomValues.Path);
                         return;
                     }
                 }
