@@ -329,12 +329,45 @@ namespace WDAC_Wizard
                 // Check custom path
                 if (this.PolicyCustomRule.CustomValues.Path != null)
                 {
+                    // Check if this is a valid path rules. I.e. supported macros
                     if(!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidPath_Error;
                         this.Log.AddWarningMsg("Invalid custom path rule for path: " + this.PolicyCustomRule.CustomValues.Path);
                         return;
+                    }
+
+                    // Check number of wildcards.
+                    // If the number is greater than 1, warn the user IFF the warn setting (default on) is on
+                    if(Helper.GetNumberofWildcards(this.PolicyCustomRule.CustomValues.Path) > 1
+                       && Properties.Settings.Default.warnWildcardPath)
+                    {
+                        this.Log.AddWarningMsg("Warning - Path Rule Windows Version Support for path: " + this.PolicyCustomRule.CustomValues.Path);
+
+                        var res = MessageBox.Show(Properties.Resources.PathRule_Warning,
+                                                  "Warning - Path Rule Windows Version Support",
+                                                  MessageBoxButtons.YesNoCancel, 
+                                                  MessageBoxIcon.Warning);
+
+                        this.Log.AddInfoMsg("Message box result: " + res.ToString());
+
+                        // User wants to modify the rule
+                        // Escape the checks so they may edit the path
+                        if (res == DialogResult.Cancel)
+                        {
+                            return; 
+                        }
+
+                        // User does not want to be warned about path rules on Windows 11 only. 
+                        // Set the warnWildcardPath to false to bypass future warnings
+                        if(res == DialogResult.No)
+                        {
+                            Properties.Settings.Default.warnWildcardPath = false;
+                            Properties.Settings.Default.Save();
+
+                            this.Log.AddInfoMsg("Set warnWildcardPath to: false");
+                        }
                     }
                 }
 

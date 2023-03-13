@@ -790,6 +790,17 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This path rule is only supported on Windows 11 (versions 21H2 and 22H2). It will be ignored on Windows 10 and all Windows Server versions. Select Cancel to fix the path rule.
+        ///
+        ///Do you want the Wizard to warn you about these types of path rules in the future? .
+        /// </summary>
+        internal static string PathRule_Warning {
+            get {
+                return ResourceManager.GetString("PathRule_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This rule applies to all files signed by a certificate from this issuing CA. .
         /// </summary>
         internal static string PCACertificateInfo {

@@ -94,5 +94,17 @@ namespace WDAC_Wizard.Properties {
                 this["showMultiplePolicyDefault"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool warnWildcardPath {
+            get {
+                return ((bool)(this["warnWildcardPath"]));
+            }
+            set {
+                this["warnWildcardPath"] = value;
+            }
+        }
     }
 }

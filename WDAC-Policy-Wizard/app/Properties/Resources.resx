@@ -515,4 +515,9 @@ Are you sure you want to abandon the exception rule creation workflow?</value>
   <data name="UnsupportedCrypto_Error" xml:space="preserve">
     <value>A cryptographic algorithm that isn't supported by WDAC was found. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
   </data>
+  <data name="PathRule_Warning" xml:space="preserve">
+    <value>This path rule is only supported on Windows 11 (versions 21H2 and 22H2). It will be ignored on Windows 10 and all Windows Server versions. Select Cancel to fix the path rule.
+
+Do you want the Wizard to warn you about these types of path rules in the future? </value>
+  </data>
 </root>

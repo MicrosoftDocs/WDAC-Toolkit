@@ -545,6 +545,32 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Checks for the presence of "?" or "*" wildcard characters in a custom path
+        /// </summary>
+        /// <param name="customPath">Returns the number of wildcards found</param>
+        /// <returns></returns>
+        public static int GetNumberofWildcards(string customPath)
+        {
+            int nWildCards = 0; 
+            foreach(char c in customPath)
+            {
+                if(c == '*')
+                {
+                    nWildCards++; 
+                }
+
+                // Add 2 to wildcards to automatically trigger the validation on the CustomRuleConditions
+                // If only 1 '?' it would pass the check
+                else if(c== '?')
+                {
+                    nWildCards += 2; 
+                }
+            }
+
+            return nWildCards; 
+        }
+
+        /// <summary>
         /// Maps the input to one of the supported macro paths in WDAC, if one exists.
         /// </summary>
         /// <param name="_path"></param>
