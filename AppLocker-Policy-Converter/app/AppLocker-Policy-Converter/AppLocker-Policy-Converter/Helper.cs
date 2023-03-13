@@ -626,7 +626,7 @@ namespace AppLocker_Policy_Converter
 
             int cWildcards = appLockerPathRule.Count(f => (f == '*'));
 
-            // Assert the only position is front or back
+            // Updated 22H2: wildcards are now supported in the middle of the path
             if(cWildcards == 1)
             {
                 int idx = appLockerPathRule.IndexOf('*'); 
@@ -640,29 +640,22 @@ namespace AppLocker_Policy_Converter
                 else
                 {
                     // 1 Wildcard is in the middle of the path
-                    // This is NOT SUPPORTED in WDAC - truncate the path
                     // E.g. %WINDIR%\Folder1\*\FolderX\tool.dll -->
                     // *\FolderX\tool.dll
-                    // This way, the intended binaries are still allowed/blocked
-                    // without being too permissive E.g. %WINDIR%\Folder1\*
+              
+                    // Updated: Win11 22H2 and 21H2 now support this - show warning about support
 
-                    wdacPathRule = "*" + appLockerPathRule.Substring(idx+1);
-
-                    WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. Replacing " +
-                        "with the following Path Rule: \"{1}\"", appLockerPathRule, wdacPathRule));
-
-                    return wdacPathRule;
+                    WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is a valid WDAC Path " +
+                                        "Rule on Windows 11 systems only.",appLockerPathRule));
                 }
             }
 
-            // WDAC supports at most 1 wildcard * in the path. This type of rule is not supported
-            // Throw an error
+            // Multiple wildcards found
+            // Now supported on Windows 11. Just warn the user about the support
             if (cWildcards > 1)
             {
-                ErrorMessages.Add(String.Format("ERROR: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. " +
-                                                "It will need to be manually converted.", appLockerPathRule));
-                
-                return null; 
+                WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is valid in WDAC on Windows 11 systems only.",
+                                                    appLockerPathRule));
             }
             
             return appLockerPathRule; 
