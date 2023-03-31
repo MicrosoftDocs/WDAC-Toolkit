@@ -1968,15 +1968,6 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
             }
-
-            if (this.FoundPackages.Count == 0)
-            {
-                label_Error.Visible = true;
-                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
-                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
-                return;
-            }
-
         }
 
         /// <summary>
@@ -2001,6 +1992,15 @@ namespace WDAC_Wizard
             }
 
             this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
+
+            // Check for the case where no packages were found and return
+            if (this.FoundPackages.Count == 0)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
+                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                return;
+            }
 
             // Bring checkbox list to front. Sort keys to display alphabetically to user
             this.checkedListBoxPackagedApps.BringToFront();
