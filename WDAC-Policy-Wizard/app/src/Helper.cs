@@ -511,30 +511,16 @@ namespace WDAC_Wizard
             return 0;
         }
 
+        /// <summary>
+        /// Validates the custom path rule against the requirements for path rules in WDAC
+        /// Updated 22H2: path rules now support multiple wildcards throughout the path
+        /// </summary>
+        /// <param name="customPath"></param>
+        /// <returns>True if valid path rule in WDAC. False, otherwise.</returns>
         public static bool IsValidPathRule(string customPath)
         {
             // Check for at most 1 wildcard param (*)
-            if (customPath.Contains("*"))
-            {
-                var wildCardParts = customPath.Split('*');
-                if (wildCardParts.Length > 2)
-                {
-                    return false;
-                }
-                else
-                {
-                    // Start or end must be empty
-                    if (String.IsNullOrEmpty(wildCardParts[0]) || String.IsNullOrEmpty(wildCardParts[1]))
-                    {
-                        // Continue - either side is empty
-                    }
-                    else
-                    {
-                        // wildcard in middle of path - not supported
-                        return false;
-                    }
-                }
-            }
+            // This check was removed since WDAC path rules can support multiple wildcards
 
             // Check for macros (%OSDRIVE%, %WINDIR%, %SYSTEM32%)
             if (customPath.Contains("%"))
@@ -542,11 +528,9 @@ namespace WDAC_Wizard
                 var macroParts = customPath.Split('%');
                 if (macroParts.Length == 3)
                 {
-                    if (macroParts[1] == "OSDRIVE" || macroParts[1] == "WINDIR" || macroParts[1] == "SYSTEM32")
-                    {
-                        // continue with rest of checks
-                    }
-                    else
+                    if (!(macroParts[1] == "OSDRIVE" 
+                        || macroParts[1] == "WINDIR" 
+                        || macroParts[1] == "SYSTEM32"))
                     {
                         return false;
                     }
@@ -560,6 +544,37 @@ namespace WDAC_Wizard
             return true;
         }
 
+        /// <summary>
+        /// Checks for the presence of "?" or "*" wildcard characters in a custom path
+        /// </summary>
+        /// <param name="customPath">Returns the number of wildcards found</param>
+        /// <returns></returns>
+        public static int GetNumberofWildcards(string customPath)
+        {
+            int nWildCards = 0; 
+            foreach(char c in customPath)
+            {
+                if(c == '*')
+                {
+                    nWildCards++; 
+                }
+
+                // Add 2 to wildcards to automatically trigger the validation on the CustomRuleConditions
+                // If only 1 '?' it would pass the check
+                else if(c== '?')
+                {
+                    nWildCards += 2; 
+                }
+            }
+
+            return nWildCards; 
+        }
+
+        /// <summary>
+        /// Maps the input to one of the supported macro paths in WDAC, if one exists.
+        /// </summary>
+        /// <param name="_path"></param>
+        /// <returns></returns>
         public static string GetEnvPath(string _path)
         {
             // if the path contains one of the following environment variables -- return true as the cmdlets can replace it
@@ -1093,7 +1108,6 @@ namespace WDAC_Wizard
         public static SiPolicy CreateAllowPathRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Allow allowRule = new Allow();
-            allowRule.FriendlyName = String.Format("Allow by path: {0}", allowRule.FilePath);
             string path;
 
             if (!isException)
@@ -1104,7 +1118,7 @@ namespace WDAC_Wizard
             else
             {
                 allowRule.ID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions++);
-                path = customRule.ReferenceFile;
+                path = customRule.ReferenceFile; 
             }
 
             // If using env variables, convert the path to a macro
@@ -1116,6 +1130,8 @@ namespace WDAC_Wizard
             {
                 allowRule.FilePath = path;
             }
+
+            allowRule.FriendlyName = String.Format("Allow by path: {0}", allowRule.FilePath);
 
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
@@ -1131,7 +1147,6 @@ namespace WDAC_Wizard
         public static SiPolicy CreateDenyPathRule(PolicyCustomRules customRule, SiPolicy siPolicy, bool isException=false)
         {
             Deny denyRule = new Deny();
-            denyRule.FriendlyName = String.Format("Deny by path: {0}", denyRule.FilePath);
             string path; 
 
             if (!isException)
@@ -1154,8 +1169,9 @@ namespace WDAC_Wizard
             {
                 denyRule.FilePath = path;
             }
-            
-            
+
+            denyRule.FriendlyName = String.Format("Deny by path: {0}", denyRule.FilePath);
+
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddDenyRule(denyRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
 
