@@ -16,6 +16,8 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Windows.Forms;
+using Windows.Management.Deployment;
+using Windows.ApplicationModel; 
 
 namespace WDAC_Wizard
 {
@@ -633,58 +635,40 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Parses the results from Get-AppxPackage to return a list of PFN names meeting the search criteria
+        /// Get the Installed Appx/MSIX Packages
         /// </summary>
-        /// <param name="results"></param>
-        /// <returns>Dictionary containing the PFN results</returns>
-        public static Dictionary<string, string> ParseGetAppxOutput(Collection<PSObject> results)
+        /// <param name="policyCustomRule"></param>
+        /// <returns></returns>
+        public static List<string> GetAppxPackages(string pfnSearchStr)
         {
-            Dictionary<string, string> output = new Dictionary<string, string>();
-
-            // Convert results to something parseable
-            StringBuilder sBuilder = new StringBuilder();
-            foreach (PSObject psObject in results)
-            {
-                sBuilder.AppendLine(psObject.ToString());
-            }
-
-            // Split the packages on newline
-            string scriptOutput = sBuilder.ToString();
-            var packages = scriptOutput.Split('\n');
-
-            // Enforce a minimum of 3 packages
-            // The first 2 will be {"\r", ""} in the case where no packages 
-            // were returned by the Get-AppxPackage command
-            int MINPKG = 3; 
-            if (packages.Length < MINPKG)
-                return output;
-
-            // Remove the first 3 in the successful case: {"\r", "", "-------------,---"}
-            packages = packages.Skip(MINPKG).ToArray(); 
+            PackageManager packageManager = new PackageManager();
+            IEnumerable<Package> packages;
+            List<string> results = new List<string>();
+            pfnSearchStr = pfnSearchStr.ToLowerInvariant(); 
 
             try
             {
-                foreach (var package in packages)
-                {
-                    string[] parts = package.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length < 2)
-                        continue; 
+                // Try to get packages installed for all system users;
+                // Will fail if Wizard is not running elevated
+                packages = packageManager.FindPackages();
+            }
+            catch
+            {
+                // fall back and get for the current user
+                packages = packageManager.FindPackagesForUser("");
+            }
 
-                    // Add the PFN and name to the dictionary
-                    // Key: Name (show this to user in the UI; easier to read than PFN)
-                    // Value: PFN (goes into policy)
-                    if(!output.ContainsKey(parts[0]))
-                    {
-                        output[parts[1]] = parts[0]; 
-                    }
+            // Search all packages for pfnSearchString
+            foreach(var package in packages)
+            {
+                string packageFamilyName = package.Id.FamilyName;
+                if (packageFamilyName.ToLowerInvariant().Contains(pfnSearchStr))
+                {
+                    results.Add(packageFamilyName);
                 }
             }
-            catch (Exception exp)
-            {
 
-            }
-
-            return output;
+            return results;
         }
 
         // Dump all of the package family names for the custom rules table
@@ -1459,16 +1443,15 @@ namespace WDAC_Wizard
         {
             List<string> pfnNames = new List<string>();
 
-            // Custom Value rules - keys and values contain the PFN
-            // Always use the values in case their are custom and system generated PFN rules
+            // Custom Value rules
             if (customRule.CustomValues.PackageFamilyNames.Count > 0)
             {
-                pfnNames = customRule.CustomValues.PackageFamilyNames.Values.ToList();
+                pfnNames = customRule.CustomValues.PackageFamilyNames;
             }
-            // System generated PFN names - keys contain name; values contain the PFN
             else
             {
-                pfnNames = customRule.PackagedFamilyNames.Values.ToList();
+                // System generated PFN names
+                pfnNames = customRule.PackagedFamilyNames;
             }
 
             // Iterate through the PFNs supplied and create a PFN rule per PFN
@@ -2628,13 +2611,13 @@ namespace WDAC_Wizard
         public string Description;
         public string InternalName;
         public string Path;
-        public Dictionary<string,string> PackageFamilyNames; 
+        public List<string> PackageFamilyNames; 
         public List<string> Hashes; 
 
         public CustomValue()
         {
             this.Hashes = new List<string>();
-            this.PackageFamilyNames = new Dictionary<string, string>();
+            this.PackageFamilyNames = new List<string>();
         }
     }
 
@@ -2711,7 +2694,7 @@ namespace WDAC_Wizard
         // Custom values
         public bool UsingCustomValues { get; set; }
         public CustomValue CustomValues { get; set; }
-        public Dictionary<string,string> PackagedFamilyNames { get; set; }
+        public List<string> PackagedFamilyNames { get; set; }
 
         // EKU Attributes
         public string EKUFriendly { get; set; }
@@ -2742,7 +2725,7 @@ namespace WDAC_Wizard
 
             this.UsingCustomValues = false;
             this.CustomValues = new CustomValue();
-            this.PackagedFamilyNames = new Dictionary<string, string>();
+            this.PackagedFamilyNames = new List<string>();
 
             // Set checkbox states
             this.CheckboxCheckStates = new CheckboxStates();

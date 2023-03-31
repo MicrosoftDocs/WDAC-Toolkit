@@ -31,7 +31,7 @@ namespace WDAC_Wizard
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
         private string[] DefaultValues;
-        private Dictionary<string,string> FoundPackages;
+        private List<string> FoundPackages;
 
         // Previous state of the COM Guid
         private string PrevComText = String.Empty;
@@ -61,7 +61,7 @@ namespace WDAC_Wizard
             this.redoRequired = false; 
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
-            this.FoundPackages = new Dictionary<string,string>();
+            this.FoundPackages = new List<string>();
         }
 
         /// <summary>
@@ -220,20 +220,10 @@ namespace WDAC_Wizard
                 else
                 {
                     // Using for loop to avoid System.InvalidOperationException despite list not changing
-                    for(int i= 0; i< this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
+                    for (int i = 0; i < this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
                     {
-                        string packagedAppName = this.checkedListBoxPackagedApps.CheckedItems[i].ToString();
-
-                        // If the key exists, Get-AppxPackage returned these results
-                        if(this.FoundPackages.ContainsKey(packagedAppName))
-                        {
-                            this.PolicyCustomRule.PackagedFamilyNames[packagedAppName] = this.FoundPackages[packagedAppName];
-                        }
-                        // Otherwise, custom rule
-                        else
-                        {
-                            this.PolicyCustomRule.PackagedFamilyNames[packagedAppName] = packagedAppName;
-                        }
+                        var item = this.checkedListBoxPackagedApps.CheckedItems[i];
+                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString());
                     }
                 }
             }
@@ -1947,22 +1937,9 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.backgroundWorker = sender as BackgroundWorker;
-            string script = String.Format("Get-AppxPackage *{0}* | Select-Object PackageFullName, Name", this.textBox_Packaged_App.Text);
-            
-            // Create runspace
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-
-            // Create the real pipeline
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(script);
-            pipeline.Commands.Add("Out-String");
-
             try
             {
-                Collection<PSObject> results = pipeline.Invoke();
-                this.FoundPackages = Helper.ParseGetAppxOutput(results);
+                this.FoundPackages = Helper.GetAppxPackages(this.textBox_Packaged_App.Text);
             }
             catch (Exception exp)
             {
@@ -1986,10 +1963,6 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
                 
             }
-            else
-            {
-                
-            }
 
             this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
 
@@ -2004,7 +1977,7 @@ namespace WDAC_Wizard
 
             // Bring checkbox list to front. Sort keys to display alphabetically to user
             this.checkedListBoxPackagedApps.BringToFront();
-            var sortedPackages = this.FoundPackages.Keys.ToList();
+            var sortedPackages = this.FoundPackages;
             sortedPackages.Sort(); 
 
             foreach (var key in sortedPackages)
