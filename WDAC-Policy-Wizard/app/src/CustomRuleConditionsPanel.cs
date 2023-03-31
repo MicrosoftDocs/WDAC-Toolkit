@@ -222,8 +222,18 @@ namespace WDAC_Wizard
                     // Using for loop to avoid System.InvalidOperationException despite list not changing
                     for(int i= 0; i< this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
                     {
-                        var item = this.checkedListBoxPackagedApps.CheckedItems[i]; 
-                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString()); 
+                        string packagedAppName = this.checkedListBoxPackagedApps.CheckedItems[i].ToString();
+
+                        // If the key exists, Get-AppxPackage returned these results
+                        if(this.FoundPackages.ContainsKey(packagedAppName))
+                        {
+                            this.PolicyCustomRule.PackagedFamilyNames[packagedAppName] = this.FoundPackages[packagedAppName];
+                        }
+                        // Otherwise, custom rule
+                        else
+                        {
+                            this.PolicyCustomRule.PackagedFamilyNames[packagedAppName] = packagedAppName;
+                        }
                     }
                 }
             }
@@ -1938,7 +1948,8 @@ namespace WDAC_Wizard
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             this.backgroundWorker = sender as BackgroundWorker;
-            string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
+            string script = String.Format("Get-AppxPackage *{0}* | Select-Object PackageFullName, Name", this.textBox_Packaged_App.Text);
+            
             // Create runspace
             Runspace runspace = RunspaceFactory.CreateRunspace();
             runspace.Open();
@@ -1951,7 +1962,7 @@ namespace WDAC_Wizard
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
-                this.FoundPackages = Helper.ParsePSOutput(results);
+                this.FoundPackages = Helper.ParseGetAppxOutput(results);
             }
             catch (Exception exp)
             {
@@ -2000,7 +2011,6 @@ namespace WDAC_Wizard
             {
                 this.checkedListBoxPackagedApps.Items.Add(key, false);
             }
-            //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
 
         /// <summary>
