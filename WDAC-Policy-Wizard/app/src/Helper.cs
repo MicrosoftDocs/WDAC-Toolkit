@@ -1460,9 +1460,10 @@ namespace WDAC_Wizard
             List<string> pfnNames = new List<string>();
 
             // Custom Value rules - keys and values contain the PFN
+            // Always use the values in case their are custom and system generated PFN rules
             if (customRule.CustomValues.PackageFamilyNames.Count > 0)
             {
-                pfnNames = customRule.CustomValues.PackageFamilyNames.Keys.ToList();
+                pfnNames = customRule.CustomValues.PackageFamilyNames.Values.ToList();
             }
             // System generated PFN names - keys contain name; values contain the PFN
             else
