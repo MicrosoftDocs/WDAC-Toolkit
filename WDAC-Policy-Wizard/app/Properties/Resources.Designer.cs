@@ -109,6 +109,17 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
+        ///
+        ///Please check the log file in .
+        /// </summary>
+        internal static string BINFileOpen_Error {
+            get {
+                return ResourceManager.GetString("BINFileOpen_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap blank_check_box {
@@ -401,6 +412,16 @@ namespace WDAC_Wizard.Properties {
             get {
                 object obj = ResourceManager.GetObject("externalLink", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The WDAC Wizard encountered this exception trying to open this file 
+        /// .
+        /// </summary>
+        internal static string FileOpen_Exception {
+            get {
+                return ResourceManager.GetString("FileOpen_Exception", resourceCulture);
             }
         }
         
@@ -824,6 +845,17 @@ namespace WDAC_Wizard.Properties {
         internal static string PFNSearch_Warn {
             get {
                 return ResourceManager.GetString("PFNSearch_Warn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error building your policy. Press home to begin again.
+        ///
+        ///Please check the log file in .
+        /// </summary>
+        internal static string PolicyBuild_Error {
+            get {
+                return ResourceManager.GetString("PolicyBuild_Error", resourceCulture);
             }
         }
         
@@ -1305,6 +1337,17 @@ namespace WDAC_Wizard.Properties {
         internal static string WindowsTemplate {
             get {
                 return ResourceManager.GetString("WindowsTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to build the policy file.
+        ///
+        ///Please check the log file in .
+        /// </summary>
+        internal static string XMLFileOpen_Error {
+            get {
+                return ResourceManager.GetString("XMLFileOpen_Error", resourceCulture);
             }
         }
     }

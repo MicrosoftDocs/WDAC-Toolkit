@@ -37,8 +37,9 @@ namespace WDAC_Wizard
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.finishLabel = new System.Windows.Forms.Label();
             this.progress_Label = new System.Windows.Forms.Label();
-            this.hyperlinkLabel = new System.Windows.Forms.Label();
+            this.xmlFilePathLabel = new System.Windows.Forms.Label();
             this.finishPanel = new System.Windows.Forms.Panel();
+            this.binFilePathLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.progressString_Label = new System.Windows.Forms.Label();
             this.finishPanel.SuspendLayout();
@@ -98,22 +99,23 @@ namespace WDAC_Wizard
             this.progress_Label.Text = "50%";
             this.progress_Label.Visible = false;
             // 
-            // hyperlinkLabel
+            // xmlFilePathLabel
             // 
-            this.hyperlinkLabel.AutoSize = true;
-            this.hyperlinkLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
-            this.hyperlinkLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.hyperlinkLabel.Location = new System.Drawing.Point(1, 76);
-            this.hyperlinkLabel.Name = "hyperlinkLabel";
-            this.hyperlinkLabel.Size = new System.Drawing.Size(123, 19);
-            this.hyperlinkLabel.TabIndex = 85;
-            this.hyperlinkLabel.Text = "Unable to locate";
-            this.hyperlinkLabel.Click += new System.EventHandler(this.HyperlinkLabel_Click);
+            this.xmlFilePathLabel.AutoSize = true;
+            this.xmlFilePathLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.xmlFilePathLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.xmlFilePathLabel.Location = new System.Drawing.Point(1, 76);
+            this.xmlFilePathLabel.Name = "xmlFilePathLabel";
+            this.xmlFilePathLabel.Size = new System.Drawing.Size(155, 19);
+            this.xmlFilePathLabel.TabIndex = 85;
+            this.xmlFilePathLabel.Text = "XmlFilePath Location";
+            this.xmlFilePathLabel.Click += new System.EventHandler(this.XmlFilePathLabel_Click);
             // 
             // finishPanel
             // 
+            this.finishPanel.Controls.Add(this.binFilePathLabel);
             this.finishPanel.Controls.Add(this.label4);
-            this.finishPanel.Controls.Add(this.hyperlinkLabel);
+            this.finishPanel.Controls.Add(this.xmlFilePathLabel);
             this.finishPanel.Controls.Add(this.finishLabel);
             this.finishPanel.Location = new System.Drawing.Point(167, 223);
             this.finishPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -121,6 +123,18 @@ namespace WDAC_Wizard
             this.finishPanel.Size = new System.Drawing.Size(867, 182);
             this.finishPanel.TabIndex = 87;
             this.finishPanel.Visible = false;
+            // 
+            // binFilePathLabel
+            // 
+            this.binFilePathLabel.AutoSize = true;
+            this.binFilePathLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
+            this.binFilePathLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.binFilePathLabel.Location = new System.Drawing.Point(3, 127);
+            this.binFilePathLabel.Name = "binFilePathLabel";
+            this.binFilePathLabel.Size = new System.Drawing.Size(150, 19);
+            this.binFilePathLabel.TabIndex = 88;
+            this.binFilePathLabel.Text = "BinFilePath Location";
+            this.binFilePathLabel.Click += new System.EventHandler(this.BinFilePathLabel_Click);
             // 
             // label4
             // 
@@ -172,9 +186,10 @@ namespace WDAC_Wizard
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label finishLabel;
         private System.Windows.Forms.Label progress_Label;
-        private System.Windows.Forms.Label hyperlinkLabel;
+        private System.Windows.Forms.Label xmlFilePathLabel;
         private System.Windows.Forms.Panel finishPanel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label progressString_Label;
+        private System.Windows.Forms.Label binFilePathLabel;
     }
 }

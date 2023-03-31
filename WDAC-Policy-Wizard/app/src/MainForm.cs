@@ -36,11 +36,13 @@ namespace WDAC_Wizard
         public string ErrorMsg { get; set; }             // Accompanying message error description for ErrorOnPage flag 
         public bool RedoFlowRequired { get; set; }       // Flag which prohibts user from making changes on page 1 then skipping back to page 4, for instance
         public bool CustomRuleinProgress { get; set; }   // Flag set when user has kicked off the custom rule procedure. Ensures user does not go to build page without accidentally creating the rule
+        public bool BinaryFileCreated { get; set; }      // Flag set when the conversion to binary file (.cip/.p7b) was successful. False, otherwise.
 
         public Logger Log { get; set; }
         public List<string> PageList;
         public WDAC_Policy Policy { get; set; }
         public List<CiEvent> CiEvents { get; set; }
+
         // Runspace param to access all PS Variables and eliminate overhead opening each time
         private Runspace runspace;
         private int RulesNumber;
@@ -83,7 +85,6 @@ namespace WDAC_Wizard
 
             // Check for configci cmdlet availability
             LicenseCheck(); 
-
         }
 
         // ###############
@@ -849,7 +850,7 @@ namespace WDAC_Wizard
             // Convert the policy from XML to Binary file
             if (Properties.Settings.Default.convertPolicyToBinary)
             {
-                ConvertPolicyToBinary();
+                this.BinaryFileCreated = ConvertPolicyToBinary();
             }
 
             worker.ReportProgress(100);
@@ -905,9 +906,11 @@ namespace WDAC_Wizard
             {
                 this._BuildPage.UpdateProgressBar(100, " ");
 
-                if (this.Policy.BinPath != null)
+                // If we successfully converted the policy XML to binary, show both file paths
+                // If conversion was unsuccessful, show only the XML path
+                if (this.BinaryFileCreated)
                 {
-                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath + Environment.NewLine + Environment.NewLine + this.Policy.BinPath);
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath, this.Policy.BinPath);
                 }
                 else
                 {
