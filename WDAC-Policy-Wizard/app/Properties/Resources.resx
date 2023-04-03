@@ -533,6 +533,7 @@ Please check the log file in </value>
     <value>The WDAC Wizard could not open the WDAC BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
 
 Please check the log file in </value>
+  </data>
   <data name="PathRule_Warning" xml:space="preserve">
     <value>This path rule is only supported on Windows 11 (versions 21H2 and 22H2). It will be ignored on Windows 10 and all Windows Server versions. Select Cancel to fix the path rule.
 

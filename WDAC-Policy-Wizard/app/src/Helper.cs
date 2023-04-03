@@ -1231,8 +1231,9 @@ namespace WDAC_Wizard
                 fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion.Trim();
             }
 
-            if (customRule.CheckboxCheckStates.checkBox4 && 
-                customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
+            if (customRule.CheckboxCheckStates.checkBox4 
+                && customRule.CustomValues.MaxVersion != null 
+                && customRule.CustomValues.MaxVersion != "*")
             {
                 fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion.Trim(); 
             }
@@ -1245,6 +1246,15 @@ namespace WDAC_Wizard
             if (customRule.CheckboxCheckStates.checkBox2)
             {
                 fileAttrib.ProductName = customRule.CustomValues.ProductName;
+            }
+
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if(fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null 
+                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            {
+                fileAttrib.FileName = "*"; 
             }
 
             // Add FileAttrib references
@@ -2293,6 +2303,15 @@ namespace WDAC_Wizard
             {
                 fileAttrib.ProductName = customRule.FileInfo["ProductName"];
                 friendlyName += fileAttrib.ProductName + " and ";
+            }
+
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if (fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null
+                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            {
+                fileAttrib.FileName = "*";
             }
 
             fileAttrib.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); // remove trailing " and "
