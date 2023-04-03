@@ -538,4 +538,7 @@ Please check the log file in </value>
 
 Do you want the Wizard to warn you about these types of path rules in the future? </value>
   </data>
+  <data name="NullXmlPath" xml:space="preserve">
+    <value>The policy path must be given before continuing.</value>
+  </data>
 </root>

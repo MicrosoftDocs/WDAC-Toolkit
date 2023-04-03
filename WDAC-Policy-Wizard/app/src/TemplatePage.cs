@@ -126,34 +126,59 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Sets the policy schema path string. Triggered when user wants to modify the save path for their policy: browse button press or PolicyPath TextBox text changed.  
+        /// Sets the Policy Path save location for the XML file. Triggered on Browse button click 
+        /// or TextBoxPolicyPath is double clicked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TextBoxPolicyPath_TextChanged(object sender, EventArgs e)
+        private void TextBoxPolicyPath_SetPath(object sender, EventArgs e)
         {
-            // Save dialog box pressed
-
+            // Save dialog box pressed or textbox double clicked
             string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
 
             // If cancel button is selected by user, or path does not exist prevent unhandled error
-            if(String.IsNullOrEmpty(policyPath))
+            if (String.IsNullOrEmpty(policyPath))
             {
-                return; 
+                if(String.IsNullOrEmpty(this._MainWindow.Policy.SchemaPath))
+                {
+                    this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                    this._MainWindow.ErrorOnPage = true;
+                }
+                return;
             }
 
             textBoxPolicyPath.Text = policyPath;
             this._Policy.SchemaPath = policyPath;
             this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            this._MainWindow.ErrorOnPage = false;
 
             // Scroll to the right-most side of the textbox
-            if(this.textBoxPolicyPath.TextLength > 0)
+            if (this.textBoxPolicyPath.TextLength > 0)
             {
                 this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
                 this.textBoxPolicyPath.ScrollToCaret();
             }
-                        
-            if(this._Policy.PolicyName != null)
+        }
+
+
+        /// <summary>
+        /// Sets the Policy Path save location for the XML file. Triggered when the user 
+        /// changes the text in the textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxPolicyPath_TextChanged(object sender, EventArgs e)
+        {
+            this._Policy.SchemaPath = textBoxPolicyPath.Text;
+            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+
+            // Validate the Path
+            if(String.IsNullOrWhiteSpace(this._MainWindow.Policy.SchemaPath))
+            {
+                this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                this._MainWindow.ErrorOnPage = true;
+            }
+            else
             {
                 this._MainWindow.ErrorOnPage = false;
             }
@@ -166,14 +191,10 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxPolicyName_TextChanged(object sender, EventArgs e)
         {
-            // Policy Friend Name
+            // Policy Friendly Name
             this._Policy.PolicyName = textBox_PolicyName.Text;
             this._MainWindow.Policy.PolicyName = this._Policy.PolicyName;
-
-            if(this._Policy.SchemaPath != null)
-                this._MainWindow.ErrorOnPage = false;
         }
-
 
         /// <summary>
         /// Sets a default save path location and policy name once a template is selected.  

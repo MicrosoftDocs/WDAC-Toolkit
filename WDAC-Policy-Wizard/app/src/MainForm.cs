@@ -1058,7 +1058,9 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
             {
                 // Set policy info - ID, Name
+                // Serialize the policy back to XML so settings persist after GUID reset
                 siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
+                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
 
                 if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy 
                     && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
