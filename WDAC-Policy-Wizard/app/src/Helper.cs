@@ -618,13 +618,9 @@ namespace WDAC_Wizard
             // If an exception is hit, the path is likely not user-writeable 
             try
             {
-                DirectoryInfo di = new DirectoryInfo(path);
-                if (di.Exists)
-                {
-                    DirectoryInfo dis = new DirectoryInfo(Path.Combine(path, "testSubDir"));
-                    dis.Create();
-                    dis.Delete();
-                }
+                string testPath = Path.Combine(path, "testSubDir");
+                Directory.CreateDirectory(testPath);
+                Directory.Delete(testPath, true);
 
                 return true;
             }
@@ -2369,6 +2365,11 @@ namespace WDAC_Wizard
             return siPolicy; 
         }
 
+        /// <summary>
+        /// Creates the PolicyInfo.Information.Name Setting
+        /// </summary>
+        /// <param name="policyName">Name string for the PolicyName Setting</param>
+        /// <returns></returns>
         public static Setting CreatePolicyNameSetting(string policyName)
         {
             Setting settingName = new Setting();
@@ -2380,6 +2381,11 @@ namespace WDAC_Wizard
             return settingName; 
         }
 
+        /// <summary>
+        /// Creates the PolicyInfo.Information.ID Setting
+        /// </summary>
+        /// <param name="policyId"></param>
+        /// <returns></returns>
         public static Setting CreatePolicyIdSetting(string policyId)
         {
             Setting settingID = new Setting();

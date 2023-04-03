@@ -139,23 +139,24 @@ namespace WDAC_Wizard
             // If cancel button is selected by user, or path does not exist prevent unhandled error
             if (String.IsNullOrEmpty(policyPath))
             {
+                if(String.IsNullOrEmpty(this._MainWindow.Policy.SchemaPath))
+                {
+                    this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                    this._MainWindow.ErrorOnPage = true;
+                }
                 return;
             }
 
             textBoxPolicyPath.Text = policyPath;
             this._Policy.SchemaPath = policyPath;
             this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            this._MainWindow.ErrorOnPage = false;
 
             // Scroll to the right-most side of the textbox
             if (this.textBoxPolicyPath.TextLength > 0)
             {
                 this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
                 this.textBoxPolicyPath.ScrollToCaret();
-            }
-
-            if (this._Policy.PolicyName != null)
-            {
-                this._MainWindow.ErrorOnPage = false;
             }
         }
 
@@ -170,6 +171,17 @@ namespace WDAC_Wizard
         {
             this._Policy.SchemaPath = textBoxPolicyPath.Text;
             this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+
+            // Validate the Path
+            if(String.IsNullOrWhiteSpace(this._MainWindow.Policy.SchemaPath))
+            {
+                this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                this._MainWindow.ErrorOnPage = true;
+            }
+            else
+            {
+                this._MainWindow.ErrorOnPage = false;
+            }
         }
 
         /// <summary>
@@ -182,9 +194,6 @@ namespace WDAC_Wizard
             // Policy Friendly Name
             this._Policy.PolicyName = textBox_PolicyName.Text;
             this._MainWindow.Policy.PolicyName = this._Policy.PolicyName;
-
-            if(this._Policy.SchemaPath != null)
-                this._MainWindow.ErrorOnPage = false;
         }
 
         /// <summary>
