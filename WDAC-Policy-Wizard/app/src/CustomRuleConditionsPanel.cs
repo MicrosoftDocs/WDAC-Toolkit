@@ -31,7 +31,7 @@ namespace WDAC_Wizard
         private Exceptions_Control exceptionsControl;
         private bool redoRequired;
         private string[] DefaultValues;
-        private Dictionary<string,string> FoundPackages;
+        private List<string> FoundPackages;
 
         // Previous state of the COM Guid
         private string PrevComText = String.Empty;
@@ -61,7 +61,7 @@ namespace WDAC_Wizard
             this.redoRequired = false; 
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
-            this.FoundPackages = new Dictionary<string,string>();
+            this.FoundPackages = new List<string>();
         }
 
         /// <summary>
@@ -220,10 +220,10 @@ namespace WDAC_Wizard
                 else
                 {
                     // Using for loop to avoid System.InvalidOperationException despite list not changing
-                    for(int i= 0; i< this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
+                    for (int i = 0; i < this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
                     {
-                        var item = this.checkedListBoxPackagedApps.CheckedItems[i]; 
-                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString()); 
+                        var item = this.checkedListBoxPackagedApps.CheckedItems[i];
+                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString());
                     }
                 }
             }
@@ -1937,35 +1937,14 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.backgroundWorker = sender as BackgroundWorker;
-            string script = String.Format("Get-AppxPackage -Name *{0}*", this.textBox_Packaged_App.Text);
-            // Create runspace
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-
-            // Create the real pipeline
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(script);
-            pipeline.Commands.Add("Out-String");
-
             try
             {
-                Collection<PSObject> results = pipeline.Invoke();
-                this.FoundPackages = Helper.ParsePSOutput(results);
+                this.FoundPackages = Helper.GetAppxPackages(this.textBox_Packaged_App.Text);
             }
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
             }
-
-            if (this.FoundPackages.Count == 0)
-            {
-                label_Error.Visible = true;
-                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
-                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
-                return;
-            }
-
         }
 
         /// <summary>
@@ -1984,23 +1963,27 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
                 
             }
-            else
-            {
-                
-            }
 
             this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
 
+            // Check for the case where no packages were found and return
+            if (this.FoundPackages.Count == 0)
+            {
+                label_Error.Visible = true;
+                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
+                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                return;
+            }
+
             // Bring checkbox list to front. Sort keys to display alphabetically to user
             this.checkedListBoxPackagedApps.BringToFront();
-            var sortedPackages = this.FoundPackages.Keys.ToList();
+            var sortedPackages = this.FoundPackages;
             sortedPackages.Sort(); 
 
             foreach (var key in sortedPackages)
             {
                 this.checkedListBoxPackagedApps.Items.Add(key, false);
             }
-            //foreach($i in $package){$Rule += New-CIPolicyRule -Package $i} - in MainForm to resolve conflicts
         }
 
         /// <summary>

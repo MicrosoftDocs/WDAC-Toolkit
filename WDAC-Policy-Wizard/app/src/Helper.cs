@@ -16,6 +16,8 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Windows.Forms;
+using Windows.Management.Deployment;
+using Windows.ApplicationModel; 
 
 namespace WDAC_Wizard
 {
@@ -632,42 +634,41 @@ namespace WDAC_Wizard
             }
         }
 
-        public static Dictionary<string, string> ParsePSOutput(Collection<PSObject> results)
+        /// <summary>
+        /// Get the Installed Appx/MSIX Packages
+        /// </summary>
+        /// <param name="policyCustomRule"></param>
+        /// <returns></returns>
+        public static List<string> GetAppxPackages(string pfnSearchStr)
         {
-            Dictionary<string, string> output = new Dictionary<string, string>();
-
-            // Convert results to something parseable
-            StringBuilder sBuilder = new StringBuilder();
-            foreach (PSObject psObject in results)
-            {
-                sBuilder.AppendLine(psObject.ToString());
-            }
-
-            // Parse the SystemDriver cmdlet output for the scanPath only
-            string scriptOutput = sBuilder.ToString();
-            var packages = scriptOutput.Split(':');
-            int OFFSET = 21;
+            PackageManager packageManager = new PackageManager();
+            IEnumerable<Package> packages;
+            List<string> results = new List<string>();
+            pfnSearchStr = pfnSearchStr.ToLowerInvariant(); 
 
             try
             {
-                foreach (var package in packages)
+                // Try to get packages installed for all system users;
+                // Will fail if Wizard is not running elevated
+                packages = packageManager.FindPackages();
+            }
+            catch
+            {
+                // fall back and get for the current user
+                packages = packageManager.FindPackagesForUser("");
+            }
+
+            // Search all packages for pfnSearchString
+            foreach(var package in packages)
+            {
+                string packageFamilyName = package.Id.FamilyName;
+                if (packageFamilyName.ToLowerInvariant().Contains(pfnSearchStr))
                 {
-                    if (package.Contains("\r\nPublisher       "))
-                    {
-                        string pkgName = package.Substring(1, package.Length - OFFSET);
-                        if (!output.ContainsKey(pkgName))
-                        {
-                            output[pkgName] = "";
-                        }
-                    }
+                    results.Add(packageFamilyName);
                 }
             }
-            catch (Exception exp)
-            {
 
-            }
-
-            return output;
+            return results;
         }
 
         // Dump all of the package family names for the custom rules table
