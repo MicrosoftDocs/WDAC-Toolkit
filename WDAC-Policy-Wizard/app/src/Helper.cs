@@ -1231,8 +1231,9 @@ namespace WDAC_Wizard
                 fileAttrib.MinimumFileVersion = customRule.CustomValues.MinVersion.Trim();
             }
 
-            if (customRule.CheckboxCheckStates.checkBox4 && 
-                customRule.CustomValues.MaxVersion != null && customRule.CustomValues.MaxVersion != "*")
+            if (customRule.CheckboxCheckStates.checkBox4 
+                && customRule.CustomValues.MaxVersion != null 
+                && customRule.CustomValues.MaxVersion != "*")
             {
                 fileAttrib.MaximumFileVersion = customRule.CustomValues.MaxVersion.Trim(); 
             }
@@ -1247,6 +1248,15 @@ namespace WDAC_Wizard
                 fileAttrib.ProductName = customRule.CustomValues.ProductName;
             }
 
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if(fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null 
+                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            {
+                fileAttrib.FileName = "*"; 
+            }
+
             // Add FileAttrib references
             signers = AddFileAttribToSigners(fileAttrib, signers);
             siPolicy = AddSiPolicyFileAttrib(fileAttrib, siPolicy);
@@ -1254,6 +1264,22 @@ namespace WDAC_Wizard
             // Add signer references
             siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
 
+            // Process exceptions
+            if (customRule.ExceptionList.Count > 0)
+            {
+                if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
+                {
+                    // Create except deny rules to add to allowed signers
+                    ExceptDenyRule[] exceptDenyRules = CreateExceptDenyRules(customRule.ExceptionList, siPolicy);
+                    siPolicy = AddExceptionsToAllowSigners(exceptDenyRules, siPolicy, customRule.SigningScenarioCheckStates);
+                }
+                else
+                {
+                    // Create except Allowrules
+                    ExceptAllowRule[] exceptAllowRules = CreateExceptAllowRules(customRule.ExceptionList, siPolicy);
+                    siPolicy = AddExceptionsToDeniedSigners(exceptAllowRules, siPolicy, customRule.SigningScenarioCheckStates);
+                }
+            }
             return siPolicy;            
         }
 
@@ -1315,6 +1341,17 @@ namespace WDAC_Wizard
                 allowRule.ID = String.Format("ID_ALLOW_EX_{0}", cFileExceptions++);
             }
 
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if (allowRule.MinimumFileVersion != null
+                && (allowRule.FileName == null
+                    || allowRule.InternalName == null
+                    || allowRule.ProductName == null
+                    || allowRule.FileDescription == null))
+            {
+                allowRule.FileName = "*";
+            }
+
             // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
             siPolicy = AddAllowRule(allowRule, siPolicy, customRule.SigningScenarioCheckStates, isException);
                         
@@ -1369,6 +1406,7 @@ namespace WDAC_Wizard
             }
 
             denyRule.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5);
+
             if(!isException)
             {
                 denyRule.ID = String.Format("ID_DENY_A_{0}", cFileDenyRules++);
@@ -1376,6 +1414,17 @@ namespace WDAC_Wizard
             else
             {
                 denyRule.ID = String.Format("ID_DENY_EX_{0}", cFileExceptions++);
+            }
+
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if (denyRule.MinimumFileVersion != null
+                && (denyRule.FileName == null 
+                    || denyRule.InternalName == null
+                    || denyRule.ProductName == null
+                    || denyRule.FileDescription == null))
+            {
+                denyRule.FileName = "*";
             }
 
             // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
@@ -2293,6 +2342,15 @@ namespace WDAC_Wizard
             {
                 fileAttrib.ProductName = customRule.FileInfo["ProductName"];
                 friendlyName += fileAttrib.ProductName + " and ";
+            }
+
+            // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
+            // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
+            if (fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null
+                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            {
+                fileAttrib.FileName = "*";
             }
 
             fileAttrib.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); // remove trailing " and "
