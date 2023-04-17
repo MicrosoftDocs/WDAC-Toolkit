@@ -769,8 +769,9 @@ namespace WDAC_Wizard
             // Short circuit policy building if using Event Log workflow
             if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit && this.EditWorkflow == EditWorkflowType.EventLog)
             {
+                // Save the path under the AppDataLocal\Temp\WDACWizard folder 
                 string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
-                string pathToWrite = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
+                string pathToWrite = Path.Combine(this.TempFolderPath, fileName);
 
                 try
                 {
@@ -799,7 +800,6 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("Process Policy() caught the following exception ", e);
             }
-            System.IO.Directory.CreateDirectory(this.TempFolderPath);
            
             this.runspace = RunspaceFactory.CreateRunspace();
             this.runspace.Open();
@@ -1584,10 +1584,11 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Check if user-writeable. If it is not, default to MyDocuments
+            // Check if the chosen path is user-writeable
+            // If it is not, default to AppDataLocal\Temp\WDACWizard
             if(!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
             {
-                this.Policy.SchemaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(this.Policy.SchemaPath)); 
+                this.Policy.SchemaPath = Path.Combine(this.TempFolderPath, Path.GetFileName(this.Policy.SchemaPath)); 
             }
 
             this.Log.AddInfoMsg("--- Merge Templates Policy ---");
