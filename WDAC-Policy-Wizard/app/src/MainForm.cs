@@ -1076,6 +1076,15 @@ namespace WDAC_Wizard
                     siPolicy.PolicyID = siPolicy.BasePolicyID;
                 }
 
+                // If single policy/legacy policy, ensure the correct IDs are set on the policy
+                else if (this.Policy._Format == WDAC_Policy.Format.Legacy)
+                {
+                    siPolicy.BasePolicyID = null;
+                    siPolicy.PolicyID = null;
+                    siPolicy.PolicyTypeSpecified = false; 
+                    siPolicy.PolicyTypeID = Properties.Resources.LegacyPolicyID_GUID; 
+                }
+
                 // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
                 else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 {
