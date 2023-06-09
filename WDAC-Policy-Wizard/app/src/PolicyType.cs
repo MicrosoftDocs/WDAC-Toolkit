@@ -220,19 +220,30 @@ namespace WDAC_Wizard
                 return 99;
             }
 
+            // Catch null/bad policies
+            if(policyToSupplement.siPolicy == null)
+            {
+                // Prompt user for additional confirmation
+                DialogResult res = MessageBox.Show("The Wizard is unable to read your base CI policy xml file. The policy XML appears to be corrupted.",
+                    "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return 99;
+            }
+
             this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", policyToSupplement.siPolicy.PolicyType.ToString()));
             
             if(policyToSupplement.siPolicy.PolicyType.ToString().Contains("Supplemental"))
             {
                 // Policy is not base -- not going to fix this case
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2");
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2 (is a supplemental policy)");
                 return 2;
             }
 
             // Policy is not multi-policy format -- not going to fix this case
-            if(String.IsNullOrEmpty(policyToSupplement.siPolicy.PolicyID))
+            if(String.IsNullOrEmpty(policyToSupplement.siPolicy.PolicyID)
+                || policyToSupplement.siPolicy.PolicyID.Contains(Properties.Resources.LegacyPolicyID_GUID))
             {
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 3");
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 3 (legacy GUID)");
                 return 3;
             }
 
@@ -244,13 +255,13 @@ namespace WDAC_Wizard
             // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
             if (allowsSupplemental)
             {
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 0"); 
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 0 (allows supplemental)"); 
                 return 0; 
             }
             else
             {
                 // Policy does not have the supplemental rule option -- can fix this case
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 1");
+                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 1 (multi-base setting supplemental)");
                 return 1; 
             }
         }

@@ -1074,6 +1074,13 @@ namespace WDAC_Wizard
                     // Reset the GUIDs
                     siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
                     siPolicy.PolicyID = siPolicy.BasePolicyID;
+
+                    // Force SiPolicy PolicyType to BasePolicy
+                    siPolicy.PolicyType = global::PolicyType.BasePolicy; 
+                    siPolicy.PolicyTypeSpecified = true;
+
+                    // Remove PolicyTypeID, if applicable
+                    siPolicy.PolicyTypeID = null;
                 }
 
                 // If single policy/legacy policy, ensure the correct IDs are set on the policy
@@ -1096,6 +1103,10 @@ namespace WDAC_Wizard
 
                     // Force SiPolicy PolicyType to Supplemental
                     siPolicy.PolicyType = global::PolicyType.SupplementalPolicy;
+                    siPolicy.PolicyTypeSpecified = true;
+
+                    // Remove PolicyTypeID, if applicable
+                    siPolicy.PolicyTypeID = null;
                 }
 
                 // Log information set for debugging
