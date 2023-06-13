@@ -601,6 +601,8 @@ namespace WDAC_Wizard
             int customRuleIdx = -1;
             List<string> ruleIDsToRemove = new List<string>();
 
+            if (rowIdx >= this.rulesDataGrid.RowCount) return; 
+
             string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
 
             // Assert cannot delete the 'empty' bottom row
