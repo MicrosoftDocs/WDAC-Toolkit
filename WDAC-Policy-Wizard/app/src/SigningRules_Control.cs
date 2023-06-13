@@ -990,14 +990,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                if(e.RowIndex  < this.displayObjects.Count)
-                {
-                    displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
-                }
-                else
-                {
-                    return; 
-                }
+                displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
             }
 
             // Set the cell value to paint using the Customer object retrieved.
