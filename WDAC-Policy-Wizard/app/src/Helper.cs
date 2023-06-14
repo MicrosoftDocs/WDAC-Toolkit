@@ -429,7 +429,7 @@ namespace WDAC_Wizard
         /// Checks for unsupported crypto oids (ECC, ECSDA)
         /// </summary>
         /// <returns>True, if unsupported crypto oids are parsed</returns>
-        public static bool IsCertChainInvalid(X509Chain certChain)
+        public static bool IsCryptoInvalid(X509Chain certChain)
         {
             foreach(var cert in certChain.ChainElements)
             {
@@ -2738,8 +2738,6 @@ namespace WDAC_Wizard
 
         public SigningScenarioStates SigningScenarioCheckStates;
 
-
-
         public enum RulePermission { Allow, Deny };
 
         // enums: 
@@ -2749,11 +2747,12 @@ namespace WDAC_Wizard
 
         // Variables:
         public string ReferenceFile { get; set; }
-        public Dictionary<string, string> FileInfo { get; set; } //
+        public Dictionary<string, string> FileInfo { get; set; }    // FileInfo dict containing PE metadata and sig CNs
+        public bool SupportedCrypto { get; set; }                   // Boolean flag indicating whether the crypto detected is supported in WDAC
         public string PSVariable { get; set; }
         public string VersionNumber { get; set; }
-        public string RuleIndex { get; set; } // Index of return struct in Get-SystemDriver cmdlet
-        public int RowNumber { get; set;  }     // Index of the row in the datagrid
+        public string RuleIndex { get; set; }                       // Index of return struct in Get-SystemDriver cmdlet
+        public int RowNumber { get; set;  }                         // Index of the row in the datagrid
 
         // Custom values
         public bool UsingCustomValues { get; set; }
@@ -2784,6 +2783,7 @@ namespace WDAC_Wizard
             this.Permission = RulePermission.Allow; // Allow by default to match the default state of the UI
 
             this.FileInfo = new Dictionary<string, string>();
+            this.SupportedCrypto = true; 
             this.ExceptionList = new List<PolicyCustomRules>();
             this.FolderContents = new List<string>();
 

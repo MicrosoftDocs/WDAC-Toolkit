@@ -691,6 +691,7 @@ namespace WDAC_Wizard
             switch (selectedOpt)
             {
                 case "Publisher":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
                     label_Info.Text = "Creates a rule for a file that is signed by the software publisher. \r\n" +
@@ -698,6 +699,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "Path":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
                     label_Info.Text = "Creates a rule for a specific file or folder. \r\n" +
@@ -710,6 +712,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "File Attributes":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
@@ -717,6 +720,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "Packaged App":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.PackagedApp);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
                     this.panelPackagedApps.Location = this.label_condition.Location;
@@ -726,6 +730,7 @@ namespace WDAC_Wizard
                     break; 
 
                 case "File Hash":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
@@ -735,6 +740,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "COM Object":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Com);
                     label_Info.Text = "Creates a rule for COM object and software provider.";
                     this.panelComObject.Location = this.label_condition.Location;
@@ -743,6 +749,7 @@ namespace WDAC_Wizard
                     break;
 
                 case "Folder Scan":
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
                     label_Info.Text = "Creates a file rule for each file found in the scanned directory and it's subdirectories.";
                     this.panelFolderScanConditions.Location = this.checkBox_CustomPath.Location;
@@ -787,6 +794,7 @@ namespace WDAC_Wizard
 
             //File Path:
             panel_FileFolder.Visible = false;
+            textBox_ReferenceFile.Clear(); 
 
             // Reset the rule type combobox
             if (clearComboBox)
@@ -833,19 +841,13 @@ namespace WDAC_Wizard
                 this._MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
-                bool status = SetFileSignerInfo(refPath);
+                SetFileSignerInfo(refPath);
 
                 // Unsupported crypto or antother issue with the file
                 // Start over
-                if(!status)
+                if(!this.PolicyCustomRule.SupportedCrypto && this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    // Renew the custom rule instance
-                    this.PolicyCustomRule = new PolicyCustomRules();
-
-                    // Reset UI view
-                    ClearCustomRulesPanel(true);
-                    this._MainWindow.CustomRuleinProgress = false;
-
+                    UnSupportedCryptoCleanUp(); 
                     return;
                 }
             }
@@ -865,7 +867,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="refPath"></param>
         /// <returns>True if successful. False otherwise. </returns>
-        private bool SetFileSignerInfo(string refPath)
+        private void SetFileSignerInfo(string refPath)
         {
             this.PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
             FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
@@ -904,14 +906,11 @@ namespace WDAC_Wizard
                 }
 
                 // Check that the parsed certificate chain uses supported crytpo
-                if(Helper.IsCertChainInvalid(certChain))
+                if(Helper.IsCryptoInvalid(certChain))
                 {
-                    this.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName)); 
-                    DialogResult res = MessageBox.Show(Properties.Resources.UnsupportedCrypto_Error ,
-                                                        "Unsupported Cryptographic Algorithm Found",
-                                                        MessageBoxButtons.OK, 
-                                                        MessageBoxIcon.Error);
-                    return false; 
+                    this.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName));
+                    this.PolicyCustomRule.SupportedCrypto = false;
+                    return; 
                 }
             }
 
@@ -924,8 +923,7 @@ namespace WDAC_Wizard
 
             this.PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
             this.PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
-
-            return true;
+            this.PolicyCustomRule.SupportedCrypto = true; 
         }
 
         /// <summary>
@@ -947,8 +945,17 @@ namespace WDAC_Wizard
                         this.textBox_ReferenceFile.ScrollToCaret();
                     }
 
+                    // Check if supported crypto first before getting FileInfo
+                    // PCACert and LeafCert will be null in the case where user chose non publisher rule type for ECC-signed file,
+                    // for example, then scanned file and then set rule type to publisher 
+                    if (!this.PolicyCustomRule.SupportedCrypto)
+                    {
+                        UnSupportedCryptoCleanUp();
+                        return;
+                    }
+
                     // Set defaults to restore to if custom values is ever reset
-                    if(PolicyCustomRule.FileInfo != null && PolicyCustomRule.FileInfo.Count > 0)
+                    if (PolicyCustomRule.FileInfo != null && PolicyCustomRule.FileInfo.Count > 0)
                     {
                         this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
                         this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
@@ -1234,6 +1241,24 @@ namespace WDAC_Wizard
             {
                 e.Cancel = false; 
             }
+        }
+
+        /// <summary>
+        /// Displays error message, cleans up the UI and resets the PolicyCustomRule object
+        /// </summary>
+        private void UnSupportedCryptoCleanUp()
+        {
+            DialogResult res = MessageBox.Show(Properties.Resources.UnsupportedCrypto_Error,
+                                                        "Unsupported Cryptographic Algorithm Found",
+                                                        MessageBoxButtons.OK,
+                                                        MessageBoxIcon.Error);
+
+            // Renew the custom rule instance
+            this.PolicyCustomRule = new PolicyCustomRules();
+
+            // Reset UI view
+            ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
