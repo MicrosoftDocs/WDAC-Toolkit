@@ -45,6 +45,10 @@ namespace WDAC_Wizard
 
             this.SelectedRow = 0;
             this.RuleIdsToAdd = new List<int>();
+
+            // Set error flag - Bug #234
+            this._MainWindow.ErrorOnPage = true;
+            this._MainWindow.ErrorMsg = Properties.Resources.InvalidEventRulesCreated; 
         }
 
         /// <summary>
@@ -102,7 +106,8 @@ namespace WDAC_Wizard
                     {
                         dp.Action = "Added to policy";
                         this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy; 
+                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                        ClearErrorMsg();
                     }
                     break;
 
@@ -112,6 +117,7 @@ namespace WDAC_Wizard
                         dp.Action = "Added to policy"; 
                         this.siPolicy = PolicyHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
+                        ClearErrorMsg();
                     }
                     break; 
 
@@ -122,6 +128,7 @@ namespace WDAC_Wizard
                         dp.Action = "Added to policy"; 
                         this.siPolicy = PolicyHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
+                        ClearErrorMsg();
                     }
                     break;
 
@@ -131,6 +138,7 @@ namespace WDAC_Wizard
                         dp.Action = "Added to policy";
                         this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
+                        ClearErrorMsg();
                     }
                     break; 
             }
@@ -757,6 +765,15 @@ namespace WDAC_Wizard
             // Unhide the panel
             this.filePathRulePanel.Visible = true;
             this.filePathRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+        }
+
+        /// <summary>
+        /// Clears the prior error message from MainForm's UI
+        /// </summary>
+        private void ClearErrorMsg()
+        {
+            this._MainWindow.ErrorOnPage = false; 
+            this._MainWindow.DisplayInfoText(0);
         }
     }
 

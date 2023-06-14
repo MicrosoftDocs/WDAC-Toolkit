@@ -542,4 +542,7 @@ Do you want the Wizard to warn you about these types of path rules in the future
   <data name="NullXmlPath" xml:space="preserve">
     <value>The policy path must be given before continuing.</value>
   </data>
+  <data name="InvalidEventRulesCreated" xml:space="preserve">
+    <value>At least one rule must be created before building the policy file. </value>
+  </data>
 </root>

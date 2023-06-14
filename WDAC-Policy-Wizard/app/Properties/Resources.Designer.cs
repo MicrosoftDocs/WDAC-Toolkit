@@ -529,6 +529,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At least one rule must be created before building the policy file. .
+        /// </summary>
+        internal static string InvalidEventRulesCreated {
+            get {
+                return ResourceManager.GetString("InvalidEventRulesCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kernel mode components cannot be allowed or denied using packaged app or path rules..
         /// </summary>
         internal static string InvalidKMCIRule {
