@@ -844,7 +844,8 @@ namespace WDAC_Wizard
                 CreateComObjectRules(worker);
             }
 
-            // Set additional parameters, for instance, policy name, GUIDs, version, etc
+            // Set additional parameters,
+            // for instance, policy name, GUIDs, version, etc
             SetAdditionalParameters(worker);
 
             // Convert the policy from XML to Binary file
@@ -1043,6 +1044,7 @@ namespace WDAC_Wizard
             // 2. Settings PolicyInfo.Name and PolicyInfo.Id
             // 3. VersionExpolicy 
             // 4. HVCI state
+            // 5. Format IDs in the case of Issue #247
 
             this.Log.AddInfoMsg("-- Set Additional Parameters --");
 
@@ -1133,7 +1135,7 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Additional parameters set - VersionEx " + siPolicy.VersionEx);
             }
 
-            // Lastly, set HVCI state
+            // Set HVCI state
             if (this.Policy.EnableHVCI)
             {
                 // Enable HVCI since HVCI is not a Rule-Option
@@ -1145,6 +1147,10 @@ namespace WDAC_Wizard
                 siPolicy.HvciOptions = 0;
                 this.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
             }
+
+            // Lastly, re-format Allow/Deny, FileAttrib and Signer IDs, if applicable
+            siPolicy = Helper.FormatRuleIDs(siPolicy); 
+
 
             try
             {

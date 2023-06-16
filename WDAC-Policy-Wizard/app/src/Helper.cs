@@ -51,6 +51,7 @@ namespace WDAC_Wizard
         // Signing Scenario Constants
         const int KMCISCN = 131;
         const int UMCISCN = 12; 
+
         public enum BrowseFileType
         {
             Policy = 0,     // -Show .xml files
@@ -59,6 +60,13 @@ namespace WDAC_Wizard
             CsvFile = 3,    // -Show Csv file
             All = 4         // -Show . all files
         }
+
+        // Counts of Deny, Allow, FileAttrib and Signers
+        const int MAX_N_UNDERSCORES = 5;
+        static int cDenyRules = 0;
+        static int cAllowRules = 0;
+        static int cFileAttribs = 0;
+        static int cSigners = 0; 
 
         public static string GetDOSPath(string NTPath)
         {
@@ -2479,6 +2487,181 @@ namespace WDAC_Wizard
 
             return false;
         }
+
+
+        /// <summary>
+        /// Formats the Rule IDs in cases of long runs of "_0"s
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object with unformatted ruleIDs</param>
+        /// <returns>SiPolicy object with formatted rule IDs</returns>
+        public static SiPolicy FormatRuleIDs(SiPolicy siPolicy)
+        {
+            // Break out if null siPolicy provided or FileRules and Signers are empty
+            if (siPolicy == null || siPolicy.FileRules == null || siPolicy.Signers == null)
+            {
+                return siPolicy;
+            }
+
+            // Reset all counts
+            cDenyRules = 0;
+            cAllowRules = 0;
+            cFileAttribs = 0;
+            cSigners = 0;
+            int _count = 0;
+
+            string oldId;
+
+            // Dictionary containing the mapping between old and new ids
+            Dictionary<string, string> idMapping = new Dictionary<string, string>(); 
+
+
+            // Check all FileRules
+            object[] fileRules = siPolicy.FileRules;
+
+            foreach(var fileRule in fileRules)
+            {
+                // Allow Rules
+                if(fileRule.GetType() == typeof(Allow))
+                {
+                    _count = ((Allow)fileRule).ID.Count(c => c == '_');
+                    if (_count > MAX_N_UNDERSCORES)
+                    {
+                        oldId = ((Allow)fileRule).ID; 
+                        ((Allow)fileRule).ID = FormatID(fileRule);
+
+                        // Handle duplicates
+                        if(idMapping.ContainsKey(oldId))
+                        {
+                            oldId += "_" + cAllowRules++.ToString(); 
+                        }
+
+                        idMapping[oldId] = ((Allow)fileRule).ID; 
+                    }
+                }
+
+                // Deny Rules
+                else if (fileRule.GetType() == typeof(Deny))
+                {
+                    _count = ((Deny)fileRule).ID.Count(c => c == '_');
+                    if (_count > MAX_N_UNDERSCORES)
+                    {
+                        oldId = ((Deny)fileRule).ID;
+                        ((Deny)fileRule).ID = FormatID(fileRule);
+
+                        // Handle duplicates
+                        if (idMapping.ContainsKey(oldId))
+                        {
+                            oldId += "_" + cDenyRules++.ToString();
+                        }
+
+                        idMapping[oldId] = ((Deny)fileRule).ID;
+                    }
+                }
+
+                // File Attribute Rules
+                else if(fileRule.GetType() == typeof(FileAttrib))
+                {
+                    _count = ((FileAttrib)fileRule).ID.Count(c => c == '_');
+                    if (_count > MAX_N_UNDERSCORES)
+                    {
+                        oldId = ((FileAttrib)fileRule).ID;
+                        ((FileAttrib)fileRule).ID = FormatID(fileRule);
+
+                        // Handle duplicates
+                        if (idMapping.ContainsKey(oldId))
+                        {
+                            oldId += "_" + cFileAttribs++.ToString();
+                        }
+                        idMapping[oldId] = ((FileAttrib)fileRule).ID;
+                    }
+                }
+            }
+
+            siPolicy.FileRules = fileRules;
+
+            // Update Signing Scenarios
+            SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios; 
+            foreach (SigningScenario signingScn in tempSigningScenario)
+            {
+                for(int i = 0; i < signingScn.ProductSigners.FileRulesRef.FileRuleRef.Length; i++)
+                {
+                    string id = signingScn.ProductSigners.FileRulesRef.FileRuleRef[i].RuleID; 
+
+                    // Remap IDs in FileRuleRef section
+                    if(idMapping.ContainsKey(id))
+                    {
+                        signingScn.ProductSigners.FileRulesRef.FileRuleRef[i].RuleID = idMapping[id]; 
+                    }
+                }
+            }
+
+            siPolicy.SigningScenarios = tempSigningScenario;
+
+            // Check all FileAttribRef in Signers
+            Signer[] tempSigners = siPolicy.Signers; 
+            foreach(Signer tempSigner in tempSigners)
+            {
+                if (tempSigner.FileAttribRef == null)
+                    continue; 
+
+                foreach(FileAttribRef fileAttribRef in tempSigner.FileAttribRef)
+                {
+                    string id = fileAttribRef.RuleID; 
+
+                    // Remap IDs in FileRuleRef section
+                    if (idMapping.ContainsKey(id))
+                    {
+                        fileAttribRef.RuleID = idMapping[id];
+                    }
+                }
+            }
+
+            siPolicy.Signers = tempSigners;
+
+            return siPolicy; 
+        }
+
+
+        /// <summary>
+        /// Formats the ID to a fixed length of 5 underscores. An int will follow the 5th _
+        /// </summary>
+        /// <param name="fileRule"></param>
+        /// <returns></returns>
+        static string FormatID(object fileRule)
+        {
+            string[] subStrings; 
+            // Allow Rules
+            // ID_ALLOW_CUSTOM_SUBCUSTOM1_SUBCUSTOM2_<>
+            if (fileRule.GetType() == typeof(Allow))
+            {
+                subStrings = ((Allow)fileRule).ID.Split('_');
+                return subStrings[0] + "_" + subStrings[1] + "_" + subStrings[2]
+                        + "_" + subStrings[3] + "_" + cFileAllowRules++.ToString();
+            }
+
+            // Deny Rules
+            else if(fileRule.GetType() == typeof(Deny))
+            {
+                subStrings = ((Deny)fileRule).ID.Split('_');
+                return subStrings[0] + "_" + subStrings[1] + "_" + subStrings[2]
+                        + "_" + subStrings[3] + "_" + cDenyRules++.ToString();
+            }
+
+            // FileAttribute Rules
+            else if (fileRule.GetType() == typeof(FileAttrib))
+            {
+                subStrings = ((FileAttrib)fileRule).ID.Split('_');
+                return subStrings[0] + "_" + subStrings[1] + "_" + subStrings[2]
+                        + "_" + subStrings[3] + "_" + cFileAttribs++.ToString();
+            }
+            
+            // Unknown type
+            else
+            {
+                return String.Empty; 
+            }
+        }
+
 
         // End of SiPolicy Helper methods
 
