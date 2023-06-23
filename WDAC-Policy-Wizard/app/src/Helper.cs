@@ -61,7 +61,7 @@ namespace WDAC_Wizard
         }
 
         // Counts of Deny, Allow, FileAttrib and Signers
-        const string UNDERSCORE_PATTERN = @"_0_0_0_0_0_0";
+        const string UNDERSCORE_PATTERN = @"_0_0_0";
         static int cDenyRules = 0;
         static int cAllowRules = 0;
         static int cFileAttribs = 0;
