@@ -1149,8 +1149,8 @@ namespace WDAC_Wizard
             }
 
             // Lastly, re-format Allow/Deny, FileAttrib and Signer IDs, if applicable
-            siPolicy = Helper.FormatRuleIDs(siPolicy); 
-
+            siPolicy = Helper.FormatFileRuleIDs(siPolicy);
+            siPolicy = Helper.FormatSignerRuleIDs(siPolicy);
 
             try
             {
