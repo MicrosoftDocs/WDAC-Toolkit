@@ -112,7 +112,10 @@ namespace WDAC_Wizard
                 }
 
                 this._Policy.BasePolicyId = Guid.Empty; 
-                TextBoxBasePolicyID_Reformat(); 
+                TextBoxBasePolicyID_Reformat();
+
+                // Log state
+                this._MainWindow.Log.AddInfoMsg("New supplemental policy flow. Clearing Policy ID and electing for base path");
             }
 
             // Hide the validation panel
@@ -523,7 +526,10 @@ namespace WDAC_Wizard
             if(isValidGuid)
             {
                 this._Policy.BasePolicyId = result; 
-                this._MainWindow.ErrorOnPage = false; 
+                this._MainWindow.ErrorOnPage = false;
+
+                // Log state
+                this._MainWindow.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: ", result.ToString()));
             }
             else
             {
@@ -603,6 +609,9 @@ namespace WDAC_Wizard
 
                 // Hide the validation panel
                 basePolicyValidation_Panel.Visible = false;
+
+                // Log state
+                this._MainWindow.Log.AddInfoMsg("New supplemental policy flow. Clearing XML path and electing for base policy ID");
             }
 
             // Clear the example text, if applicable
