@@ -95,6 +95,26 @@ namespace WDAC_Wizard
         /// </summary>
         private void Button_Browse_Click(object sender, EventArgs e)
         {
+            // Verify that a Base Policy ID/GUID is not in progress or finished
+            // and confirm the user would rather continue with adding a path instead
+            if (this._Policy.BasePolicyId != Guid.Empty 
+                || !textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
+            {
+                DialogResult res = MessageBox.Show(
+                    "Adding a Base Policy by path will remove the ID entered.\r\nAre you sure you want to continue?",
+                    "WDAC Wizard",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (res != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                this._Policy.BasePolicyId = Guid.Empty; 
+                TextBoxBasePolicyID_Reformat(); 
+            }
+
             // Hide the validation panel
             basePolicyValidation_Panel.Visible = false;
 
@@ -486,6 +506,137 @@ namespace WDAC_Wizard
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+            }
+        }
+
+        /// <summary>
+        /// Fires when the base policy ID text entered changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxBasePolicyID_TextChanged(object sender, EventArgs e)
+        {
+            // Validate the text entered
+            Guid result; 
+            bool isValidGuid = Guid.TryParse(textBoxBasePolicyID.Text, out result); 
+
+            if(isValidGuid)
+            {
+                this._Policy.BasePolicyId = result; 
+                this._MainWindow.ErrorOnPage = false; 
+            }
+            else
+            {
+                this._MainWindow.ErrorOnPage = true;
+                this._MainWindow.ErrorMsg = Properties.Resources.InvalidBasePolicyId; 
+            }
+        }
+
+        /// <summary>
+        /// Textbox selected. Clears the example text, if applicable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxBasePolicyID_Selected(object sender, MouseEventArgs e)
+        {
+            // Check if we already have a base policy path and confirm the user would rather
+            // continue with adding a GUID instead
+            if(!String.IsNullOrEmpty(this._Policy.BaseToSupplementPath))
+            {
+                DialogResult res = MessageBox.Show(
+                    String.Format("Adding a Base Policy ID will remove the following XML path: {0}. " +
+                    "\r\nAre you sure you want to continue?",this._Policy.BaseToSupplementPath),
+                    "WDAC Wizard", 
+                    MessageBoxButtons.YesNoCancel, 
+                    MessageBoxIcon.Question);
+
+                if(res != DialogResult.Yes)
+                {
+                    return; 
+                }
+
+                // Otherwise, clear the base policy path text and objects
+                this.BaseToSupplementPath = String.Empty;
+                this._Policy.BaseToSupplementPath = String.Empty;
+                textBoxBasePolicyPath.Clear();
+
+                // Hide the validation panel
+                basePolicyValidation_Panel.Visible = false;
+            }
+
+            // Clear the example text, if applicable
+            // Set the text color to black for the user
+            if(textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
+            {
+                textBoxBasePolicyID.Clear();
+                textBoxBasePolicyID.ForeColor = System.Drawing.Color.Black; 
+            }
+        }
+
+        /// <summary>
+        /// Textbox clicked. Clears the example text, if applicable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxBasePolicyID_Selected(object sender, EventArgs e)
+        {
+            // Check if we already have a base policy path and confirm the user would rather
+            // continue with adding a GUID instead
+            if (!String.IsNullOrEmpty(this._Policy.BaseToSupplementPath))
+            {
+                DialogResult res = MessageBox.Show(
+                    String.Format("Adding a Base Policy ID will remove the following XML path: {0}. " +
+                    "\r\nAre you sure you want to continue?", this._Policy.BaseToSupplementPath),
+                    "WDAC Wizard",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (res != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                // Otherwise, clear the base policy path text and objects
+                this.BaseToSupplementPath = String.Empty;
+                this._Policy.BaseToSupplementPath = String.Empty;
+                textBoxBasePolicyPath.Clear();
+
+                // Hide the validation panel
+                basePolicyValidation_Panel.Visible = false;
+            }
+
+            // Clear the example text, if applicable
+            // Set the text color to black for the user
+            if (textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
+            {
+                textBoxBasePolicyID.Clear();
+                textBoxBasePolicyID.ForeColor = System.Drawing.Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// Resets the text to the original eg. {} text and color of the text
+        /// </summary>
+        private void TextBoxBasePolicyID_Reformat()
+        {
+            // Reset the text and font to original
+            textBoxBasePolicyID.Text = Properties.Resources.ExampleBasePolicyId;
+            textBoxBasePolicyID.ForeColor = System.Drawing.SystemColors.WindowFrame; 
+        }
+
+        /// <summary>
+        /// Fires on form leaving event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxBasePolicyID_Leave(object sender, EventArgs e)
+        {
+            // If nothing was input, reformat the text box. 
+            // Otherwise, leave it as is - good Id or in progress
+
+            if(String.IsNullOrEmpty(textBoxBasePolicyID.Text))
+            {
+                TextBoxBasePolicyID_Reformat();
             }
         }
     }

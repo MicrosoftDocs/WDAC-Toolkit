@@ -593,7 +593,16 @@ namespace WDAC_Wizard
             // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
             else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
+                // User only provided a base policy ID to expand
+                if(this._MainWindow.Policy.BasePolicyId != Guid.Empty)
+                {
+                    xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.EmptyWdacXml);
+                }
+                // User provided a path to the base policy
+                else
+                {
+                    xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
+                }
             }
             else
             {

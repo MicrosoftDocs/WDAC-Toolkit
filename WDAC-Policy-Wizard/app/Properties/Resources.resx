@@ -545,4 +545,13 @@ Do you want the Wizard to warn you about these types of path rules in the future
   <data name="InvalidEventRulesCreated" xml:space="preserve">
     <value>At least one rule must be created before building the policy file. </value>
   </data>
+  <data name="EmptyWdacXml" xml:space="preserve">
+    <value>EmptyWDAC.xml</value>
+  </data>
+  <data name="ExampleBasePolicyId" xml:space="preserve">
+    <value>e.g. {fd756ea8-ad7f-4e30-96bd-8778288212f6}</value>
+  </data>
+  <data name="InvalidBasePolicyId" xml:space="preserve">
+    <value>The Base Policy Id entered does not match the format expected. E.g. {fd756ea8-ad7f-4e30-96bd-8778288212f6}</value>
+  </data>
 </root>

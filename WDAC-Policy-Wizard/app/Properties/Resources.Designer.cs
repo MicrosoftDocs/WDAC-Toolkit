@@ -350,6 +350,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EmptyWDAC.xml.
+        /// </summary>
+        internal static string EmptyWdacXml {
+            get {
+                return ResourceManager.GetString("EmptyWdacXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft-Windows-Applocker/MSI and Script.
         /// </summary>
         internal static string EventLogAppLocker {
@@ -382,6 +391,15 @@ namespace WDAC_Wizard.Properties {
         internal static string EVSigners_Info {
             get {
                 return ResourceManager.GetString("EVSigners_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to e.g. {fd756ea8-ad7f-4e30-96bd-8778288212f6}.
+        /// </summary>
+        internal static string ExampleBasePolicyId {
+            get {
+                return ResourceManager.GetString("ExampleBasePolicyId", resourceCulture);
             }
         }
         
@@ -497,6 +515,15 @@ namespace WDAC_Wizard.Properties {
         internal static string InvalidAttributeSelection_Error {
             get {
                 return ResourceManager.GetString("InvalidAttributeSelection_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Base Policy Id entered does not match the format expected. E.g. {fd756ea8-ad7f-4e30-96bd-8778288212f6}.
+        /// </summary>
+        internal static string InvalidBasePolicyId {
+            get {
+                return ResourceManager.GetString("InvalidBasePolicyId", resourceCulture);
             }
         }
         

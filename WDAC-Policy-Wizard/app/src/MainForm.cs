@@ -1095,8 +1095,28 @@ namespace WDAC_Wizard
                 // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
                 else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 {
-                    // Set BasePolicyID to match the Id of the linked base policy
-                    siPolicy.BasePolicyID = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath).BasePolicyID;
+                    // User provided path to base policy XML
+                    if(this.Policy.BasePolicyId == Guid.Empty)
+                    {
+                        // Set BasePolicyID to match the Id of the linked base policy
+                        siPolicy.BasePolicyID = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath).BasePolicyID;
+                    }
+
+                    // User provided the GUID of the base policy only
+                    else
+                    {
+                        string baseId = this.Policy.BasePolicyId.ToString().ToUpper();
+
+                        // Set BasePolicyID to match the Id provided base policy ID
+                        if (baseId.Contains("{"))
+                        {
+                            siPolicy.BasePolicyID = baseId; 
+                        }
+                        else
+                        {
+                            siPolicy.BasePolicyID = "{" + baseId + "}";
+                        }
+                    }
 
                     // Reset the PolicyID guid so it is unique
                     siPolicy.PolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
