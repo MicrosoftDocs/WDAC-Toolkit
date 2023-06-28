@@ -520,10 +520,7 @@ namespace WDAC_Wizard
         private void TextBoxBasePolicyID_TextChanged(object sender, EventArgs e)
         {
             // Validate the text entered
-            Guid result; 
-            bool isValidGuid = Guid.TryParse(textBoxBasePolicyID.Text, out result); 
-
-            if(isValidGuid)
+            if(Guid.TryParse(textBoxBasePolicyID.Text, out Guid result))
             {
                 this._Policy.BasePolicyId = result; 
                 this._MainWindow.ErrorOnPage = false;
@@ -535,47 +532,6 @@ namespace WDAC_Wizard
             {
                 this._MainWindow.ErrorOnPage = true;
                 this._MainWindow.ErrorMsg = Properties.Resources.InvalidBasePolicyId; 
-            }
-        }
-
-        /// <summary>
-        /// Textbox selected. Clears the example text, if applicable
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxBasePolicyID_Selected(object sender, MouseEventArgs e)
-        {
-            // Check if we already have a base policy path and confirm the user would rather
-            // continue with adding a GUID instead
-            if(!String.IsNullOrEmpty(this._Policy.BaseToSupplementPath))
-            {
-                DialogResult res = MessageBox.Show(
-                    String.Format("Adding a Base Policy ID will remove the following XML path: {0}. " +
-                    "\r\nAre you sure you want to continue?",this._Policy.BaseToSupplementPath),
-                    "WDAC Wizard", 
-                    MessageBoxButtons.YesNoCancel, 
-                    MessageBoxIcon.Question);
-
-                if(res != DialogResult.Yes)
-                {
-                    return; 
-                }
-
-                // Otherwise, clear the base policy path text and objects
-                this.BaseToSupplementPath = String.Empty;
-                this._Policy.BaseToSupplementPath = String.Empty;
-                textBoxBasePolicyPath.Clear();
-
-                // Hide the validation panel
-                basePolicyValidation_Panel.Visible = false;
-            }
-
-            // Clear the example text, if applicable
-            // Set the text color to black for the user
-            if(textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
-            {
-                textBoxBasePolicyID.Clear();
-                textBoxBasePolicyID.ForeColor = System.Drawing.Color.Black; 
             }
         }
 
