@@ -953,13 +953,14 @@ namespace WDAC_Wizard
             List<RuleType> ruleOptionsList = this.Policy.PolicyRuleOptions;
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
-            if (this.Policy._Format == WDAC_Policy.Format.Legacy 
-                && Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies))
+            if (Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies)
+                && (this.Policy._Format == WDAC_Policy.Format.Legacy || this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy))
             {
                 for(int i=0; i < ruleOptionsList.Count; i++)
                 {
                     if(ruleOptionsList[i].Item == OptionType.EnabledAllowSupplementalPolicies)
                     {
+                        this.Log.AddInfoMsg("Removing EnabledAllowSupplementalPolicies (rule-option 17)"); 
                         ruleOptionsList.RemoveAt(i);
                         break;
                     }
@@ -974,6 +975,8 @@ namespace WDAC_Wizard
                 RuleType unsignedPolicyRule = new RuleType();
                 unsignedPolicyRule.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
                 ruleOptionsList.Add(unsignedPolicyRule);
+
+                this.Log.AddInfoMsg("Asserting EnabledUnsignedSystemIntegrityPolicy (rule-option 6)");
             }
 
             // Convert from List<RuleType> to RuleType[]
@@ -981,6 +984,7 @@ namespace WDAC_Wizard
             for(int i = 0; i< ruleOptions.Length; i++)
             {
                 ruleOptions[i] = ruleOptionsList[i];
+                this.Log.AddInfoMsg("Adding " + ruleOptionsList[i].Item); 
             }
 
             try
