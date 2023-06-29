@@ -113,7 +113,6 @@ namespace WDAC_Wizard
                 this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(xmlPath); 
                 this._MainWindow.ErrorOnPage = false;
 
-                // Set the policy type (base, supplemental) to know which policy rule-options to set on ConfigTemplate_Control
                 // Set the policy format type for the policy creation step in MainForm.cs
                 if(this.Policy.siPolicy.PolicyTypeID == Properties.Resources.LegacyPolicyID_GUID)
                 {
@@ -122,6 +121,16 @@ namespace WDAC_Wizard
                 else
                 {
                     this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+                    
+                    // Set the policy type (base, supplemental) to know which policy rule-options to set on ConfigTemplate_Control
+                    if (this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                    {
+                        this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy; 
+                    }
+                    else
+                    {
+                        this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
+                    }
                 }
             }
 
