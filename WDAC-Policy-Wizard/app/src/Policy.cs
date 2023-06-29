@@ -76,12 +76,14 @@ namespace WDAC_Wizard
         // Paths:
         public string SchemaPath { get; set; }          // Path to final xml file on disk
         public string TemplatePath { get; set; }        // ReadOnly Path to template policy - TODO: make const
-        public string BaseToSupplementPath { get; set; } // Path to base policy to supplement, if applicable
         public string EditPolicyPath { get; set; }      // Path to the policy we are editing. Used for parsing.
         public string BinPath { get; set;  }
 
         public List<string> PoliciesToMerge { get; set; }
 
+        // Supplemental policy objs:
+        public string BaseToSupplementPath { get; set; } // Path to base policy to supplement, if applicable
+        public Guid BasePolicyId { get; set; }           // Id of the base policy the supplemental policy will expand
 
         // Datastructs for signing rules (and exceptions)
         public List<PolicyEKUs> EKUs { get; set; }
