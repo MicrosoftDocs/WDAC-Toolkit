@@ -979,12 +979,15 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg("Asserting EnabledUnsignedSystemIntegrityPolicy (rule-option 6)");
             }
 
+            // De-duplicate the Rule Options list
+            List<RuleType> dedupedRuleOptions = Helper.DeDuplicateRuleOptions(ruleOptionsList);
+
             // Convert from List<RuleType> to RuleType[]
-            RuleType[] ruleOptions = new RuleType[ruleOptionsList.Count];
+            RuleType[] ruleOptions = new RuleType[dedupedRuleOptions.Count];
             for(int i = 0; i< ruleOptions.Length; i++)
             {
-                ruleOptions[i] = ruleOptionsList[i];
-                this.Log.AddInfoMsg("Adding " + ruleOptionsList[i].Item); 
+                ruleOptions[i] = dedupedRuleOptions[i];
+                this.Log.AddInfoMsg("Adding " + dedupedRuleOptions[i].Item); 
             }
 
             try
