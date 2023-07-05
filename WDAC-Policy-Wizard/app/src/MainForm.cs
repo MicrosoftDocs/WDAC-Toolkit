@@ -215,7 +215,15 @@ namespace WDAC_Wizard
                     // Close the CustomRuleConditionsPanel
                     this._SigningRulesControl.CloseCustomRulesPanel(); 
                 }
+                else
+                {
+                    // Do not return home
+                    return; 
+                }
             }
+
+            // Re-initialize SiPolicy object
+            this.Policy = new WDAC_Policy();
 
             // Reset flags
             this.ConfigInProcess = false;
@@ -226,7 +234,6 @@ namespace WDAC_Wizard
 
             RemoveControls(); 
             ShowControlPanel(sender, e);
-            
         }
         /// <summary>
         /// Settings button on the left hand navigation panel. Loads the Settings UserControl. 
@@ -949,7 +956,7 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("Create Policy Rule Options -- parsing OutputSchema.xml encountered the following error ", e); 
             }
 
-            // Iterate through all the ruleoptions to remove each one
+            // Policy Rule Options derived from the final state of the rules page
             List<RuleType> ruleOptionsList = this.Policy.PolicyRuleOptions;
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
