@@ -348,6 +348,15 @@ namespace WDAC_Wizard
                     {
                         level = "FilePath";
                         fileAttrList = "Filepath: " + filePath;
+
+                        // Fix issue where file path not in friendly name introduced in version 2.2 of the Wizard by appending filepath
+                        // FriendlyName="Allow by path: "
+                        // FriendlyName = "Deny by path: "
+                        if(friendlyName == Properties.Resources.TruncatedPathAllowFriendlyName
+                            || friendlyName == Properties.Resources.TruncatedPathDenyFriendlyName)
+                        {
+                            friendlyName += filePath; 
+                        }
                     }
 
                     // Packaged App Rule
