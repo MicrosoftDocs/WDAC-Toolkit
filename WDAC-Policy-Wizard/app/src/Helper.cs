@@ -2487,6 +2487,45 @@ namespace WDAC_Wizard
             return false;
         }
 
+        /// <summary>
+        /// Removes duplicate Rule-Option values and returns only unique Rule-Option instances
+        /// </summary>
+        /// <param name="duplicateRuleTypes"></param>
+        /// <returns></returns>
+        public static List<RuleType> DeDuplicateRuleOptions(List<RuleType> duplicateRuleTypes)
+        {
+            // Trivial case where null or only 1 rule-option
+            if(duplicateRuleTypes == null || duplicateRuleTypes.Count < 2)
+            {
+                return duplicateRuleTypes; 
+            }
+
+            List<RuleType> deduplicatedRuleOptions = new List<RuleType>();
+            Dictionary<OptionType, int> keyValuePairs = new Dictionary<OptionType, int>(); 
+
+            // Dedupe using Dictionary keys
+            foreach(var ruleOption in duplicateRuleTypes)
+            {
+                if (keyValuePairs.ContainsKey(ruleOption.Item))
+                {
+                    continue; 
+                }
+                keyValuePairs[ruleOption.Item] = 1; 
+            }
+
+            // Set deduplicated rule-options to the dictionary keys to guarantee unique entries
+            foreach(OptionType item in keyValuePairs.Keys)
+            {
+                RuleType ruleOption = new RuleType();
+                ruleOption.Item = item;
+
+                deduplicatedRuleOptions.Add(ruleOption);
+            }
+
+            return deduplicatedRuleOptions; 
+
+        }
+
 
         /// <summary>
         /// Formats the Rule IDs in cases of long runs of "_0"s

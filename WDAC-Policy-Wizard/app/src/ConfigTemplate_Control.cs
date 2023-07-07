@@ -128,6 +128,7 @@ namespace WDAC_Wizard
             Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
+                // Found button name and rule-option mapping
                 if (this.Policy.ConfigRules[key]["ButtonMapping"] == buttonName) // button name match
                 {
                     if (this.Controls.Find(buttonName, true).FirstOrDefault().Tag.ToString() == "untoggle")
@@ -357,10 +358,11 @@ namespace WDAC_Wizard
         /// </summary>
         private void Toggle_Button_Click(object sender, EventArgs e)
         {
+            // Get button name from sender and set UI state
             string buttonName = ((Button)sender).Name;
             SetButtonVal(buttonName);
 
-
+            // Update the policy Rule-Options object
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
             this.Policy.EnableHVCI = this.Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
             this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
