@@ -1166,6 +1166,24 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow by path: .
+        /// </summary>
+        internal static string TruncatedPathAllowFriendlyName {
+            get {
+                return ResourceManager.GetString("TruncatedPathAllowFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deny by path: .
+        /// </summary>
+        internal static string TruncatedPathDenyFriendlyName {
+            get {
+                return ResourceManager.GetString("TruncatedPathDenyFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, user-mode executables and scripts are validated, in addition to kernel-mode binaries..
         /// </summary>
         internal static string UMCI_Info {
