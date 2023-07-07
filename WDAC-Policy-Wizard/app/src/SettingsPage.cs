@@ -44,7 +44,7 @@ namespace WDAC_Wizard
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-            this.appVersion_Label.Text = String.Format("App Version {0}.22", versionInfo.FileVersion);
+            this.appVersion_Label.Text = "App Version: " + versionInfo.FileVersion;
         }
 
         //

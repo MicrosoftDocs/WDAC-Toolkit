@@ -283,16 +283,16 @@ namespace WDAC_Wizard
             this.label_Progress.AutoSize = true;
             this.label_Progress.Location = new System.Drawing.Point(15, 18);
             this.label_Progress.Name = "label_Progress";
-            this.label_Progress.Size = new System.Drawing.Size(254, 17);
+            this.label_Progress.Size = new System.Drawing.Size(250, 17);
             this.label_Progress.TabIndex = 1;
-            this.label_Progress.Text = "23 / 137 Rules from Event Log Created";
+            this.label_Progress.Text = "Parsing Rules from Event Log Created";
             this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pictureBox_Progress
             // 
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
-            this.pictureBox_Progress.Location = new System.Drawing.Point(78, 48);
+            this.pictureBox_Progress.Location = new System.Drawing.Point(76, 48);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
             this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;

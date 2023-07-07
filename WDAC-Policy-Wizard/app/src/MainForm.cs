@@ -1875,7 +1875,7 @@ namespace WDAC_Wizard
                     this.page1_Button.Text = "Policy Type";
                     this.page2_Button.Text = "Policy Template";
                     this.page3_Button.Text = "Policy Rules";
-                    this.page4_Button.Text = "Signing Rules";
+                    this.page4_Button.Text = "File Rules";
                     this.page5_Button.Text = "Creating Policy";
                 }
 
@@ -1891,25 +1891,45 @@ namespace WDAC_Wizard
                     this.workflow_Label.Text = "Policy Creator";
                     this.page1_Button.Text = "Policy Type";
                     this.page2_Button.Text = "Policy Rules";
-                    this.page3_Button.Text = "Signing Rules";
+                    this.page3_Button.Text = "File Rules";
                     this.page4_Button.Text = "Creating Policy";
                 }
             }
             // Policy Editor
             else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                this.workflow_Label.Visible = true;
-                this.page1_Button.Visible = true;
-                this.page2_Button.Visible = true;
-                this.page3_Button.Visible = true;
-                this.page4_Button.Visible = true;
-                this.page5_Button.Visible = false;
+                // Editing a policy but not creating one from event logs
+                if(this.EditWorkflow == EditWorkflowType.Edit)
+                {
+                    this.workflow_Label.Visible = true;
+                    this.page1_Button.Visible = true;
+                    this.page2_Button.Visible = true;
+                    this.page3_Button.Visible = true;
+                    this.page4_Button.Visible = true;
+                    this.page5_Button.Visible = false;
 
-                this.workflow_Label.Text = "Policy Editor";
-                this.page1_Button.Text = "Select Policy";
-                this.page2_Button.Text = "Policy Rules";
-                this.page3_Button.Text = "Signing Rules";
-                this.page4_Button.Text = "Creating Policy";
+                    this.workflow_Label.Text = "Policy Editor";
+                    this.page1_Button.Text = "Select Policy";
+                    this.page2_Button.Text = "Policy Rules";
+                    this.page3_Button.Text = "File Rules";
+
+                    this.page4_Button.Text = "Creating Policy";
+                }
+                // Creating a policy from event log or advanced hunting
+                else if(this.EditWorkflow == EditWorkflowType.EventLog)
+                {
+                    this.workflow_Label.Visible = true;
+                    this.page1_Button.Visible = true;
+                    this.page2_Button.Visible = true;
+                    this.page3_Button.Visible = true;
+                    this.page4_Button.Visible = false;
+                    this.page5_Button.Visible = false;
+
+                    this.workflow_Label.Text = "Policy Editor";
+                    this.page1_Button.Text = "Select Policy";
+                    this.page2_Button.Text = "File Rules";
+                    this.page3_Button.Text = "Creating Policy";
+                }
             }
             
             // Policy Merger
@@ -1948,7 +1968,7 @@ namespace WDAC_Wizard
                 break;
 
             case 2:
-                if(this.view == 3)
+                if(this.view == 3) // Merge
                 {
                     // Building page
                     this.page1_Button.Enabled = false;
@@ -1957,8 +1977,8 @@ namespace WDAC_Wizard
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
 
-                    this.settings_Button.Enabled = false; 
-                }
+                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                    }
                 else
                 {
                     this.page1_Button.Enabled = true;
@@ -1971,32 +1991,61 @@ namespace WDAC_Wizard
                 break;
 
             case 3:
-                this.page1_Button.Enabled = true;
-                this.page2_Button.Enabled = true;
-                this.page3_Button.Enabled = true;
-                this.page4_Button.Enabled = false;
-                this.page5_Button.Enabled = false;
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
-                break;
 
-            case 4:
-                if(this.view == 2)
+                if(this.view ==2 && this.EditWorkflow == EditWorkflowType.EventLog) // event log or AH building page
                 {
-                    // Building page
                     this.page1_Button.Enabled = false;
                     this.page2_Button.Enabled = false;
                     this.page3_Button.Enabled = false;
                     this.page4_Button.Enabled = false;
+                    this.page5_Button.Enabled = false;
 
-                    this.settings_Button.Enabled = false;
+                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
                 }
                 else
                 {
                     this.page1_Button.Enabled = true;
                     this.page2_Button.Enabled = true;
                     this.page3_Button.Enabled = true;
-                    this.page4_Button.Enabled = true;
+                    this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
+                }
+                controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
+                break;
+
+            case 4:
+                if(this.view == 2) // Edit
+                {
+                    // Building page
+                    this.page1_Button.Enabled = false;
+                    this.page2_Button.Enabled = false;
+                    this.page3_Button.Enabled = false;
+                    this.page4_Button.Enabled = false;
+                    this.page5_Button.Enabled = false;
+
+                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                }
+                else
+                {
+                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy) // build page for supplemental policies
+                    {
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+
+                        this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                    }
+
+                    else
+                    {
+                        this.page1_Button.Enabled = true;
+                        this.page2_Button.Enabled = true;
+                        this.page3_Button.Enabled = true;
+                        this.page4_Button.Enabled = true;
+                        this.page5_Button.Enabled = false;
+                    }
                 }
                     
                 controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
