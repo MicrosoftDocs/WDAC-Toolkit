@@ -1061,8 +1061,6 @@ namespace WDAC_Wizard
             // 5. Format IDs in the case of Issue #247
 
             this.Log.AddInfoMsg("-- Set Additional Parameters --");
-
-            
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
 
             if(siPolicy == null)

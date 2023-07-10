@@ -436,14 +436,15 @@ namespace WDAC_Wizard
         /// </summary>
         private bool ReadSetRules(object sender, EventArgs e)
         {
-            // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy) or template policy (new base)
-            if (this._MainWindow.Policy.TemplatePath != null)
+            // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy)
+            // or template policy (new base)
+            if (this._MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                this.XmlPath = this._MainWindow.Policy.TemplatePath;
+                this.XmlPath = this._MainWindow.Policy.EditPolicyPath; // existing policy - read from policy under edit path
             }
             else
             {
-                this.XmlPath = this._MainWindow.Policy.EditPolicyPath;
+                this.XmlPath = this._MainWindow.Policy.TemplatePath; // New policy - read from template
             }
                 
             this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
