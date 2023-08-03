@@ -18,6 +18,9 @@ namespace WDAC_Wizard
         const int BLOCK_EVENT_ID = 3077;
         const int SIGNING_EVENT_ID = 3089; 
 
+        // Delimitted value set in KQL Query -- ',' will be replaced with #C#
+        const string DEL_VALUE = "#C#";
+
         // Errors
         const string NORECORDS_EXC = "No Advanced Hunting Records parsed";
         const string HEADERRECORDS_EXC = @"Advanced Hunting Records are not properly formatted. 
@@ -208,7 +211,19 @@ namespace WDAC_Wizard
             signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash);
             signerEvent.PublisherName = record.PublisherName;
             signerEvent.DeviceId = record.DeviceId;
-            signerEvent.Timestamp = record.Timestamp; 
+            signerEvent.Timestamp = record.Timestamp;
+
+            // Replace Delimitted values, if applicable
+            // E.g. Zoom Communications#C# Inc --> Zoom Communications, Inc 
+            if(signerEvent.IssuerName.Contains(DEL_VALUE))
+            {
+                signerEvent.IssuerName = signerEvent.IssuerName.Replace(DEL_VALUE, ",");
+            }
+
+            if (signerEvent.PublisherName.Contains(DEL_VALUE))
+            {
+                signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
+            }
 
             return signerEvent;
         }
