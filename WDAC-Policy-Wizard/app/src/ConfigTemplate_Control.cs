@@ -560,13 +560,21 @@ namespace WDAC_Wizard
             // Copy template to temp folder for reading and writing unless template already in temp folder (event log conversion)
             if(!xmlPathToRead.Contains(this._MainWindow.TempFolderPath))
             {
-                string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
-                File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
-                this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
+                // Set template path to the xmlPathToRead except for the suppplemental policy case
+                if (this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
+                {
+                    string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
+                    File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
+                    this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
+                }
             }
             else
             {
-                this._MainWindow.Policy.TemplatePath = xmlPathToRead; 
+                // Set template path to the xmlPathToRead except for the suppplemental policy case
+                if(this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
+                {
+                    this._MainWindow.Policy.TemplatePath = xmlPathToRead;
+                }
             }
             
             return true; 

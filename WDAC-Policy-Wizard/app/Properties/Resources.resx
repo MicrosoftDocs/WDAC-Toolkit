@@ -560,4 +560,7 @@ Do you want the Wizard to warn you about these types of path rules in the future
   <data name="TruncatedPathDenyFriendlyName" xml:space="preserve">
     <value>Deny by path: </value>
   </data>
+  <data name="EmptyWdacSupplementalXml" xml:space="preserve">
+    <value>Empty_Supplemental.xml</value>
+  </data>
 </root>
