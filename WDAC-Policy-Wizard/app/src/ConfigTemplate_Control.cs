@@ -560,23 +560,22 @@ namespace WDAC_Wizard
             // Copy template to temp folder for reading and writing unless template already in temp folder (event log conversion)
             if(!xmlPathToRead.Contains(this._MainWindow.TempFolderPath))
             {
-                // Set template path to the xmlPathToRead except for the suppplemental policy case
-                if (this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
-                {
-                    string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
-                    File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
-                    this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
-                }
+                string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
+                File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
+                this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
             }
             else
             {
-                // Set template path to the xmlPathToRead except for the suppplemental policy case
-                if(this.Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
-                {
-                    this._MainWindow.Policy.TemplatePath = xmlPathToRead;
-                }
+                this._MainWindow.Policy.TemplatePath = xmlPathToRead;
             }
-            
+
+            // Set TemplatePath to none for NEW Supplemental policy flow
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
+                && this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                this._MainWindow.Policy.TemplatePath = null; 
+            }
+
             return true; 
         }
 
