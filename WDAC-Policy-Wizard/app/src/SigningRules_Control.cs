@@ -436,18 +436,32 @@ namespace WDAC_Wizard
         /// </summary>
         private bool ReadSetRules(object sender, EventArgs e)
         {
-            // Always going to have to parse an XML file - either going to be pre-exisiting policy (edit mode, supplmental policy)
-            // or template policy (new base)
+            // Always going to have to parse an XML file 
+            // Edit Policies - Read from the EditPolicy Path
+            // New Policies
+            //     - Read from Template path if Base Policy
+            //     - Read from Empty Supplemental if Supplemental Policy i.e. no rules to show
             if (this._MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 this.XmlPath = this._MainWindow.Policy.EditPolicyPath; // existing policy - read from policy under edit path
             }
-            else
+            else // New Policy
             {
-                this.XmlPath = this._MainWindow.Policy.TemplatePath; // New policy - read from template
+                // Base Policy - Read from Template Path
+                if(this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                {
+                    this.XmlPath = this._MainWindow.Policy.TemplatePath; 
+                }
+                
+                // Supplemental Policy - Read from Empty_Supplemental.xml
+                else
+                {
+                    this.XmlPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.EmptyWdacSupplementalXml);
+                }
             }
                 
             this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
+            this.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath); 
 
             try
             {
@@ -464,7 +478,9 @@ namespace WDAC_Wizard
                                                     MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
+                {
                     this._MainWindow.ResetWorkflow(sender, e);
+                }
                 return false; 
             }
             

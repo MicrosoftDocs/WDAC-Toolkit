@@ -350,6 +350,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty_Supplemental.xml.
+        /// </summary>
+        internal static string EmptyWdacSupplementalXml {
+            get {
+                return ResourceManager.GetString("EmptyWdacSupplementalXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EmptyWDAC.xml.
         /// </summary>
         internal static string EmptyWdacXml {

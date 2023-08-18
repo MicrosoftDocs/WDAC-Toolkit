@@ -566,9 +566,16 @@ namespace WDAC_Wizard
             }
             else
             {
-                this._MainWindow.Policy.TemplatePath = xmlPathToRead; 
+                this._MainWindow.Policy.TemplatePath = xmlPathToRead;
             }
-            
+
+            // Set TemplatePath to none for NEW Supplemental policy flow
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
+                && this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            {
+                this._MainWindow.Policy.TemplatePath = null; 
+            }
+
             return true; 
         }
 
