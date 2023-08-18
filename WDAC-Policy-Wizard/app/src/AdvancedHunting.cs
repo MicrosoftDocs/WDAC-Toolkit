@@ -16,7 +16,10 @@ namespace WDAC_Wizard
         const int DRIVER_REV_EVENT_ID = 3023;
         const int AUDIT_EVENT_ID = 3076;
         const int BLOCK_EVENT_ID = 3077;
-        const int SIGNING_EVENT_ID = 3089; 
+        const int SIGNING_EVENT_ID = 3089;
+
+        // Delimitted value ',' will be replaced with #C#
+        const string DEL_VALUE = "#C#";
 
         // Errors
         const string NORECORDS_EXC = "No Advanced Hunting Records parsed";
@@ -38,6 +41,9 @@ namespace WDAC_Wizard
 
             var fileHelperEngine = new FileHelperEngine<AdvancedHunting.Record>();
             fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
+
+            // Replace any commas like in Zoom Communications, Inc per bug #273
+            fileHelperEngine.BeforeReadRecord += FileHelperEngine_BeforeReadRecord;
 
             // Parse each CSV File provided by the user
             foreach (var filepath in filepaths)
@@ -73,6 +79,50 @@ namespace WDAC_Wizard
             }
 
             return ciEvents;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="engine"></param>
+        /// <param name="e"></param>
+        private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
+        {
+            // Replace the line with the fixed version
+            e.RecordLine = ReplaceCommasInRecord(e.RecordLine); 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bad"></param>
+        /// <returns></returns>
+        private static string ReplaceCommasInRecord(string record)
+        {
+            var fields = record.Split('"');
+            if (fields.Length > 1)
+            {
+                // String replace on the substrings with quotes; skip first and last
+                for(int i = 1; i < fields.Length-1; i++)
+                {
+                    string sString = fields[i];
+
+                    // Filter out this case - ["DigiCert Trusted G4 Code Signing RSA4096 SHA256, 2021 CA1"
+                    // | ",1bd538b5ca353f4949201b01e8d3d34794020a6f3a79628c2cb36e0656dc5aaf," "Zoom Video Communications, Inc."]
+                    if (sString.Split(',').Length > 2)
+                        continue; 
+
+                    sString = sString.Replace(",", DEL_VALUE);
+                    sString = sString.Replace("\"", "");
+                    fields[i] = sString; 
+                }
+
+                return string.Join("", fields); 
+            }
+            else
+            {
+                return record;
+            }
         }
 
         /// <summary>
@@ -208,7 +258,19 @@ namespace WDAC_Wizard
             signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash);
             signerEvent.PublisherName = record.PublisherName;
             signerEvent.DeviceId = record.DeviceId;
-            signerEvent.Timestamp = record.Timestamp; 
+            signerEvent.Timestamp = record.Timestamp;
+
+            // Replace Delimitted values, if applicable
+            // E.g. Zoom Communications#C# Inc --> Zoom Communications, Inc 
+            if (signerEvent.IssuerName.Contains(DEL_VALUE))
+            {
+                signerEvent.IssuerName = signerEvent.IssuerName.Replace(DEL_VALUE, ",");
+            }
+
+            if (signerEvent.PublisherName.Contains(DEL_VALUE))
+            {
+                signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
+            }
 
             return signerEvent;
         }
