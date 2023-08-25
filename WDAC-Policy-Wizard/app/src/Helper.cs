@@ -10,6 +10,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using System.Security.Cryptography; 
 using System.Security.Cryptography.X509Certificates;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
@@ -714,57 +715,18 @@ namespace WDAC_Wizard
         /// <returns>Encoded TLV string containing the EKU</returns>
         public static string EKUValueToTLVEncoding(string stringEku)
         {
-            List<string> encodedEku = new List<string>();
-
-            // CONST
-            const string N_EKU = "01"; // Only support 1 EKU at a time
-
             if (String.IsNullOrEmpty(stringEku))
             {
                 return null;
             }
 
-            var ekuParts = stringEku.Split('.');
+            var ekuOid = CryptoConfig.EncodeOID(stringEku);
+            var ekuBit = BitConverter.ToString(ekuOid).Replace("-", "");
 
-            if (ekuParts == null || ekuParts.Length < 2)
-            {
-                return null;
-            }
+            var ekuArray = ekuBit.ToCharArray();
+            ekuArray[1] = '1';
 
-            // Ensure properly formatted oids provided
-            foreach (var ekuPart in ekuParts)
-            {
-                try
-                {
-                    int.Parse(ekuPart);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Bad oid format. NAN values provided.");
-                    return null;
-                }
-            }
-
-            encodedEku.Add(FormatHexString(N_EKU));
-            encodedEku.Add(FormatHexString(ekuParts.Length.ToString("X")));
-
-            // The first two nodes of the OID are encoded onto a single byte. The first node is multiplied by the decimal 40 and the result is added to the value of the second node.
-            int firstByteD = 40 * int.Parse(ekuParts[0]) + int.Parse(ekuParts[1]);
-            string firstByteHex = FormatHexString(firstByteD.ToString("X"));
-
-            encodedEku.Add(firstByteHex);
-
-            // Convert the rest of the EKU/OID from pos 2 to end
-            foreach (var ekuPart in ekuParts.Skip(2))
-            {
-                List<string> ekuOctet = GetEKUOctet(int.Parse(ekuPart));
-                foreach (var octet in ekuOctet)
-                {
-                    encodedEku.Add(octet);
-                }
-            }
-
-            return string.Join("", encodedEku);
+            return new string(ekuArray);
         }
 
         public static List<string> GetEKUOctet(int node)
@@ -2256,6 +2218,18 @@ namespace WDAC_Wizard
             // Serialize a new policy so signing scenarios are not pre-filled resulting in duplicate signer references
             SiPolicy siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.EmptyWDAC);
 
+            // Handle the Custom EKU fields on the signer  
+            if (!String.IsNullOrEmpty(customRule.EKUEncoded))
+            {
+                EKU eku = new EKU();
+                eku.ID = "ID_EKU_A_" + cEKURules++;
+                eku.FriendlyName = customRule.EKUFriendly;
+                eku.Value = Helper.ConvertHashStringToByte(customRule.EKUEncoded);
+
+                signers = SetSignersEKUs(signers, eku);
+                siPolicy = AddSiPolicyEKUs(eku, signerSiPolicy);
+            }
+
             // If none of the extra attributes are to be added and null exceptions, skip creating a FileAttrib rule
             if (customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4)
             {
@@ -2282,19 +2256,6 @@ namespace WDAC_Wizard
             {
                 // Add signer references
                 siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
-            }
-
-            // Handle the Custom EKU fields on the signer  
-            // TODO: test EKU creation flow
-            if (!String.IsNullOrEmpty(customRule.EKUEncoded))
-            {
-                EKU eku = new EKU();
-                eku.ID = "ID_EKU_A_" + cEKURules++;
-                eku.FriendlyName = customRule.EKUFriendly;
-                eku.Value = Helper.ConvertHashStringToByte(customRule.EKUEncoded);
-
-                signers = SetSignersEKUs(signers, eku);
-                signerSiPolicy = AddSiPolicyEKUs(eku, signerSiPolicy);
             }
 
             // Process exceptions
