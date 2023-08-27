@@ -106,5 +106,17 @@ namespace WDAC_Wizard.Properties {
                 this["warnWildcardPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useDarkMode {
+            get {
+                return ((bool)(this["useDarkMode"]));
+            }
+            set {
+                this["useDarkMode"] = value;
+            }
+        }
     }
 }

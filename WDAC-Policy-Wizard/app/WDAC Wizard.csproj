@@ -329,6 +329,7 @@
     <Content Include="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit.xml" />
+    <None Include="Resources\policyTemplates\EmptyWDAC.xml" />
     <Content Include="Resources\policyTemplates\Recommended_Driver_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\SignedReputable - SingleFormat.xml" />

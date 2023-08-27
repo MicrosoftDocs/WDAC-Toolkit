@@ -181,6 +181,34 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the state for the Dark Mode Interface Setting. If disabled, light mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DarkMode_CheckBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useDarkMode = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useDarkMode = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+        }
+
+        /// <summary>
         /// Saves the Wizard Setting and displays the update label
         /// </summary>
         private void SaveSetting()
