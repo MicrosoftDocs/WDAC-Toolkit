@@ -206,6 +206,9 @@ namespace WDAC_Wizard
 
             // Save setting and show update message to user
             SaveSetting();
+
+            // Set the Light or Dark Mode UI Elements
+            SetPageUI();
         }
 
         /// <summary>
@@ -292,8 +295,12 @@ namespace WDAC_Wizard
                     this.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
                 }
 
+                // Set the UI state for all the checkboxes
                 SetSettingsValues(this.SettingsDict);
                 Properties.Settings.Default.Reset();
+
+                // Re-load page to set Light Mode UI Elements
+                SetPageUI(); 
             }
         }
 
@@ -319,7 +326,11 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
             }
 
-            SetSettingsValues(this.SettingsDict); 
+            // Set the UI state for all the checkboxes
+            SetSettingsValues(this.SettingsDict);
+
+            // Set the Light or Dark Mode UI Elements
+            SetPageUI();
         }
 
         /// <summary>
@@ -421,6 +432,92 @@ namespace WDAC_Wizard
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
+            }
+        }
+
+        /// <summary>
+        /// Sets all of the Light and Dark Mode UI Elements
+        /// </summary>
+        private void SetPageUI()
+        {
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set Form Back Color
+            SetFormBackColor(); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                foreach(Label label in labels)
+                {
+                    if(label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black; 
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White; 
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the form to white or black depending on the 
+        /// state of the Dark Mode setting
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.Black;
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
             }
         }
     }

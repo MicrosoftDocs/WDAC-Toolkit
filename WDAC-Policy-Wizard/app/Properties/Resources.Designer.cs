@@ -510,6 +510,15 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IgnoreDarkMode.
+        /// </summary>
+        internal static string IgnoreDarkModeTag {
+            get {
+                return ResourceManager.GetString("IgnoreDarkModeTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation..
         /// </summary>
         internal static string InvalidateEAs_Info {

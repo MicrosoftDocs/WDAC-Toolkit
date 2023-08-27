@@ -42,6 +42,9 @@ namespace WDAC_Wizard
             this.useDefaultStrings_CheckBox = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.useDarkMode_Checkbox = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.label_DriverBlock = new System.Windows.Forms.Label();
             this.label_UsermodeBlock = new System.Windows.Forms.Label();
             this.useUsermodeBlockRules_CheckBox = new System.Windows.Forms.PictureBox();
@@ -54,16 +57,13 @@ namespace WDAC_Wizard
             this.label1 = new System.Windows.Forms.Label();
             this.resetButton = new System.Windows.Forms.Button();
             this.Update_Label = new System.Windows.Forms.Label();
-            this.useDarkMode_Checkbox = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.useDarkMode_Checkbox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useUsermodeBlockRules_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useDriverBlockRules_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.useDarkMode_Checkbox)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -82,7 +82,7 @@ namespace WDAC_Wizard
             this.appVersion_Label.AutoSize = true;
             this.appVersion_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.appVersion_Label.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.appVersion_Label.Location = new System.Drawing.Point(27, 396);
+            this.appVersion_Label.Location = new System.Drawing.Point(41, 407);
             this.appVersion_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.appVersion_Label.Name = "appVersion_Label";
             this.appVersion_Label.Size = new System.Drawing.Size(168, 21);
@@ -94,7 +94,7 @@ namespace WDAC_Wizard
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label3.Location = new System.Drawing.Point(27, 424);
+            this.label3.Location = new System.Drawing.Point(41, 435);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(243, 42);
@@ -104,32 +104,34 @@ namespace WDAC_Wizard
             // terms_Label
             // 
             this.terms_Label.AutoSize = true;
-            this.terms_Label.BackColor = System.Drawing.Color.White;
+            this.terms_Label.BackColor = System.Drawing.Color.Transparent;
             this.terms_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.terms_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.terms_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.terms_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.terms_Label.Location = new System.Drawing.Point(25, 472);
+            this.terms_Label.Location = new System.Drawing.Point(39, 483);
             this.terms_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.terms_Label.Name = "terms_Label";
             this.terms_Label.Size = new System.Drawing.Size(129, 21);
             this.terms_Label.TabIndex = 4;
+            this.terms_Label.Tag = "IgnoreDarkMode";
             this.terms_Label.Text = "Terms of Use    ";
             this.terms_Label.Click += new System.EventHandler(this.Terms_Label_Click);
             // 
             // privacy_Label
             // 
             this.privacy_Label.AutoSize = true;
-            this.privacy_Label.BackColor = System.Drawing.Color.White;
+            this.privacy_Label.BackColor = System.Drawing.Color.Transparent;
             this.privacy_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.privacy_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.privacy_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
             this.privacy_Label.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.privacy_Label.Location = new System.Drawing.Point(25, 501);
+            this.privacy_Label.Location = new System.Drawing.Point(185, 483);
             this.privacy_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.privacy_Label.Name = "privacy_Label";
             this.privacy_Label.Size = new System.Drawing.Size(164, 21);
             this.privacy_Label.TabIndex = 5;
+            this.privacy_Label.Tag = "IgnoreDarkMode";
             this.privacy_Label.Text = "Privacy Statement    ";
             this.privacy_Label.Click += new System.EventHandler(this.Privacy_Label_Click);
             // 
@@ -207,16 +209,53 @@ namespace WDAC_Wizard
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.appVersion_Label);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(164, 93);
+            this.panel1.Location = new System.Drawing.Point(164, 75);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(713, 528);
             this.panel1.TabIndex = 12;
             // 
+            // useDarkMode_Checkbox
+            // 
+            this.useDarkMode_Checkbox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
+            this.useDarkMode_Checkbox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useDarkMode_Checkbox.Location = new System.Drawing.Point(38, 247);
+            this.useDarkMode_Checkbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.useDarkMode_Checkbox.Name = "useDarkMode_Checkbox";
+            this.useDarkMode_Checkbox.Size = new System.Drawing.Size(23, 26);
+            this.useDarkMode_Checkbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.useDarkMode_Checkbox.TabIndex = 28;
+            this.useDarkMode_Checkbox.TabStop = false;
+            this.useDarkMode_Checkbox.Tag = "Checked";
+            this.useDarkMode_Checkbox.Click += new System.EventHandler(this.DarkMode_CheckBox_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.Black;
+            this.label10.Location = new System.Drawing.Point(70, 250);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(226, 21);
+            this.label10.TabIndex = 27;
+            this.label10.Text = "Use the Wizard in Dark Mode";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.label11.Location = new System.Drawing.Point(25, 210);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(86, 23);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "Interface";
+            // 
             // label_DriverBlock
             // 
             this.label_DriverBlock.AutoSize = true;
-            this.label_DriverBlock.BackColor = System.Drawing.Color.White;
+            this.label_DriverBlock.BackColor = System.Drawing.Color.Transparent;
             this.label_DriverBlock.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_DriverBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_DriverBlock.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -226,13 +265,14 @@ namespace WDAC_Wizard
             this.label_DriverBlock.Name = "label_DriverBlock";
             this.label_DriverBlock.Size = new System.Drawing.Size(516, 21);
             this.label_DriverBlock.TabIndex = 25;
+            this.label_DriverBlock.Tag = "IgnoreDarkMode";
             this.label_DriverBlock.Text = "Create policies with Microsoft\'s Recommended Driver Block Rules    ";
             this.label_DriverBlock.Click += new System.EventHandler(this.LabelDriverBlock_Click);
             // 
             // label_UsermodeBlock
             // 
             this.label_UsermodeBlock.AutoSize = true;
-            this.label_UsermodeBlock.BackColor = System.Drawing.Color.White;
+            this.label_UsermodeBlock.BackColor = System.Drawing.Color.Transparent;
             this.label_UsermodeBlock.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_UsermodeBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_UsermodeBlock.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -242,6 +282,7 @@ namespace WDAC_Wizard
             this.label_UsermodeBlock.Name = "label_UsermodeBlock";
             this.label_UsermodeBlock.Size = new System.Drawing.Size(466, 21);
             this.label_UsermodeBlock.TabIndex = 24;
+            this.label_UsermodeBlock.Tag = "IgnoreDarkMode";
             this.label_UsermodeBlock.Text = "Create policies with Microsoft\'s Recommended Block Rules    ";
             this.label_UsermodeBlock.Click += new System.EventHandler(this.Label_UsermodeBlock_Click);
             // 
@@ -377,43 +418,6 @@ namespace WDAC_Wizard
             this.Update_Label.Text = "Saving Setting ...";
             this.Update_Label.Visible = false;
             // 
-            // useDarkMode_Checkbox
-            // 
-            this.useDarkMode_Checkbox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
-            this.useDarkMode_Checkbox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.useDarkMode_Checkbox.Location = new System.Drawing.Point(38, 247);
-            this.useDarkMode_Checkbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.useDarkMode_Checkbox.Name = "useDarkMode_Checkbox";
-            this.useDarkMode_Checkbox.Size = new System.Drawing.Size(23, 26);
-            this.useDarkMode_Checkbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.useDarkMode_Checkbox.TabIndex = 28;
-            this.useDarkMode_Checkbox.TabStop = false;
-            this.useDarkMode_Checkbox.Tag = "Checked";
-            this.useDarkMode_Checkbox.Click += new System.EventHandler(this.DarkMode_CheckBox_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(70, 250);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(90, 21);
-            this.label10.TabIndex = 27;
-            this.label10.Text = "Dark Mode";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label11.Location = new System.Drawing.Point(25, 210);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(86, 23);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Interface";
-            // 
             // SettingsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -430,11 +434,11 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)(this.useDefaultStrings_CheckBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.useDarkMode_Checkbox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useUsermodeBlockRules_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useDriverBlockRules_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.convertPolicyToBinary_CheckBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.useEnvVars_CheckBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.useDarkMode_Checkbox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
