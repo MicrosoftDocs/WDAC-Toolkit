@@ -326,6 +326,8 @@
     <None Include="Resources\imgs\external-link-symbol-highlight.png" />
     <None Include="Resources\imgs\eventlog_progress.gif" />
     <None Include="Resources\imgs\loading.gif" />
+    <None Include="Resources\imgs\white-gear.png" />
+    <None Include="Resources\imgs\white-house.png" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit.xml" />

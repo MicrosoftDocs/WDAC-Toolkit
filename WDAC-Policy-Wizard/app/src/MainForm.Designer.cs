@@ -60,6 +60,7 @@ namespace WDAC_Wizard
             // label_Welcome
             // 
             this.label_Welcome.AutoSize = true;
+            this.label_Welcome.BackColor = System.Drawing.Color.Transparent;
             this.label_Welcome.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Welcome.ForeColor = System.Drawing.Color.Black;
             this.label_Welcome.Location = new System.Drawing.Point(185, 42);
@@ -70,6 +71,7 @@ namespace WDAC_Wizard
             // 
             // button_New
             // 
+            this.button_New.BackColor = System.Drawing.Color.Transparent;
             this.button_New.FlatAppearance.BorderSize = 0;
             this.button_New.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
             this.button_New.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
@@ -83,18 +85,19 @@ namespace WDAC_Wizard
             this.button_New.TabIndex = 10;
             this.button_New.Text = "Policy Creator";
             this.button_New.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.button_New.UseVisualStyleBackColor = true;
+            this.button_New.UseVisualStyleBackColor = false;
             this.button_New.Click += new System.EventHandler(this.Button_New_Click);
             // 
             // label_Info
             // 
             this.label_Info.AutoSize = true;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Info.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.label_Info.ForeColor = System.Drawing.Color.DodgerBlue;
             this.label_Info.Location = new System.Drawing.Point(168, 674);
             this.label_Info.Name = "label_Info";
             this.label_Info.Size = new System.Drawing.Size(71, 18);
             this.label_Info.TabIndex = 9;
+            this.label_Info.Tag = "IgnoreDarkMode";
             this.label_Info.Text = "Info Text";
             this.label_Info.Visible = false;
             // 
@@ -107,6 +110,7 @@ namespace WDAC_Wizard
             // 
             // button_Edit
             // 
+            this.button_Edit.BackColor = System.Drawing.Color.Transparent;
             this.button_Edit.FlatAppearance.BorderSize = 0;
             this.button_Edit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
             this.button_Edit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
@@ -120,11 +124,12 @@ namespace WDAC_Wizard
             this.button_Edit.TabIndex = 25;
             this.button_Edit.Text = "Policy Editor";
             this.button_Edit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.button_Edit.UseVisualStyleBackColor = true;
+            this.button_Edit.UseVisualStyleBackColor = false;
             this.button_Edit.Click += new System.EventHandler(this.Button_Edit_Click);
             // 
             // button_Merge
             // 
+            this.button_Merge.BackColor = System.Drawing.Color.Transparent;
             this.button_Merge.FlatAppearance.BorderSize = 0;
             this.button_Merge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
             this.button_Merge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
@@ -138,7 +143,7 @@ namespace WDAC_Wizard
             this.button_Merge.TabIndex = 26;
             this.button_Merge.Text = "Policy Merger";
             this.button_Merge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.button_Merge.UseVisualStyleBackColor = true;
+            this.button_Merge.UseVisualStyleBackColor = false;
             this.button_Merge.Click += new System.EventHandler(this.Button_Merge_Click);
             // 
             // control_Panel
@@ -163,6 +168,7 @@ namespace WDAC_Wizard
             // workflow_Label
             // 
             this.workflow_Label.AutoSize = true;
+            this.workflow_Label.BackColor = System.Drawing.Color.Transparent;
             this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.workflow_Label.Location = new System.Drawing.Point(12, 162);
             this.workflow_Label.Name = "workflow_Label";
@@ -174,7 +180,7 @@ namespace WDAC_Wizard
             // page5_Button
             // 
             this.page5_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.page5_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page5_Button.BackColor = System.Drawing.Color.Transparent;
             this.page5_Button.Enabled = false;
             this.page5_Button.FlatAppearance.BorderSize = 0;
             this.page5_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -196,7 +202,7 @@ namespace WDAC_Wizard
             // page4_Button
             // 
             this.page4_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.page4_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page4_Button.BackColor = System.Drawing.Color.Transparent;
             this.page4_Button.Enabled = false;
             this.page4_Button.FlatAppearance.BorderSize = 0;
             this.page4_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -218,7 +224,7 @@ namespace WDAC_Wizard
             // page3_Button
             // 
             this.page3_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.page3_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page3_Button.BackColor = System.Drawing.Color.Transparent;
             this.page3_Button.Enabled = false;
             this.page3_Button.FlatAppearance.BorderSize = 0;
             this.page3_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -240,7 +246,7 @@ namespace WDAC_Wizard
             // page2_Button
             // 
             this.page2_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.page2_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page2_Button.BackColor = System.Drawing.Color.Transparent;
             this.page2_Button.Enabled = false;
             this.page2_Button.FlatAppearance.BorderSize = 0;
             this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -262,7 +268,7 @@ namespace WDAC_Wizard
             // page1_Button
             // 
             this.page1_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.page1_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.page1_Button.BackColor = System.Drawing.Color.Transparent;
             this.page1_Button.Enabled = false;
             this.page1_Button.FlatAppearance.BorderSize = 0;
             this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -288,11 +294,12 @@ namespace WDAC_Wizard
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
             this.controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
             this.controlHighlight_Panel.TabIndex = 33;
+            this.controlHighlight_Panel.Tag = "IgnoreDarkMode";
             // 
             // home_Button
             // 
             this.home_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.home_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.home_Button.BackColor = System.Drawing.Color.Transparent;
             this.home_Button.FlatAppearance.BorderSize = 0;
             this.home_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
             this.home_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
@@ -313,13 +320,13 @@ namespace WDAC_Wizard
             // settings_Button
             // 
             this.settings_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.settings_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.settings_Button.BackColor = System.Drawing.Color.Transparent;
             this.settings_Button.FlatAppearance.BorderSize = 0;
             this.settings_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
             this.settings_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
             this.settings_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.settings_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settings_Button.Image = ((System.Drawing.Image)(resources.GetObject("settings_Button.Image")));
+            this.settings_Button.Image = global::WDAC_Wizard.Properties.Resources.gear;
             this.settings_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.settings_Button.Location = new System.Drawing.Point(15, 647);
             this.settings_Button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -346,6 +353,7 @@ namespace WDAC_Wizard
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(185, 82);
@@ -357,6 +365,7 @@ namespace WDAC_Wizard
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label2.Location = new System.Drawing.Point(296, 453);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -368,6 +377,7 @@ namespace WDAC_Wizard
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label3.Location = new System.Drawing.Point(563, 453);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -379,6 +389,7 @@ namespace WDAC_Wizard
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label4.Location = new System.Drawing.Point(802, 453);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -412,6 +423,7 @@ namespace WDAC_Wizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Defender App Control Policy Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClosing_Event);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.control_Panel.ResumeLayout(false);
             this.control_Panel.PerformLayout();
             this.ResumeLayout(false);

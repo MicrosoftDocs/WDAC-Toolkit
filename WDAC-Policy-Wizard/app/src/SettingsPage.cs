@@ -319,6 +319,7 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
             this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
             this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
+            this.SettingsDict.Add("useDarkMode", (bool)Properties.Settings.Default.useDarkMode);
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
@@ -446,7 +447,13 @@ namespace WDAC_Wizard
             SetLabelsColor(labels);
 
             // Set Form Back Color
-            SetFormBackColor(); 
+            SetFormBackColor();
+
+            // Set 'Reset' Button Colors
+            SetResetButtonColor();
+
+            // Set the Control Panel Colors
+            SetControlPanelUI(); 
         }
 
         /// <summary>
@@ -511,7 +518,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if(Properties.Settings.Default.useDarkMode)
             {
-                BackColor = Color.Black;
+                BackColor = Color.FromArgb(15, 15, 15);
             }
 
             // Light Mode
@@ -519,6 +526,32 @@ namespace WDAC_Wizard
             {
                 BackColor = Color.White;
             }
+        }
+
+        /// <summary>
+        /// Sets the colors for the Reset Button depending 
+        /// on the state of Light or Dark Mode
+        /// </summary>
+        private void SetResetButtonColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                resetButton.ForeColor = Color.DodgerBlue;
+                resetButton.BackColor = Color.Black; 
+            }
+
+            // Light Mode
+            else
+            {
+                resetButton.ForeColor = Color.Black;
+                resetButton.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        private void SetControlPanelUI()
+        {
+            this._MainWindow.SetControlPanelUI(); 
         }
     }
 }

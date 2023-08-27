@@ -2134,6 +2134,55 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the Control Panel and children UI elements
+        /// depending on the state of Light or Dark mode
+        /// </summary>
+        public void SetControlPanelUI()
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                // Control panel color
+                this.control_Panel.BackColor = Color.Black; 
+
+                // Subcontrol elements like buttons and text
+                foreach (Control control in this.control_Panel.Controls)
+                {
+                    if (control.Tag == null
+                        || control.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        control.ForeColor = Color.White;
+                    }
+                }
+
+                // Home and Settings images
+                settings_Button.Image = Properties.Resources.white_gear;
+                home_Button.Image = Properties.Resources.white_house; 
+            }
+
+            // Light Mode
+            else
+            {
+                // Control Panel color
+                this.control_Panel.BackColor = Color.FromArgb(230, 230, 230); 
+
+                // Subcontrol elements like buttons and text
+                foreach(Control control in this.control_Panel.Controls)
+                {
+                    if(control.Tag == null 
+                        || control.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        control.ForeColor = Color.Black; 
+                    }
+                }
+
+                // Home and Settings images
+                settings_Button.Image = Properties.Resources.gear;
+                home_Button.Image = Properties.Resources.house;
+            }
+        }
+
+        /// <summary>
         /// Resets the logic flow to the home page by calling the Home Button Click method
         /// </summary>
         /// <param name="sender"></param>
@@ -2243,6 +2292,62 @@ namespace WDAC_Wizard
         public void HideInfoLabel()
         {
             this.label_Info.Visible = false;
+        }
+
+        /// <summary>
+        /// Runs on page load. Sets the colors for the UI elements 
+        /// depending on the state of Light and Dark Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            // Set background color
+            SetMainWindowColors(); 
+
+            // Set UI for the Control Panel
+            SetControlPanelUI(); 
+        }
+
+        /// <summary>
+        /// Sets the Main Windows UI colors depending on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        private void SetMainWindowColors()
+        {
+            // Iterate over all the controls and set the forecolor
+            foreach(Control control in this.Controls)
+            {
+                if(control.GetType() != typeof(Panel)) // exclude the control panel
+                {
+                    if(control.Tag == null 
+                        || control.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        if(Properties.Settings.Default.useDarkMode)
+                        {
+                            // Dark Mode
+                            control.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            // Light Mode
+                            control.ForeColor = Color.Black; 
+                        }
+                    }
+                }
+            }
+
+            // Set the back color of the Main Window form
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                // Dark Mode
+                BackColor = Color.FromArgb(15, 15, 15); 
+            }
+            else
+            {
+                // Light Mode
+                BackColor = Color.White;
+            }
         }
     } // End of MainForm class
 }

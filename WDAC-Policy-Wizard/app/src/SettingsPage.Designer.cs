@@ -402,7 +402,7 @@ namespace WDAC_Wizard
             this.resetButton.Size = new System.Drawing.Size(92, 32);
             this.resetButton.TabIndex = 14;
             this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = false;
+            this.resetButton.UseVisualStyleBackColor = true;
             this.resetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
             // Update_Label
