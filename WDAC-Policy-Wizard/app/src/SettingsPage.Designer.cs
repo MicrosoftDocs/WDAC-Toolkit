@@ -161,11 +161,11 @@ namespace WDAC_Wizard
             // useDefaultStrings_CheckBox
             // 
             this.useDefaultStrings_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
-            this.useDefaultStrings_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useDefaultStrings_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.useDefaultStrings_CheckBox.Location = new System.Drawing.Point(38, 329);
             this.useDefaultStrings_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useDefaultStrings_CheckBox.Name = "useDefaultStrings_CheckBox";
-            this.useDefaultStrings_CheckBox.Size = new System.Drawing.Size(23, 26);
+            this.useDefaultStrings_CheckBox.Size = new System.Drawing.Size(25, 25);
             this.useDefaultStrings_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useDefaultStrings_CheckBox.TabIndex = 8;
             this.useDefaultStrings_CheckBox.TabStop = false;
@@ -218,11 +218,11 @@ namespace WDAC_Wizard
             // useDarkMode_Checkbox
             // 
             this.useDarkMode_Checkbox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.useDarkMode_Checkbox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useDarkMode_Checkbox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.useDarkMode_Checkbox.Location = new System.Drawing.Point(38, 247);
             this.useDarkMode_Checkbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useDarkMode_Checkbox.Name = "useDarkMode_Checkbox";
-            this.useDarkMode_Checkbox.Size = new System.Drawing.Size(23, 26);
+            this.useDarkMode_Checkbox.Size = new System.Drawing.Size(25, 25);
             this.useDarkMode_Checkbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useDarkMode_Checkbox.TabIndex = 28;
             this.useDarkMode_Checkbox.TabStop = false;
@@ -289,11 +289,11 @@ namespace WDAC_Wizard
             // useUsermodeBlockRules_CheckBox
             // 
             this.useUsermodeBlockRules_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.useUsermodeBlockRules_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useUsermodeBlockRules_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.useUsermodeBlockRules_CheckBox.Location = new System.Drawing.Point(39, 126);
             this.useUsermodeBlockRules_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useUsermodeBlockRules_CheckBox.Name = "useUsermodeBlockRules_CheckBox";
-            this.useUsermodeBlockRules_CheckBox.Size = new System.Drawing.Size(23, 26);
+            this.useUsermodeBlockRules_CheckBox.Size = new System.Drawing.Size(25, 25);
             this.useUsermodeBlockRules_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useUsermodeBlockRules_CheckBox.TabIndex = 23;
             this.useUsermodeBlockRules_CheckBox.TabStop = false;
@@ -303,11 +303,11 @@ namespace WDAC_Wizard
             // useDriverBlockRules_CheckBox
             // 
             this.useDriverBlockRules_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.useDriverBlockRules_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useDriverBlockRules_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.useDriverBlockRules_CheckBox.Location = new System.Drawing.Point(39, 166);
             this.useDriverBlockRules_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useDriverBlockRules_CheckBox.Name = "useDriverBlockRules_CheckBox";
-            this.useDriverBlockRules_CheckBox.Size = new System.Drawing.Size(23, 26);
+            this.useDriverBlockRules_CheckBox.Size = new System.Drawing.Size(25, 25);
             this.useDriverBlockRules_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useDriverBlockRules_CheckBox.TabIndex = 21;
             this.useDriverBlockRules_CheckBox.TabStop = false;
@@ -317,11 +317,11 @@ namespace WDAC_Wizard
             // convertPolicyToBinary_CheckBox
             // 
             this.convertPolicyToBinary_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_unchecked;
-            this.convertPolicyToBinary_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.convertPolicyToBinary_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.convertPolicyToBinary_CheckBox.Location = new System.Drawing.Point(39, 86);
             this.convertPolicyToBinary_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.convertPolicyToBinary_CheckBox.Name = "convertPolicyToBinary_CheckBox";
-            this.convertPolicyToBinary_CheckBox.Size = new System.Drawing.Size(23, 26);
+            this.convertPolicyToBinary_CheckBox.Size = new System.Drawing.Size(25, 25);
             this.convertPolicyToBinary_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.convertPolicyToBinary_CheckBox.TabIndex = 19;
             this.convertPolicyToBinary_CheckBox.TabStop = false;
@@ -356,11 +356,11 @@ namespace WDAC_Wizard
             // useEnvVars_CheckBox
             // 
             this.useEnvVars_CheckBox.BackgroundImage = global::WDAC_Wizard.Properties.Resources.check_box_checked;
-            this.useEnvVars_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.useEnvVars_CheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.useEnvVars_CheckBox.Location = new System.Drawing.Point(39, 50);
             this.useEnvVars_CheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.useEnvVars_CheckBox.Name = "useEnvVars_CheckBox";
-            this.useEnvVars_CheckBox.Size = new System.Drawing.Size(23, 26);
+            this.useEnvVars_CheckBox.Size = new System.Drawing.Size(25, 25);
             this.useEnvVars_CheckBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useEnvVars_CheckBox.TabIndex = 14;
             this.useEnvVars_CheckBox.TabStop = false;

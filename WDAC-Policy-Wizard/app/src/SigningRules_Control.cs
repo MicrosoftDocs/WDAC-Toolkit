@@ -1266,6 +1266,14 @@ namespace WDAC_Wizard
                         panel.ForeColor = Color.White;
                         panel.BackColor = Color.Black;
                     }
+
+                    // Checkboxes
+                    else if(control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.White;
+                        checkBox.BackColor = Color.Black;
+                    }
                 }
 
                 // Button Images
@@ -1292,6 +1300,14 @@ namespace WDAC_Wizard
                     {
                         panel.ForeColor = Color.Black;
                         panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.Black;
+                        checkBox.BackColor = Color.White;
                     }
                 }
 
@@ -1376,26 +1392,40 @@ namespace WDAC_Wizard
         /// <summary>
         /// Set the Rules Grid colors for Dark and Light Mode
         /// </summary>
-        private void SetToggleColors(List<Button> toggles)
+        private void SetGridColors()
         {
             // Set the Rules Grid colors for Light and Dark Mode 
 
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                rulesDataGrid.BackgroundColor = Color.LightGray;
-                rulesDataGrid.GridColor = Color.DimGray;
+                rulesDataGrid.BackgroundColor = Color.FromArgb(15, 15, 15);
+                rulesDataGrid.GridColor = Color.FromArgb(15, 15, 15);
+
+                // Header
+                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White; 
+
+                // Cells
+                rulesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                rulesDataGrid.DefaultCellStyle.ForeColor = Color.White;
             }
 
             // Light Mode
             else
             {
                 rulesDataGrid.BackgroundColor = Color.LightGray;
-                rulesDataGrid.GridColor = Color.DimGray; 
+                rulesDataGrid.GridColor = Color.DimGray;
+
+                // Header
+                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.LightGray; 
+                rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+
+                // Cells
+                rulesDataGrid.DefaultCellStyle.BackColor = Color.WhiteSmoke; 
+                rulesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
             }
         }
-
-
     }
 
     // Class for the datastore

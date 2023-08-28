@@ -2337,7 +2337,7 @@ namespace WDAC_Wizard
         /// Sets the Main Windows UI colors depending on the 
         /// state of Light and Dark Mode
         /// </summary>
-        private void SetMainWindowColors()
+        public void SetMainWindowColors()
         {
             // Iterate over all the controls and set the forecolor
             foreach(Control control in this.Controls)

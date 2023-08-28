@@ -304,7 +304,10 @@ namespace WDAC_Wizard
                 Properties.Settings.Default.Reset();
 
                 // Re-load page to set Light Mode UI Elements
-                SetPageUI(); 
+                SetPageUI();
+
+                // Re-load all other pages to set Light Mode UI 
+                RepaintUIModeChange();
             }
         }
 
@@ -464,6 +467,8 @@ namespace WDAC_Wizard
             ResetControlPanelUI(); // Set the Control Panel Colors
             ResetNextButtonUI();  // Set the Next Button Colors
 
+            ResetMainWindowColors();  // Set the MainWindow form colors
+
             // Revalidate and paint all existing pages
             RepaintAllExistingPages();
         }
@@ -559,6 +564,14 @@ namespace WDAC_Wizard
                 resetButton.ForeColor = Color.Black;
                 resetButton.BackColor = Color.WhiteSmoke;
             }
+        }
+
+        /// <summary>
+        /// Resets the colors for Main window
+        /// </summary>
+        private void ResetMainWindowColors()
+        {
+            this._MainWindow.SetMainWindowColors(); 
         }
 
         /// <summary>

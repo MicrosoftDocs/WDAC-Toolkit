@@ -32,6 +32,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rulesDataGrid = new System.Windows.Forms.DataGridView();
@@ -83,6 +84,16 @@ namespace WDAC_Wizard
             this.rulesDataGrid.AllowUserToDeleteRows = false;
             this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.LightGray;
+            this.rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rulesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
@@ -96,6 +107,7 @@ namespace WDAC_Wizard
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(2);
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
+            this.rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.rulesDataGrid.RowHeadersVisible = false;
             this.rulesDataGrid.RowHeadersWidth = 70;
             this.rulesDataGrid.RowTemplate.Height = 24;

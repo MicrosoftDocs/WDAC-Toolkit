@@ -479,7 +479,6 @@ namespace WDAC_Wizard
             }
         }
 
-
         /// <summary>
         /// Sets the Back Color of the form depending on the
         /// state of Dark and Light Mode

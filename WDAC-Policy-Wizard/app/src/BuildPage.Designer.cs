@@ -102,12 +102,14 @@ namespace WDAC_Wizard
             // xmlFilePathLabel
             // 
             this.xmlFilePathLabel.AutoSize = true;
+            this.xmlFilePathLabel.BackColor = System.Drawing.Color.Transparent;
             this.xmlFilePathLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.xmlFilePathLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.xmlFilePathLabel.Location = new System.Drawing.Point(1, 76);
             this.xmlFilePathLabel.Name = "xmlFilePathLabel";
             this.xmlFilePathLabel.Size = new System.Drawing.Size(155, 19);
             this.xmlFilePathLabel.TabIndex = 85;
+            this.xmlFilePathLabel.Tag = "IgnoreDarkMode";
             this.xmlFilePathLabel.Text = "XmlFilePath Location";
             this.xmlFilePathLabel.Click += new System.EventHandler(this.XmlFilePathLabel_Click);
             // 
@@ -117,7 +119,7 @@ namespace WDAC_Wizard
             this.finishPanel.Controls.Add(this.label4);
             this.finishPanel.Controls.Add(this.xmlFilePathLabel);
             this.finishPanel.Controls.Add(this.finishLabel);
-            this.finishPanel.Location = new System.Drawing.Point(167, 223);
+            this.finishPanel.Location = new System.Drawing.Point(167, 237);
             this.finishPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.finishPanel.Name = "finishPanel";
             this.finishPanel.Size = new System.Drawing.Size(867, 182);
@@ -127,12 +129,14 @@ namespace WDAC_Wizard
             // binFilePathLabel
             // 
             this.binFilePathLabel.AutoSize = true;
+            this.binFilePathLabel.BackColor = System.Drawing.Color.Transparent;
             this.binFilePathLabel.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.binFilePathLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.binFilePathLabel.Location = new System.Drawing.Point(3, 127);
             this.binFilePathLabel.Name = "binFilePathLabel";
             this.binFilePathLabel.Size = new System.Drawing.Size(150, 19);
             this.binFilePathLabel.TabIndex = 88;
+            this.binFilePathLabel.Tag = "IgnoreDarkMode";
             this.binFilePathLabel.Text = "BinFilePath Location";
             this.binFilePathLabel.Click += new System.EventHandler(this.BinFilePathLabel_Click);
             // 
@@ -172,6 +176,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "BuildPage";
             this.Size = new System.Drawing.Size(1443, 833);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.BuildPage_Paint);
             this.finishPanel.ResumeLayout(false);
             this.finishPanel.PerformLayout();
             this.ResumeLayout(false);
