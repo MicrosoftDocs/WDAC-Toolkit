@@ -1317,6 +1317,16 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap white_add_button {
+            get {
+                object obj = ResourceManager.GetObject("white_add_button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap white_close {
             get {
                 object obj = ResourceManager.GetObject("white_close", resourceCulture);
@@ -1380,6 +1390,16 @@ namespace WDAC_Wizard.Properties {
         internal static System.Drawing.Bitmap white_minimize {
             get {
                 object obj = ResourceManager.GetObject("white_minimize", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap white_minus_button {
+            get {
+                object obj = ResourceManager.GetObject("white_minus_button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

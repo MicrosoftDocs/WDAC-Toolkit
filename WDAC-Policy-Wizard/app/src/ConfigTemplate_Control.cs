@@ -995,8 +995,6 @@ namespace WDAC_Wizard
                     toggle.BackColor = Color.White; 
                 }
             }
-
-            
         }
     }
 }

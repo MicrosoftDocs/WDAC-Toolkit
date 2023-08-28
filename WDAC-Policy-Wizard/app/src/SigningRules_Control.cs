@@ -1196,6 +1196,206 @@ namespace WDAC_Wizard
             this.panel_Progress.Visible = false;
             this.panel_Progress.SendToBack(); 
         }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SigningRules_Control_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set Grid Colors
+            SetGridColors();
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.White;
+                        button.BackColor = Color.Black;
+                    }
+
+                    // Panels
+                    else if(control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.Black;
+                    }
+                }
+
+                // Button Images
+                addButton.Image = Properties.Resources.white_add_button;
+                deleteButton.Image = Properties.Resources.white_minus_button; 
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.White;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+                }
+
+                // Button Images
+                addButton.Image = Properties.Resources.add_button;
+                deleteButton.Image = Properties.Resources.minus_button; 
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the toggle buttons on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTogglesRecursive(Control parent, List<Button> toggles)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Button toggle)
+                {
+                    toggles.Add(toggle);
+                }
+                else
+                {
+                    GetTogglesRecursive(control, toggles);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the Rules Grid colors for Dark and Light Mode
+        /// </summary>
+        private void SetToggleColors(List<Button> toggles)
+        {
+            // Set the Rules Grid colors for Light and Dark Mode 
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                rulesDataGrid.BackgroundColor = Color.LightGray;
+                rulesDataGrid.GridColor = Color.DimGray;
+            }
+
+            // Light Mode
+            else
+            {
+                rulesDataGrid.BackgroundColor = Color.LightGray;
+                rulesDataGrid.GridColor = Color.DimGray; 
+            }
+        }
+
+
     }
 
     // Class for the datastore
@@ -1237,5 +1437,4 @@ namespace WDAC_Wizard
             this.Id = id; 
         }
     }
-
 }

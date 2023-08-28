@@ -326,6 +326,11 @@ namespace WDAC_Wizard
             GetLabelsRecursive(this, labels);
             SetLabelsColor(labels);
 
+            // Set TextBoxes Color
+            List<TextBox> textBoxes = new List<TextBox>();
+            GetTextBoxesRecursive(this, textBoxes);
+            SetTextBoxesColor(textBoxes); 
+
             // Set PolicyType Form back color
             SetFormBackColor();
 
@@ -349,6 +354,39 @@ namespace WDAC_Wizard
                 else
                 {
                     GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
                 }
             }
         }
@@ -389,20 +427,40 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTextBoxesRecursive(Control parent, List<TextBox> textBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBoxes.Add(textBox);
+                }
+                else
+                {
+                    GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
         /// Sets the color of the labels defined in the provided List
         /// </summary>
         /// <param name="labels"></param>
-        private void SetLabelsColor(List<Label> labels)
+        private void SetTextBoxesColor(List<TextBox> textBoxes)
         {
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Label label in labels)
+                foreach (TextBox textBox in textBoxes)
                 {
-                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
-                        label.ForeColor = Color.White;
-                        label.BackColor = Color.Black;
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.Black;
                     }
                 }
             }
@@ -410,16 +468,17 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Label label in labels)
+                foreach (TextBox textBox in textBoxes)
                 {
-                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
-                        label.ForeColor = Color.Black;
-                        label.BackColor = Color.White;
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
                     }
                 }
             }
         }
+
 
         /// <summary>
         /// Sets the Back Color of the form depending on the
