@@ -209,6 +209,10 @@ namespace WDAC_Wizard
 
             // Set the Light or Dark Mode UI Elements
             SetPageUI();
+
+            // Mode changed. Need to repaint all other UI elements like 
+            // MainWindow, Control Panel, other existing Pages
+            RepaintUIModeChange(); 
         }
 
         /// <summary>
@@ -448,12 +452,20 @@ namespace WDAC_Wizard
 
             // Set Form Back Color
             SetFormBackColor();
+        }
 
-            // Set 'Reset' Button Colors
-            SetResetButtonColor();
+        /// <summary>
+        /// 
+        /// </summary>
+        private void RepaintUIModeChange()
+        {
+            // MainForm UI Elements
+            SetResetButtonColor(); // Set 'Reset' Button Colors
+            ResetControlPanelUI(); // Set the Control Panel Colors
+            ResetNextButtonUI();  // Set the Next Button Colors
 
-            // Set the Control Panel Colors
-            SetControlPanelUI(); 
+            // Revalidate and paint all existing pages
+            RepaintAllExistingPages();
         }
 
         /// <summary>
@@ -549,9 +561,31 @@ namespace WDAC_Wizard
             }
         }
 
-        private void SetControlPanelUI()
+        /// <summary>
+        /// Resets the color of the control panel in
+        /// the MainWindow class
+        /// </summary>
+        private void ResetControlPanelUI()
         {
             this._MainWindow.SetControlPanelUI(); 
+        }
+
+        /// <summary>
+        /// Resets the color of the Next Button UI in 
+        /// the MainWindow class
+        /// </summary>
+        private void ResetNextButtonUI()
+        {
+            this._MainWindow.SetNextButtonUI(); 
+        }
+
+        /// <summary>
+        /// Forces revalidation and painting of all previously loaded pages
+        /// so they are in the correct Dark or Light mode
+        /// </summary>
+        private void RepaintAllExistingPages()
+        {
+            this._MainWindow.ReloadPreviousPages(); 
         }
     }
 }

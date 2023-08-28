@@ -278,7 +278,7 @@ namespace WDAC_Wizard
         /// <param name="sender">Sender is the picturebox control </param>
         private void MouseHover_Button(object sender, EventArgs e)
         {
-            Color hoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
+            Color hoverBackColor = System.Drawing.Color.FromArgb(190, 230, 253);
             PictureBox checkBox = ((PictureBox)sender);
             checkBox.BackColor = hoverBackColor;
         }
@@ -290,7 +290,7 @@ namespace WDAC_Wizard
         private void MouseLeave_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.White;
+            checkBox.BackColor = Color.Transparent; 
         }
 
         /// <summary>
@@ -310,5 +310,159 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
             }
         }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TemplatePage_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set Template Policy Icons
+            SetTemplateIconImages(); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Sets the images for the policy template icons
+        /// depending on Dark or Light Mode
+        /// </summary>
+        private void SetTemplateIconImages()
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                windowsPictureBox.Image = Properties.Resources.white_windows_logo;
+                microsoftPictureBox.Image = Properties.Resources.white_windows_logo;
+                reputablePictureBox.Image = Properties.Resources.white_shield; 
+            }
+
+            // Light Mode
+            else
+            {
+                windowsPictureBox.Image = Properties.Resources.windows_logo;
+                microsoftPictureBox.Image = Properties.Resources.windows_logo;
+                reputablePictureBox.Image = Properties.Resources.shield;
+            }
+        }
+
     }
 }

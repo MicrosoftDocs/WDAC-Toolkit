@@ -91,6 +91,7 @@ namespace WDAC_Wizard
             // label_Info
             // 
             this.label_Info.AutoSize = true;
+            this.label_Info.BackColor = System.Drawing.Color.Transparent;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.Color.DodgerBlue;
             this.label_Info.Location = new System.Drawing.Point(168, 674);

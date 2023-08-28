@@ -4,9 +4,9 @@
 
 using System;
 using System.Windows.Forms;
-using System.Xml;
+using System.Collections.Generic;
 using System.IO;
-using System.Xml.Serialization;
+using System.Drawing; 
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
@@ -602,6 +602,133 @@ namespace WDAC_Wizard
             if(String.IsNullOrEmpty(textBoxBasePolicyID.Text))
             {
                 TextBoxBasePolicyID_Reformat();
+            }
+        }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PolicyType_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Radio Buttons)
+            SetControlsColor(); 
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set PolicyType Form back color
+            SetFormBackColor(); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if(control is RadioButton radioButton 
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.White;
+                        radioButton.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.Black;
+                        radioButton.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
             }
         }
     }

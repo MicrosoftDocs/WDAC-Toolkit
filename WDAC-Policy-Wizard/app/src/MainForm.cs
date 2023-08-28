@@ -2183,6 +2183,27 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the colors for the Next Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void SetNextButtonUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Next.ForeColor = Color.DodgerBlue;
+                button_Next.BackColor = Color.Black;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Next.ForeColor = Color.Black;
+                button_Next.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        /// <summary>
         /// Resets the logic flow to the home page by calling the Home Button Click method
         /// </summary>
         /// <param name="sender"></param>
@@ -2306,7 +2327,10 @@ namespace WDAC_Wizard
             SetMainWindowColors(); 
 
             // Set UI for the Control Panel
-            SetControlPanelUI(); 
+            SetControlPanelUI();
+
+            // Set UI for the 'Next' Button
+            SetNextButtonUI(); 
         }
 
         /// <summary>
@@ -2349,5 +2373,19 @@ namespace WDAC_Wizard
                 BackColor = Color.White;
             }
         }
+
+        /// <summary>
+        /// Calls the Load() method on all existing pages to ensure they
+        /// are Dark Mode and Light Mode compliant
+        /// </summary>
+        public void ReloadPreviousPages()
+        {
+            foreach(var pageKey in this.PageList)
+            {
+                Control[] _Pages = this.Controls.Find(pageKey, true);
+                _Pages[0].Refresh(); 
+            }
+        }
+
     } // End of MainForm class
 }

@@ -111,7 +111,7 @@ namespace WDAC_Wizard
             // 
             // panelSupplName
             // 
-            this.panelSupplName.BackColor = System.Drawing.Color.White;
+            this.panelSupplName.BackColor = System.Drawing.Color.Transparent;
             this.panelSupplName.Controls.Add(this.panelSuppl_Base);
             this.panelSupplName.Controls.Add(this.button_Browse_Supp);
             this.panelSupplName.Controls.Add(this.textBox_PolicyName);
@@ -386,11 +386,13 @@ namespace WDAC_Wizard
             this.label_LearnMore.Name = "label_LearnMore";
             this.label_LearnMore.Size = new System.Drawing.Size(287, 18);
             this.label_LearnMore.TabIndex = 98;
+            this.label_LearnMore.Tag = "IgnoreDarkMode";
             this.label_LearnMore.Text = "Learn more about multiple policy format    ";
             this.label_LearnMore.Click += new System.EventHandler(this.Label_LearnMore_Click);
             // 
             // panel_MultiPolicy
             // 
+            this.panel_MultiPolicy.BackColor = System.Drawing.Color.Transparent;
             this.panel_MultiPolicy.Controls.Add(this.label4);
             this.panel_MultiPolicy.Controls.Add(this.label3);
             this.panel_MultiPolicy.Controls.Add(this.suppPolicy_PictureBox);
@@ -432,6 +434,7 @@ namespace WDAC_Wizard
             // radioButton_MultiplePolicy
             // 
             this.radioButton_MultiplePolicy.AutoSize = true;
+            this.radioButton_MultiplePolicy.BackColor = System.Drawing.Color.Transparent;
             this.radioButton_MultiplePolicy.Checked = true;
             this.radioButton_MultiplePolicy.Font = new System.Drawing.Font("Tahoma", 10F);
             this.radioButton_MultiplePolicy.Location = new System.Drawing.Point(178, 70);
@@ -440,19 +443,20 @@ namespace WDAC_Wizard
             this.radioButton_MultiplePolicy.TabIndex = 2;
             this.radioButton_MultiplePolicy.TabStop = true;
             this.radioButton_MultiplePolicy.Text = "Multiple Policy Format";
-            this.radioButton_MultiplePolicy.UseVisualStyleBackColor = true;
+            this.radioButton_MultiplePolicy.UseVisualStyleBackColor = false;
             this.radioButton_MultiplePolicy.Click += new System.EventHandler(this.MultipleFormat_ButtonClick);
             // 
             // radioButton_SinglePolicy
             // 
             this.radioButton_SinglePolicy.AutoSize = true;
+            this.radioButton_SinglePolicy.BackColor = System.Drawing.Color.Transparent;
             this.radioButton_SinglePolicy.Font = new System.Drawing.Font("Tahoma", 10F);
             this.radioButton_SinglePolicy.Location = new System.Drawing.Point(178, 160);
             this.radioButton_SinglePolicy.Name = "radioButton_SinglePolicy";
             this.radioButton_SinglePolicy.Size = new System.Drawing.Size(180, 25);
             this.radioButton_SinglePolicy.TabIndex = 1;
             this.radioButton_SinglePolicy.Text = "Single Policy Format";
-            this.radioButton_SinglePolicy.UseVisualStyleBackColor = true;
+            this.radioButton_SinglePolicy.UseVisualStyleBackColor = false;
             this.radioButton_SinglePolicy.Click += new System.EventHandler(this.SingleFormat_ButtonClick);
             // 
             // PolicyType
@@ -473,6 +477,7 @@ namespace WDAC_Wizard
             this.Name = "PolicyType";
             this.Size = new System.Drawing.Size(1172, 782);
             this.Load += new System.EventHandler(this.PolicyType_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PolicyType_Paint);
             this.panelSupplName.ResumeLayout(false);
             this.panelSupplName.PerformLayout();
             this.panelSuppl_Base.ResumeLayout(false);

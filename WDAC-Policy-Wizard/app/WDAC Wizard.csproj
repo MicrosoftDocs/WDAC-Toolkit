@@ -328,6 +328,9 @@
     <None Include="Resources\imgs\loading.gif" />
     <None Include="Resources\imgs\white-gear.png" />
     <None Include="Resources\imgs\white-house.png" />
+    <None Include="Resources\imgs\white-office.png" />
+    <None Include="Resources\imgs\white-shield.png" />
+    <None Include="Resources\imgs\white-windows-logo.png" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit.xml" />
