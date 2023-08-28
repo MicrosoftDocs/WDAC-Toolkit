@@ -278,9 +278,8 @@ namespace WDAC_Wizard
         /// <param name="sender">Sender is the picturebox control </param>
         private void MouseHover_Button(object sender, EventArgs e)
         {
-            Color hoverBackColor = System.Drawing.Color.FromArgb(190, 230, 253);
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = hoverBackColor;
+            checkBox.BackColor = Color.FromArgb(190, 230, 253);
         }
 
         /// <summary>
@@ -463,6 +462,5 @@ namespace WDAC_Wizard
                 reputablePictureBox.Image = Properties.Resources.shield;
             }
         }
-
     }
 }

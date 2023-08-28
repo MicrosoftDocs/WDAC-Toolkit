@@ -331,6 +331,7 @@
     <None Include="Resources\imgs\white-office.png" />
     <None Include="Resources\imgs\white-shield.png" />
     <None Include="Resources\imgs\white-windows-logo.png" />
+    <None Include="Resources\imgs\darkmode-toggle.png" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml" />
     <Content Include="Resources\policyTemplates\DefaultWindows_Audit.xml" />
