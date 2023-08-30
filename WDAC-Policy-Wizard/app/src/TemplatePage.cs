@@ -372,7 +372,7 @@ namespace WDAC_Wizard
                     if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
-                        label.BackColor = Color.Black;
+                        label.BackColor = Color.FromArgb(15,15,15);
                     }
                 }
             }
@@ -406,7 +406,7 @@ namespace WDAC_Wizard
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         panel.ForeColor = Color.White;
-                        panel.BackColor = Color.Black;
+                        panel.BackColor = Color.FromArgb(15,15,15);
                     }
                 }
             }
