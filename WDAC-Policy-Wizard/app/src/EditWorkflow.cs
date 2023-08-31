@@ -215,6 +215,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
             this.panel_Progress.Visible = true;
+            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
             // Clear error labels if applicable
@@ -240,6 +241,7 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
             this.panel_Progress.Visible = true;
+            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
             this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
             this.Workflow = WorkflowType.DeviceEventLog;
 
@@ -276,6 +278,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
             this.panel_Progress.Visible = true;
+            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.AdvancedHunting;
 
             // Clear error labels if applicable
@@ -491,6 +494,247 @@ namespace WDAC_Wizard
             catch (Exception exp)
             {
                 this.Log.AddErrorMsg(String.Format("Launching {0} encountered the following error", webpage), exp);
+            }
+        }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EditWorkflow_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels, Textboxes, Buttons)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set TextBoxes Color
+            List<TextBox> textBoxes = new List<TextBox>();
+            GetTextBoxesRecursive(this, textBoxes);
+            SetTextBoxesColor(textBoxes);
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.White;
+                        button.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15,15,15);
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15,15,15);
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.White;
+                        radioButton.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+
+                // Progress Panel Gif
+                panel_Progress.BackColor = Color.Black; // Set to black so it appears in front of other controls
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.White;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White; 
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.Black;
+                        radioButton.BackColor = Color.White; 
+                    }
+                }
+
+                // Progress Panel Gif
+                panel_Progress.BackColor = Color.White; 
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTextBoxesRecursive(Control parent, List<TextBox> textBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBoxes.Add(textBox);
+                }
+                else
+                {
+                    GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetTextBoxesColor(List<TextBox> textBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15,15,15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                    }
+                }
             }
         }
     }

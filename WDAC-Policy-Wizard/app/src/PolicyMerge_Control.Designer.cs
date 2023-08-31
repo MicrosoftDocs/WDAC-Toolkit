@@ -113,7 +113,12 @@
             this.policiesDataGrid.Name = "policiesDataGrid";
             this.policiesDataGrid.RowHeadersWidth = 51;
             this.policiesDataGrid.RowTemplate.Height = 24;
-            this.policiesDataGrid.Size = new System.Drawing.Size(676, 150);
+            this.policiesDataGrid.EnableHeadersVisualStyles = false;
+            this.policiesDataGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Single;
+            this.policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.policiesDataGrid.Size = new System.Drawing.Size(678, 150);
             this.policiesDataGrid.TabIndex = 95;
             this.policiesDataGrid.VirtualMode = true;
             this.policiesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.PoliciesDataGrid_CellValueNeeded);
@@ -161,6 +166,7 @@
             // label_Error
             // 
             this.label_Error.AutoSize = true;
+            this.label_Error.BackColor = System.Drawing.Color.Transparent;
             this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Error.ForeColor = System.Drawing.Color.Red;
             this.label_Error.Location = new System.Drawing.Point(166, 600);
@@ -168,6 +174,7 @@
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(648, 18);
             this.label_Error.TabIndex = 98;
+            this.label_Error.Tag = "IgnoreDarkMode";
             this.label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text tex" +
     "t text text text";
             this.label_Error.Visible = false;
@@ -187,6 +194,7 @@
             this.Controls.Add(this.label1);
             this.Name = "PolicyMerge_Control";
             this.Size = new System.Drawing.Size(1172, 782);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PolicyMerge_Control_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.policiesDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

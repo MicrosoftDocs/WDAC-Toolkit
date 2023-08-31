@@ -460,7 +460,7 @@ namespace WDAC_Wizard
                     if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         textBox.ForeColor = Color.White;
-                        textBox.BackColor = Color.Black;
+                        textBox.BackColor = Color.FromArgb(15,15,15);
                     }
                 }
             }

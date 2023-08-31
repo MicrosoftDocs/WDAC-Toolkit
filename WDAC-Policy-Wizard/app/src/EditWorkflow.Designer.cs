@@ -270,9 +270,9 @@ namespace WDAC_Wizard
             // 
             // panel_Progress
             // 
-            this.panel_Progress.Controls.Add(this.label_Progress);
             this.panel_Progress.Controls.Add(this.pictureBox_Progress);
-            this.panel_Progress.Location = new System.Drawing.Point(533, 11);
+            this.panel_Progress.Controls.Add(this.label_Progress);
+            this.panel_Progress.Location = new System.Drawing.Point(533, 8);
             this.panel_Progress.Name = "panel_Progress";
             this.panel_Progress.Size = new System.Drawing.Size(280, 193);
             this.panel_Progress.TabIndex = 114;
@@ -281,15 +281,18 @@ namespace WDAC_Wizard
             // label_Progress
             // 
             this.label_Progress.AutoSize = true;
+            this.label_Progress.BackColor = System.Drawing.Color.Transparent;
             this.label_Progress.Location = new System.Drawing.Point(15, 18);
             this.label_Progress.Name = "label_Progress";
             this.label_Progress.Size = new System.Drawing.Size(250, 17);
             this.label_Progress.TabIndex = 1;
+            this.label_Progress.Tag = "IgnoreDarkMode";
             this.label_Progress.Text = "Parsing Rules from Event Log Created";
             this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pictureBox_Progress
             // 
+            this.pictureBox_Progress.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.Location = new System.Drawing.Point(76, 48);
@@ -298,10 +301,12 @@ namespace WDAC_Wizard
             this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox_Progress.TabIndex = 0;
             this.pictureBox_Progress.TabStop = false;
+            this.pictureBox_Progress.Tag = "IgnoreDarkMode";
             // 
             // label_LearnMore
             // 
             this.label_LearnMore.AutoSize = true;
+            this.label_LearnMore.BackColor = System.Drawing.Color.Transparent;
             this.label_LearnMore.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label_LearnMore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.label_LearnMore.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -311,6 +316,7 @@ namespace WDAC_Wizard
             this.label_LearnMore.Name = "label_LearnMore";
             this.label_LearnMore.Size = new System.Drawing.Size(289, 18);
             this.label_LearnMore.TabIndex = 107;
+            this.label_LearnMore.Tag = "IgnoreDarkMode";
             this.label_LearnMore.Text = "Learn more about event log conversion     ";
             this.label_LearnMore.Click += new System.EventHandler(this.Label_LearnMore_Click);
             // 
@@ -364,6 +370,7 @@ namespace WDAC_Wizard
             // 
             // panel_EventLog_Conversion
             // 
+            this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
             this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_MDE_AH_Logs);
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_AdvancedHuntingPaths);
             this.panel_EventLog_Conversion.Controls.Add(this.label8);
@@ -373,7 +380,6 @@ namespace WDAC_Wizard
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLogFilePath);
             this.panel_EventLog_Conversion.Controls.Add(this.label4);
             this.panel_EventLog_Conversion.Controls.Add(this.label6);
-            this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
             this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
             this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 265);
             this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
@@ -413,7 +419,7 @@ namespace WDAC_Wizard
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(15, 210);
+            this.label8.Location = new System.Drawing.Point(23, 210);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(349, 18);
             this.label8.TabIndex = 125;
@@ -447,6 +453,7 @@ namespace WDAC_Wizard
             // ahParsingLearnMore_Label
             // 
             this.ahParsingLearnMore_Label.AutoSize = true;
+            this.ahParsingLearnMore_Label.BackColor = System.Drawing.Color.Transparent;
             this.ahParsingLearnMore_Label.Font = new System.Drawing.Font("Tahoma", 9F);
             this.ahParsingLearnMore_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.ahParsingLearnMore_Label.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -456,6 +463,7 @@ namespace WDAC_Wizard
             this.ahParsingLearnMore_Label.Name = "ahParsingLearnMore_Label";
             this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(349, 18);
             this.ahParsingLearnMore_Label.TabIndex = 127;
+            this.ahParsingLearnMore_Label.Tag = "IgnoreDarkMode";
             this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting logs    ";
             this.ahParsingLearnMore_Label.Visible = false;
             this.ahParsingLearnMore_Label.Click += new System.EventHandler(this.AHLearnMoreLabel_Click);
@@ -501,7 +509,7 @@ namespace WDAC_Wizard
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(16, 111);
+            this.label4.Location = new System.Drawing.Point(23, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(274, 18);
             this.label4.TabIndex = 117;
@@ -512,7 +520,7 @@ namespace WDAC_Wizard
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(17, 6);
+            this.label6.Location = new System.Drawing.Point(23, 6);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(432, 18);
             this.label6.TabIndex = 116;
@@ -570,6 +578,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EditWorkflow";
             this.Size = new System.Drawing.Size(1208, 894);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.EditWorkflow_Paint);
             this.policyInfoPanel.ResumeLayout(false);
             this.policyInfoPanel.PerformLayout();
             this.panel_Progress.ResumeLayout(false);
