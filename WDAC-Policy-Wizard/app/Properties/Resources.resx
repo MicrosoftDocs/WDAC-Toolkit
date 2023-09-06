@@ -378,9 +378,6 @@ with a version at or above this specified file version number.</value>
   <data name="RevokedAsUnsigned_Info" xml:space="preserve">
     <value>When enabled, WDAC will treat revoked and expired binaries as unsigned. </value>
   </data>
-  <data name="DefaultPFNVersion" xml:space="preserve">
-    <value>1.0.0.0</value>
-  </data>
   <data name="HashEmptyList_Error" xml:space="preserve">
     <value>Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.</value>
   </data>
@@ -562,5 +559,8 @@ Do you want the Wizard to warn you about these types of path rules in the future
   </data>
   <data name="EmptyWdacSupplementalXml" xml:space="preserve">
     <value>Empty_Supplemental.xml</value>
+  </data>
+  <data name="MaxVersion" xml:space="preserve">
+    <value>65535.65535.65535.65535</value>
   </data>
 </root>

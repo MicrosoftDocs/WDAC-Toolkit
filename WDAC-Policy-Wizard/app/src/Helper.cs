@@ -1475,7 +1475,7 @@ namespace WDAC_Wizard
                 {
                     Allow allowRule = new Allow();
                     allowRule.PackageFamilyName = pfn;
-                    allowRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    allowRule.MinimumFileVersion = Properties.Resources.DefaultVersionString;
                     allowRule.FriendlyName = String.Format("Allow packaged app by Package Family Name (PFN): {0}", pfn);
                     allowRule.ID = String.Format("ID_ALLOW_PFN_{0}", cFileAllowRules);
                     cFileAllowRules++;
@@ -1490,7 +1490,7 @@ namespace WDAC_Wizard
                 {
                     Deny denyRule = new Deny();
                     denyRule.PackageFamilyName = pfn;
-                    denyRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    denyRule.PackageVersion = Properties.Resources.MaxVersion;
                     denyRule.FriendlyName = String.Format("Deny packaged app by Package Family Name (PFN): {0}", pfn);
                     denyRule.ID = String.Format("ID_DENY_PFN_{0}", cFileDenyRules);
                     cFileDenyRules++;
