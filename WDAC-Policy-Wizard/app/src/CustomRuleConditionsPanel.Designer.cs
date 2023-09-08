@@ -226,7 +226,7 @@
             this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
             this.checkedListBoxPackagedApps.Margin = new System.Windows.Forms.Padding(2);
             this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 225);
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 213);
             this.checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
@@ -319,6 +319,7 @@
             // labelFolderScanLearnMore
             // 
             this.labelFolderScanLearnMore.AutoSize = true;
+            this.labelFolderScanLearnMore.BackColor = System.Drawing.Color.Transparent;
             this.labelFolderScanLearnMore.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelFolderScanLearnMore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.labelFolderScanLearnMore.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -328,6 +329,7 @@
             this.labelFolderScanLearnMore.Name = "labelFolderScanLearnMore";
             this.labelFolderScanLearnMore.Size = new System.Drawing.Size(265, 18);
             this.labelFolderScanLearnMore.TabIndex = 113;
+            this.labelFolderScanLearnMore.Tag = "IgnoreDarkMode";
             this.labelFolderScanLearnMore.Text = "Learn more about WDAC rule levels     ";
             this.labelFolderScanLearnMore.Click += new System.EventHandler(this.LabelFolderScanLearnMore_Click);
             // 
@@ -398,6 +400,7 @@
             // labelLearnMoreCom
             // 
             this.labelLearnMoreCom.AutoSize = true;
+            this.labelLearnMoreCom.BackColor = System.Drawing.Color.Transparent;
             this.labelLearnMoreCom.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelLearnMoreCom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.labelLearnMoreCom.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -407,6 +410,7 @@
             this.labelLearnMoreCom.Name = "labelLearnMoreCom";
             this.labelLearnMoreCom.Size = new System.Drawing.Size(313, 18);
             this.labelLearnMoreCom.TabIndex = 112;
+            this.labelLearnMoreCom.Tag = "IgnoreDarkMode";
             this.labelLearnMoreCom.Text = "Learn more about COM object registration      ";
             this.labelLearnMoreCom.Click += new System.EventHandler(this.LabelLearnMoreCom_Click);
             // 
@@ -707,7 +711,7 @@
             // checkBox_CustomValues
             // 
             this.checkBox_CustomValues.AutoSize = true;
-            this.checkBox_CustomValues.Location = new System.Drawing.Point(8, 279);
+            this.checkBox_CustomValues.Location = new System.Drawing.Point(6, 279);
             this.checkBox_CustomValues.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_CustomValues.Name = "checkBox_CustomValues";
             this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
@@ -853,6 +857,7 @@
             // label_Info
             // 
             this.label_Info.AutoSize = true;
+            this.label_Info.BackColor = System.Drawing.Color.Transparent;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.label_Info.Location = new System.Drawing.Point(4, 248);
@@ -860,6 +865,7 @@
             this.label_Info.Name = "label_Info";
             this.label_Info.Size = new System.Drawing.Size(76, 18);
             this.label_Info.TabIndex = 95;
+            this.label_Info.Tag = "IgnoreDarkMode";
             this.label_Info.Text = "Label_Info";
             this.label_Info.Visible = false;
             // 
@@ -1096,6 +1102,7 @@
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
             this.controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
             this.controlHighlight_Panel.TabIndex = 33;
+            this.controlHighlight_Panel.Tag = "IgnoreDarkMode";
             // 
             // headerLabel
             // 
@@ -1181,6 +1188,7 @@
             this.Text = "Custom Rules ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.CustomRuleConditionsPanel_Paint);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);

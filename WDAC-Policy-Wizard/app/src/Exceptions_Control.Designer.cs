@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel_ExceptionRule = new System.Windows.Forms.Panel();
+            this.errorLabel = new System.Windows.Forms.Label();
             this.ruleCondition_Label = new System.Windows.Forms.Label();
             this.panel_FileFolder = new System.Windows.Forms.Panel();
             this.radioButton_Folder = new System.Windows.Forms.RadioButton();
@@ -56,7 +57,6 @@
             this.textBox_ReferenceFile = new System.Windows.Forms.TextBox();
             this.button_Browse = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.errorLabel = new System.Windows.Forms.Label();
             this.panel_ExceptionRule.SuspendLayout();
             this.panel_FileFolder.SuspendLayout();
             this.panel_Publisher_Scroll.SuspendLayout();
@@ -83,6 +83,16 @@
             this.panel_ExceptionRule.Name = "panel_ExceptionRule";
             this.panel_ExceptionRule.Size = new System.Drawing.Size(704, 965);
             this.panel_ExceptionRule.TabIndex = 87;
+            // 
+            // errorLabel
+            // 
+            this.errorLabel.AutoSize = true;
+            this.errorLabel.Location = new System.Drawing.Point(7, 787);
+            this.errorLabel.Name = "errorLabel";
+            this.errorLabel.Size = new System.Drawing.Size(74, 17);
+            this.errorLabel.TabIndex = 110;
+            this.errorLabel.Text = "errorLabel";
+            this.errorLabel.Visible = false;
             // 
             // ruleCondition_Label
             // 
@@ -412,16 +422,6 @@
             this.label11.Text = "Reference File:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // errorLabel
-            // 
-            this.errorLabel.AutoSize = true;
-            this.errorLabel.Location = new System.Drawing.Point(7, 787);
-            this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(74, 17);
-            this.errorLabel.TabIndex = 110;
-            this.errorLabel.Text = "errorLabel";
-            this.errorLabel.Visible = false;
-            // 
             // Exceptions_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -431,6 +431,7 @@
             this.Name = "Exceptions_Control";
             this.Size = new System.Drawing.Size(1001, 988);
             this.Load += new System.EventHandler(this.Exceptions_Control_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Exceptions_Control_Paint);
             this.panel_ExceptionRule.ResumeLayout(false);
             this.panel_ExceptionRule.PerformLayout();
             this.panel_FileFolder.ResumeLayout(false);

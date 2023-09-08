@@ -32,7 +32,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rulesDataGrid = new System.Windows.Forms.DataGridView();
@@ -86,9 +86,14 @@ namespace WDAC_Wizard
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.LightGray;
             this.rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.LightGray;
-            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rulesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,

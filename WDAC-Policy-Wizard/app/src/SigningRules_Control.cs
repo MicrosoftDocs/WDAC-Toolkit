@@ -1256,7 +1256,7 @@ namespace WDAC_Wizard
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         button.ForeColor = Color.White;
-                        button.BackColor = Color.Black;
+                        button.BackColor = Color.FromArgb(15,15,15);
                     }
 
                     // Panels
@@ -1264,7 +1264,7 @@ namespace WDAC_Wizard
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         panel.ForeColor = Color.White;
-                        panel.BackColor = Color.Black;
+                        panel.BackColor = Color.FromArgb(15, 15, 15);
                     }
 
                     // Checkboxes
@@ -1272,7 +1272,7 @@ namespace WDAC_Wizard
                         && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         checkBox.ForeColor = Color.White;
-                        checkBox.BackColor = Color.Black;
+                        checkBox.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
 
@@ -1331,7 +1331,7 @@ namespace WDAC_Wizard
                     if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
-                        label.BackColor = Color.Black;
+                        label.BackColor = Color.FromArgb(15,15,15);
                     }
                 }
             }
@@ -1409,6 +1409,9 @@ namespace WDAC_Wizard
                 // Cells
                 rulesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.White;
+
+                // Grid lines
+                rulesDataGrid.GridColor = Color.Silver;
             }
 
             // Light Mode
@@ -1424,6 +1427,9 @@ namespace WDAC_Wizard
                 // Cells
                 rulesDataGrid.DefaultCellStyle.BackColor = Color.WhiteSmoke; 
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
+
+                // Grid lines
+                rulesDataGrid.GridColor = Color.Black;
             }
         }
     }
