@@ -358,15 +358,26 @@ namespace WDAC_Wizard
                     continue; 
                 }
 
-                if (!settingDict[settingName]) //False case
+                if (!settingDict[settingName]) //False (unchecked) case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
                 }
-                else
+                else // Checked case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Checked";
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
+                }
+
+                // Set BackColor of the checkbox
+                // Dark Mode
+                if(Properties.Settings.Default.useDarkMode)
+                {
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15); 
+                }
+                else
+                {
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
                 }
 
                 this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
@@ -392,7 +403,17 @@ namespace WDAC_Wizard
         {
             // Change the background color when mouse is hovering above checkbox
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.FromArgb(190, 230, 253);
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackColor = Color.DodgerBlue;
+            }
+            // Light Mode
+            else
+            {
+                checkBox.BackColor = Color.FromArgb(190, 230, 253);
+            }
         }
 
         /// <summary>
@@ -402,7 +423,17 @@ namespace WDAC_Wizard
         private void SettingCheckBox_Leave(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.White;
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackColor = Color.FromArgb(15, 15, 15);
+            }
+            // Light Mode
+            else
+            {
+                checkBox.BackColor = Color.White;
+            }
         }
 
         /// <summary>
@@ -452,6 +483,11 @@ namespace WDAC_Wizard
             List<Label> labels = new List<Label>();
             GetLabelsRecursive(this, labels);
             SetLabelsColor(labels);
+
+            // Set correct Icons
+            List<PictureBox> pictureBoxes = new List<PictureBox>();
+            GetPictureBoxesRecursive(this, pictureBoxes);
+            SetPictureBoxesColor(pictureBoxes); 
 
             // Set Form Back Color
             SetFormBackColor();
@@ -522,6 +558,50 @@ namespace WDAC_Wizard
                         label.ForeColor = Color.Black;
                         label.BackColor = Color.White; 
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetPictureBoxesRecursive(Control parent, List<PictureBox> pictureBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    pictureBoxes.Add(pictureBox);
+                }
+                else
+                {
+                    GetPictureBoxesRecursive(control, pictureBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets all the checkbox PictureBoxes background color
+        /// </summary>
+        private void SetPictureBoxesColor(List<PictureBox> pictureBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (PictureBox pictureBox in pictureBoxes)
+                {
+                    pictureBox.BackColor = Color.FromArgb(15,15,15);
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (PictureBox pictureBox in pictureBoxes)
+                {
+                    pictureBox.BackColor = Color.White;
                 }
             }
         }

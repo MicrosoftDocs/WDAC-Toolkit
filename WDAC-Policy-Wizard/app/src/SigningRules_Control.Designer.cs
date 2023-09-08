@@ -86,14 +86,9 @@ namespace WDAC_Wizard
             this.rulesDataGrid.BackgroundColor = System.Drawing.Color.LightGray;
             this.rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.rulesDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.LightGray;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rulesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
