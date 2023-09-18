@@ -826,6 +826,9 @@ namespace WDAC_Wizard
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
+
+            // Flag to skip policy conversion in the case of signed policy without PolicySigners section
+            bool skipPolicyConversion = false; 
             
             if(this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
@@ -845,7 +848,7 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
                 // Handle Policy Rule-Options
-                SetPolicyRuleOptions(worker);
+                SetPolicyRuleOptions(worker, ref skipPolicyConversion);
 
                 // Handle COM rules
                 CreateComObjectRules(worker);
@@ -856,7 +859,8 @@ namespace WDAC_Wizard
             SetAdditionalParameters(worker);
 
             // Convert the policy from XML to Binary file
-            if (Properties.Settings.Default.convertPolicyToBinary)
+            if (Properties.Settings.Default.convertPolicyToBinary
+                && !skipPolicyConversion)
             {
                 this.BinaryFileCreated = ConvertPolicyToBinary();
             }
@@ -934,7 +938,7 @@ namespace WDAC_Wizard
         /// Create the policy rule-option pairings the user has set and creates a seperate CI policy just for the pairings. 
         /// Also removes all of the rule-options for the template policy such that there is no merge conflict. 
         /// </summary>
-        public void SetPolicyRuleOptions(BackgroundWorker worker)
+        public void SetPolicyRuleOptions(BackgroundWorker worker, ref bool skipPolicyConversion)
         {
             this.Log.AddInfoMsg("--- Create Policy Rule Options --- ");
 
@@ -974,16 +978,27 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Assert unsigned CI policy (rule #6)
-            // Fixes issues with converting to binary where the policy does not specify PolicySigners
+            // Updated logic for Issue #262 - instead of forcing rule-option 6, skip binary conversion
+            // if the policy has the signed CI policy option (rule #6) and lacks policy signers
             if (Properties.Settings.Default.convertPolicyToBinary 
                 && !Policy.HasRuleOption(OptionType.EnabledUnsignedSystemIntegrityPolicy))
             {
-                RuleType unsignedPolicyRule = new RuleType();
-                unsignedPolicyRule.Item = OptionType.EnabledUnsignedSystemIntegrityPolicy;
-                ruleOptionsList.Add(unsignedPolicyRule);
+                if(finalPolicy.UpdatePolicySigners == null 
+                    || finalPolicy.UpdatePolicySigners.Length < 1)
+                {
+                    skipPolicyConversion = true; 
+                }
 
-                this.Log.AddInfoMsg("Asserting EnabledUnsignedSystemIntegrityPolicy (rule-option 6)");
+                // Handle Supplemental Signers issue - must have supplemental signers if signed policy && policy
+                // allows supplemental policies
+                if(Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies))
+                {
+                    if (finalPolicy.SupplementalPolicySigners == null
+                    || finalPolicy.SupplementalPolicySigners.Length < 1)
+                    {
+                        skipPolicyConversion = true;
+                    }
+                }
             }
 
             // De-duplicate the Rule Options list

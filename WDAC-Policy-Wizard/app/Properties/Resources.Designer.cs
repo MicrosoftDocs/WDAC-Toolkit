@@ -300,15 +300,6 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.0.0.0.
-        /// </summary>
-        internal static string DefaultPFNVersion {
-            get {
-                return ResourceManager.GetString("DefaultPFNVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 0.0.0.0.
         /// </summary>
         internal static string DefaultVersionString {
@@ -728,6 +719,15 @@ namespace WDAC_Wizard.Properties {
         internal static string ManagedInst_Info {
             get {
                 return ResourceManager.GetString("ManagedInst_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 65535.65535.65535.65535.
+        /// </summary>
+        internal static string MaxVersion {
+            get {
+                return ResourceManager.GetString("MaxVersion", resourceCulture);
             }
         }
         

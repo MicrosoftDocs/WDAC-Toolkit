@@ -1475,7 +1475,7 @@ namespace WDAC_Wizard
                 {
                     Allow allowRule = new Allow();
                     allowRule.PackageFamilyName = pfn;
-                    allowRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    allowRule.MinimumFileVersion = Properties.Resources.DefaultVersionString;
                     allowRule.FriendlyName = String.Format("Allow packaged app by Package Family Name (PFN): {0}", pfn);
                     allowRule.ID = String.Format("ID_ALLOW_PFN_{0}", cFileAllowRules);
                     cFileAllowRules++;
@@ -1490,7 +1490,7 @@ namespace WDAC_Wizard
                 {
                     Deny denyRule = new Deny();
                     denyRule.PackageFamilyName = pfn;
-                    denyRule.MinimumFileVersion = Properties.Resources.DefaultPFNVersion;
+                    denyRule.PackageVersion = Properties.Resources.MaxVersion;
                     denyRule.FriendlyName = String.Format("Deny packaged app by Package Family Name (PFN): {0}", pfn);
                     denyRule.ID = String.Format("ID_DENY_PFN_{0}", cFileDenyRules);
                     cFileDenyRules++;
@@ -2506,77 +2506,134 @@ namespace WDAC_Wizard
             cAllowRules = 0;
             cFileAttribs = 0;
             cSigners = 0;
-            int _count = 0;
 
-            string oldId;
+            string ruleId;
 
             // Dictionary containing the mapping between old and new ids
-            Dictionary<string, string> idMapping = new Dictionary<string, string>(); 
+            Dictionary<string, string> idMapping = new Dictionary<string, string>();
+
+            // Dictionary containing all FileRule IDs. Addresses Bug #287 where 
+            // 2 IDs can collide 
+            Dictionary<string, int> existingIDs = new Dictionary<string, int>(); 
 
             // Check all FileRules
             object[] fileRules = siPolicy.FileRules;
 
+            // First pass: get all IDs --> existing IDs and non-conformant IDs --> idMapping
             foreach(var fileRule in fileRules)
             {
                 // Allow Rules
                 if(fileRule.GetType() == typeof(Allow))
                 {
-                    // Check for "_0_0_0_0_0_0" pattern
-                    Match match = Regex.Match(((Allow)fileRule).ID, UNDERSCORE_PATTERN);
+                    ruleId = ((Allow)fileRule).ID; 
+
+                    // Populate the existing IDs dictionary
+                    if (existingIDs.ContainsKey(ruleId))
+                    {
+                        existingIDs[ruleId]++; 
+                    }
+                    else
+                    {
+                        existingIDs[ruleId] = 0; 
+                    }
+
+                    // Check for non-conformant IDs case: "_0_0_0" pattern
+                    Match match = Regex.Match(ruleId, UNDERSCORE_PATTERN);
 
                     if (match.Success)
                     {
-                        oldId = ((Allow)fileRule).ID; 
-                        ((Allow)fileRule).ID = FormatID(fileRule, match);
-
-                        // Handle duplicates
-                        if(idMapping.ContainsKey(oldId))
-                        {
-                            oldId += "_" + cAllowRules++.ToString(); 
-                        }
-
-                        idMapping[oldId] = ((Allow)fileRule).ID; 
+                        idMapping[ruleId] = ""; 
                     }
                 }
 
                 // Deny Rules
                 else if (fileRule.GetType() == typeof(Deny))
                 {
-                    // Check for "_0_0_0_0_0_0" pattern
-                    Match match = Regex.Match(((Deny)fileRule).ID, UNDERSCORE_PATTERN);
+                    ruleId = ((Deny)fileRule).ID;
+
+                    // Populate the existing IDs dictionary
+                    if (existingIDs.ContainsKey(ruleId))
+                    {
+                        existingIDs[ruleId]++;
+                    }
+                    else
+                    {
+                        existingIDs[ruleId] = 0;
+                    }
+
+                    // Check for non-conformant IDs case: "_0_0_0" pattern
+                    Match match = Regex.Match(ruleId, UNDERSCORE_PATTERN);
 
                     if (match.Success)
                     {
-                        oldId = ((Deny)fileRule).ID;
-                        ((Deny)fileRule).ID = FormatID(fileRule, match);
-
-                        // Handle duplicates
-                        if (idMapping.ContainsKey(oldId))
-                        {
-                            oldId += "_" + cDenyRules++.ToString();
-                        }
-
-                        idMapping[oldId] = ((Deny)fileRule).ID;
+                        idMapping[ruleId] = "";
                     }
                 }
 
                 // File Attribute Rules
                 else if(fileRule.GetType() == typeof(FileAttrib))
                 {
-                    // Check for "_0_0_0_0_0_0" pattern
-                    Match match = Regex.Match(((FileAttrib)fileRule).ID, UNDERSCORE_PATTERN);
+                    ruleId = ((FileAttrib)fileRule).ID;
+
+                    // Populate the existing IDs dictionary
+                    if (existingIDs.ContainsKey(ruleId))
+                    {
+                        existingIDs[ruleId]++;
+                    }
+                    else
+                    {
+                        existingIDs[ruleId] = 0;
+                    }
+
+                    // Check for non-conformant IDs case: "_0_0_0" pattern
+                    Match match = Regex.Match(ruleId, UNDERSCORE_PATTERN);
 
                     if (match.Success)
                     {
-                        oldId = ((FileAttrib)fileRule).ID;
-                        ((FileAttrib)fileRule).ID = FormatID(fileRule, match);
+                        idMapping[ruleId] = "";
+                    }
+                }
+            }
 
-                        // Handle duplicates
-                        if (idMapping.ContainsKey(oldId))
-                        {
-                            oldId += "_" + cFileAttribs++.ToString();
-                        }
-                        idMapping[oldId] = ((FileAttrib)fileRule).ID;
+            // Second pass: map non-conformant IDs --> idMapping & ensure uniqueness
+            // If there are no keys in idMapping, nothing mateched the _0_0_0 pattern
+            if(idMapping.Keys.Count < 1)
+            {
+                return siPolicy; 
+            }
+
+            foreach (var fileRule in fileRules)
+            {
+                // Allow Rules
+                if (fileRule.GetType() == typeof(Allow))
+                {
+                    ruleId = ((Allow)fileRule).ID;
+                    if(idMapping.ContainsKey(ruleId))
+                    {
+                        ((Allow)fileRule).ID = FormatID(fileRule, ref existingIDs);
+                        idMapping[ruleId] = ((Allow)fileRule).ID;
+                    }
+                }
+
+                // Deny Rules
+                else if (fileRule.GetType() == typeof(Deny))
+                {
+                    ruleId = ((Deny)fileRule).ID;
+                    if (idMapping.ContainsKey(ruleId))
+                    {
+                        ((Deny)fileRule).ID = FormatID(fileRule, ref existingIDs);
+                        idMapping[ruleId] = ((Deny)fileRule).ID;
+                    }
+                }
+
+                // File Attribute Rules
+                else if (fileRule.GetType() == typeof(FileAttrib))
+                {
+                    ruleId = ((FileAttrib)fileRule).ID;
+                    if (idMapping.ContainsKey(ruleId))
+                    {
+                        ((FileAttrib)fileRule).ID = FormatID(fileRule, ref existingIDs);
+                        idMapping[ruleId] = ((FileAttrib)fileRule).ID;
                     }
                 }
             }
@@ -2647,34 +2704,56 @@ namespace WDAC_Wizard
 
             // Reset all counts
             cSigners = 0;
-            int _count = 0;
 
-            string oldId;
+            string signerID;
 
             // Dictionary containing the mapping between old and new ids
             Dictionary<string, string> idMapping = new Dictionary<string, string>();
 
+            // Dictionary containing all FileRule IDs. Addresses Bug #287 where 
+            // 2 IDs can collide 
+            Dictionary<string, int> existingIDs = new Dictionary<string, int>();
 
             // Check all FileRules
             Signer[] signers = siPolicy.Signers;
 
+            // First pass: get all IDs --> existing IDs and non-conformant IDs --> idMapping
             foreach (var signer in signers)
             {
-                // Check for "_0_0_0_0_0_0" pattern
-                Match match = Regex.Match(signer.ID, UNDERSCORE_PATTERN);
+                signerID = signer.ID;
+                // Populate the existing IDs dictionary
+                if (existingIDs.ContainsKey(signerID))
+                {
+                    existingIDs[signerID]++;
+                }
+                else
+                {
+                    existingIDs[signerID] = 0;
+                }
+
+                // Check for non-conformant IDs case: "_0_0_0" pattern
+                Match match = Regex.Match(signerID, UNDERSCORE_PATTERN);
 
                 if (match.Success)
                 {
-                    oldId = signer.ID;
-                    signer.ID = FormatID(signer, match);
+                    idMapping[signerID] = "";
+                }
+            }
 
-                    // Handle duplicates
-                    if (idMapping.ContainsKey(oldId))
-                    {
-                        oldId += "_" + cSigners++.ToString();
-                    }
+            // Second pass: map non-conformant IDs --> idMapping & ensure uniqueness
+            // If there are no keys in idMapping, nothing mateched the _0_0_0 pattern
+            if (idMapping.Keys.Count < 1)
+            {
+                return siPolicy;
+            }
 
-                    idMapping[oldId] = signer.ID;
+            foreach (var signer in signers)
+            {
+                signerID = signer.ID; 
+                if (idMapping.ContainsKey(signerID))
+                {
+                    signer.ID = FormatID(signer, ref existingIDs);
+                    idMapping[signerID] = signer.ID;
                 }
             }
 
@@ -2775,35 +2854,83 @@ namespace WDAC_Wizard
 
 
         /// <summary>
-        /// Formats the ID to a fixed length of 5 underscores. An int will follow the 5th _
+        /// Formats the ID to a fixed length of 3 underscores. An int will follow the 3rd_
         /// </summary>
         /// <param name="fileRule"></param>
         /// <returns></returns>
-        static string FormatID(object fileRule, Match match)
+        static string FormatID(object fileRule, ref Dictionary<string,int> existingIds)
         {
             // Allow Rules
             // ID_ALLOW_CUSTOM_SUBCUSTOM1_SUBCUSTOM2_<>
             if (fileRule.GetType() == typeof(Allow))
             {
-                return ((Allow)fileRule).ID.Substring(0, match.Index) + "_" + cFileAllowRules++.ToString();
+                string currId = ((Allow)fileRule).ID; 
+                string proposedId = currId.Substring(0, currId.IndexOf(UNDERSCORE_PATTERN)) + "_" + cFileAllowRules++.ToString();
+
+                // Loop until we find a unique ID
+                while(existingIds.ContainsKey(proposedId))
+                {
+                    proposedId = proposedId.Substring(0, proposedId.LastIndexOf('_')) + "_" + cFileAllowRules++.ToString();
+                }
+
+                // Add new ID to existingIDs Diction
+                existingIds[proposedId] = 0;
+
+                return proposedId; 
             }
 
             // Deny Rules
             else if(fileRule.GetType() == typeof(Deny))
             {
-                return ((Deny)fileRule).ID.Substring(0, match.Index) + "_" + cFileDenyRules++.ToString();
+                string currId = ((Deny)fileRule).ID;
+                string proposedId = currId.Substring(0, currId.IndexOf(UNDERSCORE_PATTERN)) + "_" + cFileDenyRules++.ToString();
+                
+                // Loop until we find a unique ID
+                while (existingIds.ContainsKey(proposedId))
+                {
+                    proposedId = proposedId.Substring(0, proposedId.LastIndexOf('_')) + "_" + cFileDenyRules++.ToString();
+                }
+
+                // Add new ID to existingIDs Diction
+                existingIds[proposedId] = 0;
+
+                return proposedId;
             }
 
             // FileAttribute Rules
             else if (fileRule.GetType() == typeof(FileAttrib))
             {
-                return ((FileAttrib)fileRule).ID.Substring(0, match.Index) + "_" + cFileAttribs++.ToString();
+                string currId = ((FileAttrib)fileRule).ID;
+                string proposedId = currId.Substring(0, currId.IndexOf(UNDERSCORE_PATTERN)) + "_" + cFileAttribRules++.ToString();
+                
+                // Loop until we find a unique ID
+                while (existingIds.ContainsKey(proposedId))
+                {
+                    proposedId = proposedId.Substring(0, proposedId.LastIndexOf('_')) + "_" + cFileAttribRules++.ToString();
+                }
+
+                // Add new ID to existingIDs Diction
+                existingIds[proposedId] = 0; 
+
+                return proposedId;
             }
 
             // Allowed & Denied Signers
             else if(fileRule.GetType() == typeof(Signer))
             {
-                return ((Signer)fileRule).ID.Substring(0, match.Index) + "_" + cSigners++.ToString();
+                string currId = ((Signer)fileRule).ID;
+                string proposedId = currId.Substring(0, currId.IndexOf(UNDERSCORE_PATTERN)) + "_" + cSigners++.ToString();
+
+                // Loop until we find a unique ID
+                while (existingIds.ContainsKey(proposedId))
+                {
+                    proposedId = proposedId.Substring(0, proposedId.LastIndexOf('_')) + "_" + cSigners++.ToString();
+                }
+
+                // Add new ID to existingIDs Diction
+                existingIds[proposedId] = 0;
+
+                return proposedId;
             }
 
             // Unknown type
@@ -2812,7 +2939,6 @@ namespace WDAC_Wizard
                 return String.Empty; 
             }
         }
-
 
         // End of SiPolicy Helper methods
 
