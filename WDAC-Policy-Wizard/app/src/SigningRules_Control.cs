@@ -1218,6 +1218,12 @@ namespace WDAC_Wizard
 
             // Set Grid Colors
             SetGridColors();
+
+            // Repaint the Custom Rules Condition Panel, if applicable
+            if(customRuleConditionsPanel != null)
+            {
+                customRuleConditionsPanel.ForceRepaint();
+            }
         }
 
         /// <summary>

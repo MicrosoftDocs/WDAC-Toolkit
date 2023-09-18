@@ -999,7 +999,7 @@
             // 
             // button_CreateRule
             // 
-            this.button_CreateRule.BackColor = System.Drawing.Color.Transparent;
+            this.button_CreateRule.BackColor = System.Drawing.Color.White;
             this.button_CreateRule.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.button_CreateRule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_CreateRule.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1015,7 +1015,7 @@
             // 
             // button_Next
             // 
-            this.button_Next.BackColor = System.Drawing.Color.Transparent;
+            this.button_Next.BackColor = System.Drawing.Color.White;
             this.button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Next.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1032,15 +1032,16 @@
             // control_Panel
             // 
             this.control_Panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.control_Panel.Controls.Add(this.workflow_Label);
             this.control_Panel.Controls.Add(this.page2_Button);
             this.control_Panel.Controls.Add(this.page1_Button);
+            this.control_Panel.Controls.Add(this.workflow_Label);
             this.control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.control_Panel.Location = new System.Drawing.Point(0, 61);
             this.control_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.control_Panel.Name = "control_Panel";
-            this.control_Panel.Size = new System.Drawing.Size(122, 678);
+            this.control_Panel.Size = new System.Drawing.Size(122, 778);
             this.control_Panel.TabIndex = 108;
+            this.control_Panel.Tag = "IgnoreDarkMode";
             // 
             // workflow_Label
             // 
@@ -1057,10 +1058,9 @@
             // 
             this.page2_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.page2_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.page2_Button.Enabled = false;
             this.page2_Button.FlatAppearance.BorderSize = 0;
-            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.page2_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page2_Button.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -1070,6 +1070,7 @@
             this.page2_Button.Name = "page2_Button";
             this.page2_Button.Size = new System.Drawing.Size(122, 60);
             this.page2_Button.TabIndex = 36;
+            this.page2_Button.Tag = "IgnoreDarkMode";
             this.page2_Button.Text = "Rule Exceptions";
             this.page2_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.page2_Button.UseVisualStyleBackColor = false;
@@ -1078,10 +1079,9 @@
             // 
             this.page1_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.page1_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.page1_Button.Enabled = false;
             this.page1_Button.FlatAppearance.BorderSize = 0;
-            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1090,6 +1090,7 @@
             this.page1_Button.Name = "page1_Button";
             this.page1_Button.Size = new System.Drawing.Size(120, 52);
             this.page1_Button.TabIndex = 35;
+            this.page1_Button.Tag = "IgnoreDarkMode";
             this.page1_Button.Text = "Rule Conditions";
             this.page1_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.page1_Button.UseVisualStyleBackColor = false;
@@ -1129,7 +1130,7 @@
             // 
             // button_AddException
             // 
-            this.button_AddException.BackColor = System.Drawing.Color.Transparent;
+            this.button_AddException.BackColor = System.Drawing.Color.White;
             this.button_AddException.Enabled = false;
             this.button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
             this.button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1142,11 +1143,12 @@
             this.button_AddException.TabIndex = 111;
             this.button_AddException.Text = "Add Exception";
             this.button_AddException.UseVisualStyleBackColor = false;
+            this.button_AddException.EnabledChanged += new System.EventHandler(this.Button_AddException_EnabledChanged);
             this.button_AddException.Click += new System.EventHandler(this.Button_AddException_Click);
             // 
             // button_Back
             // 
-            this.button_Back.BackColor = System.Drawing.Color.Transparent;
+            this.button_Back.BackColor = System.Drawing.Color.White;
             this.button_Back.Enabled = false;
             this.button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
             this.button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1159,6 +1161,7 @@
             this.button_Back.TabIndex = 110;
             this.button_Back.Text = "< Back";
             this.button_Back.UseVisualStyleBackColor = false;
+            this.button_Back.EnabledChanged += new System.EventHandler(this.Button_Back_EnabledChanged);
             this.button_Back.Click += new System.EventHandler(this.Button_Back_Click);
             // 
             // backgroundWorker
@@ -1173,15 +1176,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(766, 828);
+            this.Controls.Add(this.controlHighlight_Panel);
             this.Controls.Add(this.button_AddException);
             this.Controls.Add(this.button_Back);
             this.Controls.Add(this.headerPanel);
-            this.Controls.Add(this.controlHighlight_Panel);
             this.Controls.Add(this.label_Error);
-            this.Controls.Add(this.control_Panel);
             this.Controls.Add(this.button_Next);
             this.Controls.Add(this.panel_CustomRules);
             this.Controls.Add(this.button_CreateRule);
+            this.Controls.Add(this.control_Panel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "CustomRuleConditionsPanel";

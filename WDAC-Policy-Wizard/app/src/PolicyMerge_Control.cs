@@ -325,8 +325,9 @@ namespace WDAC_Wizard.src
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.White;
+                        button.ForeColor = Color.DodgerBlue;
                         button.BackColor = Color.FromArgb(15, 15, 15);
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
                     }
 
                     // Panels
@@ -364,8 +365,9 @@ namespace WDAC_Wizard.src
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.Black;
+                        button.ForeColor = Color.DodgerBlue;
                         button.BackColor = Color.White;
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
                     }
 
                     // Panels
