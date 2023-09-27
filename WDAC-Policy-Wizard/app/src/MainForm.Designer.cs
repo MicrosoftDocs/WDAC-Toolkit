@@ -77,7 +77,7 @@ namespace WDAC_Wizard
             this.button_New.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
             this.button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_New.Image = global::WDAC_Wizard.Properties.Resources.newPolicy;
+            this.button_New.Image = Properties.Resources.newPolicy;
             this.button_New.Location = new System.Drawing.Point(328, 225);
             this.button_New.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_New.Name = "button_New";

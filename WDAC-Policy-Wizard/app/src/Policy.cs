@@ -215,6 +215,25 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Removes a given rule option if it exists in the Policy
+        /// </summary>
+        /// <param name="targetRuleOption"></param>
+        public void RemoveRuleOption(OptionType targetRuleOption)
+        {
+            List<RuleType> tempRuleOptions = this.PolicyRuleOptions; 
+            for (int i = 0; i < tempRuleOptions.Count; i++)
+            {
+                if (tempRuleOptions[i].Item == OptionType.EnabledAllowSupplementalPolicies)
+                {
+                    tempRuleOptions.RemoveAt(i);
+                    break;
+                }
+            }
+
+            this.PolicyRuleOptions = tempRuleOptions; 
+        }
+
+        /// <summary>
         /// Checks if a given rule option is already specified in the Policy
         /// </summary>
         /// <param name="targetRuleOption">Rule OptionType to query the Policy object for</param>

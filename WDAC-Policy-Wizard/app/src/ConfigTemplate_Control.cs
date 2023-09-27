@@ -554,6 +554,14 @@ namespace WDAC_Wizard
                         {
                             this.Policy.ConfigRules[name]["CurrentValue"] = value;
                         }
+
+                        // Mirror the value for signed policy based on the value in the base policy
+                        // This will allow for the resulting xml to compile to bin
+                        if(name == "UnsignedSystemIntegrityPolicy")
+                        {
+                            SetRuleOptionState(name);
+                        }
+
                     }
                     else
                     {
@@ -611,7 +619,8 @@ namespace WDAC_Wizard
                 // User only provided a base policy ID to expand
                 if(this._MainWindow.Policy.BasePolicyId != Guid.Empty)
                 {
-                    xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.EmptyWdacXml);
+                    xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, 
+                                                            Properties.Resources.EmptyWdacSupplementalXml);
                 }
                 // User provided a path to the base policy
                 else
