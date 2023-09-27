@@ -272,6 +272,330 @@ namespace WDAC_Wizard.src
         {
             this.label_Error.Visible = false;
         }
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PolicyMerge_Control_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Labels Panels, Textboxes, Buttons)
+            SetControlsColor();
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set the Rules Grid colors
+            SetGridColors();
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.DodgerBlue;
+                        button.BackColor = Color.FromArgb(15, 15, 15);
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Labels
+                    else if (control is Label label
+                        && (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.DodgerBlue;
+                        button.BackColor = Color.White;
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                    }
+
+                    // Labels
+                    else if (control is Label label
+                        && (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.FromArgb(15,15,15);
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTextBoxesRecursive(Control parent, List<TextBox> textBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBoxes.Add(textBox);
+                }
+                else
+                {
+                    GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetTextBoxesColor(List<TextBox> textBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetCheckBoxesRecursive(Control parent, List<CheckBox> checkBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is CheckBox checkBox)
+                {
+                    checkBoxes.Add(checkBox);
+                }
+                else
+                {
+                    GetCheckBoxesRecursive(control, checkBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetCheckBoxesColor(List<CheckBox> checkBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (CheckBox checkBox in checkBoxes)
+                {
+                    if (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkBox.ForeColor = Color.White;
+                        checkBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (CheckBox checkBox in checkBoxes)
+                {
+                    if (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkBox.ForeColor = Color.Black;
+                        checkBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the Rules Grid colors for Dark and Light Mode
+        /// </summary>
+        private void SetGridColors()
+        {
+            // Set the Rules Grid colors for Light and Dark Mode 
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                policiesDataGrid.BackgroundColor = Color.Black; // FromArgb(15, 15, 15);
+                policiesDataGrid.GridColor = Color.Black; // FromArgb(15, 15, 15);
+
+                // Headers
+                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+                // Cells
+                policiesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                policiesDataGrid.DefaultCellStyle.ForeColor = Color.White;
+            }
+
+            // Light Mode
+            else
+            {
+                policiesDataGrid.BackgroundColor = Color.LightGray;
+                policiesDataGrid.GridColor = Color.DimGray;
+
+                // Header
+                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+
+                // Cells
+                policiesDataGrid.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                policiesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
+            }
+        }
     }
 
     // Class for the table datastore

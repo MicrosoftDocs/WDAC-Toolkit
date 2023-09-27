@@ -181,6 +181,41 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the state for the Dark Mode Interface Setting. If disabled, light mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DarkMode_CheckBox_Click(object sender, EventArgs e)
+        {
+            // Toggle the UI and set the setting
+            // Currently true, set to false
+            PictureBox checkBox = ((PictureBox)sender);
+
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
+                checkBox.Tag = "Unchecked";
+                Properties.Settings.Default.useDarkMode = false;
+            }
+            else // false, set to true
+            {
+                checkBox.BackgroundImage = Properties.Resources.check_box_checked;
+                checkBox.Tag = "Checked";
+                Properties.Settings.Default.useDarkMode = true;
+            }
+
+            // Save setting and show update message to user
+            SaveSetting();
+
+            // Set the Light or Dark Mode UI Elements
+            SetPageUI();
+
+            // Mode changed. Need to repaint all other UI elements like 
+            // MainWindow, Control Panel, other existing Pages
+            RepaintUIModeChange(); 
+        }
+
+        /// <summary>
         /// Saves the Wizard Setting and displays the update label
         /// </summary>
         private void SaveSetting()
@@ -264,8 +299,15 @@ namespace WDAC_Wizard
                     this.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
                 }
 
+                // Set the UI state for all the checkboxes
                 SetSettingsValues(this.SettingsDict);
                 Properties.Settings.Default.Reset();
+
+                // Re-load page to set Light Mode UI Elements
+                SetPageUI();
+
+                // Re-load all other pages to set Light Mode UI 
+                RepaintUIModeChange();
             }
         }
 
@@ -284,6 +326,7 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
             this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
             this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
+            this.SettingsDict.Add("useDarkMode", (bool)Properties.Settings.Default.useDarkMode);
 
             this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
@@ -291,7 +334,11 @@ namespace WDAC_Wizard
                 this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
             }
 
-            SetSettingsValues(this.SettingsDict); 
+            // Set the UI state for all the checkboxes
+            SetSettingsValues(this.SettingsDict);
+
+            // Set the Light or Dark Mode UI Elements
+            SetPageUI();
         }
 
         /// <summary>
@@ -311,15 +358,26 @@ namespace WDAC_Wizard
                     continue; 
                 }
 
-                if (!settingDict[settingName]) //False case
+                if (!settingDict[settingName]) //False (unchecked) case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
                 }
-                else
+                else // Checked case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Checked";
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
+                }
+
+                // Set BackColor of the checkbox
+                // Dark Mode
+                if(Properties.Settings.Default.useDarkMode)
+                {
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15); 
+                }
+                else
+                {
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
                 }
 
                 this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
@@ -345,7 +403,17 @@ namespace WDAC_Wizard
         {
             // Change the background color when mouse is hovering above checkbox
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.FromArgb(190, 230, 253);
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackColor = Color.DodgerBlue;
+            }
+            // Light Mode
+            else
+            {
+                checkBox.BackColor = Color.FromArgb(190, 230, 253);
+            }
         }
 
         /// <summary>
@@ -355,7 +423,17 @@ namespace WDAC_Wizard
         private void SettingCheckBox_Leave(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.White;
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                checkBox.BackColor = Color.FromArgb(15, 15, 15);
+            }
+            // Light Mode
+            else
+            {
+                checkBox.BackColor = Color.White;
+            }
         }
 
         /// <summary>
@@ -394,6 +472,213 @@ namespace WDAC_Wizard
             {
                 this.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
             }
+        }
+
+        /// <summary>
+        /// Sets all of the Light and Dark Mode UI Elements
+        /// </summary>
+        private void SetPageUI()
+        {
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set correct Icons
+            List<PictureBox> pictureBoxes = new List<PictureBox>();
+            GetPictureBoxesRecursive(this, pictureBoxes);
+            SetPictureBoxesColor(pictureBoxes); 
+
+            // Set Form Back Color
+            SetFormBackColor();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void RepaintUIModeChange()
+        {
+            // MainForm UI Elements
+            SetResetButtonColor(); // Set 'Reset' Button Colors
+            ResetControlPanelUI(); // Set the Control Panel Colors
+            ResetNextButtonUI();  // Set the Next Button Colors
+
+            ResetMainWindowColors();  // Set the MainWindow form colors
+
+            // Revalidate and paint all existing pages
+            RepaintAllExistingPages();
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                foreach(Label label in labels)
+                {
+                    if(label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black; 
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White; 
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetPictureBoxesRecursive(Control parent, List<PictureBox> pictureBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    pictureBoxes.Add(pictureBox);
+                }
+                else
+                {
+                    GetPictureBoxesRecursive(control, pictureBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets all the checkbox PictureBoxes background color
+        /// </summary>
+        private void SetPictureBoxesColor(List<PictureBox> pictureBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (PictureBox pictureBox in pictureBoxes)
+                {
+                    pictureBox.BackColor = Color.FromArgb(15,15,15);
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (PictureBox pictureBox in pictureBoxes)
+                {
+                    pictureBox.BackColor = Color.White;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the form to white or black depending on the 
+        /// state of the Dark Mode setting
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Sets the colors for the Reset Button depending 
+        /// on the state of Light or Dark Mode
+        /// </summary>
+        private void SetResetButtonColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                resetButton.ForeColor = Color.DodgerBlue;
+                resetButton.BackColor = Color.Black; 
+            }
+
+            // Light Mode
+            else
+            {
+                resetButton.ForeColor = Color.Black;
+                resetButton.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        /// <summary>
+        /// Resets the colors for Main window
+        /// </summary>
+        private void ResetMainWindowColors()
+        {
+            this._MainWindow.SetMainWindowColors(); 
+        }
+
+        /// <summary>
+        /// Resets the color of the control panel in
+        /// the MainWindow class
+        /// </summary>
+        private void ResetControlPanelUI()
+        {
+            this._MainWindow.SetControlPanelUI(); 
+        }
+
+        /// <summary>
+        /// Resets the color of the Next Button UI in 
+        /// the MainWindow class
+        /// </summary>
+        private void ResetNextButtonUI()
+        {
+            this._MainWindow.SetNextButtonUI(); 
+        }
+
+        /// <summary>
+        /// Forces revalidation and painting of all previously loaded pages
+        /// so they are in the correct Dark or Light mode
+        /// </summary>
+        private void RepaintAllExistingPages()
+        {
+            this._MainWindow.ReloadPreviousPages(); 
         }
     }
 }

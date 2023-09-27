@@ -774,5 +774,249 @@ namespace WDAC_Wizard
                 this.ExceptionRule.Type = PolicyCustomRules.RuleType.FolderPath;
             }
         }
+
+        /// <summary>
+        /// Fires on Load, Paint, Refresh. 
+        /// Sets the colors on the UI elements for Dark and Light mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Exceptions_Control_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels, buttons)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set color of the Grid
+            SetGridColors(); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.White;
+                        button.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Checkboxes
+                    else if (control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.White;
+                        checkBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.White;
+                        radioButton.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.White;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.Black;
+                        checkBox.BackColor = Color.White;
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.Black;
+                        radioButton.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the toggle buttons on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTogglesRecursive(Control parent, List<Button> toggles)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Button toggle)
+                {
+                    toggles.Add(toggle);
+                }
+                else
+                {
+                    GetTogglesRecursive(control, toggles);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the Rules Grid colors for Dark and Light Mode
+        /// </summary>
+        private void SetGridColors()
+        {
+            // Set the Rules Grid colors for Light and Dark Mode 
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                dataGridView_Exceptions.BackgroundColor = Color.FromArgb(15, 15, 15);
+                dataGridView_Exceptions.GridColor = Color.FromArgb(15, 15, 15);
+
+                // Header
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+
+                // Cells
+                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                dataGridView_Exceptions.DefaultCellStyle.ForeColor = Color.White;
+
+                // Grid lines
+                dataGridView_Exceptions.GridColor = Color.Silver;
+            }
+
+            // Light Mode
+            else
+            {
+                dataGridView_Exceptions.BackgroundColor = Color.LightGray;
+                dataGridView_Exceptions.GridColor = Color.DimGray;
+
+                // Header
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+
+                // Cells
+                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                dataGridView_Exceptions.DefaultCellStyle.ForeColor = Color.Black;
+
+                // Grid lines
+                dataGridView_Exceptions.GridColor = Color.Black;
+            }
+        }
     }
 }

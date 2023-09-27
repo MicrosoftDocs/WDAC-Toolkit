@@ -281,6 +281,16 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap darkmode_toggle {
+            get {
+                object obj = ResourceManager.GetObject("darkmode_toggle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N/A.
         /// </summary>
         internal static string DefaultFileAttributeString {
@@ -497,6 +507,15 @@ namespace WDAC_Wizard.Properties {
         internal static string HVCI_Info {
             get {
                 return ResourceManager.GetString("HVCI_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IgnoreDarkMode.
+        /// </summary>
+        internal static string IgnoreDarkModeTag {
+            get {
+                return ResourceManager.GetString("IgnoreDarkModeTag", resourceCulture);
             }
         }
         
@@ -1298,6 +1317,16 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap white_add_button {
+            get {
+                object obj = ResourceManager.GetObject("white_add_button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap white_close {
             get {
                 object obj = ResourceManager.GetObject("white_close", resourceCulture);
@@ -1328,6 +1357,26 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap white_gear {
+            get {
+                object obj = ResourceManager.GetObject("white_gear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap white_house {
+            get {
+                object obj = ResourceManager.GetObject("white_house", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap white_merge {
             get {
                 object obj = ResourceManager.GetObject("white_merge", resourceCulture);
@@ -1348,6 +1397,26 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap white_minus_button {
+            get {
+                object obj = ResourceManager.GetObject("white_minus_button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap white_office {
+            get {
+                object obj = ResourceManager.GetObject("white_office", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap white_right_arrow {
             get {
                 object obj = ResourceManager.GetObject("white_right_arrow", resourceCulture);
@@ -1358,9 +1427,29 @@ namespace WDAC_Wizard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap white_shield {
+            get {
+                object obj = ResourceManager.GetObject("white_shield", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap white_view {
             get {
                 object obj = ResourceManager.GetObject("white_view", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap white_windows_logo {
+            get {
+                object obj = ResourceManager.GetObject("white_windows_logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

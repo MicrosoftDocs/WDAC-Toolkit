@@ -2475,5 +2475,375 @@ namespace WDAC_Wizard
         {
             e.Effect = DragDropEffects.Move;
         }
+
+        /// <summary>
+        /// Fires on Load, Paint, Refresh. 
+        /// Sets the colors on the UI elements for Dark and Light mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CustomRuleConditionsPanel_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels, buttons)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set Radio Buttons Color
+            List<RadioButton> radioButtons = new List<RadioButton>();
+            GetRadioButtonsRecursive(this, radioButtons);
+            SetRadioButtonsColor(radioButtons); 
+
+            // Set Side Panel
+            SetSidePanelColor();
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+        }
+
+        /// <summary>
+        /// Public method to call the _Paint method. Triggered by the signing rules control
+        /// </summary>
+        public void ForceRepaint()
+        {
+            CustomRuleConditionsPanel_Paint(null, null); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.White;
+                        button.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Checkboxes
+                    else if (control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.White;
+                        checkBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.White;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is CheckBox checkBox
+                        && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        checkBox.ForeColor = Color.Black;
+                        checkBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of radio buttons recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="radioButtons"></param>
+        private void GetRadioButtonsRecursive(Control parent, List<RadioButton> radioButtons)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is RadioButton radioButton)
+                {
+                    radioButtons.Add(radioButton);
+                }
+                else
+                {
+                    GetRadioButtonsRecursive(control, radioButtons);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the color of radio buttons
+        /// </summary>
+        /// <param name="radioButtons"></param>
+        private void SetRadioButtonsColor(List<RadioButton> radioButtons)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach(RadioButton radioButton in radioButtons)
+                {
+                    if (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        radioButton.ForeColor = Color.White;
+                        radioButton.BackColor = Color.FromArgb(15, 15, 15);
+                        radioButton.FlatAppearance.BorderColor = Color.White; 
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (RadioButton radioButton in radioButtons)
+                {
+                    if (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        radioButton.ForeColor = Color.Black;
+                        radioButton.BackColor = Color.White;
+                        radioButton.FlatAppearance.BorderColor = Color.Black; 
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the color of the elements in the side panel
+        /// </summary>
+        private void SetSidePanelColor()
+        {
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                // Side Panel
+                control_Panel.BackColor = Color.Black;
+                control_Panel.ForeColor = Color.Black;
+
+                // Label
+                workflow_Label.ForeColor = Color.White;
+                workflow_Label.BackColor = Color.Black; 
+
+                // Side Panel Buttons
+                page1_Button.ForeColor = Color.White;
+                page1_Button.BackColor = Color.Black;
+                page2_Button.ForeColor = Color.White;
+                page2_Button.BackColor = Color.Black;
+            }
+            // Light Mode
+            else
+            {
+                // Side Panel
+                control_Panel.BackColor = Color.FromArgb(230, 230, 230);
+                control_Panel.ForeColor = Color.FromArgb(230, 230, 230);
+
+                // Label
+                workflow_Label.ForeColor = Color.Black; 
+                workflow_Label.BackColor = Color.FromArgb(230, 230, 230);
+
+                // Side Panel Buttons
+                page1_Button.ForeColor = Color.Black;
+                page1_Button.BackColor = Color.FromArgb(230, 230, 230);
+                page2_Button.ForeColor = Color.Gray;
+                page2_Button.BackColor = Color.FromArgb(230, 230, 230);
+            }
+        }
+
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+
+                // Buttons
+                button_Back.ForeColor = Color.Pink;
+                button_Back.BackColor = Color.FromArgb(15, 15, 15);
+                button_Back.FlatAppearance.BorderColor = Color.White;
+                button_AddException.ForeColor = Color.White;
+                button_AddException.BackColor = Color.FromArgb(15, 15, 15);
+                button_AddException.FlatAppearance.BorderColor = Color.White;
+                button_CreateRule.ForeColor = Color.White;
+                button_CreateRule.BackColor = Color.FromArgb(15, 15, 15);
+                button_CreateRule.FlatAppearance.BorderColor = Color.White;
+                button_Next.ForeColor = Color.White;
+                button_Next.BackColor = Color.FromArgb(15, 15, 15);
+                button_Next.FlatAppearance.BorderColor = Color.White;
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+
+                // Buttons
+                button_Back.ForeColor = Color.Gray;
+                button_Back.BackColor = Color.White;
+                button_Back.FlatAppearance.BorderColor = Color.Black;
+                button_AddException.ForeColor = Color.Gray;
+                button_AddException.BackColor = Color.White;
+                button_AddException.FlatAppearance.BorderColor = Color.Black;
+                button_CreateRule.ForeColor = Color.Black;
+                button_CreateRule.BackColor = Color.White;
+                button_CreateRule.FlatAppearance.BorderColor = Color.Black;
+                button_Next.ForeColor = Color.Black;
+                button_Next.BackColor = Color.White;
+                button_Next.FlatAppearance.BorderColor = Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the toggle buttons on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTogglesRecursive(Control parent, List<Button> toggles)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Button toggle)
+                {
+                    toggles.Add(toggle);
+                }
+                else
+                {
+                    GetTogglesRecursive(control, toggles);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the Button_AddException when enablement changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_AddException_EnabledChanged(object sender, EventArgs e)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_AddException.ForeColor = Color.White;
+                button_AddException.BackColor = Color.FromArgb(15, 15, 15);
+                button_AddException.FlatAppearance.BorderColor = Color.White;
+            }
+
+            // Light Mode
+            else
+            {
+                button_AddException.ForeColor = Color.Black;
+                button_AddException.BackColor = Color.White; 
+                button_AddException.FlatAppearance.BorderColor = Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the Button_AddException when enablement changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Back_EnabledChanged(object sender, EventArgs e)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Back.ForeColor = Color.White;
+                button_Back.BackColor = Color.FromArgb(15, 15, 15);
+                button_Back.FlatAppearance.BorderColor = Color.White;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Back.ForeColor = Color.Black;
+                button_Back.BackColor = Color.White;
+                button_Back.FlatAppearance.BorderColor = Color.Black;
+            }
+        }
     }
 }

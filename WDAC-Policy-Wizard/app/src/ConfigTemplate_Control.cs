@@ -135,8 +135,19 @@ namespace WDAC_Wizard
                     {
                         // Set button to toggled mode
                         this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
-                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
 
+                        // Dark Mode
+                        if(Properties.Settings.Default.useDarkMode)
+                        {
+                            this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.darkmode_toggle;
+                        }
+
+                        // Light Mode
+                        else
+                        {
+                            this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
+                        }
+                        
                         this.Policy.ConfigRules[key]["CurrentValue"] = this.Policy.ConfigRules[key]["AllowedValue"];
                         SetRuleOptionState(key); 
                     }
@@ -764,16 +775,226 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Sets the color of the AdvancedOptions label while 
+        /// user is hovering over it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AdvancedOptions_MouseHover(object sender, EventArgs e)
         {
-            Label checkBox = ((Label)sender);
-            checkBox.BackColor = Color.WhiteSmoke;
+            Label advOptLabel = ((Label)sender);
+            advOptLabel.BackColor = Color.FromArgb(190, 230, 253);
         }
 
+        /// <summary>
+        /// Resets the color of the AdvancedOptions label after 
+        /// user finishes hovering over it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AdvancedOptions_MouseLeave(object sender, EventArgs e)
         {
-            Label checkBox = ((Label)sender);
-            checkBox.BackColor = Color.White;
+            Label advOptLabel = ((Label)sender);
+            advOptLabel.BackColor = Color.Transparent; 
+        }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ConfigTemplate_Control_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set toggle colors
+            List<Button> toggles = new List<Button>(); 
+            GetTogglesRecursive(this, toggles);
+            SetToggleColors(toggles); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15,15,15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.FromArgb(15,15,15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+
+            // Explicitly set color for HVCI label since tag cannot be set to Ignore.. 
+            // on this page as it's used for enabled/disabled state
+            this.label_HVCI.ForeColor = System.Drawing.Color.FromArgb(16,110,190);
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the toggle buttons on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTogglesRecursive(Control parent, List<Button> toggles)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Button toggle)
+                {
+                    toggles.Add(toggle);
+                }
+                else
+                {
+                    GetTogglesRecursive(control, toggles);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set all the enabled toggles to light or dark blue
+        /// depending on the state of Light and Dark Mode
+        /// </summary>
+        private void SetToggleColors(List<Button> toggles)
+        {
+            // Set all Toggle buttons to the correct Light and Dark
+            // Mode control colors
+
+            // Dark Mode
+            if(Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Button toggle in toggles)
+                {
+                    if (toggle.Tag != null)
+                    {
+                        if (toggle.Tag.ToString() == "toggle")
+                        {
+                            toggle.BackgroundImage = Properties.Resources.darkmode_toggle;
+                        }
+                    }
+                    toggle.BackColor = Color.FromArgb(15, 15, 15); 
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Button toggle in toggles)
+                {
+                    if (toggle.Tag != null)
+                    {
+                        if (toggle.Tag.ToString() == "toggle")
+                        {
+                            toggle.BackgroundImage = Properties.Resources.toggle;
+                        }
+                    }
+                    toggle.BackColor = Color.White; 
+                }
+            }
         }
     }
 }

@@ -226,7 +226,7 @@
             this.checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
             this.checkedListBoxPackagedApps.Margin = new System.Windows.Forms.Padding(2);
             this.checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 225);
+            this.checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 213);
             this.checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
@@ -319,6 +319,7 @@
             // labelFolderScanLearnMore
             // 
             this.labelFolderScanLearnMore.AutoSize = true;
+            this.labelFolderScanLearnMore.BackColor = System.Drawing.Color.Transparent;
             this.labelFolderScanLearnMore.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelFolderScanLearnMore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.labelFolderScanLearnMore.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -328,6 +329,7 @@
             this.labelFolderScanLearnMore.Name = "labelFolderScanLearnMore";
             this.labelFolderScanLearnMore.Size = new System.Drawing.Size(265, 18);
             this.labelFolderScanLearnMore.TabIndex = 113;
+            this.labelFolderScanLearnMore.Tag = "IgnoreDarkMode";
             this.labelFolderScanLearnMore.Text = "Learn more about WDAC rule levels     ";
             this.labelFolderScanLearnMore.Click += new System.EventHandler(this.LabelFolderScanLearnMore_Click);
             // 
@@ -398,6 +400,7 @@
             // labelLearnMoreCom
             // 
             this.labelLearnMoreCom.AutoSize = true;
+            this.labelLearnMoreCom.BackColor = System.Drawing.Color.Transparent;
             this.labelLearnMoreCom.Font = new System.Drawing.Font("Tahoma", 9F);
             this.labelLearnMoreCom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
             this.labelLearnMoreCom.Image = global::WDAC_Wizard.Properties.Resources.external_link_symbol_highlight;
@@ -407,6 +410,7 @@
             this.labelLearnMoreCom.Name = "labelLearnMoreCom";
             this.labelLearnMoreCom.Size = new System.Drawing.Size(313, 18);
             this.labelLearnMoreCom.TabIndex = 112;
+            this.labelLearnMoreCom.Tag = "IgnoreDarkMode";
             this.labelLearnMoreCom.Text = "Learn more about COM object registration      ";
             this.labelLearnMoreCom.Click += new System.EventHandler(this.LabelLearnMoreCom_Click);
             // 
@@ -707,7 +711,7 @@
             // checkBox_CustomValues
             // 
             this.checkBox_CustomValues.AutoSize = true;
-            this.checkBox_CustomValues.Location = new System.Drawing.Point(8, 279);
+            this.checkBox_CustomValues.Location = new System.Drawing.Point(6, 279);
             this.checkBox_CustomValues.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_CustomValues.Name = "checkBox_CustomValues";
             this.checkBox_CustomValues.Size = new System.Drawing.Size(153, 21);
@@ -853,6 +857,7 @@
             // label_Info
             // 
             this.label_Info.AutoSize = true;
+            this.label_Info.BackColor = System.Drawing.Color.Transparent;
             this.label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.label_Info.Location = new System.Drawing.Point(4, 248);
@@ -860,6 +865,7 @@
             this.label_Info.Name = "label_Info";
             this.label_Info.Size = new System.Drawing.Size(76, 18);
             this.label_Info.TabIndex = 95;
+            this.label_Info.Tag = "IgnoreDarkMode";
             this.label_Info.Text = "Label_Info";
             this.label_Info.Visible = false;
             // 
@@ -993,7 +999,7 @@
             // 
             // button_CreateRule
             // 
-            this.button_CreateRule.BackColor = System.Drawing.Color.Transparent;
+            this.button_CreateRule.BackColor = System.Drawing.Color.White;
             this.button_CreateRule.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.button_CreateRule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_CreateRule.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1009,7 +1015,7 @@
             // 
             // button_Next
             // 
-            this.button_Next.BackColor = System.Drawing.Color.Transparent;
+            this.button_Next.BackColor = System.Drawing.Color.White;
             this.button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Next.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1026,15 +1032,16 @@
             // control_Panel
             // 
             this.control_Panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.control_Panel.Controls.Add(this.workflow_Label);
             this.control_Panel.Controls.Add(this.page2_Button);
             this.control_Panel.Controls.Add(this.page1_Button);
+            this.control_Panel.Controls.Add(this.workflow_Label);
             this.control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.control_Panel.Location = new System.Drawing.Point(0, 61);
             this.control_Panel.Margin = new System.Windows.Forms.Padding(2);
             this.control_Panel.Name = "control_Panel";
-            this.control_Panel.Size = new System.Drawing.Size(122, 678);
+            this.control_Panel.Size = new System.Drawing.Size(122, 778);
             this.control_Panel.TabIndex = 108;
+            this.control_Panel.Tag = "IgnoreDarkMode";
             // 
             // workflow_Label
             // 
@@ -1051,10 +1058,9 @@
             // 
             this.page2_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.page2_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.page2_Button.Enabled = false;
             this.page2_Button.FlatAppearance.BorderSize = 0;
-            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.page2_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page2_Button.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -1064,6 +1070,7 @@
             this.page2_Button.Name = "page2_Button";
             this.page2_Button.Size = new System.Drawing.Size(122, 60);
             this.page2_Button.TabIndex = 36;
+            this.page2_Button.Tag = "IgnoreDarkMode";
             this.page2_Button.Text = "Rule Exceptions";
             this.page2_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.page2_Button.UseVisualStyleBackColor = false;
@@ -1072,10 +1079,9 @@
             // 
             this.page1_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.page1_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.page1_Button.Enabled = false;
             this.page1_Button.FlatAppearance.BorderSize = 0;
-            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1084,6 +1090,7 @@
             this.page1_Button.Name = "page1_Button";
             this.page1_Button.Size = new System.Drawing.Size(120, 52);
             this.page1_Button.TabIndex = 35;
+            this.page1_Button.Tag = "IgnoreDarkMode";
             this.page1_Button.Text = "Rule Conditions";
             this.page1_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.page1_Button.UseVisualStyleBackColor = false;
@@ -1096,6 +1103,7 @@
             this.controlHighlight_Panel.Name = "controlHighlight_Panel";
             this.controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
             this.controlHighlight_Panel.TabIndex = 33;
+            this.controlHighlight_Panel.Tag = "IgnoreDarkMode";
             // 
             // headerLabel
             // 
@@ -1122,7 +1130,7 @@
             // 
             // button_AddException
             // 
-            this.button_AddException.BackColor = System.Drawing.Color.Transparent;
+            this.button_AddException.BackColor = System.Drawing.Color.White;
             this.button_AddException.Enabled = false;
             this.button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
             this.button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1135,11 +1143,12 @@
             this.button_AddException.TabIndex = 111;
             this.button_AddException.Text = "Add Exception";
             this.button_AddException.UseVisualStyleBackColor = false;
+            this.button_AddException.EnabledChanged += new System.EventHandler(this.Button_AddException_EnabledChanged);
             this.button_AddException.Click += new System.EventHandler(this.Button_AddException_Click);
             // 
             // button_Back
             // 
-            this.button_Back.BackColor = System.Drawing.Color.Transparent;
+            this.button_Back.BackColor = System.Drawing.Color.White;
             this.button_Back.Enabled = false;
             this.button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
             this.button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1152,6 +1161,7 @@
             this.button_Back.TabIndex = 110;
             this.button_Back.Text = "< Back";
             this.button_Back.UseVisualStyleBackColor = false;
+            this.button_Back.EnabledChanged += new System.EventHandler(this.Button_Back_EnabledChanged);
             this.button_Back.Click += new System.EventHandler(this.Button_Back_Click);
             // 
             // backgroundWorker
@@ -1166,21 +1176,22 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(766, 828);
+            this.Controls.Add(this.controlHighlight_Panel);
             this.Controls.Add(this.button_AddException);
             this.Controls.Add(this.button_Back);
             this.Controls.Add(this.headerPanel);
-            this.Controls.Add(this.controlHighlight_Panel);
             this.Controls.Add(this.label_Error);
-            this.Controls.Add(this.control_Panel);
             this.Controls.Add(this.button_Next);
             this.Controls.Add(this.panel_CustomRules);
             this.Controls.Add(this.button_CreateRule);
+            this.Controls.Add(this.control_Panel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "CustomRuleConditionsPanel";
             this.Text = "Custom Rules ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.CustomRuleConditionsPanel_Paint);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);

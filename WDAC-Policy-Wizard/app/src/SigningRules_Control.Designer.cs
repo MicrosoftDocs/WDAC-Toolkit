@@ -32,7 +32,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SigningRules_Control));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rulesDataGrid = new System.Windows.Forms.DataGridView();
@@ -46,7 +46,7 @@ namespace WDAC_Wizard
             this.label3 = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
             this.label_Error = new System.Windows.Forms.Label();
-            this.label_AddCustomRules = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
             this.checkBox_KernelList = new System.Windows.Forms.CheckBox();
             this.checkBox_UserModeList = new System.Windows.Forms.CheckBox();
             this.panel_Progress = new System.Windows.Forms.Panel();
@@ -83,7 +83,17 @@ namespace WDAC_Wizard
             // 
             this.rulesDataGrid.AllowUserToDeleteRows = false;
             this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.rulesDataGrid.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.rulesDataGrid.BackgroundColor = System.Drawing.Color.LightGray;
+            this.rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.rulesDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.rulesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rulesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
@@ -92,10 +102,12 @@ namespace WDAC_Wizard
             this.Column_Files,
             this.Column_Exceptions,
             this.column_ID});
+            this.rulesDataGrid.GridColor = System.Drawing.Color.DimGray;
             this.rulesDataGrid.Location = new System.Drawing.Point(163, 162);
             this.rulesDataGrid.Margin = new System.Windows.Forms.Padding(2);
             this.rulesDataGrid.Name = "rulesDataGrid";
             this.rulesDataGrid.ReadOnly = true;
+            this.rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.rulesDataGrid.RowHeadersVisible = false;
             this.rulesDataGrid.RowHeadersWidth = 70;
             this.rulesDataGrid.RowTemplate.Height = 24;
@@ -203,6 +215,7 @@ namespace WDAC_Wizard
             // label_Error
             // 
             this.label_Error.AutoSize = true;
+            this.label_Error.BackColor = System.Drawing.Color.Transparent;
             this.label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Error.ForeColor = System.Drawing.Color.Red;
             this.label_Error.Location = new System.Drawing.Point(152, 666);
@@ -210,26 +223,27 @@ namespace WDAC_Wizard
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(648, 18);
             this.label_Error.TabIndex = 96;
+            this.label_Error.Tag = "IgnoreDarkMode";
             this.label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text tex" +
     "t text text text";
             this.label_Error.Visible = false;
             // 
-            // label_AddCustomRules
+            // addButton
             // 
-            this.label_AddCustomRules.FlatAppearance.BorderSize = 0;
-            this.label_AddCustomRules.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label_AddCustomRules.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_AddCustomRules.Image = ((System.Drawing.Image)(resources.GetObject("label_AddCustomRules.Image")));
-            this.label_AddCustomRules.Location = new System.Drawing.Point(881, 132);
-            this.label_AddCustomRules.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label_AddCustomRules.Name = "label_AddCustomRules";
-            this.label_AddCustomRules.Size = new System.Drawing.Size(174, 26);
-            this.label_AddCustomRules.TabIndex = 97;
-            this.label_AddCustomRules.Text = "   Add Custom Rule";
-            this.label_AddCustomRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label_AddCustomRules.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.label_AddCustomRules.UseVisualStyleBackColor = true;
-            this.label_AddCustomRules.Click += new System.EventHandler(this.Label_AddCustomRules_Click);
+            this.addButton.FlatAppearance.BorderSize = 0;
+            this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addButton.Image = global::WDAC_Wizard.Properties.Resources.add_button;
+            this.addButton.Location = new System.Drawing.Point(881, 132);
+            this.addButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(174, 26);
+            this.addButton.TabIndex = 97;
+            this.addButton.Text = "   Add Custom Rule";
+            this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.Label_AddCustomRules_Click);
             // 
             // checkBox_KernelList
             // 
@@ -245,12 +259,13 @@ namespace WDAC_Wizard
             // checkBox_UserModeList
             // 
             this.checkBox_UserModeList.AutoSize = true;
+            this.checkBox_UserModeList.BackColor = System.Drawing.Color.White;
             this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 607);
             this.checkBox_UserModeList.Name = "checkBox_UserModeList";
             this.checkBox_UserModeList.Size = new System.Drawing.Size(348, 21);
             this.checkBox_UserModeList.TabIndex = 99;
             this.checkBox_UserModeList.Text = "Merge with Recommended User Mode Block Rules";
-            this.checkBox_UserModeList.UseVisualStyleBackColor = true;
+            this.checkBox_UserModeList.UseVisualStyleBackColor = false;
             this.checkBox_UserModeList.CheckedChanged += new System.EventHandler(this.CheckBox_UserModeList_CheckedChanged);
             // 
             // panel_Progress
@@ -266,7 +281,7 @@ namespace WDAC_Wizard
             // label_Progress
             // 
             this.label_Progress.AutoSize = true;
-            this.label_Progress.Location = new System.Drawing.Point(11, 2);
+            this.label_Progress.Location = new System.Drawing.Point(23, 2);
             this.label_Progress.Name = "label_Progress";
             this.label_Progress.Size = new System.Drawing.Size(111, 17);
             this.label_Progress.TabIndex = 1;
@@ -275,14 +290,16 @@ namespace WDAC_Wizard
             // 
             // pictureBox_Progress
             // 
+            this.pictureBox_Progress.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox_Progress.Image = global::WDAC_Wizard.Properties.Resources.loading;
             this.pictureBox_Progress.InitialImage = global::WDAC_Wizard.Properties.Resources.loading;
-            this.pictureBox_Progress.Location = new System.Drawing.Point(12, 32);
+            this.pictureBox_Progress.Location = new System.Drawing.Point(14, 32);
             this.pictureBox_Progress.Name = "pictureBox_Progress";
             this.pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
             this.pictureBox_Progress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox_Progress.TabIndex = 0;
             this.pictureBox_Progress.TabStop = false;
+            this.pictureBox_Progress.Tag = "IgnoreDarkMode";
             // 
             // backgroundWorkerRulesDeleter
             // 
@@ -298,7 +315,7 @@ namespace WDAC_Wizard
             this.Controls.Add(this.panel_Progress);
             this.Controls.Add(this.checkBox_UserModeList);
             this.Controls.Add(this.checkBox_KernelList);
-            this.Controls.Add(this.label_AddCustomRules);
+            this.Controls.Add(this.addButton);
             this.Controls.Add(this.label_Error);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.label8);
@@ -310,6 +327,7 @@ namespace WDAC_Wizard
             this.Name = "SigningRules_Control";
             this.Size = new System.Drawing.Size(1203, 725);
             this.Load += new System.EventHandler(this.SigningRules_Control_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.SigningRules_Control_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.rulesDataGrid)).EndInit();
             this.panel_Progress.ResumeLayout(false);
             this.panel_Progress.PerformLayout();
@@ -327,7 +345,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Label label_Error;
-        private System.Windows.Forms.Button label_AddCustomRules;
+        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.CheckBox checkBox_KernelList;
         private System.Windows.Forms.CheckBox checkBox_UserModeList;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Action;

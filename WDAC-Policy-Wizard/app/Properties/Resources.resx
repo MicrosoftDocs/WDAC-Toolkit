@@ -131,7 +131,7 @@
     <value>..\Resources\imgs\blank-check-box_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="house" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\house.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\house.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="windows_10s_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\windows-10s-logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -168,7 +168,7 @@ and this original filename with a version at or above the specified file version
     <value>..\Resources\imgs\wizard-ico.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="switch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\switch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\switch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="radio-on-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\radio-on-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -229,7 +229,7 @@ and this original filename with a version at or above the specified file version
 with a version at or above this specified file version number.</value>
   </data>
   <data name="radio_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\radio_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\radio_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AdvancedBootOpts_Info" xml:space="preserve">
     <value>The F8 preboot menu is disabled by default. This rule option allows the F8 menu to appear to physically present users.</value>
@@ -244,7 +244,7 @@ with a version at or above this specified file version number.</value>
     <value>This rule applies to all files signed by this issuing CA and publisher.</value>
   </data>
   <data name="untoggle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\untoggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\untoggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="radio-off-button" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\radio-off-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -253,7 +253,7 @@ with a version at or above this specified file version number.</value>
     <value>Used when the WDAC policy is in enforcement mode. When a driver fails during startup, the WDAC policy will be placed in audit mode so that Windows will load.</value>
   </data>
   <data name="toggle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\toggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="untoggle_old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\untoggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -271,7 +271,7 @@ with a version at or above this specified file version number.</value>
     <value>In addition to being WHQL signed, this rule requires drivers must have been submitted by a partner that has an Extended Verification (EV) certificate.</value>
   </data>
   <data name="radio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\radio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WHQL_Info" xml:space="preserve">
     <value>When enabled, kernel-mode drivers must be WHQL-signed. Legacy cross-signed drivers will not be trusted.</value>
@@ -280,7 +280,7 @@ with a version at or above this specified file version number.</value>
     <value>..\Resources\imgs\newPolicy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="gear" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\imgs\gear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="UMCI_Info" xml:space="preserve">
     <value>When enabled, user-mode executables and scripts are validated, in addition to kernel-mode binaries.</value>
@@ -434,7 +434,7 @@ Please select the  'Create Rule' button.</value>
     <value>Unknown</value>
   </data>
   <data name="EmptyWDAC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EmptyWDAC.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\policyTemplates\EmptyWDAC.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="InvalidCheckboxState" xml:space="preserve">
     <value>Zero attributes are selected. Please select at least one attribute to add to the rule.</value>
@@ -560,6 +560,32 @@ Do you want the Wizard to warn you about these types of path rules in the future
   <data name="EmptyWdacSupplementalXml" xml:space="preserve">
     <value>Empty_Supplemental.xml</value>
   </data>
+  <data name="IgnoreDarkModeTag" xml:space="preserve">
+    <value>IgnoreDarkMode</value>
+  </data>
+  <data name="white_gear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-gear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_house" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-house.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="darkmode_toggle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\darkmode-toggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_office" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-office.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_shield" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-shield.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_windows_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-windows-logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_add_button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-add-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="white_minus_button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imgs\white-minus-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   <data name="MaxVersion" xml:space="preserve">
     <value>65535.65535.65535.65535</value>
   </data>

@@ -32,6 +32,9 @@ namespace WDAC_Wizard
         private int[] FileAttributesUIState = { 0, 0, 0, 0, 0 };
         private int[] FilePathUIState = { 0, 0 };
 
+        // Reference to all the checkboxes
+        private List<CheckBox> CheckBoxes; 
+
         public EventLogRuleConfiguration(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -48,7 +51,9 @@ namespace WDAC_Wizard
 
             // Set error flag - Bug #234
             this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.ErrorMsg = Properties.Resources.InvalidEventRulesCreated; 
+            this._MainWindow.ErrorMsg = Properties.Resources.InvalidEventRulesCreated;
+
+            this.CheckBoxes = new List<CheckBox>(); 
         }
 
         /// <summary>
@@ -303,10 +308,10 @@ namespace WDAC_Wizard
             this.versionCheckBox.Checked = false;
             this.productCheckBox.Checked = false;
 
-            this.publisherCheckBox.Enabled = false;
-            this.filenameCheckBox.Enabled = false;
-            this.versionCheckBox.Enabled = false;
-            this.productCheckBox.Enabled = false;
+            this.publisherCheckBox.AutoCheck = false;
+            this.filenameCheckBox.AutoCheck = false;
+            this.versionCheckBox.AutoCheck = false;
+            this.productCheckBox.AutoCheck = false;
 
             // Clear all textboxes
             this.issuerTextBox.Clear();
@@ -658,29 +663,32 @@ namespace WDAC_Wizard
             if (!String.IsNullOrEmpty(publisher))
             {
                 this.publisherCheckBox.Checked = true;
-                this.publisherCheckBox.Enabled = true;
+                this.publisherCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(filename))
             {
                 this.filenameCheckBox.Checked = true;
-                this.filenameCheckBox.Enabled = true;
+                this.filenameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(version))
             {
                 this.versionCheckBox.Checked = true;
-                this.versionCheckBox.Enabled = true;
+                this.versionCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(product))
             {
                 this.productCheckBox.Checked = true;
-                this.productCheckBox.Enabled = true;
+                this.productCheckBox.AutoCheck = true;
             }
 
             // Unhide the panel
-            this.publisherRulePanel.Visible = true; 
+            this.publisherRulePanel.Visible = true;
+
+            // Set color of disabled checkboxes
+            SetDisabledCheckBoxesColor(); 
         }
 
         /// <summary>
@@ -704,36 +712,39 @@ namespace WDAC_Wizard
             if (!String.IsNullOrEmpty(originalFilename))
             {
                 this.origFileNameCheckBox.Checked = true;
-                this.origFileNameCheckBox.Enabled = true;
+                this.origFileNameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(fileDescription))
             {
                 this.fileDescCheckBox.Checked = true;
-                this.fileDescCheckBox.Enabled = true;
+                this.fileDescCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(productName))
             {
                 this.prodNameCheckBox.Checked = true;
-                this.prodNameCheckBox.Enabled = true;
+                this.prodNameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(internalFilename))
             {
                 this.intFileNameCheckBox.Checked = true;
-                this.intFileNameCheckBox.Enabled = true;
+                this.intFileNameCheckBox.AutoCheck = true;
             }
 
             if(!String.IsNullOrEmpty(packagedAppName))
             {
                 this.pfnCheckBox.Checked = true;
-                this.pfnCheckBox.Enabled = true;
+                this.pfnCheckBox.AutoCheck = true;
             }
 
             // Unhide the panel
             this.fileAttributeRulePanel.Visible = true;
             this.fileAttributeRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+
+            // Set color of disabled checkboxes
+            SetDisabledCheckBoxesColor();
         }
 
         /// <summary>
@@ -754,6 +765,10 @@ namespace WDAC_Wizard
             this.hashRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
         }
 
+        /// <summary>
+        /// Set the UI for the Path (File and Folder) Panel 
+        /// </summary>
+        /// <param name="filepath"></param>
         private void SetFilePathPanel(string filepath)
         {
             this.filePathTextBox.Text = filepath;
@@ -765,6 +780,9 @@ namespace WDAC_Wizard
             // Unhide the panel
             this.filePathRulePanel.Visible = true;
             this.filePathRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+
+            // Set color of disabled checkboxes
+            SetDisabledCheckBoxesColor();
         }
 
         /// <summary>
@@ -774,6 +792,370 @@ namespace WDAC_Wizard
         {
             this._MainWindow.ErrorOnPage = false; 
             this._MainWindow.DisplayInfoText(0);
+        }
+
+        /// <summary>
+        /// Form painting. Occurs on Form.Refresh, Load and Focus. 
+        /// Used for UI element changes for Dark and Light Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EventLogRuleConfiguration_Paint(object sender, PaintEventArgs e)
+        {
+            // Set Controls Color (e.g. Panels, Textboxes, Buttons)
+            SetControlsColor();
+
+            // Set Labels Color
+            List<Label> labels = new List<Label>();
+            GetLabelsRecursive(this, labels);
+            SetLabelsColor(labels);
+
+            // Set TextBoxes Color
+            List<TextBox> textBoxes = new List<TextBox>();
+            GetTextBoxesRecursive(this, textBoxes);
+            SetTextBoxesColor(textBoxes);
+
+            // Set Checkboxes Color
+            List<CheckBox> checkBoxes = new List<CheckBox>();
+            GetCheckBoxesRecursive(this, checkBoxes);
+            SetCheckBoxesColor(checkBoxes);
+
+            this.CheckBoxes = checkBoxes;
+            SetDisabledCheckBoxesColor(); 
+
+            // Set PolicyType Form back color
+            SetFormBackColor();
+
+            // Set the Rules Grid colors
+            SetGridColors(); 
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetLabelsRecursive(Control parent, List<Label> labels)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is Label label)
+                {
+                    labels.Add(label);
+                }
+                else
+                {
+                    GetLabelsRecursive(control, labels);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the controls
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetControlsColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.White;
+                        button.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.White;
+                        panel.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.White;
+                        radioButton.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Control control in this.Controls)
+                {
+                    // Buttons
+                    if (control is Button button
+                        && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.White;
+                    }
+
+                    // Panels
+                    else if (control is Panel panel
+                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        panel.ForeColor = Color.Black;
+                        panel.BackColor = Color.White;
+                    }
+
+                    // Checkboxes
+                    else if (control is TextBox textBox
+                        && (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                    }
+
+                    // Radio buttons
+                    else if (control is RadioButton radioButton
+                        && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                    {
+                        radioButton.ForeColor = Color.Black;
+                        radioButton.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetLabelsColor(List<Label> labels)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.White;
+                        label.BackColor = Color.Black;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (Label label in labels)
+                {
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        label.ForeColor = Color.Black;
+                        label.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the Back Color of the form depending on the
+        /// state of Dark and Light Mode
+        /// </summary>
+        private void SetFormBackColor()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                BackColor = Color.FromArgb(15, 15, 15);
+            }
+
+            // Light Mode
+            else
+            {
+                BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTextBoxesRecursive(Control parent, List<TextBox> textBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBoxes.Add(textBox);
+                }
+                else
+                {
+                    GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetTextBoxesColor(List<TextBox> textBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetCheckBoxesRecursive(Control parent, List<CheckBox> checkBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is CheckBox checkBox)
+                {
+                    checkBoxes.Add(checkBox);
+                }
+                else
+                {
+                    GetCheckBoxesRecursive(control, checkBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the labels defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetCheckBoxesColor(List<CheckBox> checkBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (CheckBox checkBox in checkBoxes)
+                {
+                    if (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkBox.ForeColor = Color.White;
+                        checkBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (CheckBox checkBox in checkBoxes)
+                {
+                    if (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkBox.ForeColor = Color.Black;
+                        checkBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set the Rules Grid colors for Dark and Light Mode
+        /// </summary>
+        private void SetGridColors()
+        {
+            // Set the Rules Grid colors for Light and Dark Mode 
+
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                eventsDataGridView.BackgroundColor = Color.FromArgb(15, 15, 15);
+                eventsDataGridView.GridColor = Color.FromArgb(15, 15, 15);
+
+                // Header
+                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+
+                // Cells
+                eventsDataGridView.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                eventsDataGridView.DefaultCellStyle.ForeColor = Color.White;
+            }
+
+            // Light Mode
+            else
+            {
+                eventsDataGridView.BackgroundColor = Color.LightGray;
+                eventsDataGridView.GridColor = Color.DimGray;
+
+                // Header
+                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+
+                // Cells
+                eventsDataGridView.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                eventsDataGridView.DefaultCellStyle.ForeColor = Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the checkbox text when enabled changes to disabled
+        /// so the text is legible in Dark Mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetDisabledCheckBoxesColor()
+        {
+            // Override the color of the checkbox font from gray to WhiteSmoke 
+            // so that the text is legible in Dark Mode
+
+            // Break if not dark mode -- keep default color
+            if(!Properties.Settings.Default.useDarkMode)
+            {
+                return; 
+            }
+
+            foreach(CheckBox checkBox in this.CheckBoxes)
+            {
+                // Set checkbox text to a lighter color for better Dark Mode contrast
+                if (!checkBox.AutoCheck)
+                {
+                    checkBox.ForeColor = Color.Red;
+                }
+            } 
         }
     }
 
