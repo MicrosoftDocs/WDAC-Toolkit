@@ -49,8 +49,8 @@ namespace WDAC_Wizard
             this.button_Parse_LogFile = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel_Progress = new System.Windows.Forms.Panel();
-            this.label_Progress = new System.Windows.Forms.Label();
             this.pictureBox_Progress = new System.Windows.Forms.PictureBox();
+            this.label_Progress = new System.Windows.Forms.Label();
             this.label_LearnMore = new System.Windows.Forms.Label();
             this.radioButton_EventConversion = new System.Windows.Forms.RadioButton();
             this.radioButton_EditXML = new System.Windows.Forms.RadioButton();
@@ -278,18 +278,6 @@ namespace WDAC_Wizard
             this.panel_Progress.TabIndex = 114;
             this.panel_Progress.Visible = false;
             // 
-            // label_Progress
-            // 
-            this.label_Progress.AutoSize = true;
-            this.label_Progress.BackColor = System.Drawing.Color.Transparent;
-            this.label_Progress.Location = new System.Drawing.Point(15, 18);
-            this.label_Progress.Name = "label_Progress";
-            this.label_Progress.Size = new System.Drawing.Size(250, 17);
-            this.label_Progress.TabIndex = 1;
-            this.label_Progress.Tag = "IgnoreDarkMode";
-            this.label_Progress.Text = "Parsing Rules from Event Log Created";
-            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // pictureBox_Progress
             // 
             this.pictureBox_Progress.BackColor = System.Drawing.Color.Transparent;
@@ -302,6 +290,18 @@ namespace WDAC_Wizard
             this.pictureBox_Progress.TabIndex = 0;
             this.pictureBox_Progress.TabStop = false;
             this.pictureBox_Progress.Tag = "IgnoreDarkMode";
+            // 
+            // label_Progress
+            // 
+            this.label_Progress.AutoSize = true;
+            this.label_Progress.BackColor = System.Drawing.Color.Transparent;
+            this.label_Progress.Location = new System.Drawing.Point(15, 18);
+            this.label_Progress.Name = "label_Progress";
+            this.label_Progress.Size = new System.Drawing.Size(250, 17);
+            this.label_Progress.TabIndex = 1;
+            this.label_Progress.Tag = "IgnoreDarkMode";
+            this.label_Progress.Text = "Parsing Rules from Event Log Created";
+            this.label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label_LearnMore
             // 
@@ -578,7 +578,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EditWorkflow";
             this.Size = new System.Drawing.Size(1208, 894);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.EditWorkflow_Paint);
+            this.Validated += new System.EventHandler(this.EditWorkflow_Validated);
             this.policyInfoPanel.ResumeLayout(false);
             this.policyInfoPanel.PerformLayout();
             this.panel_Progress.ResumeLayout(false);

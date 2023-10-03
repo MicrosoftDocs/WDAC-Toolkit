@@ -478,7 +478,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "TemplatePage";
             this.Size = new System.Drawing.Size(1172, 782);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.TemplatePage_Paint);
+            this.Validated += new System.EventHandler(this.TemplatePage_Validated);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.allowMsft_Button)).EndInit();

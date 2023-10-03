@@ -176,7 +176,7 @@ namespace WDAC_Wizard
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "BuildPage";
             this.Size = new System.Drawing.Size(1443, 833);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.BuildPage_Paint);
+            this.Validated += new System.EventHandler(this.BuildPage_Validated);
             this.finishPanel.ResumeLayout(false);
             this.finishPanel.PerformLayout();
             this.ResumeLayout(false);

@@ -781,7 +781,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Exceptions_Control_Paint(object sender, PaintEventArgs e)
+        private void Exceptions_Control_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels, buttons)
             SetControlsColor();
@@ -795,7 +795,7 @@ namespace WDAC_Wizard
             SetFormBackColor();
 
             // Set color of the Grid
-            SetGridColors(); 
+            SetGridColors();
         }
 
         /// <summary>

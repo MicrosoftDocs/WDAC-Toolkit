@@ -477,7 +477,7 @@ namespace WDAC_Wizard
             this.Name = "PolicyType";
             this.Size = new System.Drawing.Size(1172, 782);
             this.Load += new System.EventHandler(this.PolicyType_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PolicyType_Paint);
+            this.Validated += new System.EventHandler(this.PolicyType_Validated);
             this.panelSupplName.ResumeLayout(false);
             this.panelSupplName.PerformLayout();
             this.panelSuppl_Base.ResumeLayout(false);

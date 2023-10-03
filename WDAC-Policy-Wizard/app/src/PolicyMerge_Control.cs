@@ -272,13 +272,19 @@ namespace WDAC_Wizard.src
         {
             this.label_Error.Visible = false;
         }
+        
+        private void PolicyMerge_Control_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+
         /// <summary>
         /// Form painting. Occurs on Form.Refresh, Load and Focus. 
         /// Used for UI element changes for Dark and Light Mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PolicyMerge_Control_Paint(object sender, PaintEventArgs e)
+        private void PolicyMerge_Control_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Labels Panels, Textboxes, Buttons)
             SetControlsColor();

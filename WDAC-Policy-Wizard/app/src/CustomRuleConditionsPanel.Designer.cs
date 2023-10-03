@@ -96,9 +96,9 @@
             this.button_CreateRule = new System.Windows.Forms.Button();
             this.button_Next = new System.Windows.Forms.Button();
             this.control_Panel = new System.Windows.Forms.Panel();
-            this.workflow_Label = new System.Windows.Forms.Label();
             this.page2_Button = new System.Windows.Forms.Button();
             this.page1_Button = new System.Windows.Forms.Button();
+            this.workflow_Label = new System.Windows.Forms.Label();
             this.controlHighlight_Panel = new System.Windows.Forms.Panel();
             this.headerLabel = new System.Windows.Forms.Label();
             this.headerPanel = new System.Windows.Forms.Panel();
@@ -1043,17 +1043,6 @@
             this.control_Panel.TabIndex = 108;
             this.control_Panel.Tag = "IgnoreDarkMode";
             // 
-            // workflow_Label
-            // 
-            this.workflow_Label.AutoSize = true;
-            this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.workflow_Label.Location = new System.Drawing.Point(11, 9);
-            this.workflow_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.workflow_Label.Name = "workflow_Label";
-            this.workflow_Label.Size = new System.Drawing.Size(82, 21);
-            this.workflow_Label.TabIndex = 40;
-            this.workflow_Label.Text = "File Rules";
-            // 
             // page2_Button
             // 
             this.page2_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -1094,6 +1083,17 @@
             this.page1_Button.Text = "Rule Conditions";
             this.page1_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.page1_Button.UseVisualStyleBackColor = false;
+            // 
+            // workflow_Label
+            // 
+            this.workflow_Label.AutoSize = true;
+            this.workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.workflow_Label.Location = new System.Drawing.Point(11, 9);
+            this.workflow_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.workflow_Label.Name = "workflow_Label";
+            this.workflow_Label.Size = new System.Drawing.Size(82, 21);
+            this.workflow_Label.TabIndex = 40;
+            this.workflow_Label.Text = "File Rules";
             // 
             // controlHighlight_Panel
             // 
@@ -1191,7 +1191,7 @@
             this.Text = "Custom Rules ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomRulesPanel_FormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.CustomRuleConditionsPanel_Paint);
+            this.Validated += new System.EventHandler(this.CustomRuleConditionsPanel_Validated);
             this.panel_CustomRules.ResumeLayout(false);
             this.panel_CustomRules.PerformLayout();
             this.panelPackagedApps.ResumeLayout(false);

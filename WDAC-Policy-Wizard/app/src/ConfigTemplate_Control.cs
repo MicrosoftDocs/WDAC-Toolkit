@@ -814,7 +814,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ConfigTemplate_Control_Paint(object sender, PaintEventArgs e)
+        private void ConfigTemplate_Control_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels)
             SetControlsColor();
@@ -828,9 +828,9 @@ namespace WDAC_Wizard
             SetFormBackColor();
 
             // Set toggle colors
-            List<Button> toggles = new List<Button>(); 
+            List<Button> toggles = new List<Button>();
             GetTogglesRecursive(this, toggles);
-            SetToggleColors(toggles); 
+            SetToggleColors(toggles);
         }
 
         /// <summary>
