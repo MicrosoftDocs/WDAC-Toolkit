@@ -431,7 +431,7 @@
             this.Name = "Exceptions_Control";
             this.Size = new System.Drawing.Size(1001, 988);
             this.Load += new System.EventHandler(this.Exceptions_Control_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Exceptions_Control_Paint);
+            this.Validated += new System.EventHandler(this.Exceptions_Control_Validated);
             this.panel_ExceptionRule.ResumeLayout(false);
             this.panel_ExceptionRule.PerformLayout();
             this.panel_FileFolder.ResumeLayout(false);

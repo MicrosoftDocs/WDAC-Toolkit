@@ -503,7 +503,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void EditWorkflow_Paint(object sender, PaintEventArgs e)
+        private void EditWorkflow_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels, Textboxes, Buttons)
             SetControlsColor();

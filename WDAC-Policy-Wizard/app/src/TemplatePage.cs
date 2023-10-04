@@ -316,7 +316,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TemplatePage_Paint(object sender, PaintEventArgs e)
+        private void TemplatePage_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels)
             SetControlsColor();
@@ -329,13 +329,13 @@ namespace WDAC_Wizard
             // Set TextBoxes Color
             List<TextBox> textBoxes = new List<TextBox>();
             GetTextBoxesRecursive(this, textBoxes);
-            SetTextBoxesColor(textBoxes); 
+            SetTextBoxesColor(textBoxes);
 
             // Set PolicyType Form back color
             SetFormBackColor();
 
             // Set Template Policy Icons
-            SetTemplateIconImages(); 
+            SetTemplateIconImages();
         }
 
         /// <summary>

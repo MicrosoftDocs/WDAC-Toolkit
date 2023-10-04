@@ -965,33 +965,27 @@ namespace WDAC_Wizard
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
             if (Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies)
-                && (this.Policy._Format == WDAC_Policy.Format.Legacy || this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy))
+                && (this.Policy._Format == WDAC_Policy.Format.Legacy 
+                    || this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy))
             {
-                for(int i=0; i < ruleOptionsList.Count; i++)
-                {
-                    if(ruleOptionsList[i].Item == OptionType.EnabledAllowSupplementalPolicies)
-                    {
-                        this.Log.AddInfoMsg("Removing EnabledAllowSupplementalPolicies (rule-option 17)"); 
-                        ruleOptionsList.RemoveAt(i);
-                        break;
-                    }
-                }
+                Policy.RemoveRuleOption(OptionType.EnabledAllowSupplementalPolicies);
+                this.Log.AddInfoMsg("Removing EnabledAllowSupplementalPolicies (rule-option 17)");
             }
 
             // Updated logic for Issue #262 - instead of forcing rule-option 6, skip binary conversion
             // if the policy has the signed CI policy option (rule #6) and lacks policy signers
-            if (Properties.Settings.Default.convertPolicyToBinary 
+            if (Properties.Settings.Default.convertPolicyToBinary
                 && !Policy.HasRuleOption(OptionType.EnabledUnsignedSystemIntegrityPolicy))
             {
-                if(finalPolicy.UpdatePolicySigners == null 
+                if (finalPolicy.UpdatePolicySigners == null
                     || finalPolicy.UpdatePolicySigners.Length < 1)
                 {
-                    skipPolicyConversion = true; 
+                    skipPolicyConversion = true;
                 }
 
                 // Handle Supplemental Signers issue - must have supplemental signers if signed policy && policy
                 // allows supplemental policies
-                if(Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies))
+                if (Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies))
                 {
                     if (finalPolicy.SupplementalPolicySigners == null
                     || finalPolicy.SupplementalPolicySigners.Length < 1)

@@ -342,10 +342,13 @@ namespace WDAC_Wizard
                 || this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
             {
                 // Log exception error and throw error to user
-                MessageBox.Show(String.Format("The Issuer is invalid for rule creation. The issuer cannot be empty or '{0}'", Properties.Resources.BadEventPubValue), 
-                    "New Rule Creation Error", 
-                    MessageBoxButtons.OK, 
-                    MessageBoxIcon.Error);
+                MessageBox.Show(this,String.Format("The Issuer is invalid for rule creation. The issuer cannot be empty or '{0}'", Properties.Resources.BadEventPubValue), 
+                                                   "New Rule Creation Error", 
+                                                   MessageBoxButtons.OK, 
+                                                   MessageBoxIcon.Error);
+
+                this.Invalidate();
+
                 this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
                 return false; 
             }
@@ -353,40 +356,40 @@ namespace WDAC_Wizard
             if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) 
                 || this.publisherTextBox.Text == Properties.Resources.BadEventPubValue))
             {
-                MessageBox.Show(String.Format("The Publisher is invalid for rule creation. The Publisher cannot be empty '{0}'", Properties.Resources.BadEventPubValue),
-                    "New Rule Creation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                DialogResult res = MessageBox.Show(String.Format("The Publisher is invalid for rule creation. The Publisher cannot be empty '{0}'", Properties.Resources.BadEventPubValue),
+                                                   "New Rule Creation Error",
+                                                   MessageBoxButtons.OK,
+                                                   MessageBoxIcon.Error);
                 this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Publisher = Unknown");
                 return false;
             }
 
             if (PublisherUIState[2] == 1 && String.IsNullOrEmpty(this.filenameTextBox.Text))
             {
-                MessageBox.Show(String.Format("The Filename is invalid for rule creation. The Filename cannot be empty if its checkbox is selected."),
-                    "New Rule Creation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                DialogResult res = MessageBox.Show(String.Format("The Filename is invalid for rule creation. The Filename cannot be empty if its checkbox is selected."),
+                                                   "New Rule Creation Error",
+                                                   MessageBoxButtons.OK,
+                                                   MessageBoxIcon.Error);
                 this.Log.AddWarningMsg("Event Log Config - Empty Filename");
                 return false;
             }
 
             if (PublisherUIState[3] == 1 && String.IsNullOrEmpty(this.versionCheckBox.Text))
             {
-                MessageBox.Show(String.Format("The Version field is invalid for rule creation. The Version field cannot be empty if its checkbox is selected."),
-                    "New Rule Creation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                DialogResult res = MessageBox.Show(String.Format("The Version field is invalid for rule creation. The Version field cannot be empty if its checkbox is selected."),
+                                                   "New Rule Creation Error",
+                                                   MessageBoxButtons.OK,
+                                                   MessageBoxIcon.Error);
                 this.Log.AddWarningMsg("Event Log Config - Empty Version field");
                 return false;
             }
 
             if (PublisherUIState[4] == 1 && String.IsNullOrEmpty(this.productTextBox.Text))
             {
-                MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name cannot be empty if its checkbox is selected."),
-                    "New Rule Creation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                DialogResult res = MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name cannot be empty if its checkbox is selected."),
+                                                   "New Rule Creation Error",
+                                                   MessageBoxButtons.OK,
+                                                   MessageBoxIcon.Error);
                 this.Log.AddWarningMsg("Event Log Config - Empty Product name");
                 return false;
             }
@@ -800,7 +803,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void EventLogRuleConfiguration_Paint(object sender, PaintEventArgs e)
+        private void EventLogRuleConfiguration_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels, Textboxes, Buttons)
             SetControlsColor();
@@ -821,14 +824,15 @@ namespace WDAC_Wizard
             SetCheckBoxesColor(checkBoxes);
 
             this.CheckBoxes = checkBoxes;
-            SetDisabledCheckBoxesColor(); 
+            SetDisabledCheckBoxesColor();
 
             // Set PolicyType Form back color
             SetFormBackColor();
 
             // Set the Rules Grid colors
-            SetGridColors(); 
+            SetGridColors();
         }
+
 
         /// <summary>
         /// Gets all of the labels on the form recursively
@@ -1153,7 +1157,7 @@ namespace WDAC_Wizard
                 // Set checkbox text to a lighter color for better Dark Mode contrast
                 if (!checkBox.AutoCheck)
                 {
-                    checkBox.ForeColor = Color.Red;
+                    checkBox.ForeColor = Color.Silver;
                 }
             } 
         }

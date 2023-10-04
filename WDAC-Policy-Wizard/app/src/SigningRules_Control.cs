@@ -98,6 +98,7 @@ namespace WDAC_Wizard
                 this.customRuleConditionsPanel.Show();
                 this.customRuleConditionsPanel.BringToFront();
                 this.customRuleConditionsPanel.Focus();
+                this.customRuleConditionsPanel.ForceRepaint();
 
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
                 this.isCustomPanelOpen = true; 
@@ -1203,7 +1204,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SigningRules_Control_Paint(object sender, PaintEventArgs e)
+        private void SigningRules_Control_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels)
             SetControlsColor();
@@ -1220,7 +1221,7 @@ namespace WDAC_Wizard
             SetGridColors();
 
             // Repaint the Custom Rules Condition Panel, if applicable
-            if(customRuleConditionsPanel != null)
+            if (customRuleConditionsPanel != null)
             {
                 customRuleConditionsPanel.ForceRepaint();
             }

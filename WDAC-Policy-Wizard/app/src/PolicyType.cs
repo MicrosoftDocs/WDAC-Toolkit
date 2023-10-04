@@ -605,16 +605,17 @@ namespace WDAC_Wizard
             }
         }
 
+
         /// <summary>
         /// Form painting. Occurs on Form.Refresh, Load and Focus. 
         /// Used for UI element changes for Dark and Light Mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PolicyType_Paint(object sender, PaintEventArgs e)
+        private void PolicyType_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Radio Buttons)
-            SetControlsColor(); 
+            SetControlsColor();
 
             // Set Labels Color
             List<Label> labels = new List<Label>();
@@ -624,10 +625,10 @@ namespace WDAC_Wizard
             // Set Textboxes Color
             List<TextBox> textBoxes = new List<TextBox>();
             GetTextBoxesRecursive(this, textBoxes);
-            SetTextBoxesColor(textBoxes); 
+            SetTextBoxesColor(textBoxes);
 
             // Set PolicyType Form back color
-            SetFormBackColor(); 
+            SetFormBackColor();
         }
 
         /// <summary>

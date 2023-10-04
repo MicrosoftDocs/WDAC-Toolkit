@@ -598,7 +598,7 @@ namespace WDAC_Wizard
             this.Name = "EventLogRuleConfiguration";
             this.Size = new System.Drawing.Size(1208, 782);
             this.Load += new System.EventHandler(this.EventLogRuleConfiguration_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.EventLogRuleConfiguration_Paint);
+            this.Validated += new System.EventHandler(this.EventLogRuleConfiguration_Validated);
             this.publisherRulePanel.ResumeLayout(false);
             this.publisherRulePanel.PerformLayout();
             this.fileAttributeRulePanel.ResumeLayout(false);

@@ -105,19 +105,18 @@
             // policiesDataGrid
             // 
             this.policiesDataGrid.AllowUserToDeleteRows = false;
+            this.policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.policiesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.policiesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column_Number,
             this.Column_Path});
+            this.policiesDataGrid.EnableHeadersVisualStyles = false;
             this.policiesDataGrid.Location = new System.Drawing.Point(165, 139);
             this.policiesDataGrid.Name = "policiesDataGrid";
+            this.policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.policiesDataGrid.RowHeadersWidth = 51;
             this.policiesDataGrid.RowTemplate.Height = 24;
-            this.policiesDataGrid.EnableHeadersVisualStyles = false;
-            this.policiesDataGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Single;
-            this.policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.policiesDataGrid.Size = new System.Drawing.Size(678, 150);
             this.policiesDataGrid.TabIndex = 95;
             this.policiesDataGrid.VirtualMode = true;
@@ -194,7 +193,7 @@
             this.Controls.Add(this.label1);
             this.Name = "PolicyMerge_Control";
             this.Size = new System.Drawing.Size(1172, 782);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PolicyMerge_Control_Paint);
+            this.Validated += new System.EventHandler(this.PolicyMerge_Control_Validated);
             ((System.ComponentModel.ISupportInitialize)(this.policiesDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

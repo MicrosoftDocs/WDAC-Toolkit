@@ -817,8 +817,8 @@ namespace WDAC_Wizard
             this.Name = "ConfigTemplate_Control";
             this.Size = new System.Drawing.Size(1208, 782);
             this.Load += new System.EventHandler(this.SetDefaultButtonVals);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ConfigTemplate_Control_Paint);
             this.MouseHover += new System.EventHandler(this.RuleLabel_Hover);
+            this.Validated += new System.EventHandler(this.ConfigTemplate_Control_Validated);
             this.panel_AdvancedOptions.ResumeLayout(false);
             this.panel_AdvancedOptions.PerformLayout();
             this.ResumeLayout(false);

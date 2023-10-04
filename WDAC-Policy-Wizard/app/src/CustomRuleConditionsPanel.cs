@@ -2476,13 +2476,14 @@ namespace WDAC_Wizard
             e.Effect = DragDropEffects.Move;
         }
 
+
         /// <summary>
         /// Fires on Load, Paint, Refresh. 
         /// Sets the colors on the UI elements for Dark and Light mode
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CustomRuleConditionsPanel_Paint(object sender, PaintEventArgs e)
+        private void CustomRuleConditionsPanel_Validated(object sender, EventArgs e)
         {
             // Set Controls Color (e.g. Panels, buttons)
             SetControlsColor();
@@ -2495,7 +2496,7 @@ namespace WDAC_Wizard
             // Set Radio Buttons Color
             List<RadioButton> radioButtons = new List<RadioButton>();
             GetRadioButtonsRecursive(this, radioButtons);
-            SetRadioButtonsColor(radioButtons); 
+            SetRadioButtonsColor(radioButtons);
 
             // Set Side Panel
             SetSidePanelColor();
@@ -2509,7 +2510,7 @@ namespace WDAC_Wizard
         /// </summary>
         public void ForceRepaint()
         {
-            CustomRuleConditionsPanel_Paint(null, null); 
+            CustomRuleConditionsPanel_Validated(null, null); 
         }
 
         /// <summary>
