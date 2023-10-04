@@ -272,11 +272,6 @@ namespace WDAC_Wizard.src
         {
             this.label_Error.Visible = false;
         }
-        
-        private void PolicyMerge_Control_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
 
         /// <summary>
         /// Form painting. Occurs on Form.Refresh, Load and Focus. 
