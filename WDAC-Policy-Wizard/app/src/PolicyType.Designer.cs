@@ -167,6 +167,7 @@ namespace WDAC_Wizard
             // 
             this.textBoxBasePolicyID.Font = new System.Drawing.Font("Tahoma", 8.5F);
             this.textBoxBasePolicyID.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.textBoxBasePolicyID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBasePolicyID.Location = new System.Drawing.Point(169, 43);
             this.textBoxBasePolicyID.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxBasePolicyID.Name = "textBoxBasePolicyID";
@@ -246,6 +247,7 @@ namespace WDAC_Wizard
             this.textBoxBasePolicyPath.Location = new System.Drawing.Point(169, 107);
             this.textBoxBasePolicyPath.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxBasePolicyPath.Name = "textBoxBasePolicyPath";
+            this.textBoxBasePolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBasePolicyPath.Size = new System.Drawing.Size(381, 25);
             this.textBoxBasePolicyPath.TabIndex = 14;
             this.textBoxBasePolicyPath.Click += new System.EventHandler(this.Button_Browse_Click);
@@ -282,6 +284,7 @@ namespace WDAC_Wizard
             // 
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_PolicyName.ForeColor = System.Drawing.Color.Black;
+            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Location = new System.Drawing.Point(172, 11);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
@@ -304,6 +307,7 @@ namespace WDAC_Wizard
             // 
             this.textBoxSuppPath.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSuppPath.ForeColor = System.Drawing.Color.Black;
+            this.textBoxSuppPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSuppPath.Location = new System.Drawing.Point(172, 55);
             this.textBoxSuppPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxSuppPath.Name = "textBoxSuppPath";
