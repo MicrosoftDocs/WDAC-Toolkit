@@ -646,7 +646,7 @@ namespace WDAC_Wizard
                         && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         radioButton.ForeColor = Color.White;
-                        radioButton.BackColor = Color.Black;
+                        radioButton.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
             }
@@ -700,7 +700,7 @@ namespace WDAC_Wizard
                     if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
-                        label.BackColor = Color.Black;
+                        label.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
             }
