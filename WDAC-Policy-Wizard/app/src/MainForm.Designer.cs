@@ -73,8 +73,8 @@ namespace WDAC_Wizard
             // 
             this.button_New.BackColor = System.Drawing.Color.Transparent;
             this.button_New.FlatAppearance.BorderSize = 0;
-            this.button_New.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
-            this.button_New.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
+            this.button_New.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.button_New.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_New.Image = Properties.Resources.newPolicy;
@@ -113,8 +113,8 @@ namespace WDAC_Wizard
             // 
             this.button_Edit.BackColor = System.Drawing.Color.Transparent;
             this.button_Edit.FlatAppearance.BorderSize = 0;
-            this.button_Edit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
-            this.button_Edit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
+            this.button_Edit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.button_Edit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.button_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Edit.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Edit.Image = global::WDAC_Wizard.Properties.Resources.tools;
@@ -132,8 +132,8 @@ namespace WDAC_Wizard
             // 
             this.button_Merge.BackColor = System.Drawing.Color.Transparent;
             this.button_Merge.FlatAppearance.BorderSize = 0;
-            this.button_Merge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
-            this.button_Merge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(230)))), ((int)(((byte)(253)))));
+            this.button_Merge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.button_Merge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.button_Merge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Merge.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_Merge.Image = global::WDAC_Wizard.Properties.Resources.merge;
@@ -184,8 +184,8 @@ namespace WDAC_Wizard
             this.page5_Button.BackColor = System.Drawing.Color.Transparent;
             this.page5_Button.Enabled = false;
             this.page5_Button.FlatAppearance.BorderSize = 0;
-            this.page5_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page5_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page5_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.page5_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.page5_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page5_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page5_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -206,8 +206,8 @@ namespace WDAC_Wizard
             this.page4_Button.BackColor = System.Drawing.Color.Transparent;
             this.page4_Button.Enabled = false;
             this.page4_Button.FlatAppearance.BorderSize = 0;
-            this.page4_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page4_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page4_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.page4_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.page4_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page4_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page4_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -228,8 +228,8 @@ namespace WDAC_Wizard
             this.page3_Button.BackColor = System.Drawing.Color.Transparent;
             this.page3_Button.Enabled = false;
             this.page3_Button.FlatAppearance.BorderSize = 0;
-            this.page3_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page3_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page3_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.page3_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.page3_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page3_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page3_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -250,8 +250,8 @@ namespace WDAC_Wizard
             this.page2_Button.BackColor = System.Drawing.Color.Transparent;
             this.page2_Button.Enabled = false;
             this.page2_Button.FlatAppearance.BorderSize = 0;
-            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page2_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.page2_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.page2_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page2_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -272,8 +272,8 @@ namespace WDAC_Wizard
             this.page1_Button.BackColor = System.Drawing.Color.Transparent;
             this.page1_Button.Enabled = false;
             this.page1_Button.FlatAppearance.BorderSize = 0;
-            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.page1_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.page1_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             this.page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -302,8 +302,8 @@ namespace WDAC_Wizard
             this.home_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.home_Button.BackColor = System.Drawing.Color.Transparent;
             this.home_Button.FlatAppearance.BorderSize = 0;
-            this.home_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.home_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.home_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.home_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.home_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.home_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.home_Button.Image = ((System.Drawing.Image)(resources.GetObject("home_Button.Image")));
@@ -323,8 +323,8 @@ namespace WDAC_Wizard
             this.settings_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.settings_Button.BackColor = System.Drawing.Color.Transparent;
             this.settings_Button.FlatAppearance.BorderSize = 0;
-            this.settings_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
-            this.settings_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(149)))), ((int)(((byte)(149)))), ((int)(((byte)(149)))));
+            this.settings_Button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+            this.settings_Button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
             this.settings_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.settings_Button.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settings_Button.Image = global::WDAC_Wizard.Properties.Resources.gear;
