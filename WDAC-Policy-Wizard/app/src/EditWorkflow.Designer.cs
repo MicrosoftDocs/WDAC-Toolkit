@@ -124,6 +124,7 @@ namespace WDAC_Wizard
             this.textBoxPolicyPath.Location = new System.Drawing.Point(17, 22);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
+            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.ReadOnly = true;
             this.textBoxPolicyPath.Size = new System.Drawing.Size(462, 26);
             this.textBoxPolicyPath.TabIndex = 1;
@@ -188,6 +189,7 @@ namespace WDAC_Wizard
             this.textBox_PolicyName.Location = new System.Drawing.Point(126, 42);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
+            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyName.TabIndex = 2;
             this.textBox_PolicyName.TextChanged += new System.EventHandler(this.TextBox_PolicyName_TextChanged);
@@ -198,6 +200,7 @@ namespace WDAC_Wizard
             this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 154);
             this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxSaveLocation.Name = "textBoxSaveLocation";
+            this.textBoxSaveLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSaveLocation.ReadOnly = true;
             this.textBoxSaveLocation.Size = new System.Drawing.Size(462, 26);
             this.textBoxSaveLocation.TabIndex = 112;
@@ -220,6 +223,7 @@ namespace WDAC_Wizard
             this.textBox_PolicyID.Location = new System.Drawing.Point(126, 77);
             this.textBox_PolicyID.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyID.Name = "textBox_PolicyID";
+            this.textBox_PolicyID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyID.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyID.TabIndex = 3;
             this.textBox_PolicyID.TextChanged += new System.EventHandler(this.TextBox_PolicyID_TextChanged);
@@ -408,6 +412,7 @@ namespace WDAC_Wizard
             this.textBox_AdvancedHuntingPaths.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_AdvancedHuntingPaths.Multiline = true;
             this.textBox_AdvancedHuntingPaths.Name = "textBox_AdvancedHuntingPaths";
+            this.textBox_AdvancedHuntingPaths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_AdvancedHuntingPaths.ReadOnly = true;
             this.textBox_AdvancedHuntingPaths.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_AdvancedHuntingPaths.Size = new System.Drawing.Size(453, 37);
@@ -432,6 +437,7 @@ namespace WDAC_Wizard
             this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLog.Multiline = true;
             this.textBox_EventLog.Name = "textBox_EventLog";
+            this.textBox_EventLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLog.ReadOnly = true;
             this.textBox_EventLog.Size = new System.Drawing.Size(453, 43);
             this.textBox_EventLog.TabIndex = 123;
@@ -498,6 +504,7 @@ namespace WDAC_Wizard
             this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLogFilePath.Multiline = true;
             this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
+            this.textBox_EventLogFilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLogFilePath.ReadOnly = true;
             this.textBox_EventLogFilePath.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 37);

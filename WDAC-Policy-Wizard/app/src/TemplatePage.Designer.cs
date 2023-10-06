@@ -364,6 +364,7 @@ namespace WDAC_Wizard
             // 
             this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxPolicyPath.ForeColor = System.Drawing.Color.Black;
+            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.Location = new System.Drawing.Point(185, 87);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
@@ -387,6 +388,7 @@ namespace WDAC_Wizard
             // 
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_PolicyName.ForeColor = System.Drawing.Color.Black;
+            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Location = new System.Drawing.Point(185, 46);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";

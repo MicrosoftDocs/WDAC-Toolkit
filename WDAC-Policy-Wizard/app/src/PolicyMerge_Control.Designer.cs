@@ -83,6 +83,7 @@
             this.finalPolicyTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.finalPolicyTextBox.Location = new System.Drawing.Point(165, 409);
             this.finalPolicyTextBox.Name = "finalPolicyTextBox";
+            this.finalPolicyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.finalPolicyTextBox.Size = new System.Drawing.Size(448, 26);
             this.finalPolicyTextBox.TabIndex = 4;
             this.finalPolicyTextBox.Click += new System.EventHandler(this.Button_Browse_Click);
