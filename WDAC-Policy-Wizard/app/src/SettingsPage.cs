@@ -65,13 +65,15 @@ namespace WDAC_Wizard
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
-                Properties.Settings.Default.useEnvVars = false; 
+                Properties.Settings.Default.useEnvVars = false;
+                useEnvVars_CheckBox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.useEnvVars = true;
+                useEnvVars_CheckBox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
@@ -89,12 +91,14 @@ namespace WDAC_Wizard
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
                 Properties.Settings.Default.convertPolicyToBinary = false;
+                convertPolicyToBinary_CheckBox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.convertPolicyToBinary = true;
+                convertPolicyToBinary_CheckBox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
@@ -112,12 +116,14 @@ namespace WDAC_Wizard
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
                 Properties.Settings.Default.useDefaultStrings = false;
+                useDefaultStrings_CheckBox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.useDefaultStrings = true;
+                useDefaultStrings_CheckBox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
@@ -140,12 +146,14 @@ namespace WDAC_Wizard
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
                 Properties.Settings.Default.useDriverBlockRules = false;
+                useDriverBlockRules_CheckBox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.useDriverBlockRules = true;
+                useDriverBlockRules_CheckBox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
@@ -168,12 +176,14 @@ namespace WDAC_Wizard
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
                 Properties.Settings.Default.useUsermodeBlockRules = false;
+                useUsermodeBlockRules_CheckBox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.useUsermodeBlockRules = true;
+                useUsermodeBlockRules_CheckBox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
@@ -196,12 +206,14 @@ namespace WDAC_Wizard
                 checkBox.BackgroundImage = Properties.Resources.check_box_unchecked;
                 checkBox.Tag = "Unchecked";
                 Properties.Settings.Default.useDarkMode = false;
+                useDarkMode_Checkbox.BackColor = Color.Transparent;
             }
             else // false, set to true
             {
                 checkBox.BackgroundImage = Properties.Resources.check_box_checked;
                 checkBox.Tag = "Checked";
                 Properties.Settings.Default.useDarkMode = true;
+                useDarkMode_Checkbox.BackColor = Color.Transparent;
             }
 
             // Save setting and show update message to user
