@@ -503,6 +503,9 @@ namespace WDAC_Wizard
 
             // Set Form Back Color
             SetFormBackColor();
+
+            // Set color of Reset button
+            SetResetButtonColor();
         }
 
         /// <summary>
