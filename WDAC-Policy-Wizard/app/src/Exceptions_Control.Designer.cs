@@ -122,7 +122,6 @@
             // 
             this.radioButton_Folder.AutoSize = true;
             this.radioButton_Folder.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.radioButton_Folder.ForeColor = System.Drawing.Color.Black;
             this.radioButton_Folder.Location = new System.Drawing.Point(61, 7);
             this.radioButton_Folder.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_Folder.Name = "radioButton_Folder";
@@ -137,7 +136,6 @@
             // 
             this.radioButton_File.AutoSize = true;
             this.radioButton_File.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.radioButton_File.ForeColor = System.Drawing.Color.Black;
             this.radioButton_File.Location = new System.Drawing.Point(2, 7);
             this.radioButton_File.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_File.Name = "radioButton_File";
