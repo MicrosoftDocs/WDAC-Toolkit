@@ -2200,15 +2200,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_Next.ForeColor = Color.DodgerBlue;
-                button_Next.BackColor = Color.Black;
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Next.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_Next.ForeColor = Color.Black;
-                button_Next.BackColor = Color.WhiteSmoke;
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.Black;
+                button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 

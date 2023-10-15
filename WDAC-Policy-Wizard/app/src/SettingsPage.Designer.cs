@@ -401,7 +401,6 @@ namespace WDAC_Wizard
             // 
             // resetButton
             // 
-            this.resetButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.resetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.resetButton.Location = new System.Drawing.Point(785, 624);
             this.resetButton.Margin = new System.Windows.Forms.Padding(2);
