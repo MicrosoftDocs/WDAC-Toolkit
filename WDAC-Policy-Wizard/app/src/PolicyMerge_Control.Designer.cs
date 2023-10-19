@@ -106,8 +106,6 @@
             // policiesDataGrid
             // 
             this.policiesDataGrid.AllowUserToDeleteRows = false;
-            this.policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.policiesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.policiesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column_Number,
@@ -115,7 +113,6 @@
             this.policiesDataGrid.EnableHeadersVisualStyles = false;
             this.policiesDataGrid.Location = new System.Drawing.Point(165, 139);
             this.policiesDataGrid.Name = "policiesDataGrid";
-            this.policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.policiesDataGrid.RowHeadersWidth = 51;
             this.policiesDataGrid.RowTemplate.Height = 24;
             this.policiesDataGrid.Size = new System.Drawing.Size(678, 150);

@@ -293,7 +293,6 @@
             // 
             this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
             this.dataGridView_Exceptions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridView_Exceptions.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
@@ -301,6 +300,7 @@
             this.column_Name});
             this.dataGridView_Exceptions.Location = new System.Drawing.Point(7, 270);
             this.dataGridView_Exceptions.Name = "dataGridView_Exceptions";
+            this.dataGridView_Exceptions.EnableHeadersVisualStyles = false;
             this.dataGridView_Exceptions.ReadOnly = true;
             this.dataGridView_Exceptions.RowHeadersWidth = 51;
             this.dataGridView_Exceptions.RowTemplate.Height = 24;
