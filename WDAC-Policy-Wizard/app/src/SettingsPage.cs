@@ -649,15 +649,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                resetButton.ForeColor = Color.DodgerBlue;
-                resetButton.BackColor = Color.Black; 
+                resetButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                resetButton.ForeColor = System.Drawing.Color.DodgerBlue;
+                resetButton.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                resetButton.ForeColor = Color.Black;
-                resetButton.BackColor = Color.WhiteSmoke;
+                resetButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                resetButton.ForeColor = System.Drawing.Color.Black;
+                resetButton.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 
