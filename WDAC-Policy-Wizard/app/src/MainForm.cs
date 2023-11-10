@@ -1244,11 +1244,14 @@ namespace WDAC_Wizard
                 // policy to reduce the complexity of the PS scripting
                 if (customRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    SiPolicy signerSiPolicy = Helper.CreateSignerPolicyFromPS(customRule, tmpPolicyPath);
+                    // Logging
+                    this.Log.AddInfoMsg("--- New Signer Rule ---");
+
+                    SiPolicy signerSiPolicy = Helper.CreateSignerPolicyFromPS(customRule, tmpPolicyPath, Log);
 
                     if (signerSiPolicy != null)
                     {
-                        signerSiPolicy = Helper.AddSignerRuleAttributes(customRule, signerSiPolicy);
+                        signerSiPolicy = Helper.AddSignerRuleAttributes(customRule, signerSiPolicy, Log);
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
                         customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
                     }
@@ -1257,6 +1260,9 @@ namespace WDAC_Wizard
                 // Hash Rules -- Invoke Powershell cmd to generate 
                 if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
+                    // Logging
+                    this.Log.AddInfoMsg("--- New Hash Rule ---");
+
                     SiPolicy signerSiPolicy = CreateHashPolicyFromPS(customRule, tmpPolicyPath);
                     if (signerSiPolicy != null)
                     {
@@ -1340,7 +1346,7 @@ namespace WDAC_Wizard
         {
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                siPolicy = Helper.CreateFilePublisherRule(customRule, siPolicy);
+                siPolicy = Helper.CreateFilePublisherRule(customRule, siPolicy, Log);
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)

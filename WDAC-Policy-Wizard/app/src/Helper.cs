@@ -1150,7 +1150,7 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="siPolicy"></param>
         /// <returns></returns>
-        public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
+        public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy, Logger log)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
             SiPolicy tempSiPolicy = CreateSignerFromPS(customRule);
@@ -1219,9 +1219,9 @@ namespace WDAC_Wizard
 
             // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
-            if(fileAttrib.MinimumFileVersion != null 
-                || fileAttrib.MinimumFileVersion != null 
-                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            if((fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null)
+                && (fileAttrib.FileName == null && fileAttrib.ProductName == null))
             {
                 fileAttrib.FileName = "*"; 
             }
@@ -2158,7 +2158,7 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="policyPath"></param>
         /// <returns></returns>
-        public static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        public static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath, Logger log)
         {
             // Create runspace, pipeline and run script
             Runspace runspace = RunspaceFactory.CreateRunspace();
@@ -2184,6 +2184,12 @@ namespace WDAC_Wizard
             pipeline.Commands.AddScript(newPolicyRuleCmd);
             pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
 
+            // Logging 
+            foreach (var cmd in pipeline.Commands)
+            {
+                log.AddInfoMsg("Running the following commands: " + cmd);
+            }
+
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
@@ -2205,7 +2211,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="customRule"></param>
         /// <param name="signerSiPolicy"></param>
-        public static SiPolicy AddSignerRuleAttributes(PolicyCustomRules customRule, SiPolicy signerSiPolicy)
+        public static SiPolicy AddSignerRuleAttributes(PolicyCustomRules customRule, SiPolicy signerSiPolicy, Logger log)
         {
             // Get signers and check if Wizard fell back to hash rules
             Signer[] signers = signerSiPolicy.Signers;
@@ -2213,6 +2219,12 @@ namespace WDAC_Wizard
             {
                 // Failed to create signer rules and fellback to hash rules. There are no signers to which to add file attributes
                 return signerSiPolicy;
+            }
+
+            foreach (var signer in signers)
+            {
+                log.AddInfoMsg("Signer Name: " + signer.Name);
+                log.AddInfoMsg("Signer Hash: " + ConvertHash(signer.CertRoot.Value));
             }
 
             // Serialize a new policy so signing scenarios are not pre-filled resulting in duplicate signer references
@@ -2228,13 +2240,16 @@ namespace WDAC_Wizard
 
                 signers = SetSignersEKUs(signers, eku);
                 siPolicy = AddSiPolicyEKUs(eku, signerSiPolicy);
+
+                log.AddInfoMsg("EKU FriendlyName: " + eku.FriendlyName);
+                log.AddInfoMsg("EKU Value: " + eku.Value.ToString());
             }
 
             // If none of the extra attributes are to be added and null exceptions, skip creating a FileAttrib rule
             if (customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4)
             {
                 // Create new FileAttrib object to link to signers
-                FileAttrib fileAttrib = CreateFileAttributeFromCustomRule(customRule);
+                FileAttrib fileAttrib = CreateFileAttributeFromCustomRule(customRule, log);
 
                 // Add FileAttrib references
                 signers = AddFileAttribToSigners(fileAttrib, signers);
@@ -2283,7 +2298,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="customRule"></param>
         /// <returns></returns>
-        private static FileAttrib CreateFileAttributeFromCustomRule(PolicyCustomRules customRule)
+        private static FileAttrib CreateFileAttributeFromCustomRule(PolicyCustomRules customRule, Logger log)
         {
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules++;
@@ -2296,6 +2311,8 @@ namespace WDAC_Wizard
             {
                 fileAttrib.MinimumFileVersion = customRule.FileInfo["FileVersion"];
                 friendlyName += fileAttrib.MinimumFileVersion + " and ";
+
+                log.AddInfoMsg("MinFileVersion: " + fileAttrib.MinimumFileVersion);
             }
 
             // Original Filename
@@ -2303,6 +2320,8 @@ namespace WDAC_Wizard
             {
                 fileAttrib.FileName = customRule.FileInfo["OriginalFilename"];
                 friendlyName += fileAttrib.FileName + " and ";
+
+                log.AddInfoMsg("OriginalFilename: " + fileAttrib.FileName);
             }
 
             // Product name
@@ -2310,6 +2329,8 @@ namespace WDAC_Wizard
             {
                 fileAttrib.ProductName = customRule.FileInfo["ProductName"];
                 friendlyName += fileAttrib.ProductName + " and ";
+
+                log.AddInfoMsg("ProductName: " + fileAttrib.ProductName);
             }
 
             // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
@@ -2319,6 +2340,8 @@ namespace WDAC_Wizard
                 && (fileAttrib.FileName == null && fileAttrib.ProductName == null))
             {
                 fileAttrib.FileName = "*";
+
+                log.AddInfoMsg("OriginalFilename: *");
             }
 
             fileAttrib.FriendlyName = friendlyName.Substring(0, friendlyName.Length - 5); // remove trailing " and "
