@@ -2314,9 +2314,9 @@ namespace WDAC_Wizard
 
             // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
-            if (fileAttrib.MinimumFileVersion != null 
-                || fileAttrib.MinimumFileVersion != null
-                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            if ((fileAttrib.MinimumFileVersion != null 
+                || fileAttrib.MinimumFileVersion != null)
+                && (fileAttrib.FileName == null && fileAttrib.ProductName == null))
             {
                 fileAttrib.FileName = "*";
             }
