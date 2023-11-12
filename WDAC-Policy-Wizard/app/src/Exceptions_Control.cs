@@ -927,7 +927,7 @@ namespace WDAC_Wizard
                     if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         textBox.ForeColor = Color.White;
-                        textBox.BackColor = Color.Black;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
                         textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
                     }
                 }
@@ -962,7 +962,7 @@ namespace WDAC_Wizard
                     if (comboBox.Tag == null || comboBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         comboBox.ForeColor = Color.White;
-                        comboBox.BackColor = Color.Black;
+                        comboBox.BackColor = Color.FromArgb(15, 15, 15);
                         comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                         comboBox.Text = "--Select--";
                     }
