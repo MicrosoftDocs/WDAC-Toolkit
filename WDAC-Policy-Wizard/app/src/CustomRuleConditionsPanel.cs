@@ -2488,6 +2488,16 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Panels, buttons)
             SetControlsColor();
 
+            // Set Textboxes Color
+            List<TextBox> textBoxes = new List<TextBox>();
+            GetTextBoxesRecursive(this, textBoxes);
+            SetTextBoxesColor(textBoxes);
+
+            // Set Comboboxes Color
+            List<ComboBox> comboBoxes = new List<ComboBox>();
+            GetComboBoxesRecursive(this, comboBoxes);
+            SetComboboxesColor(comboBoxes);
+
             // Set Labels Color
             List<Label> labels = new List<Label>();
             GetLabelsRecursive(this, labels);
@@ -2597,6 +2607,78 @@ namespace WDAC_Wizard
                     {
                         checkBox.ForeColor = Color.Black;
                         checkBox.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the textBoxes defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetTextBoxesColor(List<TextBox> textBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.White;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
+                        textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (TextBox textBox in textBoxes)
+                {
+                    if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        textBox.ForeColor = Color.Black;
+                        textBox.BackColor = Color.White;
+                        textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the comboBoxes defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetComboboxesColor(List<ComboBox> comboBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (ComboBox comboBox in comboBoxes)
+                {
+                    if (comboBox.Tag == null || comboBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        comboBox.ForeColor = Color.White;
+                        comboBox.BackColor = Color.FromArgb(15, 15, 15);
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.Text = "--Select--";
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (ComboBox comboBox in comboBoxes)
+                {
+                    if (comboBox.Tag == null || comboBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        comboBox.ForeColor = Color.Black;
+                        comboBox.BackColor = Color.White;
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.Text = "--Select--";
                     }
                 }
             }
@@ -2795,6 +2877,46 @@ namespace WDAC_Wizard
                 else
                 {
                     GetTogglesRecursive(control, toggles);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetTextBoxesRecursive(Control parent, List<TextBox> textBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBoxes.Add(textBox);
+                }
+                else
+                {
+                    GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetComboBoxesRecursive(Control parent, List<ComboBox> comboBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is ComboBox comboBox)
+                {
+                    comboBoxes.Add(comboBox);
+                }
+                else
+                {
+                    GetComboBoxesRecursive(control, comboBoxes);
                 }
             }
         }
