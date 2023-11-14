@@ -377,7 +377,6 @@ namespace WDAC_Wizard
             // 
             this.eventsDataGridView.AllowUserToDeleteRows = false;
             this.eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.eventsDataGridView.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.addedColumn,
@@ -390,6 +389,8 @@ namespace WDAC_Wizard
             this.eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.eventsDataGridView.MultiSelect = false;
             this.eventsDataGridView.Name = "eventsDataGridView";
+            this.eventsDataGridView.EnableHeadersVisualStyles = false;
+            this.eventsDataGridView.AllowUserToResizeRows = false;
             this.eventsDataGridView.ReadOnly = true;
             this.eventsDataGridView.RowHeadersVisible = false;
             this.eventsDataGridView.RowHeadersWidth = 70;

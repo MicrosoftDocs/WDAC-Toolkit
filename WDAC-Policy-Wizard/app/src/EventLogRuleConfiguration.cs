@@ -1108,30 +1108,58 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 eventsDataGridView.BackgroundColor = Color.FromArgb(15, 15, 15);
-                eventsDataGridView.GridColor = Color.FromArgb(15, 15, 15);
 
                 // Header
-                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.Black;
                 eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Borders
+                eventsDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                eventsDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                eventsDataGridView.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                eventsDataGridView.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
+                eventsDataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 eventsDataGridView.DefaultCellStyle.ForeColor = Color.White;
+                eventsDataGridView.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                eventsDataGridView.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Grid lines
+                eventsDataGridView.GridColor = Color.LightSlateGray;
             }
 
             // Light Mode
             else
             {
-                eventsDataGridView.BackgroundColor = Color.LightGray;
-                eventsDataGridView.GridColor = Color.DimGray;
+                eventsDataGridView.BackgroundColor = Color.White;
 
                 // Header
-                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                eventsDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Borders
+                eventsDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                eventsDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                eventsDataGridView.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                eventsDataGridView.DefaultCellStyle.BackColor = Color.White;
+                eventsDataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 eventsDataGridView.DefaultCellStyle.ForeColor = Color.Black;
+                eventsDataGridView.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                eventsDataGridView.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Grid lines
+                eventsDataGridView.GridColor = Color.Black;
             }
         }
 

@@ -566,35 +566,59 @@ namespace WDAC_Wizard.src
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                policiesDataGrid.BackgroundColor = Color.Black; // FromArgb(15, 15, 15);
-                policiesDataGrid.GridColor = Color.Black; // FromArgb(15, 15, 15);
+                policiesDataGrid.BackgroundColor = Color.FromArgb(15, 15, 15);
 
-                // Headers
-                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                // Header
+                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.Black;
                 policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White;
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Borders
+                policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                policiesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                policiesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
+                policiesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 policiesDataGrid.DefaultCellStyle.ForeColor = Color.White;
+                policiesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                policiesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Grid lines
+                policiesDataGrid.GridColor = Color.LightSlateGray;
             }
 
             // Light Mode
             else
             {
-                policiesDataGrid.BackgroundColor = Color.LightGray;
-                policiesDataGrid.GridColor = Color.DimGray;
+                policiesDataGrid.BackgroundColor = Color.White;
 
                 // Header
-                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                policiesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Borders
+                policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                policiesDataGrid.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                policiesDataGrid.DefaultCellStyle.BackColor = Color.White;
+                policiesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 policiesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
+                policiesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                policiesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Grid lines
+                policiesDataGrid.GridColor = Color.Black;
             }
         }
     }

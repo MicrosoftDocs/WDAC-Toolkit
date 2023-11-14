@@ -986,33 +986,55 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 dataGridView_Exceptions.BackgroundColor = Color.FromArgb(15, 15, 15);
-                dataGridView_Exceptions.GridColor = Color.FromArgb(15, 15, 15);
 
                 // Header
-                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.Black;
                 dataGridView_Exceptions.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Borders
+                dataGridView_Exceptions.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                dataGridView_Exceptions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                dataGridView_Exceptions.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
+                dataGridView_Exceptions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 dataGridView_Exceptions.DefaultCellStyle.ForeColor = Color.White;
+                dataGridView_Exceptions.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                dataGridView_Exceptions.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
 
                 // Grid lines
-                dataGridView_Exceptions.GridColor = Color.Silver;
+                dataGridView_Exceptions.GridColor = Color.LightSlateGray;
             }
 
             // Light Mode
             else
             {
-                dataGridView_Exceptions.BackgroundColor = Color.LightGray;
-                dataGridView_Exceptions.GridColor = Color.DimGray;
+                dataGridView_Exceptions.BackgroundColor = Color.White;
 
                 // Header
-                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView_Exceptions.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 dataGridView_Exceptions.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                dataGridView_Exceptions.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Borders
+                dataGridView_Exceptions.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                dataGridView_Exceptions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                dataGridView_Exceptions.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+                dataGridView_Exceptions.DefaultCellStyle.BackColor = Color.White;
+                dataGridView_Exceptions.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 dataGridView_Exceptions.DefaultCellStyle.ForeColor = Color.Black;
+                dataGridView_Exceptions.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                dataGridView_Exceptions.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
 
                 // Grid lines
                 dataGridView_Exceptions.GridColor = Color.Black;

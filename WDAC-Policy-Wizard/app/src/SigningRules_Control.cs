@@ -1407,33 +1407,55 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 rulesDataGrid.BackgroundColor = Color.FromArgb(15, 15, 15);
-                rulesDataGrid.GridColor = Color.FromArgb(15, 15, 15);
 
                 // Header
-                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
-                rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White; 
+                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.Black;
+                rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+                // Borders
+                rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                rulesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(15, 15, 15);
+                rulesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
+                rulesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.White;
+                rulesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
+                rulesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
 
                 // Grid lines
-                rulesDataGrid.GridColor = Color.Silver;
+                rulesDataGrid.GridColor = Color.LightSlateGray;
             }
 
             // Light Mode
             else
             {
-                rulesDataGrid.BackgroundColor = Color.LightGray;
-                rulesDataGrid.GridColor = Color.DimGray;
+                rulesDataGrid.BackgroundColor = Color.White;
 
                 // Header
-                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.LightGray; 
+                rulesDataGrid.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+                // Borders
+                rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
-                rulesDataGrid.DefaultCellStyle.BackColor = Color.WhiteSmoke; 
+                rulesDataGrid.DefaultCellStyle.BackColor = Color.White;
+                rulesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
+                rulesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
+                rulesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
 
                 // Grid lines
                 rulesDataGrid.GridColor = Color.Black;
