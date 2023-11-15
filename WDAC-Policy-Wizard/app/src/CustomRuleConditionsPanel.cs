@@ -2677,7 +2677,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.Black;
                         comboBox.BackColor = Color.White;
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
                         comboBox.Text = "--Select--";
                     }
                 }
