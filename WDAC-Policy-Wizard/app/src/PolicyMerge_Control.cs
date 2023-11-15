@@ -326,9 +326,12 @@ namespace WDAC_Wizard.src
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.DodgerBlue;
-                        button.BackColor = Color.FromArgb(15, 15, 15);
-                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.DodgerBlue;
+                        button.BackColor = System.Drawing.Color.Transparent;
                     }
 
                     // Panels
@@ -366,9 +369,12 @@ namespace WDAC_Wizard.src
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.DodgerBlue;
-                        button.BackColor = Color.White;
-                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.Black;
+                        button.BackColor = System.Drawing.Color.WhiteSmoke;
                     }
 
                     // Panels

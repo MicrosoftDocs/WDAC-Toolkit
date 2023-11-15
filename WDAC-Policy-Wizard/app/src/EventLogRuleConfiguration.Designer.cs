@@ -86,7 +86,7 @@ namespace WDAC_Wizard
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(130, 30);
             this.addButton.TabIndex = 0;
-            this.addButton.Text = "Add Allow Rule";
+            this.addButton.Text = "+ Add Allow Rule";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
