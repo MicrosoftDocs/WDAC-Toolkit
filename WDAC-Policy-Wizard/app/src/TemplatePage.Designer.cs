@@ -398,10 +398,7 @@ namespace WDAC_Wizard
             // 
             // button_Browse
             // 
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.Location = new System.Drawing.Point(602, 86);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button_Browse.Name = "button_Browse";
