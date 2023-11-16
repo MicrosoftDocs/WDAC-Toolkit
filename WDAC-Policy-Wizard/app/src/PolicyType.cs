@@ -617,6 +617,12 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Radio Buttons)
             SetControlsColor();
 
+            // Set UI for the 'button_Browse' Button
+            Setbutton_BrowseUI();
+
+            // Set UI for the 'button_Browse_Supp' Button
+            Setbutton_Browse_SuppUI();
+
             // Set Labels Color
             List<Label> labels = new List<Label>();
             GetLabelsRecursive(this, labels);
@@ -666,6 +672,64 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Sets the colors for the button_Browse Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void Setbutton_BrowseUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.Black;
+                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+
+        /// <summary>
+        /// Sets the colors for the button_Browse_Supp Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void Setbutton_Browse_SuppUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Browse_Supp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse_Supp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse_Supp.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Browse_Supp.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Browse_Supp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse_Supp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse_Supp.ForeColor = System.Drawing.Color.Black;
+                button_Browse_Supp.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+        
         /// <summary>
         /// Gets all of the labels on the form recursively
         /// </summary>
@@ -753,7 +817,7 @@ namespace WDAC_Wizard
                     if (textBox.Tag == null || textBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         textBox.ForeColor = Color.White;
-                        textBox.BackColor = Color.Black;
+                        textBox.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
             }

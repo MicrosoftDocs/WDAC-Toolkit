@@ -228,10 +228,7 @@ namespace WDAC_Wizard
             // 
             // button_Browse
             // 
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.Location = new System.Drawing.Point(560, 105);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
@@ -267,10 +264,7 @@ namespace WDAC_Wizard
             // 
             // button_Browse_Supp
             // 
-            this.button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse_Supp.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button_Browse_Supp.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse_Supp.Location = new System.Drawing.Point(563, 53);
             this.button_Browse_Supp.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse_Supp.Name = "button_Browse_Supp";
