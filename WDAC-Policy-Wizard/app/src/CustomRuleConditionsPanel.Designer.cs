@@ -231,11 +231,7 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.BackColor = System.Drawing.Color.Transparent;
-            this.buttonSearch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.buttonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSearch.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSearch.ForeColor = System.Drawing.Color.DodgerBlue;
             this.buttonSearch.Location = new System.Drawing.Point(358, 12);
             this.buttonSearch.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSearch.Name = "buttonSearch";
@@ -946,11 +942,7 @@
             // 
             // button_Browse
             // 
-            this.button_Browse.BackColor = System.Drawing.Color.Transparent;
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.Location = new System.Drawing.Point(464, 333);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
@@ -999,11 +991,7 @@
             // 
             // button_CreateRule
             // 
-            this.button_CreateRule.BackColor = System.Drawing.Color.White;
-            this.button_CreateRule.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button_CreateRule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_CreateRule.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_CreateRule.ForeColor = System.Drawing.Color.Black;
             this.button_CreateRule.Location = new System.Drawing.Point(532, 786);
             this.button_CreateRule.Margin = new System.Windows.Forms.Padding(2);
             this.button_CreateRule.Name = "button_CreateRule";
@@ -1015,11 +1003,7 @@
             // 
             // button_Next
             // 
-            this.button_Next.BackColor = System.Drawing.Color.White;
-            this.button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Next.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Next.ForeColor = System.Drawing.Color.Black;
             this.button_Next.Location = new System.Drawing.Point(648, 786);
             this.button_Next.Margin = new System.Windows.Forms.Padding(2);
             this.button_Next.Name = "button_Next";
@@ -1130,12 +1114,8 @@
             // 
             // button_AddException
             // 
-            this.button_AddException.BackColor = System.Drawing.Color.White;
             this.button_AddException.Enabled = false;
-            this.button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_AddException.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_AddException.ForeColor = System.Drawing.Color.Gray;
             this.button_AddException.Location = new System.Drawing.Point(419, 786);
             this.button_AddException.Margin = new System.Windows.Forms.Padding(2);
             this.button_AddException.Name = "button_AddException";
@@ -1148,12 +1128,8 @@
             // 
             // button_Back
             // 
-            this.button_Back.BackColor = System.Drawing.Color.White;
             this.button_Back.Enabled = false;
-            this.button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Back.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Back.ForeColor = System.Drawing.Color.Gray;
             this.button_Back.Location = new System.Drawing.Point(316, 786);
             this.button_Back.Margin = new System.Windows.Forms.Padding(2);
             this.button_Back.Name = "button_Back";
@@ -1161,7 +1137,6 @@
             this.button_Back.TabIndex = 110;
             this.button_Back.Text = "< Back";
             this.button_Back.UseVisualStyleBackColor = false;
-            this.button_Back.EnabledChanged += new System.EventHandler(this.Button_Back_EnabledChanged);
             this.button_Back.Click += new System.EventHandler(this.Button_Back_Click);
             // 
             // backgroundWorker

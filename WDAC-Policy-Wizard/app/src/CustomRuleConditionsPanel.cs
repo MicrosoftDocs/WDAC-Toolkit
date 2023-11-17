@@ -1291,19 +1291,52 @@ namespace WDAC_Wizard
                 this.state = UIState.RuleExceptions; 
                 SetUIState();
 
-                // Disable next button 
-                //this.button_Next.ForeColor = Color.Gray;
-                //this.button_Back.FlatAppearance.BorderColor = Color.Gray;
-                this.button_Next.Enabled = false;
-
                 // Enable Back & exception button
-                this.button_Back.ForeColor = Color.Black;
-                this.button_Back.FlatAppearance.BorderColor = Color.Black;
-                this.button_Back.Enabled = true;
+                
+                // Dark Mode
+                if (Properties.Settings.Default.useDarkMode)
+                {
+                    button_Back.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                    button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                    button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
+                    button_Back.BackColor = System.Drawing.Color.Transparent;
+                    button_Back.Enabled = true;
+                    button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                    button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                    button_AddException.ForeColor = System.Drawing.Color.DodgerBlue;
+                    button_AddException.BackColor = System.Drawing.Color.Transparent;
+                    button_AddException.Enabled = true;
+                    // Disable next button 
+                    button_Next.FlatAppearance.BorderColor = Color.Gray;
+                    button_Next.Enabled = false;
+                }
 
-                this.button_AddException.ForeColor = Color.Black;
-                this.button_AddException.FlatAppearance.BorderColor = Color.Black;
-                this.button_AddException.Enabled = true;
+                // Light Mode
+                else
+                {
+                    button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                    button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                    button_Back.ForeColor = System.Drawing.Color.Black;
+                    button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
+                    button_Back.Enabled = true;
+                    button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                    button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                    button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                    button_AddException.ForeColor = System.Drawing.Color.Black;
+                    button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
+                    button_AddException.Enabled = true;
+                    // Disable next button 
+                    button_Next.FlatAppearance.BorderColor = Color.LightGray;
+                    button_Next.Enabled = false;
+                }
+                
             }
             else
             {
@@ -1322,14 +1355,37 @@ namespace WDAC_Wizard
             SetUIState();
 
             // Enable next button 
-            this.button_Next.ForeColor = Color.Black;
-            this.button_Back.FlatAppearance.BorderColor = Color.Black;
-            this.button_Next.Enabled = true;
+            
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Next.BackColor = System.Drawing.Color.Transparent;
+                button_Next.Enabled = true;
+                // Disable Back button
+                button_Back.FlatAppearance.BorderColor = Color.Gray;
+                button_Back.Enabled = false;
+            }
 
-            // Disable Back button
-            //this.button_Back.ForeColor = Color.Gray;
-            //this.button_Back.FlatAppearance.BorderColor = Color.Gray;
-            this.button_Back.Enabled = false;
+            // Light Mode
+            else
+            {
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.Black;
+                button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_Next.Enabled = true;
+                // Disable Back button
+                //this.button_Back.ForeColor = Color.Gray;
+                button_Back.FlatAppearance.BorderColor = Color.LightGray;
+                button_Back.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -2488,6 +2544,12 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Panels, buttons)
             SetControlsColor();
 
+            // Set UI for the 'button_Browse' Button
+            Setbutton_BrowseUI();
+
+            // Set UI for the 'buttonSearch' Button
+            SetbuttonSearchUI();
+
             // Set Textboxes Color
             List<TextBox> textBoxes = new List<TextBox>();
             GetTextBoxesRecursive(this, textBoxes);
@@ -2613,6 +2675,64 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the colors for the button_Browse Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void Setbutton_BrowseUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.Black;
+                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+
+        /// <summary>
+        /// Sets the colors for the buttonSearch Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void SetbuttonSearchUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                buttonSearch.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                buttonSearch.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                buttonSearch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                buttonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                buttonSearch.ForeColor = System.Drawing.Color.DodgerBlue;
+                buttonSearch.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                buttonSearch.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                buttonSearch.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                buttonSearch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                buttonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                buttonSearch.ForeColor = System.Drawing.Color.Black;
+                buttonSearch.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+        
+        /// <summary>
         /// Sets the color of the textBoxes defined in the provided List
         /// </summary>
         /// <param name="labels"></param>
@@ -2677,7 +2797,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.Black;
                         comboBox.BackColor = Color.White;
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
                         comboBox.Text = "--Select--";
                     }
                 }
@@ -2826,18 +2946,30 @@ namespace WDAC_Wizard
                 BackColor = Color.FromArgb(15, 15, 15);
 
                 // Buttons
-                button_Back.ForeColor = Color.Pink;
-                button_Back.BackColor = Color.FromArgb(15, 15, 15);
-                button_Back.FlatAppearance.BorderColor = Color.White;
-                button_AddException.ForeColor = Color.White;
-                button_AddException.BackColor = Color.FromArgb(15, 15, 15);
-                button_AddException.FlatAppearance.BorderColor = Color.White;
-                button_CreateRule.ForeColor = Color.White;
-                button_CreateRule.BackColor = Color.FromArgb(15, 15, 15);
-                button_CreateRule.FlatAppearance.BorderColor = Color.White;
-                button_Next.ForeColor = Color.White;
-                button_Next.BackColor = Color.FromArgb(15, 15, 15);
-                button_Next.FlatAppearance.BorderColor = Color.White;
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Back.BackColor = System.Drawing.Color.Transparent;
+                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_AddException.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_AddException.BackColor = System.Drawing.Color.Transparent;
+                button_CreateRule.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_CreateRule.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_CreateRule.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_CreateRule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_CreateRule.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_CreateRule.BackColor = System.Drawing.Color.Transparent;
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Next.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
@@ -2846,18 +2978,30 @@ namespace WDAC_Wizard
                 BackColor = Color.White;
 
                 // Buttons
-                button_Back.ForeColor = Color.Gray;
-                button_Back.BackColor = Color.White;
-                button_Back.FlatAppearance.BorderColor = Color.Black;
-                button_AddException.ForeColor = Color.Gray;
-                button_AddException.BackColor = Color.White;
-                button_AddException.FlatAppearance.BorderColor = Color.Black;
-                button_CreateRule.ForeColor = Color.Black;
-                button_CreateRule.BackColor = Color.White;
-                button_CreateRule.FlatAppearance.BorderColor = Color.Black;
-                button_Next.ForeColor = Color.Black;
-                button_Next.BackColor = Color.White;
-                button_Next.FlatAppearance.BorderColor = Color.Black;
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.Black;
+                button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
+                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_AddException.ForeColor = System.Drawing.Color.Black;
+                button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_CreateRule.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_CreateRule.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_CreateRule.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_CreateRule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_CreateRule.ForeColor = System.Drawing.Color.Black;
+                button_CreateRule.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Next.ForeColor = System.Drawing.Color.Black;
+                button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 
@@ -2931,22 +3075,28 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_AddException.ForeColor = Color.White;
-                button_AddException.BackColor = Color.FromArgb(15, 15, 15);
-                button_AddException.FlatAppearance.BorderColor = Color.White;
+                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_AddException.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_AddException.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_AddException.ForeColor = Color.Black;
-                button_AddException.BackColor = Color.White; 
-                button_AddException.FlatAppearance.BorderColor = Color.Black;
+                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_AddException.ForeColor = System.Drawing.Color.Black;
+                button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 
         /// <summary>
-        /// Sets the color of the Button_AddException when enablement changes
+        /// Sets the color of the button_Back when enablement changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2955,17 +3105,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_Back.ForeColor = Color.White;
-                button_Back.BackColor = Color.FromArgb(15, 15, 15);
-                button_Back.FlatAppearance.BorderColor = Color.White;
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Back.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_Back.ForeColor = Color.Black;
-                button_Back.BackColor = Color.White;
-                button_Back.FlatAppearance.BorderColor = Color.Black;
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.Black;
+                button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
     }
