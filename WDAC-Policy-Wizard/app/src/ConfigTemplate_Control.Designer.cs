@@ -159,6 +159,8 @@ namespace WDAC_Wizard
             this.button_5.BackColor = System.Drawing.Color.White;
             this.button_5.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_5.FlatAppearance.BorderSize = 0;
             this.button_5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_5.Location = new System.Drawing.Point(449, 421);
@@ -175,6 +177,8 @@ namespace WDAC_Wizard
             this.button_3.BackColor = System.Drawing.Color.White;
             this.button_3.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_3.FlatAppearance.BorderSize = 0;
             this.button_3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_3.Location = new System.Drawing.Point(449, 321);
@@ -191,6 +195,8 @@ namespace WDAC_Wizard
             this.button_2.BackColor = System.Drawing.Color.White;
             this.button_2.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_2.FlatAppearance.BorderSize = 0;
             this.button_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_2.Location = new System.Drawing.Point(449, 271);
@@ -207,6 +213,8 @@ namespace WDAC_Wizard
             this.button_1.BackColor = System.Drawing.Color.White;
             this.button_1.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_1.FlatAppearance.BorderSize = 0;
             this.button_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_1.Location = new System.Drawing.Point(449, 221);
@@ -223,6 +231,8 @@ namespace WDAC_Wizard
             this.button_0.BackColor = System.Drawing.Color.White;
             this.button_0.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_0.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_0.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_0.FlatAppearance.BorderSize = 0;
             this.button_0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_0.Location = new System.Drawing.Point(449, 171);
@@ -253,6 +263,8 @@ namespace WDAC_Wizard
             this.button_6.BackColor = System.Drawing.Color.White;
             this.button_6.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_6.FlatAppearance.BorderSize = 0;
             this.button_6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_6.Location = new System.Drawing.Point(447, 589);
@@ -282,6 +294,8 @@ namespace WDAC_Wizard
             this.button_17.BackColor = System.Drawing.Color.White;
             this.button_17.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_17.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_17.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_17.FlatAppearance.BorderSize = 0;
             this.button_17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_17.Location = new System.Drawing.Point(271, 179);
@@ -311,6 +325,8 @@ namespace WDAC_Wizard
             this.button_16.BackColor = System.Drawing.Color.White;
             this.button_16.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_16.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_16.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_16.FlatAppearance.BorderSize = 0;
             this.button_16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_16.Location = new System.Drawing.Point(271, 129);
@@ -353,6 +369,8 @@ namespace WDAC_Wizard
             this.button_13.BackColor = System.Drawing.Color.White;
             this.button_13.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_13.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_13.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_13.FlatAppearance.BorderSize = 0;
             this.button_13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_13.Location = new System.Drawing.Point(271, 29);
@@ -395,6 +413,8 @@ namespace WDAC_Wizard
             this.button_11.BackColor = System.Drawing.Color.White;
             this.button_11.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_11.FlatAppearance.BorderSize = 0;
             this.button_11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_11.Location = new System.Drawing.Point(783, 371);
@@ -424,6 +444,8 @@ namespace WDAC_Wizard
             this.button_18.BackColor = System.Drawing.Color.White;
             this.button_18.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_18.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_18.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_18.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_18.FlatAppearance.BorderSize = 0;
             this.button_18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_18.Location = new System.Drawing.Point(271, 229);
@@ -453,6 +475,8 @@ namespace WDAC_Wizard
             this.button_15.BackColor = System.Drawing.Color.White;
             this.button_15.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_15.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_15.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_15.FlatAppearance.BorderSize = 0;
             this.button_15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_15.Location = new System.Drawing.Point(271, 79);
@@ -482,6 +506,8 @@ namespace WDAC_Wizard
             this.button_10.BackColor = System.Drawing.Color.White;
             this.button_10.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_10.FlatAppearance.BorderSize = 0;
             this.button_10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_10.Location = new System.Drawing.Point(783, 321);
@@ -511,6 +537,8 @@ namespace WDAC_Wizard
             this.button_8.BackColor = System.Drawing.Color.White;
             this.button_8.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_8.FlatAppearance.BorderSize = 0;
             this.button_8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_8.Location = new System.Drawing.Point(783, 221);
@@ -527,6 +555,8 @@ namespace WDAC_Wizard
             this.button_7.BackColor = System.Drawing.Color.White;
             this.button_7.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_7.FlatAppearance.BorderSize = 0;
             this.button_7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_7.Location = new System.Drawing.Point(783, 171);
@@ -569,6 +599,8 @@ namespace WDAC_Wizard
             this.button_9.BackColor = System.Drawing.Color.White;
             this.button_9.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_9.FlatAppearance.BorderSize = 0;
             this.button_9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_9.Location = new System.Drawing.Point(783, 271);
@@ -598,6 +630,8 @@ namespace WDAC_Wizard
             this.button_HVCI.BackColor = System.Drawing.Color.White;
             this.button_HVCI.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_HVCI.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_HVCI.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_HVCI.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_HVCI.FlatAppearance.BorderSize = 0;
             this.button_HVCI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_HVCI.Location = new System.Drawing.Point(449, 371);
@@ -635,6 +669,8 @@ namespace WDAC_Wizard
             this.button_19.BackColor = System.Drawing.Color.White;
             this.button_19.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_19.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_19.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_19.FlatAppearance.BorderSize = 0;
             this.button_19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_19.Location = new System.Drawing.Point(271, 279);
@@ -748,6 +784,8 @@ namespace WDAC_Wizard
             this.button_20.BackColor = System.Drawing.Color.White;
             this.button_20.BackgroundImage = global::WDAC_Wizard.Properties.Resources.untoggle;
             this.button_20.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button_20.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_20.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button_20.FlatAppearance.BorderSize = 0;
             this.button_20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_20.Location = new System.Drawing.Point(783, 421);
