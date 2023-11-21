@@ -207,8 +207,9 @@ namespace WDAC_Wizard
 
             // Packaged family name apps
             // Set the list of apps at button create time
+
             if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
-            {
+            {             
                 // Assert >=1 packaged apps must be selected
                 if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
                 {
@@ -1883,12 +1884,31 @@ namespace WDAC_Wizard
             {
                 if (this.checkBox_CustomPath.Checked)
                 {
+                    // Dark Mode
+                    if (Properties.Settings.Default.useDarkMode)
+                    {
                     this.richTextBox_CustomHashes.Visible = true;
                     this.richTextBox_CustomHashes.Location = this.panel_Publisher_Scroll.Location;
                     this.richTextBox_CustomHashes.Tag = "Title";
+                    this.richTextBox_CustomHashes.BackColor = Color.FromArgb(15, 15, 15);
+                    this.richTextBox_CustomHashes.ForeColor = Color.White;
 
                     this.PolicyCustomRule.UsingCustomValues = true;
                     this.textBox_ReferenceFile.Text = String.Empty;
+                    }
+
+                    // Light Mode
+                    else
+                    {
+                    this.richTextBox_CustomHashes.Visible = true;
+                    this.richTextBox_CustomHashes.Location = this.panel_Publisher_Scroll.Location;
+                    this.richTextBox_CustomHashes.Tag = "Title";
+                    this.richTextBox_CustomHashes.BackColor = Color.White;
+                    this.richTextBox_CustomHashes.ForeColor = Color.Black;
+
+                    this.PolicyCustomRule.UsingCustomValues = true;
+                    this.textBox_ReferenceFile.Text = String.Empty;
+                    }
                 }
                 else
                 {
@@ -1900,17 +1920,43 @@ namespace WDAC_Wizard
             {
                 if (this.checkBox_CustomPath.Checked)
                 {
+                    // Dark Mode
+                    if (Properties.Settings.Default.useDarkMode)
+                    {
                     this.PolicyCustomRule.UsingCustomValues = true;
                     this.textBox_ReferenceFile.ReadOnly = false;
                     this.textBox_ReferenceFile.Enabled = true; 
-                    this.textBox_ReferenceFile.BackColor = Color.White; 
+                    this.textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Light Mode
+                    else
+                    {
+                    this.PolicyCustomRule.UsingCustomValues = true;
+                    this.textBox_ReferenceFile.ReadOnly = false;
+                    this.textBox_ReferenceFile.Enabled = true; 
+                    this.textBox_ReferenceFile.BackColor = Color.White;
+                    }
                 }
                 else
                 {
+                    // Dark Mode
+                    if (Properties.Settings.Default.useDarkMode)
+                    {
                     this.PolicyCustomRule.UsingCustomValues = false;
                     this.textBox_ReferenceFile.ReadOnly = true;
                     this.textBox_ReferenceFile.Enabled = false;
-                    this.textBox_ReferenceFile.BackColor = SystemColors.Control;
+                    this.textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+
+                    // Light Mode
+                    else
+                    {
+                    this.PolicyCustomRule.UsingCustomValues = false;
+                    this.textBox_ReferenceFile.ReadOnly = true;
+                    this.textBox_ReferenceFile.Enabled = false;
+                    this.textBox_ReferenceFile.BackColor = Color.White;
+                    }
 
                     // Set back to the reference file path
                     if(this.DefaultValues[4] != null && this.DefaultValues[4].Length > 0)
@@ -1960,6 +2006,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
+            
             if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
             {
                 label_Error.Visible = true;
@@ -2076,6 +2123,7 @@ namespace WDAC_Wizard
         {
             // If checked, update text on the 'Search' button
             // Hide the PFN search UI
+
             if(this.checkBox_CustomPFN.Checked)
             {
                 this.buttonSearch.Text = "Create";
@@ -2555,6 +2603,11 @@ namespace WDAC_Wizard
             GetTextBoxesRecursive(this, textBoxes);
             SetTextBoxesColor(textBoxes);
 
+            // Set checkedListBoxes Color
+            List<CheckedListBox> checkedListBoxes = new List<CheckedListBox>();
+            GetCheckedListBoxesRecursive(this, checkedListBoxes);
+            SetCheckedListBoxesColor(checkedListBoxes);
+
             // Set Comboboxes Color
             List<ComboBox> comboBoxes = new List<ComboBox>();
             GetComboBoxesRecursive(this, comboBoxes);
@@ -2762,6 +2815,39 @@ namespace WDAC_Wizard
                         textBox.ForeColor = Color.Black;
                         textBox.BackColor = Color.White;
                         textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the checkedListBoxes defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetCheckedListBoxesColor(List<CheckedListBox> checkedListBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (CheckedListBox checkedListBox in checkedListBoxes)
+                {
+                    if (checkedListBox.Tag == null || checkedListBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkedListBox.ForeColor = Color.White;
+                        checkedListBox.BackColor = Color.FromArgb(15, 15, 15);
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (CheckedListBox checkedListBox in checkedListBoxes)
+                {
+                    if (checkedListBox.Tag == null || checkedListBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        checkedListBox.ForeColor = Color.Black;
+                        checkedListBox.BackColor = Color.White;
                     }
                 }
             }
@@ -3041,6 +3127,26 @@ namespace WDAC_Wizard
                 else
                 {
                     GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetCheckedListBoxesRecursive(Control parent, List<CheckedListBox> checkedListBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is CheckedListBox checkedListBox)
+                {
+                    checkedListBoxes.Add(checkedListBox);
+                }
+                else
+                {
+                    GetCheckedListBoxesRecursive(control, checkedListBoxes);
                 }
             }
         }
