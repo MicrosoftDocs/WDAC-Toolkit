@@ -1630,7 +1630,7 @@ namespace WDAC_Wizard
                 if(String.IsNullOrEmpty(this.Policy.SchemaPath))
                 {
                     // Since we don't have a new save location, copy the TemplatePath
-                    // and append '_Edit' to the file path.
+                    // and append '_version' to the file path.
                     // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
                     int versionNumPos = this.Policy.EditPathContainsVersionInfo(); 
                     if (versionNumPos > 0)
@@ -1726,7 +1726,7 @@ namespace WDAC_Wizard
                 this.Log.AddErrorMsg("MergeTemplatesPolicy() encountered the following error: Unable to locate any policies to merge");
             }
                 
-
+            // Logging
             foreach (var policyPath in policyPaths)
             {
                 mergeScript += String.Format("\"{0}\",", policyPath);
