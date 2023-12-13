@@ -190,18 +190,14 @@ namespace WDAC_Wizard
             // 
             // deleteButton
             // 
-            this.deleteButton.FlatAppearance.BorderSize = 0;
-            this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteButton.Image = global::WDAC_Wizard.Properties.Resources.minus_button;
-            this.deleteButton.Location = new System.Drawing.Point(903, 607);
+            this.deleteButton.Location = new System.Drawing.Point(905, 607);
             this.deleteButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(154, 26);
+            this.deleteButton.Size = new System.Drawing.Size(114, 26);
             this.deleteButton.TabIndex = 93;
-            this.deleteButton.Text = "   Remove Rule";
+            this.deleteButton.Text = "- Remove Rule";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
@@ -223,18 +219,14 @@ namespace WDAC_Wizard
             // 
             // addButton
             // 
-            this.addButton.FlatAppearance.BorderSize = 0;
-            this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addButton.Image = global::WDAC_Wizard.Properties.Resources.add_button;
             this.addButton.Location = new System.Drawing.Point(881, 132);
             this.addButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(174, 26);
+            this.addButton.Size = new System.Drawing.Size(146, 26);
             this.addButton.TabIndex = 97;
-            this.addButton.Text = "   Add Custom Rule";
+            this.addButton.Text = "+ Add Custom Rule";
             this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.Label_AddCustomRules_Click);
             // 
