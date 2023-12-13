@@ -786,6 +786,9 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Panels, buttons)
             SetControlsColor();
 
+            // Set UI for the 'button_Browse' Button
+            Setbutton_BrowseUI();
+
             // Set Textboxes Color
             List<TextBox> textBoxes = new List<TextBox>();
             GetTextBoxesRecursive(this, textBoxes);
@@ -914,6 +917,35 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sets the colors for the button_Browse Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void Setbutton_BrowseUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.Black;
+                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+        
+        /// <summary>
         /// Sets the color of the textBoxes defined in the provided List
         /// </summary>
         /// <param name="labels"></param>
@@ -978,7 +1010,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.Black;
                         comboBox.BackColor = Color.White;
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
                         comboBox.Text = "--Select--";
                     }
                 }
