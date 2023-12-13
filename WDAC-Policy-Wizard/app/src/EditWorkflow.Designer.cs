@@ -105,10 +105,7 @@ namespace WDAC_Wizard
             // 
             // browseButton
             // 
-            this.browseButton.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseButton.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.browseButton.ForeColor = System.Drawing.Color.DodgerBlue;
             this.browseButton.Location = new System.Drawing.Point(499, 21);
             this.browseButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.browseButton.Name = "browseButton";
@@ -170,10 +167,7 @@ namespace WDAC_Wizard
             // 
             // buttonNewSaveLocation
             // 
-            this.buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.SystemColors.MenuHighlight;
-            this.buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNewSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
             this.buttonNewSaveLocation.Location = new System.Drawing.Point(502, 153);
             this.buttonNewSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonNewSaveLocation.Name = "buttonNewSaveLocation";
@@ -241,8 +235,6 @@ namespace WDAC_Wizard
             // 
             // button_ParseEventLog
             // 
-            this.button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_ParseEventLog.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_ParseEventLog.Location = new System.Drawing.Point(343, 72);
             this.button_ParseEventLog.Name = "button_ParseEventLog";
             this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
@@ -253,10 +245,7 @@ namespace WDAC_Wizard
             // 
             // button_Parse_LogFile
             // 
-            this.button_Parse_LogFile.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Parse_LogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.button_Parse_LogFile.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 174);
             this.button_Parse_LogFile.Name = "button_Parse_LogFile";
             this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
@@ -393,10 +382,7 @@ namespace WDAC_Wizard
             // 
             // button_Parse_MDE_AH_Logs
             // 
-            this.button_Parse_MDE_AH_Logs.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Parse_MDE_AH_Logs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Parse_MDE_AH_Logs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.button_Parse_MDE_AH_Logs.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Parse_MDE_AH_Logs.Location = new System.Drawing.Point(342, 273);
             this.button_Parse_MDE_AH_Logs.Name = "button_Parse_MDE_AH_Logs";
             this.button_Parse_MDE_AH_Logs.Size = new System.Drawing.Size(133, 27);
