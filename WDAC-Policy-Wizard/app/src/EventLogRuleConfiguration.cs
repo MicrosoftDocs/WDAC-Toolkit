@@ -818,6 +818,11 @@ namespace WDAC_Wizard
             GetTextBoxesRecursive(this, textBoxes);
             SetTextBoxesColor(textBoxes);
 
+            // Set Comboboxes Color
+            List<ComboBox> comboBoxes = new List<ComboBox>();
+            GetComboBoxesRecursive(this, comboBoxes);
+            SetComboboxesColor(comboBoxes);
+
             // Set Checkboxes Color
             List<CheckBox> checkBoxes = new List<CheckBox>();
             GetCheckBoxesRecursive(this, checkBoxes);
@@ -869,8 +874,12 @@ namespace WDAC_Wizard
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.White;
-                        button.BackColor = Color.FromArgb(15, 15, 15);
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.DodgerBlue;
+                        button.BackColor = System.Drawing.Color.Transparent;
                     }
 
                     // Panels
@@ -908,8 +917,12 @@ namespace WDAC_Wizard
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.Black;
-                        button.BackColor = Color.White;
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.Black;
+                        button.BackColor = System.Drawing.Color.WhiteSmoke;
                     }
 
                     // Panels
@@ -934,6 +947,41 @@ namespace WDAC_Wizard
                     {
                         radioButton.ForeColor = Color.Black;
                         radioButton.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the color of the comboBoxes defined in the provided List
+        /// </summary>
+        /// <param name="labels"></param>
+        private void SetComboboxesColor(List<ComboBox> comboBoxes)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                foreach (ComboBox comboBox in comboBoxes)
+                {
+                    if (comboBox.Tag == null || comboBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        comboBox.ForeColor = Color.White;
+                        comboBox.BackColor = Color.FromArgb(15, 15, 15);
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                    }
+                }
+            }
+
+            // Light Mode
+            else
+            {
+                foreach (ComboBox comboBox in comboBoxes)
+                {
+                    if (comboBox.Tag == null || comboBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    {
+                        comboBox.ForeColor = Color.Black;
+                        comboBox.BackColor = Color.White;
+                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
                     }
                 }
             }
@@ -1007,6 +1055,26 @@ namespace WDAC_Wizard
                 else
                 {
                     GetTextBoxesRecursive(control, textBoxes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the labels on the form recursively
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="labels"></param>
+        private void GetComboBoxesRecursive(Control parent, List<ComboBox> comboBoxes)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                if (control is ComboBox comboBox)
+                {
+                    comboBoxes.Add(comboBox);
+                }
+                else
+                {
+                    GetComboBoxesRecursive(control, comboBoxes);
                 }
             }
         }
