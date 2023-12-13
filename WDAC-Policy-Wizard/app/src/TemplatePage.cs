@@ -49,6 +49,7 @@ namespace WDAC_Wizard
             }
                 
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
+            
             // Update UI
             Uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
@@ -279,9 +280,12 @@ namespace WDAC_Wizard
         private void MouseHover_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-        /// Temporarily disable MouseHover effect by changing FromArgb(190, 230, 253) to Transparent.
-        /// Disabled until issue (https://github.com/MicrosoftDocs/WDAC-Toolkit/issues/307) is fixed.
-            checkBox.BackColor = Color.Transparent;
+
+            // If untoggled, show toggled button on hover. Undo on mouse leave event
+            if(!checkBox.Tag.Equals("toggle"))
+            {
+                checkBox.Image = Properties.Resources.radio_on;
+            }
         }
 
         /// <summary>
@@ -291,7 +295,13 @@ namespace WDAC_Wizard
         private void MouseLeave_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.Transparent; 
+
+            // Undo the image set by MouseHover_Button event
+            // Image with untoggle tags need to be set back to untoggled
+            if (!checkBox.Tag.Equals("untoggle"))
+            {
+                checkBox.Image = Properties.Resources.radio_off;
+            }
         }
 
         /// <summary>

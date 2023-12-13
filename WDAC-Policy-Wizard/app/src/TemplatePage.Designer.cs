@@ -105,7 +105,7 @@ namespace WDAC_Wizard
             this.allowMsft_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.allowMsft_Button.TabIndex = 99;
             this.allowMsft_Button.TabStop = false;
-            this.allowMsft_Button.Tag = "IgnoreDarkMode";
+            this.allowMsft_Button.Tag = "";
             this.allowMsft_Button.Click += new System.EventHandler(this.AllowMsft_Button_Click);
             this.allowMsft_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
             this.allowMsft_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
@@ -182,7 +182,7 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.windowsWorks_Button.TabIndex = 98;
             this.windowsWorks_Button.TabStop = false;
-            this.windowsWorks_Button.Tag = "IgnoreDarkMode";
+            this.windowsWorks_Button.Tag = "";
             this.windowsWorks_Button.Click += new System.EventHandler(this.WindowsWorks_Button_Click);
             this.windowsWorks_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
             this.windowsWorks_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
@@ -276,7 +276,7 @@ namespace WDAC_Wizard
             this.signedReputable_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.signedReputable_Button.TabIndex = 96;
             this.signedReputable_Button.TabStop = false;
-            this.signedReputable_Button.Tag = "IgnoreDarkMode";
+            this.signedReputable_Button.Tag = "";
             this.signedReputable_Button.Click += new System.EventHandler(this.SignedReputable_Button_Click);
             this.signedReputable_Button.MouseLeave += new System.EventHandler(this.MouseLeave_Button);
             this.signedReputable_Button.MouseHover += new System.EventHandler(this.MouseHover_Button);
@@ -362,9 +362,9 @@ namespace WDAC_Wizard
             // 
             // textBoxPolicyPath
             // 
+            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxPolicyPath.ForeColor = System.Drawing.Color.Black;
-            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.Location = new System.Drawing.Point(185, 87);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
@@ -386,9 +386,9 @@ namespace WDAC_Wizard
             // 
             // textBox_PolicyName
             // 
+            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_PolicyName.ForeColor = System.Drawing.Color.Black;
-            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Location = new System.Drawing.Point(185, 46);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
