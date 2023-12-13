@@ -279,7 +279,9 @@ namespace WDAC_Wizard
         private void MouseHover_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.FromArgb(190, 230, 253);
+        /// Temporarily disable MouseHover effect by changing FromArgb(190, 230, 253) to Transparent.
+        /// Disabled until issue (https://github.com/MicrosoftDocs/WDAC-Toolkit/issues/307) is fixed.
+            checkBox.BackColor = Color.Transparent;
         }
 
         /// <summary>
