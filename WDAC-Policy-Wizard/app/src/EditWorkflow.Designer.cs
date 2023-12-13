@@ -34,7 +34,7 @@ namespace WDAC_Wizard
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.browseButton = new System.Windows.Forms.Button();
+            this.buttonBrowse = new System.Windows.Forms.Button();
             this.textBoxPolicyPath = new System.Windows.Forms.TextBox();
             this.policyInfoPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
@@ -45,8 +45,8 @@ namespace WDAC_Wizard
             this.label_policyName = new System.Windows.Forms.Label();
             this.textBox_PolicyID = new System.Windows.Forms.TextBox();
             this.label_fileLocation = new System.Windows.Forms.Label();
-            this.button_ParseEventLog = new System.Windows.Forms.Button();
-            this.button_Parse_LogFile = new System.Windows.Forms.Button();
+            this.buttonParseEventLog = new System.Windows.Forms.Button();
+            this.buttonParseLogFile = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel_Progress = new System.Windows.Forms.Panel();
             this.pictureBox_Progress = new System.Windows.Forms.PictureBox();
@@ -57,7 +57,7 @@ namespace WDAC_Wizard
             this.label9 = new System.Windows.Forms.Label();
             this.panel_Page = new System.Windows.Forms.Panel();
             this.panel_EventLog_Conversion = new System.Windows.Forms.Panel();
-            this.button_Parse_MDE_AH_Logs = new System.Windows.Forms.Button();
+            this.buttonParseMDELog = new System.Windows.Forms.Button();
             this.textBox_AdvancedHuntingPaths = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox_EventLog = new System.Windows.Forms.TextBox();
@@ -103,17 +103,17 @@ namespace WDAC_Wizard
             this.label2.TabIndex = 108;
             this.label2.Text = "Browse for your policy on disk or create one from a code integrity event log.";
             // 
-            // browseButton
+            // buttonBrowse
             // 
-            this.browseButton.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.browseButton.Location = new System.Drawing.Point(499, 21);
-            this.browseButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(110, 28);
-            this.browseButton.TabIndex = 109;
-            this.browseButton.Text = "Browse";
-            this.browseButton.UseVisualStyleBackColor = true;
-            this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
+            this.buttonBrowse.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.buttonBrowse.Location = new System.Drawing.Point(499, 21);
+            this.buttonBrowse.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(110, 28);
+            this.buttonBrowse.TabIndex = 109;
+            this.buttonBrowse.Text = "Browse";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
             // textBoxPolicyPath
             // 
@@ -233,26 +233,26 @@ namespace WDAC_Wizard
             this.label_fileLocation.TabIndex = 6;
             this.label_fileLocation.Text = "Policy ID:";
             // 
-            // button_ParseEventLog
+            // buttonParseEventLog
             // 
-            this.button_ParseEventLog.Location = new System.Drawing.Point(343, 72);
-            this.button_ParseEventLog.Name = "button_ParseEventLog";
-            this.button_ParseEventLog.Size = new System.Drawing.Size(133, 27);
-            this.button_ParseEventLog.TabIndex = 112;
-            this.button_ParseEventLog.Text = "Parse Event Logs";
-            this.button_ParseEventLog.UseVisualStyleBackColor = true;
-            this.button_ParseEventLog.Click += new System.EventHandler(this.ParseSystemLog_ButtonClick);
+            this.buttonParseEventLog.Location = new System.Drawing.Point(343, 72);
+            this.buttonParseEventLog.Name = "buttonParseEventLog";
+            this.buttonParseEventLog.Size = new System.Drawing.Size(133, 27);
+            this.buttonParseEventLog.TabIndex = 112;
+            this.buttonParseEventLog.Text = "Parse Event Logs";
+            this.buttonParseEventLog.UseVisualStyleBackColor = true;
+            this.buttonParseEventLog.Click += new System.EventHandler(this.ParseSystemLog_ButtonClick);
             // 
-            // button_Parse_LogFile
+            // buttonParseLogFile
             // 
-            this.button_Parse_LogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.button_Parse_LogFile.Location = new System.Drawing.Point(343, 174);
-            this.button_Parse_LogFile.Name = "button_Parse_LogFile";
-            this.button_Parse_LogFile.Size = new System.Drawing.Size(133, 27);
-            this.button_Parse_LogFile.TabIndex = 113;
-            this.button_Parse_LogFile.Text = "Parse Log File(s)";
-            this.button_Parse_LogFile.UseVisualStyleBackColor = true;
-            this.button_Parse_LogFile.Click += new System.EventHandler(this.ParseLog_ButtonClick);
+            this.buttonParseLogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.buttonParseLogFile.Location = new System.Drawing.Point(343, 174);
+            this.buttonParseLogFile.Name = "buttonParseLogFile";
+            this.buttonParseLogFile.Size = new System.Drawing.Size(133, 27);
+            this.buttonParseLogFile.TabIndex = 113;
+            this.buttonParseLogFile.Text = "Parse Log File(s)";
+            this.buttonParseLogFile.UseVisualStyleBackColor = true;
+            this.buttonParseLogFile.Click += new System.EventHandler(this.ParseLog_ButtonClick);
             // 
             // backgroundWorker
             // 
@@ -364,32 +364,32 @@ namespace WDAC_Wizard
             // panel_EventLog_Conversion
             // 
             this.panel_EventLog_Conversion.Controls.Add(this.panel_Progress);
-            this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_MDE_AH_Logs);
+            this.panel_EventLog_Conversion.Controls.Add(this.buttonParseMDELog);
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_AdvancedHuntingPaths);
             this.panel_EventLog_Conversion.Controls.Add(this.label8);
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLog);
             this.panel_EventLog_Conversion.Controls.Add(this.eventLogParsing_Result_Panel);
-            this.panel_EventLog_Conversion.Controls.Add(this.button_Parse_LogFile);
+            this.panel_EventLog_Conversion.Controls.Add(this.buttonParseLogFile);
             this.panel_EventLog_Conversion.Controls.Add(this.textBox_EventLogFilePath);
             this.panel_EventLog_Conversion.Controls.Add(this.label4);
             this.panel_EventLog_Conversion.Controls.Add(this.label6);
-            this.panel_EventLog_Conversion.Controls.Add(this.button_ParseEventLog);
+            this.panel_EventLog_Conversion.Controls.Add(this.buttonParseEventLog);
             this.panel_EventLog_Conversion.Location = new System.Drawing.Point(3, 265);
             this.panel_EventLog_Conversion.Name = "panel_EventLog_Conversion";
             this.panel_EventLog_Conversion.Size = new System.Drawing.Size(856, 388);
             this.panel_EventLog_Conversion.TabIndex = 1;
             this.panel_EventLog_Conversion.Visible = false;
             // 
-            // button_Parse_MDE_AH_Logs
+            // buttonParseMDELog
             // 
-            this.button_Parse_MDE_AH_Logs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.button_Parse_MDE_AH_Logs.Location = new System.Drawing.Point(342, 273);
-            this.button_Parse_MDE_AH_Logs.Name = "button_Parse_MDE_AH_Logs";
-            this.button_Parse_MDE_AH_Logs.Size = new System.Drawing.Size(133, 27);
-            this.button_Parse_MDE_AH_Logs.TabIndex = 124;
-            this.button_Parse_MDE_AH_Logs.Text = "Parse Log File(s)";
-            this.button_Parse_MDE_AH_Logs.UseVisualStyleBackColor = true;
-            this.button_Parse_MDE_AH_Logs.Click += new System.EventHandler(this.ParseMDEAHLogs_ButtonClick);
+            this.buttonParseMDELog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.buttonParseMDELog.Location = new System.Drawing.Point(342, 273);
+            this.buttonParseMDELog.Name = "buttonParseMDELog";
+            this.buttonParseMDELog.Size = new System.Drawing.Size(133, 27);
+            this.buttonParseMDELog.TabIndex = 124;
+            this.buttonParseMDELog.Text = "Parse Log File(s)";
+            this.buttonParseMDELog.UseVisualStyleBackColor = true;
+            this.buttonParseMDELog.Click += new System.EventHandler(this.ParseMDEAHLogs_ButtonClick);
             // 
             // textBox_AdvancedHuntingPaths
             // 
@@ -523,7 +523,7 @@ namespace WDAC_Wizard
             // 
             this.panel_Edit_XML.Controls.Add(this.label3);
             this.panel_Edit_XML.Controls.Add(this.policyInfoPanel);
-            this.panel_Edit_XML.Controls.Add(this.browseButton);
+            this.panel_Edit_XML.Controls.Add(this.buttonBrowse);
             this.panel_Edit_XML.Controls.Add(this.textBoxPolicyPath);
             this.panel_Edit_XML.Location = new System.Drawing.Point(3, 3);
             this.panel_Edit_XML.Name = "panel_Edit_XML";
@@ -594,7 +594,7 @@ namespace WDAC_Wizard
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button browseButton;
+        private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.TextBox textBoxPolicyPath;
         private System.Windows.Forms.Panel policyInfoPanel;
         private System.Windows.Forms.Label label5;
@@ -602,8 +602,8 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label_policyName;
         private System.Windows.Forms.TextBox textBox_PolicyID;
         private System.Windows.Forms.Label label_fileLocation;
-        private System.Windows.Forms.Button button_ParseEventLog;
-        private System.Windows.Forms.Button button_Parse_LogFile;
+        private System.Windows.Forms.Button buttonParseEventLog;
+        private System.Windows.Forms.Button buttonParseLogFile;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.Windows.Forms.Panel panel_Progress;
         private System.Windows.Forms.Label label_Progress;
@@ -627,7 +627,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button buttonNewSaveLocation;
         private System.Windows.Forms.TextBox textBoxSaveLocation;
-        private System.Windows.Forms.Button button_Parse_MDE_AH_Logs;
+        private System.Windows.Forms.Button buttonParseMDELog;
         private System.Windows.Forms.TextBox textBox_AdvancedHuntingPaths;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label ahParsingLearnMore_Label;

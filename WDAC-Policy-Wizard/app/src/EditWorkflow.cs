@@ -53,7 +53,7 @@ namespace WDAC_Wizard
         /// Sets the Edit Policy Path parameter of the policy object. Launches the OpenFileDialog so the user can 
         /// select the Policy they would like to edit. 
         /// </summary>
-        private void BrowseButton_Click(object sender, EventArgs e)
+        private void buttonBrowse_Click(object sender, EventArgs e)
         {
             // If user is changing the policy schema being edited, show message
             if(this._MainWindow.PageList.Count > 1)
@@ -215,7 +215,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
             // Clear error labels if applicable
@@ -241,7 +241,7 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
             this.Workflow = WorkflowType.DeviceEventLog;
 
@@ -278,7 +278,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.AdvancedHunting;
 
             // Clear error labels if applicable
@@ -508,20 +508,20 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Panels, Textboxes, Buttons)
             SetControlsColor();
 
-            // Set UI for the 'browseButton' Button
-            SetbrowseButtonUI();
+            // Set UI for the 'buttonBrowse' Button
+            SetButtonUI(buttonBrowse);
 
             // Set UI for the 'buttonNewSaveLocation' Button
-            SetbuttonNewSaveLocationUI();
+            SetButtonUI(buttonNewSaveLocation);
 
-            // Set UI for the 'button_ParseEventLog' Button
-            Setbutton_ParseEventLogUI();
+            // Set UI for the 'buttonParseEventLog' Button
+            SetButtonUI(buttonParseEventLog);
 
-            // Set UI for the 'button_Parse_LogFile' Button
-            Setbutton_Parse_LogFileUI();
+            // Set UI for the 'buttonParseLogFile' Button
+            SetButtonUI(buttonParseLogFile);
 
-            // Set UI for the 'button_Parse_MDE_AH_Logs' Button
-            Setbutton_Parse_MDE_AH_LogsUI();
+            // Set UI for the 'buttonParseMDELog' Button
+            SetButtonUI(buttonParseMDELog);
 
             // Set Labels Color
             List<Label> labels = new List<Label>();
@@ -649,150 +649,34 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Sets the colors for the browseButton Button which depends on the 
+        /// Sets the colors for the buttonBrowse Button which depends on the 
         /// state of Light and Dark Mode
         /// </summary>
-        public void SetbrowseButtonUI()
+        public void SetButtonUI(Button button)
         {
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                browseButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                browseButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                browseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                browseButton.ForeColor = System.Drawing.Color.DodgerBlue;
-                browseButton.BackColor = System.Drawing.Color.Transparent;
+                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.DodgerBlue;
+                button.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                browseButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                browseButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                browseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                browseButton.ForeColor = System.Drawing.Color.Black;
-                browseButton.BackColor = System.Drawing.Color.WhiteSmoke;
+                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.Black;
+                button.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 
-        /// <summary>
-        /// Sets the colors for the buttonNewSaveLocation Button which depends on the 
-        /// state of Light and Dark Mode
-        /// </summary>
-        public void SetbuttonNewSaveLocationUI()
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                buttonNewSaveLocation.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                buttonNewSaveLocation.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                buttonNewSaveLocation.ForeColor = System.Drawing.Color.DodgerBlue;
-                buttonNewSaveLocation.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                buttonNewSaveLocation.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                buttonNewSaveLocation.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                buttonNewSaveLocation.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                buttonNewSaveLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                buttonNewSaveLocation.ForeColor = System.Drawing.Color.Black;
-                buttonNewSaveLocation.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-        
-        /// <summary>
-        /// Sets the colors for the button_ParseEventLog Button which depends on the 
-        /// state of Light and Dark Mode
-        /// </summary>
-        public void Setbutton_ParseEventLogUI()
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                button_ParseEventLog.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_ParseEventLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_ParseEventLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_ParseEventLog.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_ParseEventLog.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                button_ParseEventLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_ParseEventLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_ParseEventLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_ParseEventLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_ParseEventLog.ForeColor = System.Drawing.Color.Black;
-                button_ParseEventLog.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-
-        /// <summary>
-        /// Sets the colors for the button_Parse_LogFile Button which depends on the 
-        /// state of Light and Dark Mode
-        /// </summary>
-        public void Setbutton_Parse_LogFileUI()
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                button_Parse_LogFile.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Parse_LogFile.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_LogFile.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Parse_LogFile.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Parse_LogFile.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                button_Parse_LogFile.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Parse_LogFile.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_LogFile.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_LogFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Parse_LogFile.ForeColor = System.Drawing.Color.Black;
-                button_Parse_LogFile.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-
-        /// <summary>
-        /// Sets the colors for the button_Parse_MDE_AH_Logs Button which depends on the 
-        /// state of Light and Dark Mode
-        /// </summary>
-        public void Setbutton_Parse_MDE_AH_LogsUI()
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                button_Parse_MDE_AH_Logs.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Parse_MDE_AH_Logs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_MDE_AH_Logs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_MDE_AH_Logs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Parse_MDE_AH_Logs.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Parse_MDE_AH_Logs.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                button_Parse_MDE_AH_Logs.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Parse_MDE_AH_Logs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_MDE_AH_Logs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Parse_MDE_AH_Logs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Parse_MDE_AH_Logs.ForeColor = System.Drawing.Color.Black;
-                button_Parse_MDE_AH_Logs.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-        
         /// <summary>
         /// Sets the color of the labels defined in the provided List
         /// </summary>
