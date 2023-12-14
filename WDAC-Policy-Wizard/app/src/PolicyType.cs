@@ -618,10 +618,10 @@ namespace WDAC_Wizard
             SetControlsColor();
 
             // Set UI for the 'button_Browse' Button
-            Setbutton_BrowseUI();
+            Setbutton_BrowseUI(button_Browse);
 
             // Set UI for the 'button_Browse_Supp' Button
-            Setbutton_Browse_SuppUI();
+            Setbutton_BrowseUI(button_Browse_Supp);
 
             // Set Labels Color
             List<Label> labels = new List<Label>();
@@ -676,57 +676,28 @@ namespace WDAC_Wizard
         /// Sets the colors for the button_Browse Button which depends on the 
         /// state of Light and Dark Mode
         /// </summary>
-        public void Setbutton_BrowseUI()
+        public void Setbutton_BrowseUI(Button button)
         {
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Browse.BackColor = System.Drawing.Color.Transparent;
+                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.DodgerBlue;
+                button.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse.ForeColor = System.Drawing.Color.Black;
-                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-
-        /// <summary>
-        /// Sets the colors for the button_Browse_Supp Button which depends on the 
-        /// state of Light and Dark Mode
-        /// </summary>
-        public void Setbutton_Browse_SuppUI()
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Browse_Supp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse_Supp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse_Supp.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Browse_Supp.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                button_Browse_Supp.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Browse_Supp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse_Supp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Browse_Supp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse_Supp.ForeColor = System.Drawing.Color.Black;
-                button_Browse_Supp.BackColor = System.Drawing.Color.WhiteSmoke;
+                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.Black;
+                button.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
         
