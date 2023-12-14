@@ -1669,12 +1669,41 @@ namespace WDAC_Wizard
                 this.textBox_MaxVersion.Enabled = true;
 
                 // Set back color to white to help user determine boxes are userwriteable
-                this.textBoxSlider_0.BackColor = Color.White;
-                this.textBoxSlider_1.BackColor = Color.White;
-                this.textBoxSlider_2.BackColor = Color.White;
-                this.textBoxSlider_3.BackColor = Color.White;
-                this.textBoxSlider_4.BackColor = Color.White;
-                this.textBox_MaxVersion.BackColor = Color.White;
+                if(!Properties.Settings.Default.useDarkMode)
+                {
+                    this.textBoxSlider_0.BackColor = Color.White;
+                    this.textBoxSlider_1.BackColor = Color.White;
+                    this.textBoxSlider_2.BackColor = Color.White;
+                    this.textBoxSlider_3.BackColor = Color.White;
+                    this.textBoxSlider_4.BackColor = Color.White;
+                    this.textBox_MaxVersion.BackColor = Color.White;
+
+                    // Text color
+                    this.textBoxSlider_0.ForeColor = Color.Black;
+                    this.textBoxSlider_1.ForeColor = Color.Black;
+                    this.textBoxSlider_2.ForeColor = Color.Black;
+                    this.textBoxSlider_3.ForeColor = Color.Black;
+                    this.textBoxSlider_4.ForeColor = Color.Black;
+                    this.textBox_MaxVersion.ForeColor = Color.Black;
+                }
+                else
+                {
+                    this.textBoxSlider_0.BackColor = Color.FromArgb(15,15,15);
+                    this.textBoxSlider_1.BackColor = Color.FromArgb(15, 15, 15);
+                    this.textBoxSlider_2.BackColor = Color.FromArgb(15, 15, 15);
+                    this.textBoxSlider_3.BackColor = Color.FromArgb(15, 15, 15);
+                    this.textBoxSlider_4.BackColor = Color.FromArgb(15, 15, 15);
+                    this.textBox_MaxVersion.BackColor = Color.FromArgb(15, 15, 15);
+
+                    // Text color
+                    this.textBoxSlider_0.ForeColor = Color.White;
+                    this.textBoxSlider_1.ForeColor = Color.White;
+                    this.textBoxSlider_2.ForeColor = Color.White;
+                    this.textBoxSlider_3.ForeColor = Color.White;
+                    this.textBoxSlider_4.ForeColor = Color.White;
+                    this.textBox_MaxVersion.ForeColor = Color.White;
+                }
+                
 
                 // Format the version text boxes
                 this.textBoxSlider_4.Visible = true;
@@ -1714,12 +1743,9 @@ namespace WDAC_Wizard
                 this.textBox_MaxVersion.Enabled = false;
 
                 // Set back to default color
-                this.textBoxSlider_0.BackColor = SystemColors.Control;
-                this.textBoxSlider_1.BackColor = SystemColors.Control;
-                this.textBoxSlider_2.BackColor = SystemColors.Control;
-                this.textBoxSlider_3.BackColor = SystemColors.Control;
-                this.textBoxSlider_4.BackColor = SystemColors.Control;
-                this.textBox_MaxVersion.BackColor = SystemColors.Control;
+                List<TextBox> textBoxes = new List<TextBox>();
+                GetTextBoxesRecursive(this, textBoxes);
+                SetTextBoxesColor(textBoxes);
             }
 
         }
@@ -3122,36 +3148,6 @@ namespace WDAC_Wizard
                 button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_AddException.ForeColor = System.Drawing.Color.Black;
                 button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
-            }
-        }
-
-        /// <summary>
-        /// Sets the color of the button_Back when enablement changes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Back_EnabledChanged(object sender, EventArgs e)
-        {
-            // Dark Mode
-            if (Properties.Settings.Default.useDarkMode)
-            {
-                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Back.BackColor = System.Drawing.Color.Transparent;
-            }
-
-            // Light Mode
-            else
-            {
-                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Back.ForeColor = System.Drawing.Color.Black;
-                button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
     }
