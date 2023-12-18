@@ -54,7 +54,7 @@ namespace WDAC_Wizard
             Uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
-            allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
+            allowMsft_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Allow Microsoft selected");
         }
 
@@ -76,7 +76,7 @@ namespace WDAC_Wizard
             Uncheck_all();
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
-            windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
+            windowsWorks_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Windows Works selected");
         }
 
@@ -100,7 +100,7 @@ namespace WDAC_Wizard
             Uncheck_all();
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
-            signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
+            signedReputable_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Signed and Reputable selected");
         }
 
@@ -119,11 +119,9 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.Tag = "untoggle";
             this.signedReputable_Button.Tag = "untoggle";
 
-            this.allowMsft_Button.BackgroundImage = Properties.Resources.radio_off;
-            this.windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
-            this.signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
-
-            // this._MainWindow.ErrorOnPage = false;
+            this.allowMsft_Button.Image = Properties.Resources.radio_off;
+            this.windowsWorks_Button.Image = Properties.Resources.radio_off;
+            this.signedReputable_Button.Image = Properties.Resources.radio_off;
         }
 
         /// <summary>
@@ -298,7 +296,7 @@ namespace WDAC_Wizard
 
             // Undo the image set by MouseHover_Button event
             // Image with untoggle tags need to be set back to untoggled
-            if (!checkBox.Tag.Equals("untoggle"))
+            if (!checkBox.Tag.Equals("toggle"))
             {
                 checkBox.Image = Properties.Resources.radio_off;
             }
