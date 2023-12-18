@@ -91,7 +91,7 @@ namespace WDAC_Wizard
         private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
             // Open the custom rules conditions panel
-
+            
             if (this.customRuleConditionsPanel == null)
             {
                 this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
@@ -101,7 +101,7 @@ namespace WDAC_Wizard
                 this.customRuleConditionsPanel.ForceRepaint();
 
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
-                this.isCustomPanelOpen = true; 
+                this.isCustomPanelOpen = true;
             }
             
             this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
@@ -1263,8 +1263,13 @@ namespace WDAC_Wizard
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.White;
-                        button.BackColor = Color.FromArgb(15,15,15);
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                        button.FlatAppearance.BorderSize = 0;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.DodgerBlue;
+                        button.BackColor = System.Drawing.Color.Transparent;
                     }
 
                     // Panels
@@ -1283,10 +1288,6 @@ namespace WDAC_Wizard
                         checkBox.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
-
-                // Button Images
-                addButton.Image = Properties.Resources.white_add_button;
-                deleteButton.Image = Properties.Resources.white_minus_button; 
             }
 
             // Light Mode
@@ -1298,8 +1299,13 @@ namespace WDAC_Wizard
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.ForeColor = Color.Black;
-                        button.BackColor = Color.White;
+                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                        button.FlatAppearance.BorderSize = 0;
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        button.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
+                        button.BackColor = System.Drawing.Color.Transparent;
                     }
 
                     // Panels
@@ -1318,10 +1324,6 @@ namespace WDAC_Wizard
                         checkBox.BackColor = Color.White;
                     }
                 }
-
-                // Button Images
-                addButton.Image = Properties.Resources.add_button;
-                deleteButton.Image = Properties.Resources.minus_button; 
             }
         }
 

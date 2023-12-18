@@ -90,10 +90,7 @@
             // 
             // button_Browse
             // 
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.Location = new System.Drawing.Point(632, 408);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";
@@ -136,8 +133,6 @@
             // 
             // button_AddPolicy
             // 
-            this.button_AddPolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button_AddPolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_AddPolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_AddPolicy.Location = new System.Drawing.Point(165, 307);
             this.button_AddPolicy.Name = "button_AddPolicy";
@@ -149,8 +144,6 @@
             // 
             // button_RemovePolicy
             // 
-            this.button_RemovePolicy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button_RemovePolicy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_RemovePolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_RemovePolicy.Location = new System.Drawing.Point(317, 307);
             this.button_RemovePolicy.Name = "button_RemovePolicy";

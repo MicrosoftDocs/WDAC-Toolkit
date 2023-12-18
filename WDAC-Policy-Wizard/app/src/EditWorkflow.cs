@@ -53,7 +53,7 @@ namespace WDAC_Wizard
         /// Sets the Edit Policy Path parameter of the policy object. Launches the OpenFileDialog so the user can 
         /// select the Policy they would like to edit. 
         /// </summary>
-        private void BrowseButton_Click(object sender, EventArgs e)
+        private void buttonBrowse_Click(object sender, EventArgs e)
         {
             // If user is changing the policy schema being edited, show message
             if(this._MainWindow.PageList.Count > 1)
@@ -215,7 +215,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.ArbitraryEventLog;
 
             // Clear error labels if applicable
@@ -241,7 +241,7 @@ namespace WDAC_Wizard
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
             this.Workflow = WorkflowType.DeviceEventLog;
 
@@ -278,7 +278,7 @@ namespace WDAC_Wizard
             // Prep UI
             this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
             this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = button_ParseEventLog.Location; // Center the progress gif
+            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
             this.Workflow = WorkflowType.AdvancedHunting;
 
             // Clear error labels if applicable
@@ -508,6 +508,21 @@ namespace WDAC_Wizard
             // Set Controls Color (e.g. Panels, Textboxes, Buttons)
             SetControlsColor();
 
+            // Set UI for the 'buttonBrowse' Button
+            SetButtonUI(buttonBrowse);
+
+            // Set UI for the 'buttonNewSaveLocation' Button
+            SetButtonUI(buttonNewSaveLocation);
+
+            // Set UI for the 'buttonParseEventLog' Button
+            SetButtonUI(buttonParseEventLog);
+
+            // Set UI for the 'buttonParseLogFile' Button
+            SetButtonUI(buttonParseLogFile);
+
+            // Set UI for the 'buttonParseMDELog' Button
+            SetButtonUI(buttonParseMDELog);
+
             // Set Labels Color
             List<Label> labels = new List<Label>();
             GetLabelsRecursive(this, labels);
@@ -630,6 +645,35 @@ namespace WDAC_Wizard
 
                 // Progress Panel Gif
                 panel_Progress.BackColor = Color.White; 
+            }
+        }
+
+        /// <summary>
+        /// Sets the colors for the buttonBrowse Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void SetButtonUI(Button button)
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.DodgerBlue;
+                button.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button.ForeColor = System.Drawing.Color.Black;
+                button.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 

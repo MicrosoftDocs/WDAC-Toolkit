@@ -394,11 +394,7 @@
             // 
             // button_Browse
             // 
-            this.button_Browse.BackColor = System.Drawing.Color.Transparent;
-            this.button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
             this.button_Browse.Location = new System.Drawing.Point(493, 455);
             this.button_Browse.Margin = new System.Windows.Forms.Padding(2);
             this.button_Browse.Name = "button_Browse";

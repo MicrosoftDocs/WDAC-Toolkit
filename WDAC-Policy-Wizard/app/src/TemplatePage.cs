@@ -49,11 +49,12 @@ namespace WDAC_Wizard
             }
                 
             this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
+            
             // Update UI
             Uncheck_all();
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
-            allowMsft_Button.BackgroundImage = Properties.Resources.radio_on;
+            allowMsft_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Allow Microsoft selected");
         }
 
@@ -75,7 +76,7 @@ namespace WDAC_Wizard
             Uncheck_all();
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
-            windowsWorks_Button.BackgroundImage = Properties.Resources.radio_on;
+            windowsWorks_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Windows Works selected");
         }
 
@@ -99,7 +100,7 @@ namespace WDAC_Wizard
             Uncheck_all();
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
-            signedReputable_Button.BackgroundImage = Properties.Resources.radio_on;
+            signedReputable_Button.Image = Properties.Resources.radio_on;
             this.Log.AddInfoMsg("New Base Template: Signed and Reputable selected");
         }
 
@@ -118,11 +119,9 @@ namespace WDAC_Wizard
             this.windowsWorks_Button.Tag = "untoggle";
             this.signedReputable_Button.Tag = "untoggle";
 
-            this.allowMsft_Button.BackgroundImage = Properties.Resources.radio_off;
-            this.windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
-            this.signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
-
-            // this._MainWindow.ErrorOnPage = false;
+            this.allowMsft_Button.Image = Properties.Resources.radio_off;
+            this.windowsWorks_Button.Image = Properties.Resources.radio_off;
+            this.signedReputable_Button.Image = Properties.Resources.radio_off;
         }
 
         /// <summary>
@@ -279,7 +278,12 @@ namespace WDAC_Wizard
         private void MouseHover_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.FromArgb(190, 230, 253);
+
+            // If untoggled, show toggled button on hover. Undo on mouse leave event
+            if(!checkBox.Tag.Equals("toggle"))
+            {
+                checkBox.Image = Properties.Resources.radio_on;
+            }
         }
 
         /// <summary>
@@ -289,7 +293,13 @@ namespace WDAC_Wizard
         private void MouseLeave_Button(object sender, EventArgs e)
         {
             PictureBox checkBox = ((PictureBox)sender);
-            checkBox.BackColor = Color.Transparent; 
+
+            // Undo the image set by MouseHover_Button event
+            // Image with untoggle tags need to be set back to untoggled
+            if (!checkBox.Tag.Equals("toggle"))
+            {
+                checkBox.Image = Properties.Resources.radio_off;
+            }
         }
 
         /// <summary>
@@ -320,6 +330,9 @@ namespace WDAC_Wizard
         {
             // Set Controls Color (e.g. Panels)
             SetControlsColor();
+
+            // Set UI for the 'button_Browse' Button
+            Setbutton_BrowseUI();
 
             // Set Labels Color
             List<Label> labels = new List<Label>();
@@ -426,6 +439,35 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Sets the colors for the button_Browse Button which depends on the 
+        /// state of Light and Dark Mode
+        /// </summary>
+        public void Setbutton_BrowseUI()
+        {
+            // Dark Mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Browse.BackColor = System.Drawing.Color.Transparent;
+            }
+
+            // Light Mode
+            else
+            {
+                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Browse.ForeColor = System.Drawing.Color.Black;
+                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+        
         /// <summary>
         /// Gets all of the labels on the form recursively
         /// </summary>
