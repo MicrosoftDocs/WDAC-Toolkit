@@ -22,7 +22,7 @@ DeviceEvents
 | extend PolicyId = parsejson(AdditionalFields).PolicyID
 | extend PolicyName = parsejson(AdditionalFields).PolicyName
 // Keep only actionable info for the Wizard
-| project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName
+| project-keep Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName
 ```
 
 The Wizard is expecting **exactly the following data fields**:
