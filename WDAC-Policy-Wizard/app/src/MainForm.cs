@@ -109,8 +109,7 @@ namespace WDAC_Wizard
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
 
                 PageController(sender, e); 
-                button_Next.Visible = true; 
-
+                button_Next.Visible = true;
             }
 
             else

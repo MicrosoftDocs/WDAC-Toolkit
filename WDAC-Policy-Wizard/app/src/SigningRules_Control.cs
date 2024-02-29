@@ -233,14 +233,15 @@ namespace WDAC_Wizard
                         if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
                         {
                             // Iterate through all of the exceptions, get the ID and map to filename
-                            for (int j = 0; j < scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
+                            for (int j = 0; j < scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule.Length; j++)
                             {
                                 exceptionID = scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID;
                                 exceptionList += String.Format("{0}, ", exceptionID);
 
                                 if (!fileExceptionsDict.ContainsKey(exceptionID))
+                                {
                                     fileExceptionsDict.Add(scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID, String.Empty);
-
+                                }
                             }
                         }
 
