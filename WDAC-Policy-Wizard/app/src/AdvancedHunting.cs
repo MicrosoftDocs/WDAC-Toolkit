@@ -87,18 +87,23 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// 
+        /// Event handler for bad data like commas and malformed timestamps
         /// </summary>
         /// <param name="engine"></param>
         /// <param name="e"></param>
         private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
         {
             // Replace the line with the fixed version
-            e.RecordLine = ReplaceCommasInRecord(e.RecordLine); 
+            e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
+
+            // Bug reported where MDE AH in Local time, not UTC
+            // Replace instances of 'Local' Timestamps with UTC
+            // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
+            e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
 
         /// <summary>
-        /// 
+        /// Replaces instances of commas within data arrays to #C#
         /// </summary>
         /// <param name="bad"></param>
         /// <returns></returns>
@@ -128,6 +133,37 @@ namespace WDAC_Wizard
             {
                 return record;
             }
+        }
+
+        /// <summary>
+        /// Converts local timestamps to UTC like "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
+        /// </summary>
+        /// <param name="bad"></param>
+        /// <returns></returns>
+        private static string ConvertTimestampsToUTC(string record)
+        {
+            string timestampFormat = "dd/MM/yyyy, h:mm:ss.fff tt";
+            var fields = record.Split(',');
+            if (fields.Length > 1)
+            {
+                string localTimeStamp = fields[0]; 
+                if(localTimeStamp.Contains(DEL_VALUE)) // Non UTC times will contain a comma
+                {
+                    // Replace comma to help with DateTime parsing
+                    localTimeStamp = localTimeStamp.Replace(DEL_VALUE, ",");
+
+                    // Parse the timestamp
+                    DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
+
+                    // Convert to UTC
+                    string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
+
+                    fields[0] = utcDateTime; 
+                    return string.Join(",", fields);
+                }
+
+            }
+            return record;
         }
 
         /// <summary>
@@ -282,6 +318,10 @@ namespace WDAC_Wizard
                 signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
             }
 
+            // Bug reported where MDE AH is in local time instead of Zulu time
+            // Replace Timestamp	"13/03/2024#C# 3:40:13.988 pm"	with string
+
+
             return signerEvent;
         }
 
@@ -429,7 +469,7 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            public string? AuthenticodeHash; //Make the AuthenticodeHash column nullable
+            public string AuthenticodeHash; //TODO: Make the AuthenticodeHash column nullable -- string?
             public string PolicyId;
             public string PolicyName;
         }
