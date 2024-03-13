@@ -109,50 +109,50 @@ namespace WDAC_Wizard
             // 
             // productTextBox
             // 
+            this.productTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.productTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.productTextBox.Location = new System.Drawing.Point(109, 157);
             this.productTextBox.Name = "productTextBox";
-            this.productTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.productTextBox.ReadOnly = true;
             this.productTextBox.Size = new System.Drawing.Size(420, 28);
             this.productTextBox.TabIndex = 20;
             // 
             // versionTextBox
             // 
+            this.versionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.versionTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.versionTextBox.Location = new System.Drawing.Point(109, 118);
             this.versionTextBox.Name = "versionTextBox";
-            this.versionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.versionTextBox.ReadOnly = true;
             this.versionTextBox.Size = new System.Drawing.Size(420, 28);
             this.versionTextBox.TabIndex = 19;
             // 
             // filenameTextBox
             // 
+            this.filenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.filenameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filenameTextBox.Location = new System.Drawing.Point(109, 79);
             this.filenameTextBox.Name = "filenameTextBox";
-            this.filenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.filenameTextBox.ReadOnly = true;
             this.filenameTextBox.Size = new System.Drawing.Size(420, 28);
             this.filenameTextBox.TabIndex = 18;
             // 
             // publisherTextBox
             // 
+            this.publisherTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.publisherTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.publisherTextBox.Location = new System.Drawing.Point(109, 40);
             this.publisherTextBox.Name = "publisherTextBox";
-            this.publisherTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.publisherTextBox.ReadOnly = true;
             this.publisherTextBox.Size = new System.Drawing.Size(420, 28);
             this.publisherTextBox.TabIndex = 17;
             // 
             // issuerTextBox
             // 
+            this.issuerTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.issuerTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.issuerTextBox.Location = new System.Drawing.Point(109, 1);
             this.issuerTextBox.Name = "issuerTextBox";
-            this.issuerTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.issuerTextBox.ReadOnly = true;
             this.issuerTextBox.Size = new System.Drawing.Size(420, 28);
             this.issuerTextBox.TabIndex = 16;
@@ -265,50 +265,50 @@ namespace WDAC_Wizard
             // 
             // pfnTextBox
             // 
+            this.pfnTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pfnTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pfnTextBox.Location = new System.Drawing.Point(173, 157);
             this.pfnTextBox.Name = "pfnTextBox";
-            this.pfnTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pfnTextBox.ReadOnly = true;
             this.pfnTextBox.Size = new System.Drawing.Size(351, 28);
             this.pfnTextBox.TabIndex = 20;
             // 
             // intFileNameTextBox
             // 
+            this.intFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.intFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.intFileNameTextBox.Location = new System.Drawing.Point(173, 118);
             this.intFileNameTextBox.Name = "intFileNameTextBox";
-            this.intFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.intFileNameTextBox.ReadOnly = true;
             this.intFileNameTextBox.Size = new System.Drawing.Size(351, 28);
             this.intFileNameTextBox.TabIndex = 19;
             // 
             // prodNameTextBox
             // 
+            this.prodNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.prodNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.prodNameTextBox.Location = new System.Drawing.Point(173, 79);
             this.prodNameTextBox.Name = "prodNameTextBox";
-            this.prodNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.prodNameTextBox.ReadOnly = true;
             this.prodNameTextBox.Size = new System.Drawing.Size(352, 28);
             this.prodNameTextBox.TabIndex = 18;
             // 
             // fileDescTextBox
             // 
+            this.fileDescTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fileDescTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fileDescTextBox.Location = new System.Drawing.Point(173, 40);
             this.fileDescTextBox.Name = "fileDescTextBox";
-            this.fileDescTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fileDescTextBox.ReadOnly = true;
             this.fileDescTextBox.Size = new System.Drawing.Size(351, 28);
             this.fileDescTextBox.TabIndex = 17;
             // 
             // origFileNameTextBox
             // 
+            this.origFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.origFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.origFileNameTextBox.Location = new System.Drawing.Point(173, 1);
             this.origFileNameTextBox.Name = "origFileNameTextBox";
-            this.origFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.origFileNameTextBox.ReadOnly = true;
             this.origFileNameTextBox.Size = new System.Drawing.Size(351, 28);
             this.origFileNameTextBox.TabIndex = 16;
@@ -376,6 +376,7 @@ namespace WDAC_Wizard
             // eventsDataGridView
             // 
             this.eventsDataGridView.AllowUserToDeleteRows = false;
+            this.eventsDataGridView.AllowUserToResizeRows = false;
             this.eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -385,12 +386,10 @@ namespace WDAC_Wizard
             this.productColumn,
             this.policyColumn,
             this.publisherColumn});
+            this.eventsDataGridView.EnableHeadersVisualStyles = false;
             this.eventsDataGridView.Location = new System.Drawing.Point(167, 101);
             this.eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
-            this.eventsDataGridView.MultiSelect = false;
             this.eventsDataGridView.Name = "eventsDataGridView";
-            this.eventsDataGridView.EnableHeadersVisualStyles = false;
-            this.eventsDataGridView.AllowUserToResizeRows = false;
             this.eventsDataGridView.ReadOnly = true;
             this.eventsDataGridView.RowHeadersVisible = false;
             this.eventsDataGridView.RowHeadersWidth = 70;
@@ -516,20 +515,20 @@ namespace WDAC_Wizard
             // 
             // sha2TextBox
             // 
+            this.sha2TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sha2TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sha2TextBox.Location = new System.Drawing.Point(173, 52);
             this.sha2TextBox.Name = "sha2TextBox";
-            this.sha2TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sha2TextBox.ReadOnly = true;
             this.sha2TextBox.Size = new System.Drawing.Size(399, 26);
             this.sha2TextBox.TabIndex = 18;
             // 
             // sha1TextBox
             // 
+            this.sha1TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sha1TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sha1TextBox.Location = new System.Drawing.Point(173, 15);
             this.sha1TextBox.Name = "sha1TextBox";
-            this.sha1TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sha1TextBox.ReadOnly = true;
             this.sha1TextBox.Size = new System.Drawing.Size(397, 26);
             this.sha1TextBox.TabIndex = 16;
@@ -548,20 +547,20 @@ namespace WDAC_Wizard
             // 
             // filePathTextBox
             // 
+            this.filePathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.filePathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filePathTextBox.Location = new System.Drawing.Point(173, 16);
             this.filePathTextBox.Name = "filePathTextBox";
-            this.filePathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.filePathTextBox.ReadOnly = true;
             this.filePathTextBox.Size = new System.Drawing.Size(516, 28);
             this.filePathTextBox.TabIndex = 18;
             // 
             // folderPathTextBox
             // 
+            this.folderPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.folderPathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.folderPathTextBox.Location = new System.Drawing.Point(173, 53);
             this.folderPathTextBox.Name = "folderPathTextBox";
-            this.folderPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.folderPathTextBox.ReadOnly = true;
             this.folderPathTextBox.Size = new System.Drawing.Size(516, 28);
             this.folderPathTextBox.TabIndex = 17;

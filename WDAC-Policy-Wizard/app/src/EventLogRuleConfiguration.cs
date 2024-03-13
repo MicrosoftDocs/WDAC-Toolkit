@@ -100,52 +100,74 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void AddButton_Click(object sender, EventArgs e)
         {
-            // Update UI and SiPolicy object
-            EventDisplayObject dp = this.DisplayObjects[this.SelectedRow];
-            CiEvent ciEvent = this.CiEvents[this.SelectedRow];
-
-            switch(this.ruleTypeComboBox.SelectedIndex)
+            // Determine whether the user is deleting one row or multiple rows
+            int numRowsSelected = this.eventsDataGridView.SelectedRows.Count;
+            if(numRowsSelected > 1)
             {
-                case 0: // Publisher
-                    if(IsValidPublisherUiState())
-                    {
-                        dp.Action = "Added to policy";
-                        this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
-                        ClearErrorMsg();
-                    }
-                    break;
+                // Prompt the user for additional deletion confirmation
+                DialogResult res = MessageBox.Show(String.Format("Are you sure you want to add these {0} rules?", numRowsSelected.ToString()),
+                                                   "Rule Deletion Confirmation",
+                                                   MessageBoxButtons.YesNo,
+                                                   MessageBoxIcon.Question);
 
-                case 1: // File Path Rule
-                    if(IsValidFilePathUiState())
-                    {
-                        dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
-                        ClearErrorMsg();
-                    }
-                    break; 
+                if (res == DialogResult.No)
+                {
+                    this.Log.AddInfoMsg(Properties.Resources.DeleteRowsCanceled);
+                    return;
+                }
+            }
 
-                case 2: // File Attributes Rule
-                case 3:
-                    if(IsValidFileAttributesUiState())
-                    {
-                        dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
-                        ClearErrorMsg();
-                    }
-                    break;
+            // Loop through all the selected rows
+            for(int i = 0; i< eventsDataGridView.SelectedRows.Count; i++)
+            {
+                // Update UI and SiPolicy object
+                EventDisplayObject dp = this.DisplayObjects[eventsDataGridView.SelectedRows[i].Index];
+                CiEvent ciEvent = this.CiEvents[eventsDataGridView.SelectedRows[i].Index];
 
-                case 4: // Hash rule
-                    if(IsValidHashRuleUiState())
-                    {
-                        dp.Action = "Added to policy";
-                        this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
-                        ClearErrorMsg();
-                    }
-                    break; 
+                switch (this.ruleTypeComboBox.SelectedIndex)
+                {
+                    case 0: // Publisher
+                        if (IsValidPublisherUiState())
+                        {
+                            dp.Action = "Added to policy";
+                            this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
+                            this._MainWindow.EventLogPolicy = this.siPolicy;
+                            ClearErrorMsg();
+                        }
+                        break;
+
+                    case 1: // File Path Rule
+                        if (IsValidFilePathUiState())
+                        {
+                            dp.Action = "Added to policy";
+                            this.siPolicy = PolicyHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
+                            this._MainWindow.EventLogPolicy = this.siPolicy;
+                            ClearErrorMsg();
+                        }
+                        break;
+
+                    case 2: // File Attributes Rule
+                    case 3:
+                        if (IsValidFileAttributesUiState())
+                        {
+                            dp.Action = "Added to policy";
+                            this.siPolicy = PolicyHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
+                            this._MainWindow.EventLogPolicy = this.siPolicy;
+                            ClearErrorMsg();
+                        }
+                        break;
+
+                    case 4: // Hash rule
+                        if (IsValidHashRuleUiState())
+                        {
+                            dp.Action = "Added to policy";
+                            this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
+                            this._MainWindow.EventLogPolicy = this.siPolicy;
+                            ClearErrorMsg();
+                        }
+                        break;
+                }
+
             }
 
             this.eventsDataGridView.Refresh();
@@ -1277,6 +1299,12 @@ namespace WDAC_Wizard
         public static SiPolicy AddSiPolicyPublisherRule(CiEvent ciEvent, SiPolicy siPolicy, int[] uiState)
         {
             bool createFileRule = false; 
+            
+            // Check if valid signer rule possible
+            if(ciEvent.SignerInfo.IssuerTBSHash == null)
+            {
+                return siPolicy; 
+            }
 
             // Create new signer object
             Signer signer = new Signer();
