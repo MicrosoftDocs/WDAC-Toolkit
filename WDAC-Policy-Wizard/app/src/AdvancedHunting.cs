@@ -45,7 +45,7 @@ namespace WDAC_Wizard
             List<CiEvent> ciEvents = new List<CiEvent>(); 
 
             var fileHelperEngine = new FileHelperEngine<AdvancedHunting.Record>();
-            //fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
+            fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
 
             // Replace any commas like in Zoom Communications, Inc per bug #273
             fileHelperEngine.BeforeReadRecord += FileHelperEngine_BeforeReadRecord;
@@ -317,10 +317,6 @@ namespace WDAC_Wizard
             {
                 signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
             }
-
-            // Bug reported where MDE AH is in local time instead of Zulu time
-            // Replace Timestamp	"13/03/2024#C# 3:40:13.988 pm"	with string
-
 
             return signerEvent;
         }
