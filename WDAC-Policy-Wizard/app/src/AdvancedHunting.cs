@@ -12,11 +12,16 @@ namespace WDAC_Wizard
         const string AUDIT_EVENT_NAME = "AppControlCodeIntegrityPolicyAudited"; // 3076
         const string BLOCK_EVENT_NAME = "AppControlCodeIntegrityPolicyBlocked"; // 3077
         const string SIGNING_EVENT_NAME = "AppControlCodeIntegritySigningInformation"; // 3089
+        const string SCRIPT_AUDIT_EVENT_NAME = "AppControlCIScriptAudited"; // 8028
+        const string SCRIPT_BLOCK_EVENT_NAME = "AppControlCIScriptBlocked"; // 8029
+
 
         const int DRIVER_REV_EVENT_ID = 3023;
         const int AUDIT_EVENT_ID = 3076;
         const int BLOCK_EVENT_ID = 3077;
         const int SIGNING_EVENT_ID = 3089;
+        const int SCRIPT_AUDIT_EVENT_ID = 8028;
+        const int SCRIPT_BLOCK_EVENT_ID = 8029;
 
         // Delimitted value ',' will be replaced with #C#
         const string DEL_VALUE = "#C#";
@@ -40,7 +45,7 @@ namespace WDAC_Wizard
             List<CiEvent> ciEvents = new List<CiEvent>(); 
 
             var fileHelperEngine = new FileHelperEngine<AdvancedHunting.Record>();
-            fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
+            //fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
 
             // Replace any commas like in Zoom Communications, Inc per bug #273
             fileHelperEngine.BeforeReadRecord += FileHelperEngine_BeforeReadRecord;
@@ -145,31 +150,37 @@ namespace WDAC_Wizard
                 {
                     case DRIVER_REV_EVENT_NAME:
                         ciEvent = Create3023Event(record);
-                        if(!IsDuplicateEvent(ciEvent, ciEvents)) // De-duplicate audit and block events
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
                         break;
 
                     case AUDIT_EVENT_NAME:
-                        ciEvent = Create3076Event(record);
-                        if (!IsDuplicateEvent(ciEvent, ciEvents))
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
+                        ciEvent = Create3076_3077Event(record, AUDIT_EVENT_ID);
                         break;
 
                     case BLOCK_EVENT_NAME:
-                        ciEvent = Create3077Event(record);
-                        if (!IsDuplicateEvent(ciEvent, ciEvents))
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
+                        ciEvent = Create3076_3077Event(record, BLOCK_EVENT_ID);
+                        break;
+
+                    case SCRIPT_AUDIT_EVENT_NAME:
+                        ciEvent = Create8028_8029Event(record, SCRIPT_AUDIT_EVENT_ID);
+                        break;
+
+                    case SCRIPT_BLOCK_EVENT_NAME:
+                        ciEvent = Create8028_8029Event(record, SCRIPT_BLOCK_EVENT_ID);
                         break;
 
                     case SIGNING_EVENT_NAME:
                         signerEvents.Add(Create3089Event(record));
-                        break;
+                        continue;
+
+                    default:
+                        continue; 
+                }
+
+                // De-duplicate audit and block events
+                if (!IsDuplicateEvent(ciEvent, ciEvents)) 
+                {
+                    ciEvents.Add(ciEvent);
+                    ciEvent = new CiEvent(); 
                 }
             }
 
@@ -201,14 +212,14 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a 3076 CiEvent from the fields in the AH Record
+        /// Creates a 3076/3077 CiEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3076Event(Record record)
+        private static CiEvent Create3076_3077Event(Record record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
-            ciEvent.EventId = AUDIT_EVENT_ID;
+            ciEvent.EventId = eventId;
             ciEvent.FileName = record.FileName;
             // MDE AH FolderPath is the dir path without the filename
             ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
@@ -222,16 +233,15 @@ namespace WDAC_Wizard
             return ciEvent;
         }
 
-
         /// <summary>
-        /// Creates a 3077 CiEvent from the fields in the AH Record
+        /// Creates a 8028/8029 Script CiEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3077Event(Record record)
+        private static CiEvent Create8028_8029Event(Record record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
-            ciEvent.EventId = BLOCK_EVENT_ID;
+            ciEvent.EventId = eventId;
             ciEvent.FileName = record.FileName;
             // MDE AH FolderPath is the dir path without the filename
             ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
@@ -242,7 +252,7 @@ namespace WDAC_Wizard
             ciEvent.PolicyId = record.PolicyId;
             ciEvent.PolicyName = record.PolicyName;
 
-            return ciEvent; 
+            return ciEvent;
         }
 
         /// <summary>
@@ -419,7 +429,7 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            public string AuthenticodeHash;
+            public string? AuthenticodeHash; //Make the AuthenticodeHash column nullable
             public string PolicyId;
             public string PolicyName;
         }
