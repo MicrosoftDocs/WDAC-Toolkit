@@ -473,7 +473,7 @@ Please select the  'Create Rule' button.</value>
     <value>The COM Object Guid is invalid. Please see the docs for more information.</value>
   </data>
   <data name="ComObjectAllKeys" xml:space="preserve">
-    <value>All Keys</value>
+    <value>AllKeys</value>
   </data>
   <data name="MSDocLink_ComObjects" xml:space="preserve">
     <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/allow-com-object-registration-in-windows-defender-application-control-policy</value>

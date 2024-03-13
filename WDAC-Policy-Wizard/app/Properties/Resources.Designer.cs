@@ -272,7 +272,7 @@ namespace WDAC_Wizard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Keys.
+        ///   Looks up a localized string similar to AllKeys.
         /// </summary>
         internal static string ComObjectAllKeys {
             get {

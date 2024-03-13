@@ -476,7 +476,7 @@
             this.comboBoxComKeyType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxComKeyType.FormattingEnabled = true;
             this.comboBoxComKeyType.Items.AddRange(new object[] {
-            "All Keys",
+            "AllKeys",
             "Custom Key"});
             this.comboBoxComKeyType.Location = new System.Drawing.Point(176, 150);
             this.comboBoxComKeyType.Margin = new System.Windows.Forms.Padding(2);
