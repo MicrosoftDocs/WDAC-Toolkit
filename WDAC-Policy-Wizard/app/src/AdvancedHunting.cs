@@ -12,11 +12,15 @@ namespace WDAC_Wizard
         const string AUDIT_EVENT_NAME = "AppControlCodeIntegrityPolicyAudited"; // 3076
         const string BLOCK_EVENT_NAME = "AppControlCodeIntegrityPolicyBlocked"; // 3077
         const string SIGNING_EVENT_NAME = "AppControlCodeIntegritySigningInformation"; // 3089
+        const string SCRIPT_AUDIT_EVENT_NAME = "AppControlCIScriptAudited"; // 8028
+        const string SCRIPT_BLOCK_EVENT_NAME = "AppControlCIScriptBlocked"; // 8029
 
         const int DRIVER_REV_EVENT_ID = 3023;
         const int AUDIT_EVENT_ID = 3076;
         const int BLOCK_EVENT_ID = 3077;
         const int SIGNING_EVENT_ID = 3089;
+        const int SCRIPT_AUDIT_EVENT_ID = 8028;
+        const int SCRIPT_BLOCK_EVENT_ID = 8029;
 
         // Delimitted value ',' will be replaced with #C#
         const string DEL_VALUE = "#C#";
@@ -82,18 +86,23 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// 
+        /// Event handler for bad data like commas and malformed timestamps
         /// </summary>
         /// <param name="engine"></param>
         /// <param name="e"></param>
         private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
         {
             // Replace the line with the fixed version
-            e.RecordLine = ReplaceCommasInRecord(e.RecordLine); 
+            e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
+
+            // Bug reported where MDE AH in Local time, not UTC
+            // Replace instances of 'Local' Timestamps with UTC
+            // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
+            e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
 
         /// <summary>
-        /// 
+        /// Replaces instances of commas within data arrays to #C#
         /// </summary>
         /// <param name="bad"></param>
         /// <returns></returns>
@@ -126,6 +135,37 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Converts local timestamps to UTC like "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
+        /// </summary>
+        /// <param name="bad"></param>
+        /// <returns></returns>
+        private static string ConvertTimestampsToUTC(string record)
+        {
+            string timestampFormat = "dd/MM/yyyy, h:mm:ss.fff tt";
+            var fields = record.Split(',');
+            if (fields.Length > 1)
+            {
+                string localTimeStamp = fields[0]; 
+                if(localTimeStamp.Contains(DEL_VALUE)) // Non UTC times will contain a comma
+                {
+                    // Replace comma to help with DateTime parsing
+                    localTimeStamp = localTimeStamp.Replace(DEL_VALUE, ",");
+
+                    // Parse the timestamp
+                    DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
+
+                    // Convert to UTC
+                    string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
+
+                    fields[0] = utcDateTime; 
+                    return string.Join(",", fields);
+                }
+
+            }
+            return record;
+        }
+
+        /// <summary>
         /// Iterates through all of the AH records and creates corresponding CiEvent objects
         /// </summary>
         /// <param name="records"></param>
@@ -145,31 +185,37 @@ namespace WDAC_Wizard
                 {
                     case DRIVER_REV_EVENT_NAME:
                         ciEvent = Create3023Event(record);
-                        if(!IsDuplicateEvent(ciEvent, ciEvents)) // De-duplicate audit and block events
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
                         break;
 
                     case AUDIT_EVENT_NAME:
-                        ciEvent = Create3076Event(record);
-                        if (!IsDuplicateEvent(ciEvent, ciEvents))
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
+                        ciEvent = Create3076_3077Event(record, AUDIT_EVENT_ID);
                         break;
 
                     case BLOCK_EVENT_NAME:
-                        ciEvent = Create3077Event(record);
-                        if (!IsDuplicateEvent(ciEvent, ciEvents))
-                        {
-                            ciEvents.Add(ciEvent);
-                        }
+                        ciEvent = Create3076_3077Event(record, BLOCK_EVENT_ID);
+                        break;
+
+                    case SCRIPT_AUDIT_EVENT_NAME:
+                        ciEvent = Create8028_8029Event(record, SCRIPT_AUDIT_EVENT_ID);
+                        break;
+
+                    case SCRIPT_BLOCK_EVENT_NAME:
+                        ciEvent = Create8028_8029Event(record, SCRIPT_BLOCK_EVENT_ID);
                         break;
 
                     case SIGNING_EVENT_NAME:
                         signerEvents.Add(Create3089Event(record));
-                        break;
+                        continue;
+
+                    default:
+                        continue; 
+                }
+
+                // De-duplicate audit and block events
+                if (!IsDuplicateEvent(ciEvent, ciEvents)) 
+                {
+                    ciEvents.Add(ciEvent);
+                    ciEvent = new CiEvent(); 
                 }
             }
 
@@ -201,14 +247,14 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a 3076 CiEvent from the fields in the AH Record
+        /// Creates a 3076/3077 CiEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3076Event(Record record)
+        private static CiEvent Create3076_3077Event(Record record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
-            ciEvent.EventId = AUDIT_EVENT_ID;
+            ciEvent.EventId = eventId;
             ciEvent.FileName = record.FileName;
             // MDE AH FolderPath is the dir path without the filename
             ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
@@ -222,16 +268,15 @@ namespace WDAC_Wizard
             return ciEvent;
         }
 
-
         /// <summary>
-        /// Creates a 3077 CiEvent from the fields in the AH Record
+        /// Creates a 8028/8029 Script CiEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3077Event(Record record)
+        private static CiEvent Create8028_8029Event(Record record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
-            ciEvent.EventId = BLOCK_EVENT_ID;
+            ciEvent.EventId = eventId;
             ciEvent.FileName = record.FileName;
             // MDE AH FolderPath is the dir path without the filename
             ciEvent.FilePath = Helper.GetDOSPath(record.FolderPath) + "\\" + ciEvent.FileName;
@@ -242,7 +287,7 @@ namespace WDAC_Wizard
             ciEvent.PolicyId = record.PolicyId;
             ciEvent.PolicyName = record.PolicyName;
 
-            return ciEvent; 
+            return ciEvent;
         }
 
         /// <summary>
@@ -419,7 +464,7 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            public string AuthenticodeHash;
+            public string AuthenticodeHash; //TODO: Make the AuthenticodeHash column nullable -- string?
             public string PolicyId;
             public string PolicyName;
         }
