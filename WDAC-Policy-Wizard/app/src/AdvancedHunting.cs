@@ -15,7 +15,6 @@ namespace WDAC_Wizard
         const string SCRIPT_AUDIT_EVENT_NAME = "AppControlCIScriptAudited"; // 8028
         const string SCRIPT_BLOCK_EVENT_NAME = "AppControlCIScriptBlocked"; // 8029
 
-
         const int DRIVER_REV_EVENT_ID = 3023;
         const int AUDIT_EVENT_ID = 3076;
         const int BLOCK_EVENT_ID = 3077;
