@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.2.2.0</VersionEx>
+  <VersionEx>10.3.0.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
@@ -44,6 +44,7 @@
     <EKU ID="ID_EKU_HAL_EXT" Value="010a2b0601040182373d0501" FriendlyName="" />
     <EKU ID="ID_EKU_WHQL" Value="010A2B0601040182370A0305" FriendlyName="" />
     <EKU ID="ID_EKU_STORE" Value="010a2b0601040182374c0301" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1 Windows Store" />
+    <EKU ID="ID_EKU_RT_EXT" Value="010a2b0601040182370a0315" FriendlyName="Windows RT WoA EKU - 1.3.6.1.4.1.311.10.3.21 Windows RT"/>
   </EKUs>
   <!--File Rules-->
   <FileRules />
@@ -109,6 +110,31 @@
     <Signer ID="ID_SIGNER_TEST2010" Name="MincryptKnownRootMicrosoftTestRoot2010">
       <CertRoot Type="Wellknown" Value="0A" />
     </Signer>
+    <!-- Flighting related signers -->
+    <Signer ID="ID_SIGNER_WINDOWS_FLIGHT_ROOT" Name="Microsoft Flighting Root 2014 Windows EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_WINDOWS" />
+    </Signer>
+    <Signer ID="ID_SIGNER_ELAM_FLIGHT" Name="Microsoft Flighting Root 2014 ELAM EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_ELAM" />
+    </Signer>
+    <Signer ID="ID_SIGNER_HAL_FLIGHT" Name="Microsoft Flighting Root 2014 HAL EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_HAL_EXT" />
+    </Signer>
+    <Signer ID="ID_SIGNER_WHQL_FLIGHT_SHA2" Name="Microsoft Flighting Root 2014 WHQL EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_WHQL" />
+    </Signer>
+    <Signer ID="ID_SIGNER_STORE_FLIGHT_ROOT" Name="Microsoft Flighting Root 2014 Store EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_STORE" />
+    </Signer>
+    <Signer ID="ID_SIGNER_RT_FLIGHT" Name="Microsoft Flighting Root 2014 RT EKU">
+      <CertRoot Type="Wellknown" Value="0E" />
+      <CertEKU ID="ID_EKU_RT_EXT" />
+    </Signer>
   </Signers>
   <!--Driver Signing Scenarios-->
   <SigningScenarios>
@@ -122,6 +148,11 @@
           <AllowedSigner SignerId="ID_SIGNER_WHQL_SHA1_0" />
           <AllowedSigner SignerId="ID_SIGNER_WHQL_MD5_0" />
           <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006" />
+          <AllowedSigner SignerId ="ID_SIGNER_WINDOWS_FLIGHT_ROOT" />
+          <AllowedSigner SignerId ="ID_SIGNER_ELAM_FLIGHT"/>
+          <AllowedSigner SignerId ="ID_SIGNER_HAL_FLIGHT" />
+          <AllowedSigner SignerId ="ID_SIGNER_WHQL_FLIGHT_SHA2" />
+          <AllowedSigner SignerId ="ID_SIGNER_RT_FLIGHT" />    
         </AllowedSigners>
       </ProductSigners>
     </SigningScenario>
@@ -137,6 +168,11 @@
           <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_CODEVERIFICATION_2006" />
           <AllowedSigner SignerId="ID_SIGNER_DRM_UMCI_1" />
           <AllowedSigner SignerId="ID_SIGNER_STORE_1" />
+          <AllowedSigner SignerId="ID_SIGNER_WINDOWS_FLIGHT_ROOT" />
+          <AllowedSigner SignerId="ID_SIGNER_ELAM_FLIGHT"/>
+          <AllowedSigner SignerId="ID_SIGNER_HAL_FLIGHT" />
+          <AllowedSigner SignerId="ID_SIGNER_WHQL_FLIGHT_SHA2" />
+          <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />    
         </AllowedSigners>
       </ProductSigners>
     </SigningScenario>
@@ -156,7 +192,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>09302022</String>
+        <String>03202024</String>
       </Value>
     </Setting>
   </Settings>
