@@ -403,7 +403,7 @@ namespace WDAC_Wizard
             this.textBox_AdvancedHuntingPaths.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_AdvancedHuntingPaths.Size = new System.Drawing.Size(453, 37);
             this.textBox_AdvancedHuntingPaths.TabIndex = 126;
-            this.textBox_AdvancedHuntingPaths.Text = "Select MDE Advanced Hunting and/or LogAnalytic CSV Files";
+            this.textBox_AdvancedHuntingPaths.Text = "Select MDE Advanced Hunting and/or Log Analytics CSV Files";
             // 
             // label8
             // 
@@ -412,9 +412,9 @@ namespace WDAC_Wizard
             this.label8.ForeColor = System.Drawing.Color.Black;
             this.label8.Location = new System.Drawing.Point(23, 210);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(435, 18);
+            this.label8.Size = new System.Drawing.Size(447, 18);
             this.label8.TabIndex = 125;
-            this.label8.Text = "Parse Advanced Hunting and LogAnalytic Events to Policy";
+            this.label8.Text = "Parse Advanced Hunting and Log Analytics Events to Policy";
             // 
             // textBox_EventLog
             // 
@@ -453,10 +453,10 @@ namespace WDAC_Wizard
             this.ahParsingLearnMore_Label.Location = new System.Drawing.Point(4, 41);
             this.ahParsingLearnMore_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ahParsingLearnMore_Label.Name = "ahParsingLearnMore_Label";
-            this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(455, 18);
+            this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(467, 18);
             this.ahParsingLearnMore_Label.TabIndex = 127;
             this.ahParsingLearnMore_Label.Tag = "IgnoreDarkMode";
-            this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting and LogAnalytic logs    ";
+            this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting and Log Analytics logs    ";
             this.ahParsingLearnMore_Label.Visible = false;
             this.ahParsingLearnMore_Label.Click += new System.EventHandler(this.AHLearnMoreLabel_Click);
             // 
