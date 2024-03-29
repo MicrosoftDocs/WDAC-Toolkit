@@ -78,7 +78,7 @@ namespace WDAC_Wizard
                 catch (Exception e)
                 {
                     LastError = e.Message;
-                    return null;
+                    // return null; // continue in the case of mixing AH and LogAnalytic csvs
                 }
             }
 

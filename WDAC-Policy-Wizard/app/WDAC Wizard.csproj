@@ -111,6 +111,7 @@
     <Compile Include="src\Exceptions_Control.Designer.cs">
       <DependentUpon>Exceptions_Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\LogAnalytics.cs" />
     <Compile Include="src\Policy.cs" />
     <Compile Include="src\ConfigTemplate_Control.cs">
       <SubType>UserControl</SubType>

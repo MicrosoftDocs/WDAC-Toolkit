@@ -617,6 +617,7 @@ namespace WDAC_Wizard
         public string IssuerName { get; set; }
         public byte[] IssuerTBSHash { get; set; }
         public string PublisherName { get; set; }
+        public byte[] PublisherTBSHash { get; set; }
 
         // AH Device Specific
         public string Timestamp { get; set; }

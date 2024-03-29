@@ -66,8 +66,13 @@ namespace WDAC_Wizard
         static int cDenyRules = 0;
         static int cAllowRules = 0;
         static int cFileAttribs = 0;
-        static int cSigners = 0; 
+        static int cSigners = 0;
 
+        /// <summary>
+        /// Converts a path like \Device\HarddiskVolume3\Windows\System32\wbem\WMIC.exe to "C\Windows\System32\wbem\WMIC.exe
+        /// </summary>
+        /// <param name="NTPath"></param>
+        /// <returns></returns>
         public static string GetDOSPath(string NTPath)
         {
             string windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
