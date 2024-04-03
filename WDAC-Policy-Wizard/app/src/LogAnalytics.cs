@@ -194,14 +194,44 @@ namespace WDAC_Wizard
         private static void FileHelperEngine_LogAnalyticsBeforeReadRecord(EngineBase engine, 
             FileHelpers.Events.BeforeReadEventArgs<LogAnalyticsRecord> e)
         {
+            // Replace common phrases with commas first
+            e.RecordLine = ReplaceCommonIssuePhrases(e.RecordLine); 
+
             // Replace the line with the fixed version
             e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
+        }
+
+
+        /// <summary>
+        /// Replaces common phrases to help with comma removal success
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        private static string ReplaceCommonIssuePhrases(string record)
+        {
+            /* Common failures include:
+             * However,
+             * auditing policy,
+             * , Inc.
+             */
+            string[] commonFailures = { "However,", "auditing policy,", ", Inc" };
+            string[] replacementValues = { "However", "auditing policy", " Inc" }; 
+
+            for(int i = 0; i < commonFailures.Length; i++)
+            {
+                if(record.Contains(commonFailures[i]))
+                {
+                    record = record.Replace(commonFailures[i], replacementValues[i]); 
+                }
+            }
+
+            return record; 
         }
 
         /// <summary>
         /// Replaces instances of commas within data arrays to #C#
         /// </summary>
-        /// <param name="bad"></param>
+        /// <param></param>
         /// <returns></returns>
         private static string ReplaceCommasInRecord(string record)
         {
