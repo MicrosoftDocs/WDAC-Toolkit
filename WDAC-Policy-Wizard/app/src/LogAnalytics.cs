@@ -205,6 +205,9 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static string ReplaceCommasInRecord(string record)
         {
+            //string delimiter = "\",";
+            //var fields = record.Split(new String[] { delimiter }, StringSplitOptions.None);
+
             var fields = record.Split('"');
             if (fields.Length > 1)
             {
@@ -229,7 +232,7 @@ namespace WDAC_Wizard
             {
                 return record;
             }
-        }
+        }     
 
         /// <summary>
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
@@ -264,5 +267,41 @@ namespace WDAC_Wizard
             public string PublisherTBSHash;
             public string IssuerTBSHash;
         }
+        
+
+        // 30d CSV
+
+        /*
+        [DelimitedRecord(",")]
+        public class LogAnalyticsRecord
+        {
+            public string TimeGenerated;
+            public string Computer;
+            public string UserName;
+            public string Action;
+            public string publishervalue;
+            public string PublisherName;
+            public string Details;
+            public string AffectedFile;
+            public string ProcessName;
+            public string Status;
+            public string PolicyID;
+            public string PolicyGUID;
+            public string PolicyHash;
+            public string SHA1_Hash;
+            public string OriginalFileName;
+            public string InternalName;
+            public string FileDescription;
+            public string ProductName;
+            public string FileVersion;
+            public string PolicyName;
+            public string SHA256_Hash;
+            public string IssuerName;
+            public string NotValidAfter;
+            public string NotValidBefore;
+            public string PublisherTBSHash;
+            public string IssuerTBSHash;
+        }
+        */
     }
 }

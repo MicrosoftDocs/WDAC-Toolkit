@@ -485,7 +485,7 @@ Please select the  'Create Rule' button.</value>
     <value>Microsoft-Windows-CodeIntegrity/Operational</value>
   </data>
   <data name="UnsuccessfulEventLogConversionZeroEvents" xml:space="preserve">
-    <value>The Wizard did not parse any WDAC events from the selected .evtx files.</value>
+    <value>The Wizard did not parse any WDAC events from the selected log files.</value>
   </data>
   <data name="MSDocLink_RuleLevels" xml:space="preserve">
     <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-file-rule-levels</value>
@@ -494,7 +494,7 @@ Please select the  'Create Rule' button.</value>
     <value>The list of selected rule levels is empty. Please select at least 1 rule level to use while scanning the folder.</value>
   </data>
   <data name="UnsuccessfulAdvancedHuntingLogConversion" xml:space="preserve">
-    <value>The Wizard could not parse any Advanced Hunting events from the CSV file(s).</value>
+    <value>The Wizard could not parse any events from the CSV file(s).</value>
   </data>
   <data name="RuleExceptionInProgressText" xml:space="preserve">
     <value>There is an exception rule in progress.
