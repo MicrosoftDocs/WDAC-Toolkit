@@ -25,7 +25,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Parses the CSV file to CiEvent fields
         /// </summary>
-        /// <param name="filepath"></param>
+        /// <param name="filepaths">List of filepaths to try to parse for csv events</param>
+        /// <returns>List of CiEvent objects containing policy event info</returns>
         public static List<CiEvent> ReadLogAnalyticCsvFiles(List<string> filepaths)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
@@ -64,7 +65,7 @@ namespace WDAC_Wizard
                 catch (Exception e)
                 {
                     LastError = e.Message;
-                    // return null; // continue in the case of mixing AH and LogAnalytic csvs
+                    // continue in the case of mixing AH and LogAnalytic csvs
                 }
             }
 
@@ -73,10 +74,10 @@ namespace WDAC_Wizard
 
 
         /// <summary>
-        /// Iterates through all of the AH records and creates corresponding CiEvent objects
+        /// Iterates through all of the LogAnalytic records and creates corresponding CiEvent objects
         /// </summary>
-        /// <param name="records"></param>
-        /// <returns></returns>
+        /// <param name="records">Array of LogAnalyticRecord objects to use in generating CiEvents</param>
+        /// <returns>List of CiEvent objects containing policy event info</returns>
         public static List<CiEvent> ParseRecordsIntoCiEvents(LogAnalyticsRecord[] records)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
@@ -112,8 +113,9 @@ namespace WDAC_Wizard
         /// <summary>
         /// Creates a 3076/3077 CiEvent from the fields in the AH Record
         /// </summary>
-        /// <param name="record"></param>
-        /// <returns></returns>
+        /// <param name="record">Single LogAnalytic CSV record to parse into a policy log event</param>
+        /// <param name="eventId">String containing the event ID</param>
+        /// <returns>Single CiEvent object containing policy event info</returns>
         private static CiEvent Create3076_3077Event(LogAnalyticsRecord record, string eventId)
         {
             CiEvent ciEvent = new CiEvent();
@@ -144,9 +146,9 @@ namespace WDAC_Wizard
         /// <summary>
         /// Determines whether the provided ciEvent unique or a duplicate within the event logs
         /// </summary>
-        /// <param name="newEvent"></param>
-        /// <param name="existingEvents"></param>
-        /// <returns></returns>
+        /// <param name="newEvent">Newly created CI policy event</param>
+        /// <param name="existingEvents">List of CI policy events to verify against</param>
+        /// <returns>True if event exists in existingEvents. False if unique event.</returns>
         private static bool IsDuplicateEvent(CiEvent newEvent, List<CiEvent> existingEvents)
         {
             if (existingEvents.Count == 0)
@@ -189,8 +191,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Event handler for bad data like commas and malformed timestamps
         /// </summary>
-        /// <param name="engine"></param>
-        /// <param name="e"></param>
+        /// <param name="engine">FileHelpers parsing engine</param>
+        /// <param name="e">BeforeReadEventArg</param>
         private static void FileHelperEngine_LogAnalyticsBeforeReadRecord(EngineBase engine, 
             FileHelpers.Events.BeforeReadEventArgs<LogAnalyticsRecord> e)
         {
@@ -205,8 +207,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Replaces common phrases to help with comma removal success
         /// </summary>
-        /// <param name="record"></param>
-        /// <returns></returns>
+        /// <param name="record">Single LogAnalytic CSV record to verify for common issues</param>
+        /// <returns>String containing the fixed record</returns>
         private static string ReplaceCommonIssuePhrases(string record)
         {
             /* Common failures include:
@@ -231,8 +233,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Replaces instances of commas within data arrays to #C#
         /// </summary>
-        /// <param></param>
-        /// <returns></returns>
+        /// <param name="record">Single LogAnalytic CSV record to verify for common issues</param>
+        /// <returns>String containing the fixed record</returns>
         private static string ReplaceCommasInRecord(string record)
         {
             //string delimiter = "\",";
@@ -297,41 +299,5 @@ namespace WDAC_Wizard
             public string PublisherTBSHash;
             public string IssuerTBSHash;
         }
-        
-
-        // 30d CSV
-
-        /*
-        [DelimitedRecord(",")]
-        public class LogAnalyticsRecord
-        {
-            public string TimeGenerated;
-            public string Computer;
-            public string UserName;
-            public string Action;
-            public string publishervalue;
-            public string PublisherName;
-            public string Details;
-            public string AffectedFile;
-            public string ProcessName;
-            public string Status;
-            public string PolicyID;
-            public string PolicyGUID;
-            public string PolicyHash;
-            public string SHA1_Hash;
-            public string OriginalFileName;
-            public string InternalName;
-            public string FileDescription;
-            public string ProductName;
-            public string FileVersion;
-            public string PolicyName;
-            public string SHA256_Hash;
-            public string IssuerName;
-            public string NotValidAfter;
-            public string NotValidBefore;
-            public string PublisherTBSHash;
-            public string IssuerTBSHash;
-        }
-        */
     }
 }
