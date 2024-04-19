@@ -2167,11 +2167,11 @@ namespace WDAC_Wizard
 
             // Scan the file to extract the TBS hash (or hashes for fallback) and, optionally, the CN for the signer rules
             string newPolicyRuleCmd = string.Empty; 
-            if(customRule.CheckboxCheckStates.checkBox1)
+            if(customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
             {
                 newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
             }
-            else
+            else // Publisher checkbox unselected - create a PCA rule
             {
                 newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
             }

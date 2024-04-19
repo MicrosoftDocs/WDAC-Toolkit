@@ -503,6 +503,26 @@ namespace WDAC_Wizard
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
             level = this.PolicyCustomRule.Type.ToString();
 
+            // Get the Rule Scope for logging
+            string scope = String.Empty; 
+
+            if(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled)
+            {
+                if(this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled)
+                {
+                    scope = "Kernel and Usermode Rule";
+                }
+                else
+                {
+                    scope = "Kernel Rule"; 
+                }
+            }
+
+            else
+            {
+                scope = "Usermode Rule"; 
+            }
+
             // Format rule display string
             switch (this.PolicyCustomRule.Type){
             // Signer rules
@@ -653,7 +673,7 @@ namespace WDAC_Wizard
                 exceptions.Trim(';');
             }
 
-            this.Log.AddInfoMsg(String.Format("CUSTOM RULE Created: {0} - {1} - {2} - {3} ", action, level, name, files));
+            this.Log.AddInfoMsg(String.Format("Custom {0} created: {1} - {2} - {3} - {4} ", scope, action, level, name, files));
             return new string[5] { action, level, name, files, exceptions };
         }
 

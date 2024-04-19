@@ -526,7 +526,7 @@ namespace WDAC_Wizard
                 this._MainWindow.ErrorOnPage = false;
 
                 // Log state
-                this._MainWindow.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: ", result.ToString()));
+                this._MainWindow.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: {0}", result.ToString()));
             }
             else
             {
