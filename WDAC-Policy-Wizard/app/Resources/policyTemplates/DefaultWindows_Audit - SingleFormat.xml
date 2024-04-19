@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.1.1.0</VersionEx>
+  <VersionEx>10.2.0.0</VersionEx>
   <PolicyTypeID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyTypeID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
@@ -31,14 +31,15 @@
   </Rules>
   <!--EKUS-->
   <EKUs>
-    <EKU ID="ID_EKU_WINDOWS" Value="010A2B0601040182370A0306" />
-    <EKU ID="ID_EKU_WHQL" Value="010A2B0601040182370A0305" />
-    <EKU ID="ID_EKU_ELAM" Value="010A2B0601040182373D0401" />
-    <EKU ID="ID_EKU_HAL_EXT" Value="010a2b0601040182373d0501" />
-    <EKU ID="ID_EKU_RT_EXT" Value="010a2b0601040182370a0315" />
-    <EKU ID="ID_EKU_STORE" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1 Windows Store" Value="010a2b0601040182374c0301" />
+    <EKU ID="ID_EKU_WINDOWS" FriendlyName="Windows EKU - 1.3.6.1.4.1.311.10.3.6" Value="010A2B0601040182370A0306" />
+    <EKU ID="ID_EKU_WHQL" FriendlyName="WHQL EKU - 1.3.6.1.4.1.311.10.3.5" Value="010A2B0601040182370A0305" />
+    <EKU ID="ID_EKU_ELAM" FriendlyName="Early Launch AntiMalware EKU - 1.3.6.1.4.1.311.61.4.1" Value="010A2B0601040182373D0401" />
+    <EKU ID="ID_EKU_HAL_EXT" FriendlyName="Hardware Abstraction Layer EKU - 1.3.6.1.4.1.311.61.5.1" Value="010A2B0601040182373D0501" />
+    <EKU ID="ID_EKU_RT_EXT" FriendlyName="Windows RT EKU - 1.3.6.1.4.1.311.10.3.21" Value="010A2B0601040182370A0315" />
+    <EKU ID="ID_EKU_STORE" FriendlyName="Windows Store EKU - 1.3.6.1.4.1.311.76.3.1" Value="010A2B0601040182374C0301" />
     <EKU ID="ID_EKU_DCODEGEN" FriendlyName="Dynamic Code Generation EKU - 1.3.6.1.4.1.311.76.5.1" Value="010A2B0601040182374C0501" />
-    <EKU ID="ID_EKU_AM" FriendlyName="AntiMalware EKU -1.3.6.1.4.1.311.76.11.1 " Value="010a2b0601040182374c0b01" />
+    <EKU ID="ID_EKU_AM" FriendlyName="AntiMalware EKU - 1.3.6.1.4.1.311.76.11.1" Value="010A2B0601040182374C0B01" />
+    <EKU ID="ID_EKU_ENCLAVE" FriendlyName="Enclave EKU - 1.3.6.1.4.1.311.10.3.42" Value="010A2B0601040182370A032A" />
   </EKUs>
   <!--File Rules-->
   <FileRules>
@@ -164,6 +165,10 @@
       <CertRoot Type="Wellknown" Value="07" />
       <CertEKU ID="ID_EKU_AM" />
     </Signer>
+    <Signer ID="ID_SIGNER_ENCLAVE" Name="Microsoft Standard Root 2011 Enclave EKU">
+      <CertRoot Type="Wellknown" Value="07" />
+      <CertEKU ID="ID_EKU_ENCLAVE" />
+    </Signer>
     <Signer ID="ID_SIGNER_MICROSOFT_REFRESH_POLICY" Name="Microsoft Code Signing PCA 2011">
       <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
       <CertPublisher Value="Microsoft Corporation" />
@@ -212,6 +217,7 @@
           <AllowedSigner SignerId="ID_SIGNER_AM" />
           <AllowedSigner SignerId="ID_SIGNER_RT_FLIGHT" />
           <AllowedSigner SignerId="ID_SIGNER_RT_STANDARD" />
+          <AllowedSigner SignerId="ID_SIGNER_ENCLAVE" />
           <AllowedSigner SignerId="ID_SIGNER_MICROSOFT_REFRESH_POLICY" />
           <!-- Test signer is trusted by ConfigCI, however, it will not be trusted by CI unless testsigning BCD is set -->
           <AllowedSigner SignerId="ID_SIGNER_TEST2010_USER" />
@@ -247,7 +253,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>12022022</String>
+        <String>04122024</String>
       </Value>
     </Setting>
   </Settings>
