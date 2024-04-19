@@ -108,7 +108,7 @@ namespace WDAC_Wizard
                     if(IsValidPublisherUiState())
                     {
                         dp.Action = "Added to policy";
-                        this.siPolicy = PolicyHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
+                        this.siPolicy = PolicyEventHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
                         ClearErrorMsg();
                     }
@@ -118,7 +118,7 @@ namespace WDAC_Wizard
                     if(IsValidFilePathUiState())
                     {
                         dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
+                        this.siPolicy = PolicyEventHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
                         ClearErrorMsg();
                     }
@@ -129,7 +129,7 @@ namespace WDAC_Wizard
                     if(IsValidFileAttributesUiState())
                     {
                         dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
+                        this.siPolicy = PolicyEventHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
                         ClearErrorMsg();
                     }
@@ -139,7 +139,7 @@ namespace WDAC_Wizard
                     if(IsValidHashRuleUiState())
                     {
                         dp.Action = "Added to policy";
-                        this.siPolicy = PolicyHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
+                        this.siPolicy = PolicyEventHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
                         this._MainWindow.EventLogPolicy = this.siPolicy;
                         ClearErrorMsg();
                     }
@@ -1257,7 +1257,7 @@ namespace WDAC_Wizard
         }
     }
 
-    internal static class PolicyHelper
+    internal static class PolicyEventHelper
     {
         // Counts of file rules created to pipe into IDs
         static public int cPublisherRules = 0;
@@ -1344,7 +1344,7 @@ namespace WDAC_Wizard
             // Kernel mode rule, don't add signer to cisigners
             // If you don't know always add to cisigners.
             Signer[] signers = new Signer[] { signer };
-            siPolicy = Helper.AddSiPolicyCiSigner(signers, siPolicy);
+            siPolicy = PolicyHelper.AddSiPolicyCiSigner(signers, siPolicy);
 
             return siPolicy;
         }

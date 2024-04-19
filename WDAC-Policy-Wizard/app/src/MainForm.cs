@@ -993,7 +993,7 @@ namespace WDAC_Wizard
             }
 
             // De-duplicate the Rule Options list
-            List<RuleType> dedupedRuleOptions = Helper.DeDuplicateRuleOptions(ruleOptionsList);
+            List<RuleType> dedupedRuleOptions = PolicyHelper.DeDuplicateRuleOptions(ruleOptionsList);
 
             // Convert from List<RuleType> to RuleType[]
             RuleType[] ruleOptions = new RuleType[dedupedRuleOptions.Count];
@@ -1041,7 +1041,7 @@ namespace WDAC_Wizard
 
             // Manipulate the final policy on disk as oppposed to any temp policies
             SiPolicy policy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
-            policy = Helper.CreateComRule(policy, comObjectRules);
+            policy = PolicyHelper.CreateComRule(policy, comObjectRules);
 
             try
             {
@@ -1079,7 +1079,7 @@ namespace WDAC_Wizard
             {
                 // Set policy info - ID, Name
                 // Serialize the policy back to XML so settings persist after GUID reset
-                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
+                siPolicy.Settings = PolicyHelper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
                 Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
 
                 if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy 
@@ -1165,7 +1165,7 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 // Set policy info - ID, Name
-                siPolicy.Settings = Helper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID); 
+                siPolicy.Settings = PolicyHelper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID); 
                 siPolicy.VersionEx = this.Policy.VersionNumber;
 
                 Logger.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
@@ -1187,8 +1187,8 @@ namespace WDAC_Wizard
             }
 
             // Lastly, re-format Allow/Deny, FileAttrib and Signer IDs, if applicable
-            siPolicy = Helper.FormatFileRuleIDs(siPolicy);
-            siPolicy = Helper.FormatSignerRuleIDs(siPolicy);
+            siPolicy = PolicyHelper.FormatFileRuleIDs(siPolicy);
+            siPolicy = PolicyHelper.FormatSignerRuleIDs(siPolicy);
 
             try
             {
@@ -1245,7 +1245,7 @@ namespace WDAC_Wizard
 
                     if (signerSiPolicy != null)
                     {
-                        signerSiPolicy = Helper.AddSignerRuleAttributes(customRule, signerSiPolicy);
+                        signerSiPolicy = PolicyHelper.AddSignerRuleAttributes(customRule, signerSiPolicy);
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
                         customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
                     }
@@ -1306,17 +1306,17 @@ namespace WDAC_Wizard
                 }
                 else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
                 {
-                    siPolicyCustomValueRules = Helper.CreatePFNRule(customRule, siPolicyCustomValueRules);
+                    siPolicyCustomValueRules = PolicyHelper.CreatePFNRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
                 else if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
-                    siPolicyCustomValueRules = Helper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
+                    siPolicyCustomValueRules = PolicyHelper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
                 else if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
-                    siPolicyCustomValueRules = Helper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
+                    siPolicyCustomValueRules = PolicyHelper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
             }
@@ -1337,35 +1337,35 @@ namespace WDAC_Wizard
         {
             if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                siPolicy = Helper.CreateFilePublisherRule(customRule, siPolicy);
+                siPolicy = PolicyHelper.CreateFilePublisherRule(customRule, siPolicy);
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
                 if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    siPolicy = Helper.CreateAllowFileAttributeRule(customRule, siPolicy);
+                    siPolicy = PolicyHelper.CreateAllowFileAttributeRule(customRule, siPolicy);
                 }
                 else
                 {
-                    siPolicy = Helper.CreateDenyFileAttributeRule(customRule, siPolicy);
+                    siPolicy = PolicyHelper.CreateDenyFileAttributeRule(customRule, siPolicy);
                 }
             }
 
             else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
             {
-                siPolicy = Helper.CreatePFNRule(customRule, siPolicy);
+                siPolicy = PolicyHelper.CreatePFNRule(customRule, siPolicy);
             }
 
             else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
             {
                 if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    siPolicy = Helper.CreateAllowPathRule(customRule, siPolicy);
+                    siPolicy = PolicyHelper.CreateAllowPathRule(customRule, siPolicy);
                 }
                 else
                 {
-                    siPolicy = Helper.CreateDenyPathRule(customRule, siPolicy);
+                    siPolicy = PolicyHelper.CreateDenyPathRule(customRule, siPolicy);
                 }
             }
 
@@ -1373,11 +1373,11 @@ namespace WDAC_Wizard
             {
                 if (customRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    siPolicy = Helper.CreateAllowHashRule(siPolicy, customRule);
+                    siPolicy = PolicyHelper.CreateAllowHashRule(siPolicy, customRule);
                 }
                 else
                 {
-                    siPolicy = Helper.CreateDenyHashRule(siPolicy, customRule);
+                    siPolicy = PolicyHelper.CreateDenyHashRule(siPolicy, customRule);
                 }
             }
 
