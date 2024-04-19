@@ -17,7 +17,6 @@ namespace WDAC_Wizard.src
         private int nPolicies;
         private string mergePolicyPath;
         private List<string> policiesToMerge;
-        private Logger Log;
         private MainWindow _MainWindow;
         private DisplayObject displayObjectInEdit;
 
@@ -34,11 +33,9 @@ namespace WDAC_Wizard.src
             this.nPolicies = 0;
             this.mergePolicyPath = String.Empty;
             this.policiesToMerge = new List<string>();
-            this.rowInEdit = -1; 
+            this.rowInEdit = -1;
 
             this._MainWindow = pMainWindow;
-            this.Log = pMainWindow.Log;
-
             this._MainWindow.ErrorOnPage = true;
             this._MainWindow.RedoFlowRequired = false;
             this._MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
@@ -66,7 +63,7 @@ namespace WDAC_Wizard.src
                 }
 
                 this._MainWindow.Policy.SchemaPath = this.mergePolicyPath;
-                this.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));
+                Logger.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));
 
                 if(this.nPolicies >= 2)
                 {
@@ -120,11 +117,11 @@ namespace WDAC_Wizard.src
                             this._MainWindow.ErrorOnPage = false;
                         }
 
-                        this.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
+                        Logger.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
                     }
                     else
                     {
-                        this.Log.AddInfoMsg("Adding to list of policies to merge: Could Not Resolve Path");
+                        Logger.Log.AddInfoMsg("Adding to list of policies to merge: Could Not Resolve Path");
                     }
                 }
             }
@@ -137,7 +134,7 @@ namespace WDAC_Wizard.src
         /// <param name="e"></param>
         private void Button_RemovePolicy_Click(object sender, EventArgs e)
         {
-            this.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
+            Logger.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
             // Get info about the rule user wants to delete: row index and path
             DataGridViewSelectedCellCollection cellCollection = this.policiesDataGrid.SelectedCells; 
@@ -164,7 +161,7 @@ namespace WDAC_Wizard.src
                     continue;
                 }
 
-                this.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
+                Logger.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
 
                 this.displayObjects.RemoveAt(rowIdx);
                 this.policiesDataGrid.Rows.RemoveAt(rowIdx);

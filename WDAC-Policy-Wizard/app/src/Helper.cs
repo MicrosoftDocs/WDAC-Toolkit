@@ -12,9 +12,6 @@ using System.Xml.Serialization;
 using Microsoft.Win32;
 using System.Security.Cryptography; 
 using System.Security.Cryptography.X509Certificates;
-using System.Management.Automation;
-using System.Collections.ObjectModel;
-using System.Management.Automation.Runspaces;
 using System.Windows.Forms;
 using Windows.Management.Deployment;
 using Windows.ApplicationModel; 
@@ -33,6 +30,9 @@ namespace WDAC_Wizard
 
         const string AUDIT_POLICY_PATH = "AuditEvents_Policy.xml";
         const string AUDIT_LOG_PATH = "AuditEvents_Log.txt";
+
+        // Key already added PowerShell error HResult
+        const int PSKEY_HRESULT = -2146233087; 
 
         // Unsupported Crypto OIDs
         // Oids and friendly names
@@ -66,7 +66,7 @@ namespace WDAC_Wizard
         static int cDenyRules = 0;
         static int cAllowRules = 0;
         static int cFileAttribs = 0;
-        static int cSigners = 0; 
+        static int cSigners = 0;
 
         public static string GetDOSPath(string NTPath)
         {
@@ -300,6 +300,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
+                Logger.Log.AddErrorMsg("DeserializeXMLtoPolicy() caught the following error", exp); 
                 return null;
             }
 
@@ -330,6 +331,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
+                Logger.Log.AddErrorMsg("DeserializeXMLStringtoPolicy() caught the following exception", exp);
                 return null;
             }
 
@@ -472,6 +474,7 @@ namespace WDAC_Wizard
                 }
                 catch (Exception e)
                 {
+                    Logger.Log.AddErrorMsg("IsValidVersion() caught the following exception", e);
                     return false;
                 }
             }
@@ -634,6 +637,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("IsUserWriteable() caught the following exception", e);
                 return false;
             }
         }
@@ -659,6 +663,7 @@ namespace WDAC_Wizard
             catch
             {
                 // fall back and get for the current user
+                Logger.Log.AddWarningMsg("GetAppxPackages() fallback to user check");
                 packages = packageManager.FindPackagesForUser("");
             }
 
@@ -880,9 +885,53 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
-
+                Logger.Log.AddErrorMsg("GetWinVersion() caught the following exception", e);
             }
             return -1;
+        }
+
+        /// <summary>
+        /// SKU check to see if cmdlets are on the system 
+        /// /// </summary>
+        internal static void LicenseCheck()
+        {
+            // Check that WDAC feature is compatible with system
+            // Cmdlets are available on all builds 1909+. 
+            // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability
+
+            int REQUIRED_V = 1909;
+            string REQUIRED_ED = "Enterprise";
+
+            Logger.Log.AddInfoMsg("--- Feature Compat Check ---");
+
+            string edition = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CompositionEditionID", "").ToString();
+            string prodName = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", "").ToString();
+            int releaseN = Convert.ToInt32(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", ""));
+
+            if (releaseN >= REQUIRED_V)
+            {
+                Logger.Log.AddInfoMsg(String.Format("Release Id: {0} meets min build requirements.", releaseN));
+            }
+            else if (edition.Contains(REQUIRED_ED) || prodName.Contains(REQUIRED_ED))
+            {
+                Logger.Log.AddInfoMsg(String.Format("Edition/ProdName:{0}/{1} meets min build requirements.", edition, prodName));
+            }
+            else
+            {
+                // Device does not meet the versioning or SKU check
+                Logger.Log.AddWarningMsg(String.Format("Incompatible Windows Build Detected!! BuildN={0}", releaseN));
+                Logger.Log.AddWarningMsg(String.Format("Incompatible Windows Edition/Product Detected!! CompositionEditionID={0} and ProductName={1}", edition, prodName));
+                DialogResult res = MessageBox.Show("The Policy Wizard has detected an incompatible version of Windows. " +
+                    "The Wizard may not be able to successfully complete policy creation.",
+                    "Incompatible Windows Product",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                if (res == DialogResult.OK)
+                {
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability");
+                }
+            }
         }
 
         /// <summary>
@@ -891,6 +940,7 @@ namespace WDAC_Wizard
         /// <returns>Location of the WDACWizard Temp folder location</returns>
         public static string GetTempFolderPath()
         {
+            // This runs before Logger is instantiated -- do not add logging here to avoid deref error
             string tempFolder = Path.Combine("WDACWizard", "Temp", GetFormattedDateTime());
             return Path.Combine(Path.GetTempPath(), tempFolder);
         }
@@ -1153,7 +1203,7 @@ namespace WDAC_Wizard
         public static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
-            SiPolicy tempSiPolicy = CreateSignerFromPS(customRule);
+            SiPolicy tempSiPolicy = PSCmdlets.CreateSignerFromPS(customRule);
 
             if(tempSiPolicy == null)
             {
@@ -1932,7 +1982,7 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleType.Hash:
                         {
-                            object[] hashRules = CreateHashRulesFromPS(exceptAllowRule);
+                            object[] hashRules = PSCmdlets.CreateHashRulesFromPS(exceptAllowRule);
                             Array.Resize(ref exceptAllowRules, exceptAllowRules.Length + hashRules.Length - 1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
                             foreach (object hashRule in hashRules)
                             {
@@ -1986,7 +2036,7 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleType.Hash:
                         {
-                            object[] hashRules = CreateHashRulesFromPS(exceptDenyRule);
+                            object[] hashRules = PSCmdlets.CreateHashRulesFromPS(exceptDenyRule);
                             Array.Resize(ref exceptDenyRules, exceptDenyRules.Length + hashRules.Length-1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
                             foreach (object hashRule in hashRules)
                             {
@@ -2065,138 +2115,6 @@ namespace WDAC_Wizard
                 }
             }
 
-            return siPolicy;
-        }
-
-        /// <summary>
-        /// Creates a dummy signer rule and policy to calculate the TBS hash for custom value signer rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <returns></returns>
-        static private SiPolicy CreateSignerFromPS(PolicyCustomRules customRule)
-        {
-            string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummySignersPolicy.xml");
-
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // Scan the file to extract the TBS hash (or hashes) for the signers
-            pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile));
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyPcaRule -FilePath \"{0}\"", DUMMYPATH));
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (Exception e)
-            {
-                return null; 
-            }
-            runspace.Dispose(); 
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = DeserializeXMLtoPolicy(DUMMYPATH);
-
-            // Remove dummy file
-            File.Delete(DUMMYPATH);
-
-            return siPolicy; 
-        }
-
-        /// <summary>
-        /// Creates a list of hash rules to be used in the exceptions creation workflow. Calls the PS command to generate the hashes.
-        /// </summary>
-        /// <returns></returns>
-        static private object[] CreateHashRulesFromPS(PolicyCustomRules exceptRule)
-        {
-            // 1. Create a Deny Rule of the requested type (file attibutes, path, hash)
-            // 2. Add the Deny Rule to the SiPolicy.FileRules section
-            // 3. Return the ExceptDenyRule[] which contain the IDs of the Allow rules to add to the Signer.Exceptions
-
-            string DUMMYPATH = Path.Combine(GetTempFolderPathRoot(), "DummyHashPolicy.xml");
-
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // Scan the file to extract the TBS hash (or hashes) for the signers
-            string createRuleCmd = String.Format("$DummyHashRule += New-CIPolicyRule -Level Hash " +
-                "-DriverFilePath \"{0}\"", exceptRule.ReferenceFile);
-
-            if(exceptRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                createRuleCmd += " -Deny";
-            }
-            pipeline.Commands.AddScript(createRuleCmd); 
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", DUMMYPATH));
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-            runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy tempSiPolicy = DeserializeXMLtoPolicy(DUMMYPATH);
-
-            // Remove dummy file
-            File.Delete(DUMMYPATH);
-
-            return tempSiPolicy.FileRules; 
-        }
-
-        /// <summary>
-        /// Creates a WDAC policy for a signer rule to be used in signer rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <param name="policyPath"></param>
-        /// <returns></returns>
-        public static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath)
-        {
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // Scan the file to extract the TBS hash (or hashes for fallback) and, optionally, the CN for the signer rules
-            string newPolicyRuleCmd = string.Empty; 
-            if(customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
-            {
-                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
-            }
-            else // Publisher checkbox unselected - create a PCA rule
-            {
-                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
-            }
-
-            if(customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                newPolicyRuleCmd += " -Deny"; 
-            }
-
-            pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-
-            runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = DeserializeXMLtoPolicy(policyPath);
             return siPolicy;
         }
 
@@ -3358,120 +3276,6 @@ namespace WDAC_Wizard
             return this.CheckboxCheckStates.checkBox0 || this.CheckboxCheckStates.checkBox1
                 || this.CheckboxCheckStates.checkBox2 || this.CheckboxCheckStates.checkBox3 
                 || this.CheckboxCheckStates.checkBox4;
-        }
-    }
-
-    public class Logger
-    {
-        public StreamWriter Log;
-        public string FileName;
-
-        // Singleton pattern here we only allow one instance of the class. 
-
-        public Logger(string _FolderName)
-        {
-            string fileName = GetLoggerDst();
-            this.FileName = _FolderName + fileName;
-
-            if (!File.Exists(this.FileName))
-            {
-                this.Log = new StreamWriter(this.FileName);
-            }
-
-            this.Log.AutoFlush = true;
-            this.AddBoilerPlate(); 
-        }
-
-        public void AddInfoMsg(string info)
-        {
-            string msg = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), info);
-            this.Log.WriteLine(msg);
-        }
-        public void AddErrorMsg(string error)
-        {
-            string msg = String.Format("{0} [ERROR]: {1}", Helper.GetFormattedDateTime(), error);
-            this.Log.WriteLine(msg);
-        }
-
-        public void AddErrorMsg(string error, Exception e)
-        {
-            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e.ToString());
-            this.Log.WriteLine(msg);
-        }
-
-        public void AddErrorMsg(string error, Exception e, int lineN)
-        {
-            string msg = String.Format("{0} [ERROR] at line {1}. \r\n {2}: {3}", Helper.GetFormattedDateTime(), lineN, error, e.ToString());
-            this.Log.WriteLine(msg);
-        }
-
-        public void AddWarningMsg(string warning)
-        {
-            string msg = String.Format("{0} [WARNING]: {1}", Helper.GetFormattedDateTime(), warning);
-            this.Log.WriteLine(msg);
-        }
-
-        public void AddNewSeparationLine(string subTitle)
-        {
-            string[] msg = new string[3];
-            msg[0] = String.Format("{0} [INFO]: **********************************************************************", Helper.GetFormattedDateTime());
-            msg[1] = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), subTitle);
-            msg[2] = String.Format("{0} [INFO]: **********************************************************************", Helper.GetFormattedDateTime());
-
-            foreach(var line in msg)
-            {
-                this.Log.WriteLine(line);
-            }
-        }
-
-        /// <summary>
-        /// Sets the name for the log file based on date and time
-        /// </summary>
-        /// <returns></returns>
-        public string GetLoggerDst()
-        {
-            string fileName = String.Format("/Log_{0}_{1}.txt", Helper.GetFormattedDate(), Helper.GetFormattedTime());
-            return fileName;
-        }
-
-        /// <summary>
-        /// Closes the Log StreamWriter object
-        /// </summary>
-        public void CloseLogger()
-        {
-            //this.Log.Flush();
-            this.Log.Close(); 
-        }
-
-        /// <summary>
-        /// Adds information on the Wizard and OS like their versions
-        /// </summary>
-        private void AddBoilerPlate()
-        {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            this.AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
-            this.AddInfoMsg(String.Format("Session ID: {0}", GetInstallTime())); 
-        }
-
-        private string GetInstallTime()
-        {
-            RegistryHive rootNode = RegistryHive.LocalMachine;
-            RegistryView registryView = RegistryView.Registry64;
-            RegistryKey root = RegistryKey.OpenBaseKey(rootNode, registryView);
-            RegistryKey registryKey = root.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
-
-            RegistryValueKind subKeyValueKind = registryKey.GetValueKind("InstallTime");
-            object subKeyValue = null;
-            subKeyValue = registryKey.GetValue("InstallTime");
-
-            return subKeyValue.ToString(); /*
-
-            int dword = (int)subKeyValue;
-            string valueAsStr = true ? Convert.ToString(dword, 16).ToUpper() : dword.ToString();
-
-            string inst =  Convert.ToString(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "BuildLab", ""));
-            return valueAsStr; */
         }
     }
 }

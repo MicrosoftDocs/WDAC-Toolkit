@@ -17,7 +17,6 @@ namespace WDAC_Wizard
         // Declare an ArrayList to serve as the data store. 
         private List<EventDisplayObject> DisplayObjects;
 
-        private Logger Log;
         private SiPolicy siPolicy;
         private MainWindow _MainWindow; 
 
@@ -40,7 +39,6 @@ namespace WDAC_Wizard
             InitializeComponent();
 
             this.CiEvents = pMainWindow.CiEvents; 
-            this.Log = pMainWindow.Log;
             this._MainWindow = pMainWindow; 
             this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.EmptyWDAC);
 
@@ -349,7 +347,7 @@ namespace WDAC_Wizard
 
                 this.Invalidate();
 
-                this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
+                Logger.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
                 return false; 
             }
 
@@ -360,7 +358,7 @@ namespace WDAC_Wizard
                                                    "New Rule Creation Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Publisher = Unknown");
+                Logger.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Publisher = Unknown");
                 return false;
             }
 
@@ -370,7 +368,7 @@ namespace WDAC_Wizard
                                                    "New Rule Creation Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Empty Filename");
+                Logger.Log.AddWarningMsg("Event Log Config - Empty Filename");
                 return false;
             }
 
@@ -380,7 +378,7 @@ namespace WDAC_Wizard
                                                    "New Rule Creation Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Empty Version field");
+                Logger.Log.AddWarningMsg("Event Log Config - Empty Version field");
                 return false;
             }
 
@@ -390,7 +388,7 @@ namespace WDAC_Wizard
                                                    "New Rule Creation Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Empty Product name");
+                Logger.Log.AddWarningMsg("Event Log Config - Empty Product name");
                 return false;
             }
 
@@ -422,7 +420,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - File attributes none selected");
+                Logger.Log.AddWarningMsg("Event Log Config - File attributes none selected");
                 return false; 
             }
 
@@ -432,7 +430,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Original filename name");
+                Logger.Log.AddWarningMsg("Event Log Config - Original filename name");
                 return false;
             }
 
@@ -442,7 +440,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - File description");
+                Logger.Log.AddWarningMsg("Event Log Config - File description");
                 return false;
             }
 
@@ -452,7 +450,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Product name ");
+                Logger.Log.AddWarningMsg("Event Log Config - Product name ");
                 return false;
             }
 
@@ -462,7 +460,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Internal filename");
+                Logger.Log.AddWarningMsg("Event Log Config - Internal filename");
                 return false;
             }
 
@@ -472,7 +470,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Package Family Name ");
+                Logger.Log.AddWarningMsg("Event Log Config - Package Family Name ");
                 return false;
             }
 
@@ -497,7 +495,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - Path rules none selected");
+                Logger.Log.AddWarningMsg("Event Log Config - Path rules none selected");
                 return false;
             }
 
@@ -507,7 +505,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - empty file path field");
+                Logger.Log.AddWarningMsg("Event Log Config - empty file path field");
                 return false;
             }
             
@@ -517,7 +515,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - empty folder path field");
+                Logger.Log.AddWarningMsg("Event Log Config - empty folder path field");
                 return false; 
             }
 
@@ -538,7 +536,7 @@ namespace WDAC_Wizard
                     "New Rule Creation Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                this.Log.AddWarningMsg("Event Log Config - hash rules none selected");
+                Logger.Log.AddWarningMsg("Event Log Config - hash rules none selected");
                 return false;
             }
 

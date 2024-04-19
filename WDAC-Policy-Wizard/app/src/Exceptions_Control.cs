@@ -14,7 +14,6 @@ namespace WDAC_Wizard
 {
     public partial class Exceptions_Control : UserControl
     {
-        private Logger Log;
         private PolicyCustomRules ExceptionRule;     // One instance of a custom rule. Appended to Policy.CustomRules
         private PolicyCustomRules CustomRule;
         private CustomRuleConditionsPanel ConditionsPanel;
@@ -35,7 +34,6 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
             this.ExceptionRule = new PolicyCustomRules();
-            this.Log = pRuleConditionsPanel.Log;
             this.CustomRule = pRuleConditionsPanel.PolicyCustomRule;
             this.ConditionsPanel = pRuleConditionsPanel;
 
@@ -114,7 +112,7 @@ namespace WDAC_Wizard
                 default:
                     break;
             }
-            this.Log.AddInfoMsg(String.Format("Exception File Rule Level Set to {0}", selectedOpt));
+            Logger.Log.AddInfoMsg(String.Format("Exception File Rule Level Set to {0}", selectedOpt));
         }
 
         /// <summary>
@@ -129,7 +127,7 @@ namespace WDAC_Wizard
             {
                 // Set CustomRule conditios panel need method
                 this.ConditionsPanel.SetLabel_ErrorText("Please set exception rule type first");
-                this.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
+                Logger.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
                 return;
             }
 

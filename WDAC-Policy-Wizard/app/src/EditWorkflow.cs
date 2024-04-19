@@ -15,7 +15,6 @@ namespace WDAC_Wizard
     {
         public string EditPath { get; set; }
         private int NumberRules; 
-        private Logger Log; 
         private MainWindow _MainWindow;
         private WDAC_Policy Policy;
         private Runspace runspace;
@@ -43,8 +42,7 @@ namespace WDAC_Wizard
             this._MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
             this._MainWindow.RedoFlowRequired = false;
             this.Policy = this._MainWindow.Policy; 
-            this.Log = this._MainWindow.Log;
-            this.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
+            Logger.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
             this.Workflow = WorkflowType.Edit; // Edit xml is default in the UI
             this.EventLogPaths = new List<string>();
         }
@@ -70,7 +68,7 @@ namespace WDAC_Wizard
                 }
             }
                        
-            this.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
+            Logger.Log.AddInfoMsg("Browsing for existing WDAC Policy on file.");
             string policyPath = String.Empty; 
 
             try
@@ -98,7 +96,7 @@ namespace WDAC_Wizard
 
             catch(Exception exp)
             {
-                this.Log.AddErrorMsg("EditWorkflow Browse() encountered the following error ", exp); 
+                Logger.Log.AddErrorMsg("EditWorkflow Browse() encountered the following error ", exp); 
             }
         }
 
@@ -141,7 +139,7 @@ namespace WDAC_Wizard
                     "This is typically a result of a malformed policy.",
                     "Policy Parsing Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                this.Log.AddErrorMsg("ParsePolicy encountered the following error message" + e.ToString()); 
+                Logger.Log.AddErrorMsg("ParsePolicy encountered the following error message" + e.ToString()); 
                 this._MainWindow.ErrorOnPage = true;
             }
         }
@@ -340,14 +338,14 @@ namespace WDAC_Wizard
             // Unsuccessful conversion
             if (e.Error != null)
             {
-                this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                Logger.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
                 this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
             }
             else if(this._MainWindow.CiEvents == null)
             {
-                this.Log.AddErrorMsg(AdvancedHunting.GetLastError());
+                Logger.Log.AddErrorMsg(AdvancedHunting.GetLastError());
                 this.parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
@@ -355,7 +353,7 @@ namespace WDAC_Wizard
             }
             else if(this._MainWindow.CiEvents.Count < 1)
             {
-                this.Log.AddErrorMsg("Zero CiEvents were created.");
+                Logger.Log.AddErrorMsg("Zero CiEvents were created.");
                 this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true; 
@@ -369,7 +367,7 @@ namespace WDAC_Wizard
                 this._MainWindow.ErrorOnPage = false;
             }
 
-            this.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
+            Logger.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
         }
 
 
@@ -388,7 +386,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
             }
         }
 
@@ -493,7 +491,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg(String.Format("Launching {0} encountered the following error", webpage), exp);
+                Logger.Log.AddErrorMsg(String.Format("Launching {0} encountered the following error", webpage), exp);
             }
         }
 

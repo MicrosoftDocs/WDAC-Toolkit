@@ -23,7 +23,6 @@ namespace WDAC_Wizard
         public PolicyCustomRules PolicyCustomRule;     // One instance of a custom rule. Appended to Policy.CustomRules
         private List<string> AllFilesinFolder;          // List to track all files in a folder 
 
-        public Logger Log;
         private MainWindow _MainWindow;
         private SigningRules_Control SigningControl;
         public bool RuleInEdit = false;
@@ -53,8 +52,7 @@ namespace WDAC_Wizard
             this._MainWindow = pControl._MainWindow;
             this._MainWindow.RedoFlowRequired = false;
             this._MainWindow.CustomRuleinProgress = true;
-            this.Log = this._MainWindow.Log;
-            this.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
+            Logger.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
             this.SigningControl = pControl;
             this.RuleInEdit = true;
             this.state = UIState.RuleConditions;
@@ -97,7 +95,7 @@ namespace WDAC_Wizard
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.ComInvalidGuid;
-                    this.Log.AddWarningMsg("Invalid COM Object Guid " + this.PolicyCustomRule.COMObject.Guid);
+                    Logger.Log.AddWarningMsg("Invalid COM Object Guid " + this.PolicyCustomRule.COMObject.Guid);
                     return; 
                 }
 
@@ -136,7 +134,7 @@ namespace WDAC_Wizard
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.InvalidCheckboxState;
-                    this.Log.AddWarningMsg("Invalid checkbox state. No checkboxes selected.");
+                    Logger.Log.AddWarningMsg("Invalid checkbox state. No checkboxes selected.");
                     return;
                 }
 
@@ -145,13 +143,13 @@ namespace WDAC_Wizard
                     if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
                     {
                         warnUser = true; 
-                        this.Log.AddWarningMsg("PCACertificate field with null attribute");
+                        Logger.Log.AddWarningMsg("PCACertificate field with null attribute");
                     }
 
                     if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(this.textBoxSlider_1.Text))
                     {
                         warnUser = true;
-                        this.Log.AddWarningMsg("Publisher field with null attribute");
+                        Logger.Log.AddWarningMsg("Publisher field with null attribute");
                     }
 
                     if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4 && !Helper.IsValidText(this.textBoxSlider_4.Text))
@@ -166,7 +164,7 @@ namespace WDAC_Wizard
                         string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.EKUFriendly.Trim());
                         if (String.IsNullOrEmpty(ekuTLVEncoded))
                         {
-                            this.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " + this.PolicyCustomRule.EKUFriendly);
+                            Logger.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " + this.PolicyCustomRule.EKUFriendly);
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
                             return;
@@ -215,7 +213,7 @@ namespace WDAC_Wizard
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.PFNEmptyList_Error;
-                    this.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
+                    Logger.Log.AddWarningMsg("Create button rule selected with an empty packaged app list.");
                     return;
                 }
                 else
@@ -238,7 +236,7 @@ namespace WDAC_Wizard
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.RuleLevelEmptyList_Error;
-                    this.Log.AddWarningMsg("Create button rule selected with an empty folder scan rule level list.");
+                    Logger.Log.AddWarningMsg("Create button rule selected with an empty folder scan rule level list.");
                     return;
                 }
                 // Set the rule level ordered list
@@ -271,7 +269,7 @@ namespace WDAC_Wizard
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidPublisherFormat_Error;
-                        this.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", this.PolicyCustomRule.CustomValues.Publisher));
+                        Logger.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", this.PolicyCustomRule.CustomValues.Publisher));
                         return;
                     }
                     else
@@ -302,7 +300,7 @@ namespace WDAC_Wizard
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidVersionFormat_Error; 
-                        this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MinVersion));
+                        Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MinVersion));
                         return;
                     }
 
@@ -313,7 +311,7 @@ namespace WDAC_Wizard
                         {
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
-                            this.Log.AddWarningMsg(String.Format("Invalid version format for CustomMaxVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
+                            Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMaxVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
                             return;
                         }
 
@@ -321,7 +319,7 @@ namespace WDAC_Wizard
                         {
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidVersionRange_Error;
-                            this.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
+                            Logger.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
                             return;
                         }
                     }
@@ -335,7 +333,7 @@ namespace WDAC_Wizard
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidPath_Error;
-                        this.Log.AddWarningMsg("Invalid custom path rule for path: " + this.PolicyCustomRule.CustomValues.Path);
+                        Logger.Log.AddWarningMsg("Invalid custom path rule for path: " + this.PolicyCustomRule.CustomValues.Path);
                         return;
                     }
 
@@ -344,14 +342,14 @@ namespace WDAC_Wizard
                     if(Helper.GetNumberofWildcards(this.PolicyCustomRule.CustomValues.Path) > 1
                        && Properties.Settings.Default.warnWildcardPath)
                     {
-                        this.Log.AddWarningMsg("Warning - Path Rule Windows Version Support for path: " + this.PolicyCustomRule.CustomValues.Path);
+                        Logger.Log.AddWarningMsg("Warning - Path Rule Windows Version Support for path: " + this.PolicyCustomRule.CustomValues.Path);
 
                         var res = MessageBox.Show(Properties.Resources.PathRule_Warning,
                                                   "Warning - Path Rule Windows Version Support",
                                                   MessageBoxButtons.YesNoCancel, 
                                                   MessageBoxIcon.Warning);
 
-                        this.Log.AddInfoMsg("Message box result: " + res.ToString());
+                        Logger.Log.AddInfoMsg("Message box result: " + res.ToString());
 
                         // User wants to modify the rule
                         // Escape the checks so they may edit the path
@@ -367,7 +365,7 @@ namespace WDAC_Wizard
                             Properties.Settings.Default.warnWildcardPath = false;
                             Properties.Settings.Default.Save();
 
-                            this.Log.AddInfoMsg("Set warnWildcardPath to: false");
+                            Logger.Log.AddInfoMsg("Set warnWildcardPath to: false");
                         }
                     }
                 }
@@ -394,7 +392,7 @@ namespace WDAC_Wizard
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.HashEmptyList_Error;
-                        this.Log.AddWarningMsg("Zero hash values located.");
+                        Logger.Log.AddWarningMsg("Zero hash values located.");
                         return;
                     }
 
@@ -427,7 +425,7 @@ namespace WDAC_Wizard
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
-                this.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
+                Logger.Log.AddWarningMsg("Invalid signing scenarios checkbox state. No checkboxes selected.");
                 return false;
             }
 
@@ -439,7 +437,7 @@ namespace WDAC_Wizard
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidKMCIRule;
-                this.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
+                Logger.Log.AddWarningMsg("KMCI rule scoping set for PFN or path rule.");
                 return false;
             }
 
@@ -455,7 +453,7 @@ namespace WDAC_Wizard
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.InvalidRule_Error;
-                    this.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
+                    Logger.Log.AddWarningMsg("Create button rule selected without allow/deny setting and a reference file.");
                     return false;
                 }
             }
@@ -480,7 +478,7 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.Yes)
                 {
-                    this.Log.AddInfoMsg("Proceeding with Rule Creation anyway. Rule may fallback to hash");
+                    Logger.Log.AddInfoMsg("Proceeding with Rule Creation anyway. Rule may fallback to hash");
                 }
                 else
                 {
@@ -495,7 +493,7 @@ namespace WDAC_Wizard
             string files = String.Empty;
             string exceptions = String.Empty;
 
-            this.Log.AddInfoMsg("--- New Custom Rule Added ---");
+            Logger.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
             // Set Action/Permission value to Allow or Deny
             action = this.PolicyCustomRule.Permission.ToString();
@@ -673,7 +671,7 @@ namespace WDAC_Wizard
                 exceptions.Trim(';');
             }
 
-            this.Log.AddInfoMsg(String.Format("Custom {0} created: {1} - {2} - {3} - {4} ", scope, action, level, name, files));
+            Logger.Log.AddInfoMsg(String.Format("Custom {0} created: {1} - {2} - {3} - {4} ", scope, action, level, name, files));
             return new string[5] { action, level, name, files, exceptions };
         }
 
@@ -782,7 +780,7 @@ namespace WDAC_Wizard
                     break;
             }
 
-            this.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
+            Logger.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
 
             // Returned back from exceptions to change Rule Type - Redo is required
             if(this.exceptionsControl != null)
@@ -843,7 +841,7 @@ namespace WDAC_Wizard
             {
                 label_Error.Visible = true;
                 label_Error.Text = "Please select a rule type first.";
-                this.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
+                Logger.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
                 return;
             }
 
@@ -929,7 +927,7 @@ namespace WDAC_Wizard
                 // Check that the parsed certificate chain uses supported crytpo
                 if(Helper.IsCryptoInvalid(certChain))
                 {
-                    this.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName));
+                    Logger.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName));
                     this.PolicyCustomRule.SupportedCrypto = false;
                     return; 
                 }
@@ -937,7 +935,7 @@ namespace WDAC_Wizard
 
             catch (Exception exp)
             {
-                this._MainWindow.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
+                Logger.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
                 this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
                 this.label_Error.Visible = true;
             }
@@ -1303,7 +1301,7 @@ namespace WDAC_Wizard
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
-                this.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path and hash rules cannot be excepted.");
+                Logger.Log.AddWarningMsg("Cannot proceed to Exceptions Panel. Path and hash rules cannot be excepted.");
                 return;
             }
 
@@ -1542,7 +1540,7 @@ namespace WDAC_Wizard
         {
             label_Error.Visible = true;
             label_Error.Text = Properties.Resources.InvalidAttributeSelection_Error;
-            this.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
+            Logger.Log.AddWarningMsg("Create button rule selected with an empty file attribute.");
         }
 
         /// <summary>
@@ -1575,7 +1573,7 @@ namespace WDAC_Wizard
             }
 
             this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
-            this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+            Logger.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
 
             // Returned back from exceptions to change Rule Type - Redo is required
             if (this.exceptionsControl != null)
@@ -1592,7 +1590,7 @@ namespace WDAC_Wizard
         private void RadioButton_Allow_Click(object sender, EventArgs e)
         {
             this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Allow;
-            this.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+            Logger.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
 
             // Returned back from exceptions to change Rule Type - Redo is required
             if (this.exceptionsControl != null)
@@ -2060,7 +2058,7 @@ namespace WDAC_Wizard
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.PFNSearch_Warn;
-                this.Log.AddWarningMsg("Empty packaged app search criteria");
+                Logger.Log.AddWarningMsg("Empty packaged app search criteria");
                 return;
             }
 
@@ -2120,7 +2118,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
+                Logger.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", exp));
             }
         }
 
@@ -2137,18 +2135,18 @@ namespace WDAC_Wizard
             // Unsuccessful conversion
             if (e.Error != null)
             {
-                this.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
+                Logger.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
                 
             }
 
-            this.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
+            Logger.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
 
             // Check for the case where no packages were found and return
             if (this.FoundPackages.Count == 0)
             {
                 label_Error.Visible = true;
                 label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
-                this.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                Logger.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
                 return;
             }
 
@@ -2507,7 +2505,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", Properties.Resources.MSDocLink_ComObjects), exp);
+                Logger.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", Properties.Resources.MSDocLink_ComObjects), exp);
             }
         }
 
@@ -2595,7 +2593,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", 
+                Logger.Log.AddErrorMsg(String.Format("Launching {0} for policy options link encountered the following error", 
                                      Properties.Resources.MSDocLink_RuleLevels), exp);
             }
         }

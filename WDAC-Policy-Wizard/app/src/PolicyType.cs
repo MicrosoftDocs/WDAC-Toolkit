@@ -19,19 +19,17 @@ namespace WDAC_Wizard
 
         private MainWindow _MainWindow;
         private WDAC_Policy _Policy;
-        private Logger Log; 
 
         public PolicyType(MainWindow pMainWindow)
         {
             InitializeComponent();
             this._MainWindow = pMainWindow;
             this._Policy = pMainWindow.Policy;
-            this.Log = this._MainWindow.Log;
 
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false;
 
-            this.Log.AddInfoMsg("==== Policy Type Page Initialized ====");
+            Logger.Log.AddInfoMsg("==== Policy Type Page Initialized ====");
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace WDAC_Wizard
                 TextBoxBasePolicyID_Reformat();
 
                 // Log state
-                this._MainWindow.Log.AddInfoMsg("New supplemental policy flow. Clearing Policy ID and electing for base path");
+                Logger.Log.AddInfoMsg("New supplemental policy flow. Clearing Policy ID and electing for base path");
             }
 
             // Hide the validation panel
@@ -188,7 +186,7 @@ namespace WDAC_Wizard
                 if (res == DialogResult.Yes)
                 {
                     // Run command Set-RuleOption -Option 17, check IsPolicyExtendable again
-                    this._MainWindow.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
+                    Logger.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
                     bool success = AddSupplementalOption(this.BaseToSupplementPath);
 
                     // If adding supplemental option was unsuccessful for any reason
@@ -235,7 +233,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
+                Logger.Log.AddErrorMsg("Reading the xml CI policy encountered the following error ", exp);
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your base CI policy xml file. The policy XML appears to be corrupted.",
                     "Parsing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -253,12 +251,12 @@ namespace WDAC_Wizard
                 return 99;
             }
 
-            this.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", policyToSupplement.siPolicy.PolicyType.ToString()));
+            Logger.Log.AddInfoMsg(String.Format("IsPolicyExtendable -- Policy Type: {0}", policyToSupplement.siPolicy.PolicyType.ToString()));
             
             if(policyToSupplement.siPolicy.PolicyType.ToString().Contains("Supplemental"))
             {
                 // Policy is not base -- not going to fix this case
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2 (is a supplemental policy)");
+                Logger.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 2 (is a supplemental policy)");
                 return 2;
             }
 
@@ -266,7 +264,7 @@ namespace WDAC_Wizard
             if(String.IsNullOrEmpty(policyToSupplement.siPolicy.PolicyID)
                 || policyToSupplement.siPolicy.PolicyID.Contains(Properties.Resources.LegacyPolicyID_GUID))
             {
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 3 (legacy GUID)");
+                Logger.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 3 (legacy GUID)");
                 return 3;
             }
 
@@ -278,13 +276,13 @@ namespace WDAC_Wizard
             // if both allows supplemental policies, and this policy is not already a supplemental policy (ie. a base)
             if (allowsSupplemental)
             {
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 0 (allows supplemental)"); 
+                Logger.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 0 (allows supplemental)"); 
                 return 0; 
             }
             else
             {
                 // Policy does not have the supplemental rule option -- can fix this case
-                this.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 1 (multi-base setting supplemental)");
+                Logger.Log.AddInfoMsg("IsPolicyExtendable -- returns error code 1 (multi-base setting supplemental)");
                 return 1; 
             }
         }
@@ -416,7 +414,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("SetPolicyRuleOptions() caught the following exception ", exp);
+                Logger.Log.AddErrorMsg("SetPolicyRuleOptions() caught the following exception ", exp);
                 return false; 
             }
         }
@@ -453,7 +451,7 @@ namespace WDAC_Wizard
 
             // Set policy format in Policy object
             this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
-            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
         }
 
         // <summary>
@@ -470,7 +468,7 @@ namespace WDAC_Wizard
 
             // Set policy format in Policy object
             this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
-            this.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
 
             // Set policy type 
             this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
@@ -508,7 +506,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for multipolicy link encountered the following error", exp);
             }
         }
 
@@ -526,7 +524,7 @@ namespace WDAC_Wizard
                 this._MainWindow.ErrorOnPage = false;
 
                 // Log state
-                this._MainWindow.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: {0}", result.ToString()));
+                Logger.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: {0}", result.ToString()));
             }
             else
             {
@@ -567,7 +565,7 @@ namespace WDAC_Wizard
                 basePolicyValidation_Panel.Visible = false;
 
                 // Log state
-                this._MainWindow.Log.AddInfoMsg("New supplemental policy flow. Clearing XML path and electing for base policy ID");
+                Logger.Log.AddInfoMsg("New supplemental policy flow. Clearing XML path and electing for base policy ID");
             }
 
             // Clear the example text, if applicable

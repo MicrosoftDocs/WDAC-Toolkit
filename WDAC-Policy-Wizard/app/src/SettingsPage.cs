@@ -21,7 +21,6 @@ namespace WDAC_Wizard
     {
         private Dictionary<string, bool> SettingsDict;
         private MainWindow _MainWindow;
-        private Logger Log; 
 
         public SettingsPage(MainWindow pMainWindow)
         {
@@ -29,7 +28,6 @@ namespace WDAC_Wizard
             ShowVersionNumber();
 
             this._MainWindow = pMainWindow;
-            this.Log = pMainWindow.Log; 
             this.SettingsDict = new Dictionary<string, bool>(); 
         }
 
@@ -257,7 +255,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for Terms of Use link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for Terms of Use link encountered the following error", exp);
             }
 
         }
@@ -277,7 +275,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for Privacy agreement link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for Privacy agreement link encountered the following error", exp);
             }
 
         }
@@ -308,7 +306,7 @@ namespace WDAC_Wizard
                     string settingVal = settingNode.InnerText;
                     this.SettingsDict[settingName] = settingVal=="True";
 
-                    this.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
+                    Logger.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
                 }
 
                 // Set the UI state for all the checkboxes
@@ -331,7 +329,7 @@ namespace WDAC_Wizard
         private void SettingsPage_Load(object sender, EventArgs e)
         {
             // On load, configure UI to match the app settings
-            this.Log.AddNewSeparationLine("Settings Page Load"); 
+            Logger.Log.AddNewSeparationLine("Settings Page Load"); 
 
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
@@ -340,10 +338,10 @@ namespace WDAC_Wizard
             this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
             this.SettingsDict.Add("useDarkMode", (bool)Properties.Settings.Default.useDarkMode);
 
-            this.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
+            Logger.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
             foreach (var key in this.SettingsDict.Keys)
             {
-                this.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
+                Logger.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
             }
 
             // Set the UI state for all the checkboxes
@@ -392,7 +390,7 @@ namespace WDAC_Wizard
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
                 }
 
-                this.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
+                Logger.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
             }            
         }
 
@@ -463,7 +461,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for Driver recommended Blocklist link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for Driver recommended Blocklist link encountered the following error", exp);
             }
         }
 
@@ -482,7 +480,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for user mode recommended Blocklist link encountered the following error", exp);
             }
         }
 
