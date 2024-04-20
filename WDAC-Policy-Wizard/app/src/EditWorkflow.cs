@@ -308,7 +308,28 @@ namespace WDAC_Wizard
             }
             else if(this.Workflow == WorkflowType.AdvancedHunting)
             {
-                this._MainWindow.CiEvents = AdvancedHunting.ReadAdvancedHuntingCsvFiles(this.EventLogPaths);
+                // Process CSV file(s) as if they are Advanced Hunting and LogAnalytics
+
+                List<CiEvent> aHuntingEvents = AdvancedHunting.ReadAdvancedHuntingCsvFiles(this.EventLogPaths);
+                List<CiEvent> lAnalyticEvents = LogAnalytics.ReadLogAnalyticCsvFiles(this.EventLogPaths); 
+
+                if(aHuntingEvents != null)
+                {
+                    this._MainWindow.CiEvents = aHuntingEvents; 
+                }
+
+                if(lAnalyticEvents != null)
+                {
+                    if (this._MainWindow.CiEvents == null)
+                    {
+                        this._MainWindow.CiEvents = lAnalyticEvents; 
+                    }
+                    else
+                    {
+                        this._MainWindow.CiEvents.AddRange(lAnalyticEvents);
+                    }
+                }
+
             }
             else
             {
