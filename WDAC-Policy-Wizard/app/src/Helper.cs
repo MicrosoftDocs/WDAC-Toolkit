@@ -52,9 +52,6 @@ namespace WDAC_Wizard
             string logicalDisk = windowsDir.Substring(0, windowsDir.Length - WINDOWS_L); // Gets the logical disk name string of the harddrive
 
             // Regex replace to take the NT path and convert to DOS Path
-
-            string pattern = @"\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\";
-
             Regex regex = new Regex("\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\", RegexOptions.IgnoreCase);
             Match match = regex.Match(NTPath);
             if (match.Success)
