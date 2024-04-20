@@ -77,8 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
-    <Compile Include="PolicyHelper.cs" />
+    <Compile Include="src\Logger.cs" />
+    <Compile Include="src\PolicyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -86,7 +86,7 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Properties\Settings.cs" />
-    <Compile Include="PSCmdlets.cs" />
+    <Compile Include="src\PSCmdlets.cs" />
     <Compile Include="src\AdvancedHunting.cs" />
     <Compile Include="src\BuildPage.cs">
       <SubType>UserControl</SubType>
