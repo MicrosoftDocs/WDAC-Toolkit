@@ -137,7 +137,7 @@ namespace WDAC_Wizard
             {
                 try
                 {
-                    Process.Start(this.XmlFilePath);
+                    Process.Start(new ProcessStartInfo(this.XmlFilePath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {

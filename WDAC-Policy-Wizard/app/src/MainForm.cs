@@ -41,8 +41,6 @@ namespace WDAC_Wizard
         public WDAC_Policy Policy { get; set; }
         public List<CiEvent> CiEvents { get; set; }
 
-        // Runspace param to access all PS Variables and eliminate overhead opening each time
-        private Runspace runspace;
         private int RulesNumber;
         private int nCustomValueRules;
 
@@ -77,7 +75,7 @@ namespace WDAC_Wizard
             this.Policy = new WDAC_Policy();
             this.CiEvents = new List<CiEvent>(); 
             this.PageList = new List<string>();
-            this.ExeFolderPath = GetExecutablePath(false);
+            this.ExeFolderPath = Helper.GetExecutablePath(false);
 
             this.CustomRuleinProgress = false; 
 
@@ -805,9 +803,6 @@ namespace WDAC_Wizard
                 Logger.Log.AddErrorMsg("Process Policy() caught the following exception ", e);
             }
            
-            this.runspace = RunspaceFactory.CreateRunspace();
-            this.runspace.Open();
-
             Logger.Log.AddNewSeparationLine("Workflow -- Building Policy Underway"); 
 
             // Write all policy, file and signer rules to xml files:
@@ -1198,8 +1193,6 @@ namespace WDAC_Wizard
             {
                 Logger.Log.AddErrorMsg(String.Format("Exception encountered in SetAdditionalParameters(): {0}", e));
             }
-            
-            runspace.Dispose();
         }
 
         /// <summary>
@@ -1283,8 +1276,6 @@ namespace WDAC_Wizard
                 }
             }
 
-            //TODO: results check ensuring 
-            runspace.Dispose();
             return customRulesPathList;
         }
 
@@ -1962,23 +1953,6 @@ namespace WDAC_Wizard
         private void FormClosing_Event(object sender, FormClosingEventArgs e)
         {
             Logger.Log.CloseLogger();
-        }
-
-        /// <summary>
-        /// Get exe/assembly path  
-        /// /// </summary>
-        private string GetExecutablePath(bool exePath)
-        {
-            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string folderPath = System.IO.Path.GetDirectoryName(executablePath);
-            if (exePath)
-            {
-                return executablePath;
-            }
-            else
-            {
-                return folderPath;
-            }
         }
 
         /// <summary>

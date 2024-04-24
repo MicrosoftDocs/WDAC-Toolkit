@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Management.Automation.Runspaces;
+using System.Diagnostics;
 
 namespace WDAC_Wizard
 {
@@ -382,7 +383,7 @@ namespace WDAC_Wizard
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control"
                     + "/audit-windows-defender-application-control-policies#create-a-windows-defender-application-control-policy-that-captures-audit-information-from-the-event-log";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -487,7 +488,7 @@ namespace WDAC_Wizard
             string webpage = "https://aka.ms/wdacWizardAHParsing";
             try
             {
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {

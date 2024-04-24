@@ -60,9 +60,7 @@
     <Compile Update="src\SigningRules_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="src\TemplatePage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Update="src\TemplatePage.cs" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.ConfigTemplate_Control.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.PolicyType.resources" />

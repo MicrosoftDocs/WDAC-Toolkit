@@ -903,7 +903,15 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.OK)
                 {
-                    System.Diagnostics.Process.Start("https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability");
+                    try
+                    {
+                        string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability";
+                        Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log.AddErrorMsg("Launching webpage for LicenseCheck encountered the following exception", ex);
+                    }
                 }
             }
         }
@@ -926,6 +934,25 @@ namespace WDAC_Wizard
         public static string GetTempFolderPathRoot()
         {
             return Path.Combine(Path.GetTempPath(), "WDACWizard");
+        }
+
+        /// <summary>
+        /// Gets the path to the WDACWizard.exe executable and its parent directory
+        /// </summary>
+        /// <param name="exePath"></param>
+        /// <returns></returns>
+        internal static string GetExecutablePath(bool exePath)
+        {
+            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string folderPath = System.IO.Path.GetDirectoryName(executablePath);
+            if (exePath)
+            {
+                return executablePath;
+            }
+            else
+            {
+                return folderPath;
+            }
         }
 
         /// <summary>

@@ -3,16 +3,11 @@
 // jogeurte 11/19
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
-using System.Timers; 
+using System.Drawing;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace WDAC_Wizard
 {
@@ -260,7 +255,7 @@ namespace WDAC_Wizard
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/" +
                     "windows-defender-application-control/use-windows-defender-application-control-with-" +
                     "intelligent-security-graph";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -310,7 +305,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/example-wdac-base-policies";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {

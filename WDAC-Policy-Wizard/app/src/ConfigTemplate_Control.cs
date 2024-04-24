@@ -4,17 +4,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using WDAC_Wizard.Properties;
-using System.Xml.Serialization; 
 
 namespace WDAC_Wizard
 {
@@ -755,7 +751,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -770,7 +766,7 @@ namespace WDAC_Wizard
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/" +
                     "windows-defender-application-control/select-types-of-rules-to-create";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {

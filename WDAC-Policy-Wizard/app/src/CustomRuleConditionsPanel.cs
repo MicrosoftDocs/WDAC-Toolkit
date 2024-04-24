@@ -2501,7 +2501,7 @@ namespace WDAC_Wizard
             // Label for learn more about policy options clicked. Launch msft docs page. 
             try
             {
-                System.Diagnostics.Process.Start(Properties.Resources.MSDocLink_ComObjects);
+                Process.Start(new ProcessStartInfo(Properties.Resources.MSDocLink_ComObjects) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -2589,7 +2589,7 @@ namespace WDAC_Wizard
             // Label for learn more about policy options clicked. Launch msft docs page. 
             try
             {
-                System.Diagnostics.Process.Start(Properties.Resources.MSDocLink_RuleLevels);
+                Process.Start(new ProcessStartInfo(Properties.Resources.MSDocLink_RuleLevels) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
