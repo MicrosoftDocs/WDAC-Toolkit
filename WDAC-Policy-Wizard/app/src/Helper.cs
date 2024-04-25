@@ -45,6 +45,11 @@ namespace WDAC_Wizard
             All = 4         // -Show . all files
         }
 
+        /// <summary>
+        /// Converts a path like \Device\HarddiskVolume3\Windows\System32\wbem\WMIC.exe to "C\Windows\System32\wbem\WMIC.exe
+        /// </summary>
+        /// <param name="NTPath">Path containing \Device\HarddiskVolume3</param>
+        /// <returns>A converted path like C:\Windows</returns>
         public static string GetDOSPath(string NTPath)
         {
             string windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
@@ -68,8 +73,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Helper function to call OpenFileDialog and multi-select files
         /// </summary>
-        /// <param name="displayTitle"></param>
-        /// <param name="browseFileType"></param>
+        /// <param name="displayTitle">Title to display on the Open File Dialog UI</param>
+        /// <param name="browseFileType">Enum of types of files supported by the Wizard for opening</param>
         /// <returns>String list of file paths if paths found and user clicks OK. Null otherwise</returns>
         public static List<string> BrowseForMultiFiles(string displayTitle, BrowseFileType browseFileType)
         {
@@ -115,17 +120,17 @@ namespace WDAC_Wizard
         /// <summary>
         /// Browse for single file path using OpenFileDialog
         /// </summary>
-        /// <param name="displayTitle"></param>
-        /// <param name="browseFile"></param>
+        /// <param name="displayTitle">Title to display on the Open File Dialog UI</param>
+        /// <param name="browseFileType">Enum of types of files supported by the Wizard for opening</param>
         /// <returns>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
-        public static string BrowseForSingleFile(string displayTitle, BrowseFileType browseFile)
+        public static string BrowseForSingleFile(string displayTitle, BrowseFileType browseFileType)
         {
             // Open file dialog to get file or folder path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = displayTitle;
             openFileDialog.CheckPathExists = true;
 
-            if (browseFile.Equals(BrowseFileType.PEFile))
+            if (browseFileType.Equals(BrowseFileType.PEFile))
             {
                 openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
                 "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS;*.JS|" +
@@ -135,11 +140,11 @@ namespace WDAC_Wizard
 
                 openFileDialog.FilterIndex = 4; // Display All Binary Files by default (everything)
             }
-            else if (browseFile.Equals(BrowseFileType.Policy))
+            else if (browseFileType.Equals(BrowseFileType.Policy))
             {
                 openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
             }
-            else if (browseFile.Equals(BrowseFileType.CsvFile))
+            else if (browseFileType.Equals(BrowseFileType.CsvFile))
             {
                 openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
             }
@@ -160,7 +165,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Browse for foler path using the FolderBrowserDialog
         /// </summary>
-        /// <param name="displayTitle"></param>
+        /// <param name="displayTitle">Title to display on the Open File Dialog UI</param>
         /// <returns></returns>
         public static string GetFolderPath(string displayTitle)
         {
@@ -181,8 +186,10 @@ namespace WDAC_Wizard
         /// <summary>
         /// Open SaveFileDialog for a single file
         /// </summary>
-        /// <returns>>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
-        public static string SaveSingleFile(string displayTitle, BrowseFileType browseFile)
+        /// <param name="displayTitle">Title to display on the Open File Dialog UI</param>
+        /// <param name="browseFileType">Enum of types of files supported by the Wizard for saving</param>
+        /// <returns>Path to file if user selects Ok and file exists. String.Empty otherwise</returns>
+        public static string SaveSingleFile(string displayTitle, BrowseFileType browseFileType)
         {
             string saveLocationPath = String.Empty;
 
@@ -191,7 +198,7 @@ namespace WDAC_Wizard
             saveFileDialog.Title = displayTitle;
             saveFileDialog.CheckPathExists = true;
 
-            if (browseFile == BrowseFileType.Policy)
+            if (browseFileType == BrowseFileType.Policy)
             {
                 saveFileDialog.Filter = "Policy Files (*.xml)|*.xml";
             }
@@ -208,12 +215,11 @@ namespace WDAC_Wizard
             return saveLocationPath;
         }
 
-        //
-        // Summary:
-        //     Scans the input string folderPth and finds the filepath with the greatest _ID. 
-        //      
-        // Returns:
-        //     String with the newest _ID filename. example) policy_44.xml 
+        /// <summary>
+        /// Scans the input string folderPth and finds the filepath with the greatest _ID
+        /// </summary>
+        /// <param name="folderPth">Path to the folder where to scan for a unique file</param>
+        /// <returns>String with the newest _ID filename. example) policy_44.xml</returns>
         public static string GetUniquePolicyPath(string folderPth)
         {
             string newUniquePath = "";
@@ -256,7 +262,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Deserialize the xml policy on disk to SiPolicy
         /// </summary>
-        /// <param name="xmlPath"></param>
+        /// <param name="xmlPath">Path to the xml file on disk</param>
         /// <returns>SiPolicy object</returns>
         public static SiPolicy DeserializeXMLtoPolicy(string xmlPath)
         {
@@ -284,7 +290,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Deserialize the xml policy string to SiPolicy
         /// </summary>
-        /// <param name="xmlPath"></param>
+        /// <param name="xmlPath">Path to the xml file on disk</param>
         /// <returns>SiPolicy object</returns>
         public static SiPolicy DeserializeXMLStringtoPolicy(string xmlContents)
         {
@@ -316,7 +322,7 @@ namespace WDAC_Wizard
         /// Serialize the SiPolicy object to XML file
         /// </summary>
         /// <param name="siPolicy">SiPolicy object</param>
-        /// <param name="xmlPath">Path to serialize the SiPolicy to</param>
+        /// <param name="xmlPath">Path on disk to serialize the SiPolicy to</param>
         public static void SerializePolicytoXML(SiPolicy siPolicy, string xmlPath)
         {
             if (siPolicy == null || xmlPath == null)
@@ -350,6 +356,11 @@ namespace WDAC_Wizard
             return true;
         }
 
+        /// <summary>
+        /// Formats the CN of the certificate subject
+        /// </summary>
+        /// <param name="publisher">Subject of the publisher containing all the CN=, L=, etc.</param>
+        /// <returns></returns>
         public static string FormatPublisherCN(string publisher)
         {
             string formattedPub;
@@ -372,6 +383,11 @@ namespace WDAC_Wizard
             return formattedPub;
         }
 
+        /// <summary>
+        /// Checks for empty/null or "N/A" in the provided text
+        /// </summary>
+        /// <param name="text">Text string to verify</param>
+        /// <returns></returns>
         public static bool IsValidText(string text)
         {
             if (String.IsNullOrWhiteSpace(text))
@@ -426,8 +442,11 @@ namespace WDAC_Wizard
             return false;
         }
 
-        // Check that version has 4 parts (follows ww.xx.yy.zz format)
-        // And each part < 2^16
+        /// <summary>
+        /// Check that version has 4 parts (follows ww.xx.yy.zz format), and each part < 2^16
+        /// </summary>
+        /// <param name="version">Version string (e.g. 22.33.456.7890) </param>
+        /// <returns>Bool stating whether the input string is a valid version</returns>
         public static bool IsValidVersion(string version)
         {
             var versionParts = version.Split('.');
@@ -475,6 +494,12 @@ namespace WDAC_Wizard
                                    fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
         }
 
+        /// <summary>
+        /// Compares the min and max versions
+        /// </summary>
+        /// <param name="minVersion"></param>
+        /// <param name="maxVersion"></param>
+        /// <returns></returns>
         public static int CompareVersions(string minVersion, string maxVersion)
         {
             var minversionParts = minVersion.Split('.');
@@ -596,7 +621,9 @@ namespace WDAC_Wizard
 
         /// <summary>
         /// Check that the given directory is write-accessable by the user.  
-        /// /// </summary>
+        /// </summary>
+        /// <param name="path">Directory path to verify user writeability</param>
+        /// <returns>Bool representing user writeability. True if writeable, otherwise, false</returns>
         public static bool IsUserWriteable(string path)
         {
             // Try to create a subdir in the folderPath. If successful, write access is true. 
@@ -654,7 +681,13 @@ namespace WDAC_Wizard
             return results;
         }
 
-        // Dump all of the package family names for the custom rules table
+
+
+        /// <summary>
+        /// Dump all of the package family names for the custom rules table
+        /// </summary>
+        /// <param name="policyCustomRule">PolicyCustomRule object</param>
+        /// <returns>Comma-delimitted tring of packaged family names</returns>
         public static string GetListofPackages(PolicyCustomRules policyCustomRule)
         {
             string output = String.Empty;
@@ -708,110 +741,11 @@ namespace WDAC_Wizard
             return new string(ekuArray);
         }
 
-        public static List<string> GetEKUOctet(int node)
-        {
-            List<string> octet = new List<string>();
-            const int MAX_EKU_VAL = 127;
-            const int MSB = 0;
-            const int IGNORE_POS = 9;
-
-            if (node > MAX_EKU_VAL)
-            {
-                // Node values greater than or equal to 128 are encoded on multiple bytes.
-                // Bit 7 of the leftmost byte is set to one.
-                // Bits 0 through 6 of each byte contains the encoded value.
-                string s = Convert.ToString(node, 2); //Convert to binary in a string
-
-                int[] bits = s.PadLeft(16, '0') // Add 0's from left
-                             .Select(c => int.Parse(c.ToString())) // convert each char to int
-                             .ToArray();
-
-                // MSB (bit 7 of the leftmost byte) set to 1
-                // Ignoring bit 7 of the rightmost byte (ie set to 0)
-                // Shifting the right nibble of the leftmost byte by 1 bit
-                bits[MSB] = 1;
-                bits[IGNORE_POS] = 0;
-
-                bits[4] = bits[5];
-                bits[5] = bits[6];
-                bits[6] = bits[7];
-                bits[7] = 0;
-
-                // Convert left and right byte to hex to add to octet list
-                List<string> decArr = DecodeBitArray(bits);
-                octet.Add(decArr[0] + decArr[1]);
-                octet.Add(decArr[2] + decArr[3]);
-            }
-            else
-            {
-                // Node values less than or equal to 127 are encoded on one byte.
-                octet.Add(FormatHexString(node.ToString("X")));
-            }
-
-            return octet;
-        }
-
-        /// <summary>
-        ///  Simple method to ensure hex values are size=2
-        /// </summary>
-        /// <param name="hex_in"></param>
-        /// <returns></returns>
-        public static string FormatHexString(string hex_in)
-        {
-            if (String.IsNullOrEmpty(hex_in))
-            {
-                return String.Empty;
-            }
-            if (hex_in.Length == 1)
-            {
-                return "0" + hex_in;
-            }
-            else
-            {
-                return hex_in;
-            }
-        }
-
-        /// <summary>
-        /// Convert bit array to hexidecimal values
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <returns></returns>
-        public static List<string> DecodeBitArray(int[] bits)
-        {
-            List<string> octet = new List<string>();
-            int val = 0;
-
-            for (int i = 0; i < bits.Length; i++)
-            {
-                if (i % 4 == 0)
-                {
-                    val = 0;
-                    val += 8 * bits[i];
-                }
-                else if (i % 4 == 1)
-                {
-                    val += 4 * bits[i];
-                }
-                else if (i % 4 == 2)
-                {
-                    val += 2 * bits[i];
-                }
-                else if (i % 4 == 3)
-                {
-                    val += 1 * bits[i];
-                    octet.Add(val.ToString("X"));
-                }
-            }
-
-            return octet;
-        }
-
         /// <summary>
         /// Converts a hash byte[] to hash hex string
         /// </summary>
-        /// <param name="hashByte"></param>
-        /// <returns></returns>
+        /// <param name="hashByte">Byte array of representing a hash</param>
+        /// <returns>Hexidecimal, readable hash string</returns>
         public static string ConvertHash(byte[] hashByte)
         {
             if (hashByte == null)

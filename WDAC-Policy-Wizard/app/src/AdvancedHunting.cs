@@ -78,7 +78,7 @@ namespace WDAC_Wizard
                 catch (Exception e)
                 {
                     LastError = e.Message;
-                    return null;
+                    // continue in the case of mixing AH and LogAnalytic csvs
                 }
             }
 
@@ -152,13 +152,20 @@ namespace WDAC_Wizard
                     localTimeStamp = localTimeStamp.Replace(DEL_VALUE, ",");
 
                     // Parse the timestamp
-                    DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
+                    try
+                    {
+                        DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
 
-                    // Convert to UTC
-                    string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
+                        // Convert to UTC
+                        string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
 
-                    fields[0] = utcDateTime; 
-                    return string.Join(",", fields);
+                        fields[0] = utcDateTime;
+                        return string.Join(",", fields);
+                    }
+                    catch(Exception exp)
+                    {
+                        return localTimeStamp; 
+                    }
                 }
 
             }
