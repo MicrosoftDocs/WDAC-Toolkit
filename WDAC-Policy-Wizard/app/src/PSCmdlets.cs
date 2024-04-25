@@ -144,39 +144,53 @@ namespace WDAC_Wizard
             string newPolicyRuleCmd = string.Empty;
             if (customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
             {
-                newPolicyRuleCmd = String.Format("-NoProfile -Command \"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
+                newPolicyRuleCmd = $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{customRule.ReferenceFile}\" -Fallback Hash";
             }
             else // Publisher checkbox unselected - create a PCA rule
             {
-                newPolicyRuleCmd = String.Format("-NoProfile -Command $DummySignerRule = New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
+                newPolicyRuleCmd = $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{customRule.ReferenceFile}\" -Fallback Hash";
             }
-
             if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
             {
                 newPolicyRuleCmd += " -Deny";
             }
 
-            newPolicyRuleCmd += String.Format(", New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"\"", policyPath);
+            //newPolicyRuleCmd += $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{policyPath}\" -Fallback Hash";
 
             // Execute the Powershell (5.x) via Start Process
             var startInfo = new ProcessStartInfo
             {
-                FileName = "powerShell.exe",
-                Arguments = newPolicyRuleCmd,
+                FileName = "powershell.exe",
+                Arguments = $"-Command \"{newPolicyRuleCmd}\"",
                 UseShellExecute = false,
-                CreateNoWindow = true, // TODO: set to true after debugging
+                CreateNoWindow = false, // TODO: set to true after debugging
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            Process process = new Process
+            {
+                StartInfo = startInfo
             };
 
             try
             {
-                using (var process = new Process { StartInfo = startInfo })
-                {
-                    process.Start();
-                    process.WaitForExit();
+                process.Start();
+                process.WaitForExit();
 
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                if(!string.IsNullOrEmpty(error))
+                {
+                    Logger.Log.AddErrorMsg($"CreateSignerPolicyFromPS() threw the following error: {error}");
+                    
+                    if(error.Contains("An item with the same key"))
+                    {
+                        return CreateSignerPolicyFromPS(customRule, policyPath);
+                    }
                 }
+                
             }
             catch (CmdletInvocationException e) when (e.HResult == PSKEY_HRESULT)
             {
@@ -444,6 +458,13 @@ namespace WDAC_Wizard
             _Runspace.Dispose();
         }
 
+        /// <summary>
+        /// Runs the Merge-CIPolicy command for all the policies generated per custom rule
+        /// </summary>
+        /// <param name="customRulesPathList">List of custom policy paths to merge</param>
+        /// <param name="nCustomRules">Number of custom rules generated</param>
+        /// <param name="outputFilePath">Final output policy path</param>
+        /// <param name="pathCustomValuePolicy">Policy containing the list of custom rules e.g. custom path, custom PFN</param>
         internal static void MergeCustomPolicies(List<string> customRulesPathList, int nCustomRules, string outputFilePath, string pathCustomValuePolicy)
         {
             string mergeScript = String.Empty;
