@@ -13,6 +13,9 @@ namespace WDAC_Wizard
         // Key already added PowerShell error HResult
         const int PSKEY_HRESULT = -2146233087;
 
+        // Name of PS Script to generate signer policy (workaround for New-CIPolicyRule bug)
+        const string PS_FILENAME = "CreateSignerPolicy.ps1";
+
         // Internal static instance of Runspace for PS pipelines
         internal static Runspace _Runspace {  get; set; }
 
@@ -134,36 +137,51 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="policyPath"></param>
         /// <returns></returns>
-        internal static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        internal static SiPolicy CreatePolicyRuleFromPS(PolicyCustomRules customRule, string policyPath)
         {
             // As a result of a bug in the ConfigCI New-CiPolicyRule variable output, the New-CIPolicyRule command
             // must be run in Powershell.exe (5.x) as opposed to PowerShell Core (7.x). Once the deserialization bug is 
             // fixed, the PS commands can be run in the runspace like all other commands
             
             // Scan the file to extract the TBS hash (or hashes for fallback) and, optionally, the CN for the signer rules
-            string newPolicyRuleCmd = string.Empty;
-            if (customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
+            string level = string.Empty;
+            string deny = "False";
+            string ps1File = Path.Combine(Helper.GetExecutablePath(false), PS_FILENAME);
+            string wizardPath = Helper.GetExecutablePath(true);
+
+            if(customRule.Type == PolicyCustomRules.RuleType.Hash)
             {
-                newPolicyRuleCmd = $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{customRule.ReferenceFile}\" -Fallback Hash";
+                level = "Hash";
             }
-            else // Publisher checkbox unselected - create a PCA rule
+            else
             {
-                newPolicyRuleCmd = $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{customRule.ReferenceFile}\" -Fallback Hash";
+                if (customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
+                {
+                    level = "Publisher";
+                }
+                else // Publisher checkbox unselected - create a PCA rule
+                {
+                    level = "PcaCertificate";
+                }
             }
+           
             if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
             {
-                newPolicyRuleCmd += " -Deny";
+                deny = "True";
             }
 
-            //newPolicyRuleCmd += $"$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{policyPath}\" -Fallback Hash";
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
+                $"-DriverFilePath \"{customRule.ReferenceFile}\" -PolicyPath \"{policyPath}\" -Level {level} -Deny {deny}";
+
+            Logger.Log.AddInfoMsg($"Running the following PS cmd in CreateSignerPolicyFromPS(): {newPolicyScriptCmd}");
 
             // Execute the Powershell (5.x) via Start Process
             var startInfo = new ProcessStartInfo
             {
                 FileName = "powershell.exe",
-                Arguments = $"-Command \"{newPolicyRuleCmd}\"",
+                Arguments = newPolicyScriptCmd,
                 UseShellExecute = false,
-                CreateNoWindow = false, // TODO: set to true after debugging
+                CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
@@ -183,74 +201,18 @@ namespace WDAC_Wizard
 
                 if(!string.IsNullOrEmpty(error))
                 {
-                    Logger.Log.AddErrorMsg($"CreateSignerPolicyFromPS() threw the following error: {error}");
-                    
-                    if(error.Contains("An item with the same key"))
-                    {
-                        return CreateSignerPolicyFromPS(customRule, policyPath);
-                    }
+                    Logger.Log.AddErrorMsg($"CreatePolicyRuleFromPS() threw the following error: {error}");
                 }
                 
             }
-            catch (CmdletInvocationException e) when (e.HResult == PSKEY_HRESULT)
-            {
-                // Catch the "An item with the same key has already been added" {System.Management.Automation.CmdletInvocationException}
-                // Issue occurs on first powershell invocation - simply calling again fixes the issue
-                // Github bugs 302, 362
-                Logger.Log.AddWarningMsg("CreateSignerPolicyFromPS() caught CmdletInvocationException - An item with the same key has already been added");
-                return CreateSignerPolicyFromPS(customRule, policyPath);
-            }
             catch (Exception e)
             {
-                Logger.Log.AddErrorMsg("CreateSignerPolicyFromPS() caught the following exception", e);
+                Logger.Log.AddErrorMsg("CreatePolicyRuleFromPS() caught the following exception", e);
                 return null;
             }
 
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
-            return siPolicy;
-        }
-
-        /// <summary>
-        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <param name="signerSiPolicy"></param>
-        internal static SiPolicy CreateHashPolicyFromPS(PolicyCustomRules customRule, string policyPath)
-        {
-            // Create runspace, pipeline and run script
-            Pipeline pipeline = CreatePipeline();
-
-            // Scan the file to extract the hashes for rules
-            string newPolicyRuleCmd = String.Format("$DummyHashRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
-            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                newPolicyRuleCmd += " -Deny";
-            }
-
-            pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", policyPath));
-
-            foreach (var cmd in pipeline.Commands)
-            {
-                Logger.Log.AddInfoMsg("Running the following commands: " + cmd);
-            }
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (Exception e)
-            {
-                Logger.Log.AddErrorMsg("CreateHashPolicyFromPS() encountered the following exception ", e);
-                return null;
-            }
-
-            _Runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
-            return siPolicy;
+            // De-serialize the dummy policy to get the signer or file rule objects
+            return Helper.DeserializeXMLtoPolicy(policyPath);
         }
 
         /// <summary>
