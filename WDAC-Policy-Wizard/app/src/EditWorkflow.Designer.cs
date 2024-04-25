@@ -117,11 +117,11 @@ namespace WDAC_Wizard
             // 
             // textBoxPolicyPath
             // 
+            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxPolicyPath.Location = new System.Drawing.Point(17, 22);
             this.textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxPolicyPath.Name = "textBoxPolicyPath";
-            this.textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPolicyPath.ReadOnly = true;
             this.textBoxPolicyPath.Size = new System.Drawing.Size(462, 26);
             this.textBoxPolicyPath.TabIndex = 1;
@@ -179,22 +179,22 @@ namespace WDAC_Wizard
             // 
             // textBox_PolicyName
             // 
+            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_PolicyName.Location = new System.Drawing.Point(126, 42);
             this.textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyName.Name = "textBox_PolicyName";
-            this.textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyName.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyName.TabIndex = 2;
             this.textBox_PolicyName.TextChanged += new System.EventHandler(this.TextBox_PolicyName_TextChanged);
             // 
             // textBoxSaveLocation
             // 
+            this.textBoxSaveLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSaveLocation.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBoxSaveLocation.Location = new System.Drawing.Point(20, 154);
             this.textBoxSaveLocation.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxSaveLocation.Name = "textBoxSaveLocation";
-            this.textBoxSaveLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSaveLocation.ReadOnly = true;
             this.textBoxSaveLocation.Size = new System.Drawing.Size(462, 26);
             this.textBoxSaveLocation.TabIndex = 112;
@@ -213,11 +213,11 @@ namespace WDAC_Wizard
             // 
             // textBox_PolicyID
             // 
+            this.textBox_PolicyID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyID.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_PolicyID.Location = new System.Drawing.Point(126, 77);
             this.textBox_PolicyID.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_PolicyID.Name = "textBox_PolicyID";
-            this.textBox_PolicyID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_PolicyID.Size = new System.Drawing.Size(351, 26);
             this.textBox_PolicyID.TabIndex = 3;
             this.textBox_PolicyID.TextChanged += new System.EventHandler(this.TextBox_PolicyID_TextChanged);
@@ -393,17 +393,17 @@ namespace WDAC_Wizard
             // 
             // textBox_AdvancedHuntingPaths
             // 
+            this.textBox_AdvancedHuntingPaths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_AdvancedHuntingPaths.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_AdvancedHuntingPaths.Location = new System.Drawing.Point(22, 232);
             this.textBox_AdvancedHuntingPaths.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_AdvancedHuntingPaths.Multiline = true;
             this.textBox_AdvancedHuntingPaths.Name = "textBox_AdvancedHuntingPaths";
-            this.textBox_AdvancedHuntingPaths.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_AdvancedHuntingPaths.ReadOnly = true;
             this.textBox_AdvancedHuntingPaths.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_AdvancedHuntingPaths.Size = new System.Drawing.Size(453, 37);
             this.textBox_AdvancedHuntingPaths.TabIndex = 126;
-            this.textBox_AdvancedHuntingPaths.Text = "Select MDE Advanced Hunting CSV Files";
+            this.textBox_AdvancedHuntingPaths.Text = "Select MDE Advanced Hunting and/or Log Analytics CSV Files";
             // 
             // label8
             // 
@@ -412,18 +412,18 @@ namespace WDAC_Wizard
             this.label8.ForeColor = System.Drawing.Color.Black;
             this.label8.Location = new System.Drawing.Point(23, 210);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(349, 18);
+            this.label8.Size = new System.Drawing.Size(447, 18);
             this.label8.TabIndex = 125;
-            this.label8.Text = "Parse MDE Advanced Hunting Events to Policy";
+            this.label8.Text = "Parse Advanced Hunting and Log Analytics Events to Policy";
             // 
             // textBox_EventLog
             // 
+            this.textBox_EventLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLog.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLog.Location = new System.Drawing.Point(23, 27);
             this.textBox_EventLog.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLog.Multiline = true;
             this.textBox_EventLog.Name = "textBox_EventLog";
-            this.textBox_EventLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLog.ReadOnly = true;
             this.textBox_EventLog.Size = new System.Drawing.Size(453, 43);
             this.textBox_EventLog.TabIndex = 123;
@@ -453,10 +453,10 @@ namespace WDAC_Wizard
             this.ahParsingLearnMore_Label.Location = new System.Drawing.Point(4, 41);
             this.ahParsingLearnMore_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ahParsingLearnMore_Label.Name = "ahParsingLearnMore_Label";
-            this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(349, 18);
+            this.ahParsingLearnMore_Label.Size = new System.Drawing.Size(467, 18);
             this.ahParsingLearnMore_Label.TabIndex = 127;
             this.ahParsingLearnMore_Label.Tag = "IgnoreDarkMode";
-            this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting logs    ";
+            this.ahParsingLearnMore_Label.Text = "Learn more about parsing Advanced Hunting and Log Analytics logs    ";
             this.ahParsingLearnMore_Label.Visible = false;
             this.ahParsingLearnMore_Label.Click += new System.EventHandler(this.AHLearnMoreLabel_Click);
             // 
@@ -485,12 +485,12 @@ namespace WDAC_Wizard
             // 
             // textBox_EventLogFilePath
             // 
+            this.textBox_EventLogFilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLogFilePath.Font = new System.Drawing.Font("Tahoma", 9F);
             this.textBox_EventLogFilePath.Location = new System.Drawing.Point(23, 133);
             this.textBox_EventLogFilePath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBox_EventLogFilePath.Multiline = true;
             this.textBox_EventLogFilePath.Name = "textBox_EventLogFilePath";
-            this.textBox_EventLogFilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_EventLogFilePath.ReadOnly = true;
             this.textBox_EventLogFilePath.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_EventLogFilePath.Size = new System.Drawing.Size(453, 37);
