@@ -782,6 +782,20 @@ namespace WDAC_Wizard
             this.filePathRulePanel.Visible = true;
             this.filePathRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
 
+            // Right align text
+            if (this.filePathTextBox.TextLength > 0)
+            {
+                filePathTextBox.SelectionStart = filePathTextBox.TextLength - 1;
+                filePathTextBox.ScrollToCaret();
+            }
+
+            // Right align text
+            if (this.folderPathTextBox.TextLength > 0)
+            {
+                folderPathTextBox.SelectionStart = folderPathTextBox.TextLength - 1;
+                folderPathTextBox.ScrollToCaret();
+            }
+
             // Set color of disabled checkboxes
             SetDisabledCheckBoxesColor();
         }

@@ -29,603 +29,590 @@ namespace WDAC_Wizard
         /// </summary>
         private void InitializeComponent()
         {
-            this.addButton = new System.Windows.Forms.Button();
-            this.publisherRulePanel = new System.Windows.Forms.Panel();
-            this.productTextBox = new System.Windows.Forms.TextBox();
-            this.versionTextBox = new System.Windows.Forms.TextBox();
-            this.filenameTextBox = new System.Windows.Forms.TextBox();
-            this.publisherTextBox = new System.Windows.Forms.TextBox();
-            this.issuerTextBox = new System.Windows.Forms.TextBox();
-            this.productCheckBox = new System.Windows.Forms.CheckBox();
-            this.versionCheckBox = new System.Windows.Forms.CheckBox();
-            this.filenameCheckBox = new System.Windows.Forms.CheckBox();
-            this.publisherCheckBox = new System.Windows.Forms.CheckBox();
-            this.issuerCheckBox = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ruleTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.fileAttributeRulePanel = new System.Windows.Forms.Panel();
-            this.pfnTextBox = new System.Windows.Forms.TextBox();
-            this.intFileNameTextBox = new System.Windows.Forms.TextBox();
-            this.prodNameTextBox = new System.Windows.Forms.TextBox();
-            this.fileDescTextBox = new System.Windows.Forms.TextBox();
-            this.origFileNameTextBox = new System.Windows.Forms.TextBox();
-            this.pfnCheckBox = new System.Windows.Forms.CheckBox();
-            this.intFileNameCheckBox = new System.Windows.Forms.CheckBox();
-            this.prodNameCheckBox = new System.Windows.Forms.CheckBox();
-            this.fileDescCheckBox = new System.Windows.Forms.CheckBox();
-            this.origFileNameCheckBox = new System.Windows.Forms.CheckBox();
-            this.eventsDataGridView = new System.Windows.Forms.DataGridView();
-            this.addedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.eventIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.filenameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.productColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.policyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.publisherColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.hashRulePanel = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.sha2TextBox = new System.Windows.Forms.TextBox();
-            this.sha1TextBox = new System.Windows.Forms.TextBox();
-            this.filePathRulePanel = new System.Windows.Forms.Panel();
-            this.filePathTextBox = new System.Windows.Forms.TextBox();
-            this.folderPathTextBox = new System.Windows.Forms.TextBox();
-            this.folderPathCheckBox = new System.Windows.Forms.CheckBox();
-            this.filePathCheckBox = new System.Windows.Forms.CheckBox();
-            this.publisherRulePanel.SuspendLayout();
-            this.fileAttributeRulePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.eventsDataGridView)).BeginInit();
-            this.hashRulePanel.SuspendLayout();
-            this.filePathRulePanel.SuspendLayout();
-            this.SuspendLayout();
+            addButton = new System.Windows.Forms.Button();
+            publisherRulePanel = new System.Windows.Forms.Panel();
+            productTextBox = new System.Windows.Forms.TextBox();
+            versionTextBox = new System.Windows.Forms.TextBox();
+            filenameTextBox = new System.Windows.Forms.TextBox();
+            publisherTextBox = new System.Windows.Forms.TextBox();
+            issuerTextBox = new System.Windows.Forms.TextBox();
+            productCheckBox = new System.Windows.Forms.CheckBox();
+            versionCheckBox = new System.Windows.Forms.CheckBox();
+            filenameCheckBox = new System.Windows.Forms.CheckBox();
+            publisherCheckBox = new System.Windows.Forms.CheckBox();
+            issuerCheckBox = new System.Windows.Forms.CheckBox();
+            label3 = new System.Windows.Forms.Label();
+            ruleTypeComboBox = new System.Windows.Forms.ComboBox();
+            fileAttributeRulePanel = new System.Windows.Forms.Panel();
+            pfnTextBox = new System.Windows.Forms.TextBox();
+            intFileNameTextBox = new System.Windows.Forms.TextBox();
+            prodNameTextBox = new System.Windows.Forms.TextBox();
+            fileDescTextBox = new System.Windows.Forms.TextBox();
+            origFileNameTextBox = new System.Windows.Forms.TextBox();
+            pfnCheckBox = new System.Windows.Forms.CheckBox();
+            intFileNameCheckBox = new System.Windows.Forms.CheckBox();
+            prodNameCheckBox = new System.Windows.Forms.CheckBox();
+            fileDescCheckBox = new System.Windows.Forms.CheckBox();
+            origFileNameCheckBox = new System.Windows.Forms.CheckBox();
+            eventsDataGridView = new System.Windows.Forms.DataGridView();
+            addedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            eventIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            filenameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            productColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            policyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            publisherColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            hashRulePanel = new System.Windows.Forms.Panel();
+            label5 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            sha2TextBox = new System.Windows.Forms.TextBox();
+            sha1TextBox = new System.Windows.Forms.TextBox();
+            filePathRulePanel = new System.Windows.Forms.Panel();
+            filePathTextBox = new System.Windows.Forms.TextBox();
+            folderPathTextBox = new System.Windows.Forms.TextBox();
+            folderPathCheckBox = new System.Windows.Forms.CheckBox();
+            filePathCheckBox = new System.Windows.Forms.CheckBox();
+            publisherRulePanel.SuspendLayout();
+            fileAttributeRulePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)eventsDataGridView).BeginInit();
+            hashRulePanel.SuspendLayout();
+            filePathRulePanel.SuspendLayout();
+            SuspendLayout();
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(442, 412);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(130, 30);
-            this.addButton.TabIndex = 0;
-            this.addButton.Text = "+ Add Allow Rule";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            addButton.Location = new System.Drawing.Point(442, 412);
+            addButton.Name = "addButton";
+            addButton.Size = new System.Drawing.Size(130, 30);
+            addButton.TabIndex = 0;
+            addButton.Text = "+ Add Allow Rule";
+            addButton.UseVisualStyleBackColor = true;
+            addButton.Click += AddButton_Click;
             // 
             // publisherRulePanel
             // 
-            this.publisherRulePanel.Controls.Add(this.productTextBox);
-            this.publisherRulePanel.Controls.Add(this.versionTextBox);
-            this.publisherRulePanel.Controls.Add(this.filenameTextBox);
-            this.publisherRulePanel.Controls.Add(this.publisherTextBox);
-            this.publisherRulePanel.Controls.Add(this.issuerTextBox);
-            this.publisherRulePanel.Controls.Add(this.productCheckBox);
-            this.publisherRulePanel.Controls.Add(this.versionCheckBox);
-            this.publisherRulePanel.Controls.Add(this.filenameCheckBox);
-            this.publisherRulePanel.Controls.Add(this.publisherCheckBox);
-            this.publisherRulePanel.Controls.Add(this.issuerCheckBox);
-            this.publisherRulePanel.Location = new System.Drawing.Point(167, 447);
-            this.publisherRulePanel.Name = "publisherRulePanel";
-            this.publisherRulePanel.Size = new System.Drawing.Size(716, 190);
-            this.publisherRulePanel.TabIndex = 9;
+            publisherRulePanel.Controls.Add(productTextBox);
+            publisherRulePanel.Controls.Add(versionTextBox);
+            publisherRulePanel.Controls.Add(filenameTextBox);
+            publisherRulePanel.Controls.Add(publisherTextBox);
+            publisherRulePanel.Controls.Add(issuerTextBox);
+            publisherRulePanel.Controls.Add(productCheckBox);
+            publisherRulePanel.Controls.Add(versionCheckBox);
+            publisherRulePanel.Controls.Add(filenameCheckBox);
+            publisherRulePanel.Controls.Add(publisherCheckBox);
+            publisherRulePanel.Controls.Add(issuerCheckBox);
+            publisherRulePanel.Location = new System.Drawing.Point(167, 447);
+            publisherRulePanel.Name = "publisherRulePanel";
+            publisherRulePanel.Size = new System.Drawing.Size(716, 190);
+            publisherRulePanel.TabIndex = 9;
             // 
             // productTextBox
             // 
-            this.productTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.productTextBox.Location = new System.Drawing.Point(109, 157);
-            this.productTextBox.Name = "productTextBox";
-            this.productTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.productTextBox.ReadOnly = true;
-            this.productTextBox.Size = new System.Drawing.Size(420, 28);
-            this.productTextBox.TabIndex = 20;
+            productTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            productTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            productTextBox.Location = new System.Drawing.Point(109, 157);
+            productTextBox.Name = "productTextBox";
+            productTextBox.ReadOnly = true;
+            productTextBox.Size = new System.Drawing.Size(420, 28);
+            productTextBox.TabIndex = 20;
             // 
             // versionTextBox
             // 
-            this.versionTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.versionTextBox.Location = new System.Drawing.Point(109, 118);
-            this.versionTextBox.Name = "versionTextBox";
-            this.versionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.versionTextBox.ReadOnly = true;
-            this.versionTextBox.Size = new System.Drawing.Size(420, 28);
-            this.versionTextBox.TabIndex = 19;
+            versionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            versionTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            versionTextBox.Location = new System.Drawing.Point(109, 118);
+            versionTextBox.Name = "versionTextBox";
+            versionTextBox.ReadOnly = true;
+            versionTextBox.Size = new System.Drawing.Size(420, 28);
+            versionTextBox.TabIndex = 19;
             // 
             // filenameTextBox
             // 
-            this.filenameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filenameTextBox.Location = new System.Drawing.Point(109, 79);
-            this.filenameTextBox.Name = "filenameTextBox";
-            this.filenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.filenameTextBox.ReadOnly = true;
-            this.filenameTextBox.Size = new System.Drawing.Size(420, 28);
-            this.filenameTextBox.TabIndex = 18;
+            filenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            filenameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            filenameTextBox.Location = new System.Drawing.Point(109, 79);
+            filenameTextBox.Name = "filenameTextBox";
+            filenameTextBox.ReadOnly = true;
+            filenameTextBox.Size = new System.Drawing.Size(420, 28);
+            filenameTextBox.TabIndex = 18;
             // 
             // publisherTextBox
             // 
-            this.publisherTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherTextBox.Location = new System.Drawing.Point(109, 40);
-            this.publisherTextBox.Name = "publisherTextBox";
-            this.publisherTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.publisherTextBox.ReadOnly = true;
-            this.publisherTextBox.Size = new System.Drawing.Size(420, 28);
-            this.publisherTextBox.TabIndex = 17;
+            publisherTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            publisherTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            publisherTextBox.Location = new System.Drawing.Point(109, 40);
+            publisherTextBox.Name = "publisherTextBox";
+            publisherTextBox.ReadOnly = true;
+            publisherTextBox.Size = new System.Drawing.Size(420, 28);
+            publisherTextBox.TabIndex = 17;
             // 
             // issuerTextBox
             // 
-            this.issuerTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.issuerTextBox.Location = new System.Drawing.Point(109, 1);
-            this.issuerTextBox.Name = "issuerTextBox";
-            this.issuerTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.issuerTextBox.ReadOnly = true;
-            this.issuerTextBox.Size = new System.Drawing.Size(420, 28);
-            this.issuerTextBox.TabIndex = 16;
+            issuerTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            issuerTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            issuerTextBox.Location = new System.Drawing.Point(109, 1);
+            issuerTextBox.Name = "issuerTextBox";
+            issuerTextBox.ReadOnly = true;
+            issuerTextBox.Size = new System.Drawing.Size(420, 28);
+            issuerTextBox.TabIndex = 16;
             // 
             // productCheckBox
             // 
-            this.productCheckBox.AutoCheck = false;
-            this.productCheckBox.AutoSize = true;
-            this.productCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.productCheckBox.Location = new System.Drawing.Point(4, 159);
-            this.productCheckBox.Name = "productCheckBox";
-            this.productCheckBox.Size = new System.Drawing.Size(94, 25);
-            this.productCheckBox.TabIndex = 15;
-            this.productCheckBox.Text = "Product:";
-            this.productCheckBox.UseVisualStyleBackColor = true;
+            productCheckBox.AutoCheck = false;
+            productCheckBox.AutoSize = true;
+            productCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            productCheckBox.Location = new System.Drawing.Point(4, 159);
+            productCheckBox.Name = "productCheckBox";
+            productCheckBox.Size = new System.Drawing.Size(94, 25);
+            productCheckBox.TabIndex = 15;
+            productCheckBox.Text = "Product:";
+            productCheckBox.UseVisualStyleBackColor = true;
             // 
             // versionCheckBox
             // 
-            this.versionCheckBox.AutoCheck = false;
-            this.versionCheckBox.AutoSize = true;
-            this.versionCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.versionCheckBox.Location = new System.Drawing.Point(4, 120);
-            this.versionCheckBox.Name = "versionCheckBox";
-            this.versionCheckBox.Size = new System.Drawing.Size(93, 25);
-            this.versionCheckBox.TabIndex = 14;
-            this.versionCheckBox.Text = "Version:";
-            this.versionCheckBox.UseVisualStyleBackColor = true;
+            versionCheckBox.AutoCheck = false;
+            versionCheckBox.AutoSize = true;
+            versionCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            versionCheckBox.Location = new System.Drawing.Point(4, 120);
+            versionCheckBox.Name = "versionCheckBox";
+            versionCheckBox.Size = new System.Drawing.Size(93, 25);
+            versionCheckBox.TabIndex = 14;
+            versionCheckBox.Text = "Version:";
+            versionCheckBox.UseVisualStyleBackColor = true;
             // 
             // filenameCheckBox
             // 
-            this.filenameCheckBox.AutoCheck = false;
-            this.filenameCheckBox.AutoSize = true;
-            this.filenameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filenameCheckBox.Location = new System.Drawing.Point(4, 81);
-            this.filenameCheckBox.Name = "filenameCheckBox";
-            this.filenameCheckBox.Size = new System.Drawing.Size(105, 25);
-            this.filenameCheckBox.TabIndex = 13;
-            this.filenameCheckBox.Text = "Filename:";
-            this.filenameCheckBox.UseVisualStyleBackColor = true;
+            filenameCheckBox.AutoCheck = false;
+            filenameCheckBox.AutoSize = true;
+            filenameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            filenameCheckBox.Location = new System.Drawing.Point(4, 81);
+            filenameCheckBox.Name = "filenameCheckBox";
+            filenameCheckBox.Size = new System.Drawing.Size(105, 25);
+            filenameCheckBox.TabIndex = 13;
+            filenameCheckBox.Text = "Filename:";
+            filenameCheckBox.UseVisualStyleBackColor = true;
             // 
             // publisherCheckBox
             // 
-            this.publisherCheckBox.AutoCheck = false;
-            this.publisherCheckBox.AutoSize = true;
-            this.publisherCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.publisherCheckBox.Location = new System.Drawing.Point(4, 42);
-            this.publisherCheckBox.Name = "publisherCheckBox";
-            this.publisherCheckBox.Size = new System.Drawing.Size(105, 25);
-            this.publisherCheckBox.TabIndex = 12;
-            this.publisherCheckBox.Text = "Publisher:";
-            this.publisherCheckBox.UseVisualStyleBackColor = true;
+            publisherCheckBox.AutoCheck = false;
+            publisherCheckBox.AutoSize = true;
+            publisherCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            publisherCheckBox.Location = new System.Drawing.Point(4, 42);
+            publisherCheckBox.Name = "publisherCheckBox";
+            publisherCheckBox.Size = new System.Drawing.Size(105, 25);
+            publisherCheckBox.TabIndex = 12;
+            publisherCheckBox.Text = "Publisher:";
+            publisherCheckBox.UseVisualStyleBackColor = true;
             // 
             // issuerCheckBox
             // 
-            this.issuerCheckBox.AutoCheck = false;
-            this.issuerCheckBox.AutoSize = true;
-            this.issuerCheckBox.Checked = true;
-            this.issuerCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.issuerCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.issuerCheckBox.Location = new System.Drawing.Point(4, 3);
-            this.issuerCheckBox.Name = "issuerCheckBox";
-            this.issuerCheckBox.Size = new System.Drawing.Size(84, 25);
-            this.issuerCheckBox.TabIndex = 10;
-            this.issuerCheckBox.Text = "Issuer:";
-            this.issuerCheckBox.UseVisualStyleBackColor = true;
+            issuerCheckBox.AutoCheck = false;
+            issuerCheckBox.AutoSize = true;
+            issuerCheckBox.Checked = true;
+            issuerCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            issuerCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            issuerCheckBox.Location = new System.Drawing.Point(4, 3);
+            issuerCheckBox.Name = "issuerCheckBox";
+            issuerCheckBox.Size = new System.Drawing.Size(84, 25);
+            issuerCheckBox.TabIndex = 10;
+            issuerCheckBox.Text = "Issuer:";
+            issuerCheckBox.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(163, 415);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 21);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Rule Type:";
+            label3.AutoSize = true;
+            label3.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label3.Location = new System.Drawing.Point(163, 415);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(90, 21);
+            label3.TabIndex = 8;
+            label3.Text = "Rule Type:";
             // 
             // ruleTypeComboBox
             // 
-            this.ruleTypeComboBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ruleTypeComboBox.FormattingEnabled = true;
-            this.ruleTypeComboBox.Items.AddRange(new object[] {
-            "Publisher",
-            "Path",
-            "File Attributes",
-            "Packaged App",
-            "File Hash"});
-            this.ruleTypeComboBox.Location = new System.Drawing.Point(259, 412);
-            this.ruleTypeComboBox.Name = "ruleTypeComboBox";
-            this.ruleTypeComboBox.Size = new System.Drawing.Size(163, 29);
-            this.ruleTypeComboBox.TabIndex = 3;
-            this.ruleTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.RuleTypeChanged);
+            ruleTypeComboBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            ruleTypeComboBox.FormattingEnabled = true;
+            ruleTypeComboBox.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash" });
+            ruleTypeComboBox.Location = new System.Drawing.Point(259, 412);
+            ruleTypeComboBox.Name = "ruleTypeComboBox";
+            ruleTypeComboBox.Size = new System.Drawing.Size(163, 29);
+            ruleTypeComboBox.TabIndex = 3;
+            ruleTypeComboBox.SelectedIndexChanged += RuleTypeChanged;
             // 
             // fileAttributeRulePanel
             // 
-            this.fileAttributeRulePanel.Controls.Add(this.pfnTextBox);
-            this.fileAttributeRulePanel.Controls.Add(this.intFileNameTextBox);
-            this.fileAttributeRulePanel.Controls.Add(this.prodNameTextBox);
-            this.fileAttributeRulePanel.Controls.Add(this.fileDescTextBox);
-            this.fileAttributeRulePanel.Controls.Add(this.origFileNameTextBox);
-            this.fileAttributeRulePanel.Controls.Add(this.pfnCheckBox);
-            this.fileAttributeRulePanel.Controls.Add(this.intFileNameCheckBox);
-            this.fileAttributeRulePanel.Controls.Add(this.prodNameCheckBox);
-            this.fileAttributeRulePanel.Controls.Add(this.fileDescCheckBox);
-            this.fileAttributeRulePanel.Controls.Add(this.origFileNameCheckBox);
-            this.fileAttributeRulePanel.Location = new System.Drawing.Point(906, 447);
-            this.fileAttributeRulePanel.Name = "fileAttributeRulePanel";
-            this.fileAttributeRulePanel.Size = new System.Drawing.Size(551, 190);
-            this.fileAttributeRulePanel.TabIndex = 21;
-            this.fileAttributeRulePanel.Visible = false;
+            fileAttributeRulePanel.Controls.Add(pfnTextBox);
+            fileAttributeRulePanel.Controls.Add(intFileNameTextBox);
+            fileAttributeRulePanel.Controls.Add(prodNameTextBox);
+            fileAttributeRulePanel.Controls.Add(fileDescTextBox);
+            fileAttributeRulePanel.Controls.Add(origFileNameTextBox);
+            fileAttributeRulePanel.Controls.Add(pfnCheckBox);
+            fileAttributeRulePanel.Controls.Add(intFileNameCheckBox);
+            fileAttributeRulePanel.Controls.Add(prodNameCheckBox);
+            fileAttributeRulePanel.Controls.Add(fileDescCheckBox);
+            fileAttributeRulePanel.Controls.Add(origFileNameCheckBox);
+            fileAttributeRulePanel.Location = new System.Drawing.Point(906, 447);
+            fileAttributeRulePanel.Name = "fileAttributeRulePanel";
+            fileAttributeRulePanel.Size = new System.Drawing.Size(551, 190);
+            fileAttributeRulePanel.TabIndex = 21;
+            fileAttributeRulePanel.Visible = false;
             // 
             // pfnTextBox
             // 
-            this.pfnTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pfnTextBox.Location = new System.Drawing.Point(173, 157);
-            this.pfnTextBox.Name = "pfnTextBox";
-            this.pfnTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pfnTextBox.ReadOnly = true;
-            this.pfnTextBox.Size = new System.Drawing.Size(351, 28);
-            this.pfnTextBox.TabIndex = 20;
+            pfnTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            pfnTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            pfnTextBox.Location = new System.Drawing.Point(173, 157);
+            pfnTextBox.Name = "pfnTextBox";
+            pfnTextBox.ReadOnly = true;
+            pfnTextBox.Size = new System.Drawing.Size(351, 28);
+            pfnTextBox.TabIndex = 20;
             // 
             // intFileNameTextBox
             // 
-            this.intFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intFileNameTextBox.Location = new System.Drawing.Point(173, 118);
-            this.intFileNameTextBox.Name = "intFileNameTextBox";
-            this.intFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.intFileNameTextBox.ReadOnly = true;
-            this.intFileNameTextBox.Size = new System.Drawing.Size(351, 28);
-            this.intFileNameTextBox.TabIndex = 19;
+            intFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            intFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            intFileNameTextBox.Location = new System.Drawing.Point(173, 118);
+            intFileNameTextBox.Name = "intFileNameTextBox";
+            intFileNameTextBox.ReadOnly = true;
+            intFileNameTextBox.Size = new System.Drawing.Size(351, 28);
+            intFileNameTextBox.TabIndex = 19;
             // 
             // prodNameTextBox
             // 
-            this.prodNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.prodNameTextBox.Location = new System.Drawing.Point(173, 79);
-            this.prodNameTextBox.Name = "prodNameTextBox";
-            this.prodNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.prodNameTextBox.ReadOnly = true;
-            this.prodNameTextBox.Size = new System.Drawing.Size(352, 28);
-            this.prodNameTextBox.TabIndex = 18;
+            prodNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            prodNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            prodNameTextBox.Location = new System.Drawing.Point(173, 79);
+            prodNameTextBox.Name = "prodNameTextBox";
+            prodNameTextBox.ReadOnly = true;
+            prodNameTextBox.Size = new System.Drawing.Size(352, 28);
+            prodNameTextBox.TabIndex = 18;
             // 
             // fileDescTextBox
             // 
-            this.fileDescTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileDescTextBox.Location = new System.Drawing.Point(173, 40);
-            this.fileDescTextBox.Name = "fileDescTextBox";
-            this.fileDescTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fileDescTextBox.ReadOnly = true;
-            this.fileDescTextBox.Size = new System.Drawing.Size(351, 28);
-            this.fileDescTextBox.TabIndex = 17;
+            fileDescTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            fileDescTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            fileDescTextBox.Location = new System.Drawing.Point(173, 40);
+            fileDescTextBox.Name = "fileDescTextBox";
+            fileDescTextBox.ReadOnly = true;
+            fileDescTextBox.Size = new System.Drawing.Size(351, 28);
+            fileDescTextBox.TabIndex = 17;
             // 
             // origFileNameTextBox
             // 
-            this.origFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.origFileNameTextBox.Location = new System.Drawing.Point(173, 1);
-            this.origFileNameTextBox.Name = "origFileNameTextBox";
-            this.origFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.origFileNameTextBox.ReadOnly = true;
-            this.origFileNameTextBox.Size = new System.Drawing.Size(351, 28);
-            this.origFileNameTextBox.TabIndex = 16;
+            origFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            origFileNameTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            origFileNameTextBox.Location = new System.Drawing.Point(173, 1);
+            origFileNameTextBox.Name = "origFileNameTextBox";
+            origFileNameTextBox.ReadOnly = true;
+            origFileNameTextBox.Size = new System.Drawing.Size(351, 28);
+            origFileNameTextBox.TabIndex = 16;
             // 
             // pfnCheckBox
             // 
-            this.pfnCheckBox.AutoCheck = false;
-            this.pfnCheckBox.AutoSize = true;
-            this.pfnCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pfnCheckBox.Location = new System.Drawing.Point(4, 159);
-            this.pfnCheckBox.Name = "pfnCheckBox";
-            this.pfnCheckBox.Size = new System.Drawing.Size(147, 25);
-            this.pfnCheckBox.TabIndex = 15;
-            this.pfnCheckBox.Text = "Package Name:";
-            this.pfnCheckBox.UseVisualStyleBackColor = true;
+            pfnCheckBox.AutoCheck = false;
+            pfnCheckBox.AutoSize = true;
+            pfnCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            pfnCheckBox.Location = new System.Drawing.Point(4, 159);
+            pfnCheckBox.Name = "pfnCheckBox";
+            pfnCheckBox.Size = new System.Drawing.Size(147, 25);
+            pfnCheckBox.TabIndex = 15;
+            pfnCheckBox.Text = "Package Name:";
+            pfnCheckBox.UseVisualStyleBackColor = true;
             // 
             // intFileNameCheckBox
             // 
-            this.intFileNameCheckBox.AutoCheck = false;
-            this.intFileNameCheckBox.AutoSize = true;
-            this.intFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intFileNameCheckBox.Location = new System.Drawing.Point(4, 120);
-            this.intFileNameCheckBox.Name = "intFileNameCheckBox";
-            this.intFileNameCheckBox.Size = new System.Drawing.Size(168, 25);
-            this.intFileNameCheckBox.TabIndex = 14;
-            this.intFileNameCheckBox.Text = "Internal Filename:";
-            this.intFileNameCheckBox.UseVisualStyleBackColor = true;
+            intFileNameCheckBox.AutoCheck = false;
+            intFileNameCheckBox.AutoSize = true;
+            intFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            intFileNameCheckBox.Location = new System.Drawing.Point(4, 120);
+            intFileNameCheckBox.Name = "intFileNameCheckBox";
+            intFileNameCheckBox.Size = new System.Drawing.Size(168, 25);
+            intFileNameCheckBox.TabIndex = 14;
+            intFileNameCheckBox.Text = "Internal Filename:";
+            intFileNameCheckBox.UseVisualStyleBackColor = true;
             // 
             // prodNameCheckBox
             // 
-            this.prodNameCheckBox.AutoCheck = false;
-            this.prodNameCheckBox.AutoSize = true;
-            this.prodNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.prodNameCheckBox.Location = new System.Drawing.Point(4, 81);
-            this.prodNameCheckBox.Name = "prodNameCheckBox";
-            this.prodNameCheckBox.Size = new System.Drawing.Size(142, 25);
-            this.prodNameCheckBox.TabIndex = 13;
-            this.prodNameCheckBox.Text = "Product Name:";
-            this.prodNameCheckBox.UseVisualStyleBackColor = true;
+            prodNameCheckBox.AutoCheck = false;
+            prodNameCheckBox.AutoSize = true;
+            prodNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            prodNameCheckBox.Location = new System.Drawing.Point(4, 81);
+            prodNameCheckBox.Name = "prodNameCheckBox";
+            prodNameCheckBox.Size = new System.Drawing.Size(142, 25);
+            prodNameCheckBox.TabIndex = 13;
+            prodNameCheckBox.Text = "Product Name:";
+            prodNameCheckBox.UseVisualStyleBackColor = true;
             // 
             // fileDescCheckBox
             // 
-            this.fileDescCheckBox.AutoCheck = false;
-            this.fileDescCheckBox.AutoSize = true;
-            this.fileDescCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileDescCheckBox.Location = new System.Drawing.Point(4, 42);
-            this.fileDescCheckBox.Name = "fileDescCheckBox";
-            this.fileDescCheckBox.Size = new System.Drawing.Size(153, 25);
-            this.fileDescCheckBox.TabIndex = 12;
-            this.fileDescCheckBox.Text = "File Description:";
-            this.fileDescCheckBox.UseVisualStyleBackColor = true;
+            fileDescCheckBox.AutoCheck = false;
+            fileDescCheckBox.AutoSize = true;
+            fileDescCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            fileDescCheckBox.Location = new System.Drawing.Point(4, 42);
+            fileDescCheckBox.Name = "fileDescCheckBox";
+            fileDescCheckBox.Size = new System.Drawing.Size(153, 25);
+            fileDescCheckBox.TabIndex = 12;
+            fileDescCheckBox.Text = "File Description:";
+            fileDescCheckBox.UseVisualStyleBackColor = true;
             // 
             // origFileNameCheckBox
             // 
-            this.origFileNameCheckBox.AutoCheck = false;
-            this.origFileNameCheckBox.AutoSize = true;
-            this.origFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.origFileNameCheckBox.Location = new System.Drawing.Point(4, 3);
-            this.origFileNameCheckBox.Name = "origFileNameCheckBox";
-            this.origFileNameCheckBox.Size = new System.Drawing.Size(167, 25);
-            this.origFileNameCheckBox.TabIndex = 10;
-            this.origFileNameCheckBox.Text = "Original Filename:";
-            this.origFileNameCheckBox.UseVisualStyleBackColor = true;
+            origFileNameCheckBox.AutoCheck = false;
+            origFileNameCheckBox.AutoSize = true;
+            origFileNameCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            origFileNameCheckBox.Location = new System.Drawing.Point(4, 3);
+            origFileNameCheckBox.Name = "origFileNameCheckBox";
+            origFileNameCheckBox.Size = new System.Drawing.Size(167, 25);
+            origFileNameCheckBox.TabIndex = 10;
+            origFileNameCheckBox.Text = "Original Filename:";
+            origFileNameCheckBox.UseVisualStyleBackColor = true;
             // 
             // eventsDataGridView
             // 
-            this.eventsDataGridView.AllowUserToDeleteRows = false;
-            this.eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.addedColumn,
-            this.eventIdColumn,
-            this.filenameColumn,
-            this.productColumn,
-            this.policyColumn,
-            this.publisherColumn});
-            this.eventsDataGridView.Location = new System.Drawing.Point(167, 101);
-            this.eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
-            this.eventsDataGridView.MultiSelect = false;
-            this.eventsDataGridView.Name = "eventsDataGridView";
-            this.eventsDataGridView.EnableHeadersVisualStyles = false;
-            this.eventsDataGridView.AllowUserToResizeRows = false;
-            this.eventsDataGridView.ReadOnly = true;
-            this.eventsDataGridView.RowHeadersVisible = false;
-            this.eventsDataGridView.RowHeadersWidth = 70;
-            this.eventsDataGridView.RowTemplate.Height = 24;
-            this.eventsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventsDataGridView.Size = new System.Drawing.Size(896, 287);
-            this.eventsDataGridView.TabIndex = 4;
-            this.eventsDataGridView.VirtualMode = true;
-            this.eventsDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EventRowClick);
-            this.eventsDataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.EventsDataGrid_CellValueNeeded);
-            this.eventsDataGridView.SelectionChanged += new System.EventHandler(this.RowSelectionChanged);
+            eventsDataGridView.AllowUserToDeleteRows = false;
+            eventsDataGridView.AllowUserToResizeRows = false;
+            eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { addedColumn, eventIdColumn, filenameColumn, productColumn, policyColumn, publisherColumn });
+            eventsDataGridView.EnableHeadersVisualStyles = false;
+            eventsDataGridView.Location = new System.Drawing.Point(167, 101);
+            eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
+            eventsDataGridView.MultiSelect = false;
+            eventsDataGridView.Name = "eventsDataGridView";
+            eventsDataGridView.ReadOnly = true;
+            eventsDataGridView.RowHeadersVisible = false;
+            eventsDataGridView.RowHeadersWidth = 70;
+            eventsDataGridView.RowTemplate.Height = 24;
+            eventsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            eventsDataGridView.Size = new System.Drawing.Size(896, 287);
+            eventsDataGridView.TabIndex = 4;
+            eventsDataGridView.VirtualMode = true;
+            eventsDataGridView.CellClick += EventRowClick;
+            eventsDataGridView.CellValueNeeded += EventsDataGrid_CellValueNeeded;
+            eventsDataGridView.SelectionChanged += RowSelectionChanged;
             // 
             // addedColumn
             // 
-            this.addedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.addedColumn.HeaderText = "Added To Policy";
-            this.addedColumn.MinimumWidth = 100;
-            this.addedColumn.Name = "addedColumn";
-            this.addedColumn.ReadOnly = true;
-            this.addedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            addedColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            addedColumn.HeaderText = "Added To Policy";
+            addedColumn.MinimumWidth = 100;
+            addedColumn.Name = "addedColumn";
+            addedColumn.ReadOnly = true;
+            addedColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            addedColumn.Width = 145;
             // 
             // eventIdColumn
             // 
-            this.eventIdColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.eventIdColumn.HeaderText = "Event Id";
-            this.eventIdColumn.MinimumWidth = 6;
-            this.eventIdColumn.Name = "eventIdColumn";
-            this.eventIdColumn.ReadOnly = true;
-            this.eventIdColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.eventIdColumn.Width = 82;
+            eventIdColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            eventIdColumn.HeaderText = "Event Id";
+            eventIdColumn.MinimumWidth = 6;
+            eventIdColumn.Name = "eventIdColumn";
+            eventIdColumn.ReadOnly = true;
+            eventIdColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            eventIdColumn.Width = 91;
             // 
             // filenameColumn
             // 
-            this.filenameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.filenameColumn.HeaderText = "Filename";
-            this.filenameColumn.MinimumWidth = 6;
-            this.filenameColumn.Name = "filenameColumn";
-            this.filenameColumn.ReadOnly = true;
-            this.filenameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.filenameColumn.Width = 94;
+            filenameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            filenameColumn.HeaderText = "Filename";
+            filenameColumn.MinimumWidth = 6;
+            filenameColumn.Name = "filenameColumn";
+            filenameColumn.ReadOnly = true;
+            filenameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            filenameColumn.Width = 98;
             // 
             // productColumn
             // 
-            this.productColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.productColumn.HeaderText = "Product";
-            this.productColumn.MinimumWidth = 6;
-            this.productColumn.Name = "productColumn";
-            this.productColumn.ReadOnly = true;
-            this.productColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.productColumn.Width = 86;
+            productColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            productColumn.HeaderText = "Product";
+            productColumn.MinimumWidth = 6;
+            productColumn.Name = "productColumn";
+            productColumn.ReadOnly = true;
+            productColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            productColumn.Width = 89;
             // 
             // policyColumn
             // 
-            this.policyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.policyColumn.HeaderText = "Policy Name";
-            this.policyColumn.MinimumWidth = 6;
-            this.policyColumn.Name = "policyColumn";
-            this.policyColumn.ReadOnly = true;
-            this.policyColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.policyColumn.Width = 106;
+            policyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            policyColumn.HeaderText = "Policy Name";
+            policyColumn.MinimumWidth = 6;
+            policyColumn.Name = "policyColumn";
+            policyColumn.ReadOnly = true;
+            policyColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            policyColumn.Width = 120;
             // 
             // publisherColumn
             // 
-            this.publisherColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.publisherColumn.HeaderText = "Publisher";
-            this.publisherColumn.MinimumWidth = 6;
-            this.publisherColumn.Name = "publisherColumn";
-            this.publisherColumn.ReadOnly = true;
-            this.publisherColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.publisherColumn.Width = 96;
+            publisherColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            publisherColumn.HeaderText = "Publisher";
+            publisherColumn.MinimumWidth = 6;
+            publisherColumn.Name = "publisherColumn";
+            publisherColumn.ReadOnly = true;
+            publisherColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            publisherColumn.Width = 98;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(162, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(292, 29);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Configure Event Log Rules";
+            label1.AutoSize = true;
+            label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label1.Location = new System.Drawing.Point(162, 29);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(292, 29);
+            label1.TabIndex = 6;
+            label1.Text = "Configure Event Log Rules";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(164, 71);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(391, 18);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Create custom rules based on the WDAC event log events";
+            label2.AutoSize = true;
+            label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label2.Location = new System.Drawing.Point(164, 71);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(391, 18);
+            label2.TabIndex = 7;
+            label2.Text = "Create custom rules based on the WDAC event log events";
             // 
             // hashRulePanel
             // 
-            this.hashRulePanel.Controls.Add(this.label5);
-            this.hashRulePanel.Controls.Add(this.label4);
-            this.hashRulePanel.Controls.Add(this.sha2TextBox);
-            this.hashRulePanel.Controls.Add(this.sha1TextBox);
-            this.hashRulePanel.Location = new System.Drawing.Point(765, 664);
-            this.hashRulePanel.Name = "hashRulePanel";
-            this.hashRulePanel.Size = new System.Drawing.Size(603, 93);
-            this.hashRulePanel.TabIndex = 22;
-            this.hashRulePanel.Visible = false;
+            hashRulePanel.Controls.Add(label5);
+            hashRulePanel.Controls.Add(label4);
+            hashRulePanel.Controls.Add(sha2TextBox);
+            hashRulePanel.Controls.Add(sha1TextBox);
+            hashRulePanel.Location = new System.Drawing.Point(765, 664);
+            hashRulePanel.Name = "hashRulePanel";
+            hashRulePanel.Size = new System.Drawing.Size(603, 93);
+            hashRulePanel.TabIndex = 22;
+            hashRulePanel.Visible = false;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(140, 21);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "SHA256 PE Hash:";
+            label5.AutoSize = true;
+            label5.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label5.Location = new System.Drawing.Point(12, 55);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(140, 21);
+            label5.TabIndex = 24;
+            label5.Text = "SHA256 PE Hash:";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 18);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(122, 21);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "SHA1 PE Hash:";
+            label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label4.Location = new System.Drawing.Point(12, 18);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(122, 21);
+            label4.TabIndex = 23;
+            label4.Text = "SHA1 PE Hash:";
             // 
             // sha2TextBox
             // 
-            this.sha2TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha2TextBox.Location = new System.Drawing.Point(173, 52);
-            this.sha2TextBox.Name = "sha2TextBox";
-            this.sha2TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sha2TextBox.ReadOnly = true;
-            this.sha2TextBox.Size = new System.Drawing.Size(399, 26);
-            this.sha2TextBox.TabIndex = 18;
+            sha2TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            sha2TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            sha2TextBox.Location = new System.Drawing.Point(173, 52);
+            sha2TextBox.Name = "sha2TextBox";
+            sha2TextBox.ReadOnly = true;
+            sha2TextBox.Size = new System.Drawing.Size(399, 26);
+            sha2TextBox.TabIndex = 18;
             // 
             // sha1TextBox
             // 
-            this.sha1TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sha1TextBox.Location = new System.Drawing.Point(173, 15);
-            this.sha1TextBox.Name = "sha1TextBox";
-            this.sha1TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sha1TextBox.ReadOnly = true;
-            this.sha1TextBox.Size = new System.Drawing.Size(397, 26);
-            this.sha1TextBox.TabIndex = 16;
+            sha1TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            sha1TextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            sha1TextBox.Location = new System.Drawing.Point(173, 15);
+            sha1TextBox.Name = "sha1TextBox";
+            sha1TextBox.ReadOnly = true;
+            sha1TextBox.Size = new System.Drawing.Size(397, 26);
+            sha1TextBox.TabIndex = 16;
             // 
             // filePathRulePanel
             // 
-            this.filePathRulePanel.Controls.Add(this.filePathTextBox);
-            this.filePathRulePanel.Controls.Add(this.folderPathTextBox);
-            this.filePathRulePanel.Controls.Add(this.folderPathCheckBox);
-            this.filePathRulePanel.Controls.Add(this.filePathCheckBox);
-            this.filePathRulePanel.Location = new System.Drawing.Point(16, 664);
-            this.filePathRulePanel.Name = "filePathRulePanel";
-            this.filePathRulePanel.Size = new System.Drawing.Size(743, 93);
-            this.filePathRulePanel.TabIndex = 22;
-            this.filePathRulePanel.Visible = false;
+            filePathRulePanel.Controls.Add(filePathTextBox);
+            filePathRulePanel.Controls.Add(folderPathTextBox);
+            filePathRulePanel.Controls.Add(folderPathCheckBox);
+            filePathRulePanel.Controls.Add(filePathCheckBox);
+            filePathRulePanel.Location = new System.Drawing.Point(16, 664);
+            filePathRulePanel.Name = "filePathRulePanel";
+            filePathRulePanel.Size = new System.Drawing.Size(743, 93);
+            filePathRulePanel.TabIndex = 22;
+            filePathRulePanel.Visible = false;
             // 
             // filePathTextBox
             // 
-            this.filePathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathTextBox.Location = new System.Drawing.Point(173, 16);
-            this.filePathTextBox.Name = "filePathTextBox";
-            this.filePathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.filePathTextBox.ReadOnly = true;
-            this.filePathTextBox.Size = new System.Drawing.Size(516, 28);
-            this.filePathTextBox.TabIndex = 18;
+            filePathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            filePathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            filePathTextBox.Location = new System.Drawing.Point(173, 16);
+            filePathTextBox.Name = "filePathTextBox";
+            filePathTextBox.ReadOnly = true;
+            filePathTextBox.Size = new System.Drawing.Size(516, 28);
+            filePathTextBox.TabIndex = 18;
             // 
             // folderPathTextBox
             // 
-            this.folderPathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathTextBox.Location = new System.Drawing.Point(173, 53);
-            this.folderPathTextBox.Name = "folderPathTextBox";
-            this.folderPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.folderPathTextBox.ReadOnly = true;
-            this.folderPathTextBox.Size = new System.Drawing.Size(516, 28);
-            this.folderPathTextBox.TabIndex = 17;
+            folderPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            folderPathTextBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            folderPathTextBox.Location = new System.Drawing.Point(173, 53);
+            folderPathTextBox.Name = "folderPathTextBox";
+            folderPathTextBox.ReadOnly = true;
+            folderPathTextBox.Size = new System.Drawing.Size(516, 28);
+            folderPathTextBox.TabIndex = 17;
             // 
             // folderPathCheckBox
             // 
-            this.folderPathCheckBox.AutoCheck = false;
-            this.folderPathCheckBox.AutoSize = true;
-            this.folderPathCheckBox.Checked = true;
-            this.folderPathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.folderPathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderPathCheckBox.Location = new System.Drawing.Point(3, 55);
-            this.folderPathCheckBox.Name = "folderPathCheckBox";
-            this.folderPathCheckBox.Size = new System.Drawing.Size(122, 25);
-            this.folderPathCheckBox.TabIndex = 12;
-            this.folderPathCheckBox.Text = "Folder Path:";
-            this.folderPathCheckBox.UseVisualStyleBackColor = true;
+            folderPathCheckBox.AutoSize = true;
+            folderPathCheckBox.Checked = true;
+            folderPathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            folderPathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            folderPathCheckBox.Location = new System.Drawing.Point(3, 55);
+            folderPathCheckBox.Name = "folderPathCheckBox";
+            folderPathCheckBox.Size = new System.Drawing.Size(122, 25);
+            folderPathCheckBox.TabIndex = 12;
+            folderPathCheckBox.Text = "Folder Path:";
+            folderPathCheckBox.UseVisualStyleBackColor = true;
             // 
             // filePathCheckBox
             // 
-            this.filePathCheckBox.AutoCheck = false;
-            this.filePathCheckBox.AutoSize = true;
-            this.filePathCheckBox.Checked = true;
-            this.filePathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.filePathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filePathCheckBox.Location = new System.Drawing.Point(3, 18);
-            this.filePathCheckBox.Name = "filePathCheckBox";
-            this.filePathCheckBox.Size = new System.Drawing.Size(102, 25);
-            this.filePathCheckBox.TabIndex = 10;
-            this.filePathCheckBox.Text = "File Path:";
-            this.filePathCheckBox.UseVisualStyleBackColor = true;
+            filePathCheckBox.AutoSize = true;
+            filePathCheckBox.Checked = true;
+            filePathCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            filePathCheckBox.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            filePathCheckBox.Location = new System.Drawing.Point(3, 18);
+            filePathCheckBox.Name = "filePathCheckBox";
+            filePathCheckBox.Size = new System.Drawing.Size(102, 25);
+            filePathCheckBox.TabIndex = 10;
+            filePathCheckBox.Text = "File Path:";
+            filePathCheckBox.UseVisualStyleBackColor = true;
             // 
             // EventLogRuleConfiguration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.publisherRulePanel);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.filePathRulePanel);
-            this.Controls.Add(this.ruleTypeComboBox);
-            this.Controls.Add(this.hashRulePanel);
-            this.Controls.Add(this.fileAttributeRulePanel);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.eventsDataGridView);
-            this.Controls.Add(this.addButton);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "EventLogRuleConfiguration";
-            this.Size = new System.Drawing.Size(1208, 782);
-            this.Load += new System.EventHandler(this.EventLogRuleConfiguration_Load);
-            this.Validated += new System.EventHandler(this.EventLogRuleConfiguration_Validated);
-            this.publisherRulePanel.ResumeLayout(false);
-            this.publisherRulePanel.PerformLayout();
-            this.fileAttributeRulePanel.ResumeLayout(false);
-            this.fileAttributeRulePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.eventsDataGridView)).EndInit();
-            this.hashRulePanel.ResumeLayout(false);
-            this.hashRulePanel.PerformLayout();
-            this.filePathRulePanel.ResumeLayout(false);
-            this.filePathRulePanel.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            BackColor = System.Drawing.Color.White;
+            Controls.Add(publisherRulePanel);
+            Controls.Add(label3);
+            Controls.Add(filePathRulePanel);
+            Controls.Add(ruleTypeComboBox);
+            Controls.Add(hashRulePanel);
+            Controls.Add(fileAttributeRulePanel);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(eventsDataGridView);
+            Controls.Add(addButton);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "EventLogRuleConfiguration";
+            Size = new System.Drawing.Size(1208, 782);
+            Load += EventLogRuleConfiguration_Load;
+            Validated += EventLogRuleConfiguration_Validated;
+            publisherRulePanel.ResumeLayout(false);
+            publisherRulePanel.PerformLayout();
+            fileAttributeRulePanel.ResumeLayout(false);
+            fileAttributeRulePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)eventsDataGridView).EndInit();
+            hashRulePanel.ResumeLayout(false);
+            hashRulePanel.PerformLayout();
+            filePathRulePanel.ResumeLayout(false);
+            filePathRulePanel.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
