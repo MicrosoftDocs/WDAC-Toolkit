@@ -22,7 +22,6 @@ namespace WDAC_Wizard
         public WDAC_Policy Policy;
         private List<string> AllFilesinFolder;          // List to track all files in a folder 
 
-        private Logger Log;
         public MainWindow _MainWindow;
         private string XmlPath;
 
@@ -47,11 +46,10 @@ namespace WDAC_Wizard
             this._MainWindow = pMainWindow;
             this._MainWindow.RedoFlowRequired = false;
             this._MainWindow.CustomRuleinProgress = false; 
-            this.Log = this._MainWindow.Log;
             this.RowSelected = -1;
             this.isCustomPanelOpen = false; 
 
-            this.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
+            Logger.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace WDAC_Wizard
             }
             catch(Exception exp)
             {
-                this.Log.AddErrorMsg("DisplayRules() encountered an exception.", exp);
+                Logger.Log.AddErrorMsg("DisplayRules() encountered an exception.", exp);
                 DialogResult res = MessageBox.Show("The Wizard is unable to read all the rules in your CI policy xml file. The policy XML is likely corrupted. " +
                                                     "Try converting the policy to binary to locate the issue in the XML.",
                                                     "Parsing Error", 
@@ -104,7 +102,7 @@ namespace WDAC_Wizard
                 this.isCustomPanelOpen = true;
             }
             
-            this.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
+            Logger.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
         }
 
         
@@ -463,8 +461,8 @@ namespace WDAC_Wizard
                 }
             }
                 
-            this.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
-            this.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath); 
+            Logger.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
+            Logger.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath); 
 
             try
             {
@@ -473,7 +471,7 @@ namespace WDAC_Wizard
             } 
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
+                Logger.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
                                                     "Parsing Error", 
@@ -556,7 +554,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            this.Log.AddNewSeparationLine("Delete Rule Button Clicked");
+            Logger.Log.AddNewSeparationLine("Delete Rule Button Clicked");
 
             // Determine whether the user is deleting one row or multiple rows
             int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
@@ -594,7 +592,7 @@ namespace WDAC_Wizard
 
             if (res == DialogResult.No)
             {
-                this.Log.AddInfoMsg(Properties.Resources.DeleteRowsCanceled);
+                Logger.Log.AddInfoMsg(Properties.Resources.DeleteRowsCanceled);
                 return;
             }
 
@@ -645,7 +643,7 @@ namespace WDAC_Wizard
             string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
             string ruleKey = (String)this.rulesDataGrid["Column_Files", rowIdx].Value;
 
-            this.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
+            Logger.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
 
             // Remove from table iff sucessful re-serialization
             // Remove from DisplayObject
@@ -676,7 +674,7 @@ namespace WDAC_Wizard
                         if (customRule.RowNumber == rowIdx)
                         {
                             customRuleIdx = numIdex; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
-                            this.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
+                            Logger.Log.AddInfoMsg(String.Format("Removing custom rule - {0}", customRule));
                             break;
                         }
                         else
@@ -707,7 +705,7 @@ namespace WDAC_Wizard
                         if (comRule.Provider == provider && comRule.Key == key)
                         {
                             settingIdx = numIdx; // = this.Policy.CustomRules.Where((val, idx) => idx != numIdex).ToArray();
-                            this.Log.AddInfoMsg(String.Format("Removing COM rule - {0}.{1}", provider, key));
+                            Logger.Log.AddInfoMsg(String.Format("Removing COM rule - {0}.{1}", provider, key));
                             break;
                         }
                         else
@@ -742,7 +740,7 @@ namespace WDAC_Wizard
                     if (signer.ID.Equals(ruleId))
                     {
                         this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
-                        this.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
+                        Logger.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
 
                         // Remove the signer from Signing Scenarios
                         RemoveSignerIdFromSigningScenario(signer.ID);
@@ -770,7 +768,7 @@ namespace WDAC_Wizard
 
             else if (ruleType.Equals("Hash"))
             {
-                this.Log.AddInfoMsg("Removing Hash Rule");
+                Logger.Log.AddInfoMsg("Removing Hash Rule");
 
                 numIdex = 0;
                 string friendlyName = String.Empty;
@@ -843,7 +841,7 @@ namespace WDAC_Wizard
                     if (fileRuleID.Equals(ruleId))
                     {
                         this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
-                        this.Log.AddInfoMsg("Removing from siPolicy.signers");
+                        Logger.Log.AddInfoMsg("Removing from siPolicy.signers");
                         break;
                     }
                     else
@@ -863,7 +861,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Serialization failed after removing rule with error: ", exp);
+                Logger.Log.AddErrorMsg("Serialization failed after removing rule with error: ", exp);
                 return;
             }
         }
@@ -886,7 +884,7 @@ namespace WDAC_Wizard
                         {
                             scenario.ProductSigners.AllowedSigners.AllowedSigner = scenario.ProductSigners.AllowedSigners.AllowedSigner
                                 .Where((val, idx) => idx != numIdex).ToArray();
-                            this.Log.AddInfoMsg(String.Format("Removing {0} from AllowedSigners", allowedSigner.SignerId.ToString()));
+                            Logger.Log.AddInfoMsg(String.Format("Removing {0} from AllowedSigners", allowedSigner.SignerId.ToString()));
 
                             // If removing the last AllowedSigner, set AllowedSigners to null so serialization is successful
                             if (scenario.ProductSigners.AllowedSigners.AllowedSigner.Length == 0)
@@ -911,7 +909,7 @@ namespace WDAC_Wizard
                         {
                             scenario.ProductSigners.DeniedSigners.DeniedSigner = scenario.ProductSigners.DeniedSigners.DeniedSigner
                                 .Where((val, idx) => idx != numIdex).ToArray();
-                            this.Log.AddInfoMsg(String.Format("Removing {0} from DeniedSigners", deniedSigner.SignerId.ToString()));
+                            Logger.Log.AddInfoMsg(String.Format("Removing {0} from DeniedSigners", deniedSigner.SignerId.ToString()));
 
                             if (scenario.ProductSigners.DeniedSigners.DeniedSigner.Length == 0)
                             {
@@ -955,7 +953,7 @@ namespace WDAC_Wizard
                         this.Policy.siPolicy.CiSigners = null;
                     }
 
-                    this.Log.AddInfoMsg(String.Format("Removing {0} from CiSigners", signerId));
+                    Logger.Log.AddInfoMsg(String.Format("Removing {0} from CiSigners", signerId));
                     break;
                 }
                 else
@@ -989,7 +987,7 @@ namespace WDAC_Wizard
                     {
                         scenario.ProductSigners.FileRulesRef.FileRuleRef = scenario.ProductSigners.FileRulesRef.FileRuleRef.
                             Where((val, idx) => idx != numIdex).ToArray();
-                        this.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleId));
+                        Logger.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleId));
 
                         if(scenario.ProductSigners.FileRulesRef.FileRuleRef.Length == 0)
                         {

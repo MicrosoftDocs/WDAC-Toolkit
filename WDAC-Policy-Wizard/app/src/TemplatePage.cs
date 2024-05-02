@@ -21,7 +21,6 @@ namespace WDAC_Wizard
         // Properties to maintain the policy mode selected
         private MainWindow _MainWindow;
         private WDAC_Policy _Policy;
-        private Logger Log; 
         public TemplatePage(MainWindow pMainWindow)
         {
             InitializeComponent();
@@ -30,8 +29,7 @@ namespace WDAC_Wizard
             this._MainWindow.RedoFlowRequired = false; 
             this._MainWindow.ErrorMsg = "Please select a policy template before continuing."; 
             this._Policy = new WDAC_Policy();
-            this.Log = this._MainWindow.Log;
-            this.Log.AddInfoMsg("==== Template Page Initialized ===="); 
+            Logger.Log.AddInfoMsg("==== Template Page Initialized ===="); 
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("AllowMicrosoft"); 
             allowMsft_Button.Tag = "toggle";
             allowMsft_Button.Image = Properties.Resources.radio_on;
-            this.Log.AddInfoMsg("New Base Template: Allow Microsoft selected");
+            Logger.Log.AddInfoMsg("New Base Template: Allow Microsoft selected");
         }
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("WindowsWorks");
             windowsWorks_Button.Tag = "toggle";
             windowsWorks_Button.Image = Properties.Resources.radio_on;
-            this.Log.AddInfoMsg("New Base Template: Windows Works selected");
+            Logger.Log.AddInfoMsg("New Base Template: Windows Works selected");
         }
 
         /// <summary>
@@ -101,7 +99,7 @@ namespace WDAC_Wizard
             SetDefaultTextValues("SignedReputable");
             signedReputable_Button.Tag = "toggle";
             signedReputable_Button.Image = Properties.Resources.radio_on;
-            this.Log.AddInfoMsg("New Base Template: Signed and Reputable selected");
+            Logger.Log.AddInfoMsg("New Base Template: Signed and Reputable selected");
         }
 
         /// <summary>
@@ -266,7 +264,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for ISG link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for ISG link encountered the following error", exp);
             }
         }
 
@@ -316,7 +314,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for Windows Works template encountered the following error", exp);
             }
         }
 

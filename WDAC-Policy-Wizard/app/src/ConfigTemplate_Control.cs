@@ -20,23 +20,17 @@ namespace WDAC_Wizard
 {
     public partial class ConfigTemplate_Control : UserControl
     {        
-        public Logger Log { get; set; }
         public MainWindow _MainWindow;
         private WDAC_Policy Policy;
 
         public ConfigTemplate_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
-
-            
             this.Policy = pMainWindow.Policy; 
             this._MainWindow = pMainWindow;
-            this.Log = this._MainWindow.Log;
-
             this._MainWindow.ErrorOnPage = false;
             this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
-
-            this.Log.AddInfoMsg("==== Configuration Template Page Initialized ====");
+            Logger.Log.AddInfoMsg("==== Configuration Template Page Initialized ====");
         }
 
         /// <summary>
@@ -161,7 +155,7 @@ namespace WDAC_Wizard
                         SetRuleOptionState(key, true);
                     }
 
-                    this.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
+                    Logger.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
                     break; // break out of foreach, we found the button
                 }
             } 
@@ -316,7 +310,7 @@ namespace WDAC_Wizard
                 panel_AdvancedOptions.Visible = false;
                 this.label_AdvancedOptions.Text = "+ Advanced Options"; 
             }
-            this.Log.AddInfoMsg("Advanced options clicked.");
+            Logger.Log.AddInfoMsg("Advanced options clicked.");
         }
 
         /// <summary>
@@ -358,7 +352,7 @@ namespace WDAC_Wizard
             }
             catch(Exception e)
             {
-                this.Log.AddErrorMsg("Reading RulesDict.xml in InitRulesDict() encountered the following error: ", e); 
+                Logger.Log.AddErrorMsg("Reading RulesDict.xml in InitRulesDict() encountered the following error: ", e); 
             }
             return rulesDict; 
         }
@@ -504,13 +498,13 @@ namespace WDAC_Wizard
             // Pre-existing base policy IF EDIT policy selected
 
             string xmlPathToRead = GetTemplatePath();
-            this.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
+            Logger.Log.AddInfoMsg(String.Format("--- Reading Set Rules from {0} ---", xmlPathToRead));
 
             // Read File
             SiPolicy sipolicy = Helper.DeserializeXMLtoPolicy(xmlPathToRead); 
             if(sipolicy == null)
             {
-                this._MainWindow.Log.AddErrorMsg("Reading the xml CI policy failed during ReadSetRules");
+                Logger.Log.AddErrorMsg("Reading the xml CI policy failed during ReadSetRules");
                 
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML may be corrupted. ",
@@ -741,7 +735,7 @@ namespace WDAC_Wizard
 
             else
             {
-                Log.AddErrorMsg("Rule Value not found for rule " + rule);
+                Logger.Log.AddErrorMsg("Rule Value not found for rule " + rule);
             }
             return parsedRule; 
         }
@@ -765,7 +759,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
             }
         }
 
@@ -780,7 +774,7 @@ namespace WDAC_Wizard
             }
             catch (Exception exp)
             {
-                this.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
+                Logger.Log.AddErrorMsg("Launching webpage for policy options link encountered the following error", exp);
             }
         }
 
