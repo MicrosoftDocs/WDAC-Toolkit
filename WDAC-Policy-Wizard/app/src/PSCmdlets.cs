@@ -91,7 +91,7 @@ namespace WDAC_Wizard
 
             // Create runspace, pipeline and run script
             Pipeline pipeline = CreatePipeline();
-
+          
             // Scan the file to extract the TBS hash (or hashes) for the signers
             string createRuleCmd = String.Format("$DummyHashRule += New-CIPolicyRule -Level Hash " +
                 "-DriverFilePath \"{0}\"", exceptRule.ReferenceFile);
@@ -375,6 +375,7 @@ namespace WDAC_Wizard
             }
 
             _Runspace.Dispose();
+
             return binPath;
         }
 
@@ -388,7 +389,7 @@ namespace WDAC_Wizard
         {
             // Create runspace, pipeline and runscript
             Pipeline pipeline = CreatePipeline();
-            
+
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
 
             // Logging
@@ -478,6 +479,7 @@ namespace WDAC_Wizard
                 }
             }
             _Runspace.Dispose();
+
         }
     }
 }

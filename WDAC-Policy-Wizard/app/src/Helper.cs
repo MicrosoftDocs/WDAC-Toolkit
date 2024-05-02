@@ -806,7 +806,6 @@ namespace WDAC_Wizard
             // Check that WDAC feature is compatible with system
             // Cmdlets are available on all builds 1909+. 
             // Pre-1909, Enterprise SKU only: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/feature-availability
-
             int REQUIRED_V = 1909;
             string REQUIRED_ED = "Enterprise";
 

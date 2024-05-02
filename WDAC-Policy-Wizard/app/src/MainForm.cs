@@ -1248,6 +1248,7 @@ namespace WDAC_Wizard
                 if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
                     SiPolicy signerSiPolicy = PSCmdlets.CreatePolicyRuleFromPS(customRule, tmpPolicyPath);
+
                     if (signerSiPolicy != null)
                     {
                         Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
