@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
+using System.Diagnostics;
 
 namespace WDAC_Wizard
 {
@@ -502,7 +503,7 @@ namespace WDAC_Wizard
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/" +
                     "deploy-multiple-windows-defender-application-control-policies";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {

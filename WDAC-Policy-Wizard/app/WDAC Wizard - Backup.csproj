@@ -60,7 +60,9 @@
     <Compile Update="src\SigningRules_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="src\TemplatePage.cs" />
+    <Compile Update="src\TemplatePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.ConfigTemplate_Control.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.PolicyType.resources" />
@@ -205,15 +207,6 @@
     <Content Include="obj\Release\WDAC Wizard.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Release\WDAC Wizard.exe" />
     <Content Include="obj\Release\WDAC Wizard.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FileHelpers" Version="3.5.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Management" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Utility" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.ConsoleHost" Version="7.4.2" />
-    <PackageReference Include="Microsoft.WSMan.Management" Version="7.4.2" />
-    <PackageReference Include="System.Management.Automation" Version="7.4.2" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

@@ -4,6 +4,7 @@ using System.Management.Automation;
 using System.Collections.Generic; 
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
+using System.Diagnostics;
 
 namespace WDAC_Wizard
 {
@@ -11,6 +12,26 @@ namespace WDAC_Wizard
     {
         // Key already added PowerShell error HResult
         const int PSKEY_HRESULT = -2146233087;
+
+        // Name of PS Script to generate signer policy (workaround for New-CIPolicyRule bug)
+        const string PS_FILENAME = "CreateSignerPolicy.ps1";
+
+        // Internal static instance of Runspace for PS pipelines
+        internal static Runspace _Runspace {  get; set; }
+
+        /// <summary>
+        /// Creates Runspace and Pipeline while importing the ConfigCI module
+        /// </summary>
+        /// <returns></returns>
+        internal static Pipeline CreatePipeline()
+        {
+            _Runspace =  RunspaceFactory.CreateRunspace();
+            _Runspace.Open();
+            Pipeline pipeline = _Runspace.CreatePipeline();
+            pipeline.Commands.AddScript("Import-Module -SkipEditionCheck 'ConfigCI'");
+
+            return pipeline;
+        }
 
         /// <summary>
         /// Creates a dummy signer rule and policy to calculate the TBS hash for custom value signer rules
@@ -22,9 +43,7 @@ namespace WDAC_Wizard
             string DUMMYPATH = Path.Combine(Helper.GetTempFolderPathRoot(), "DummySignersPolicy.xml");
 
             // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
+            Pipeline pipeline = CreatePipeline();
 
             // Scan the file to extract the TBS hash (or hashes) for the signers
             pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile));
@@ -47,7 +66,7 @@ namespace WDAC_Wizard
                 Logger.Log.AddErrorMsg("CreateSignerFromPS() caught the following exception", e);
                 return null;
             }
-            runspace.Dispose();
+            _Runspace.Dispose();
 
             // De-serialize the dummy policy to get the signer objects
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(DUMMYPATH);
@@ -71,10 +90,8 @@ namespace WDAC_Wizard
             string DUMMYPATH = Path.Combine(Helper.GetTempFolderPathRoot(), "DummyHashPolicy.xml");
 
             // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
+            Pipeline pipeline = CreatePipeline();
+          
             // Scan the file to extract the TBS hash (or hashes) for the signers
             string createRuleCmd = String.Format("$DummyHashRule += New-CIPolicyRule -Level Hash " +
                 "-DriverFilePath \"{0}\"", exceptRule.ReferenceFile);
@@ -103,7 +120,7 @@ namespace WDAC_Wizard
                 Logger.Log.AddErrorMsg("CreateHashRulesFromPS() caught the following exception:", e);
                 return null;
             }
-            runspace.Dispose();
+            _Runspace.Dispose();
 
             // De-serialize the dummy policy to get the signer objects
             SiPolicy tempSiPolicy = Helper.DeserializeXMLtoPolicy(DUMMYPATH);
@@ -120,99 +137,82 @@ namespace WDAC_Wizard
         /// <param name="customRule"></param>
         /// <param name="policyPath"></param>
         /// <returns></returns>
-        internal static SiPolicy CreateSignerPolicyFromPS(PolicyCustomRules customRule, string policyPath)
+        internal static SiPolicy CreatePolicyRuleFromPS(PolicyCustomRules customRule, string policyPath)
         {
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
+            // As a result of a bug in the ConfigCI New-CiPolicyRule variable output, the New-CIPolicyRule command
+            // must be run in Powershell.exe (5.x) as opposed to PowerShell Core (7.x). Once the deserialization bug is 
+            // fixed, the PS commands can be run in the runspace like all other commands
+            
             // Scan the file to extract the TBS hash (or hashes for fallback) and, optionally, the CN for the signer rules
-            string newPolicyRuleCmd = string.Empty;
-            if (customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
-            {
-                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level Publisher -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
-            }
-            else // Publisher checkbox unselected - create a PCA rule
-            {
-                newPolicyRuleCmd = String.Format("$DummySignerRule = New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile);
-            }
+            string level = string.Empty;
+            string deny = "False";
+            string ps1File = Path.Combine(Helper.GetExecutablePath(false), PS_FILENAME);
+            string wizardPath = Helper.GetExecutablePath(true);
 
+            if(customRule.Type == PolicyCustomRules.RuleType.Hash)
+            {
+                level = "Hash";
+            }
+            else
+            {
+                if (customRule.CheckboxCheckStates.checkBox1) // Publisher checkbox selected
+                {
+                    level = "Publisher";
+                }
+                else // Publisher checkbox unselected - create a PCA rule
+                {
+                    level = "PcaCertificate";
+                }
+            }
+           
             if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
             {
-                newPolicyRuleCmd += " -Deny";
+                deny = "True";
             }
 
-            pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummySignerRule -FilePath \"{0}\"", policyPath));
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
+                $"-DriverFilePath \"{customRule.ReferenceFile}\" -PolicyPath \"{policyPath}\" -Level {level} -Deny {deny}";
+
+            Logger.Log.AddInfoMsg($"Running the following PS cmd in CreateSignerPolicyFromPS(): {newPolicyScriptCmd}");
+
+            // Execute the Powershell (5.x) via Start Process
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = newPolicyScriptCmd,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            Process process = new Process
+            {
+                StartInfo = startInfo
+            };
 
             try
             {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (CmdletInvocationException e) when (e.HResult == PSKEY_HRESULT)
-            {
-                // Catch the "An item with the same key has already been added" {System.Management.Automation.CmdletInvocationException}
-                // Issue occurs on first powershell invocation - simply calling again fixes the issue
-                // Github bugs 302, 362
-                Logger.Log.AddWarningMsg("CreateSignerPolicyFromPS() caught CmdletInvocationException - An item with the same key has already been added");
-                return CreateSignerPolicyFromPS(customRule, policyPath);
-            }
-            catch (Exception e)
-            {
-                Logger.Log.AddErrorMsg("CreateSignerPolicyFromPS() caught the following exception", e);
-                return null;
-            }
+                process.Start();
+                process.WaitForExit();
 
-            runspace.Dispose();
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
 
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
-            return siPolicy;
-        }
-
-        /// <summary>
-        /// Tries to add attributes like filename, publisher and version to non-custom publisher rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <param name="signerSiPolicy"></param>
-        internal static SiPolicy CreateHashPolicyFromPS(PolicyCustomRules customRule, string policyPath)
-        {
-            // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            // Scan the file to extract the hashes for rules
-            string newPolicyRuleCmd = String.Format("$DummyHashRule = New-CIPolicyRule -Level Hash -DriverFilePath \"{0}\"", customRule.ReferenceFile);
-            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
-            {
-                newPolicyRuleCmd += " -Deny";
-            }
-
-            pipeline.Commands.AddScript(newPolicyRuleCmd);
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyHashRule -FilePath \"{0}\"", policyPath));
-
-            foreach (var cmd in pipeline.Commands)
-            {
-                Logger.Log.AddInfoMsg("Running the following commands: " + cmd);
-            }
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
+                if(!string.IsNullOrEmpty(error))
+                {
+                    Logger.Log.AddErrorMsg($"CreatePolicyRuleFromPS() threw the following error: {error}");
+                }
+                
             }
             catch (Exception e)
             {
-                Logger.Log.AddErrorMsg("CreateHashPolicyFromPS() encountered the following exception ", e);
+                Logger.Log.AddErrorMsg("CreatePolicyRuleFromPS() caught the following exception", e);
                 return null;
             }
 
-            runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
-            return siPolicy;
+            // De-serialize the dummy policy to get the signer or file rule objects
+            return Helper.DeserializeXMLtoPolicy(policyPath);
         }
 
         /// <summary>
@@ -225,9 +225,7 @@ namespace WDAC_Wizard
         internal static SiPolicy CreateScannedPolicyFromPS(PolicyCustomRules customRule, string policyPath, string basePolicyToSupplementPath = null)
         {
             // Create runspace, pipeline and run script
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
+            Pipeline pipeline = CreatePipeline();
 
             // Scan the file to extract the hashes for rules
             string newPolicyRuleCmd = String.Format("New-CIPolicy -ScanPath \"{0}\" -Level \"{1}\" -FilePath \"{2}\"",
@@ -294,7 +292,7 @@ namespace WDAC_Wizard
                 return null;
             }
 
-            runspace.Dispose();
+            _Runspace.Dispose();
 
             // De-serialize the dummy policy to get the signer objects
             SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
@@ -312,9 +310,7 @@ namespace WDAC_Wizard
         internal static void ResetGuidPs(string path)
         {
             // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
+            Pipeline pipeline = CreatePipeline();
 
             string resetCmd = String.Format("Set-CIPolicyIdInfo -ResetPolicyID \"{0}\"", path);
 
@@ -330,7 +326,7 @@ namespace WDAC_Wizard
                 Logger.Log.AddErrorMsg(String.Format("Exception encountered in ResetGuidPs(): {0}", e));
             }
 
-            runspace.Dispose();
+            _Runspace.Dispose();
         }
 
         /// <summary>
@@ -342,9 +338,7 @@ namespace WDAC_Wizard
             Logger.Log.AddInfoMsg("-- Converting to Binary --");
 
             // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
+            Pipeline pipeline = CreatePipeline();
 
             // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
             string binaryFileName = string.Empty;
@@ -380,7 +374,8 @@ namespace WDAC_Wizard
                 Logger.Log.AddErrorMsg(String.Format("Exception encountered in ConvertPolicyToBinary(): {0}", exp));
             }
 
-            runspace.Dispose();
+            _Runspace.Dispose();
+
             return binPath;
         }
 
@@ -392,6 +387,9 @@ namespace WDAC_Wizard
         /// <param name="destPath">The final destination output path. OutputSchema.xml</param>
         internal static void MergePolicies(List<string> policyPaths, string schemaPath, string destPath)
         {
+            // Create runspace, pipeline and runscript
+            Pipeline pipeline = CreatePipeline();
+
             string mergeScript = "Merge-CIPolicy -PolicyPaths ";
 
             // Logging
@@ -407,12 +405,9 @@ namespace WDAC_Wizard
             Logger.Log.AddInfoMsg("Running the following Merge Commands: ");
             Logger.Log.AddInfoMsg(mergeScript);
 
-            // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
             pipeline.Commands.AddScript(mergeScript);
             pipeline.Commands.Add("Out-String");
+
             try
             {
                 Collection<PSObject> results = pipeline.Invoke();
@@ -423,18 +418,22 @@ namespace WDAC_Wizard
             {
                 Logger.Log.AddErrorMsg(String.Format("Exception encountered in MergeTemplatesPolicy(): {0}", e));
             }
-            runspace.Dispose();
+            _Runspace.Dispose();
         }
 
+        /// <summary>
+        /// Runs the Merge-CIPolicy command for all the policies generated per custom rule
+        /// </summary>
+        /// <param name="customRulesPathList">List of custom policy paths to merge</param>
+        /// <param name="nCustomRules">Number of custom rules generated</param>
+        /// <param name="outputFilePath">Final output policy path</param>
+        /// <param name="pathCustomValuePolicy">Policy containing the list of custom rules e.g. custom path, custom PFN</param>
         internal static void MergeCustomPolicies(List<string> customRulesPathList, int nCustomRules, string outputFilePath, string pathCustomValuePolicy)
         {
             string mergeScript = String.Empty;
 
             // Create runspace, pipeline and runscript
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-
+            Pipeline pipeline = CreatePipeline();
 
             if (customRulesPathList.Count > 0 || nCustomRules > 0)
             {
@@ -479,7 +478,8 @@ namespace WDAC_Wizard
                     Logger.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
                 }
             }
-            runspace.Dispose();
+            _Runspace.Dispose();
+
         }
     }
 }

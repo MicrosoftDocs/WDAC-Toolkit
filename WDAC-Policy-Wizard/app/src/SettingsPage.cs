@@ -251,7 +251,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/README.md";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -271,7 +271,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://github.com/MicrosoftDocs/WDAC-Toolkit/blob/master/PRIVACY.md";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -457,7 +457,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -476,7 +476,7 @@ namespace WDAC_Wizard
             try
             {
                 string webpage = "https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-block-rules";
-                System.Diagnostics.Process.Start(webpage);
+                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
