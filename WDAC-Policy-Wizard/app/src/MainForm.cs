@@ -771,9 +771,9 @@ namespace WDAC_Wizard
             // Short circuit policy building if using Event Log workflow
             if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit && this.EditWorkflow == EditWorkflowType.EventLog)
             {
-                // Save the path under the AppDataLocal\Temp\WDACWizard folder 
+                // Save the path under the Downloads folder 
                 string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
-                string pathToWrite = Path.Combine(this.TempFolderPath, fileName);
+                string pathToWrite = Path.Combine(Helper.GetDocumentsFolder(), fileName);
 
                 try
                 {

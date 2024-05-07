@@ -40,7 +40,7 @@ namespace WDAC_Wizard
 
             this.CiEvents = pMainWindow.CiEvents; 
             this._MainWindow = pMainWindow; 
-            this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.EmptyWDAC);
+            this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty_Supplemental);
 
             this.DisplayObjects = new List<EventDisplayObject>();
 

@@ -37,6 +37,6 @@
   <UpdatePolicySigners />
   <CiSigners />
   <HvciOptions>0</HvciOptions>
-  <BasePolicyID>{784C4414-79F4-4C32-A6A5-F0FB42A51D0D}</BasePolicyID>
-  <PolicyID>{784C4414-79F4-4C32-A6A5-F0FB42A51D0D}</PolicyID>
+  <BasePolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</BasePolicyID>
+  <PolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</PolicyID>
 </SiPolicy>
