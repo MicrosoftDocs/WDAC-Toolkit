@@ -481,6 +481,7 @@ namespace WDAC_Wizard
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
         /// </summary>
         [DelimitedRecord(",")]
+        [IgnoreFirst]
         public class Record
         {
             public string Timestamp;
@@ -495,8 +496,12 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            public string AuthenticodeHash; //TODO: Make the AuthenticodeHash column nullable -- string?
+            
+            [FieldOptional] 
+            public string AuthenticodeHash;
+            [FieldOptional] 
             public string PolicyId;
+            [FieldOptional] 
             public string PolicyName;
         }
 
