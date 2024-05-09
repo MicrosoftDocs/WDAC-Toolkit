@@ -349,7 +349,33 @@ namespace WDAC_Wizard.Properties {
                 return ResourceManager.GetString("EmptyWDAC", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;SiPolicy xmlns=&quot;urn:schemas-microsoft-com:sipolicy&quot; PolicyType=&quot;Supplemental Policy&quot;&gt;
+        ///  &lt;VersionEx&gt;10.0.0.0&lt;/VersionEx&gt;
+        ///  &lt;PlatformID&gt;{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}&lt;/PlatformID&gt;
+        ///  &lt;Rules&gt;
+        ///    &lt;Rule&gt;
+        ///      &lt;Option&gt;Enabled:Unsigned System Integrity Policy&lt;/Option&gt;
+        ///    &lt;/Rule&gt;
+        ///    &lt;Rule&gt;
+        ///      &lt;Option&gt;Enabled:Audit Mode&lt;/Option&gt;
+        ///    &lt;/Rule&gt;
+        ///    &lt;Rule&gt;
+        ///      &lt;Option&gt;Enabled:Advanced Boot Options Menu&lt;/Option&gt;
+        ///    &lt;/Rule&gt;
+        ///    &lt;Rule&gt;
+        ///      &lt;Option&gt;Required:En [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Empty_Supplemental
+        {
+            get
+            {
+                return ResourceManager.GetString("Empty_Supplemental", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Empty_Supplemental.xml.
         /// </summary>

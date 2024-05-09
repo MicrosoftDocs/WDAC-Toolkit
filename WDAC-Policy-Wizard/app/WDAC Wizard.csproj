@@ -33,6 +33,11 @@
     <StartupObject></StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Update="src\BuildPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -194,6 +199,10 @@
     <Content Include="Resources\imgs\windows-logo.png" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
     </None>

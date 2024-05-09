@@ -889,6 +889,25 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Gets the path of the documents folder. If documents folder path doesn't exist, fallsback to Desktop folder
+        /// </summary>
+        /// <returns>MyDocuments folder path. Else, Desktop path</returns>
+        internal static string GetDocumentsFolder()
+        {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); 
+            string deskPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            if(Path.Exists(docPath))
+            {
+                return docPath;
+            }
+            else
+            {
+                return deskPath;
+            }
+        }
+
+        /// <summary>
         /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
         /// </summary>
         /// <returns>DateTime string in format YYYY-MM-DD</returns>
