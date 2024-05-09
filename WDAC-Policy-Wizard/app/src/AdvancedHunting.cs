@@ -157,6 +157,7 @@ namespace WDAC_Wizard
                     // Parse the timestamp
                     try
                     {
+                        // Try to convert the likes of 13/03/2024, 3:40:13.988 pm
                         DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
 
                         // Convert to ISO 8601
@@ -169,6 +170,7 @@ namespace WDAC_Wizard
                     {
                         try
                         {
+                            // Try to convert the likes of Apr 15, 2024 11:09:27 AM
                             DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat2, null);
 
                             // Convert to ISO 8601
