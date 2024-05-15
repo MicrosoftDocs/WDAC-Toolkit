@@ -24,6 +24,7 @@ namespace WDAC_Wizard
 
         // Delimitted value ',' will be replaced with #C#
         const string DEL_VALUE = "#C#";
+        const int TIMESMP_LNG = 22; 
 
         // Errors
         const string NORECORDS_EXC = "No Advanced Hunting Records parsed";
@@ -33,7 +34,7 @@ namespace WDAC_Wizard
 
         private static string LastError = string.Empty;
 
-        const int TIMESMP_LNG = 22; 
+        private static int ErrorCount = 0;
 
         /// <summary>
         /// Parses the CSV file to CiEvent fields
@@ -95,8 +96,8 @@ namespace WDAC_Wizard
             // Replace the line with the fixed version
             e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
 
-            // Bug reported where MDE AH in Local time, not UTC
-            // Replace instances of 'Local' Timestamps with UTC
+            // Issue #364 reported where MDE AH no longer uses ISO 8601 timestamps
+            // Replace instances of these new timestamps with ISO 8601
             // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
             e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
@@ -141,7 +142,9 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static string ConvertTimestampsToUTC(string record)
         {
+            // 2 possible timestamp formats MDE AH data can have as of 5/1/2024
             string timestampFormat = "dd/MM/yyyy, h:mm:ss.fff tt";
+            string timestampFormat2 = "MMM d, yyyy h:mm:ss tt";
             var fields = record.Split(',');
             if (fields.Length > 1)
             {
@@ -154,9 +157,10 @@ namespace WDAC_Wizard
                     // Parse the timestamp
                     try
                     {
+                        // Try to convert the likes of 13/03/2024, 3:40:13.988 pm
                         DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
 
-                        // Convert to UTC
+                        // Convert to ISO 8601
                         string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
 
                         fields[0] = utcDateTime;
@@ -164,7 +168,27 @@ namespace WDAC_Wizard
                     }
                     catch(Exception exp)
                     {
-                        return localTimeStamp; 
+                        try
+                        {
+                            // Try to convert the likes of Apr 15, 2024 11:09:27 AM
+                            DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat2, null);
+
+                            // Convert to ISO 8601
+                            string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
+
+                            fields[0] = utcDateTime;
+                            return string.Join(",", fields);
+                        }
+                        catch(Exception ex)
+                        {
+                            if(ErrorCount < 2)
+                            {
+                                // Could be 100s of bad timestamps. Only log first 2
+                                Logger.Log.AddErrorMsg($"Bad AH Timestamp: {localTimeStamp}", ex);
+                                ErrorCount++;
+                            }
+                            return localTimeStamp;
+                        }
                     }
                 }
 
@@ -457,6 +481,7 @@ namespace WDAC_Wizard
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
         /// </summary>
         [DelimitedRecord(",")]
+        [IgnoreFirst]
         public class Record
         {
             public string Timestamp;
@@ -471,8 +496,12 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            public string AuthenticodeHash; //TODO: Make the AuthenticodeHash column nullable -- string?
+            
+            [FieldOptional] 
+            public string AuthenticodeHash;
+            [FieldOptional] 
             public string PolicyId;
+            [FieldOptional] 
             public string PolicyName;
         }
 
