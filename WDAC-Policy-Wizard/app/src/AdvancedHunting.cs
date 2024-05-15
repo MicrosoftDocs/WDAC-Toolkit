@@ -57,8 +57,9 @@ namespace WDAC_Wizard
                 {
                     var records = fileHelperEngine.ReadFile(filepath);
 
-                    // Assert csv must have a header and 1 row of data
-                    if (records.Length < 2)
+                    // Assert csv must have at least 1 row of data
+                    // Header is now ignored [IgnoreFirst]
+                    if (records.Length < 1)
                     {
                         throw new Exception(NORECORDS_EXC);
                     }
@@ -93,6 +94,9 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
         {
+            // Replace double (and tripe quotes) with single quotes
+            e.RecordLine = ReplaceMultiQuotes(e.RecordLine);
+            
             // Replace the line with the fixed version
             e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
 
@@ -100,6 +104,27 @@ namespace WDAC_Wizard
             // Replace instances of these new timestamps with ISO 8601
             // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
             e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
+        }
+
+        /// <summary>
+        /// Replaces instances of multiple quotes with single quotes
+        /// </summary>
+        /// <param name="bad"></param>
+        /// <returns></returns>
+        private static string ReplaceMultiQuotes(string record)
+        {
+            // MDE will occasionally wrap the new fields (e.g. OriginalFileName: """WpConDesktopDev.PROGRAM""")
+            // in double or triple quotes. This causes issues when trying to split by quotes in the next
+            // handler, ReplaceCommasInRecord
+
+            if (!String.IsNullOrEmpty(record))
+            {
+                record = record.Replace(@"""""", "\""); // triple quotes
+                record = record.Replace(@"""", "\"");   // double quotes
+            }
+
+            Console.WriteLine(record);  
+            return record; 
         }
 
         /// <summary>
@@ -119,7 +144,13 @@ namespace WDAC_Wizard
 
                     // Filter out this case - ["DigiCert Trusted G4 Code Signing RSA4096 SHA256, 2021 CA1"
                     // | ",1bd538b5ca353f4949201b01e8d3d34794020a6f3a79628c2cb36e0656dc5aaf," "Zoom Video Communications, Inc."]
-                    if (sString.Split(',').Length > 2)
+                    var parts = sString.Split(',');
+                    if (parts.Length > 2)
+                        continue;
+
+                    // Exclude the cases where the split leaves a single comma
+                    // This can cause issues parsing 
+                    if (String.IsNullOrEmpty(sString) || sString.Length == 1)
                         continue; 
 
                     sString = sString.Replace(",", DEL_VALUE);
@@ -274,6 +305,14 @@ namespace WDAC_Wizard
             ciEvent.PolicyId = record.PolicyId;
             ciEvent.PolicyName = record.PolicyName;
 
+            // New MDE AH fields added in May 2024
+            ciEvent.OriginalFilename = record.OriginalFileName;
+            ciEvent.ProductName = record.ProductName;
+            ciEvent.InternalFilename = record.InternalName; 
+            ciEvent.FileVersion = record.FileVersion;
+            ciEvent.FileDescription = record.FileDescription;
+            ciEvent.CorrelationId = record.EtwCorrelationId;
+
             return ciEvent;
         }
 
@@ -294,7 +333,15 @@ namespace WDAC_Wizard
             ciEvent.Timestamp = record.Timestamp;
             ciEvent.DeviceId = record.DeviceId;
             ciEvent.PolicyId = record.PolicyId;
-            ciEvent.PolicyName = record.PolicyName; 
+            ciEvent.PolicyName = record.PolicyName;
+
+            // New MDE AH fields added in May 2024
+            ciEvent.OriginalFilename = record.OriginalFileName;
+            ciEvent.ProductName = record.ProductName;
+            ciEvent.InternalFilename = record.InternalName;
+            ciEvent.FileVersion = record.FileVersion;
+            ciEvent.FileDescription = record.FileDescription;
+            ciEvent.CorrelationId = record.EtwCorrelationId;
 
             return ciEvent;
         }
@@ -318,6 +365,14 @@ namespace WDAC_Wizard
             ciEvent.PolicyId = record.PolicyId;
             ciEvent.PolicyName = record.PolicyName;
 
+            // New MDE AH fields added in May 2024
+            ciEvent.OriginalFilename = record.OriginalFileName;
+            ciEvent.ProductName = record.ProductName;
+            ciEvent.InternalFilename = record.InternalName;
+            ciEvent.FileVersion = record.FileVersion;
+            ciEvent.FileDescription = record.FileDescription;
+            ciEvent.CorrelationId = record.EtwCorrelationId;
+
             return ciEvent;
         }
 
@@ -335,6 +390,7 @@ namespace WDAC_Wizard
             signerEvent.PublisherName = record.PublisherName;
             signerEvent.DeviceId = record.DeviceId;
             signerEvent.Timestamp = record.Timestamp;
+            signerEvent.CorrelationId = record.EtwCorrelationId; 
 
             // Replace Delimitted values, if applicable
             // E.g. Zoom Communications#C# Inc --> Zoom Communications, Inc 
@@ -374,8 +430,31 @@ namespace WDAC_Wizard
                 // Iterate through all the signingEvents to match on Timestamp[0:23]
                 foreach(SignerEvent signerEvent in signerEvents)
                 {
+                    // Primary correlation mechanism, as of new AH events, use the correlation ID
+                    if(!String.IsNullOrEmpty(signerEvent.CorrelationId) && !String.IsNullOrEmpty(ciEvent.CorrelationId))
+                    {
+                        if(signerEvent.CorrelationId.Equals(ciEvent.CorrelationId, StringComparison.OrdinalIgnoreCase)
+                            && IsValidSigner(signerEvent))
+                        {
+                            // If first/only signer, set the SignerInfo attribute to signer
+                            // otherwise, duplicate ciEvent and append to ciEvents
+                            if (ciEvent.SignerInfo.DeviceId == null)
+                            {
+                                ciEvent.SignerInfo = signerEvent;
+                                correlatedCiEvents.Add(ciEvent);
+                            }
+                            else
+                            {
+                                CiEvent ciEventCopy = ciEvent.Clone();
+                                ciEventCopy.SignerInfo = signerEvent;
+                                correlatedCiEvents.Add(ciEventCopy);
+                            }
+                        }
+                    }
+
+                    // Fallback, use the timestamp fields to correlate
                     // If there is a DeviceId and timestamp match - correlated events
-                    if(signerEvent.DeviceId == ciEvent.DeviceId
+                    else if(signerEvent.DeviceId == ciEvent.DeviceId
                         && DoTimestampsMatch(signerEvent.Timestamp, ciEvent.Timestamp)
                         && IsValidSigner(signerEvent))
                     {
@@ -503,6 +582,20 @@ namespace WDAC_Wizard
             public string PolicyId;
             [FieldOptional] 
             public string PolicyName;
+
+            // New fields introduced in May 2024
+            [FieldOptional]
+            public string OriginalFileName;
+            [FieldOptional]
+            public string ProductName;
+            [FieldOptional]
+            public string InternalName;
+            [FieldOptional]
+            public string FileDescription;
+            [FieldOptional]
+            public string FileVersion;
+            [FieldOptional]
+            public string EtwCorrelationId; 
         }
 
         // AH KQL Query must follow:
@@ -518,8 +611,16 @@ namespace WDAC_Wizard
         | extend AuthenticodeHash = parsejson(AdditionalFields).AuthenticodeHash
         | extend PolicyId = parsejson(AdditionalFields).PolicyID
         | extend PolicyName = parsejson(AdditionalFields).PolicyName
+        // PE Header Fields
+        | extend OriginalFileName = parsejson(AdditionalFields).OriginalFileName
+        | extend ProductName = parsejson(AdditionalFields).ProductName
+        | extend InternalName = parsejson(AdditionalFields).InternalName
+        | extend FileDescription = parsejson(AdditionalFields).FileDescription
+        | extend FileVersion = parsejson(AdditionalFields).FileVersion
+        // Correlation Fields
+        | extend CorrelationId = parsejson(AdditionalFields).EtwActivityId
         // Keep only actionable info for the Wizard
-        | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName
-         */
+        | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName, OriginalFileName, ProductName, InternalName, FileDescription, FileVersion, CorrelationId
+        */
     }
 }
