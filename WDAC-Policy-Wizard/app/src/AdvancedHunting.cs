@@ -94,7 +94,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
         {
-            // Replace double (and tripe quotes) with single quotes
+            // Replace double (and triple quotes) with single quotes
             e.RecordLine = ReplaceMultiQuotes(e.RecordLine);
             
             // Replace the line with the fixed version
@@ -109,8 +109,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Replaces instances of multiple quotes with single quotes
         /// </summary>
-        /// <param name="bad"></param>
-        /// <returns></returns>
+        /// <param name="record">One CSV line, or record, to clean</param>
+        /// <returns>Cleaned CSV record with double and triple quotes replaced by single quotes</returns>
         private static string ReplaceMultiQuotes(string record)
         {
             // MDE will occasionally wrap the new fields (e.g. OriginalFileName: """WpConDesktopDev.PROGRAM""")
@@ -130,8 +130,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Replaces instances of commas within data arrays to #C#
         /// </summary>
-        /// <param name="bad"></param>
-        /// <returns></returns>
+        /// <param name="record">One CSV line, or record, to clean</param>
+        /// <returns>Cleaned CSV record with mid-field commas replaced with #C#</returns>
         private static string ReplaceCommasInRecord(string record)
         {
             var fields = record.Split('"');
@@ -169,8 +169,8 @@ namespace WDAC_Wizard
         /// <summary>
         /// Converts local timestamps to UTC like "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
         /// </summary>
-        /// <param name="bad"></param>
-        /// <returns></returns>
+        /// <param name="record">One CSV line, or record, to clean</param>
+        /// <returns>Cleaned CSV record with timestamps in ISO 8601 UTC format</returns>
         private static string ConvertTimestampsToUTC(string record)
         {
             // 2 possible timestamp formats MDE AH data can have as of 5/1/2024
