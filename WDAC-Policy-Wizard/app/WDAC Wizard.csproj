@@ -17,7 +17,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>2.4.3.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -31,6 +31,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\imgs\wizard-ico.ico</ApplicationIcon>
     <StartupObject></StartupObject>
+    <Description>WDAC Wizard</Description>
+    <PackageProjectUrl>aka.ms/wdacwizard</PackageProjectUrl>
+    <FileVersion>2.4.3.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
@@ -226,5 +229,5 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
+  </ItemGroup>  
 </Project>
