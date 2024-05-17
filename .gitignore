@@ -347,3 +347,4 @@ AppLocker-Policy-Converter/app/test-policies/*
 /WDAC-Policy-Wizard/app/MSIX/it
 /WDAC-Policy-Wizard/app/MSIX/cs
 /WDAC-Policy-Wizard/app/MSIX/de
+/WDAC-Policy-Wizard/app/MSIX/runtimes
