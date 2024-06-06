@@ -412,9 +412,10 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static List<CiEvent> CorrelateSigningEvents(List<CiEvent> ciEvents, List<SignerEvent> signerEvents)
         {
-            // AH events currently are missing the correlation ID. Work ongoing to fix this.
+            // AH events now support the correlation ID. To be backwards compatible, the Wizard will try to correlate signing events by
+            // timestamp and correlation ID (if applicable)
+
             // Correlated signer and ci events appear to share the same timestamp to the 23rd-24th position.
-            // Example:
             // Timestamp	DeviceId	DeviceName	ActionType	FileName
             // 2023-01-09T21:49:44.19[89403Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegrityPolicyAudited GoogleUpdate.exe
             // 2023-01-09T21:49:44.19[89495Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
