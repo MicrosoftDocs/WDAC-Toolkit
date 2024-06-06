@@ -338,3 +338,14 @@ WDAC-Policy-Wizard/app/MSIX/WDAC Wizard.exe
 # Test policies
 AppLocker-Policy-Converter/app/test-policies/*
 *.exe
+
+#Dotnet binaries
+*.dll
+*.dll
+/WDAC-Policy-Wizard/app/MSIX/es
+/WDAC-Policy-Wizard/app/MSIX/fr
+/WDAC-Policy-Wizard/app/MSIX/it
+/WDAC-Policy-Wizard/app/MSIX/cs
+/WDAC-Policy-Wizard/app/MSIX/de
+/WDAC-Policy-Wizard/app/MSIX/runtimes
+*.dll
