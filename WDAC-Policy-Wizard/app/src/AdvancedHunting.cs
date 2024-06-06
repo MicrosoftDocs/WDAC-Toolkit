@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using FileHelpers;
+using System.Globalization;
 
 namespace WDAC_Wizard
 {
@@ -100,9 +101,8 @@ namespace WDAC_Wizard
             // Replace the line with the fixed version
             e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
 
-            // Issue #364 reported where MDE AH no longer uses ISO 8601 timestamps
+            // Issue #364 reported where MDE AH may not use ISO 8601 timestamps (Sept. 2023 and later)
             // Replace instances of these new timestamps with ISO 8601
-            // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
             e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
 
@@ -173,57 +173,54 @@ namespace WDAC_Wizard
         /// <returns>Cleaned CSV record with timestamps in ISO 8601 UTC format</returns>
         private static string ConvertTimestampsToUTC(string record)
         {
-            // 2 possible timestamp formats MDE AH data can have as of 5/1/2024
-            string timestampFormat = "dd/MM/yyyy, h:mm:ss.fff tt";
-            string timestampFormat2 = "MMM d, yyyy h:mm:ss tt";
-            var fields = record.Split(',');
-            if (fields.Length > 1)
+            // Try to first parse the timestamp to UTC time, if unsuccessful, fallback to list of MDETimestampFormats
+            if(String.IsNullOrEmpty(record))
             {
-                string localTimeStamp = fields[0]; 
-                if(localTimeStamp.Contains(DEL_VALUE)) // Non UTC times will contain a comma
+                return record; 
+            }
+
+            var fields = record.Split(','); 
+            string recordTimestamp = fields[0];
+            
+            if(DateTime.TryParseExact(recordTimestamp, "o", CultureInfo.InvariantCulture, 
+                System.Globalization.DateTimeStyles.AssumeUniversal, out _))
+            {
+                return record; // return record, timestamp is already formatted as UTC/ISO 8601
+            }
+
+            // Non-UTC format timestamps may have a comma (e.g. May 7, 2024 6:41:33 PM") so re-replace
+            if(recordTimestamp.Contains(DEL_VALUE))
+            {
+                recordTimestamp = recordTimestamp.Replace(DEL_VALUE, ",");
+            }
+
+            // Try to convert to UTC/ISO 8601 format
+            if (DateTime.TryParse(recordTimestamp, out var timestamp))
+            {
+                try
                 {
-                    // Replace comma to help with DateTime parsing
-                    localTimeStamp = localTimeStamp.Replace(DEL_VALUE, ",");
+                    // Convert to ISO 8601
+                    string utcDateTime = timestamp.ToUniversalTime().ToString("o");
 
-                    // Parse the timestamp
-                    try
-                    {
-                        // Try to convert the likes of 13/03/2024, 3:40:13.988 pm
-                        DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
-
-                        // Convert to ISO 8601
-                        string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
-
-                        fields[0] = utcDateTime;
-                        return string.Join(",", fields);
-                    }
-                    catch(Exception exp)
-                    {
-                        try
-                        {
-                            // Try to convert the likes of Apr 15, 2024 11:09:27 AM
-                            DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat2, null);
-
-                            // Convert to ISO 8601
-                            string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
-
-                            fields[0] = utcDateTime;
-                            return string.Join(",", fields);
-                        }
-                        catch(Exception ex)
-                        {
-                            if(ErrorCount < 2)
-                            {
-                                // Could be 100s of bad timestamps. Only log first 2
-                                Logger.Log.AddErrorMsg($"Bad AH Timestamp: {localTimeStamp}", ex);
-                                ErrorCount++;
-                            }
-                            return localTimeStamp;
-                        }
-                    }
+                    fields[0] = utcDateTime;
+                    return string.Join(",", fields);
                 }
 
+                catch (Exception ex)
+                {
+                    if (ErrorCount < 2)
+                    {
+                        // Could be 100s of bad timestamps. Only log first 2
+                        Logger.Log.AddErrorMsg($"Bad AH Timestamp: {recordTimestamp}", ex);
+                        ErrorCount++;
+                    }
+
+                    // Set timestamp to arbitrary datetime in case there is a correlation ID
+                    // which can be used in the correlate signature events method
+                    return record; 
+                }
             }
+            
             return record;
         }
 
@@ -492,6 +489,10 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static bool DoTimestampsMatch(string timestampA, string timestampB)
         {
+            // Comparison must be done on UTC/ISO 8601 timestamps only. Fail otherwise
+            if(timestampA.Length < TIMESMP_LNG || timestampB.Length < TIMESMP_LNG)
+                return false;
+
             return string.CompareOrdinal(timestampA.Substring(0, TIMESMP_LNG),
                                   timestampB.Substring(0, TIMESMP_LNG)) == 0;
         }
@@ -622,5 +623,76 @@ namespace WDAC_Wizard
         // Keep only actionable info for the Wizard
         | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName, OriginalFileName, ProductName, InternalName, FileDescription, FileVersion, CorrelationId
         */
+
+
+        // MDE Advanced Hunting Timestamp Formats
+        private static string[] MDEDateTimeFormats =
+        {
+            // FullDateWithLongTimeWithMillionSecond and AM/PM indicator e.g.'Dec 1, 2018 7:59:18.334 AM'
+            "MMM D, YYYY h:mm:ss.SSS A",
+
+            // FullDateWithLongTime with AM/PM indicator e.g.'Dec 1, 2018 7:59:18 AM'
+            "MMM D, YYYY h:mm:ss A",
+            
+            // FullDateTime24HourTimeWithMillionSecond e.g.: 'Dec 1, 2018 17:59:18.334'
+            "MMM D, YYYY hh:mm:ss.SSS", 
+
+            // FullDateTime24HourTime e.g.: 'Dec 1, 2018 17:59:18'
+            "MMM D, YYYY hh:mm:ss",
+            
+            // E.g. 01/05/2024 7:59:18.334 AM 
+            "dd/MM/yyyy, h:mm:ss.SSS A",
+
+            // E.g. 01/05/2024 7:59:18 AM 
+            "dd/MM/yyyy, h:mm:ss A",
+
+            // E.g. 01/05/2024 17:59:18.334
+            "dd/MM/yyyy, hh:mm:ss.SSS",
+
+            // E.g. 01/05/2024 17:59:18
+            "dd/MM/yyyy, hh:mm:ss",
+
+            // E.g. 12/23/2024 7:59:18.334 AM 
+            "MM/dd/yyyy, h:mm:ss.SSS A",
+
+            // E.g. 12/23/2024 7:59:18 AM 
+            "MM/dd/yyyy, h:mm:ss A",
+
+            // E.g. 12/23/2024 17:59:18.334
+            "MM/dd/yyyy, hh:mm:ss.SSS",
+
+            // E.g. 12/23/2024 17:59:18
+            "MM/dd/yyyy, hh:mm:ss",
+
+            // Less common examples
+
+            //ShortDate e.g: '1/1/2018', '12/15/2018'
+            "M/D/YYYY", 
+
+            // LongDate e.g: 'Jan 1, 2018', 'Dec 15, 2018
+            "MMM D, YYYY",
+
+            //Date only - locale specific
+            // DD/MM e.g. '12/05', '03/11'
+            "DD/MM",
+
+            // DD.MM e.g. '12.05', '03.11'
+            "DD.MM",
+
+            // DD-MM e.g. '12-05', '03-11'
+            "DD-MM",
+
+            // D/M no leading zeros e.g: '31/5', '4/12'
+            "D/M",
+
+            // MM/DD e.g: '12/04'
+            "MM/DD",
+
+            // MM/DD e.g: '12-31'
+            "MM-DD",
+
+            // MM.DD e.g: '12.31'
+            "MM.DD"
+        };
     }
 }
