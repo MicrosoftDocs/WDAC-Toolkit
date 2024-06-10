@@ -769,6 +769,18 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public static byte[] ConvertHashStringToByte(string sHash)
         {
+            // Null/empty catch
+            if(String.IsNullOrEmpty(sHash))
+            {
+                return new byte[0];
+            }
+
+            // Odd length
+            if(sHash.Length % 2 == 1)
+            {
+                return new byte[0];
+            }
+
             byte[] bHash = new byte[sHash.Length / 2];
             int _base = 16;
             string sValue;  //chunk into 2's
