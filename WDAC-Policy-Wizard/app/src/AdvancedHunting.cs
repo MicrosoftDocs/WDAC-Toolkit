@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using FileHelpers;
+using System.Globalization;
 
 namespace WDAC_Wizard
 {
@@ -100,9 +101,8 @@ namespace WDAC_Wizard
             // Replace the line with the fixed version
             e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
 
-            // Issue #364 reported where MDE AH no longer uses ISO 8601 timestamps
+            // Issue #364 reported where MDE AH may not use ISO 8601 timestamps (Sept. 2023 and later)
             // Replace instances of these new timestamps with ISO 8601
-            // "13/03/2024#C# 3:40:13.988 pm" --> 2024-03-13T06:40:13.9880000Z
             e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
 
@@ -173,57 +173,54 @@ namespace WDAC_Wizard
         /// <returns>Cleaned CSV record with timestamps in ISO 8601 UTC format</returns>
         private static string ConvertTimestampsToUTC(string record)
         {
-            // 2 possible timestamp formats MDE AH data can have as of 5/1/2024
-            string timestampFormat = "dd/MM/yyyy, h:mm:ss.fff tt";
-            string timestampFormat2 = "MMM d, yyyy h:mm:ss tt";
-            var fields = record.Split(',');
-            if (fields.Length > 1)
+            // Try to first parse the timestamp to UTC time, if unsuccessful, fallback to list of MDETimestampFormats
+            if(String.IsNullOrEmpty(record))
             {
-                string localTimeStamp = fields[0]; 
-                if(localTimeStamp.Contains(DEL_VALUE)) // Non UTC times will contain a comma
+                return record; 
+            }
+
+            var fields = record.Split(','); 
+            string recordTimestamp = fields[0];
+            
+            if(DateTime.TryParseExact(recordTimestamp, "o", CultureInfo.InvariantCulture, 
+                System.Globalization.DateTimeStyles.AssumeUniversal, out _))
+            {
+                return record; // return record, timestamp is already formatted as UTC/ISO 8601
+            }
+
+            // Non-UTC format timestamps may have a comma (e.g. May 7, 2024 6:41:33 PM") so re-replace
+            if(recordTimestamp.Contains(DEL_VALUE))
+            {
+                recordTimestamp = recordTimestamp.Replace(DEL_VALUE, ",");
+            }
+
+            // Try to convert to UTC/ISO 8601 format
+            if (DateTime.TryParse(recordTimestamp, out var timestamp))
+            {
+                try
                 {
-                    // Replace comma to help with DateTime parsing
-                    localTimeStamp = localTimeStamp.Replace(DEL_VALUE, ",");
+                    // Convert to ISO 8601
+                    string utcDateTime = timestamp.ToUniversalTime().ToString("o");
 
-                    // Parse the timestamp
-                    try
-                    {
-                        // Try to convert the likes of 13/03/2024, 3:40:13.988 pm
-                        DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat, null);
-
-                        // Convert to ISO 8601
-                        string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
-
-                        fields[0] = utcDateTime;
-                        return string.Join(",", fields);
-                    }
-                    catch(Exception exp)
-                    {
-                        try
-                        {
-                            // Try to convert the likes of Apr 15, 2024 11:09:27 AM
-                            DateTime localDateTime = DateTime.ParseExact(localTimeStamp, timestampFormat2, null);
-
-                            // Convert to ISO 8601
-                            string utcDateTime = localDateTime.ToUniversalTime().ToString("o");
-
-                            fields[0] = utcDateTime;
-                            return string.Join(",", fields);
-                        }
-                        catch(Exception ex)
-                        {
-                            if(ErrorCount < 2)
-                            {
-                                // Could be 100s of bad timestamps. Only log first 2
-                                Logger.Log.AddErrorMsg($"Bad AH Timestamp: {localTimeStamp}", ex);
-                                ErrorCount++;
-                            }
-                            return localTimeStamp;
-                        }
-                    }
+                    fields[0] = utcDateTime;
+                    return string.Join(",", fields);
                 }
 
+                catch (Exception ex)
+                {
+                    if (ErrorCount < 2)
+                    {
+                        // Could be 100s of bad timestamps. Only log first 2
+                        Logger.Log.AddErrorMsg($"Bad AH Timestamp: {recordTimestamp}", ex);
+                        ErrorCount++;
+                    }
+
+                    // Set timestamp to arbitrary datetime in case there is a correlation ID
+                    // which can be used in the correlate signature events method
+                    return record; 
+                }
             }
+            
             return record;
         }
 
@@ -415,9 +412,10 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static List<CiEvent> CorrelateSigningEvents(List<CiEvent> ciEvents, List<SignerEvent> signerEvents)
         {
-            // AH events currently are missing the correlation ID. Work ongoing to fix this.
+            // AH events now support the correlation ID. To be backwards compatible, the Wizard will try to correlate signing events by
+            // timestamp and correlation ID (if applicable)
+
             // Correlated signer and ci events appear to share the same timestamp to the 23rd-24th position.
-            // Example:
             // Timestamp	DeviceId	DeviceName	ActionType	FileName
             // 2023-01-09T21:49:44.19[89403Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegrityPolicyAudited GoogleUpdate.exe
             // 2023-01-09T21:49:44.19[89495Z]    6777cf8827f32a6492a16eda60c3e02d80a697d5 liftoffdemo11   AppControlCodeIntegritySigningInformation
@@ -492,6 +490,10 @@ namespace WDAC_Wizard
         /// <returns></returns>
         private static bool DoTimestampsMatch(string timestampA, string timestampB)
         {
+            // Comparison must be done on UTC/ISO 8601 timestamps only. Fail otherwise
+            if(timestampA.Length < TIMESMP_LNG || timestampB.Length < TIMESMP_LNG)
+                return false;
+
             return string.CompareOrdinal(timestampA.Substring(0, TIMESMP_LNG),
                                   timestampB.Substring(0, TIMESMP_LNG)) == 0;
         }
