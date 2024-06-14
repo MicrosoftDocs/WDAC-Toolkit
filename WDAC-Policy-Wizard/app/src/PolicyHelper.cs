@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace WDAC_Wizard
@@ -1548,6 +1546,7 @@ namespace WDAC_Wizard
             // If there are no keys in idMapping, nothing mateched the _0_0_0 pattern
             if (idMapping.Keys.Count < 1)
             {
+                Logger.Log.AddInfoMsg("FormatFileRuleIDs: No rule IDs remapped");
                 return siPolicy;
             }
 
@@ -1561,6 +1560,7 @@ namespace WDAC_Wizard
                     {
                         ((Allow)fileRule).ID = FormatID(fileRule, ref existingIDs);
                         idMapping[ruleId] = ((Allow)fileRule).ID;
+                        Logger.Log.AddInfoMsg($"Replacing RuleID: {ruleId} with {idMapping[ruleId]}");
                     }
                 }
 
@@ -1572,6 +1572,7 @@ namespace WDAC_Wizard
                     {
                         ((Deny)fileRule).ID = FormatID(fileRule, ref existingIDs);
                         idMapping[ruleId] = ((Deny)fileRule).ID;
+                        Logger.Log.AddInfoMsg($"Replacing RuleID: {ruleId} with {idMapping[ruleId]}");
                     }
                 }
 
@@ -1583,6 +1584,7 @@ namespace WDAC_Wizard
                     {
                         ((FileAttrib)fileRule).ID = FormatID(fileRule, ref existingIDs);
                         idMapping[ruleId] = ((FileAttrib)fileRule).ID;
+                        Logger.Log.AddInfoMsg($"Replacing RuleID: {ruleId} with {idMapping[ruleId]}");
                     }
                 }
             }
@@ -1603,6 +1605,52 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             signingScn.ProductSigners.FileRulesRef.FileRuleRef[i].RuleID = idMapping[id];
+                            Logger.Log.AddInfoMsg($"Replacing RuleID: {id} with {idMapping[id]}");
+                        }
+                    }
+
+                    // Check AllowedSigner.ExceptDenyRules that must be remapped
+                    // Root cause of Issue #384
+                    if (signingScn.ProductSigners.AllowedSigners != null)
+                    {
+                        for (int i = 0; i < signingScn.ProductSigners.AllowedSigners.AllowedSigner.Length; i++)
+                        {
+                            if (signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule == null)
+                                continue;
+
+                            for (int j = 0; j < signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule.Length; j++)
+                            {
+                                string id = signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID;
+
+                                // Remap IDs in DenyRuleID section
+                                if (idMapping.ContainsKey(id))
+                                {
+                                    signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID = idMapping[id];
+                                    Logger.Log.AddInfoMsg($"Replacing RuleID: {id} with {idMapping[id]}");
+                                }
+                            }
+                        }
+                    }
+
+                    // Check DeniedSigner.ExceptAllowRules that must be remapped
+                    if(signingScn.ProductSigners.DeniedSigners != null)
+                    {
+                        for (int i = 0; i < signingScn.ProductSigners.DeniedSigners.DeniedSigner.Length; i++)
+                        {
+                            if (signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule == null)
+                                continue;
+
+                            for (int j = 0; j < signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule.Length; j++)
+                            {
+                                string id = signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID;
+
+                                // Remap IDs in DenyRuleID section
+                                if (idMapping.ContainsKey(id))
+                                {
+                                    signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule[j].AllowRuleID = idMapping[id];
+                                    Logger.Log.AddInfoMsg($"Replacing RuleID: {id} with {idMapping[id]}");
+                                }
+                            }
                         }
                     }
                 }
@@ -1628,6 +1676,7 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             fileAttribRef.RuleID = idMapping[id];
+                            Logger.Log.AddInfoMsg($"Replacing RuleID: {id} with {idMapping[id]}");
                         }
                     }
                 }
@@ -1693,6 +1742,7 @@ namespace WDAC_Wizard
             // If there are no keys in idMapping, nothing mateched the _0_0_0 pattern
             if (idMapping.Keys.Count < 1)
             {
+                Logger.Log.AddInfoMsg("FormatSignerRuleIDs: No signer IDs remapped");
                 return siPolicy;
             }
 
@@ -1723,6 +1773,7 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId = idMapping[id];
+                            Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
                         }
                     }
                 }
@@ -1738,6 +1789,7 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId = idMapping[id];
+                            Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
                         }
                     }
                 }
@@ -1756,8 +1808,8 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempCiSigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
                     }
-
                 }
                 siPolicy.CiSigners = tempCiSigners;
             }
@@ -1774,8 +1826,8 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempPolicySigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
                     }
-
                 }
                 siPolicy.UpdatePolicySigners = tempPolicySigners;
             }
@@ -1792,8 +1844,8 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempSupplementalSigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
                     }
-
                 }
                 siPolicy.SupplementalPolicySigners = tempSupplementalSigners;
             }

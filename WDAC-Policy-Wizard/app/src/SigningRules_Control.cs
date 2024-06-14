@@ -167,7 +167,10 @@ namespace WDAC_Wizard
                         friendlyName = signersDict[signerID].Name;   
                         action = "Allow"; 
                         level = "Publisher";
-                        string exceptionID; 
+                        string exceptionID;
+
+                        // Re-init exceptions list so subsequent signers don't inherit the exceptions of previous signers
+                        exceptionList = String.Empty;
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule != null)
@@ -210,6 +213,12 @@ namespace WDAC_Wizard
                             fileAttrList = fileAttrList.Remove(fileAttrList.Length - 2);
                         }
 
+                        // Remove trailing comma and whitespace on list of Exceptions
+                        if (!String.IsNullOrEmpty(exceptionList))
+                        {
+                            exceptionList = exceptionList.Remove(exceptionList.Length - 2);
+                        }
+
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
                         this.rulesDataGrid.RowCount += 1;
                     }
@@ -226,6 +235,9 @@ namespace WDAC_Wizard
                         action = "Deny"; 
                         level = "Publisher";
                         string exceptionID;
+
+                        // Re-init exceptions list so subsequent signers don't inherit the exceptions of previous signers
+                        exceptionList = String.Empty;
 
                         // Get signer exceptions - if applicable
                         if (scenario.ProductSigners.DeniedSigners.DeniedSigner[i].ExceptAllowRule != null)
@@ -266,6 +278,12 @@ namespace WDAC_Wizard
                         if(!String.IsNullOrEmpty(fileAttrList))
                         {
                             fileAttrList = fileAttrList.Remove(fileAttrList.Length - 2);
+                        }
+
+                        // Remove trailing comma and whitespace on list of Exceptions
+                        if (!String.IsNullOrEmpty(exceptionList))
+                        {
+                            exceptionList = exceptionList.Remove(exceptionList.Length - 2);
                         }
 
                         this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
@@ -393,11 +411,17 @@ namespace WDAC_Wizard
                             fileAttrList = String.Format("InternalName: {0}, ", friendlyName);
                         }
 
-                        // Remove trailing comma and whitespace
+                        // Remove trailing comma and whitespace on list of FileAttributes
                         if(!String.IsNullOrEmpty(fileAttrList))
                         {
                             char[] trimChars = { ',', ' ' };
                             fileAttrList = fileAttrList.TrimEnd(trimChars);
+                        }
+
+                        // Remove trailing comma and whitespace on list of Exceptions
+                        if (!String.IsNullOrEmpty(exceptionList))
+                        {
+                            exceptionList = exceptionList.Remove(exceptionList.Length - 2);
                         }
                     }
 
