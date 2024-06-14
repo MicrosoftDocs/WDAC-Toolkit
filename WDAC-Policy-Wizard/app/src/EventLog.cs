@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
-
+using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WDAC_Wizard
 {
@@ -78,9 +80,16 @@ namespace WDAC_Wizard
                 // Read Signature Events first to prepopulate for correlation with audit/block events
                 for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
                 {
+                    // Convert entry to json 
+                    // Issue # 382 - hashes converted to strings by Event Forwarding
+                    // Additionally, noticed EventLogReader drops empty/null entries so can't rely on indexing since 
+                    // the size of the entry.Properities field is not fixed
+                    var xnode = XElement.Parse(entry.ToXml());
+                    string jsonString = JsonConvert.SerializeXNode(xnode);
+
                     if (entry.Id == SIG_INFO_ID) // CI Signature events
                     {
-                        SignerEvent signerEvent = ReadSignatureEvent(entry);
+                        SignerEvent signerEvent = ReadSignatureEvent(jsonString);
                         if (signerEvent != null)
                         {
                             ciSignerEvents.Add(signerEvent);
@@ -88,7 +97,7 @@ namespace WDAC_Wizard
                     }
                     else if (entry.Id == APP_SIG_INFO_ID) // AppLocker Signature events
                     {
-                        SignerEvent signerEvent = ReadAppLockerSignatureEvent(entry);
+                        SignerEvent signerEvent = ReadAppLockerSignatureEvent(jsonString);
                         if (signerEvent != null)
                         {
                             appSignerEvents.Add(signerEvent);
@@ -101,10 +110,24 @@ namespace WDAC_Wizard
                 // Read all other audit/block events
                 for (EventRecord entry = log.ReadEvent(); entry != null; entry = log.ReadEvent())
                 {
-                    // Audit 3076's
-                    if (entry.Id == AUDIT_PE_ID)
+                    // Convert entry to json 
+                    // Issue # 382 - hashes converted to strings by Event Forwarding
+                    // Additionally, noticed EventLogReader drops empty/null entries so can't rely on indexing since 
+                    // the size of the entry.Properities field is not fixed
+                    var xnode = XElement.Parse(entry.ToXml());
+                    string jsonString = JsonConvert.SerializeXNode(xnode);
+
+                    // Audit 3076s and block 3077s
+                    if (entry.Id == AUDIT_PE_ID 
+                        || entry.Id == BLOCK_PE_ID)
                     {
-                        List<CiEvent> auditEvents = ReadPEAuditEvent(entry, ciSignerEvents);
+                        List<CiEvent> auditEvents = ReadPEAuditBlockEvent(jsonString, ciSignerEvents);
+                        
+                        // Handle parsing errors
+                        if (auditEvents == null)
+                        {
+                            continue;
+                        }
 
                         foreach (CiEvent auditEvent in auditEvents)
                         {
@@ -118,26 +141,18 @@ namespace WDAC_Wizard
                         }
                     }
 
-                    // Block 3077's
-                    else if (entry.Id == BLOCK_PE_ID)
-                    {
-                        List<CiEvent> blockEvents = ReadPEBlockEvent(entry, ciSignerEvents);
-                        foreach (CiEvent blockEvent in blockEvents)
-                        {
-                            if (blockEvent != null)
-                            {
-                                if (!IsDuplicateEvent(blockEvent, ciEvents))
-                                {
-                                    ciEvents.Add(blockEvent);
-                                }
-                            }
-                        }
-                    }
-
                     // AppLocker MSI and Script channel
-                    else if (entry.Id == AUDIT_SCRIPT_ID || entry.Id == BLOCK_SCRIPT_ID)
+                    else if (entry.Id == AUDIT_SCRIPT_ID 
+                             || entry.Id == BLOCK_SCRIPT_ID)
                     {
-                        List<CiEvent> appEvents = ReadAppLockerEvents(entry, appSignerEvents);
+                        List<CiEvent> appEvents = ReadAppLockerEvents(jsonString, appSignerEvents);
+
+                        // Handle parsing errors
+                        if (appEvents == null)
+                        {
+                            continue;
+                        }
+
                         foreach (CiEvent appEvent in appEvents)
                         {
                             if (appEvent != null)
@@ -153,7 +168,13 @@ namespace WDAC_Wizard
                     // Block 3033's
                     else if (entry.Id == BLOCK_SIG_LEVEL_ID)
                     {
-                        List<CiEvent> blockSLEvents = ReadSLBlockEvent(entry, ciSignerEvents);
+                        List<CiEvent> blockSLEvents = ReadSLBlockEvent(jsonString, ciSignerEvents);
+                        
+                        // Handle parsing errors
+                        if(blockSLEvents == null)
+                        {
+                            continue; 
+                        }
 
                         foreach (CiEvent blockSLEvent in blockSLEvents)
                         {
@@ -173,39 +194,46 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Parses the EventRecord for a 3078 audit event into a CiEvent object
+        /// Parses the EventRecord for a 3076 audit and 3077 block events into a CiEvent object from json string
         /// </summary>
-        /// <param name="entry"></param>
-        /// <returns></returns>
-        public static List<CiEvent> ReadPEAuditEvent(EventRecord entry, List<SignerEvent> ciSignerEvents)
+        /// <param name="jsonString">JSON string representation of the event log data</param>
+        /// <returns>List of CiEvent objects</returns>
+        public static List<CiEvent> ReadPEAuditBlockEvent(string jsonString, List<SignerEvent> ciSignerEvents)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
 
             // Event Info
-            // Version 4
+            // Version 5
             try
             {
-                ciEvent.EventId = entry.Id;
-                ciEvent.CorrelationId = entry.ActivityId.ToString();
+                var objects = JObject.Parse(jsonString);
+                JToken eventData = objects["Event"]["EventData"]["Data"];
+
+                ciEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
+                ciEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
 
                 // File related info
-                string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
+                string ntfilePath = GetValueString(eventData, "File Name"); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[8].Value; // SHA1 Flat Hash - 12; SHA256 Flat Hash - 14
-                ciEvent.SHA2 = (byte[])entry.Properties[10].Value;
-                ciEvent.OriginalFilename = entry.Properties[24].Value.ToString();
-                ciEvent.InternalFilename = entry.Properties[26].Value.ToString();
-                ciEvent.FileDescription = entry.Properties[28].Value.ToString();
-                ciEvent.ProductName = entry.Properties[30].Value.ToString();
-                ciEvent.FileVersion = entry.Properties[31].Value.ToString();
+
+                // Windows Event Forwarding appears to cast everything as string
+                // Issue #382
+                ciEvent.SHA1 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA1 Hash")); // PE SHA1 Hash 
+                ciEvent.SHA2 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA256 Hash")); // PE SHA256 Hash
+
+                ciEvent.OriginalFilename = GetValueString(eventData, "OriginalFileName");
+                ciEvent.InternalFilename = GetValueString(eventData, "InternalName");
+                ciEvent.FileDescription = GetValueString(eventData, "FileDescription");
+                ciEvent.ProductName = GetValueString(eventData, "ProductName");
+                ciEvent.FileVersion = GetValueString(eventData, "FileVersion");
 
                 // Policy related info
-                // ciEvent.PolicyGUID = entry.Properties[32].Value.ToString();
-                ciEvent.PolicyName = entry.Properties[18].Value.ToString();
-                ciEvent.PolicyId = entry.Properties[20].Value.ToString();
-                ciEvent.PolicyHash = (byte[])entry.Properties[22].Value;
+                ciEvent.PolicyGUID = GetValueString(eventData, "PolicyGUID");
+                ciEvent.PolicyName = GetValueString(eventData, "PolicyName");
+                ciEvent.PolicyId = GetValueString(eventData, "PolicyID");
+                ciEvent.PolicyHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "PolicyHash"));
 
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in ciSignerEvents)
@@ -237,89 +265,20 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("ReadPEAuditEvent() encountered the following error", e); 
                 return null;
             }
 
             return ciEvents;
         }
 
-        /// <summary>
-        /// Parses the EventRecord for a 3077 block event into a CiEvent object
-        /// </summary>
-        /// <param name="entry"></param>
-        /// <returns></returns>
-        public static List<CiEvent> ReadPEBlockEvent(EventRecord entry, List<SignerEvent> ciSignerEvents)
-        {
-            List<CiEvent> ciEvents = new List<CiEvent>();
-            CiEvent ciEvent = new CiEvent(); 
-
-            // Version 5
-            // Event Info
-            try
-            {
-                ciEvent.EventId = entry.Id;
-                ciEvent.CorrelationId = entry.ActivityId.ToString();
-
-                // File related info
-                string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
-                ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
-                ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[8].Value; // SHA1 Flat Hash - 12; SHA256 Flat Hash - 14
-                ciEvent.SHA2 = (byte[])entry.Properties[10].Value;
-                ciEvent.OriginalFilename = entry.Properties[24].Value.ToString();
-                ciEvent.InternalFilename = entry.Properties[26].Value.ToString();
-                ciEvent.FileDescription = entry.Properties[28].Value.ToString();
-                ciEvent.ProductName = entry.Properties[30].Value.ToString();
-                ciEvent.FileVersion = entry.Properties[31].Value.ToString();
-
-                // Policy related info
-                ciEvent.PolicyGUID = entry.Properties[32].Value.ToString();
-                ciEvent.PolicyName = entry.Properties[18].Value.ToString();
-                ciEvent.PolicyId = entry.Properties[20].Value.ToString();
-                ciEvent.PolicyHash = (byte[])entry.Properties[22].Value;
-
-                // Try to match with pre-populated signer events
-                foreach (SignerEvent signer in ciSignerEvents)
-                {
-                    if (signer.CorrelationId == ciEvent.CorrelationId
-                        && IsValidSigner(signer))
-                    {
-                        // If first/only signer, set the SignerInfo attribute to signer
-                        // otherwise, duplicate ciEvent and append to ciEvents
-                        if (ciEvent.SignerInfo.CorrelationId == null)
-                        {
-                            ciEvent.SignerInfo = signer;
-                            ciEvents.Add(ciEvent);
-                        }
-                        else
-                        {
-                            CiEvent ciEventCopy = ciEvent.Clone();
-                            ciEventCopy.SignerInfo = signer;
-                            ciEvents.Add(ciEventCopy);
-                        }
-                    }
-                }
-
-                // In the case where the file is unsigned
-                if (ciEvents.Count == 0)
-                {
-                    ciEvents.Add(ciEvent);
-                }
-            }
-            catch(Exception e)
-            {
-                return null; 
-            }
-
-            return ciEvents; 
-        }
 
         /// <summary>
         /// Parses the EventRecord for a 8028 or 8029 Script/MSI audit/block event into a CiEvent object
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static List<CiEvent> ReadAppLockerEvents(EventRecord entry, List<SignerEvent> appSignerEvents)
+        public static List<CiEvent> ReadAppLockerEvents(string jsonString, List<SignerEvent> appSignerEvents)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
@@ -328,15 +287,18 @@ namespace WDAC_Wizard
             // Event Info
             try
             {
-                ciEvent.EventId = entry.Id;
-                ciEvent.CorrelationId = entry.ActivityId.ToString();
+                var objects = JObject.Parse(jsonString);
+                JToken eventData = objects["Event"]["EventData"]["Data"];
+
+                ciEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
+                ciEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
 
                 // File related info
-                string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
+                string ntfilePath = GetValueString(eventData, "File Name"); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = (byte[])entry.Properties[2].Value; // SHA1 PE Hash
-                ciEvent.SHA2 = (byte[])entry.Properties[3].Value; // SHA256 PE Hash
+                ciEvent.SHA1 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA1 Hash")); // SHA1 PE Hash
+                ciEvent.SHA2 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA256 Hash"));  // SHA256 PE Hash
 
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in appSignerEvents)
@@ -368,6 +330,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("ReadAppLockerEvents() encountered the following error", e);
                 return null;
             }
 
@@ -380,7 +343,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static List<CiEvent> ReadSLBlockEvent(EventRecord entry, List<SignerEvent> ciSignerEvents)
+        public static List<CiEvent> ReadSLBlockEvent(string jsonString, List<SignerEvent> ciSignerEvents)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
@@ -389,11 +352,14 @@ namespace WDAC_Wizard
             // Event Info
             try
             {
-                ciEvent.EventId = entry.Id;
-                ciEvent.CorrelationId = entry.ActivityId.ToString();
+                var objects = JObject.Parse(jsonString);
+                JToken eventData = objects["Event"]["EventData"]["Data"];
+
+                ciEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
+                ciEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
 
                 // File related info
-                string ntfilePath = entry.Properties[1].Value.ToString(); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
+                string ntfilePath = GetValueString(eventData, "FileNameBuffer"); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
 
@@ -429,6 +395,7 @@ namespace WDAC_Wizard
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("ReadSLBlockEvent() encountered the following error", e);
                 return null;
             }
 
@@ -440,7 +407,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static SignerEvent ReadSignatureEvent(EventRecord entry)
+        public static SignerEvent ReadSignatureEvent(string jsonString)
         {
             // Version 4 
 
@@ -449,17 +416,20 @@ namespace WDAC_Wizard
             // Event Info
             try
             {
-                signerEvent.EventId = entry.Id;
-                signerEvent.CorrelationId = entry.ActivityId.ToString();
+                var objects = JObject.Parse(jsonString);
+                JToken eventData = objects["Event"]["EventData"]["Data"];
 
-                // File related info
-                signerEvent.PublisherName = entry.Properties[14].Value.ToString();
-                signerEvent.IssuerName = entry.Properties[16].Value.ToString();
-                signerEvent.IssuerTBSHash = (byte[]) entry.Properties[18].Value;
+                signerEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
+                signerEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
 
+                // Signer related info
+                signerEvent.PublisherName = GetValueString(eventData, "PublisherName");
+                signerEvent.IssuerName = GetValueString(eventData, "IssuerName");
+                signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "IssuerTBSHash"));
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("ReadSignatureEvent() encountered the following error", e);
                 return null;
             }
 
@@ -471,7 +441,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public static SignerEvent ReadAppLockerSignatureEvent(EventRecord entry)
+        public static SignerEvent ReadAppLockerSignatureEvent(string jsonString)
         {
             // Version 0 
 
@@ -480,17 +450,21 @@ namespace WDAC_Wizard
             // Event Info
             try
             {
-                signerEvent.EventId = entry.Id;
-                signerEvent.CorrelationId = entry.ActivityId.ToString();
+                var objects = JObject.Parse(jsonString);
+                JToken eventData = objects["Event"]["EventData"]["Data"];
 
-                // File related info
-                signerEvent.PublisherName = entry.Properties[3].Value.ToString();
-                signerEvent.IssuerName = entry.Properties[5].Value.ToString();
-                signerEvent.IssuerTBSHash = (byte[])entry.Properties[9].Value;
+                signerEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
+                signerEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
+
+                // Signer related info
+                signerEvent.PublisherName = GetValueString(eventData, "PublisherName");
+                signerEvent.IssuerName = GetValueString(eventData, "IssuerName");
+                signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "IssuerTBSHash"));
 
             }
             catch (Exception e)
             {
+                Logger.Log.AddErrorMsg("ReadAppLockerSignatureEvent() encountered the following error", e);
                 return null;
             }
 
@@ -551,6 +525,30 @@ namespace WDAC_Wizard
             }
 
             return true; 
+        }
+
+        /// <summary>
+        /// Gets EventData value given look-up key e.g. OriginalFileName
+        /// </summary>
+        /// <param name="eventData">JToken object containing the array of EventData key value pairs</param>
+        /// <param name="key">String key to perform value look-up</param>
+        /// <returns></returns>
+        private static string GetValueString(JToken eventData, string key)
+        {
+            if (eventData == null) 
+            { 
+                return null;
+            }
+
+            foreach(JToken value in eventData)
+            {
+                if (value["@Name"].ToString() == key)
+                {
+                    return value["#text"] != null ? value["#text"].ToString() : null ;
+                }
+            }
+
+            return null;
         }
     }
 
