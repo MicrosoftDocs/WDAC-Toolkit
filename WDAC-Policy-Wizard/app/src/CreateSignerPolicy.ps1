@@ -23,11 +23,11 @@ catch
 # Run New-CIPolicyRule to generate a rule object from the provided driver file path and specified level (Publisher vs PcaCertificate)
 if($Deny -eq "False")
 {
-    $SignerRule = New-CIPolicyRule -Level $Level -DriverFilePath $DriverFilePath -Fallback Hash -Deny
+    $SignerRule = New-CIPolicyRule -Level $Level -DriverFilePath $DriverFilePath -Fallback Hash
 }
 else
 {
-    $SignerRule = New-CIPolicyRule -Level $Level -DriverFilePath $DriverFilePath -Fallback Hash
+    $SignerRule = New-CIPolicyRule -Level $Level -DriverFilePath $DriverFilePath -Fallback Hash -Deny
 }
 
 # Create policy from the SignerRule object
