@@ -8,7 +8,7 @@
         Name="Microsoft.WDAC.WDACWizard"
             Version="2.4.4.0"
         Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
-        Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard_2.4.3.0_x64_8wekyb3d8bbwe.MSIX"
+        Uri="https://webapp-wdac-wizard.azurewebsites.net/packages/WDACWizard_2.4.4.0_x64_8wekyb3d8bbwe.MSIX"
         ProcessorArchitecture="x64"/>
 
     <UpdateSettings>
