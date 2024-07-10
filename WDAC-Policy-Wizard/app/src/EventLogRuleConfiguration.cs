@@ -102,6 +102,20 @@ namespace WDAC_Wizard
             EventDisplayObject dp = this.DisplayObjects[this.SelectedRow];
             CiEvent ciEvent = this.CiEvents[this.SelectedRow];
 
+            // Check if rule was already added
+            if(dp.Action != null &&
+                dp.Action.Contains("Added to policy"))
+            {
+                DialogResult res = MessageBox.Show("This allow rule was already created and will be added to the resulting policy. Do you want to create the rule again?",
+                                                   "WDAC Wizard - New Rule Creation",
+                                                   MessageBoxButtons.YesNo,
+                                                   MessageBoxIcon.Warning);
+                if (res == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             switch(this.ruleTypeComboBox.SelectedIndex)
             {
                 case 0: // Publisher
