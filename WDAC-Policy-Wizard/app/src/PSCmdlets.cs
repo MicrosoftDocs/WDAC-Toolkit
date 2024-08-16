@@ -35,50 +35,6 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a dummy signer rule and policy to calculate the TBS hash for custom value signer rules
-        /// </summary>
-        /// <param name="customRule"></param>
-        /// <returns></returns>
-        internal static SiPolicy CreateSignerFromPS(PolicyCustomRules customRule)
-        {
-            string DUMMYPATH = Path.Combine(Helper.GetTempFolderPathRoot(), "DummySignersPolicy.xml");
-
-            // Create runspace, pipeline and run script
-            Pipeline pipeline = CreatePipeline();
-
-            // Scan the file to extract the TBS hash (or hashes) for the signers
-            pipeline.Commands.AddScript(String.Format("$DummyPcaRule += New-CIPolicyRule -Level PcaCertificate -DriverFilePath \"{0}\" -Fallback Hash", customRule.ReferenceFile));
-            pipeline.Commands.AddScript(String.Format("New-CIPolicy -Rules $DummyPcaRule -FilePath \"{0}\"", DUMMYPATH));
-
-            try
-            {
-                Collection<PSObject> results = pipeline.Invoke();
-            }
-            catch (CmdletInvocationException e) when (e.HResult == PSKEY_HRESULT)
-            {
-                // Catch the "An item with the same key has already been added" {System.Management.Automation.CmdletInvocationException}
-                // Issue occurs on first powershell invocation - simply calling again fixes the issue
-                // Github bugs 302, 362
-                Logger.Log.AddWarningMsg("CreateSignerFromPS() caught CmdletInvocationException - An item with the same key has already been added");
-                return CreateSignerFromPS(customRule);
-            }
-            catch (Exception e)
-            {
-                Logger.Log.AddErrorMsg("CreateSignerFromPS() caught the following exception", e);
-                return null;
-            }
-            _Runspace.Dispose();
-
-            // De-serialize the dummy policy to get the signer objects
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(DUMMYPATH);
-
-            // Remove dummy file
-            File.Delete(DUMMYPATH);
-
-            return siPolicy;
-        }
-
-        /// <summary>
         /// Creates a WDAC policy for a signer rule to be used in signer rules
         /// </summary>
         /// <param name="customRule"></param>

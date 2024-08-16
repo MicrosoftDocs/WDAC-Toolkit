@@ -233,7 +233,7 @@ namespace WDAC_Wizard
         internal static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
-            SiPolicy tempSiPolicy = PSCmdlets.CreateSignerFromPS(customRule);
+            SiPolicy tempSiPolicy = PSCmdlets.CreatePolicyRuleFromPS(customRule);
 
             if (tempSiPolicy == null)
             {
