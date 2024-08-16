@@ -16,7 +16,7 @@ param (
 )
 
 # Run New-CIPolicy -Scan to generate a policy from a directory
-# The command needs to be run twice to generate the full policy. Otherwise, the "An item with the same key has already been added." WARNING prevents the full policy
+# The command needs to be run twice to generate the full policy. Otherwise, the "An item with the same key has already been added." WARNING prevents the full policy from being generated.
 if($Deny -eq "False")
 {
     if($UserPEs -eq "True")
