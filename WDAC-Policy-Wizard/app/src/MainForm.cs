@@ -1081,7 +1081,7 @@ namespace WDAC_Wizard
                     && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
                 {
                     // Run Set-CIPolicyIdInfo -ResetPolicyID to force the policy into multiple policy format
-                    PSCmdlets.ResetGuidPs(this.Policy.SchemaPath);
+                    PSCmdlets.ResetGuidPS(this.Policy.SchemaPath);
 
                     // Deserialize again since Wizard reset the policy on disk to multi-policy
                     siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
