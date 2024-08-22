@@ -233,7 +233,7 @@ namespace WDAC_Wizard
         internal static SiPolicy CreateFilePublisherRule(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
             // Still need to run the PS cmd to generate the TBS hash for the signer(s)
-            SiPolicy tempSiPolicy = PSCmdlets.CreateSignerFromPS(customRule);
+            SiPolicy tempSiPolicy = PSCmdlets.CreatePolicyRuleFromPS(customRule);
 
             if (tempSiPolicy == null)
             {
@@ -1011,7 +1011,7 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleType.Hash:
                         {
-                            object[] hashRules = PSCmdlets.CreateHashRulesFromPS(exceptAllowRule);
+                            object[] hashRules = PSCmdlets.CreatePolicyRuleFromPS(exceptAllowRule).FileRules;
                             Array.Resize(ref exceptAllowRules, exceptAllowRules.Length + hashRules.Length - 1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
                             foreach (object hashRule in hashRules)
                             {
@@ -1065,7 +1065,7 @@ namespace WDAC_Wizard
 
                     case PolicyCustomRules.RuleType.Hash:
                         {
-                            object[] hashRules = PSCmdlets.CreateHashRulesFromPS(exceptDenyRule);
+                            object[] hashRules = PSCmdlets.CreatePolicyRuleFromPS(exceptDenyRule).FileRules;
                             Array.Resize(ref exceptDenyRules, exceptDenyRules.Length + hashRules.Length - 1); // re-size the exceptDenyRules id to accomodate (likely) 3 more hash rules
                             foreach (object hashRule in hashRules)
                             {
