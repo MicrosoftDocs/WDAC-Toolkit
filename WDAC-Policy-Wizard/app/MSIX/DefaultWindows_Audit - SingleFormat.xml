@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.2.0.0</VersionEx>
+  <VersionEx>10.3.0.0</VersionEx>
   <PolicyTypeID>{A244370E-44C9-4C06-B551-F6016E563076}</PolicyTypeID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
@@ -21,9 +21,6 @@
     </Rule>
     <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
-    </Rule>
-    <Rule>
-      <Option>Enabled:Dynamic Code Security</Option>
     </Rule>
     <Rule>
       <Option>Enabled:Revoked Expired As Unsigned</Option>
@@ -253,7 +250,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>04122024</String>
+        <String>09172024</String>
       </Value>
     </Setting>
   </Settings>
