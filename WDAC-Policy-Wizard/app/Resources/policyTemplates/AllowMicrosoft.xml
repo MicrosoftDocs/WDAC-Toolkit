@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="Base Policy">
-  <VersionEx>10.0.5.0</VersionEx>
+  <VersionEx>10.0.4.0</VersionEx>
   <PolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</PolicyID>
   <BasePolicyID>{959A0F15-8985-4551-A208-5FFE9EDB3A70}</BasePolicyID>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
@@ -16,6 +16,9 @@
     </Rule>
     <Rule>
       <Option>Enabled:Inherit Default Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Dynamic Code Security</Option>
     </Rule>
     <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
@@ -165,7 +168,7 @@
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>09172024</String>
+        <String>12022022</String>
       </Value>
     </Setting>
   </Settings>
