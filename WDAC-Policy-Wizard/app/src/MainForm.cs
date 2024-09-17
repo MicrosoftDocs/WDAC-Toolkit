@@ -260,7 +260,7 @@ namespace WDAC_Wizard
                 // Check that a custom rule is not in progress
                 if(this.CustomRuleinProgress)
                 {
-                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your WDAC policy?", 
+                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your policy?", 
                         "Confirmation", 
                         MessageBoxButtons.YesNo, 
                         MessageBoxIcon.Question);
@@ -788,7 +788,7 @@ namespace WDAC_Wizard
                 Logger.Log.CloseLogger(); 
 
                 // Build Page:
-                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to WDAC Policy");
+                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to App Control Policy");
                 this._BuildPage.ShowFinishMsg(pathToWrite);
                 return;
             }
@@ -871,7 +871,7 @@ namespace WDAC_Wizard
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
-                process = "Configuring WDAC policy signer and file rules ...";
+                process = "Configuring policy signer and file rules ...";
             else if (progressPercent <= 80)
                 process = "Building custom policy file rules ...";
             else if (progressPercent <= 85)

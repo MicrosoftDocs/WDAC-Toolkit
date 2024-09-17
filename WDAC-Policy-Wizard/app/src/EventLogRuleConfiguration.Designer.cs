@@ -468,9 +468,9 @@ namespace WDAC_Wizard
             label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label2.Location = new System.Drawing.Point(164, 71);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(391, 18);
+            label2.Size = new System.Drawing.Size(508, 18);
             label2.TabIndex = 7;
-            label2.Text = "Create custom rules based on the WDAC event log events";
+            label2.Text = "Create custom rules based on the App Control for Business event log events";
             // 
             // hashRulePanel
             // 

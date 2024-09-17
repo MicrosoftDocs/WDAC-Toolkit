@@ -264,7 +264,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ParseMDEAHLogs_ButtonClick(object sender, EventArgs e)
         {
-            string dspTitle = "Choose MDE Advanced Hunting WDAC CSV Export Files to convert to policy";
+            string dspTitle = "Select Advanced Hunting exported CSV files to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.CsvFile);
 
             if (eventLogPaths == null)
