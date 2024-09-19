@@ -384,7 +384,7 @@ namespace WDAC_Wizard
             {
                 this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
                 this.parseresult_PictureBox.Image = Properties.Resources.verified;
-                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log Parsing Success", 
+                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "Wizard Event Log Parsing Success", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this._MainWindow.ErrorOnPage = false;
             }

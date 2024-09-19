@@ -101,7 +101,7 @@ namespace WDAC_Wizard
             {
                 DialogResult res = MessageBox.Show(
                     "Adding a Base Policy by path will remove the ID entered.\r\nAre you sure you want to continue?",
-                    "WDAC Wizard",
+                    "App Control Wizard",
                     MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
 
@@ -548,7 +548,7 @@ namespace WDAC_Wizard
                 DialogResult res = MessageBox.Show(
                     String.Format("Adding a Base Policy ID will remove the following XML path: {0}. " +
                     "\r\nAre you sure you want to continue?", this._Policy.BaseToSupplementPath),
-                    "WDAC Wizard",
+                    "App Control Wizard",
                     MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
 

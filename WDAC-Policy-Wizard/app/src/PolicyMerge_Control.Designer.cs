@@ -50,9 +50,9 @@
             label1.Location = new System.Drawing.Point(165, 42);
             label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(521, 29);
+            label1.Size = new System.Drawing.Size(384, 29);
             label1.TabIndex = 1;
-            label1.Text = "Merge Multiple App Control for Business Policies";
+            label1.Text = "Merge Multiple App Control Policies";
             // 
             // label2
             // 
