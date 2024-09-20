@@ -1633,7 +1633,7 @@ namespace WDAC_Wizard
                     }
 
                     // Check DeniedSigner.ExceptAllowRules that must be remapped
-                    if(signingScn.ProductSigners.DeniedSigners != null)
+                    if (signingScn.ProductSigners.DeniedSigners != null)
                     {
                         for (int i = 0; i < signingScn.ProductSigners.DeniedSigners.DeniedSigner.Length; i++)
                         {
@@ -1940,5 +1940,31 @@ namespace WDAC_Wizard
                 return String.Empty;
             }
         }
-    } 
+
+        /// <summary>
+        /// Resets the Policy ID for base and supplemental policies and BasePolicy ID, for base policies
+        /// </summary>
+        /// <param name="policy"></param>
+        public static void ResetPolicyGuid(SiPolicy policy)
+        {
+            // Catch null and Legacy policies
+            if (policy == null || policy.BasePolicyID == null)
+            {
+                return;
+            }
+
+            // Base
+            if (policy.BasePolicyID == policy.PolicyID)
+            {
+                policy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+                policy.PolicyID = policy.BasePolicyID;
+            }
+
+            // Supplemental
+            else
+            {
+                policy.PolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+            }
+        }
+    }
 }
