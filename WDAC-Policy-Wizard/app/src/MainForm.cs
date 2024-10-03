@@ -817,38 +817,39 @@ namespace WDAC_Wizard
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            string MERGEPATH = System.IO.Path.Combine(this.TempFolderPath, "Merged_CustomRules_Policy.xml");
 
             // Flag to skip policy conversion in the case of signed policy without PolicySigners section
             bool skipPolicyConversion = false; 
             
-            if(this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
-            {
-                // Handle custom value rules: 
-                ProcessCustomValueRules(worker);
-
-                // Handle user created rules:
-                List<string> customRulesPathList = ProcessSignerRules(worker);
-                
-                // Merge policies - all custom ones and the template and/or the base (if this is a supplemental)
-                MergeCustomRulesPolicy(customRulesPathList, MERGEPATH, worker);
-            }
-                      
-            // Merge all of the unique CI policies with template and/or base policy:
-            MergeTemplatesPolicy(MERGEPATH, worker);
+            // Use an SiPolicy object to store all new file and signer rules
+            SiPolicy siPolicyNewRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
 
             if (this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
+                // Handle custom value rules: 
+                siPolicyNewRules = ProcessCustomValueRules(worker, siPolicyNewRules);
+
+                // Handle user created rules:
+                siPolicyNewRules = ProcessSignerRules(worker, siPolicyNewRules);
+
+                // Merge all of the unique CI policies with template and/or base policy:
+                MergeTemplatesPolicy(siPolicyNewRules, worker);
+
                 // Handle Policy Rule-Options
                 SetPolicyRuleOptions(worker, ref skipPolicyConversion);
 
                 // Handle COM rules
                 CreateComObjectRules(worker);
+                
+                // Set additional parameters: policy name, GUIDs, version, etc
+                SetAdditionalParameters(worker);
             }
 
-            // Set additional parameters,
-            // for instance, policy name, GUIDs, version, etc
-            SetAdditionalParameters(worker);
+            // Handle the merge workflow
+            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+            {
+                MergePolicies_MergeControl(worker);
+            }
 
             // Convert the policy from XML to Binary file
             if (Properties.Settings.Default.convertPolicyToBinary
@@ -1198,7 +1199,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Processes all of the non-custom signer rules defined by user. 
         /// </summary>
-        public List<string> ProcessSignerRules(BackgroundWorker worker)
+        public SiPolicy ProcessSignerRules(BackgroundWorker worker, SiPolicy siPolicy)
         {
             List<string> customRulesPathList = new List<string>();
             int nCustomRules = this.Policy.CustomRules.Count;
@@ -1239,8 +1240,7 @@ namespace WDAC_Wizard
                     if (signerSiPolicy != null)
                     {
                         signerSiPolicy = PolicyHelper.AddSignerRuleAttributes(customRule, signerSiPolicy);
-                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
-                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);    
                     }
                 }
                 
@@ -1251,8 +1251,7 @@ namespace WDAC_Wizard
 
                     if (signerSiPolicy != null)
                     {
-                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
-                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
                     }
                 }
 
@@ -1269,25 +1268,23 @@ namespace WDAC_Wizard
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
                     
+                    // Successful Scan completed
                     if (signerSiPolicy != null)
                     {
-                        Helper.SerializePolicytoXML(signerSiPolicy, tmpPolicyPath);
-                        customRulesPathList.Add(tmpPolicyPath); // Successfully ran the PS commands; add path to list to merge at the end
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
                     }
                 }
             }
 
-            return customRulesPathList;
+            return siPolicy;
         }
 
         /// <summary>
         /// Processes all of the custom rules with user input fields
         /// </summary>
         /// <param name="worker"></param>
-        public void ProcessCustomValueRules(BackgroundWorker worker)
+        public SiPolicy ProcessCustomValueRules(BackgroundWorker worker, SiPolicy siPolicyCustomValueRules)
         {
-            SiPolicy siPolicyCustomValueRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
-
             // Iterate through all of the custom rules and PFN rules and update the progress bar    
             foreach (var customRule in this.Policy.CustomRules)
             {
@@ -1313,13 +1310,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            // If we created custom value rules, write to temp folder to merge with other policies
-            if(this.nCustomValueRules > 0)
-            {
-                Helper.SerializePolicytoXML(siPolicyCustomValueRules, System.IO.Path.Combine(this.TempFolderPath, "CustomValueRules.xml"));
-            }
-
             worker.ReportProgress(25);
+            return siPolicyCustomValueRules;
         }
 
         /// <summary>
@@ -1377,22 +1369,9 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Merges all of the CI Policies created for each custom rule. Writes the merged policy into one OutputFilePath (input)
-        /// </summary>
-        public void MergeCustomRulesPolicy(List<string> customRulesPathList, string outputFilePath, BackgroundWorker worker)
-        {
-            Logger.Log.AddInfoMsg("--- Merge Custom Rules Policy ---");
-
-            // If there are custom value rules, merge in siPolicy from /Temp/Custom
-            string pathCustomValuePolicy = System.IO.Path.Combine(this.TempFolderPath, "CustomValueRules.xml");
-            PSCmdlets.MergeCustomPolicies(customRulesPathList, this.nCustomValueRules, outputFilePath, pathCustomValuePolicy);             
-            worker.ReportProgress(85);
-        }
-
-        /// <summary>
         /// Merges the template policy, supplemental policy, and/or custom rules policy into the user's desired output path
         /// </summary>
-        public void MergeTemplatesPolicy(string customRulesMergePath, BackgroundWorker worker)
+        public void MergeTemplatesPolicy(SiPolicy siPolicyCustomRules, BackgroundWorker worker)
         {
             // Template policy @ this.TemplatePath, Supplemental policy @ this.BaseToSupplementPath
             // Operations: Merge template (always applicable) with suppleme (if applicable) with 
@@ -1404,6 +1383,10 @@ namespace WDAC_Wizard
             // Otherwise, keep Policy.SchemaPath as is
             
             Logger.Log.AddInfoMsg("--- Merge Templates Policy ---");
+
+            SiPolicy siPolicyFinal = null;
+
+
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 if(String.IsNullOrEmpty(this.Policy.SchemaPath))
@@ -1430,83 +1413,67 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Check if the chosen path is user-writeable
-            // If it is not, default to AppDataLocal\Temp\WDACWizard
-            if(!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
-            {
-                this.Policy.SchemaPath = Path.Combine(this.TempFolderPath, Path.GetFileName(this.Policy.SchemaPath)); 
-            }
-
-            // Temporary destination Path post-merging. This file is transient as the ouput will be eventually copied to 
-            // the final build path (this.Policy.SchemaPath)
-            string tempOutputPath = System.IO.Path.Combine(this.TempFolderPath, "OutputSchema.xml");
-            List<string> policyPaths = new List<string>();
-
-            // First merged policy will define the type of the output. eg) if merging a legcy with multi --> output=legacy, vice-versa
-            // Again, the policy at customRulesMergePath will be the correct format and will determine the output format as its first in the command
-            // TODO: what if CustomRules is empty ??
-
             // TemplatePath holds the structure of the policy under edit
             // If editing a policy, e.g. supplemental, have the TemplatePath define the structure
 
-            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+            // TemplatePath holds the structure of the policy under edit
+            if (this.Policy.TemplatePath != null)
             {
-                // TemplatePath holds the structure of the policy under edit
-                if (this.Policy.TemplatePath != null)
-                {
-                    policyPaths.Add(this.Policy.TemplatePath);
-                }
-
-                if (this.Policy.CustomRules.Count > 0 && File.Exists(customRulesMergePath))
-                {
-                    policyPaths.Add(customRulesMergePath);
-                }
-            }
-            else
-            {
-                // Merge issue #87 is here - non zero custom rules
-                if (this.Policy.CustomRules.Count > 0 && File.Exists(customRulesMergePath))
-                {
-                    policyPaths.Add(customRulesMergePath);
-                }
-
-                if (this.Policy.TemplatePath != null)
-                {
-                    policyPaths.Add(this.Policy.TemplatePath);
-                }
+                siPolicyFinal = Helper.DeserializeXMLtoPolicy(this.Policy.TemplatePath);
             }
             
-            // Added in the order based on their final order in the table
-            if (this.Policy.PoliciesToMerge.Count > 0)
-            {
-                foreach(var path in this.Policy.PoliciesToMerge)
-                {
-                    policyPaths.Add(path);
-                }
-            }
-
-            // Check whether the recommended block list rules are wanted in the output:
+            // Check whether the User Mode recommended block list rules are wanted in the output:
             if(this.Policy.UseUserModeBlocks)
             {
-                string recommendedUsermodeBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
-                policyPaths.Add(recommendedUsermodeBlockPath);
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,
+                                                                 Helper.DeserializeXMLStringtoPolicy(
+                                                                     Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml")));
             }
 
+            // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
             if (this.Policy.UseKernelModeBlocks)
             {
-                string recommendedDriverBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml"); ; 
-                policyPaths.Add(recommendedDriverBlockPath); 
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,
+                                                                 Helper.DeserializeXMLStringtoPolicy(
+                                                                     Path.Combine(this.ExeFolderPath, "Recommended_KernelMode_Blocklist.xml"))); 
             }
 
-            // Merge-CIPolicy command requires at MIN 1 valid input policy:
-            if (policyPaths.Count < 1)
+            siPolicyFinal = PolicyHelper.MergePolicies(siPolicyCustomRules, siPolicyFinal);
+
+            // Write to output schema location
+
+            // Check if the chosen path is user-writeable
+            // If it is not, default to AppDataLocal\Temp\WDACWizard
+            if (!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
             {
-                Logger.Log.AddErrorMsg("MergeTemplatesPolicy() encountered the following error: Unable to locate any policies to merge");
+                Logger.Log.AddWarningMsg($"User-defined schema path is not user-writeable: {this.Policy.SchemaPath}");
+                this.Policy.SchemaPath = Path.Combine(this.TempFolderPath, Path.GetFileName(this.Policy.SchemaPath));
+                Logger.Log.AddWarningMsg($"Using Wizard defined schema path under temp folder: {this.Policy.SchemaPath}");
             }
 
-            PSCmdlets.MergePolicies(policyPaths, this.Policy.SchemaPath, tempOutputPath);
+            Helper.SerializePolicytoXML(siPolicyFinal, this.Policy.SchemaPath);
+            worker.ReportProgress(90);
+        }
 
-            //TODO: check output
+        /// <summary>
+        /// Calls the PS Cmd to merge all of the policies
+        /// </summary>
+        /// <param name="worker"></param>
+        public void MergePolicies_MergeControl(BackgroundWorker worker)
+        {
+            // Input: Merge all of the policies on disk defined in this.PoliciesToMerge
+            // Output: this.SchemaPath
+
+            // Check if the chosen path is user-writeable
+            // If it is not, default to AppDataLocal\Temp\WDACWizard
+            if (!Helper.IsUserWriteable(Path.GetDirectoryName(this.Policy.SchemaPath)))
+            {
+                Logger.Log.AddWarningMsg($"User-defined schema path is not user-writeable: {this.Policy.SchemaPath}");
+                this.Policy.SchemaPath = Path.Combine(this.TempFolderPath, Path.GetFileName(this.Policy.SchemaPath));
+                Logger.Log.AddWarningMsg($"Using Wizard defined schema path under temp folder: {this.Policy.SchemaPath}");
+            }
+
+            PSCmdlets.MergePolicies(this.Policy.PoliciesToMerge, this.Policy.SchemaPath);
             worker.ReportProgress(90);
         }
 

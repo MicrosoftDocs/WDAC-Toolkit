@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Management.Automation;
+using System.Management.Automation.Language;
 using System.Text.RegularExpressions;
+using Windows.Networking.NetworkOperators;
 
 namespace WDAC_Wizard
 {
@@ -1633,7 +1637,7 @@ namespace WDAC_Wizard
                     }
 
                     // Check DeniedSigner.ExceptAllowRules that must be remapped
-                    if(signingScn.ProductSigners.DeniedSigners != null)
+                    if (signingScn.ProductSigners.DeniedSigners != null)
                     {
                         for (int i = 0; i < signingScn.ProductSigners.DeniedSigners.DeniedSigner.Length; i++)
                         {
@@ -1939,6 +1943,281 @@ namespace WDAC_Wizard
             {
                 return String.Empty;
             }
+        }
+
+        /// <summary>
+        /// Handles the merge operation between two SiPolicy objects. Merges all FileRules, Signers, SigningScenarios and references
+        /// </summary>
+        /// <param name="tempPolicy"></param>
+        /// <param name="resultantPolicy"></param>
+        /// <param name="ruleType"></param>
+        /// <returns></returns>
+        public static SiPolicy MergePolicies(SiPolicy tempPolicy, SiPolicy resultantPolicy)
+        {
+            // Handle nulls
+            if(resultantPolicy == null)
+            {
+                return tempPolicy;
+            }
+
+            if(tempPolicy == null)
+            {
+                return resultantPolicy;
+            }
+
+            // Handle Signing Scenario (AllowedSigners, DeniedSigners and FileRuleRefs)
+            resultantPolicy.SigningScenarios = MergeSigningScenario(tempPolicy.SigningScenarios, resultantPolicy.SigningScenarios);
+
+            // Handle Signers
+            resultantPolicy.Signers = MergeSigners(tempPolicy.Signers, resultantPolicy.Signers);   
+
+            // Handle File Rules
+            resultantPolicy.FileRules = MergeFileRules(tempPolicy.FileRules, resultantPolicy.FileRules);
+
+            // Handle CiSigners
+            if (tempPolicy.CiSigners != null && tempPolicy.CiSigners.Length > 0)
+            {
+                resultantPolicy = AddSiPolicyCiSigner(tempPolicy.Signers, resultantPolicy);
+            }
+
+            return resultantPolicy;
+        }
+
+        /// <summary>
+        /// Handles the merge operation between a new SigningScenario and an existing SigningScenario struct
+        /// </summary>
+        /// <param name="newSigningScenarios"></param>
+        /// <param name="resultSigningScenarios"></param>
+        /// <returns></returns>
+        static SigningScenario[] MergeSigningScenario(SigningScenario[] newSigningScenarios, SigningScenario[] resultSigningScenarios)
+        {
+            // Check each SigningScenario's ProductSigners and copies references as needed
+            for (int i = 0; i < newSigningScenarios.Length; i++)
+            {
+                for (int j = 0; j < resultSigningScenarios.Length; j++)
+                { 
+                    // Kernel mode (131)
+                    if (newSigningScenarios[i].Value == KMCISCN
+                        && resultSigningScenarios[j].Value == KMCISCN)
+                    {
+                        resultSigningScenarios[j].ProductSigners = MergeProductSigners(newSigningScenarios[i].ProductSigners,
+                                                                                                   resultSigningScenarios[j].ProductSigners);
+                    }
+
+
+                    // User mode (12)
+                    if (newSigningScenarios[i].Value == UMCISCN
+                        && resultSigningScenarios[j].Value == UMCISCN)
+                    {
+                        resultSigningScenarios[j].ProductSigners = MergeProductSigners(newSigningScenarios[i].ProductSigners,
+                                                                                                   resultSigningScenarios[j].ProductSigners);
+                    }
+                }
+            }
+
+            return resultSigningScenarios;
+        }
+
+
+        /// <summary>
+        /// Handles the merge operation between a new ProductSigner and an existing ProductSigner struct
+        /// </summary>
+        /// <param name="newProductSigners"></param>
+        /// <param name="resultProductSigners"></param>
+        /// <returns></returns>
+        static ProductSigners MergeProductSigners(ProductSigners newProductSigners, ProductSigners resultProductSigners)
+        {
+            // Short circuit if nothing from the new sipolicy
+            if (newProductSigners == null)
+            {
+                return resultProductSigners;
+            }
+
+
+            // Allowed Signers
+            if (newProductSigners.AllowedSigners != null)
+            {
+                // Short Circuit if current AllowedSigner is null
+                if (resultProductSigners.AllowedSigners == null)
+                {
+                    resultProductSigners.AllowedSigners = newProductSigners.AllowedSigners;
+                }
+                else // new and existing AllowedSigners
+                {
+                    int copySize = newProductSigners.AllowedSigners.AllowedSigner.Length
+                                                    + resultProductSigners.AllowedSigners.AllowedSigner.Length;
+                    AllowedSigner[] allowedSignersCopy = new AllowedSigner[copySize];
+
+                    int newAllowedSignersLen = newProductSigners.AllowedSigners.AllowedSigner.Length;
+
+                    // New AllowedSigners
+                    for (int i = 0; i < newAllowedSignersLen; i++)
+                    {
+                        allowedSignersCopy[i] = newProductSigners.AllowedSigners.AllowedSigner[i];
+                    }
+
+                    // Existing AllowedSigners
+                    for (int i = 0; i < resultProductSigners.AllowedSigners.AllowedSigner.Length; i++)
+                    {
+                        // Offset the index to length of new Prod signers to not overwrite entries
+                        allowedSignersCopy[i + newAllowedSignersLen] = resultProductSigners.AllowedSigners.AllowedSigner[i];
+                    }
+
+
+                    resultProductSigners.AllowedSigners.AllowedSigner = allowedSignersCopy;
+                }
+
+            }
+
+            // Denied Signers
+            if (newProductSigners.DeniedSigners != null)
+            {
+                // Short Circuit if current DeniedSigners is null
+                if (resultProductSigners.DeniedSigners == null)
+                {
+                    resultProductSigners.DeniedSigners = newProductSigners.DeniedSigners;
+                }
+                else // new and existing DeniedSigners
+                {
+                    int copySize = newProductSigners.DeniedSigners.DeniedSigner.Length
+                                                    + resultProductSigners.DeniedSigners.DeniedSigner.Length;
+                    DeniedSigner[] deniedSignersCopy = new DeniedSigner[copySize];
+
+                    int newDeniedSignersLen = newProductSigners.DeniedSigners.DeniedSigner.Length;
+
+                    // New DeniedSigners
+                    for (int i = 0; i < newDeniedSignersLen; i++)
+                    {
+                        deniedSignersCopy[i] = newProductSigners.DeniedSigners.DeniedSigner[i];
+                    }
+
+                    // Existing AllowedSigners
+                    for (int i = 0; i < resultProductSigners.DeniedSigners.DeniedSigner.Length; i++)
+                    {
+                        // Offset the index to length of new Prod signers to not overwrite entries
+                        deniedSignersCopy[i + newDeniedSignersLen] = resultProductSigners.DeniedSigners.DeniedSigner[i];
+                    }
+
+
+                    resultProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
+                }
+            }
+            // FileRulesRef
+            if (newProductSigners.FileRulesRef != null)
+            {
+                // Short Circuit if current DeniedSigners is null
+                if (resultProductSigners.FileRulesRef == null)
+                {
+                    resultProductSigners.FileRulesRef = newProductSigners.FileRulesRef;
+                }
+                else // new and existing DeniedSigners
+                {
+                    int copySize = newProductSigners.FileRulesRef.FileRuleRef.Length
+                                                    + resultProductSigners.FileRulesRef.FileRuleRef.Length;
+                    FileRuleRef[] fileRuleRefCopy = new FileRuleRef[copySize];
+
+                    int newFileRuleRefLen = newProductSigners.FileRulesRef.FileRuleRef.Length;
+
+                    // New DeniedSigners
+                    for (int i = 0; i < newFileRuleRefLen; i++)
+                    {
+                        fileRuleRefCopy[i] = newProductSigners.FileRulesRef.FileRuleRef[i];
+                    }
+
+                    // Existing AllowedSigners
+                    for (int i = 0; i < resultProductSigners.FileRulesRef.FileRuleRef.Length; i++)
+                    {
+                        // Offset the index to length of new Prod signers to not overwrite entries
+                        fileRuleRefCopy[i + newFileRuleRefLen] = resultProductSigners.FileRulesRef.FileRuleRef[i];
+                    }
+
+
+                    resultProductSigners.FileRulesRef.FileRuleRef = fileRuleRefCopy;
+                }
+
+            }
+
+            return resultProductSigners;
+        }
+
+
+        /// <summary>
+        /// Handles the merge operation between a new Signer[] and an existing Signer[] struct
+        /// </summary>
+        /// <param name="newProductSigners"></param>
+        /// <param name="resultProductSigners"></param>
+        /// <returns></returns>
+        static Signer[] MergeSigners(Signer[] newSigners, Signer[] resultSigners)
+        {
+            // Short circuit if nothing from the new sipolicy
+            if (newSigners == null || newSigners.Length == 0)
+            {
+                return resultSigners;
+            }
+
+            // Return newSigners if resultSigners is empty/null
+            if (resultSigners == null || resultSigners.Length == 0)
+            {
+                return newSigners;
+            }
+   
+            int copySize = newSigners.Length + resultSigners.Length;
+            Signer[] signersCopy = new Signer[copySize];
+                                    
+            // New DeniedSigners
+            for (int i = 0; i < newSigners.Length; i++)
+            {
+                signersCopy[i] = newSigners[i];
+            }
+            
+            // Existing AllowedSigners
+            for (int i = 0; i < resultSigners.Length; i++)
+            {
+                // Offset the index to length of new Prod signers to not overwrite entries
+                signersCopy[i + newSigners.Length] = resultSigners[i];
+            }
+            
+            return signersCopy;
+        }
+
+
+        /// <summary>
+        /// Handles the merge operation between a new Signer[] and an existing Signer[] struct
+        /// </summary>
+        /// <param name="newProductSigners"></param>
+        /// <param name="resultProductSigners"></param>
+        /// <returns></returns>
+        static Object[] MergeFileRules(Object[] newFileRules, Object[] resultFileRules)
+        {
+            // Short circuit if nothing from the new sipolicy
+            if (newFileRules == null || newFileRules.Length == 0)
+            {
+                return resultFileRules;
+            }
+
+            // Return newFileRules if resultFileRules is empty/null
+            if (resultFileRules == null || resultFileRules.Length == 0)
+            {
+                return newFileRules;
+            }
+
+            int copySize = newFileRules.Length + resultFileRules.Length;
+            Object[] fileRulesCopy = new Object[copySize];
+
+            // New DeniedSigners
+            for (int i = 0; i < newFileRules.Length; i++)
+            {
+                fileRulesCopy[i] = newFileRules[i];
+            }
+
+            // Existing AllowedSigners
+            for (int i = 0; i < resultFileRules.Length; i++)
+            {
+                // Offset the index to length of new Prod signers to not overwrite entries
+                fileRulesCopy[i + newFileRules.Length] = resultFileRules[i];
+            }
+
+            return fileRulesCopy;
         }
     } 
 }
