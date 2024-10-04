@@ -1182,10 +1182,6 @@ namespace WDAC_Wizard
                 Logger.Log.AddInfoMsg("Additional parameters set - HVCI set to 0");
             }
 
-            // Lastly, re-format Allow/Deny, FileAttrib and Signer IDs, if applicable
-            siPolicy = PolicyHelper.FormatFileRuleIDs(siPolicy);
-            siPolicy = PolicyHelper.FormatSignerRuleIDs(siPolicy);
-
             try
             {
                 Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
@@ -1384,9 +1380,6 @@ namespace WDAC_Wizard
             
             Logger.Log.AddInfoMsg("--- Merge Templates Policy ---");
 
-            SiPolicy siPolicyFinal = null;
-
-
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 if(String.IsNullOrEmpty(this.Policy.SchemaPath))
@@ -1413,15 +1406,6 @@ namespace WDAC_Wizard
                 }
             }
 
-            // TemplatePath holds the structure of the policy under edit
-            // If editing a policy, e.g. supplemental, have the TemplatePath define the structure
-
-            // TemplatePath holds the structure of the policy under edit
-            if (this.Policy.TemplatePath != null)
-            {
-                siPolicyFinal = Helper.DeserializeXMLtoPolicy(this.Policy.TemplatePath);
-            }
-            
             // Check whether the User Mode recommended block list rules are wanted in the output:
             if(this.Policy.UseUserModeBlocks)
             {
@@ -1438,7 +1422,12 @@ namespace WDAC_Wizard
                                                                      Path.Combine(this.ExeFolderPath, "Recommended_KernelMode_Blocklist.xml"))); 
             }
 
-            siPolicyFinal = PolicyHelper.MergePolicies(siPolicyCustomRules, siPolicyFinal);
+            // New Policies:
+            // Base Policy - policy under construction in this.SiPolicy 
+            // Supplemental Policy: no existing rules
+
+            // Edit Policies - current on disk policy in this.SiPolicy
+            SiPolicy siPolicyFinal = PolicyHelper.MergePolicies(siPolicyCustomRules, this.Policy.siPolicy);
 
             // Write to output schema location
 

@@ -126,8 +126,9 @@ namespace WDAC_Wizard
                 return null;
             }
 
+            // Remap the signer, file attribute and hash rule IDs to guarantee uniqueness
             // De-serialize the dummy policy to get the signer or file rule objects
-            return Helper.DeserializeXMLtoPolicy(policyPath);
+            return PolicyHelper.RemapIDs(Helper.DeserializeXMLtoPolicy(policyPath), customRule.Type);
         }
 
         /// <summary>

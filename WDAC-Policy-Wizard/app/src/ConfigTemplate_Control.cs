@@ -318,7 +318,7 @@ namespace WDAC_Wizard
         {
             // Wiring the button IDs to the corresponding rules
             // Default values and order can be found @: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
-            string dictPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
+            string dictPath = Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
             Dictionary<string, Dictionary<string, string>> rulesDict = new Dictionary<string, Dictionary<string, string>>();
 
             try
@@ -609,7 +609,7 @@ namespace WDAC_Wizard
                 // User only provided a base policy ID to expand
                 if(this._MainWindow.Policy.BasePolicyId != Guid.Empty)
                 {
-                    xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, 
+                    xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, 
                                                             Properties.Resources.EmptyWdacSupplementalXml);
                 }
                 // User provided a path to the base policy
@@ -627,17 +627,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);
                             break;
                     }
                 }
@@ -648,17 +648,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate);
                             break;
                     }
                 }
