@@ -1478,14 +1478,22 @@ namespace WDAC_Wizard
             // Check whether the recommended block list rules are wanted in the output:
             if(this.Policy.UseUserModeBlocks)
             {
-                string recommendedUsermodeBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
-                policyPaths.Add(recommendedUsermodeBlockPath);
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
+                string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
+                File.Copy(umBlocklist_src, umBlocklist_dst, true);
+                policyPaths.Add(umBlocklist_dst);
             }
 
             if (this.Policy.UseKernelModeBlocks)
             {
-                string recommendedDriverBlockPath = System.IO.Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml"); ; 
-                policyPaths.Add(recommendedDriverBlockPath); 
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml");
+                string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
+                File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
+                policyPaths.Add(kmBlocklist_dst);
             }
 
             // Merge-CIPolicy command requires at MIN 1 valid input policy:
