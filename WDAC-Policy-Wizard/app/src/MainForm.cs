@@ -5,22 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Xml.Serialization;
-using System.Management.Automation;
-using System.Collections.ObjectModel;
-using System.Management.Automation.Runspaces;
-using System.Diagnostics;
-using System.Security; 
-using System.Security.Permissions; 
-
-using Microsoft.Win32;
 using WDAC_Wizard.src;
 using WDAC_Wizard.Properties;
 
@@ -774,6 +761,9 @@ namespace WDAC_Wizard
                 // Save the path under the Downloads folder 
                 string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
                 string pathToWrite = Path.Combine(Helper.GetDocumentsFolder(), fileName);
+
+                // Issue # 392 - Reset the policy GUID
+                PolicyHelper.ResetPolicyGuid(this.EventLogPolicy);
 
                 try
                 {
