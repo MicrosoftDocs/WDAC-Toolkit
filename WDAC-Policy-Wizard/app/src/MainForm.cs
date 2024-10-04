@@ -1399,17 +1399,25 @@ namespace WDAC_Wizard
             // Check whether the User Mode recommended block list rules are wanted in the output:
             if(this.Policy.UseUserModeBlocks)
             {
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,
-                                                                 Helper.DeserializeXMLStringtoPolicy(
-                                                                     Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml")));
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
+                string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
+                File.Copy(umBlocklist_src, umBlocklist_dst, true);
+
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLStringtoPolicy(umBlocklist_dst));
             }
 
             // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
             if (this.Policy.UseKernelModeBlocks)
             {
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,
-                                                                 Helper.DeserializeXMLStringtoPolicy(
-                                                                     Path.Combine(this.ExeFolderPath, "Recommended_KernelMode_Blocklist.xml"))); 
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml");
+                string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
+                File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
+
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLStringtoPolicy(kmBlocklist_dst)); 
             }
 
             // New Policies:
