@@ -786,7 +786,7 @@ namespace WDAC_Wizard
             // Create folder for temp intermediate policies
             try
             {
-                System.IO.Directory.CreateDirectory(this.TempFolderPath); // Create new temp folder
+                Directory.CreateDirectory(this.TempFolderPath); // Create new temp folder
             }
             catch (Exception e)
             {
