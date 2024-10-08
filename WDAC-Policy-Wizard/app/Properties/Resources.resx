@@ -125,7 +125,7 @@
     <value>..\Resources\imgs\next.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="InvalidateEAs_Info" xml:space="preserve">
-    <value>When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation.</value>
+    <value>When the Intelligent Security Graph is used, App Control for Business uses attributes to authorize the file. When enabled, App Control for Business will periodically revalidate the reputation.</value>
   </data>
   <data name="blank-check-box_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\blank-check-box_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -143,10 +143,10 @@
     <value>..\Resources\imgs\toggle_lg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NoReboot_Info" xml:space="preserve">
-    <value>When enabled, future WDAC policy updates are applied without requiring a system reboot.</value>
+    <value>When enabled, future App Control for Business policy updates are applied without requiring a system reboot.</value>
   </data>
   <data name="EventLogConversionSuccess" xml:space="preserve">
-    <value>The WDAC Wizard successfully parsed all of the WDAC Event Logs</value>
+    <value>The Wizard successfully parsed all of the App Control for Business Event Logs</value>
   </data>
   <data name="DynamicSecurity_Info" xml:space="preserve">
     <value>Enables policy enforcement for .NET applications and DLLs.</value>
@@ -192,7 +192,7 @@ and this original filename with a version at or above the specified file version
     <value>..\Resources\imgs\white-minimize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StoreApps_Info" xml:space="preserve">
-    <value>If this rule option is enabled, WDAC policies will also apply to Universal Windows applications.</value>
+    <value>If this rule option is enabled, App Control for Business policies will also apply to Universal Windows applications.</value>
   </data>
   <data name="blank_check_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\blank-check-box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -207,7 +207,7 @@ and this original filename with a version at or above the specified file version
     <value>Allows the policy to remain unsigned. When this option is removed, the policy must be signed.</value>
   </data>
   <data name="FlightSigning_Info" xml:space="preserve">
-    <value>When enabled, WDAC policies will not trust flight-signed binaries, only production binaries.</value>
+    <value>When enabled, App Control for Business policies will not trust flight-signed binaries, only production binaries.</value>
   </data>
   <data name="UnsupportedRule_Info" xml:space="preserve">
     <value>This option is not currently supported ...</value>
@@ -250,7 +250,7 @@ with a version at or above this specified file version number.</value>
     <value>..\Resources\imgs\radio-off-button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BootAudit_Info" xml:space="preserve">
-    <value>Used when the WDAC policy is in enforcement mode. When a driver fails during startup, the WDAC policy will be placed in audit mode so that Windows will load.</value>
+    <value>Used when the App Control for Business policy is in enforcement mode. When a driver fails during startup, the policy will be placed in audit mode so that Windows will load.</value>
   </data>
   <data name="toggle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\toggle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -319,7 +319,7 @@ with a version at or above this specified file version number.</value>
     <value>..\Resources\imgs\white-right-arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ManagedInst_Info" xml:space="preserve">
-    <value>When enabled, applications installed by a software distribution solution, such as SCCM, are allowlisted.</value>
+    <value>When enabled, applications installed by a software distribution solution, such as Intune, are allowlisted.</value>
   </data>
   <data name="cctv" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imgs\cctv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -370,13 +370,13 @@ with a version at or above this specified file version number.</value>
     <value>Are you sure you want to reset all settings to their original state?</value>
   </data>
   <data name="UnsuccessfulEventLogConversion" xml:space="preserve">
-    <value>Conversion of the event log to a WDAC Policy XML file was unsuccessful. Please try another file. </value>
+    <value>Conversion of the event log to a App Control for Business Policy XML file was unsuccessful. Please try another file. </value>
   </data>
   <data name="RevokedAsUnsigned_Info" xml:space="preserve">
-    <value>When enabled, WDAC will treat revoked and expired binaries as unsigned. </value>
+    <value>When enabled, App Control for Business will treat revoked and expired binaries as unsigned. </value>
   </data>
   <data name="HashEmptyList_Error" xml:space="preserve">
-    <value>Invalid custom hashes specified. The WDAC Wizard was unable to detect at least 1 hash.</value>
+    <value>Invalid custom hashes specified. The Wizard was unable to detect at least 1 hash.</value>
   </data>
   <data name="InvalidAttributeSelection_Error" xml:space="preserve">
     <value>The file attribute selected cannot be N/A or empty. Please select another attribute or use custom values. </value>
@@ -408,13 +408,13 @@ and &lt; 65535.65535.65535.65535</value>
     <value>Type the name of the package to begin the search.</value>
   </data>
   <data name="OpenPEFileDialogTitle" xml:space="preserve">
-    <value>Browse for a file to use as a reference for the WDAC rule.</value>
+    <value>Browse for a file to use as a reference for the App Control for Business rule.</value>
   </data>
   <data name="OpenXMLFileDialogTitle" xml:space="preserve">
-    <value>Browse for existing WDAC Policy File.</value>
+    <value>Browse for existing App Control for Business policy File.</value>
   </data>
   <data name="SaveXMLFileDialogTitle" xml:space="preserve">
-    <value>Choose a Location to Save your WDAC Policy</value>
+    <value>Choose a Location to Save your App Control for Business Policy</value>
   </data>
   <data name="InvalidEKUFormat_Error" xml:space="preserve">
     <value>This EKU is not valid or could not be converted to DER encoding. E.g. of a properly formated
@@ -424,7 +424,7 @@ EKU is 1.3.6.1.4.1.311.76.3.1</value>
     <value>The user has canceled deleting the row from the SigningRules_Control</value>
   </data>
   <data name="RuleTypeNoExceptionAllowed" xml:space="preserve">
-    <value>Unable to proceed to Exceptions Panel. WDAC does not support rule exceptions for this rule type.
+    <value>Unable to proceed to Exceptions Panel. App Control for Business does not support rule exceptions for this rule type.
 Please select the  'Create Rule' button.</value>
   </data>
   <data name="BadEventPubValue" xml:space="preserve">
@@ -461,10 +461,10 @@ Please select the  'Create Rule' button.</value>
     <value>At least one of Usermode Rule or Kernel Rule checkboxes must be checked</value>
   </data>
   <data name="SupplementalPolicyDenyRuleError" xml:space="preserve">
-    <value>Deny rules are ignored in supplemental policies by WDAC. Since supplemental policies are meant to expand what the base policy trusts, only allow rules are supported in supplemental policies. </value>
+    <value>Deny rules are ignored in supplemental policies by App Control for Business. Since supplemental policies are meant to expand what the base policy trusts, only allow rules are supported in supplemental policies. </value>
   </data>
   <data name="BrowseForXmlSaveLoc" xml:space="preserve">
-    <value>Choose a location to save your edited WDAC Policy</value>
+    <value>Choose a location to save your edited App Control for Business Policy</value>
   </data>
   <data name="ComInitialGuid" xml:space="preserve">
     <value>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}</value>
@@ -485,7 +485,7 @@ Please select the  'Create Rule' button.</value>
     <value>Microsoft-Windows-CodeIntegrity/Operational</value>
   </data>
   <data name="UnsuccessfulEventLogConversionZeroEvents" xml:space="preserve">
-    <value>The Wizard did not parse any WDAC events from the selected log files.</value>
+    <value>The Wizard did not parse any App Control for Business events from the selected log files.</value>
   </data>
   <data name="MSDocLink_RuleLevels" xml:space="preserve">
     <value>https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-file-rule-levels</value>
@@ -501,21 +501,21 @@ Please select the  'Create Rule' button.</value>
 Are you sure you want to abandon the exception rule creation workflow?</value>
   </data>
   <data name="ChooseEventLog_Error" xml:space="preserve">
-    <value>Please select a WDAC event log source to parse before continuing</value>
+    <value>Please select a App Control for Business event log source to parse before continuing</value>
   </data>
   <data name="ChoosePolicyToEdit_Error" xml:space="preserve">
     <value>Please select a policy XML file to edit before continuing</value>
   </data>
   <data name="UnsupportedCrypto_Error" xml:space="preserve">
-    <value>A cryptographic algorithm that isn't supported by WDAC was found. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
+    <value>A cryptographic algorithm that isn't supported was detected. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
   </data>
   <data name="XMLFileOpen_Error" xml:space="preserve">
-    <value>The WDAC Wizard could not open the WDAC XML file. The most likely reason is that the Wizard failed to build the policy file.
+    <value>The Wizard could not open the App Control for Business policy file. The most likely reason is that the Wizard failed to build the policy.
 
 Please check the log file in </value>
   </data>
   <data name="FileOpen_Exception" xml:space="preserve">
-    <value>The WDAC Wizard encountered this exception trying to open this file 
+    <value>The Wizard encountered this exception trying to open this file 
  </value>
   </data>
   <data name="PolicyBuild_Error" xml:space="preserve">
@@ -524,7 +524,7 @@ Please check the log file in </value>
 Please check the log file in </value>
   </data>
   <data name="BINFileOpen_Error" xml:space="preserve">
-    <value>The WDAC Wizard could not open the WDAC BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
+    <value>The Wizard could not open the App Control for Business BIN file. The most likely reason is that the Wizard failed to convert the policy XML file to binary.
 
 Please check the log file in </value>
   </data>

@@ -48,7 +48,7 @@ namespace WDAC_Wizard.src
         /// <param name="e"></param>
         private void Button_Browse_Click(object sender, EventArgs e)
         {
-            string dspTitle = "Choose the final merged WDAC path location";
+            string dspTitle = "Choose the final policy save location";
             string policyPath = SavePolicy(dspTitle);
 
             if (!String.IsNullOrEmpty(policyPath))
@@ -79,7 +79,7 @@ namespace WDAC_Wizard.src
         /// <param name="e"></param>
         private void Button_AddPolicy_Click(object sender, EventArgs e)
         {
-            string dspTitle = "Choose WDAC policies to merge";
+            string dspTitle = "Choose App Control policies to merge";
             List<string> policyPathsList = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.Policy);
 
             if (policyPathsList == null)

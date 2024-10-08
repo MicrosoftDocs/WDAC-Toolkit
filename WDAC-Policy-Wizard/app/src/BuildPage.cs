@@ -144,7 +144,7 @@ namespace WDAC_Wizard
                     // Log file already closed
                     string displayMsg = Properties.Resources.FileOpen_Exception + "\r\n" + ex.Message;
                     DialogResult res = MessageBox.Show(displayMsg,
-                                                       "WDAC Wizard Exception",
+                                                       "Wizard Exception",
                                                        MessageBoxButtons.OK,
                                                        MessageBoxIcon.Error);
                 }
@@ -153,7 +153,7 @@ namespace WDAC_Wizard
             {
                 string displayMsg = Properties.Resources.XMLFileOpen_Error + this._MainWindow.TempFolderPath; 
                 DialogResult res = MessageBox.Show(displayMsg,
-                                                   "WDAC Wizard Error",
+                                                   "Wizard Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
             }
@@ -180,7 +180,7 @@ namespace WDAC_Wizard
                     // Log file already closed
                     string displayMsg = Properties.Resources.FileOpen_Exception + "\r\n" + ex.Message;
                     DialogResult res = MessageBox.Show(displayMsg,
-                                                       "WDAC Wizard Exception",
+                                                       "Wizard Exception",
                                                        MessageBoxButtons.OK,
                                                        MessageBoxIcon.Error);
                 }
@@ -189,7 +189,7 @@ namespace WDAC_Wizard
             {
                 string displayMsg = Properties.Resources.BINFileOpen_Error + this._MainWindow.TempFolderPath;
                 DialogResult res = MessageBox.Show(displayMsg,
-                                                   "WDAC Wizard Error",
+                                                   "Wizard Error",
                                                    MessageBoxButtons.OK,
                                                    MessageBoxIcon.Error);
             }

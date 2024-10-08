@@ -15,21 +15,21 @@
           "Microsoft.PowerShell.ConsoleHost": "7.4.2",
           "Microsoft.WSMan.Management": "7.4.2",
           "System.Management.Automation": "7.4.2",
-          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.22621.31"
+          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.22621.34"
         },
         "runtime": {
           "WDAC Wizard.dll": {}
         }
       },
-      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.22621.31": {
+      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.22621.34": {
         "runtime": {
           "Microsoft.Windows.SDK.NET.dll": {
             "assemblyVersion": "10.0.22621.30",
-            "fileVersion": "10.0.22621.31"
+            "fileVersion": "10.0.22621.34"
           },
           "WinRT.Runtime.dll": {
             "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.4.44211"
+            "fileVersion": "2.0.8.46841"
           }
         }
       },
@@ -690,7 +690,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.22621.31": {
+    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.22621.34": {
       "type": "runtimepack",
       "serviceable": false,
       "sha512": ""
