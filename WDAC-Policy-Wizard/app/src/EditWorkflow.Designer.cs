@@ -99,9 +99,9 @@ namespace WDAC_Wizard
             label2.ForeColor = System.Drawing.Color.Black;
             label2.Location = new System.Drawing.Point(165, 76);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(572, 21);
+            label2.Size = new System.Drawing.Size(552, 21);
             label2.TabIndex = 108;
-            label2.Text = "Browse for your policy on disk or create one from a code integrity event log.";
+            label2.Text = "Browse for your policy on disk or create one from App Control event logs.";
             // 
             // buttonBrowse
             // 
@@ -347,9 +347,9 @@ namespace WDAC_Wizard
             label9.Location = new System.Drawing.Point(166, 193);
             label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(526, 18);
+            label9.Size = new System.Drawing.Size(625, 18);
             label9.TabIndex = 109;
-            label9.Text = "Convert the app control event logs or MDE Advanced Hunting log file to a policy";
+            label9.Text = "Convert the App Control event logs, MDE Advanced Hunting or LogAnalytics log files to a policy";
             // 
             // panel_Page
             // 
@@ -547,7 +547,7 @@ namespace WDAC_Wizard
             label_Error.Location = new System.Drawing.Point(163, 640);
             label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_Error.Name = "label_Error";
-            label_Error.Size = new System.Drawing.Size(620, 18);
+            label_Error.Size = new System.Drawing.Size(573, 18);
             label_Error.TabIndex = 116;
             label_Error.Text = "Convert the device's Code Integrity event log or an arbitrary log file to a policy XML file";
             label_Error.Visible = false;
