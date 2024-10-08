@@ -1453,6 +1453,12 @@ namespace WDAC_Wizard
                 siPolicy = FormatFileRuleIDs(siPolicy);
             }
 
+            if(ruleType == PolicyCustomRules.RuleType.Certificate)
+            {
+                // Remap the Signer Rule IDs (Signer, CiSigners)
+                siPolicy = FormatSignerRuleIDs(siPolicy);
+            }
+
             return siPolicy;
         }
 

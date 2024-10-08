@@ -1209,7 +1209,8 @@ namespace WDAC_Wizard
                 // File Attributes, PFN rules, file/folder path rules
                 if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
                       || customRule.Type == PolicyCustomRules.RuleType.Hash
-                      || customRule.Type == PolicyCustomRules.RuleType.FolderScan))
+                      || customRule.Type == PolicyCustomRules.RuleType.FolderScan
+                      || customRule.Type == PolicyCustomRules.RuleType.Certificate))
                 {
                     continue;
                 }
@@ -1254,6 +1255,21 @@ namespace WDAC_Wizard
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
                     
+                    // Successful Scan completed
+                    if (signerSiPolicy != null)
+                    {
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
+                    }
+                }
+
+                // Certificate File Rule -- Invoke Add-SignerRule PS Cmd to generate a policy
+                if(customRule.Type == PolicyCustomRules.RuleType.Certificate)
+                {
+                    // Copy EmptyWDAC.xml to tmpPolicyPath so Add-SignerRule has a policy which the signer rules can be added
+                    File.Copy(Path.Combine(this.ExeFolderPath, "EmptyWDAC.xml"), tmpPolicyPath);
+
+                    SiPolicy signerSiPolicy = PSCmdlets.AddSignerRuleFromPS(customRule, tmpPolicyPath);
+
                     // Successful Scan completed
                     if (signerSiPolicy != null)
                     {
