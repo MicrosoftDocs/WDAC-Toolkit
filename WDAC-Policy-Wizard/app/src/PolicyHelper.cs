@@ -1458,7 +1458,7 @@ namespace WDAC_Wizard
                 // Remap the Signer Rule IDs (Signer, CiSigners)
                 siPolicy = FormatSignerRuleIDs(siPolicy);
             }
-
+          
             return siPolicy;
         }
 
@@ -1882,7 +1882,6 @@ namespace WDAC_Wizard
                         deniedSignersCopy[i + newDeniedSignersLen] = resultProductSigners.DeniedSigners.DeniedSigner[i];
                     }
 
-
                     resultProductSigners.DeniedSigners.DeniedSigner = deniedSignersCopy;
                 }
             }
@@ -1918,7 +1917,6 @@ namespace WDAC_Wizard
 
                     resultProductSigners.FileRulesRef.FileRuleRef = fileRuleRefCopy;
                 }
-
             }
 
             return resultProductSigners;

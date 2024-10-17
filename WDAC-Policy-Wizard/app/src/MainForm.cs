@@ -1420,8 +1420,8 @@ namespace WDAC_Wizard
                 string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
                 string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
                 File.Copy(umBlocklist_src, umBlocklist_dst, true);
-
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLStringtoPolicy(umBlocklist_dst));
+                
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLtoPolicy(umBlocklist_dst));
             }
 
             // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
@@ -1433,7 +1433,7 @@ namespace WDAC_Wizard
                 string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
                 File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
 
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLStringtoPolicy(kmBlocklist_dst)); 
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,Helper.DeserializeXMLtoPolicy(kmBlocklist_dst)); 
             }
 
             // New Policies:
