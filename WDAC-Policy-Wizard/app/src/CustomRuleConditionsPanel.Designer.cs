@@ -322,10 +322,10 @@
             labelFolderScanLearnMore.Location = new System.Drawing.Point(5, 35);
             labelFolderScanLearnMore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelFolderScanLearnMore.Name = "labelFolderScanLearnMore";
-            labelFolderScanLearnMore.Size = new System.Drawing.Size(265, 18);
+            labelFolderScanLearnMore.Size = new System.Drawing.Size(382, 18);
             labelFolderScanLearnMore.TabIndex = 113;
             labelFolderScanLearnMore.Tag = "IgnoreDarkMode";
-            labelFolderScanLearnMore.Text = "Learn more about WDAC rule levels     ";
+            labelFolderScanLearnMore.Text = "Learn more about App Control for Business rule levels     ";
             labelFolderScanLearnMore.Click += LabelFolderScanLearnMore_Click;
             // 
             // checkedListBoxRuleLevels

@@ -111,7 +111,7 @@ namespace WDAC_Wizard
                 dp.Action.Contains("Added to policy"))
             {
                 DialogResult res = MessageBox.Show("This allow rule was already created and will be added to the resulting policy. Do you want to create the rule again?",
-                                                   "WDAC Wizard - New Rule Creation",
+                                                   "Wizard - New Rule Creation",
                                                    MessageBoxButtons.YesNo,
                                                    MessageBoxIcon.Warning);
                 if (res == DialogResult.No)

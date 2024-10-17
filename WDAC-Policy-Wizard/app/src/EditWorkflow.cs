@@ -264,7 +264,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ParseMDEAHLogs_ButtonClick(object sender, EventArgs e)
         {
-            string dspTitle = "Choose MDE Advanced Hunting WDAC CSV Export Files to convert to policy";
+            string dspTitle = "Select Advanced Hunting exported CSV files to convert to policy";
             List<string> eventLogPaths = Helper.BrowseForMultiFiles(dspTitle, Helper.BrowseFileType.CsvFile);
 
             if (eventLogPaths == null)
@@ -384,7 +384,7 @@ namespace WDAC_Wizard
             {
                 this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
                 this.parseresult_PictureBox.Image = Properties.Resources.verified;
-                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "WDAC Wizard Event Log Parsing Success", 
+                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "Wizard Event Log Parsing Success", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this._MainWindow.ErrorOnPage = false;
             }

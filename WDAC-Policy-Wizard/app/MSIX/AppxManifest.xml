@@ -8,9 +8,9 @@
             Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
             ProcessorArchitecture="x64"/>
    <Properties>
-    <DisplayName>WDAC Wizard</DisplayName>
+    <DisplayName>App Control Wizard</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
-    <Description>Application to help build powerful WDAC CI policies.</Description>
+    <Description>Application to help build powerful App Control for Business policies.</Description>
     <Logo>Assets\Square150x150Logo.scale-100.png</Logo>
   </Properties>
   <Resources>
@@ -25,7 +25,7 @@
   </Capabilities>
   <Applications>
     <Application Id="WDACWizard" Executable="WDAC Wizard.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="WDAC Wizard" Description="Application to help build powerful WDAC CI policies."	Square150x150Logo="Assets\Square150x150Logo.scale-100.png"
+      <uap:VisualElements DisplayName="App Control Wizard" Description="Application to help build powerful App Control for Business policies."	Square150x150Logo="Assets\Square150x150Logo.scale-100.png"
          Square44x44Logo="Assets\Square44x44Logo.scale-400.png" BackgroundColor="transparent" />
     </Application>
   </Applications>

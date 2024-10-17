@@ -95,7 +95,7 @@ namespace WDAC_Wizard
 
             if (browseFileType == BrowseFileType.Policy)
             {
-                openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
+                openFileDialog.Filter = "App Control Policy Files (*.xml)|*.xml";
             }
             else if (browseFileType == BrowseFileType.EventLog)
             {
@@ -150,7 +150,7 @@ namespace WDAC_Wizard
             }
             else if (browseFileType.Equals(BrowseFileType.Policy))
             {
-                openFileDialog.Filter = "WDAC Policy Files (*.xml)|*.xml";
+                openFileDialog.Filter = "App Control Policy Files (*.xml)|*.xml";
             }
             else if (browseFileType.Equals(BrowseFileType.CsvFile))
             {
