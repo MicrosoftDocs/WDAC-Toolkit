@@ -126,8 +126,9 @@ namespace WDAC_Wizard
                 return null;
             }
 
+            // Remap the signer, file attribute and hash rule IDs to guarantee uniqueness
             // De-serialize the dummy policy to get the signer or file rule objects
-            return Helper.DeserializeXMLtoPolicy(policyPath);
+            return PolicyHelper.RemapIDs(Helper.DeserializeXMLtoPolicy(policyPath), customRule.Type);
         }
 
         /// <summary>
@@ -230,6 +231,65 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Runs the Add-SignerRule to generate Publisher rules from certificate files and 
+        /// serializes the policy file into an SiPolicy object
+        /// </summary>
+        /// <param name="customRule"></param>
+        /// <param name="policyPath"></param>
+        /// <returns></returns>
+        internal static SiPolicy AddSignerRuleFromPS(PolicyCustomRules customRule, string policyPath)
+        {
+            // Create runspace, pipeline and runscript
+            Pipeline pipeline = CreatePipeline();
+
+            string addSignerCmd = $"Add-SignerRule -CertificatePath \"{customRule.ReferenceFile}\" -FilePath \"{policyPath}\"";
+
+            // Add -User if user mode
+            if (customRule.SigningScenarioCheckStates.umciEnabled)
+            {
+                addSignerCmd += " -User";
+            }
+
+            // Add -Kernel if kernel mode
+            if (customRule.SigningScenarioCheckStates.kmciEnabled)
+            {
+                addSignerCmd += " -Kernel";
+            }
+
+            // Append -Deny for deny rules
+            if (customRule.Permission == PolicyCustomRules.RulePermission.Deny)
+            {
+                addSignerCmd += " -Deny";
+            }
+
+            pipeline.Commands.AddScript(addSignerCmd);
+            Logger.Log.AddInfoMsg($"Running the following PS7 command: {addSignerCmd}");
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                Logger.Log.AddErrorMsg($"Exception encountered in AddSignerRuleFromPS(): {e}");
+            }
+
+            _Runspace.Dispose();
+
+            // De-serialize the dummy policy to get the signer objects
+            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(policyPath);
+
+            // Remove all the default policy rules
+            // Do not set to null which causes invalid file at compilation time - Issue #218
+            if (siPolicy != null)
+            {
+                siPolicy.Rules = new RuleType[1];
+            }
+
+            return PolicyHelper.RemapIDs(siPolicy, customRule.Type);
+        }
+
+        /// <summary>
         /// Runs the PS Set-CIPolicyIdInfo -Reset command to force the policy into multiple policy format
         /// </summary>
         /// <param name="path"></param>
@@ -309,9 +369,8 @@ namespace WDAC_Wizard
         /// Runs the Merge-CIPolicy command given a list of input file paths and output file path
         /// </summary>
         /// <param name="policyPaths">List of input policy paths to merge into destPath</param>
-        /// <param name="schemaPath">Filepath defined by Policy.SchemaPath</param>
         /// <param name="destPath">The final destination output path. OutputSchema.xml</param>
-        internal static void MergePolicies(List<string> policyPaths, string schemaPath, string destPath)
+        internal static void MergePolicies(List<string> policyPaths, string destPath)
         {
             // Create runspace, pipeline and runscript
             Pipeline pipeline = CreatePipeline();
@@ -326,7 +385,7 @@ namespace WDAC_Wizard
 
             // Remove last comma and add outputFilePath
             mergeScript = mergeScript.Remove(mergeScript.Length - 1);
-            mergeScript += String.Format(" -OutputFilePath \"{0}\"", schemaPath);
+            mergeScript += String.Format(" -OutputFilePath \"{0}\"", destPath);
 
             Logger.Log.AddInfoMsg("Running the following Merge Commands: ");
             Logger.Log.AddInfoMsg(mergeScript);
@@ -338,7 +397,6 @@ namespace WDAC_Wizard
             {
                 Collection<PSObject> results = pipeline.Invoke();
                 // Make copy of the finished schema file
-                File.Copy(schemaPath, destPath, true);
             }
             catch (Exception e)
             {

@@ -431,7 +431,7 @@ Please select the  'Create Rule' button.</value>
     <value>Unknown</value>
   </data>
   <data name="EmptyWDAC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\policyTemplates\EmptyWDAC.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\policyTemplates\EmptyWDAC.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="InvalidCheckboxState" xml:space="preserve">
     <value>Zero attributes are selected. Please select at least one attribute to add to the rule.</value>
@@ -589,5 +589,8 @@ Do you want the Wizard to warn you about these types of path rules in the future
   </data>
   <data name="Empty_Supplemental" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\policyTemplates\Empty_Supplemental.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CertificateParsing_Error" xml:space="preserve">
+    <value>This certificate file could not be read by the Wizard. Please try another certificate file with a valid certificate extension (cer, crt, pem, pfx).</value>
   </data>
 </root>

@@ -194,7 +194,18 @@ namespace WDAC_Wizard.Properties {
                 return ResourceManager.GetString("CertificateBuild_Error", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error. Could not build certificate chain for.
+        /// </summary>
+        internal static string CertificateParsing_Error
+        {
+            get
+            {
+                return ResourceManager.GetString("CertificateParsing_Error", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>

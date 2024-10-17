@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WDAC_Wizard
 {
@@ -41,6 +42,9 @@ namespace WDAC_Wizard
             this.CiEvents = pMainWindow.CiEvents; 
             this._MainWindow = pMainWindow; 
             this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty_Supplemental);
+
+            // Set the Base Policy ID of the supplemental policy
+            this.siPolicy.BasePolicyID = PolicyEventHelper.GetPolicyBaseId(this.siPolicy, this.CiEvents);
 
             this.DisplayObjects = new List<EventDisplayObject>();
 
@@ -1659,6 +1663,48 @@ namespace WDAC_Wizard
             }
 
             return siPolicy;
+        }
+
+        /// <summary>
+        /// Gets the Base Policy ID of the supplemental policy being created using the 
+        /// most common instance of the Policy GUID from the CiEvents
+        /// </summary>
+        internal static string GetPolicyBaseId(SiPolicy siPolicy, List<CiEvent> ciEvents)
+        {
+            // Get all the Policy GUIDs from the CiEvents and store counts
+            Dictionary<string, int> policyGuidCounts = new Dictionary<string, int>();
+
+            foreach(var ciEvent in ciEvents)
+            {
+                if (ciEvent.PolicyGUID == null)
+                    continue; 
+
+                if (policyGuidCounts.ContainsKey(ciEvent.PolicyGUID))
+                {
+                    policyGuidCounts[ciEvent.PolicyGUID] += 1; // increment count
+                }
+                else
+                {
+                    policyGuidCounts.Add(ciEvent.PolicyGUID, 1);
+                }
+            }
+
+            // Get policy GUID with largest event count
+            string mostCommonGuid = Guid.NewGuid().ToString();
+            int eventCount = 0;
+
+            foreach(var key in policyGuidCounts.Keys)
+            {
+                // Update leading GUID and event count
+                if (policyGuidCounts[key] > eventCount)
+                {
+                    mostCommonGuid = key;
+                    eventCount = policyGuidCounts[key];
+                }
+            }
+
+            // Return the most common GUID
+            return mostCommonGuid; 
         }
     }
 

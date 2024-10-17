@@ -865,7 +865,7 @@
             // 
             comboBox_RuleType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             comboBox_RuleType.FormattingEnabled = true;
-            comboBox_RuleType.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash", "COM Object", "Folder Scan" });
+            comboBox_RuleType.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash", "COM Object", "Folder Scan", "Certificate File" });
             comboBox_RuleType.Location = new System.Drawing.Point(96, 211);
             comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             comboBox_RuleType.Name = "comboBox_RuleType";
