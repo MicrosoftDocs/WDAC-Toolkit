@@ -625,30 +625,37 @@ namespace WDAC_Wizard
                     break;
                 }
 
-                case PolicyCustomRules.RuleType.Com:
-                    {
-                        level = "COM Object";
-                        name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
-                        files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
+            case PolicyCustomRules.RuleType.Com:
+                {
+                    level = "COM Object";
+                    name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
+                    files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
                          
-                        break; 
-                    }
+                    break; 
+                }
 
-                case PolicyCustomRules.RuleType.FolderScan:
+            case PolicyCustomRules.RuleType.FolderScan:
+                {
+                    level = this.PolicyCustomRule.Scan.Levels[0];
+                    name = "Folder Scan - " + this.PolicyCustomRule.ReferenceFile;
+                    if (this.PolicyCustomRule.Scan.Levels.Count > 1)
                     {
-                        level = this.PolicyCustomRule.Scan.Levels[0];
-                        name = "Folder Scan - " + this.PolicyCustomRule.ReferenceFile;
-                        if (this.PolicyCustomRule.Scan.Levels.Count > 1)
+                        files = "Level Fallback to "; 
+                        for(int i=1; i< this.PolicyCustomRule.Scan.Levels.Count; i++)
                         {
-                            files = "Level Fallback to "; 
-                            for(int i=1; i< this.PolicyCustomRule.Scan.Levels.Count; i++)
-                            {
-                                files += this.PolicyCustomRule.Scan.Levels[i] + ", ";
-                            }
-                            files = files.Substring(0, files.Length - 2);
+                            files += this.PolicyCustomRule.Scan.Levels[i] + ", ";
                         }
-                        break;
+                        files = files.Substring(0, files.Length - 2);
                     }
+                    break;
+                }
+
+            case PolicyCustomRules.RuleType.Certificate:
+                {
+                        level = "Certificate";
+                        name = $"Certificate File Rule: {this.PolicyCustomRule.ReferenceFile}";
+                    break;
+                }
             }
 
             // Handle custom EKU
@@ -776,6 +783,12 @@ namespace WDAC_Wizard
                     this.label_condition.Text = "Scan Path:";
                     break;
 
+                case "Certificate File":
+
+                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Certificate);
+                    label_Info.Text = "Creates a signer rule rule based off the selected certificate file.";
+                    break;
+
                 default:
                     break;
             }
@@ -854,7 +867,18 @@ namespace WDAC_Wizard
                     return; 
                 }
 
-                this.DefaultValues[4] = refPath; 
+                this.DefaultValues[4] = refPath;
+
+                // Check if certificate file is valid
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Certificate)
+                {
+                    if (!Helper.IsValidCertificateFile(refPath))
+                    {
+                        // Bad certificate file - reset UI
+                        CertificateUICleanUp();
+                        return;
+                    }
+                }
 
                 // Custom rule in progress
                 this._MainWindow.CustomRuleinProgress = true;
@@ -1065,7 +1089,6 @@ namespace WDAC_Wizard
 
                     break;
 
-
                 case PolicyCustomRules.RuleType.FilePath:
 
                     // UI updates
@@ -1174,6 +1197,20 @@ namespace WDAC_Wizard
                     }                    
 
                     break;
+
+                case PolicyCustomRules.RuleType.Certificate:
+
+                    // UI updates
+                    panel_Publisher_Scroll.Visible = false;
+                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    // Show right side of the text
+                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    {
+                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
+                        this.textBox_ReferenceFile.ScrollToCaret();
+                    }
+
+                    break;
             }
         }
 
@@ -1272,6 +1309,24 @@ namespace WDAC_Wizard
         {
             DialogResult res = MessageBox.Show(Properties.Resources.UnsupportedCrypto_Error,
                                                         "Unsupported Cryptographic Algorithm Found",
+                                                        MessageBoxButtons.OK,
+                                                        MessageBoxIcon.Error);
+
+            // Renew the custom rule instance
+            this.PolicyCustomRule = new PolicyCustomRules();
+
+            // Reset UI view
+            ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false;
+        }
+
+        /// <summary>
+        /// UI Cleanup when a certificate rule type is chosen but the file is not a certificate
+        /// </summary>
+        private void CertificateUICleanUp()
+        {
+            DialogResult res = MessageBox.Show(Properties.Resources.CertificateParsing_Error,
+                                                        "Unsupported Certificate File Found",
                                                         MessageBoxButtons.OK,
                                                         MessageBoxIcon.Error);
 

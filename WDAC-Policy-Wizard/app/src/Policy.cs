@@ -531,7 +531,8 @@ namespace WDAC_Wizard
             FolderPath,
             Hash,
             Com,
-            FolderScan
+            FolderScan,
+            Certificate
         }
 
         public enum RuleLevel

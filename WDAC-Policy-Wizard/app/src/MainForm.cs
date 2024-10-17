@@ -786,7 +786,7 @@ namespace WDAC_Wizard
             // Create folder for temp intermediate policies
             try
             {
-                System.IO.Directory.CreateDirectory(this.TempFolderPath); // Create new temp folder
+                Directory.CreateDirectory(this.TempFolderPath); // Create new temp folder
             }
             catch (Exception e)
             {
@@ -1209,7 +1209,8 @@ namespace WDAC_Wizard
                 // File Attributes, PFN rules, file/folder path rules
                 if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
                       || customRule.Type == PolicyCustomRules.RuleType.Hash
-                      || customRule.Type == PolicyCustomRules.RuleType.FolderScan))
+                      || customRule.Type == PolicyCustomRules.RuleType.FolderScan
+                      || customRule.Type == PolicyCustomRules.RuleType.Certificate))
                 {
                     continue;
                 }
@@ -1254,6 +1255,21 @@ namespace WDAC_Wizard
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
                     
+                    // Successful Scan completed
+                    if (signerSiPolicy != null)
+                    {
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
+                    }
+                }
+
+                // Certificate File Rule -- Invoke Add-SignerRule PS Cmd to generate a policy
+                if(customRule.Type == PolicyCustomRules.RuleType.Certificate)
+                {
+                    // Copy EmptyWDAC.xml to tmpPolicyPath so Add-SignerRule has a policy which the signer rules can be added
+                    File.Copy(Path.Combine(this.ExeFolderPath, "EmptyWDAC.xml"), tmpPolicyPath);
+
+                    SiPolicy signerSiPolicy = PSCmdlets.AddSignerRuleFromPS(customRule, tmpPolicyPath);
+
                     // Successful Scan completed
                     if (signerSiPolicy != null)
                     {
@@ -1399,17 +1415,19 @@ namespace WDAC_Wizard
             // Check whether the User Mode recommended block list rules are wanted in the output:
             if(this.Policy.UseUserModeBlocks)
             {
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
                 // Instead, copy to the temp folder 
                 string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
                 string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
                 File.Copy(umBlocklist_src, umBlocklist_dst, true);
-
+                
                 siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLtoPolicy(umBlocklist_dst));
             }
 
             // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
             if (this.Policy.UseKernelModeBlocks)
             {
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
                 // Instead, copy to the temp folder 
                 string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml");
                 string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");

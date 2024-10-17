@@ -35,6 +35,14 @@ namespace WDAC_Wizard
             {  "1.2.840.10045.4.3.4", "ECDSA_SH512" }
         };
 
+        // Supported certificate extensions
+        static List<string> SupportedCertificateExtensions = new List<string>
+        {
+            ".cer",
+            ".crt",
+            ".pem",
+            ".pfx",
+        };
 
         public enum BrowseFileType
         {
@@ -918,6 +926,40 @@ namespace WDAC_Wizard
                 return deskPath;
             }
         }
+
+        /// <summary>
+        /// Performs verification on the certificate file to determine whether this is a valid
+        /// certificate file
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>True if a valid certificate. False, otherwise</returns>
+        internal static bool IsValidCertificateFile(string filePath)
+        {
+            // Check if the file exists
+            if (!File.Exists(filePath))
+            {
+                return false;
+            }
+
+            // Check the file extension is a supported cert ext, return if false
+            if(!SupportedCertificateExtensions.Contains(Path.GetExtension(filePath).ToLower()))
+            {
+                return false; 
+            }
+
+            // Try to load the file as a certificate. If the load is successful, the certificate is valid, return true
+            // Otherwise, return false
+            try
+            {
+                X509Certificate2 cert = new X509Certificate2(filePath);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// Calls DateTime.UTCNow and formats to ISO 8601 (YYYY-MM-DD)
