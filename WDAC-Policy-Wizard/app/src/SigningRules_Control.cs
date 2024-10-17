@@ -481,7 +481,7 @@ namespace WDAC_Wizard
                 // Supplemental Policy - Read from Empty_Supplemental.xml
                 else
                 {
-                    this.XmlPath = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.EmptyWdacSupplementalXml);
+                    this.XmlPath = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.EmptyWdacSupplementalXml);
                 }
             }
                 
