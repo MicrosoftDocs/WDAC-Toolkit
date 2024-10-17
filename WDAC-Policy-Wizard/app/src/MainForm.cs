@@ -1266,7 +1266,7 @@ namespace WDAC_Wizard
                 if(customRule.Type == PolicyCustomRules.RuleType.Certificate)
                 {
                     // Copy EmptyWDAC.xml to tmpPolicyPath so Add-SignerRule has a policy which the signer rules can be added
-                    File.Copy(Path.Combine(this.ExeFolderPath, "EmptyWDAC.xml"), tmpPolicyPath);
+                    File.Copy(Path.Combine(this.ExeFolderPath, "Templates", "EmptyWDAC.xml"), tmpPolicyPath);
 
                     SiPolicy signerSiPolicy = PSCmdlets.AddSignerRuleFromPS(customRule, tmpPolicyPath);
 
@@ -1417,7 +1417,7 @@ namespace WDAC_Wizard
             {
                 // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
                 // Instead, copy to the temp folder 
-                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_UserMode_Blocklist.xml");
+                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_UserMode_Blocklist.xml");
                 string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
                 File.Copy(umBlocklist_src, umBlocklist_dst, true);
                 
@@ -1429,7 +1429,7 @@ namespace WDAC_Wizard
             {
                 // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
                 // Instead, copy to the temp folder 
-                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Recommended_Driver_Blocklist.xml");
+                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_Driver_Blocklist.xml");
                 string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
                 File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
 

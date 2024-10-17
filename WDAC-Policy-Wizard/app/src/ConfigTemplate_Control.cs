@@ -610,7 +610,7 @@ namespace WDAC_Wizard
                 if(this._MainWindow.Policy.BasePolicyId != Guid.Empty)
                 {
                     xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, 
-                                                            Properties.Resources.EmptyWdacSupplementalXml);
+                                                            "Templates", Properties.Resources.EmptyWdacSupplementalXml);
                 }
                 // User provided a path to the base policy
                 else
@@ -627,17 +627,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.WindowsTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.SACTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.MicrosoftTemplate);
                             break;
                     }
                 }
@@ -648,17 +648,17 @@ namespace WDAC_Wizard
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.WindowsSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.WindowsSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.SACSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.SACSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, Properties.Resources.MicrosoftSingleTemplate);
+                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.MicrosoftSingleTemplate);
                             break;
                     }
                 }
