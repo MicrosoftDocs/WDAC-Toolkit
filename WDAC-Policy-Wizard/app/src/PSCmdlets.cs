@@ -318,7 +318,7 @@ namespace WDAC_Wizard
         /// <summary>
         /// Method to convert the xml policy file into a binary CI policy file
         /// </summary>
-        internal static string ConvertPolicyToBinary(string schemaPath)
+        internal static string CompilePolicyBinary(string xmlPath)
         {
             // Operations: Converts the xml schema into a binary policy
             Logger.Log.AddInfoMsg("-- Converting to Binary --");
@@ -329,23 +329,24 @@ namespace WDAC_Wizard
             // If multi-policy format, use the {PolicyGUID}.cip format as defined in https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/deploy-multiple-windows-defender-application-control-policies#deploying-multiple-policies-locally
             string binaryFileName = string.Empty;
             string binPath = string.Empty; 
-            SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(schemaPath);
+            SiPolicy finalSiPolicy = Helper.DeserializeXMLtoPolicy(xmlPath);
 
             if (finalSiPolicy != null)
             {
+                // Multi-policy format policies always have a base policy ID. 
                 if (finalSiPolicy.BasePolicyID != null)
-
                 {
-                    binaryFileName = String.Format("{0}.cip", finalSiPolicy.PolicyID);
+                    binaryFileName = $"{finalSiPolicy.PolicyID}.cip";
                 }
                 else
                 {
+                    // Legacy policies do not. Set bin name to SiPolicy.p7b
                     binaryFileName = "SiPolicy.p7b";
                 }
 
-                binPath = Path.Combine(Path.GetDirectoryName(schemaPath), binaryFileName);
+                binPath = Path.Combine(Path.GetDirectoryName(xmlPath), binaryFileName);
                 string binConvertCmd = String.Format("ConvertFrom-CIPolicy -XmlFilePath \"{0}\" -BinaryFilePath \"{1}\"",
-                                                     schemaPath, binPath);
+                                                     xmlPath, binPath);
 
                 pipeline.Commands.AddScript(binConvertCmd);
                 Logger.Log.AddInfoMsg("Running the following commands: " + binConvertCmd);

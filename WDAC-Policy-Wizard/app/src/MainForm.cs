@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.IO;
 using WDAC_Wizard.src;
 using WDAC_Wizard.Properties;
-
 namespace WDAC_Wizard
 {
     public partial class MainWindow : Form
@@ -756,30 +755,10 @@ namespace WDAC_Wizard
         private void ProcessPolicy()
         {
             // Short circuit policy building if using Event Log workflow
-            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit && this.EditWorkflow == EditWorkflowType.EventLog)
+            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit 
+                && this.EditWorkflow == EditWorkflowType.EventLog)
             {
-                // Save the path under the Downloads folder 
-                string fileName = String.Format("EventLogPolicy_{0}.xml", Helper.GetFormattedDateTime());
-                string pathToWrite = Path.Combine(Helper.GetDocumentsFolder(), fileName);
-
-                // Issue # 392 - Reset the policy GUID
-                PolicyHelper.ResetPolicyGuid(this.EventLogPolicy);
-
-                try
-                {
-                    Helper.SerializePolicytoXML(this.EventLogPolicy, pathToWrite);
-                }
-                catch(Exception e)
-                {
-                    Logger.Log.AddErrorMsg("Event Log SiPolicy serialization failed with error: ", e);
-                }
-
-                // Close log file 
-                Logger.Log.CloseLogger(); 
-
-                // Build Page:
-                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to App Control Policy");
-                this._BuildPage.ShowFinishMsg(pathToWrite);
+                ProcessEventLogPolicy();
                 return;
             }
 
@@ -845,7 +824,7 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.convertPolicyToBinary
                 && !skipPolicyConversion)
             {
-                this.Policy.BinPath = PSCmdlets.ConvertPolicyToBinary(this.Policy.SchemaPath);
+                this.Policy.BinPath = PSCmdlets.CompilePolicyBinary(this.Policy.SchemaPath);
             }
 
             worker.ReportProgress(100);
@@ -1478,6 +1457,48 @@ namespace WDAC_Wizard
 
             PSCmdlets.MergePolicies(this.Policy.PoliciesToMerge, this.Policy.SchemaPath);
             worker.ReportProgress(90);
+        }
+
+        /// <summary>
+        /// Workflow to create the event log policy xml and compile to binary
+        /// </summary>
+        internal void ProcessEventLogPolicy()
+        {
+            // Save the path under the Downloads folder 
+            string fileName = $"EventLogPolicy_{Helper.GetFormattedDateTime()}.xml";
+            string pathToWrite = Path.Combine(Helper.GetDocumentsFolder(), fileName);
+
+            // Issue # 392 - Reset the policy GUID
+            PolicyHelper.ResetPolicyGuid(this.EventLogPolicy);
+
+            try
+            {
+                Helper.SerializePolicytoXML(this.EventLogPolicy, pathToWrite);
+            }
+            catch (Exception e)
+            {
+                Logger.Log.AddErrorMsg("Event Log SiPolicy serialization failed with error: ", e);
+            }
+
+            // Compile supplemental policies as they now have an accurate Base ID and unique Policy ID
+            // Convert the policy from XML to Binary file
+            if (Properties.Settings.Default.convertPolicyToBinary)
+            {
+                this.Policy.BinPath = PSCmdlets.CompilePolicyBinary(pathToWrite);
+
+                // Build Page:
+                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to App Control Policy");
+                this._BuildPage.ShowFinishMsg(pathToWrite, this.Policy.BinPath);
+            }
+            else
+            {
+                // Build Page:
+                this._BuildPage.UpdateProgressBar(100, "Finished completing event log conversion to App Control Policy");
+                this._BuildPage.ShowFinishMsg(pathToWrite);
+            }
+
+            // Close log file 
+            Logger.Log.CloseLogger();
         }
 
         // UI helper functions

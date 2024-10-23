@@ -1703,8 +1703,14 @@ namespace WDAC_Wizard
                 }
             }
 
+            // Check for curly braces
+            if(mostCommonGuid.Contains('{'))
+            {
+                return mostCommonGuid.ToUpperInvariant(); 
+            }
+
             // Return the most common GUID
-            return mostCommonGuid; 
+            return "{" + mostCommonGuid.ToUpperInvariant() + "}";
         }
     }
 
