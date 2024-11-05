@@ -270,7 +270,7 @@ namespace WDAC_Wizard
 
             // Create new FileAttrib object to link to signer
             FileAttrib fileAttrib = new FileAttrib();
-            fileAttrib.ID = "ID_FILEATTRIB_" + cFileAttribRules++;
+            fileAttrib.ID = "ID_FILEATTRIB_F_" + cFileAttribRules++;
 
             // Set the fileattribute fields based on the checkbox states
             if (customRule.CheckboxCheckStates.checkBox4)
@@ -1231,7 +1231,7 @@ namespace WDAC_Wizard
         internal static FileAttrib CreateFileAttributeFromCustomRule(PolicyCustomRules customRule)
         {
             FileAttrib fileAttrib = new FileAttrib();
-            fileAttrib.ID = "ID_FILEATTRIB_" + cFileAttribRules++;
+            fileAttrib.ID = "ID_FILEATTRIB_F_" + cFileAttribRules++;
 
             string friendlyName = customRule.Permission.ToString() + " files based on file attributes: ";
 
@@ -1462,6 +1462,22 @@ namespace WDAC_Wizard
             return siPolicy;
         }
 
+        /// <summary>
+        /// Remaps the FileRule and Signer IDs
+        /// </summary>
+        /// <param name="customRulesPolicy"></param>
+        /// <param name="existingPolicy"></param>
+        /// <returns></returns>
+        internal static SiPolicy RemapIDs(SiPolicy customRulesPolicy, SiPolicy existingPolicy)
+        {
+            // File Rules
+            customRulesPolicy = FormatFileRuleIDsAgainstExisting(customRulesPolicy, existingPolicy);
+
+            // Signer Rules
+            customRulesPolicy = FormatSignerRuleIDsAgainstExsiting(customRulesPolicy, existingPolicy);
+
+            return customRulesPolicy; 
+        }
 
         /// <summary>
         /// Formats the Rule IDs in cases of long runs of "_0"s
@@ -1471,7 +1487,8 @@ namespace WDAC_Wizard
         internal static SiPolicy FormatFileRuleIDs(SiPolicy siPolicy)
         {
             // Break out if null siPolicy provided or FileRules and Signers are empty
-            if (siPolicy == null || siPolicy.FileRules == null
+            if (siPolicy == null 
+                || siPolicy.FileRules == null
                 ||siPolicy.FileRules.Length == 0)
             {
                 return siPolicy;
@@ -1503,13 +1520,353 @@ namespace WDAC_Wizard
                 // File Attribute Rules
                 else if (fileRule.GetType() == typeof(FileAttrib))
                 {
-                    idMapping[((FileAttrib)fileRule).ID] = $"ID_FILEATTRIB_{cFileAttribRules++}";
+                    idMapping[((FileAttrib)fileRule).ID] = $"ID_FILEATTRIB_F_{cFileAttribRules++}";
                     ((FileAttrib)fileRule).ID = idMapping[((FileAttrib)fileRule).ID];
                 }
             }
 
             siPolicy.FileRules = fileRules;
 
+            return UpdateSiPolicyFileRuleIDs(siPolicy, idMapping);
+        }
+
+        /// <summary>
+        /// Checks all FileRule IDs in custom rule policy against an existing policy. 
+        /// Creates unique IDs for custom rules if ID is found in existing policy
+        /// </summary>
+        /// <param name="customRulesPolicy"></param>
+        /// <param name="existingPolicy"></param>
+        /// <returns></returns>
+        internal static SiPolicy FormatFileRuleIDsAgainstExisting(SiPolicy customRulesPolicy, SiPolicy existingPolicy)
+        {
+            // Break out if null siPolicy provided or FileRules and Signers are empty
+            if (customRulesPolicy == null 
+                || customRulesPolicy.FileRules == null
+                || customRulesPolicy.FileRules.Length == 0)
+            {
+                return customRulesPolicy;
+            }
+
+            // Break early if existingPolicy does not have FileRules
+            if (existingPolicy == null
+                || existingPolicy.FileRules == null
+                || existingPolicy.FileRules.Length == 0)
+            {
+                return customRulesPolicy;
+            }
+
+            // Dictionary containing the mapping between old and new ids
+            Dictionary<string, string> idMapping = new Dictionary<string, string>();
+            string newID = string.Empty;
+
+            // Dictionary containing exitingPolicy's FileRule IDs
+            Dictionary<string, string> existingFileRuleIDs = new Dictionary<string, string>();
+
+            // Get existingPolicy FileRule IDs
+            foreach(var fileRule in existingPolicy.FileRules)
+            {
+                // Allow Rules
+                if (fileRule.GetType() == typeof(Allow))
+                {
+                    existingFileRuleIDs.Add(((Allow)fileRule).ID, ""); 
+                }
+
+                // Deny Rules
+                else if (fileRule.GetType() == typeof(Deny))
+                {
+                    existingFileRuleIDs.Add(((Deny)fileRule).ID, "");
+                }
+
+                // File Attribute Rules
+                else if (fileRule.GetType() == typeof(FileAttrib))
+                {
+                    existingFileRuleIDs.Add(((FileAttrib)fileRule).ID, "");
+                }
+            }
+
+            // Check all custom FileRules IDs
+            foreach (var fileRule in customRulesPolicy.FileRules)
+            {
+                // Allow Rules
+                if (fileRule.GetType() == typeof(Allow))
+                {
+                    // If existingPolicy shares ID with customRulesPolicy, find a new value
+                    // for existingPolicy FileRule
+
+                    if (existingFileRuleIDs.ContainsKey(((Allow)fileRule).ID))
+                    {
+                        newID = $"ID_ALLOW_A_{cFileAllowRules++}";
+
+                        // Keep updating newID by incrementing the count of AllowRules
+                        // until existingFileRules does not share same ID
+                        while (existingFileRuleIDs.ContainsKey(newID))
+                        {
+                            newID = $"ID_ALLOW_A_{cFileAllowRules++}";
+                        }
+
+                        // Old ID, new ID
+                        idMapping.Add(((Allow)fileRule).ID, newID);
+                        ((Allow)fileRule).ID = newID;
+                    }
+                }
+
+                // Deny Rules
+                if (fileRule.GetType() == typeof(Deny))
+                {
+                    // If existingPolicy shares ID with customRulesPolicy, find a new value
+                    // for existingPolicy FileRule
+
+                    if (existingFileRuleIDs.ContainsKey(((Deny)fileRule).ID))
+                    {
+                        newID = $"ID_DENY_D_{cFileDenyRules++}";
+
+                        // Keep updating newID by incrementing the count of DenyRules
+                        // until existingFileRules does not share same ID
+                        while (existingFileRuleIDs.ContainsKey(newID))
+                        {
+                            newID = $"ID_DENY_D_{cFileDenyRules++}";
+                        }
+
+                        // Old ID, new ID
+                        idMapping.Add(((Deny)fileRule).ID, newID);
+                        ((Deny)fileRule).ID = newID;
+                    }
+                }
+
+                // File Attribute Rules
+                if (fileRule.GetType() == typeof(FileAttrib))
+                {
+                    // If existingPolicy shares ID with customRulesPolicy, find a new value
+                    // for existingPolicy FileRule
+
+                    if (existingFileRuleIDs.ContainsKey(((FileAttrib)fileRule).ID))
+                    {
+                        newID = $"ID_FILEATTRIB_F_{cFileAttribRules++}";
+
+                        // Keep updating newID by incrementing the count of FileAttrib
+                        // until existingFileRules does not share same ID
+                        while (existingFileRuleIDs.ContainsKey(newID))
+                        {
+                            newID = $"ID_FILEATTRIB_F_{cFileAttribRules++}";
+                        }
+
+                        // Old ID, new ID
+                        idMapping.Add(((FileAttrib)fileRule).ID, newID);
+                        ((FileAttrib)fileRule).ID = newID;
+                    }
+                }
+            }
+
+            return UpdateSiPolicyFileRuleIDs(customRulesPolicy, idMapping);
+        }
+
+        /// <summary>
+        /// Checks all FileRule IDs in custom rule policy against an existing policy. 
+        /// Creates unique IDs for custom rules if ID is found in existing policy
+        /// </summary>
+        /// <param name="customRulesPolicy"></param>
+        /// <param name="existingPolicy"></param>
+        /// <returns></returns>
+        internal static SiPolicy FormatSignerRuleIDsAgainstExsiting(SiPolicy customRulesPolicy, SiPolicy existingPolicy)
+        {
+            // Break out if null siPolicy provided or FileRules and Signers are empty
+            if (customRulesPolicy == null
+                || customRulesPolicy.FileRules == null
+                || customRulesPolicy.FileRules.Length == 0)
+            {
+                return customRulesPolicy;
+            }
+
+            // Break early if existingPolicy does not have FileRules
+            if (existingPolicy == null
+                || existingPolicy.FileRules == null
+                || existingPolicy.FileRules.Length == 0)
+            {
+                return customRulesPolicy;
+            }
+
+            // Dictionary containing the mapping between old and new ids
+            Dictionary<string, string> idMapping = new Dictionary<string, string>();
+            string newID = string.Empty;
+
+            // Dictionary containing exitingPolicy's FileRule IDs
+            Dictionary<string, string> existingSignerIDs = new Dictionary<string, string>();
+
+            // Get all exiting signer IDs
+            foreach (var signer in existingPolicy.Signers)
+            {
+                existingSignerIDs.Add(signer.ID,"");
+            }
+
+            // Check all custom Signer IDs
+            foreach (var signer in customRulesPolicy.Signers)
+            {
+                // If existingPolicy shares ID with customRulesPolicy, find a new value
+                // for existingPolicy FileRule
+
+                if (existingSignerIDs.ContainsKey(signer.ID))
+                {
+                    newID = $"ID_SIGNER_S_{cSigners++}";
+
+                    // Keep updating newID by incrementing the count of AllowRules
+                    // until existingFileRules does not share same ID
+                    while (existingSignerIDs.ContainsKey(newID))
+                    {
+                        newID = $"ID_SIGNER_S_{cSigners++}";
+                    }
+
+                    // Old ID, new ID
+                    idMapping.Add(signer.ID, newID);
+                    signer.ID = newID; 
+                }
+            }
+
+            return UpdateSiPolicySignerIDs(customRulesPolicy, idMapping);            
+        }
+
+        /// <summary>
+        /// Formats the Rule IDs in cases of long runs of "_0"s
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object with unformatted ruleIDs</param>
+        /// <returns>SiPolicy object with formatted rule IDs</returns>
+        internal static SiPolicy FormatSignerRuleIDs(SiPolicy siPolicy)
+        {
+            // Break out if null siPolicy provided or FileRules and Signers are empty
+            if (siPolicy == null || siPolicy.Signers == null)
+            {
+                return siPolicy;
+            }
+
+            // Dictionary containing the mapping between old and new ids
+            Dictionary<string, string> idMapping = new Dictionary<string, string>();
+
+            // Check all Signers
+            Signer[] signers = siPolicy.Signers;
+
+            // Remap all existing IDs to conformant IDs to ensure uniqueness
+            // Ex. generic ID_SIGNER_S_1 --> ID_SIGNER_S_234
+            foreach (var signer in signers)
+            {
+                idMapping.Add(signer.ID, $"ID_SIGNER_S_{cSigners++}");
+                signer.ID = idMapping[signer.ID];
+            }
+
+            siPolicy.Signers = signers;
+
+            return UpdateSiPolicySignerIDs(siPolicy, idMapping);
+        }
+
+        /// <summary>
+        /// Handles updating Signer ID in Signing Scenarios, CiSigners, UpdateSigners, SupplementalSigners, etc.
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <param name="idMapping"></param>
+        /// <returns></returns>
+        internal static SiPolicy UpdateSiPolicySignerIDs(SiPolicy siPolicy, Dictionary<string, string> idMapping)
+        {
+            // Signing Scenarios Product Signers
+            SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios;
+            foreach (SigningScenario signingScn in tempSigningScenario)
+            {
+                // Allowed Signers
+                if (signingScn.ProductSigners.AllowedSigners != null)
+                {
+                    for (int i = 0; i < signingScn.ProductSigners.AllowedSigners.AllowedSigner.Length; i++)
+                    {
+                        string id = signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
+
+                        // Remap IDs in Allowed Signer section
+                        if (idMapping.ContainsKey(id))
+                        {
+                            signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId = idMapping[id];
+                            Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                        }
+                    }
+                }
+
+                // Denied Signers
+                if (signingScn.ProductSigners.DeniedSigners != null)
+                {
+                    for (int i = 0; i < signingScn.ProductSigners.DeniedSigners.DeniedSigner.Length; i++)
+                    {
+                        string id = signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId;
+
+                        // Remap IDs in Denied Signer section
+                        if (idMapping.ContainsKey(id))
+                        {
+                            signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId = idMapping[id];
+                            Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                        }
+                    }
+                }
+            }
+            siPolicy.SigningScenarios = tempSigningScenario;
+
+            // CiSigners
+            CiSigner[] tempCiSigners = siPolicy.CiSigners;
+            if (tempCiSigners != null)
+            {
+                for (int i = 0; i < tempCiSigners.Length; i++)
+                {
+                    string id = tempCiSigners[i].SignerId;
+
+                    // Remap IDs in Ci Signer section
+                    if (idMapping.ContainsKey(id))
+                    {
+                        tempCiSigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                    }
+                }
+                siPolicy.CiSigners = tempCiSigners;
+            }
+
+            // UpdateSigners
+            UpdatePolicySigner[] tempPolicySigners = siPolicy.UpdatePolicySigners;
+            if (tempPolicySigners != null)
+            {
+                for (int i = 0; i < tempPolicySigners.Length; i++)
+                {
+                    string id = tempPolicySigners[i].SignerId;
+
+                    // Remap IDs in Ci Signer section
+                    if (idMapping.ContainsKey(id))
+                    {
+                        tempPolicySigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                    }
+                }
+                siPolicy.UpdatePolicySigners = tempPolicySigners;
+            }
+
+            // Supplemental Signers
+            SupplementalPolicySigner[] tempSupplementalSigners = siPolicy.SupplementalPolicySigners;
+            if (tempSupplementalSigners != null)
+            {
+                for (int i = 0; i < tempSupplementalSigners.Length; i++)
+                {
+                    string id = tempSupplementalSigners[i].SignerId;
+
+                    // Remap IDs in Ci Signer section
+                    if (idMapping.ContainsKey(id))
+                    {
+                        tempSupplementalSigners[i].SignerId = idMapping[id];
+                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                    }
+                }
+                siPolicy.SupplementalPolicySigners = tempSupplementalSigners;
+            }
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Handles updating FileRule IDs in SigningScenarios, Signers, etc. 
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <param name="idMapping"></param>
+        /// <returns></returns>
+        internal static SiPolicy UpdateSiPolicyFileRuleIDs(SiPolicy siPolicy, Dictionary<string, string> idMapping)
+        {
             // Update References in Signing Scenarios
             SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios;
             foreach (SigningScenario signingScn in tempSigningScenario)
@@ -1602,133 +1959,10 @@ namespace WDAC_Wizard
                 siPolicy.Signers = tempSigners;
             }
 
-            return siPolicy;
-        }
-
-
-        /// <summary>
-        /// Formats the Rule IDs in cases of long runs of "_0"s
-        /// </summary>
-        /// <param name="siPolicy">SiPolicy object with unformatted ruleIDs</param>
-        /// <returns>SiPolicy object with formatted rule IDs</returns>
-        internal static SiPolicy FormatSignerRuleIDs(SiPolicy siPolicy)
-        {
-            // Break out if null siPolicy provided or FileRules and Signers are empty
-            if (siPolicy == null || siPolicy.Signers == null)
-            {
-                return siPolicy;
-            }
-
-            // Dictionary containing the mapping between old and new ids
-            Dictionary<string, string> idMapping = new Dictionary<string, string>();
-
-            // Check all Signers
-            Signer[] signers = siPolicy.Signers;
-
-            // Remap all existing IDs to conformant IDs to ensure uniqueness
-            // Ex. generic ID_SIGNER_S_1 --> ID_SIGNER_234
-            foreach (var signer in signers)
-            {
-                idMapping.Add(signer.ID, $"ID_SIGNER_{cSigners++}");
-                signer.ID = idMapping[signer.ID];
-            }
-
-            siPolicy.Signers = signers;
-
-            // Signing Scenarios Product Signers
-            SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios;
-            foreach (SigningScenario signingScn in tempSigningScenario)
-            {
-                // Allowed Signers
-                if (signingScn.ProductSigners.AllowedSigners != null)
-                {
-                    for (int i = 0; i < signingScn.ProductSigners.AllowedSigners.AllowedSigner.Length; i++)
-                    {
-                        string id = signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
-
-                        // Remap IDs in Allowed Signer section
-                        if (idMapping.ContainsKey(id))
-                        {
-                            signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId = idMapping[id];
-                            Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
-                        }
-                    }
-                }
-
-                // Denied Signers
-                if (signingScn.ProductSigners.DeniedSigners != null)
-                {
-                    for (int i = 0; i < signingScn.ProductSigners.DeniedSigners.DeniedSigner.Length; i++)
-                    {
-                        string id = signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId;
-
-                        // Remap IDs in Denied Signer section
-                        if (idMapping.ContainsKey(id))
-                        {
-                            signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId = idMapping[id];
-                            Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
-                        }
-                    }
-                }
-            }
-            siPolicy.SigningScenarios = tempSigningScenario;
-
-            // CiSigners
-            CiSigner[] tempCiSigners = siPolicy.CiSigners;
-            if (tempCiSigners != null)
-            {
-                for (int i = 0; i < tempCiSigners.Length; i++)
-                {
-                    string id = tempCiSigners[i].SignerId;
-
-                    // Remap IDs in Ci Signer section
-                    if (idMapping.ContainsKey(id))
-                    {
-                        tempCiSigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
-                    }
-                }
-                siPolicy.CiSigners = tempCiSigners;
-            }
-
-            // UpdateSigners
-            UpdatePolicySigner[] tempPolicySigners = siPolicy.UpdatePolicySigners;
-            if (tempPolicySigners != null)
-            {
-                for (int i = 0; i < tempPolicySigners.Length; i++)
-                {
-                    string id = tempPolicySigners[i].SignerId;
-
-                    // Remap IDs in Ci Signer section
-                    if (idMapping.ContainsKey(id))
-                    {
-                        tempPolicySigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
-                    }
-                }
-                siPolicy.UpdatePolicySigners = tempPolicySigners;
-            }
-
-            // Supplemental Signers
-            SupplementalPolicySigner[] tempSupplementalSigners = siPolicy.SupplementalPolicySigners;
-            if (tempSupplementalSigners != null)
-            {
-                for (int i = 0; i < tempSupplementalSigners.Length; i++)
-                {
-                    string id = tempSupplementalSigners[i].SignerId;
-
-                    // Remap IDs in Ci Signer section
-                    if (idMapping.ContainsKey(id))
-                    {
-                        tempSupplementalSigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"Replacing SignerID: {id} with {idMapping[id]}");
-                    }
-                }
-                siPolicy.SupplementalPolicySigners = tempSupplementalSigners;
-            }
 
             return siPolicy;
         }
+
 
         /// <summary>
         /// Handles the merge operation between two SiPolicy objects. Merges all FileRules, Signers, SigningScenarios and references
