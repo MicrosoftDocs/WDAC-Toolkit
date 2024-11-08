@@ -1365,6 +1365,31 @@ namespace WDAC_Wizard
             
             Logger.Log.AddInfoMsg("--- Merge Templates Policy ---");
 
+            // Check whether the User Mode recommended block list rules are wanted in the output:
+            if (this.Policy.UseUserModeBlocks)
+            {
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_UserMode_Blocklist.xml");
+                string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
+                File.Copy(umBlocklist_src, umBlocklist_dst, true);
+
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLtoPolicy(umBlocklist_dst));
+            }
+
+            // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
+            if (this.Policy.UseKernelModeBlocks)
+            {
+                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
+                // Instead, copy to the temp folder 
+                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_Driver_Blocklist.xml");
+                string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
+                File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
+
+                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLtoPolicy(kmBlocklist_dst));
+            }
+
+
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 if(String.IsNullOrEmpty(this.Policy.SchemaPath))
@@ -1389,30 +1414,12 @@ namespace WDAC_Wizard
                 {
                     this.Policy.UpdateVersion(); 
                 }
-            }
 
-            // Check whether the User Mode recommended block list rules are wanted in the output:
-            if(this.Policy.UseUserModeBlocks)
-            {
-                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
-                // Instead, copy to the temp folder 
-                string umBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_UserMode_Blocklist.xml");
-                string umBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_UserMode_Blocklist.xml");
-                File.Copy(umBlocklist_src, umBlocklist_dst, true);
-                
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules, Helper.DeserializeXMLtoPolicy(umBlocklist_dst));
-            }
+                // If editing policy, ensure that the IDs in the siPolicyCustomRules are not shared by the rules in Policy.siPolicy
+                // If they are, update the IDs in siPolicyCustomRules so IDs in the policy under edit don't update causing Git issues for CX
+                // New policies do not have this issue as they are guaranteed to be unique against the templates
 
-            // Check whether the Kernel Mode recommended driver block list rules are wanted in the output:
-            if (this.Policy.UseKernelModeBlocks)
-            {
-                // Issue #393 - some users cannot access the Blocklists file from \Program Files\WindowsApps so the Merge cmd throws an error
-                // Instead, copy to the temp folder 
-                string kmBlocklist_src = Path.Combine(this.ExeFolderPath, "Templates", "Recommended_Driver_Blocklist.xml");
-                string kmBlocklist_dst = Path.Combine(this.TempFolderPath, "Recommended_Driver_Blocklist.xml");
-                File.Copy(kmBlocklist_src, kmBlocklist_dst, true);
-
-                siPolicyCustomRules = PolicyHelper.MergePolicies(siPolicyCustomRules,Helper.DeserializeXMLtoPolicy(kmBlocklist_dst)); 
+                siPolicyCustomRules = PolicyHelper.RemapIDs(siPolicyCustomRules, this.Policy.siPolicy);
             }
 
             // New Policies:
