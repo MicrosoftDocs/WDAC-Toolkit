@@ -286,13 +286,13 @@ namespace WDAC_Wizard
                         break;
 
                     case 4:
-                        this.DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
-                        this.CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
+                        this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
                         break;
 
                     case 5:
-                        this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
-                        this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
+                        this.DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        this.CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
                         break;
                 }
             }
