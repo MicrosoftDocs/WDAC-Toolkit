@@ -602,8 +602,13 @@ namespace WDAC_Wizard
 
         // AH KQL Query must follow:
         /*
-        DeviceEvents 
-        | where ActionType startswith 'AppControlCodeIntegrity' 
+        DeviceEvents
+        | where ActionType == 'AppControlCodeIntegrityDriverRevoked'
+            or ActionType == 'AppControlCodeIntegrityPolicyAudited'
+            or ActionType == 'AppControlCodeIntegrityPolicyBlocked'
+            or ActionType == 'AppControlCodeIntegritySigningInformation'
+            or ActionType == 'AppControlCIScriptAudited'
+            or ActionType == 'AppControlCIScriptBlcocked'
         // SigningInfo Fields
         | extend IssuerName = parsejson(AdditionalFields).IssuerName
         | extend IssuerTBSHash = parsejson(AdditionalFields).IssuerTBSHash
@@ -622,7 +627,28 @@ namespace WDAC_Wizard
         // Correlation Fields
         | extend CorrelationId = parsejson(AdditionalFields).EtwActivityId
         // Keep only actionable info for the Wizard
-        | project Timestamp,DeviceId,DeviceName,ActionType,FileName,FolderPath,SHA1,SHA256,IssuerName,IssuerTBSHash,PublisherName,PublisherTBSHash,AuthenticodeHash,PolicyId,PolicyName, OriginalFileName, ProductName, InternalName, FileDescription, FileVersion, CorrelationId
+        | project
+            Timestamp,
+            DeviceId,
+            DeviceName,
+            ActionType,
+            FileName,
+            FolderPath,
+            SHA1,
+            SHA256,
+            IssuerName,
+            IssuerTBSHash,
+            PublisherName,
+            PublisherTBSHash,
+            AuthenticodeHash,
+            PolicyId,
+            PolicyName,
+            OriginalFileName,
+            ProductName,
+            InternalName,
+            FileDescription,
+            FileVersion,
+            CorrelationId
         */
     }
 }
