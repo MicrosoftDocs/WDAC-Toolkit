@@ -57,7 +57,6 @@ DeviceEvents
     FileDescription,
     FileVersion,
     CorrelationId
-    * /
 ```
 
 The Wizard is expecting **exactly the following data fields**:
