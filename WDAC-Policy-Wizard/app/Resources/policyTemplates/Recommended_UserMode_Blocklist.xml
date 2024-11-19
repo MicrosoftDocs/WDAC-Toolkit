@@ -20,7 +20,7 @@
     <Deny ID="ID_DENY_ADDINUTIL" FriendlyName="AddInUtil.exe" FileName="AddInUtil.exe" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65355.65355.65355.65355" />
     <Deny ID="ID_DENY_ASPNET" FriendlyName="aspnet_compiler.exe" FileName="aspnet_compiler.exe" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65355.65355.65355.65355" />
     <Deny ID="ID_DENY_BASH" FriendlyName="bash.exe" FileName="bash.exe" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65355.65355.65355.65355" />
-    <Deny ID="ID_DENY_BGINFO" FriendlyName="bginfo.exe" FileName="BGINFO.Exe" MinimumFileVersion="4.21.0.0" />
+    <Deny ID="ID_DENY_BGINFO" FriendlyName="bginfo.exe" FileName="BGINFO.Exe" MaximumFileVersion="4.21.0.0" />
     <Deny ID="ID_DENY_CBD" FriendlyName="cdb.exe" FileName="CDB.Exe" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65355.65355.65355.65355" />
     <Deny ID="ID_DENY_CSI" FriendlyName="csi.exe" FileName="csi.Exe" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65355.65355.65355.65355" />
     <Deny ID="ID_DENY_CSCRIPT" FriendlyName="cscript.exe" FileName="cscript.exe" MinimumFileVersion="5.812.10240.0" />
