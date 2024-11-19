@@ -1172,7 +1172,7 @@ namespace WDAC_Wizard
                 eku.Value = Helper.ConvertHashStringToByte(customRule.EKUEncoded);
 
                 signers = SetSignersEKUs(signers, eku);
-                siPolicy = AddSiPolicyEKUs(eku, signerSiPolicy);
+                siPolicy = AddSiPolicyEKUs(eku, siPolicy);
             }
 
             // If none of the extra attributes are to be added and null exceptions, skip creating a FileAttrib rule
@@ -1999,6 +1999,12 @@ namespace WDAC_Wizard
                 resultantPolicy.CiSigners = MergeCiSigners(tempPolicy.CiSigners, resultantPolicy.CiSigners);
             }
 
+            // Handle EKUs
+            if(tempPolicy.EKUs != null && tempPolicy.EKUs.Length > 0)
+            {
+                resultantPolicy.EKUs = MergeEKUs(tempPolicy.EKUs, resultantPolicy.EKUs);
+            }
+            
             return resultantPolicy;
         }
 
@@ -2273,6 +2279,46 @@ namespace WDAC_Wizard
             }
 
             return ciSignerCopy;
+        }
+
+
+        /// <summary>
+        /// Handles the merge operation between a new EKU[] and an existing EKU[] struct
+        /// </summary>
+        /// <param name="newEKU"></param>
+        /// <param name="resultEKU"></param>
+        /// <returns></returns>
+        static EKU[] MergeEKUs(EKU[] newEKU, EKU[] resultEKU)
+        {
+            // Short circuit if nothing from the new sipolicy
+            if (newEKU == null || newEKU.Length == 0)
+            {
+                return resultEKU;
+            }
+
+            // Return newFileRules if resultFileRules is empty/null
+            if (resultEKU == null || resultEKU.Length == 0)
+            {
+                return newEKU;
+            }
+
+            int copySize = newEKU.Length + resultEKU.Length;
+            EKU[] ekuCopy = new EKU[copySize];
+
+            // New EKUs
+            for (int i = 0; i < newEKU.Length; i++)
+            {
+                ekuCopy[i] = newEKU[i];
+            }
+
+            // Existing EKUs
+            for (int i = 0; i < resultEKU.Length; i++)
+            {
+                // Offset the index to length of new EKUs to not overwrite entries
+                ekuCopy[i + newEKU.Length] = resultEKU[i];
+            }
+
+            return ekuCopy;
         }
 
         /// <summary>
