@@ -10,11 +10,12 @@ using System.Linq;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using Microsoft.Win32;
-using System.Security.Cryptography; 
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Windows.Management.Deployment;
-using Windows.ApplicationModel; 
+using Windows.ApplicationModel;
+using System.Formats.Asn1;
+
 
 namespace WDAC_Wizard
 {
@@ -740,13 +741,12 @@ namespace WDAC_Wizard
                 return null;
             }
 
-            var ekuOid = CryptoConfig.EncodeOID(stringEku);
-            var ekuBit = BitConverter.ToString(ekuOid).Replace("-", "");
+            AsnWriter asn = new AsnWriter(AsnEncodingRules.DER);
+            asn.WriteObjectIdentifier(stringEku);
 
-            var ekuArray = ekuBit.ToCharArray();
-            ekuArray[1] = '1';
-
-            return new string(ekuArray);
+            var ekuByteArray = asn.Encode();
+            ekuByteArray[0] = 1;
+            return BitConverter.ToString(ekuByteArray).Replace("-", "");
         }
 
         /// <summary>
