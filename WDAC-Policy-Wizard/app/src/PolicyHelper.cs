@@ -297,9 +297,8 @@ namespace WDAC_Wizard
 
             // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
-            if (fileAttrib.MinimumFileVersion != null
-                || fileAttrib.MinimumFileVersion != null
-                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            if((fileAttrib.MinimumFileVersion != null || fileAttrib.MaximumFileVersion !=null)
+                && (fileAttrib.FileName == null && fileAttrib.ProductName == null))
             {
                 fileAttrib.FileName = "*";
             }
@@ -392,9 +391,9 @@ namespace WDAC_Wizard
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
             if (allowRule.MinimumFileVersion != null
                 && (allowRule.FileName == null
-                    || allowRule.InternalName == null
-                    || allowRule.ProductName == null
-                    || allowRule.FileDescription == null))
+                    && allowRule.InternalName == null
+                    && allowRule.ProductName == null
+                    && allowRule.FileDescription == null))
             {
                 allowRule.FileName = "*";
             }
@@ -467,9 +466,9 @@ namespace WDAC_Wizard
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
             if (denyRule.MinimumFileVersion != null
                 && (denyRule.FileName == null
-                    || denyRule.InternalName == null
-                    || denyRule.ProductName == null
-                    || denyRule.FileDescription == null))
+                    && denyRule.InternalName == null
+                    && denyRule.ProductName == null
+                    && denyRule.FileDescription == null))
             {
                 denyRule.FileName = "*";
             }
@@ -1176,7 +1175,9 @@ namespace WDAC_Wizard
             }
 
             // If none of the extra attributes are to be added and null exceptions, skip creating a FileAttrib rule
-            if (customRule.CheckboxCheckStates.checkBox2 || customRule.CheckboxCheckStates.checkBox3 || customRule.CheckboxCheckStates.checkBox4)
+            if (customRule.CheckboxCheckStates.checkBox2        // Product name
+                || customRule.CheckboxCheckStates.checkBox3     // Original filename
+                || customRule.CheckboxCheckStates.checkBox4)    // Version
             {
                 // Create new FileAttrib object to link to signers
                 FileAttrib fileAttrib = CreateFileAttributeFromCustomRule(customRule);
@@ -1259,9 +1260,8 @@ namespace WDAC_Wizard
 
             // Issue #210 - the WDAC policy compiler will complain that version info without one of product, filename, etc.
             // is not a valid rule. Add Filename="*" like the SignedVersion PS cmd does
-            if (fileAttrib.MinimumFileVersion != null
-                || fileAttrib.MinimumFileVersion != null
-                && (fileAttrib.FileName == null || fileAttrib.ProductName == null))
+            if ((fileAttrib.MinimumFileVersion != null || fileAttrib.MaximumFileVersion != null)
+                && (fileAttrib.FileName == null && fileAttrib.ProductName == null))
             {
                 fileAttrib.FileName = "*";
             }
