@@ -427,7 +427,7 @@ namespace WDAC_Wizard
                 signerEvent.IssuerName = GetValueString(eventData, "IssuerName");
                 signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "IssuerTBSHash"));
 
-                // Skip events with Unknown publisher/empty TBS hash values
+                // Skip events with "Unknown" publisher and empty TBS hash values
                 // Github Issue #434 - policies with empty TBS hash rules will compile but fail to deploy 
                 if(signerEvent.IssuerTBSHash.Length == 0)
                 {
