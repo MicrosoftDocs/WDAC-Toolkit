@@ -795,6 +795,12 @@ namespace WDAC_Wizard
 
             if (this.Policy.PolicyWorkflow != WDAC_Policy.Workflow.Merge)
             {
+                // Add trust for Signed Scripts
+                bool success = PSCmdlets.AddPSSigner();
+                if (!success) {
+                    ShowPSTrustFailureUI();
+                }
+                
                 // Handle custom value rules: 
                 siPolicyNewRules = ProcessCustomValueRules(worker, siPolicyNewRules);
 
@@ -1917,6 +1923,32 @@ namespace WDAC_Wizard
                 button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_Next.ForeColor = System.Drawing.Color.Black;
                 button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
+            }
+        }
+
+        /// <summary>
+        /// Shows message to user that script signer was not added to Trusted Store
+        /// They will have to manully do that
+        /// </summary>
+        private void ShowPSTrustFailureUI()
+        {
+            // Break early if setting is disabled. The user has already seen this message and elected not to show this
+            if (!Properties.Settings.Default.showIntegrityIssue)
+            {
+                return; 
+            }
+
+            DialogResult res = MessageBox.Show("The Wizard was unable to add trust for required PowerShell scripts. This may lead to policy build hanging during Folder Scanning. " +
+                                                "To fix this issue, you must add the signing certificate to the Current User's Trusted Publisher Store. \r\n\r\n" +
+                                                "Do you want to continue receiving this message on future failures?",
+                                                "Wizard Integrity Issue",
+                                                MessageBoxButtons.YesNo,
+                                                MessageBoxIcon.Question);
+
+            if (res == DialogResult.No)
+            {
+                Properties.Settings.Default.showIntegrityIssue = false; 
+                Properties.Settings.Default.Save();
             }
         }
 
