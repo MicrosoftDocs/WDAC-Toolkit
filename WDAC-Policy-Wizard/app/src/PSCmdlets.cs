@@ -85,7 +85,7 @@ namespace WDAC_Wizard
                 deny = "True";
             }
 
-            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy Bypass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
                 $"-DriverFilePath \"{customRule.ReferenceFile}\" -PolicyPath \"{policyPath}\" -Level {level} -Deny {deny}";
 
             Logger.Log.AddInfoMsg($"Running the following PS cmd in CreateSignerPolicyFromPS(): {newPolicyScriptCmd}");
@@ -96,7 +96,7 @@ namespace WDAC_Wizard
                 FileName = "powershell.exe",
                 Arguments = newPolicyScriptCmd,
                 UseShellExecute = false,
-                CreateNoWindow = true,
+                CreateNoWindow = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
@@ -176,7 +176,7 @@ namespace WDAC_Wizard
                 deny = "True";
             }
 
-            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy Bypass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
                 $"-PolicyPath \"{policyPath}\" -Level {level} -Fallback {fallbacks} -PathsToOmit \"{pathsToOmit}\"" +
                 $" -Deny {deny} -UserPEs {userPEs}";
 
@@ -188,7 +188,7 @@ namespace WDAC_Wizard
                 FileName = "powershell.exe",
                 Arguments = newPolicyScriptCmd,
                 UseShellExecute = false,
-                CreateNoWindow = true,
+                CreateNoWindow = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
