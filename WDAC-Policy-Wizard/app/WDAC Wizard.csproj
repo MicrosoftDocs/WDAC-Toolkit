@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
@@ -220,12 +220,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FileHelpers" Version="3.5.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Management" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Utility" Version="7.4.2" />
-    <PackageReference Include="Microsoft.PowerShell.ConsoleHost" Version="7.4.2" />
-    <PackageReference Include="Microsoft.WSMan.Management" Version="7.4.2" />
-    <PackageReference Include="System.Management.Automation" Version="7.4.2" />
+    <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="7.4.6" />
+    <PackageReference Include="Microsoft.PowerShell.Commands.Management" Version="7.4.6" />
+    <PackageReference Include="Microsoft.PowerShell.Commands.Utility" Version="7.4.6" />
+    <PackageReference Include="Microsoft.PowerShell.ConsoleHost" Version="7.4.6" />
+    <PackageReference Include="Microsoft.WSMan.Management" Version="7.4.6" />
+    <PackageReference Include="System.Management.Automation" Version="7.4.6" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
