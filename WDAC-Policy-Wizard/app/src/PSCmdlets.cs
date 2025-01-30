@@ -85,7 +85,7 @@ namespace WDAC_Wizard
                 deny = "True";
             }
 
-            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy Bypass -File \"{ps1File}\" -WdacBinPath \"{wizardPath}\" " +
                 $"-DriverFilePath \"{customRule.ReferenceFile}\" -PolicyPath \"{policyPath}\" -Level {level} -Deny {deny}";
 
             Logger.Log.AddInfoMsg($"Running the following PS cmd in CreateSignerPolicyFromPS(): {newPolicyScriptCmd}");
@@ -176,7 +176,7 @@ namespace WDAC_Wizard
                 deny = "True";
             }
 
-            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy ByPass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
+            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy Bypass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
                 $"-PolicyPath \"{policyPath}\" -Level {level} -Fallback {fallbacks} -PathsToOmit \"{pathsToOmit}\"" +
                 $" -Deny {deny} -UserPEs {userPEs}";
 
@@ -465,6 +465,42 @@ namespace WDAC_Wizard
             }
             _Runspace.Dispose();
 
+        }
+
+        /// <summary>
+        /// Tries to add the ps1 script signer to the Trusted Publisher store
+        /// so folder scanning and signer rule creation via the script will not hang
+        /// </summary>
+        /// <returns></returns>
+        internal static bool AddPSSigner()
+        {
+            string ps1File = Path.Combine(Helper.GetExecutablePath(false), PS_SCAN_FILENAME);
+            string tempPath = Path.GetTempFileName();
+
+            // Create runspace, pipeline and runscript
+            Pipeline pipeline = CreatePipeline();
+
+            pipeline.Commands.AddScript($"$certificate = Get-AuthenticodeSignature -FilePath {ps1File} | Select-Object -ExpandProperty SignerCertificate");
+            pipeline.Commands.AddScript($"Export-Certificate -Cert $certificate -FilePath {tempPath}");
+            pipeline.Commands.AddScript($"Import-Certificate -FilePath {tempPath} -CertStoreLocation Cert:\\CurrentUser\\TrustedPublisher");
+
+            foreach (var cmd in pipeline.Commands)
+            {
+                Logger.Log.AddInfoMsg($"Running PS Cmd: {cmd}");
+            }
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception e)
+            {
+                Logger.Log.AddErrorMsg(String.Format("Exception encountered in MergeCustomRulesPolicy(): {0}", e));
+                return false;
+            }
+        
+            _Runspace.Dispose();
+            return true; 
         }
     }
 }
