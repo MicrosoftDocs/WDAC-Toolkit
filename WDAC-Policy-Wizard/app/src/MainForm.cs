@@ -1928,7 +1928,7 @@ namespace WDAC_Wizard
 
         /// <summary>
         /// Shows message to user that script signer was not added to Trusted Store
-        /// They will have to manully do that
+        /// They will have to manually do that
         /// </summary>
         private void ShowPSTrustFailureUI()
         {
