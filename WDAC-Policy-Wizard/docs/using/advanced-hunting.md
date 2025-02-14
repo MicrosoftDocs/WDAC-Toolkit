@@ -16,7 +16,7 @@ DeviceEvents
     or ActionType == 'AppControlCodeIntegrityPolicyBlocked'
     or ActionType == 'AppControlCodeIntegritySigningInformation'
     or ActionType == 'AppControlCIScriptAudited'
-    or ActionType == 'AppControlCIScriptBlcocked'
+    or ActionType == 'AppControlCIScriptBlocked'
 // SigningInfo Fields
 | extend IssuerName = parsejson(AdditionalFields).IssuerName
 | extend IssuerTBSHash = parsejson(AdditionalFields).IssuerTBSHash
