@@ -1764,6 +1764,12 @@ namespace WDAC_Wizard
         /// <returns></returns>
         internal static SiPolicy UpdateSiPolicySignerIDs(SiPolicy siPolicy, Dictionary<string, string> idMapping)
         {
+            // Break early if nothing to remap
+            if (idMapping.Count == 0)
+            {
+                return siPolicy;
+            }
+
             // Signing Scenarios Product Signers
             SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios;
             foreach (SigningScenario signingScn in tempSigningScenario)
@@ -1867,6 +1873,12 @@ namespace WDAC_Wizard
         /// <returns></returns>
         internal static SiPolicy UpdateSiPolicyFileRuleIDs(SiPolicy siPolicy, Dictionary<string, string> idMapping)
         {
+            // Break early if nothing to remap
+            if(idMapping.Count == 0)
+            {
+                return siPolicy; 
+            }
+
             // Update References in Signing Scenarios
             SigningScenario[] tempSigningScenario = siPolicy.SigningScenarios;
             foreach (SigningScenario signingScn in tempSigningScenario)
