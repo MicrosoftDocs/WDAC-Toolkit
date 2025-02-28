@@ -22,6 +22,7 @@ namespace WDAC_Wizard
             None, 
             BasePolicy, 
             SupplementalPolicy, 
+            AppIdTaggingPolicy
         }
 
         /// <summary>

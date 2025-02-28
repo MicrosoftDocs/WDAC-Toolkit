@@ -464,6 +464,7 @@ namespace WDAC_Wizard
             // Edit Policies - Read from the copy of the policy under edit (stored under /Temp/ as Policy.TemplatePath)
             // New Policies
             //     - Read from Template path if Base Policy
+            //     - Read from Template path if AppId Tagging Policy
             //     - Read from Empty Supplemental if Supplemental Policy i.e. no rules to show
 
             if (this._MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
@@ -473,7 +474,8 @@ namespace WDAC_Wizard
             else // New Policy
             {
                 // Base Policy - Read from Template Path
-                if(this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                if(this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
+                    || _MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                 {
                     this.XmlPath = this._MainWindow.Policy.TemplatePath; 
                 }
@@ -520,7 +522,8 @@ namespace WDAC_Wizard
         private void SetBlocklistStates()
         {
             // Determine whether to show the checkboxes - hide if new/editing a supplemental policy
-            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
             {
                 this.checkBox_KernelList.Visible = false;
                 this.checkBox_UserModeList.Visible = false;

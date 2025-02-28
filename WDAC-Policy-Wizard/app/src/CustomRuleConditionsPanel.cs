@@ -2533,6 +2533,16 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void OnLoad(object sender, EventArgs e)
         {
+            // AppId Tagging Policies do not support kmci rules
+            // Uncheck kmci and disable the checkbox
+            if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+            {
+                checkBox_kernelMode.Checked = false;
+                checkBox_kernelMode.Enabled = false;
+                checkBox_userMode.Checked = true;
+                return;
+            }
+
             // If the policy does not support UMCI, uncheck umci and check kmci
             if(!PolicyHelper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
             {

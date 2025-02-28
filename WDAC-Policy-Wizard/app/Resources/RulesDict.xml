@@ -5,7 +5,8 @@
     AllowedValue="Enabled" 
     Supported="True"
     RuleNumber="0"
-	  ValidSupplemental="False"
+    ValidSupplemental="False"
+    ValidAppIdTagging="False"
     ButtonMapping="button_11">
   </Rule>
   <Rule
@@ -13,7 +14,8 @@
     AllowedValue="Enabled"
     Supported="False"
     RuleNumber="1"
-	  ValidSupplemental="False"
+    ValidSupplemental="False"
+    ValidAppIdTagging="False"
     ButtonMapping="button_14">
   </Rule>
   <Rule
@@ -22,7 +24,8 @@
     Supported="True"
     RuleNumber="2"
     ValidSupplemental="False"
-	  ButtonMapping="button_8">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_8">
   </Rule>
   <Rule
     Name="AuditMode"
@@ -30,7 +33,8 @@
     Supported="True"
     RuleNumber="3"
     ValidSupplemental="False-NoInherit"
-	  ButtonMapping="button_6">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_6">
   </Rule>
   <Rule
     Name="FlightSigning"
@@ -38,7 +42,8 @@
     Supported="True"
     RuleNumber="4"
     ValidSupplemental="False"
-	  ButtonMapping="button_15">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_15">
   </Rule>
   <Rule
     Name="InheritDefaultPolicy"
@@ -46,7 +51,8 @@
     Supported="False"
     RuleNumber="5"
     ValidSupplemental="True"
-	  ButtonMapping="button_4">
+    ValidAppIdTagging="True"
+    ButtonMapping="button_4">
   </Rule>
   <Rule
     Name="UnsignedSystemIntegrityPolicy"
@@ -54,7 +60,8 @@
     Supported="True"
     RuleNumber="6"
     ValidSupplemental="False"
-	  ButtonMapping="button_10">
+    ValidAppIdTagging="True"
+    ButtonMapping="button_10">
   </Rule>
   <Rule
     Name="DebugPolicyAugmented"
@@ -62,7 +69,8 @@
     Supported="False"
     RuleNumber="7"
     ValidSupplemental="True"
-	  ButtonMapping="button_12">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_12">
   </Rule>
   <Rule
     Name="EVSigners"
@@ -70,7 +78,8 @@
     Supported="True"
     RuleNumber="8"
     ValidSupplemental="False"
-	  ButtonMapping="button_19">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_19">
   </Rule>
   <Rule
     Name="AdvancedBootOptionsMenu"
@@ -78,7 +87,8 @@
     Supported="True"
     RuleNumber="9"
     ValidSupplemental="False"
-	  ButtonMapping="button_0">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_0">
   </Rule>
   <Rule
     Name="BootAuditOnFailure"
@@ -86,7 +96,8 @@
     Supported="True"
     RuleNumber="10"
     ValidSupplemental="False"
-	  ButtonMapping="button_13">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_13">
   </Rule>
   <Rule
     Name="ScriptEnforcement"
@@ -94,7 +105,8 @@
     Supported="True"
     RuleNumber="11"
     ValidSupplemental="False"
-	  ButtonMapping="button_2">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_2">
   </Rule>
   <Rule
     Name="EnforceStoreApplications"
@@ -102,7 +114,8 @@
     Supported="True"
     RuleNumber="12"
     ValidSupplemental="False"
-	  ButtonMapping="button_3">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_3">
   </Rule>
   <Rule
     Name="ManagedInstaller"
@@ -110,7 +123,8 @@
     Supported="True"
     RuleNumber="13"
     ValidSupplemental="True"
-	  ButtonMapping="button_7">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_7">
   </Rule>
   <Rule
     Name="IntelligentSecurityGraphAuthorization"
@@ -118,7 +132,8 @@
     Supported="True"
     RuleNumber="14"
     ValidSupplemental="True"
-	  ButtonMapping="button_5">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_5">
   </Rule>
   <Rule
     Name="InvalidateEAsonReboot"
@@ -126,7 +141,8 @@
     Supported="True"
     RuleNumber="15"
     ValidSupplemental="False"
-	  ButtonMapping="button_18">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_18">
   </Rule>
   <Rule
     Name="UpdatePolicyNoReboot"
@@ -134,7 +150,8 @@
     Supported="True"
     RuleNumber="16"
     ValidSupplemental="False"
-	  ButtonMapping="button_9">
+    ValidAppIdTagging="True"
+    ButtonMapping="button_9">
   </Rule>
   <Rule
     Name="AllowSupplementalPolicies"
@@ -142,7 +159,8 @@
     Supported="True"
     RuleNumber="17"
     ValidSupplemental="False-NoInherit"
-	  ButtonMapping="button_1">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_1">
   </Rule>
   <Rule
     Name="RuntimeFilePathRuleProtection"
@@ -150,7 +168,8 @@
     Supported="True"
     RuleNumber="18"
     ValidSupplemental="True"
-	  ButtonMapping="button_16">
+    ValidAppIdTagging="True"
+    ButtonMapping="button_16">
   </Rule>
   <Rule
     Name="DynamicCodeSecurity"
@@ -158,7 +177,8 @@
     Supported="True"
     RuleNumber="19"
     ValidSupplemental="False"
-	  ButtonMapping="button_17">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_17">
   </Rule>
   <Rule
      Name="RevokedExpiredAsUnsigned"
@@ -166,6 +186,7 @@
      Supported="True"
      RuleNumber="20"
      ValidSupplemental="False"
+     ValidAppIdTagging="False"
      ButtonMapping="button_20">
   </Rule>
   <Rule
@@ -174,6 +195,7 @@
     Supported="True"
     RuleNumber="99"
     ValidSupplemental="False"
-	  ButtonMapping="button_HVCI">
+    ValidAppIdTagging="False"
+    ButtonMapping="button_HVCI">
   </Rule>
 </Rules>

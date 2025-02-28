@@ -437,7 +437,7 @@ namespace WDAC_Wizard
                             ShowControlPanel(sender, e);
                         }
 
-                        else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                        else //if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                         {
                             // New SUPPLEMENTAL policy -> policy rules. Do not present a template page
                             string pageKey  = "SupConfigTemplatePage";
@@ -557,7 +557,8 @@ namespace WDAC_Wizard
                         }
 
                         // New Supplemental
-                        if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                        if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                            || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                         {
                             string pageKey = "SupSigningRulesPage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
@@ -655,8 +656,9 @@ namespace WDAC_Wizard
                             ShowControlPanel(sender, e);
                         }
 
-                        // New Supplemental
-                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                        // New Supplemental or AppId Tagging Policy
+                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                            || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                         {
                             // New SUPPLEMENTAL policy -- build out policy
 

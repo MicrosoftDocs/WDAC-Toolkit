@@ -104,6 +104,24 @@ namespace WDAC_Wizard
                         break; 
                     }
                 }
+
+                else if(Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+                {
+                    switch (this.Policy.ConfigRules[key]["ValidAppId"])
+                    {
+                        case "True":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                            break;
+
+                        case "False":
+                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Invalid-AppId";
+                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                            break;
+                    }
+                }
             }
         }
 
@@ -174,18 +192,26 @@ namespace WDAC_Wizard
                 return;
             }
 
+            // Break early for invalid or invalid-inherited rule-options
             if (((Label)sender).Tag.ToString() == "Grayed")
             {
                 label_Info.Text = Resources.InvalidSupplementalRule_Info;
-                return; 
+                return;
             }
 
-            if (((Label)sender).Tag.ToString() == "Grayed-NoInherit")
+            else if (((Label)sender).Tag.ToString() == "Grayed-NoInherit")
             {
                 label_Info.Text = Resources.InvalidSupplementalRule_NoInherit_Info;
                 return;
             }
 
+            else if (((Label)sender).Tag.ToString() == "Invalid-AppId")
+            {
+                label_Info.Text = Resources.InvalidAppIdRuleOption_Info;
+                return;
+            }
+
+            // Valid Rule - Show rule-option description
             switch (((Label)sender).Text){
             case "User Mode Code Integrity":
                 label_Info.Text = Resources.UMCI_Info;
@@ -339,7 +365,8 @@ namespace WDAC_Wizard
                                 tempDict.Add("CurrentValue", GetOppositeOption(tempDict["AllowedValue"]));
                                 tempDict.Add("Supported", xmlReader.GetAttribute("Supported"));
                                 tempDict.Add("RuleNumber", xmlReader.GetAttribute("RuleNumber"));
-                                tempDict.Add("ValidSupplemental", xmlReader.GetAttribute("ValidSupplemental")); 
+                                tempDict.Add("ValidSupplemental", xmlReader.GetAttribute("ValidSupplemental"));
+                                tempDict.Add("ValidAppId", xmlReader.GetAttribute("ValidAppIdTagging"));
                                 rulesDict.Add(ruleName, tempDict);
                             }
                         }
@@ -516,50 +543,10 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            this.Policy.siPolicy = sipolicy; 
-                        
-            // Merge with configRules:
-            foreach(var rule in this.Policy.siPolicy.Rules)
-            {
-                string value = ParseRule(rule.Item.ToString())[0]; 
-                string name = ParseRule(rule.Item.ToString())[1];
+            this.Policy.siPolicy = sipolicy;
 
-                if (this.Policy.ConfigRules.ContainsKey(name))
-                {
-                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
-                    {
-                        // If valid supplemental, add to PolicyRuleOptions struct to be set during policy build
-                        if(this.Policy.ConfigRules[name]["ValidSupplemental"] == "True")
-                        {
-                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
-                        }
-
-                        // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
-                        // Set the value to not enabled (Get Opposite Value)
-                        if(this.Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
-                        {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
-                        }
-                        else
-                        {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
-                        }
-
-                        // Mirror the value for signed policy based on the value in the base policy
-                        // This will allow for the resulting xml to compile to bin
-                        if(name == "UnsignedSystemIntegrityPolicy")
-                        {
-                            SetRuleOptionState(name);
-                        }
-
-                    }
-                    else
-                    {
-                        this.Policy.ConfigRules[name]["CurrentValue"] = value;
-                        this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
-                    }
-                }
-            }
+            // Set the UI state for the rule-options
+            DisplayRulesUI();
 
             this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0;
             this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
@@ -567,7 +554,7 @@ namespace WDAC_Wizard
             this._MainWindow.Policy.siPolicy = this.Policy.siPolicy;
 
             // Copy template to temp folder for reading and writing unless template already in temp folder (event log conversion)
-            if(!xmlPathToRead.Contains(this._MainWindow.TempFolderPath))
+            if (!xmlPathToRead.Contains(this._MainWindow.TempFolderPath))
             {
                 string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
                 File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
@@ -582,10 +569,73 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
                 && this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                this._MainWindow.Policy.TemplatePath = null; 
+                this._MainWindow.Policy.TemplatePath = null;
             }
 
+
             return true; 
+        }
+
+        /// <summary>
+        /// Sets the slider UI state (enabled/disabled) for each rule option 
+        /// </summary>
+        private void DisplayRulesUI()
+        {
+            // Merge with configRules:
+            foreach (var rule in this.Policy.siPolicy.Rules)
+            {
+                string value = ParseRule(rule.Item.ToString())[0];
+                string name = ParseRule(rule.Item.ToString())[1];
+
+                if (this.Policy.ConfigRules.ContainsKey(name))
+                {
+                    if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                    {
+                        // If valid supplemental, add to PolicyRuleOptions struct to be set during policy build
+                        if (this.Policy.ConfigRules[name]["ValidSupplemental"] == "True")
+                        {
+                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                        }
+
+                        // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
+                        // Set the value to not enabled (Get Opposite Value)
+                        if (this.Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
+                        }
+                        else
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                        }
+
+                        // Mirror the value for signed policy based on the value in the base policy
+                        // This will allow for the resulting xml to compile to bin
+                        if (name == "UnsignedSystemIntegrityPolicy")
+                        {
+                            SetRuleOptionState(name);
+                        }
+
+                    }
+                    else if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+                    {
+                        // If valid AppIdTagging Policy, add to PolicyRuleOptions struct to be set during policy build
+                        if (this.Policy.ConfigRules[name]["ValidAppId"] == "True")
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                        }
+                        else
+                        {
+                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
+                        }
+                    }
+                    else
+                    {
+                        this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                        this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -607,9 +657,9 @@ namespace WDAC_Wizard
             else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
                 // User only provided a base policy ID to expand
-                if(this._MainWindow.Policy.BasePolicyId != Guid.Empty)
+                if (this._MainWindow.Policy.BasePolicyId != Guid.Empty)
                 {
-                    xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, 
+                    xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath,
                                                             "Templates", Properties.Resources.EmptyWdacSupplementalXml);
                 }
                 // User provided a path to the base policy
@@ -618,7 +668,9 @@ namespace WDAC_Wizard
                     xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
                 }
             }
-            else
+
+            // Base Policy - Check for policy format and template
+            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
             {
                 if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
                 {
@@ -662,6 +714,12 @@ namespace WDAC_Wizard
                             break;
                     }
                 }
+            }
+
+            // AppIdTagging Policy
+            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+            {
+                xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Resources.AppIdTaggingTemplate);
             }
 
             return xmlPathToRead;

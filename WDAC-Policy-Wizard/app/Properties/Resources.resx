@@ -593,4 +593,10 @@ Do you want the Wizard to warn you about these types of path rules in the future
   <data name="CertificateParsing_Error" xml:space="preserve">
     <value>This certificate file could not be read by the Wizard. Please try another certificate file with a valid certificate extension (cer, crt, pem, pfx).</value>
   </data>
+  <data name="AppIdTaggingTemplate" xml:space="preserve">
+    <value>AppIdTagging.xml</value>
+  </data>
+  <data name="InvalidAppIdRuleOption_Info" xml:space="preserve">
+    <value>This rule is not supported in AppId Tagging policies. </value>
+  </data>
 </root>
