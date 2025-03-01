@@ -68,6 +68,12 @@ namespace WDAC_Wizard
             label13 = new System.Windows.Forms.Label();
             label14 = new System.Windows.Forms.Label();
             label_LearnMore_AppId = new System.Windows.Forms.Label();
+            appIdPolicy_Panel = new System.Windows.Forms.Panel();
+            browseAppId_Button = new System.Windows.Forms.Button();
+            appIdPolicyName_Textbox = new System.Windows.Forms.TextBox();
+            label20 = new System.Windows.Forms.Label();
+            appIdPolicyLocation_Textbox = new System.Windows.Forms.TextBox();
+            label21 = new System.Windows.Forms.Label();
             panelSupplName.SuspendLayout();
             panelSuppl_Base.SuspendLayout();
             basePolicyValidation_Panel.SuspendLayout();
@@ -78,6 +84,7 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)multiPolicyCheckbox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)appIdPolicyCheckbox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)singlePolicyCheckbox).BeginInit();
+            appIdPolicy_Panel.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -155,7 +162,7 @@ namespace WDAC_Wizard
             label10.AutoSize = true;
             label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label10.ForeColor = System.Drawing.Color.Black;
-            label10.Location = new System.Drawing.Point(577, 50);
+            label10.Location = new System.Drawing.Point(568, 46);
             label10.Name = "label10";
             label10.Size = new System.Drawing.Size(28, 18);
             label10.TabIndex = 102;
@@ -484,6 +491,7 @@ namespace WDAC_Wizard
             label11.Size = new System.Drawing.Size(183, 22);
             label11.TabIndex = 105;
             label11.Text = "Multiple Policy Format";
+            label11.Click += MultipleFormat_ButtonClick;
             // 
             // label12
             // 
@@ -496,6 +504,7 @@ namespace WDAC_Wizard
             label12.Size = new System.Drawing.Size(169, 22);
             label12.TabIndex = 106;
             label12.Text = "Single Policy Format";
+            label12.Click += SingleFormat_ButtonClick;
             // 
             // label13
             // 
@@ -508,6 +517,7 @@ namespace WDAC_Wizard
             label13.Size = new System.Drawing.Size(173, 22);
             label13.TabIndex = 108;
             label13.Text = "AppIdTagging Policy";
+            label13.Click += AppIdPolicy_Click;
             // 
             // label14
             // 
@@ -537,12 +547,87 @@ namespace WDAC_Wizard
             label_LearnMore_AppId.Text = "Learn more about AppId Tagging policies    \r\n";
             label_LearnMore_AppId.Click += Label_LearnMoreAppId_Click;
             // 
+            // appIdPolicy_Panel
+            // 
+            appIdPolicy_Panel.BackColor = System.Drawing.Color.Transparent;
+            appIdPolicy_Panel.Controls.Add(browseAppId_Button);
+            appIdPolicy_Panel.Controls.Add(appIdPolicyName_Textbox);
+            appIdPolicy_Panel.Controls.Add(label20);
+            appIdPolicy_Panel.Controls.Add(appIdPolicyLocation_Textbox);
+            appIdPolicy_Panel.Controls.Add(label21);
+            appIdPolicy_Panel.Location = new System.Drawing.Point(64, 763);
+            appIdPolicy_Panel.Margin = new System.Windows.Forms.Padding(2);
+            appIdPolicy_Panel.Name = "appIdPolicy_Panel";
+            appIdPolicy_Panel.Size = new System.Drawing.Size(811, 116);
+            appIdPolicy_Panel.TabIndex = 110;
+            appIdPolicy_Panel.Visible = false;
+            // 
+            // browseAppId_Button
+            // 
+            browseAppId_Button.Font = new System.Drawing.Font("Tahoma", 9F);
+            browseAppId_Button.Location = new System.Drawing.Point(537, 53);
+            browseAppId_Button.Margin = new System.Windows.Forms.Padding(2);
+            browseAppId_Button.Name = "browseAppId_Button";
+            browseAppId_Button.Size = new System.Drawing.Size(107, 28);
+            browseAppId_Button.TabIndex = 3;
+            browseAppId_Button.Text = "Browse";
+            browseAppId_Button.UseVisualStyleBackColor = true;
+            browseAppId_Button.Click += AppIdPolicyLocation_Click;
+            // 
+            // appIdPolicyName_Textbox
+            // 
+            appIdPolicyName_Textbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            appIdPolicyName_Textbox.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            appIdPolicyName_Textbox.ForeColor = System.Drawing.Color.Black;
+            appIdPolicyName_Textbox.Location = new System.Drawing.Point(146, 11);
+            appIdPolicyName_Textbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            appIdPolicyName_Textbox.Name = "appIdPolicyName_Textbox";
+            appIdPolicyName_Textbox.Size = new System.Drawing.Size(381, 25);
+            appIdPolicyName_Textbox.TabIndex = 1;
+            appIdPolicyName_Textbox.TextChanged += AppIdPolicyNameTextbox_TextChanged;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label20.ForeColor = System.Drawing.Color.Black;
+            label20.Location = new System.Drawing.Point(12, 14);
+            label20.Name = "label20";
+            label20.Size = new System.Drawing.Size(92, 18);
+            label20.TabIndex = 8;
+            label20.Text = "Policy Name:";
+            // 
+            // appIdPolicyLocation_Textbox
+            // 
+            appIdPolicyLocation_Textbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            appIdPolicyLocation_Textbox.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            appIdPolicyLocation_Textbox.ForeColor = System.Drawing.Color.Black;
+            appIdPolicyLocation_Textbox.Location = new System.Drawing.Point(146, 55);
+            appIdPolicyLocation_Textbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            appIdPolicyLocation_Textbox.Name = "appIdPolicyLocation_Textbox";
+            appIdPolicyLocation_Textbox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            appIdPolicyLocation_Textbox.Size = new System.Drawing.Size(381, 25);
+            appIdPolicyLocation_Textbox.TabIndex = 2;
+            appIdPolicyLocation_Textbox.Click += AppIdPolicyLocation_Click;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label21.ForeColor = System.Drawing.Color.Black;
+            label21.Location = new System.Drawing.Point(12, 58);
+            label21.Name = "label21";
+            label21.Size = new System.Drawing.Size(131, 18);
+            label21.TabIndex = 6;
+            label21.Text = "Policy File Location:";
+            // 
             // PolicyType
             // 
             AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
+            Controls.Add(appIdPolicy_Panel);
             Controls.Add(label_LearnMore_AppId);
             Controls.Add(label13);
             Controls.Add(label14);
@@ -576,6 +661,8 @@ namespace WDAC_Wizard
             ((System.ComponentModel.ISupportInitialize)multiPolicyCheckbox).EndInit();
             ((System.ComponentModel.ISupportInitialize)appIdPolicyCheckbox).EndInit();
             ((System.ComponentModel.ISupportInitialize)singlePolicyCheckbox).EndInit();
+            appIdPolicy_Panel.ResumeLayout(false);
+            appIdPolicy_Panel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -618,5 +705,11 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label_LearnMore_AppId;
+        private System.Windows.Forms.Panel appIdPolicy_Panel;
+        private System.Windows.Forms.Button browseAppId_Button;
+        private System.Windows.Forms.TextBox appIdPolicyName_Textbox;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox appIdPolicyLocation_Textbox;
+        private System.Windows.Forms.Label label21;
     }
 }

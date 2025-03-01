@@ -817,6 +817,9 @@ namespace WDAC_Wizard
 
                 // Handle COM rules
                 CreateComObjectRules(worker);
+
+                // Handle AppID Tags
+                SetAppIDPolicyTags(worker);
                 
                 // Set additional parameters: policy name, GUIDs, version, etc
                 SetAdditionalParameters(worker);
@@ -989,6 +992,10 @@ namespace WDAC_Wizard
             worker.ReportProgress(95);
         }
 
+        /// <summary>
+        /// Creates the COM object rules and adds them to the policy
+        /// </summary>
+        /// <param name="worker"></param>
         public void CreateComObjectRules(BackgroundWorker worker)
         {
             // Iterate through all the custom rules for the COM object rules only
@@ -1008,7 +1015,7 @@ namespace WDAC_Wizard
             // Return if no COM rules were created
             if(comObjectRules.Count == 0)
             {
-                worker.ReportProgress(99); 
+                worker.ReportProgress(98); 
                 return; 
             }
 
@@ -1026,6 +1033,56 @@ namespace WDAC_Wizard
             }
 
         }
+
+        /// <summary>
+        /// Creates all the AppID key-value pairs and adds them to the policy
+        /// </summary>
+        /// <param name="worker"></param>
+        public void SetAppIDPolicyTags(BackgroundWorker worker)
+        {
+            // Skip if this is not an AppID Tagging Policy - no AppID Tags to process
+            if(this.Policy._PolicyType != WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+            {
+                worker.ReportProgress(99);
+                return;
+            }
+
+            // Iterate through all the custom rules for the AppID Tags only
+            List<AppID> appIDs = new List<AppID>();
+            foreach (var rule in this.Policy.CustomRules)
+            {
+                if (!String.IsNullOrEmpty(rule.AppIDTag.Key))
+                {
+                    appIDs.Add(rule.AppIDTag);
+                    Logger.Log.AddInfoMsg(String.Format("Creating AppID Tag with Key={0} and Key={1}",
+                                                         rule.AppIDTag.Key,
+                                                         rule.AppIDTag.Value));
+                }
+            }
+
+            // Return if no AppID Tags were found
+            if (appIDs.Count == 0)
+            {
+                worker.ReportProgress(99);
+                return;
+            }
+
+            // Manipulate the final policy on disk as oppposed to any temp policies
+            SiPolicy policy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
+            policy = PolicyHelper.CreateAppIDTags(policy, appIDs);
+
+            try
+            {
+                Helper.SerializePolicytoXML(policy, this.Policy.SchemaPath);
+            }
+            catch (Exception e)
+            {
+                Logger.Log.AddErrorMsg(String.Format("Exception encountered in CreateComObjectRules(): {0}", e));
+            }
+
+        }
+
+
 
         /// <summary>
         /// Sets the additonal parameters at the end of a policy: GUIDs, versions, etc

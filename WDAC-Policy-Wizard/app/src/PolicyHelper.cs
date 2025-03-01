@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Management.Automation;
 using System.Management.Automation.Language;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text.RegularExpressions;
 using Windows.Networking.NetworkOperators;
 
@@ -631,6 +632,66 @@ namespace WDAC_Wizard
 
             return siPolicy;
         }
+
+        /// <summary>
+        /// Creates AppID tags the provided siPolicy object
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object to manipulate and add the AppID Tag objects to</param>
+        /// <param name="appIDs">List of COM object instances to parse and add to siPolicy</param>
+        /// <returns></returns>
+        internal static SiPolicy CreateAppIDTags(SiPolicy siPolicy, List<AppID> appIDs)
+        {
+            if (appIDs == null || appIDs.Count == 0)
+            {
+                return siPolicy;
+            }
+
+            foreach (AppID appID in appIDs)
+            {
+                AppIDTag appIDTag = new AppIDTag();
+                appIDTag.Value = appID.Value; 
+                appIDTag.Key = appID.Key;
+
+                siPolicy = AddAppIDTag(siPolicy, appIDTag);
+            }
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Adds an AppIdTag to the SiPolicy.AppIdTags structure. Returns SiPolicy with the Tag. 
+        /// </summary>
+        /// <param name="siPolicy">SiPolicy object to add the AppIDTag object to</param>
+        /// <param name="appIDTag">AppIdTag to add to the policy</param>
+        /// <returns></returns>
+        internal static SiPolicy AddAppIDTag(SiPolicy siPolicy, AppIDTag appIDTag)
+        {
+            // Iterate through signing scenarios - not guaranteed to only be 1 (e.g. policies under edit)
+            // set appIdTags in the windows/umci scenario only
+            for (int i = 0; i< siPolicy.SigningScenarios.Length; i++)
+            {
+                if(siPolicy.SigningScenarios[i].Value == UMCISCN) 
+                {
+                    if (siPolicy.SigningScenarios[i].AppIDTags != null)
+                    {
+                        AppIDTag[] appIDTagsCopy = siPolicy.SigningScenarios[i].AppIDTags.AppIDTag;
+                        Array.Resize(ref appIDTagsCopy, appIDTagsCopy.Length + 1);
+                        appIDTagsCopy[appIDTagsCopy.Length - 1] = appIDTag;
+
+                        siPolicy.SigningScenarios[i].AppIDTags.AppIDTag = appIDTagsCopy;
+                    }
+                    else
+                    {
+                        siPolicy.SigningScenarios[i].AppIDTags = new AppIDTags();
+                        siPolicy.SigningScenarios[i].AppIDTags.AppIDTag = new AppIDTag[1];
+                        siPolicy.SigningScenarios[i].AppIDTags.AppIDTag[0] = appIDTag;
+                    }
+                }
+            }
+
+            return siPolicy; 
+        }
+
 
         /// <summary>
         /// Handles adding the new Allow Rule object to the provided siPolicy

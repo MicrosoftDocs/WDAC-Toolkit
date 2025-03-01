@@ -14,7 +14,7 @@
   <EKUs />
   <!--File Rules-->
   <FileRules>
-    <FileRule Type="Match" ID="ID_ALLOW_A_1" FriendlyName="C:\test\* FileRule" MinimumFileVersion="0.0.0.0" FilePath="C:\test\*" />
+    <Allow ID="ID_ALLOW_A_1" FriendlyName="C:\test\* FileRule" MinimumFileVersion="0.0.0.0" FilePath="C:\test\*" />
   </FileRules>
   <!--Signers-->
   <Signers />

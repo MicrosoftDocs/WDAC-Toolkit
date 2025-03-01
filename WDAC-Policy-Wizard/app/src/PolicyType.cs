@@ -11,6 +11,7 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
+using Humanizer.Localisation;
 
 namespace WDAC_Wizard
 {
@@ -437,6 +438,9 @@ namespace WDAC_Wizard
             // Show the multi-policy UI panel
             this.panel_MultiPolicy.Visible = true;
 
+            // UI - hide the AppId Tagging policy panel
+            appIdPolicy_Panel.Visible = false;
+
             // Set the setting to show this radio button selected next page load
             Properties.Settings.Default.showMultiplePolicyDefault = true;
 
@@ -469,6 +473,9 @@ namespace WDAC_Wizard
             this.panel_MultiPolicy.Visible = false;
             this._MainWindow.ErrorOnPage = false;
 
+            // UI - hide the AppId Tagging policy panel
+            appIdPolicy_Panel.Visible = false;
+
             // Set the setting to show this radio button selected next page load
             Properties.Settings.Default.showMultiplePolicyDefault = false;
 
@@ -492,9 +499,13 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void AppIdPolicy_Click(object sender, EventArgs e)
         {
-            // UI changes - Hide the panel
+            // UI changes - Hide the multiple policy panel
             this.panel_MultiPolicy.Visible = false;
             this._MainWindow.ErrorOnPage = false;
+
+            // UI - show the AppId Tagging policy panel
+            appIdPolicy_Panel.Visible = true;
+            appIdPolicy_Panel.Location = panel_MultiPolicy.Location;
 
             // Set the setting to show this radio button selected next page load
             Properties.Settings.Default.showMultiplePolicyDefault = true;
@@ -505,7 +516,6 @@ namespace WDAC_Wizard
 
             // Set policy type to AppId Tagging
             this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.AppIdTaggingPolicy;
-
 
             // Set checkbox UI states for Multi Policy and AppIdTagging
             multiPolicyCheckbox.Image = Properties.Resources.radio_off;
@@ -521,7 +531,7 @@ namespace WDAC_Wizard
             // On page load, check whether multiple or single policy format was chosen last time the page was loaded
             if (Properties.Settings.Default.showMultiplePolicyDefault)
             {
-                multiPolicyCheckbox.Image = Properties.Resources.radio_on; 
+                multiPolicyCheckbox.Image = Properties.Resources.radio_on;
                 singlePolicyCheckbox.Image = Properties.Resources.radio_off;
                 appIdPolicyCheckbox.Image = Properties.Resources.radio_off;
             }
@@ -560,9 +570,7 @@ namespace WDAC_Wizard
         {
             try
             {
-                string webpage = "https://learn.microsoft.com/windows/security/application-security/application-control/" +
-                    "app-control-for-business/appidtagging/appcontrol-appid-tagging-guide";
-                Process.Start(new ProcessStartInfo(webpage) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(Properties.Resources.AppIdTaggingDocsLink) { UseShellExecute = true });
             }
             catch (Exception exp)
             {
@@ -881,6 +889,44 @@ namespace WDAC_Wizard
             else
             {
                 BackColor = Color.White;
+            }
+        }
+
+        /// <summary>
+        /// Updates the Policy Name of the AppId Tagging Policy when the textbox text changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AppIdPolicyNameTextbox_TextChanged(object sender, EventArgs e)
+        {
+            this._Policy.PolicyName = appIdPolicyName_Textbox.Text;
+            this._MainWindow.Policy.PolicyName = this._Policy.PolicyName;
+        }
+
+        /// <summary>
+        /// Updates the Policy path (schema path_ of the AppId Tagging Policy when the textbox text changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AppIdPolicyLocation_Click(object sender, EventArgs e)
+        {
+            // Save dialog box pressed
+            string policyPath = Helper.SaveSingleFile(Properties.Resources.SaveXMLFileDialogTitle, Helper.BrowseFileType.Policy);
+
+            // If cancel button is selected by user, or path does not exist prevent unhandled error
+            if (String.IsNullOrEmpty(policyPath))
+            {
+                return;
+            }
+
+            this._MainWindow.Policy.SchemaPath = policyPath;
+            this.appIdPolicyLocation_Textbox.Text = policyPath;
+
+            // Show right side of the text
+            if (this.appIdPolicyLocation_Textbox.TextLength > 55)
+            {
+                this.appIdPolicyLocation_Textbox.SelectionStart = this.appIdPolicyLocation_Textbox.TextLength - 1;
+                this.appIdPolicyLocation_Textbox.ScrollToCaret();
             }
         }
     }

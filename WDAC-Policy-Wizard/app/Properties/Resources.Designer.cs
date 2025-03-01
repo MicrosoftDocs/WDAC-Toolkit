@@ -90,6 +90,28 @@ namespace WDAC_Wizard.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Invalid AppID Tag. Both the key and value must be set. 
+        /// </summary>
+        internal static string AppIDInvalidTag
+        {
+            get
+            {
+                return ResourceManager.GetString("AppIDInvalidTag", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/application-security/application-control/app-control-for-business/appidtagging/appcontrol-appid-tagging-guide
+        /// </summary>
+        internal static string AppIdTaggingDocsLink
+        {
+            get
+            {
+                return ResourceManager.GetString("AppIdTaggingDocsLink", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to AppIdTagging.xml
         /// </summary>
         internal static string AppIdTaggingTemplate

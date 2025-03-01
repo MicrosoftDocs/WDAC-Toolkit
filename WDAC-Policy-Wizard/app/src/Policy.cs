@@ -258,6 +258,9 @@ namespace WDAC_Wizard
         }
     }
 
+    /// <summary>
+    /// Custom COM object class to manipulate during rule creation
+    /// </summary>
     public class COM
     {
         const string COMVALUENAME = "EnterpriseDefinedClsId";
@@ -300,6 +303,21 @@ namespace WDAC_Wizard
             // Possible solution 2: Valid GUID Format
             System.Guid _guid = System.Guid.NewGuid(); 
             return System.Guid.TryParse(this.Guid, out _guid); 
+        }
+    }
+
+    /// <summary>
+    /// Custom AppID class to manipulate during rule creation
+    /// </summary>
+    public class AppID
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+
+        public bool IsValidTag()
+        {
+            return !String.IsNullOrEmpty(this.Value)
+                    && !String.IsNullOrEmpty(this.Key); 
         }
     }
 
@@ -533,7 +551,8 @@ namespace WDAC_Wizard
             Hash,
             Com,
             FolderScan,
-            Certificate
+            Certificate, 
+            AppIDTag
         }
 
         public enum RuleLevel
@@ -608,6 +627,9 @@ namespace WDAC_Wizard
         // COM Object
         public COM COMObject { get; set; }
 
+        // AppID Tags
+        public AppID AppIDTag {get;set;}
+
         // Folder Scan
         public FolderScan Scan { get; set; }
 
@@ -642,6 +664,7 @@ namespace WDAC_Wizard
 
             this.COMObject = new COM();
             this.Scan = new FolderScan();
+            this.AppIDTag = new AppID(); 
         }
 
         /// <summary>
