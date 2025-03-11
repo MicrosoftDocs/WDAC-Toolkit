@@ -967,6 +967,15 @@ namespace WDAC_Wizard
                 }
             }
 
+            // Add CiSigner - Github Issue #161, #450
+            // Usermode rule you are creating a rule for, you need to add signer to cisigners.
+            // Kernel mode rule, don't add signer to cisigners
+            // If you don't know always add to cisigners.
+            if (scenarioStates.umciEnabled)
+            {
+                siPolicy = AddSiPolicyCiSigner(signers, siPolicy);
+            }
+
             return siPolicy;
         }
 
@@ -1188,15 +1197,6 @@ namespace WDAC_Wizard
 
                 // Add signer references
                 siPolicy = AddSiPolicySigner(signers, siPolicy, customRule.Permission, customRule.SigningScenarioCheckStates);
-
-                // Add CiSigner - Github Issue #161
-                // Usermode rule you are creating a rule for, you need to add signer to cisigners.
-                // Kernel mode rule, don't add signer to cisigners
-                // If you don't know always add to cisigners.
-                if (customRule.SigningScenarioCheckStates.umciEnabled)
-                {
-                    siPolicy = AddSiPolicyCiSigner(signers, siPolicy);
-                }
             }
             else
             {
