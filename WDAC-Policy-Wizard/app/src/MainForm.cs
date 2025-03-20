@@ -1142,6 +1142,18 @@ namespace WDAC_Wizard
                     siPolicy.PolicyTypeID = Properties.Resources.LegacyPolicyID_GUID; 
                 }
 
+                // AppID Tagging Policy
+                else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+                {
+                    // Reset the GUIDs
+                    siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+                    siPolicy.PolicyID = siPolicy.BasePolicyID;
+
+                    // Force SiPolicy PolicyType to BasePolicy
+                    siPolicy.PolicyType = global::PolicyType.AppIDTaggingPolicy;
+                    siPolicy.PolicyTypeSpecified = true;
+                }
+
                 // If supplemental policy, set the Base policy guid; reset the policy ID and set the policy name
                 else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 {

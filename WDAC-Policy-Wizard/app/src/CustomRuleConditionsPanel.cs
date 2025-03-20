@@ -791,6 +791,17 @@ namespace WDAC_Wizard
 
                 case "COM Object":
 
+                    if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+                    {
+                        _ = MessageBox.Show("COM Object Rules are not supported in AppID Tagging Policies. Please select another rule type",
+                                            "Unsupported Rule - COM Objects",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Question);
+
+                        ClearCustomRulesPanel(true);
+                        return;
+                    }
+
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Com);
                     label_Info.Text = "Creates a rule for COM object and software provider.";
                     this.panelComObject.Location = this.label_condition.Location;
@@ -821,6 +832,7 @@ namespace WDAC_Wizard
                                             "Unsupported Rule - AppID Tags",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Question);
+                        ClearCustomRulesPanel(true);
                         return; 
                     }
 
@@ -876,6 +888,8 @@ namespace WDAC_Wizard
             {
                 this.comboBox_RuleType.SelectedItem = null;
                 this.comboBox_RuleType.Text = "--Select--";
+
+                label_Info.Visible = false; 
             }
 
             // Reset the Slider UI textboxes

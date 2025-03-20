@@ -7,11 +7,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing; 
-using System.Management.Automation;
-using System.Collections.ObjectModel;
-using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-using Humanizer.Localisation;
 
 namespace WDAC_Wizard
 {
@@ -534,13 +530,22 @@ namespace WDAC_Wizard
                 multiPolicyCheckbox.Image = Properties.Resources.radio_on;
                 singlePolicyCheckbox.Image = Properties.Resources.radio_off;
                 appIdPolicyCheckbox.Image = Properties.Resources.radio_off;
+
+                // Set multiple policy format
+                this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
             }
             else
             {
                 multiPolicyCheckbox.Image = Properties.Resources.radio_off;
                 singlePolicyCheckbox.Image = Properties.Resources.radio_on;
                 appIdPolicyCheckbox.Image = Properties.Resources.radio_off;
+
+                // Set legacy/singly policy format
+                this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy; 
             }
+
+            Logger.Log.AddInfoMsg("PolicyType Page Load. Setting Policy Format to " + this._MainWindow.Policy._Format.ToString());
+
         }
 
         // <summary>
