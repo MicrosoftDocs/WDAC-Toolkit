@@ -434,8 +434,30 @@ namespace WDAC_Wizard
                 }
             }
 
-            // Finally, show any COM Object rules
-            if(this.Policy.siPolicy.Settings != null)
+            // Show any AppId Tags
+            if(this.Policy.siPolicy.PolicyType == global::PolicyType.AppIDTaggingPolicy)
+            {
+                foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
+                {
+                    if (scenario.AppIDTags != null)
+                    {
+                        foreach (var tag in scenario.AppIDTags.AppIDTag)
+                        {
+
+                            this.displayObjects.Add(new DisplayObject("",
+                                                                      "AppID Tag",
+                                                                      "Key: " + tag.Key,
+                                                                      "Value: " + tag.Value,
+                                                                      ""));
+                            this.rulesDataGrid.RowCount += 1;
+
+                        }
+                    }
+                }
+            }
+
+           // Finally, show any COM Object rules
+           if (this.Policy.siPolicy.Settings != null)
             {
                 foreach(var setting in this.Policy.siPolicy.Settings)
                 {
@@ -596,9 +618,11 @@ namespace WDAC_Wizard
                 // Exactly one row/rule to delete
                 int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
                 string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
-                
+                string level = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
+
                 // Assert cannot delete the 'empty' bottom row
-                if (String.IsNullOrEmpty(type))
+                if (String.IsNullOrEmpty(type)
+                    && String.IsNullOrEmpty(level))
                 {
                     return; 
                 }
@@ -658,9 +682,11 @@ namespace WDAC_Wizard
             if (rowIdx >= this.rulesDataGrid.RowCount) return; 
 
             string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
+            string level = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
 
             // Assert cannot delete the 'empty' bottom row
-            if (String.IsNullOrEmpty(type))
+            if (String.IsNullOrEmpty(type)
+                && String.IsNullOrEmpty(level))
             {
                 return;
             }
@@ -719,7 +745,7 @@ namespace WDAC_Wizard
                 }
 
                 // Handle COM object deletion from xml policy under edit
-                else if (ruleType == "COM Object")
+                if (ruleType == "COM Object")
                 {
                     string key = ruleKey.Split(':')[1].Trim();
                     string provider = ruleName.Split(':')[1].Trim();
@@ -754,6 +780,58 @@ namespace WDAC_Wizard
                         this.Policy.siPolicy.Settings = tempSettings;
                     }
                 }
+
+                // Handle AppID Tags
+                if(ruleType == "AppID Tag")
+                {
+                    string value = ruleKey.Split(':')[1].Trim();
+                    string key = ruleName.Split(':')[1].Trim();
+                    int tagIdx = -1;
+                    int numIdx = 0;
+
+                    foreach (var scenario in Policy.siPolicy.SigningScenarios)
+                    {
+                        if(scenario.AppIDTags != null)
+                        {
+                            foreach (var tag in scenario.AppIDTags.AppIDTag)
+                            {
+                                if(tag.Value == value && tag.Key == key)
+                                {
+                                    tagIdx = numIdx;
+                                    Logger.Log.AddInfoMsg($"Removing AppID Tag - Key: {key}, Value:{value}"); 
+                                    break;
+                                }
+                                else
+                                {
+                                    numIdx++;
+                                }
+                            }
+
+                            // Check if we assigned a value to settingIdx, remove that AppID Tag from the AppIDTags[] array
+                            if (tagIdx != -1)
+                            {
+                                AppIDTag[] tempTags = this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag; 
+
+                                if(tempTags.Length == 1)
+                                {
+                                    this.Policy.siPolicy.SigningScenarios[0].AppIDTags = null;
+                                }
+
+                                else
+                                {
+                                    // Move all indices to the left 1 starting at settingIdx. Finish by resizing the Settings array
+                                    for (int i = tagIdx; i < tempTags.Length - 1; i++)
+                                    {
+                                        tempTags[i] = tempTags[i + 1];
+                                    }
+                                    Array.Resize(ref tempTags, tempTags.Length - 1);
+                                    this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag = tempTags;
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
 
             // Not a custom rule -- Try to remove from signers -- 

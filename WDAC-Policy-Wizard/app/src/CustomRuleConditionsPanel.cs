@@ -677,7 +677,8 @@ namespace WDAC_Wizard
 
                     action = "";
                     level = "AppID Tag";
-                    name = $"Key: {PolicyCustomRule.AppIDTag.Key}, Value: {PolicyCustomRule.AppIDTag.Value}"; 
+                    name = $"Key: {PolicyCustomRule.AppIDTag.Key}";
+                    files = $"Value: {PolicyCustomRule.AppIDTag.Value}";
                     break;
             }
 

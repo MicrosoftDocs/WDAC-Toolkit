@@ -63,12 +63,18 @@ namespace WDAC_Wizard
 
             // Require >= 1903 for multiple policy formats - show UI notification 
             if (Helper.GetWinVersion() < 1903)
-                MessageBox.Show("The multiple policy format will not work on pre-1903 systems", "Multiple Policy Format Attention",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            {
+                MessageBox.Show("The multiple policy format will not work on pre-1903 systems",
+                                "Multiple Policy Format Attention",
+                                MessageBoxButtons.OK, 
+                                MessageBoxIcon.Information);
+            }
+                
             // Supplemental policy selected
             if (this._Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
-                this._MainWindow.RedoFlowRequired = true;
+            {
+                this._MainWindow.RedoFlowRequired = true;   
+            }
 
             this._Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy;
             this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
@@ -517,6 +523,12 @@ namespace WDAC_Wizard
             multiPolicyCheckbox.Image = Properties.Resources.radio_off;
             singlePolicyCheckbox.Image = Properties.Resources.radio_off;
             appIdPolicyCheckbox.Image = Properties.Resources.radio_on;
+
+            // Set Default Policy Name, File location, if applicable
+            if(Properties.Settings.Default.useDefaultStrings)
+            {
+                SetAppIdPolicyDefaultValues(); 
+            }
         }
 
         // <summary>
@@ -934,5 +946,30 @@ namespace WDAC_Wizard
                 this.appIdPolicyLocation_Textbox.ScrollToCaret();
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void SetAppIdPolicyDefaultValues()
+        {
+            // Set default paths once, unless explicitly turned off in settings
+            this._Policy.SchemaPath = GetDefaultPath("AppIDTagging_Policy", 0);
+            this._Policy.PolicyName = String.Format("{0}_{1}", "My AppID Tagging Policy", Helper.GetFormattedDate());
+
+            // These will trigger the textChange events
+            this.appIdPolicyName_Textbox.Text = this._Policy.PolicyName;
+            this.appIdPolicyLocation_Textbox.Text = this._Policy.SchemaPath;
+
+            // Show right side of the text
+            if (this.appIdPolicyLocation_Textbox.TextLength > 0)
+            {
+                this.appIdPolicyLocation_Textbox.SelectionStart = this.appIdPolicyLocation_Textbox.TextLength - 1;
+                this.appIdPolicyLocation_Textbox.ScrollToCaret();
+            }
+
+            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            this._MainWindow.Policy.PolicyName = this._Policy.PolicyName; 
+        }
+        
     }
 }
