@@ -6,7 +6,7 @@
     Supported="True"
     RuleNumber="0"
     ValidSupplemental="False"
-    ValidAppIdTagging="False"
+    ValidAppIdTagging="False-Inherit"
     ButtonMapping="button_11">
   </Rule>
   <Rule
@@ -33,7 +33,7 @@
     Supported="True"
     RuleNumber="3"
     ValidSupplemental="False-NoInherit"
-    ValidAppIdTagging="False"
+    ValidAppIdTagging="False-Inherit"
     ButtonMapping="button_6">
   </Rule>
   <Rule
@@ -87,7 +87,7 @@
     Supported="True"
     RuleNumber="9"
     ValidSupplemental="False"
-    ValidAppIdTagging="False"
+    ValidAppIdTagging="False-Inherit"
     ButtonMapping="button_0">
   </Rule>
   <Rule
@@ -105,7 +105,7 @@
     Supported="True"
     RuleNumber="11"
     ValidSupplemental="False"
-    ValidAppIdTagging="False"
+    ValidAppIdTagging="False-Inherit"
     ButtonMapping="button_2">
   </Rule>
   <Rule

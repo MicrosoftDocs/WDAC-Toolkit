@@ -116,6 +116,7 @@ namespace WDAC_Wizard
                             break;
 
                         case "False":
+                        case "False-Inherit":
                             this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
                             this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Invalid-AppId";
                             this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
@@ -619,7 +620,7 @@ namespace WDAC_Wizard
                     else if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                     {
                         // If valid AppIdTagging Policy, add to PolicyRuleOptions struct to be set during policy build
-                        if (this.Policy.ConfigRules[name]["ValidAppId"] == "True")
+                        if (this.Policy.ConfigRules[name]["ValidAppId"] != "False")
                         {
                             this.Policy.ConfigRules[name]["CurrentValue"] = value;
                             this._MainWindow.Policy.PolicyRuleOptions.Add(rule);

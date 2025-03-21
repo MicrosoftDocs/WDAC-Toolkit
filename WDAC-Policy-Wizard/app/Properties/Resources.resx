@@ -597,7 +597,7 @@ Do you want the Wizard to warn you about these types of path rules in the future
     <value>AppIdTagging.xml</value>
   </data>
   <data name="InvalidAppIdRuleOption_Info" xml:space="preserve">
-    <value>This rule is not supported in AppId Tagging policies. </value>
+    <value>This rule is not configurable in AppId Tagging policies. </value>
   </data>
   <data name="AppIdTaggingDocsLink" xml:space="preserve">
     <value>https://learn.microsoft.com/windows/security/application-security/application-control/app-control-for-business/appidtagging/appcontrol-appid-tagging-guide</value>

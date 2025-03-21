@@ -9,6 +9,18 @@
     <Rule>
       <Option>Enabled:Update Policy No Reboot</Option>
     </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Disabled:Script Enforcement</Option>
+    </Rule>
   </Rules>
   <!--EKUS-->
   <EKUs />
