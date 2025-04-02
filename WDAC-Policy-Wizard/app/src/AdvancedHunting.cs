@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using FileHelpers;
+using CsvHelper;
 using System.Globalization;
+using static WDAC_Wizard.LogAnalytics;
+using System.IO;
 
 namespace WDAC_Wizard
 {
@@ -45,22 +47,16 @@ namespace WDAC_Wizard
         {
             List<CiEvent> ciEvents = new List<CiEvent>(); 
 
-            var fileHelperEngine = new FileHelperEngine<AdvancedHunting.Record>();
-            fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
-
-            // Replace any commas like in Zoom Communications, Inc per bug #273
-            fileHelperEngine.BeforeReadRecord += FileHelperEngine_BeforeReadRecord;
-
             // Parse each CSV File provided by the user
             foreach (var filepath in filepaths)
             {
                 try
                 {
-                    var records = fileHelperEngine.ReadFile(filepath);
+                    var records = ReadCsvFile(filepath);
 
                     // Assert csv must have at least 1 row of data
                     // Header is now ignored [IgnoreFirst]
-                    if (records.Length < 1)
+                    if (records.Count < 1)
                     {
                         throw new Exception(NORECORDS_EXC);
                     }
@@ -86,24 +82,6 @@ namespace WDAC_Wizard
             }
 
             return ciEvents;
-        }
-
-        /// <summary>
-        /// Event handler for bad data like commas and malformed timestamps
-        /// </summary>
-        /// <param name="engine"></param>
-        /// <param name="e"></param>
-        private static void FileHelperEngine_BeforeReadRecord(EngineBase engine, FileHelpers.Events.BeforeReadEventArgs<Record> e)
-        {
-            // Replace double (and triple quotes) with single quotes
-            e.RecordLine = ReplaceMultiQuotes(e.RecordLine);
-            
-            // Replace the line with the fixed version
-            e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
-
-            // Issue #364 reported where MDE AH may not use ISO 8601 timestamps (Sept. 2023 and later)
-            // Replace instances of these new timestamps with ISO 8601
-            e.RecordLine = ConvertTimestampsToUTC(e.RecordLine);
         }
 
         /// <summary>
@@ -171,19 +149,20 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="record">One CSV line, or record, to clean</param>
         /// <returns>Cleaned CSV record with timestamps in ISO 8601 UTC format</returns>
-        private static string ConvertTimestampsToUTC(string record)
+        private static AdvancedHuntingRecord ConvertTimestampsToUTC(AdvancedHuntingRecord record)
         {
             // Try to first parse the timestamp to UTC time, if unsuccessful, fallback to list of MDETimestampFormats
-            if(String.IsNullOrEmpty(record))
+            if(String.IsNullOrEmpty(record.Timestamp))
             {
                 return record; 
             }
 
-            var fields = record.Split(','); 
-            string recordTimestamp = fields[0];
+            string recordTimestamp = record.Timestamp; // tmp var to manipulate
             
-            if(DateTime.TryParseExact(recordTimestamp, "o", CultureInfo.InvariantCulture, 
-                System.Globalization.DateTimeStyles.AssumeUniversal, out _))
+            if(DateTime.TryParseExact(recordTimestamp, "o", 
+                                      CultureInfo.InvariantCulture, 
+                                      DateTimeStyles.AssumeUniversal, 
+                                      out _))
             {
                 return record; // return record, timestamp is already formatted as UTC/ISO 8601
             }
@@ -202,8 +181,8 @@ namespace WDAC_Wizard
                     // Convert to ISO 8601
                     string utcDateTime = timestamp.ToUniversalTime().ToString("o");
 
-                    fields[0] = utcDateTime;
-                    return string.Join(",", fields);
+                    record.Timestamp = utcDateTime;
+                    return record;
                 }
 
                 catch (Exception ex)
@@ -229,7 +208,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="records"></param>
         /// <returns></returns>
-        public static List<CiEvent> ParseRecordsIntoCiEvents(Record[] records)
+        public static List<CiEvent> ParseRecordsIntoCiEvents(List<AdvancedHuntingRecord> records)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             List<SignerEvent> signerEvents = new List<SignerEvent>();
@@ -237,9 +216,12 @@ namespace WDAC_Wizard
             // Tmp variables
             CiEvent ciEvent = new CiEvent();
             SignerEvent signerEvent = new SignerEvent();
+            var record = new AdvancedHuntingRecord(); 
 
-            foreach (var record in records)
+            foreach (var pre_record in records)
             {
+                record = ConvertTimestampsToUTC(pre_record); 
+
                 switch (record.ActionType)
                 {
                     case DRIVER_REV_EVENT_NAME:
@@ -286,7 +268,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3023Event(Record record)
+        private static CiEvent Create3023Event(AdvancedHuntingRecord record)
         {
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = DRIVER_REV_EVENT_ID;
@@ -318,7 +300,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create3076_3077Event(Record record, int eventId)
+        private static CiEvent Create3076_3077Event(AdvancedHuntingRecord record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = eventId;
@@ -348,7 +330,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static CiEvent Create8028_8029Event(Record record, int eventId)
+        private static CiEvent Create8028_8029Event(AdvancedHuntingRecord record, int eventId)
         {
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = eventId;
@@ -378,7 +360,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private static SignerEvent Create3089Event(Record record)
+        private static SignerEvent Create3089Event(AdvancedHuntingRecord record)
         {
             SignerEvent signerEvent = new SignerEvent();
             signerEvent.EventId = SIGNING_EVENT_ID; 
@@ -391,15 +373,15 @@ namespace WDAC_Wizard
 
             // Replace Delimitted values, if applicable
             // E.g. Zoom Communications#C# Inc --> Zoom Communications, Inc 
-            if (signerEvent.IssuerName.Contains(DEL_VALUE))
-            {
-                signerEvent.IssuerName = signerEvent.IssuerName.Replace(DEL_VALUE, ",");
-            }
-
-            if (signerEvent.PublisherName.Contains(DEL_VALUE))
-            {
-                signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
-            }
+            // if (signerEvent.IssuerName.Contains(DEL_VALUE))
+            // {
+            //     signerEvent.IssuerName = signerEvent.IssuerName.Replace(DEL_VALUE, ",");
+            // }
+            // 
+            // if (signerEvent.PublisherName.Contains(DEL_VALUE))
+            // {
+            //     signerEvent.PublisherName = signerEvent.PublisherName.Replace(DEL_VALUE, ",");
+            // }
 
             return signerEvent;
         }
@@ -559,11 +541,53 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Reads CSV file defined in filePath and outputs a List of AdvancedHunting records
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private static List<AdvancedHuntingRecord> ReadCsvFile(string filePath)
+        {
+            var records = new List<AdvancedHuntingRecord>();
+            using (var reader = new StreamReader(filePath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var record = new AdvancedHuntingRecord
+                    {
+                        // Check for Timestamp or Timestamp Local time which occurs when MDE users has updated time preferences from Local to UTC
+                        Timestamp = csv.HeaderRecord.Contains("Timestamp") ? csv.GetField<string>("Timestamp") : 
+                                    csv.HeaderRecord.Contains("Timestamp Local time") ? csv.GetField<string>("Timestamp Local time") : null, 
+                        DeviceId = csv.HeaderRecord.Contains("DeviceId") ? csv.GetField<string>("DeviceId") : null,
+                        DeviceName = csv.HeaderRecord.Contains("DeviceName") ? csv.GetField<string>("DeviceName") : null,
+                        ActionType = csv.HeaderRecord.Contains("ActionType") ? csv.GetField<string>("ActionType") : null,
+                        FileName = csv.HeaderRecord.Contains("FileName") ? csv.GetField<string>("FileName") : null,
+                        FolderPath = csv.HeaderRecord.Contains("FolderPath") ? csv.GetField<string>("FolderPath") : null,
+                        SHA1 = csv.HeaderRecord.Contains("SHA1") ? csv.GetField<string>("SHA1") : null,
+                        SHA256 = csv.HeaderRecord.Contains("SHA256") ? csv.GetField<string>("SHA256") : null,
+                        IssuerName = csv.HeaderRecord.Contains("IssuerName") ? csv.GetField<string>("IssuerName") : null,
+                        IssuerTBSHash = csv.HeaderRecord.Contains("IssuerTBSHash") ? csv.GetField<string>("IssuerTBSHash") : null,
+                        AuthenticodeHash = csv.HeaderRecord.Contains("AuthenticodeHash") ? csv.GetField<string>("AuthenticodeHash") : null,
+                        PolicyId = csv.HeaderRecord.Contains("PolicyId") ? csv.GetField<string>("PolicyId") : null,
+                        PolicyName = csv.HeaderRecord.Contains("PolicyName") ? csv.GetField<string>("PolicyName") : null,
+                        OriginalFileName = csv.HeaderRecord.Contains("OriginalFileName") ? csv.GetField<string>("OriginalFileName") : null,
+                        InternalName = csv.HeaderRecord.Contains("InternalName") ? csv.GetField<string>("InternalName") : null,
+                        FileDescription = csv.HeaderRecord.Contains("FileDescription") ? csv.GetField<string>("FileDescription") : null,
+                        ProductName = csv.HeaderRecord.Contains("ProductName") ? csv.GetField<string>("ProductName") : null,
+                        FileVersion = csv.HeaderRecord.Contains("FileVersion") ? csv.GetField<string>("FileVersion") : null,
+                        EtwCorrelationId = csv.HeaderRecord.Contains("EtwCorrelationId") ? csv.GetField<string>("EtwCorrelationId") : null
+                    };
+                    records.Add(record);
+                }
+            }
+            return records;
+        }
+        /// <summary>
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
         /// </summary>
-        [DelimitedRecord(",")]
-        [IgnoreFirst]
-        public class Record
+        public class AdvancedHuntingRecord
         {
             public string Timestamp;
             public string DeviceId;
@@ -577,26 +601,14 @@ namespace WDAC_Wizard
             public string IssuerTBSHash;
             public string PublisherName;
             public string PublisherTBSHash;
-            
-            [FieldOptional] 
             public string AuthenticodeHash;
-            [FieldOptional] 
             public string PolicyId;
-            [FieldOptional] 
             public string PolicyName;
-
-            // New fields introduced in May 2024
-            [FieldOptional]
             public string OriginalFileName;
-            [FieldOptional]
             public string ProductName;
-            [FieldOptional]
             public string InternalName;
-            [FieldOptional]
             public string FileDescription;
-            [FieldOptional]
             public string FileVersion;
-            [FieldOptional]
             public string EtwCorrelationId; 
         }
 
