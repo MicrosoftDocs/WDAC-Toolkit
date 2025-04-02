@@ -40,8 +40,8 @@ namespace WDAC_Wizard
                 {
                     var records = ReadCsvFile(filepath);
 
-                    // Assert csv must have a header and 1 row of data
-                    if (records.Count < 2)
+                    // Assert csv must have at least 1 row of data; header is ignored
+                    if (records.Count < 1)
                     {
                         throw new Exception(NORECORDS_EXC);
                     }

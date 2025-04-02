@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using CsvHelper;
 using System.Globalization;
-using static WDAC_Wizard.LogAnalytics;
 using System.IO;
 
 namespace WDAC_Wizard
@@ -54,8 +53,7 @@ namespace WDAC_Wizard
                 {
                     var records = ReadCsvFile(filepath);
 
-                    // Assert csv must have at least 1 row of data
-                    // Header is now ignored [IgnoreFirst]
+                    // Assert csv must have at least 1 row of data; header is ignored
                     if (records.Count < 1)
                     {
                         throw new Exception(NORECORDS_EXC);
@@ -218,9 +216,9 @@ namespace WDAC_Wizard
             SignerEvent signerEvent = new SignerEvent();
             var record = new AdvancedHuntingRecord(); 
 
-            foreach (var pre_record in records)
+            foreach (var precleanedRecord in records)
             {
-                record = ConvertTimestampsToUTC(pre_record); 
+                record = ConvertTimestampsToUTC(precleanedRecord); 
 
                 switch (record.ActionType)
                 {
