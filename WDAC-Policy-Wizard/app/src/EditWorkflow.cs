@@ -365,27 +365,45 @@ namespace WDAC_Wizard
                 this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
                 this._MainWindow.ErrorOnPage = true;
             }
-            else if(this._MainWindow.CiEvents == null)
+            else if(this._MainWindow.CiEvents == null
+                    || _MainWindow.CiEvents.Count < 1)
             {
-                Logger.Log.AddErrorMsg(AdvancedHunting.GetLastError());
-                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
-                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
-                this._MainWindow.ErrorOnPage = true;
-                this.ahParsingLearnMore_Label.Visible = true; 
-            }
-            else if(this._MainWindow.CiEvents.Count < 1)
-            {
-                Logger.Log.AddErrorMsg("Zero CiEvents were created.");
-                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
-                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
-                this._MainWindow.ErrorOnPage = true; 
+                // Show AH/LogAnalytics error messages
+                if(this.Workflow == WorkflowType.AdvancedHunting)
+                {
+                    string errString = $"Advanced Hunting parsing returned: {AdvancedHunting.GetLastError()} " +
+                                   $"\r\n\r\nLogAnalytics parsing returned {LogAnalytics.GetLastError()}";
+                    Logger.Log.AddErrorMsg(errString);
+
+                    _ = MessageBox.Show(errString,
+                                        "Wizard Event Log Parsing Error",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+
+                    this.parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
+                    this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                    this._MainWindow.ErrorOnPage = true;
+                    this.ahParsingLearnMore_Label.Visible = true;
+                }
+
+                // Show evtx error messages
+                else
+                {
+                    Logger.Log.AddErrorMsg("Zero CiEvents were created.");
+                    this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
+                    this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                    this._MainWindow.ErrorOnPage = true;
+                }
             }
             else
             {
                 this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
                 this.parseresult_PictureBox.Image = Properties.Resources.verified;
-                DialogResult res = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, "Wizard Event Log Parsing Success", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, 
+                                    "Wizard Event Log Parsing Success", 
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
                 this._MainWindow.ErrorOnPage = false;
             }
 

@@ -34,7 +34,7 @@ namespace WDAC_Wizard
                                          The Wizard could not find critical data columns.";
         const string BAD_SIG_PUBNAME = "Unknown";
 
-        private static string LastError = string.Empty;
+        private static string LastError = "Success";
 
         private static int ErrorCount = 0;
 

@@ -22,7 +22,7 @@ namespace WDAC_Wizard
         const string HEADERRECORDS_EXC = @"LogAnalytics Records are not properly formatted. 
                                          The Wizard could not find critical data columns.";
 
-        private static string LastError = string.Empty;
+        private static string LastError = "Success";
 
         /// <summary>
         /// Parses the CSV file to CiEvent fields
@@ -243,6 +243,15 @@ namespace WDAC_Wizard
             {
                 return record;
             }
+        }
+
+        /// <summary>
+        /// Returns the error message
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLastError()
+        {
+            return LastError; 
         }
 
         /// <summary>
