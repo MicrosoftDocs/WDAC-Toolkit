@@ -30,6 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomRuleConditionsPanel));
             panel_CustomRules = new System.Windows.Forms.Panel();
+            appIdPanel = new System.Windows.Forms.Panel();
+            appIDTagValueTextbox = new System.Windows.Forms.TextBox();
+            appIDTagKeyTextbox = new System.Windows.Forms.TextBox();
+            appIdTaggingLearnMore_Link = new System.Windows.Forms.Label();
+            label17 = new System.Windows.Forms.Label();
+            label18 = new System.Windows.Forms.Label();
+            label19 = new System.Windows.Forms.Label();
             panelPackagedApps = new System.Windows.Forms.Panel();
             checkBox_CustomPFN = new System.Windows.Forms.CheckBox();
             panel_Progress = new System.Windows.Forms.Panel();
@@ -106,6 +113,7 @@
             button_Back = new System.Windows.Forms.Button();
             backgroundWorker = new System.ComponentModel.BackgroundWorker();
             panel_CustomRules.SuspendLayout();
+            appIdPanel.SuspendLayout();
             panelPackagedApps.SuspendLayout();
             panel_Progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox_Progress).BeginInit();
@@ -121,6 +129,7 @@
             // panel_CustomRules
             // 
             panel_CustomRules.BackColor = System.Drawing.Color.White;
+            panel_CustomRules.Controls.Add(appIdPanel);
             panel_CustomRules.Controls.Add(panelPackagedApps);
             panel_CustomRules.Controls.Add(panelFolderScanConditions);
             panel_CustomRules.Controls.Add(panelComObject);
@@ -146,6 +155,95 @@
             panel_CustomRules.Name = "panel_CustomRules";
             panel_CustomRules.Size = new System.Drawing.Size(615, 719);
             panel_CustomRules.TabIndex = 86;
+            // 
+            // appIdPanel
+            // 
+            appIdPanel.Controls.Add(appIDTagValueTextbox);
+            appIdPanel.Controls.Add(appIDTagKeyTextbox);
+            appIdPanel.Controls.Add(appIdTaggingLearnMore_Link);
+            appIdPanel.Controls.Add(label17);
+            appIdPanel.Controls.Add(label18);
+            appIdPanel.Controls.Add(label19);
+            appIdPanel.Location = new System.Drawing.Point(557, 418);
+            appIdPanel.Margin = new System.Windows.Forms.Padding(2);
+            appIdPanel.Name = "appIdPanel";
+            appIdPanel.Size = new System.Drawing.Size(604, 210);
+            appIdPanel.TabIndex = 126;
+            appIdPanel.Visible = false;
+            // 
+            // appIDTagValueTextbox
+            // 
+            appIDTagValueTextbox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            appIDTagValueTextbox.Location = new System.Drawing.Point(159, 151);
+            appIDTagValueTextbox.Margin = new System.Windows.Forms.Padding(2);
+            appIDTagValueTextbox.Name = "appIDTagValueTextbox";
+            appIDTagValueTextbox.Size = new System.Drawing.Size(299, 26);
+            appIDTagValueTextbox.TabIndex = 114;
+            // 
+            // appIDTagKeyTextbox
+            // 
+            appIDTagKeyTextbox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            appIDTagKeyTextbox.Location = new System.Drawing.Point(159, 108);
+            appIDTagKeyTextbox.Margin = new System.Windows.Forms.Padding(2);
+            appIDTagKeyTextbox.Name = "appIDTagKeyTextbox";
+            appIDTagKeyTextbox.Size = new System.Drawing.Size(299, 26);
+            appIDTagKeyTextbox.TabIndex = 113;
+            // 
+            // appIdTaggingLearnMore_Link
+            // 
+            appIdTaggingLearnMore_Link.AutoSize = true;
+            appIdTaggingLearnMore_Link.BackColor = System.Drawing.Color.Transparent;
+            appIdTaggingLearnMore_Link.Font = new System.Drawing.Font("Tahoma", 9F);
+            appIdTaggingLearnMore_Link.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
+            appIdTaggingLearnMore_Link.Image = Properties.Resources.external_link_symbol_highlight;
+            appIdTaggingLearnMore_Link.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            appIdTaggingLearnMore_Link.Location = new System.Drawing.Point(14, 55);
+            appIdTaggingLearnMore_Link.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            appIdTaggingLearnMore_Link.Name = "appIdTaggingLearnMore_Link";
+            appIdTaggingLearnMore_Link.Size = new System.Drawing.Size(295, 18);
+            appIdTaggingLearnMore_Link.TabIndex = 112;
+            appIdTaggingLearnMore_Link.Tag = "IgnoreDarkMode";
+            appIdTaggingLearnMore_Link.Text = "Learn more about AppID Tagging Keys      ";
+            appIdTaggingLearnMore_Link.Click += AppIdTaggingLearnMoreLink_Click;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
+            label17.ForeColor = System.Drawing.Color.Black;
+            label17.Location = new System.Drawing.Point(12, 21);
+            label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label17.Name = "label17";
+            label17.Size = new System.Drawing.Size(266, 21);
+            label17.TabIndex = 110;
+            label17.Text = "AppID Tagging Key Value Pair";
+            label17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label18.ForeColor = System.Drawing.Color.Black;
+            label18.Location = new System.Drawing.Point(14, 155);
+            label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label18.Name = "label18";
+            label18.Size = new System.Drawing.Size(125, 18);
+            label18.TabIndex = 93;
+            label18.Text = "AppID Tag Value:";
+            label18.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label19.ForeColor = System.Drawing.Color.Black;
+            label19.Location = new System.Drawing.Point(14, 112);
+            label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label19.Name = "label19";
+            label19.Size = new System.Drawing.Size(115, 18);
+            label19.TabIndex = 91;
+            label19.Text = "AppID Tag Key:";
+            label19.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // panelPackagedApps
             // 
@@ -865,7 +963,7 @@
             // 
             comboBox_RuleType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             comboBox_RuleType.FormattingEnabled = true;
-            comboBox_RuleType.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash", "COM Object", "Folder Scan", "Certificate File" });
+            comboBox_RuleType.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash", "COM Object", "Folder Scan", "Certificate File", "AppID Tags" });
             comboBox_RuleType.Location = new System.Drawing.Point(96, 211);
             comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             comboBox_RuleType.Name = "comboBox_RuleType";
@@ -1145,6 +1243,8 @@
             Validated += CustomRuleConditionsPanel_Validated;
             panel_CustomRules.ResumeLayout(false);
             panel_CustomRules.PerformLayout();
+            appIdPanel.ResumeLayout(false);
+            appIdPanel.PerformLayout();
             panelPackagedApps.ResumeLayout(false);
             panelPackagedApps.PerformLayout();
             panel_Progress.ResumeLayout(false);
@@ -1246,5 +1346,12 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.CheckedListBox checkedListBoxOmitPaths;
+        private System.Windows.Forms.Panel appIdPanel;
+        private System.Windows.Forms.Label appIdTaggingLearnMore_Link;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox appIDTagValueTextbox;
+        private System.Windows.Forms.TextBox appIDTagKeyTextbox;
     }
 }

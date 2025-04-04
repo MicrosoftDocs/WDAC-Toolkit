@@ -88,7 +88,40 @@ namespace WDAC_Wizard.Properties {
                 return ResourceManager.GetString("AdvancedBootOpts_Info", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid AppID Tag. Both the key and value must be set. 
+        /// </summary>
+        internal static string AppIDInvalidTag
+        {
+            get
+            {
+                return ResourceManager.GetString("AppIDInvalidTag", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/application-security/application-control/app-control-for-business/appidtagging/appcontrol-appid-tagging-guide
+        /// </summary>
+        internal static string AppIdTaggingDocsLink
+        {
+            get
+            {
+                return ResourceManager.GetString("AppIdTaggingDocsLink", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to AppIdTagging.xml
+        /// </summary>
+        internal static string AppIdTaggingTemplate
+        {
+            get
+            {
+                return ResourceManager.GetString("AppIdTaggingTemplate", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -555,7 +588,18 @@ namespace WDAC_Wizard.Properties {
                 return ResourceManager.GetString("IgnoreDarkModeTag", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to This rule is not supported in AppId Tagging policies. 
+        /// </summary>
+        internal static string InvalidAppIdRuleOption_Info
+        {
+            get
+            {
+                return ResourceManager.GetString("InvalidAppIdRuleOption_Info", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to When the Intelligent Security Graph is used, WDAC uses attributes to authorize the file. When enabled, WDAC will periodically revalidate the reputation..
         /// </summary>

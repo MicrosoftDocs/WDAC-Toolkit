@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy" PolicyType="AppID Tagging Policy">
+  <VersionEx>10.0.0.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Update Policy No Reboot</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:UMCI</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Disabled:Script Enforcement</Option>
+    </Rule>
+  </Rules>
+  <!--EKUS-->
+  <EKUs />
+  <!--File Rules-->
+  <FileRules>
+    <Allow ID="ID_ALLOW_DLL" FriendlyName="*.DLL FileRule - required for improved performance" MinimumFileVersion="0.0.0.0" FilePath="*.dll" />
+  </FileRules>
+  <!--Signers-->
+  <Signers />
+  <!--Driver Signing Scenarios-->
+  <SigningScenarios>
+    <SigningScenario Value="12" ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 02-28-2025">
+      <ProductSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_DLL" />
+        </FileRulesRef>
+      </ProductSigners>
+      <AppIDTags>
+        <AppIDTag Key="TestAppIdTaggingKey" Value="True" />
+      </AppIDTags>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners />
+  <Settings>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
+      <Value>
+        <String>AppIdTaggingPolicyTemplate</String>
+      </Value>
+    </Setting>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
+      <Value>
+        <String>02282025</String>
+      </Value>
+    </Setting>
+  </Settings>
+  <BasePolicyID>{0E9F7CDF-BC78-4437-A3C6-A3863B75D3CC}</BasePolicyID>
+  <PolicyID>{0E9F7CDF-BC78-4437-A3C6-A3863B75D3CC}</PolicyID>
+</SiPolicy>
