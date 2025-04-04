@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using FileHelpers;
-using System.IO; 
+using CsvHelper;
+using System.IO;
+using System.Globalization;
+
 
 namespace WDAC_Wizard
 {
@@ -20,7 +22,7 @@ namespace WDAC_Wizard
         const string HEADERRECORDS_EXC = @"LogAnalytics Records are not properly formatted. 
                                          The Wizard could not find critical data columns.";
 
-        private static string LastError = string.Empty;
+        private static string LastError = "Success";
 
         /// <summary>
         /// Parses the CSV file to CiEvent fields
@@ -31,21 +33,15 @@ namespace WDAC_Wizard
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
 
-            var fileHelperEngine = new FileHelperEngine<LogAnalytics.LogAnalyticsRecord>();
-            fileHelperEngine.ErrorManager.ErrorMode = ErrorMode.IgnoreAndContinue; //Read the file and drop bad records
-
-            // Replace any commas like in Zoom Communications, Inc per bug #273
-            fileHelperEngine.BeforeReadRecord += FileHelperEngine_LogAnalyticsBeforeReadRecord;
-
             // Parse each CSV File provided by the user
             foreach (var filepath in filepaths)
             {
                 try
                 {
-                    var records = fileHelperEngine.ReadFile(filepath);
+                    var records = ReadCsvFile(filepath);
 
-                    // Assert csv must have a header and 1 row of data
-                    if (records.Length < 2)
+                    // Assert csv must have at least 1 row of data; header is ignored
+                    if (records.Count < 1)
                     {
                         throw new Exception(NORECORDS_EXC);
                     }
@@ -53,8 +49,7 @@ namespace WDAC_Wizard
                     // Assert the following columns must be present
                     if (records[0].Action == null
                        || records[0].AffectedFile== null
-                       || records[0].SHA1_Hash == null
-                       || records[0].IssuerTBSHash == null)
+                       || records[0].SHA1_Hash == null)
                     {
                         throw new Exception(HEADERRECORDS_EXC);
                     }
@@ -78,7 +73,7 @@ namespace WDAC_Wizard
         /// </summary>
         /// <param name="records">Array of LogAnalyticRecord objects to use in generating CiEvents</param>
         /// <returns>List of CiEvent objects containing policy event info</returns>
-        public static List<CiEvent> ParseRecordsIntoCiEvents(LogAnalyticsRecord[] records)
+        public static List<CiEvent> ParseRecordsIntoCiEvents(List<LogAnalyticsRecord> records)
         {
             List<CiEvent> ciEvents = new List<CiEvent>();
             CiEvent ciEvent = new CiEvent();
@@ -189,22 +184,6 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Event handler for bad data like commas and malformed timestamps
-        /// </summary>
-        /// <param name="engine">FileHelpers parsing engine</param>
-        /// <param name="e">BeforeReadEventArg</param>
-        private static void FileHelperEngine_LogAnalyticsBeforeReadRecord(EngineBase engine, 
-            FileHelpers.Events.BeforeReadEventArgs<LogAnalyticsRecord> e)
-        {
-            // Replace common phrases with commas first
-            e.RecordLine = ReplaceCommonIssuePhrases(e.RecordLine); 
-
-            // Replace the line with the fixed version
-            e.RecordLine = ReplaceCommasInRecord(e.RecordLine);
-        }
-
-
-        /// <summary>
         /// Replaces common phrases to help with comma removal success
         /// </summary>
         /// <param name="record">Single LogAnalytic CSV record to verify for common issues</param>
@@ -264,19 +243,77 @@ namespace WDAC_Wizard
             {
                 return record;
             }
-        }     
+        }
+
+        /// <summary>
+        /// Returns the error message
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLastError()
+        {
+            return LastError; 
+        }
+
+        /// <summary>
+        /// Reads CSV file provided in filePath and returns a list of LogAnalyticRecords
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private static List<LogAnalyticsRecord> ReadCsvFile(string filePath)
+        {
+            var records = new List<LogAnalyticsRecord>();
+            using (var reader = new StreamReader(filePath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var record = new LogAnalyticsRecord
+                    {
+                        TimeGenerated = csv.HeaderRecord.Contains("TimeGenerated") ? csv.GetField<string>("TimeGenerated") : null,
+                        Computer = csv.HeaderRecord.Contains("Computer") ? csv.GetField<string>("Computer") : null,
+                        UserName = csv.HeaderRecord.Contains("UserName") ? csv.GetField<string>("UserName") : null,
+                        Action = csv.HeaderRecord.Contains("Action") ? csv.GetField<string>("Action") : null,
+                        PublisherValue = csv.HeaderRecord.Contains("publishervalue") ? csv.GetField<string>("publishervalue") : null,
+                        PublisherName = csv.HeaderRecord.Contains("PublisherName") ? csv.GetField<string>("PublisherName") : null,
+                        Details = csv.HeaderRecord.Contains("Details") ? csv.GetField<string>("Details") : null,
+                        AffectedFile = csv.HeaderRecord.Contains("AffectedFile") ? csv.GetField<string>("AffectedFile") : null,
+                        ProcessName = csv.HeaderRecord.Contains("ProcessName") ? csv.GetField<string>("ProcessName") : null,
+                        Status = csv.HeaderRecord.Contains("Status") ? csv.GetField<string>("Status") : null,
+                        PolicyID = csv.HeaderRecord.Contains("PolicyID") ? csv.GetField<string>("PolicyID") : null,
+                        PolicyGUID = csv.HeaderRecord.Contains("PolicyGUID") ? csv.GetField<string>("PolicyGUID") : null,
+                        PolicyHash = csv.HeaderRecord.Contains("PolicyHash") ? csv.GetField<string>("PolicyHash") : null,
+                        SHA1_Hash = csv.HeaderRecord.Contains("SHA1_Hash") ? csv.GetField<string>("SHA1_Hash") : null,
+                        OriginalFileName = csv.HeaderRecord.Contains("OriginalFileName") ? csv.GetField<string>("OriginalFileName") : null,
+                        InternalName = csv.HeaderRecord.Contains("InternalName") ? csv.GetField<string>("InternalName") : null,
+                        FileDescription = csv.HeaderRecord.Contains("FileDescription") ? csv.GetField<string>("FileDescription") : null,
+                        ProductName = csv.HeaderRecord.Contains("ProductName") ? csv.GetField<string>("ProductName") : null,
+                        FileVersion = csv.HeaderRecord.Contains("FileVersion") ? csv.GetField<string>("FileVersion") : null,
+                        PolicyName = csv.HeaderRecord.Contains("PolicyName") ? csv.GetField<string>("PolicyName") : null,
+                        SHA256_Hash = csv.HeaderRecord.Contains("SHA256_Hash") ? csv.GetField<string>("SHA256_Hash") : null,
+                        IssuerName = csv.HeaderRecord.Contains("IssuerName") ? csv.GetField<string>("IssuerName") : null,
+                        NotValidAfter = csv.HeaderRecord.Contains("NotValidAfter") ? csv.GetField<string>("NotValidAfter") : null,
+                        NotValidBefore = csv.HeaderRecord.Contains("NotValidBefore") ? csv.GetField<string>("NotValidBefore") : null,
+                        PublisherTBSHash = csv.HeaderRecord.Contains("PublisherTBSHash") ? csv.GetField<string>("PublisherTBSHash") : null,
+                        IssuerTBSHash = csv.HeaderRecord.Contains("IssuerTBSHash") ? csv.GetField<string>("IssuerTBSHash") : null
+                    };
+                    records.Add(record);
+                }
+            }
+            return records;
+        }
 
         /// <summary>
         /// CSV row Record class. Each of the row names map to the variable names below in this order. 
         /// </summary>
-        [DelimitedRecord(",")]
         public class LogAnalyticsRecord
         {
             public string TimeGenerated;
             public string Computer;
             public string UserName;
             public string Action;
-            public string publishervalue;
+            public string PublisherValue; // header is "publishervalue"
             public string PublisherName;
             public string Details;
             public string AffectedFile;
