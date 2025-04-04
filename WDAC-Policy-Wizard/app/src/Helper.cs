@@ -19,7 +19,6 @@ using System.Formats.Asn1;
 
 namespace WDAC_Wizard
 {
-
     internal static class Helper
     {
         // Unsupported Crypto OIDs
@@ -44,7 +43,6 @@ namespace WDAC_Wizard
             ".pem",
             ".pfx",
         };
-
         public enum BrowseFileType
         {
             Policy = 0,     // -Show .xml files
@@ -53,6 +51,8 @@ namespace WDAC_Wizard
             CsvFile = 3,    // -Show Csv file
             All = 4         // -Show . all files
         }
+
+        static int UniquePolicyId = 0; 
 
         /// <summary>
         /// Converts a path like \Device\HarddiskVolume3\Windows\System32\wbem\WMIC.exe to "C\Windows\System32\wbem\WMIC.exe
@@ -231,40 +231,14 @@ namespace WDAC_Wizard
         /// <returns>String with the newest _ID filename. example) policy_44.xml</returns>
         public static string GetUniquePolicyPath(string folderPth)
         {
-            string newUniquePath = "";
-            int NewestID = -1;
-            int Start, End;
+            string newUniquePath = Path.Combine(folderPth, $"policy_{UniquePolicyId++}.xml");
 
-            DirectoryInfo dir = new DirectoryInfo(folderPth);
-
-            foreach (var file in dir.GetFiles("*.xml"))
+            // Continue incrementing UniquePolicyId until we find one that does not exist in the path
+            while(Path.Exists(newUniquePath))
             {
-                Start = file.Name.IndexOf("policy_") + 7;
-                End = file.Name.IndexOf(".xml");
-
-                // If Start indexof returns -1, 
-                if (Start == 6)
-                {
-                    continue;
-                }
-
-                int ID = Convert.ToInt32(file.Name.Substring(Start, End - Start));
-
-                if (ID > NewestID)
-                {
-                    NewestID = ID;
-                }
+                newUniquePath = Path.Combine(folderPth, $"policy_{UniquePolicyId++}.xml");
             }
-
-            if (NewestID < 0)
-            {
-                newUniquePath = Path.Combine(folderPth, "policy_0.xml"); //first temp policy being created
-            }
-            else
-            {
-                newUniquePath = Path.Combine(folderPth, String.Format("policy_{0}.xml", NewestID + 1));
-            }
-
+            
             return newUniquePath;
         }
 
