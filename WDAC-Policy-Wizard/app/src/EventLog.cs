@@ -294,11 +294,11 @@ namespace WDAC_Wizard
                 ciEvent.CorrelationId = objects["Event"]["System"]["Correlation"]["@ActivityID"].ToString();
 
                 // File related info
-                string ntfilePath = GetValueString(eventData, "File Name"); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
+                string ntfilePath = GetValueString(eventData, "FilePath"); // e.g. "\\Device\\HarddiskVolume3\\Windows\\CCM\\StateMessage
                 ciEvent.FilePath = Helper.GetDOSPath(ntfilePath);
                 ciEvent.FileName = Path.GetFileName(ciEvent.FilePath);
-                ciEvent.SHA1 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA1 Hash")); // SHA1 PE Hash
-                ciEvent.SHA2 = Helper.ConvertHashStringToByte(GetValueString(eventData, "SHA256 Hash"));  // SHA256 PE Hash
+                ciEvent.SHA1 = Helper.ConvertHashStringToByte(GetValueString(eventData, "Sha1Hash")); // SHA1 PE Hash
+                ciEvent.SHA2 = Helper.ConvertHashStringToByte(GetValueString(eventData, "Sha256Hash"));  // SHA256 PE Hash
 
                 // Try to match with pre-populated signer events
                 foreach (SignerEvent signer in appSignerEvents)
