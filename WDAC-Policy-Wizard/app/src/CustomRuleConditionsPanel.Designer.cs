@@ -150,10 +150,10 @@
             panel_CustomRules.Controls.Add(button_Browse);
             panel_CustomRules.Controls.Add(label_condition);
             panel_CustomRules.Controls.Add(checkBox_CustomPath);
-            panel_CustomRules.Location = new System.Drawing.Point(122, 0);
+            panel_CustomRules.Location = new System.Drawing.Point(98, 0);
             panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             panel_CustomRules.Name = "panel_CustomRules";
-            panel_CustomRules.Size = new System.Drawing.Size(615, 719);
+            panel_CustomRules.Size = new System.Drawing.Size(492, 575);
             panel_CustomRules.TabIndex = 86;
             // 
             // appIdPanel
@@ -164,29 +164,29 @@
             appIdPanel.Controls.Add(label17);
             appIdPanel.Controls.Add(label18);
             appIdPanel.Controls.Add(label19);
-            appIdPanel.Location = new System.Drawing.Point(557, 418);
+            appIdPanel.Location = new System.Drawing.Point(446, 334);
             appIdPanel.Margin = new System.Windows.Forms.Padding(2);
             appIdPanel.Name = "appIdPanel";
-            appIdPanel.Size = new System.Drawing.Size(604, 210);
+            appIdPanel.Size = new System.Drawing.Size(483, 168);
             appIdPanel.TabIndex = 126;
             appIdPanel.Visible = false;
             // 
             // appIDTagValueTextbox
             // 
             appIDTagValueTextbox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            appIDTagValueTextbox.Location = new System.Drawing.Point(159, 151);
+            appIDTagValueTextbox.Location = new System.Drawing.Point(127, 121);
             appIDTagValueTextbox.Margin = new System.Windows.Forms.Padding(2);
             appIDTagValueTextbox.Name = "appIDTagValueTextbox";
-            appIDTagValueTextbox.Size = new System.Drawing.Size(299, 26);
+            appIDTagValueTextbox.Size = new System.Drawing.Size(240, 22);
             appIDTagValueTextbox.TabIndex = 114;
             // 
             // appIDTagKeyTextbox
             // 
             appIDTagKeyTextbox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            appIDTagKeyTextbox.Location = new System.Drawing.Point(159, 108);
+            appIDTagKeyTextbox.Location = new System.Drawing.Point(127, 86);
             appIDTagKeyTextbox.Margin = new System.Windows.Forms.Padding(2);
             appIDTagKeyTextbox.Name = "appIDTagKeyTextbox";
-            appIDTagKeyTextbox.Size = new System.Drawing.Size(299, 26);
+            appIDTagKeyTextbox.Size = new System.Drawing.Size(240, 22);
             appIDTagKeyTextbox.TabIndex = 113;
             // 
             // appIdTaggingLearnMore_Link
@@ -197,10 +197,10 @@
             appIdTaggingLearnMore_Link.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
             appIdTaggingLearnMore_Link.Image = Properties.Resources.external_link_symbol_highlight;
             appIdTaggingLearnMore_Link.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            appIdTaggingLearnMore_Link.Location = new System.Drawing.Point(14, 55);
+            appIdTaggingLearnMore_Link.Location = new System.Drawing.Point(11, 44);
             appIdTaggingLearnMore_Link.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             appIdTaggingLearnMore_Link.Name = "appIdTaggingLearnMore_Link";
-            appIdTaggingLearnMore_Link.Size = new System.Drawing.Size(295, 18);
+            appIdTaggingLearnMore_Link.Size = new System.Drawing.Size(244, 14);
             appIdTaggingLearnMore_Link.TabIndex = 112;
             appIdTaggingLearnMore_Link.Tag = "IgnoreDarkMode";
             appIdTaggingLearnMore_Link.Text = "Learn more about AppID Tagging Keys      ";
@@ -211,10 +211,10 @@
             label17.AutoSize = true;
             label17.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             label17.ForeColor = System.Drawing.Color.Black;
-            label17.Location = new System.Drawing.Point(12, 21);
+            label17.Location = new System.Drawing.Point(10, 17);
             label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label17.Name = "label17";
-            label17.Size = new System.Drawing.Size(266, 21);
+            label17.Size = new System.Drawing.Size(215, 17);
             label17.TabIndex = 110;
             label17.Text = "AppID Tagging Key Value Pair";
             label17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -224,10 +224,10 @@
             label18.AutoSize = true;
             label18.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label18.ForeColor = System.Drawing.Color.Black;
-            label18.Location = new System.Drawing.Point(14, 155);
+            label18.Location = new System.Drawing.Point(11, 124);
             label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label18.Name = "label18";
-            label18.Size = new System.Drawing.Size(125, 18);
+            label18.Size = new System.Drawing.Size(104, 14);
             label18.TabIndex = 93;
             label18.Text = "AppID Tag Value:";
             label18.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -237,10 +237,10 @@
             label19.AutoSize = true;
             label19.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label19.ForeColor = System.Drawing.Color.Black;
-            label19.Location = new System.Drawing.Point(14, 112);
+            label19.Location = new System.Drawing.Point(11, 90);
             label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label19.Name = "label19";
-            label19.Size = new System.Drawing.Size(115, 18);
+            label19.Size = new System.Drawing.Size(94, 14);
             label19.TabIndex = 91;
             label19.Text = "AppID Tag Key:";
             label19.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -254,20 +254,20 @@
             panelPackagedApps.Controls.Add(buttonSearch);
             panelPackagedApps.Controls.Add(textBox_Packaged_App);
             panelPackagedApps.Controls.Add(label2);
-            panelPackagedApps.Location = new System.Drawing.Point(599, 376);
+            panelPackagedApps.Location = new System.Drawing.Point(479, 301);
             panelPackagedApps.Margin = new System.Windows.Forms.Padding(2);
             panelPackagedApps.Name = "panelPackagedApps";
-            panelPackagedApps.Size = new System.Drawing.Size(609, 345);
+            panelPackagedApps.Size = new System.Drawing.Size(487, 276);
             panelPackagedApps.TabIndex = 115;
             panelPackagedApps.Visible = false;
             // 
             // checkBox_CustomPFN
             // 
             checkBox_CustomPFN.AutoSize = true;
-            checkBox_CustomPFN.Location = new System.Drawing.Point(8, 76);
+            checkBox_CustomPFN.Location = new System.Drawing.Point(6, 61);
             checkBox_CustomPFN.Margin = new System.Windows.Forms.Padding(2);
             checkBox_CustomPFN.Name = "checkBox_CustomPFN";
-            checkBox_CustomPFN.Size = new System.Drawing.Size(213, 24);
+            checkBox_CustomPFN.Size = new System.Drawing.Size(175, 19);
             checkBox_CustomPFN.TabIndex = 119;
             checkBox_CustomPFN.Text = "Use Custom Package Family";
             checkBox_CustomPFN.UseVisualStyleBackColor = true;
@@ -277,20 +277,20 @@
             // 
             panel_Progress.Controls.Add(label_Progress);
             panel_Progress.Controls.Add(pictureBox_Progress);
-            panel_Progress.Location = new System.Drawing.Point(96, 142);
+            panel_Progress.Location = new System.Drawing.Point(77, 114);
             panel_Progress.Margin = new System.Windows.Forms.Padding(2);
             panel_Progress.Name = "panel_Progress";
-            panel_Progress.Size = new System.Drawing.Size(280, 179);
+            panel_Progress.Size = new System.Drawing.Size(224, 143);
             panel_Progress.TabIndex = 118;
             panel_Progress.Visible = false;
             // 
             // label_Progress
             // 
             label_Progress.AutoSize = true;
-            label_Progress.Location = new System.Drawing.Point(32, 18);
+            label_Progress.Location = new System.Drawing.Point(26, 14);
             label_Progress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_Progress.Name = "label_Progress";
-            label_Progress.Size = new System.Drawing.Size(202, 20);
+            label_Progress.Size = new System.Drawing.Size(161, 15);
             label_Progress.TabIndex = 1;
             label_Progress.Text = "Searching for Packaged Apps";
             label_Progress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -299,7 +299,7 @@
             // 
             pictureBox_Progress.Image = Properties.Resources.loading;
             pictureBox_Progress.InitialImage = Properties.Resources.loading;
-            pictureBox_Progress.Location = new System.Drawing.Point(68, 48);
+            pictureBox_Progress.Location = new System.Drawing.Point(54, 38);
             pictureBox_Progress.Margin = new System.Windows.Forms.Padding(2);
             pictureBox_Progress.Name = "pictureBox_Progress";
             pictureBox_Progress.Size = new System.Drawing.Size(128, 128);
@@ -310,10 +310,10 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(2, 50);
+            label3.Location = new System.Drawing.Point(2, 40);
             label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(494, 20);
+            label3.Size = new System.Drawing.Size(392, 15);
             label3.TabIndex = 117;
             label3.Text = "Search for a package name and select the packages to include in the rule.";
             // 
@@ -321,19 +321,19 @@
             // 
             checkedListBoxPackagedApps.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkedListBoxPackagedApps.FormattingEnabled = true;
-            checkedListBoxPackagedApps.Location = new System.Drawing.Point(6, 116);
+            checkedListBoxPackagedApps.Location = new System.Drawing.Point(5, 93);
             checkedListBoxPackagedApps.Margin = new System.Windows.Forms.Padding(2);
             checkedListBoxPackagedApps.Name = "checkedListBoxPackagedApps";
-            checkedListBoxPackagedApps.Size = new System.Drawing.Size(458, 213);
+            checkedListBoxPackagedApps.Size = new System.Drawing.Size(367, 164);
             checkedListBoxPackagedApps.TabIndex = 116;
             // 
             // buttonSearch
             // 
             buttonSearch.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            buttonSearch.Location = new System.Drawing.Point(358, 12);
+            buttonSearch.Location = new System.Drawing.Point(286, 10);
             buttonSearch.Margin = new System.Windows.Forms.Padding(2);
             buttonSearch.Name = "buttonSearch";
-            buttonSearch.Size = new System.Drawing.Size(108, 28);
+            buttonSearch.Size = new System.Drawing.Size(86, 22);
             buttonSearch.TabIndex = 115;
             buttonSearch.Text = "Search";
             buttonSearch.UseVisualStyleBackColor = false;
@@ -342,20 +342,20 @@
             // textBox_Packaged_App
             // 
             textBox_Packaged_App.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBox_Packaged_App.Location = new System.Drawing.Point(115, 12);
+            textBox_Packaged_App.Location = new System.Drawing.Point(92, 10);
             textBox_Packaged_App.Margin = new System.Windows.Forms.Padding(2);
             textBox_Packaged_App.Name = "textBox_Packaged_App";
-            textBox_Packaged_App.Size = new System.Drawing.Size(215, 26);
+            textBox_Packaged_App.Size = new System.Drawing.Size(173, 22);
             textBox_Packaged_App.TabIndex = 115;
             textBox_Packaged_App.KeyDown += TextBox_Packaged_App_KeyDown;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(2, 18);
+            label2.Location = new System.Drawing.Point(2, 14);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(110, 20);
+            label2.Size = new System.Drawing.Size(89, 15);
             label2.TabIndex = 0;
             label2.Text = "Package Name:";
             // 
@@ -368,10 +368,10 @@
             panelFolderScanConditions.Controls.Add(checkedListBoxRuleLevels);
             panelFolderScanConditions.Controls.Add(label13);
             panelFolderScanConditions.Controls.Add(label15);
-            panelFolderScanConditions.Location = new System.Drawing.Point(552, 630);
+            panelFolderScanConditions.Location = new System.Drawing.Point(442, 504);
             panelFolderScanConditions.Margin = new System.Windows.Forms.Padding(2);
             panelFolderScanConditions.Name = "panelFolderScanConditions";
-            panelFolderScanConditions.Size = new System.Drawing.Size(537, 359);
+            panelFolderScanConditions.Size = new System.Drawing.Size(430, 287);
             panelFolderScanConditions.TabIndex = 126;
             panelFolderScanConditions.Visible = false;
             // 
@@ -379,9 +379,10 @@
             // 
             checkedListBoxOmitPaths.Font = new System.Drawing.Font("Tahoma", 8F);
             checkedListBoxOmitPaths.FormattingEnabled = true;
-            checkedListBoxOmitPaths.Location = new System.Drawing.Point(8, 260);
+            checkedListBoxOmitPaths.Location = new System.Drawing.Point(6, 208);
+            checkedListBoxOmitPaths.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             checkedListBoxOmitPaths.Name = "checkedListBoxOmitPaths";
-            checkedListBoxOmitPaths.Size = new System.Drawing.Size(341, 80);
+            checkedListBoxOmitPaths.Size = new System.Drawing.Size(274, 64);
             checkedListBoxOmitPaths.TabIndex = 116;
             // 
             // label12
@@ -389,10 +390,10 @@
             label12.AutoSize = true;
             label12.Font = new System.Drawing.Font("Tahoma", 7F);
             label12.ForeColor = System.Drawing.Color.Black;
-            label12.Location = new System.Drawing.Point(6, 92);
+            label12.Location = new System.Drawing.Point(5, 74);
             label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new System.Drawing.Size(469, 14);
+            label12.Size = new System.Drawing.Size(379, 12);
             label12.TabIndex = 115;
             label12.Text = "Multiple levels can be selected. You can drag the levels to specify the fallback order.";
             // 
@@ -401,10 +402,10 @@
             label11.AutoSize = true;
             label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label11.ForeColor = System.Drawing.Color.Black;
-            label11.Location = new System.Drawing.Point(5, 232);
+            label11.Location = new System.Drawing.Point(4, 186);
             label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label11.Name = "label11";
-            label11.Size = new System.Drawing.Size(231, 18);
+            label11.Size = new System.Drawing.Size(193, 14);
             label11.TabIndex = 114;
             label11.Text = "Paths to Omit while Scanning:";
             label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -417,10 +418,10 @@
             labelFolderScanLearnMore.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
             labelFolderScanLearnMore.Image = Properties.Resources.external_link_symbol_highlight;
             labelFolderScanLearnMore.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            labelFolderScanLearnMore.Location = new System.Drawing.Point(5, 35);
+            labelFolderScanLearnMore.Location = new System.Drawing.Point(4, 28);
             labelFolderScanLearnMore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelFolderScanLearnMore.Name = "labelFolderScanLearnMore";
-            labelFolderScanLearnMore.Size = new System.Drawing.Size(382, 18);
+            labelFolderScanLearnMore.Size = new System.Drawing.Size(319, 14);
             labelFolderScanLearnMore.TabIndex = 113;
             labelFolderScanLearnMore.Tag = "IgnoreDarkMode";
             labelFolderScanLearnMore.Text = "Learn more about App Control for Business rule levels     ";
@@ -432,10 +433,11 @@
             checkedListBoxRuleLevels.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkedListBoxRuleLevels.FormattingEnabled = true;
             checkedListBoxRuleLevels.Items.AddRange(new object[] { "PcaCertificate", "Publisher", "SignedVersion", "FilePublisher", "FileName", "FilePath", "Hash" });
-            checkedListBoxRuleLevels.Location = new System.Drawing.Point(8, 121);
+            checkedListBoxRuleLevels.Location = new System.Drawing.Point(6, 97);
+            checkedListBoxRuleLevels.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             checkedListBoxRuleLevels.MultiColumn = true;
             checkedListBoxRuleLevels.Name = "checkedListBoxRuleLevels";
-            checkedListBoxRuleLevels.Size = new System.Drawing.Size(341, 88);
+            checkedListBoxRuleLevels.Size = new System.Drawing.Size(274, 55);
             checkedListBoxRuleLevels.TabIndex = 111;
             checkedListBoxRuleLevels.DragDrop += RuleLevelsList_DragDropDone;
             checkedListBoxRuleLevels.DragOver += RuleLevelsList_DragInProgress;
@@ -446,10 +448,10 @@
             label13.AutoSize = true;
             label13.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             label13.ForeColor = System.Drawing.Color.Black;
-            label13.Location = new System.Drawing.Point(5, 9);
+            label13.Location = new System.Drawing.Point(4, 7);
             label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label13.Name = "label13";
-            label13.Size = new System.Drawing.Size(207, 21);
+            label13.Size = new System.Drawing.Size(166, 17);
             label13.TabIndex = 110;
             label13.Text = "Folder Scan Conditions";
             label13.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -459,10 +461,10 @@
             label15.AutoSize = true;
             label15.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label15.ForeColor = System.Drawing.Color.Black;
-            label15.Location = new System.Drawing.Point(5, 72);
+            label15.Location = new System.Drawing.Point(4, 58);
             label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label15.Name = "label15";
-            label15.Size = new System.Drawing.Size(132, 18);
+            label15.Size = new System.Drawing.Size(106, 14);
             label15.TabIndex = 91;
             label15.Text = "Scan Rule Level:";
             label15.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -476,10 +478,10 @@
             panelComObject.Controls.Add(comboBoxComKeyType);
             panelComObject.Controls.Add(label6);
             panelComObject.Controls.Add(comboBoxComProvider);
-            panelComObject.Location = new System.Drawing.Point(526, 88);
+            panelComObject.Location = new System.Drawing.Point(421, 70);
             panelComObject.Margin = new System.Windows.Forms.Padding(2);
             panelComObject.Name = "panelComObject";
-            panelComObject.Size = new System.Drawing.Size(611, 274);
+            panelComObject.Size = new System.Drawing.Size(489, 219);
             panelComObject.TabIndex = 125;
             panelComObject.Visible = false;
             // 
@@ -491,10 +493,10 @@
             labelLearnMoreCom.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
             labelLearnMoreCom.Image = Properties.Resources.external_link_symbol_highlight;
             labelLearnMoreCom.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            labelLearnMoreCom.Location = new System.Drawing.Point(14, 55);
+            labelLearnMoreCom.Location = new System.Drawing.Point(11, 44);
             labelLearnMoreCom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelLearnMoreCom.Name = "labelLearnMoreCom";
-            labelLearnMoreCom.Size = new System.Drawing.Size(313, 18);
+            labelLearnMoreCom.Size = new System.Drawing.Size(262, 14);
             labelLearnMoreCom.TabIndex = 112;
             labelLearnMoreCom.Tag = "IgnoreDarkMode";
             labelLearnMoreCom.Text = "Learn more about COM object registration      ";
@@ -504,20 +506,20 @@
             // 
             panelComKey.Controls.Add(textBoxObjectKey);
             panelComKey.Controls.Add(label8);
-            panelComKey.Location = new System.Drawing.Point(14, 190);
+            panelComKey.Location = new System.Drawing.Point(11, 152);
             panelComKey.Margin = new System.Windows.Forms.Padding(2);
             panelComKey.Name = "panelComKey";
-            panelComKey.Size = new System.Drawing.Size(502, 49);
+            panelComKey.Size = new System.Drawing.Size(402, 39);
             panelComKey.TabIndex = 111;
             panelComKey.Visible = false;
             // 
             // textBoxObjectKey
             // 
             textBoxObjectKey.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBoxObjectKey.Location = new System.Drawing.Point(162, 12);
+            textBoxObjectKey.Location = new System.Drawing.Point(130, 10);
             textBoxObjectKey.Margin = new System.Windows.Forms.Padding(2);
             textBoxObjectKey.Name = "textBoxObjectKey";
-            textBoxObjectKey.Size = new System.Drawing.Size(330, 26);
+            textBoxObjectKey.Size = new System.Drawing.Size(265, 22);
             textBoxObjectKey.TabIndex = 95;
             textBoxObjectKey.Text = "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}";
             textBoxObjectKey.MouseClick += ComKeyMouseClick;
@@ -527,10 +529,10 @@
             label8.AutoSize = true;
             label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label8.ForeColor = System.Drawing.Color.Black;
-            label8.Location = new System.Drawing.Point(0, 15);
+            label8.Location = new System.Drawing.Point(0, 12);
             label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(86, 18);
+            label8.Size = new System.Drawing.Size(72, 14);
             label8.TabIndex = 94;
             label8.Text = "Object Key:";
             label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -540,10 +542,10 @@
             label10.AutoSize = true;
             label10.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             label10.ForeColor = System.Drawing.Color.Black;
-            label10.Location = new System.Drawing.Point(12, 21);
+            label10.Location = new System.Drawing.Point(10, 17);
             label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label10.Name = "label10";
-            label10.Size = new System.Drawing.Size(207, 21);
+            label10.Size = new System.Drawing.Size(169, 17);
             label10.TabIndex = 110;
             label10.Text = "COM Object Conditions";
             label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -553,10 +555,10 @@
             label7.AutoSize = true;
             label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label7.ForeColor = System.Drawing.Color.Black;
-            label7.Location = new System.Drawing.Point(14, 154);
+            label7.Location = new System.Drawing.Point(11, 123);
             label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(125, 18);
+            label7.Size = new System.Drawing.Size(104, 14);
             label7.TabIndex = 93;
             label7.Text = "Object Key Type:";
             label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -566,10 +568,10 @@
             comboBoxComKeyType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             comboBoxComKeyType.FormattingEnabled = true;
             comboBoxComKeyType.Items.AddRange(new object[] { "AllKeys", "Custom Key" });
-            comboBoxComKeyType.Location = new System.Drawing.Point(176, 150);
+            comboBoxComKeyType.Location = new System.Drawing.Point(141, 120);
             comboBoxComKeyType.Margin = new System.Windows.Forms.Padding(2);
             comboBoxComKeyType.Name = "comboBoxComKeyType";
-            comboBoxComKeyType.Size = new System.Drawing.Size(186, 26);
+            comboBoxComKeyType.Size = new System.Drawing.Size(150, 22);
             comboBoxComKeyType.TabIndex = 92;
             comboBoxComKeyType.SelectedIndexChanged += ComboBoxComKeyTypeChanged;
             // 
@@ -578,10 +580,10 @@
             label6.AutoSize = true;
             label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label6.ForeColor = System.Drawing.Color.Black;
-            label6.Location = new System.Drawing.Point(14, 112);
+            label6.Location = new System.Drawing.Point(11, 90);
             label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(113, 18);
+            label6.Size = new System.Drawing.Size(96, 14);
             label6.TabIndex = 91;
             label6.Text = "Object Provider:";
             label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -591,10 +593,10 @@
             comboBoxComProvider.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             comboBoxComProvider.FormattingEnabled = true;
             comboBoxComProvider.Items.AddRange(new object[] { "PowerShell", "WSH", "IE", "VBA", "MSI", "AllHostIds" });
-            comboBoxComProvider.Location = new System.Drawing.Point(176, 108);
+            comboBoxComProvider.Location = new System.Drawing.Point(141, 86);
             comboBoxComProvider.Margin = new System.Windows.Forms.Padding(2);
             comboBoxComProvider.Name = "comboBoxComProvider";
-            comboBoxComProvider.Size = new System.Drawing.Size(186, 26);
+            comboBoxComProvider.Size = new System.Drawing.Size(150, 22);
             comboBoxComProvider.TabIndex = 90;
             comboBoxComProvider.SelectedIndexChanged += ComboBoxComProviderChanged;
             // 
@@ -603,10 +605,10 @@
             label5.AutoSize = true;
             label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label5.ForeColor = System.Drawing.Color.Black;
-            label5.Location = new System.Drawing.Point(4, 135);
+            label5.Location = new System.Drawing.Point(3, 108);
             label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(84, 18);
+            label5.Size = new System.Drawing.Size(72, 14);
             label5.TabIndex = 124;
             label5.Text = "Rule Scope:";
             label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -616,10 +618,10 @@
             label4.AutoSize = true;
             label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label4.ForeColor = System.Drawing.Color.Black;
-            label4.Location = new System.Drawing.Point(4, 175);
+            label4.Location = new System.Drawing.Point(3, 140);
             label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(84, 18);
+            label4.Size = new System.Drawing.Size(73, 14);
             label4.TabIndex = 123;
             label4.Text = "Rule Action:";
             label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -628,10 +630,10 @@
             // 
             checkBox_kernelMode.AutoSize = true;
             checkBox_kernelMode.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            checkBox_kernelMode.Location = new System.Drawing.Point(228, 134);
+            checkBox_kernelMode.Location = new System.Drawing.Point(182, 107);
             checkBox_kernelMode.Margin = new System.Windows.Forms.Padding(2);
             checkBox_kernelMode.Name = "checkBox_kernelMode";
-            checkBox_kernelMode.Size = new System.Drawing.Size(97, 21);
+            checkBox_kernelMode.Size = new System.Drawing.Size(80, 17);
             checkBox_kernelMode.TabIndex = 122;
             checkBox_kernelMode.Text = "Kernel Rule";
             checkBox_kernelMode.UseVisualStyleBackColor = true;
@@ -643,10 +645,10 @@
             checkBox_userMode.Checked = true;
             checkBox_userMode.CheckState = System.Windows.Forms.CheckState.Checked;
             checkBox_userMode.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            checkBox_userMode.Location = new System.Drawing.Point(96, 134);
+            checkBox_userMode.Location = new System.Drawing.Point(77, 107);
             checkBox_userMode.Margin = new System.Windows.Forms.Padding(2);
             checkBox_userMode.Name = "checkBox_userMode";
-            checkBox_userMode.Size = new System.Drawing.Size(122, 21);
+            checkBox_userMode.Size = new System.Drawing.Size(98, 17);
             checkBox_userMode.TabIndex = 121;
             checkBox_userMode.Text = "Usermode Rule";
             checkBox_userMode.UseVisualStyleBackColor = true;
@@ -655,10 +657,10 @@
             // richTextBox_CustomHashes
             // 
             richTextBox_CustomHashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            richTextBox_CustomHashes.Location = new System.Drawing.Point(312, 180);
+            richTextBox_CustomHashes.Location = new System.Drawing.Point(250, 144);
             richTextBox_CustomHashes.Margin = new System.Windows.Forms.Padding(2);
             richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
-            richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
+            richTextBox_CustomHashes.Size = new System.Drawing.Size(448, 78);
             richTextBox_CustomHashes.TabIndex = 114;
             richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode/PE Hashes";
             richTextBox_CustomHashes.Visible = false;
@@ -681,10 +683,10 @@
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_4);
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_1);
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_0);
-            panel_Publisher_Scroll.Location = new System.Drawing.Point(4, 389);
+            panel_Publisher_Scroll.Location = new System.Drawing.Point(3, 311);
             panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
-            panel_Publisher_Scroll.Size = new System.Drawing.Size(510, 309);
+            panel_Publisher_Scroll.Size = new System.Drawing.Size(408, 247);
             panel_Publisher_Scroll.TabIndex = 103;
             panel_Publisher_Scroll.Visible = false;
             // 
@@ -693,21 +695,21 @@
             textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
             textBoxSlider_2.Enabled = false;
             textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxSlider_2.Location = new System.Drawing.Point(139, 100);
+            textBoxSlider_2.Location = new System.Drawing.Point(111, 80);
             textBoxSlider_2.Margin = new System.Windows.Forms.Padding(2);
             textBoxSlider_2.Name = "textBoxSlider_2";
             textBoxSlider_2.ReadOnly = true;
-            textBoxSlider_2.Size = new System.Drawing.Size(355, 26);
+            textBoxSlider_2.Size = new System.Drawing.Size(285, 22);
             textBoxSlider_2.TabIndex = 120;
             textBoxSlider_2.TextChanged += TextBoxSlider_2_TextChanged;
             // 
             // checkBoxAttribute3
             // 
             checkBoxAttribute3.AutoSize = true;
-            checkBoxAttribute3.Location = new System.Drawing.Point(6, 145);
+            checkBoxAttribute3.Location = new System.Drawing.Point(5, 116);
             checkBoxAttribute3.Margin = new System.Windows.Forms.Padding(2);
             checkBoxAttribute3.Name = "checkBoxAttribute3";
-            checkBoxAttribute3.Size = new System.Drawing.Size(98, 24);
+            checkBoxAttribute3.Size = new System.Drawing.Size(80, 19);
             checkBoxAttribute3.TabIndex = 119;
             checkBoxAttribute3.Text = "File name:";
             checkBoxAttribute3.UseVisualStyleBackColor = true;
@@ -716,10 +718,10 @@
             // checkBoxAttribute4
             // 
             checkBoxAttribute4.AutoSize = true;
-            checkBoxAttribute4.Location = new System.Drawing.Point(6, 188);
+            checkBoxAttribute4.Location = new System.Drawing.Point(5, 150);
             checkBoxAttribute4.Margin = new System.Windows.Forms.Padding(2);
             checkBoxAttribute4.Name = "checkBoxAttribute4";
-            checkBoxAttribute4.Size = new System.Drawing.Size(114, 24);
+            checkBoxAttribute4.Size = new System.Drawing.Size(94, 19);
             checkBoxAttribute4.TabIndex = 118;
             checkBoxAttribute4.Text = "Min. Version:";
             checkBoxAttribute4.UseVisualStyleBackColor = true;
@@ -728,10 +730,10 @@
             // checkBoxAttribute1
             // 
             checkBoxAttribute1.AutoSize = true;
-            checkBoxAttribute1.Location = new System.Drawing.Point(6, 61);
+            checkBoxAttribute1.Location = new System.Drawing.Point(5, 49);
             checkBoxAttribute1.Margin = new System.Windows.Forms.Padding(2);
             checkBoxAttribute1.Name = "checkBoxAttribute1";
-            checkBoxAttribute1.Size = new System.Drawing.Size(94, 24);
+            checkBoxAttribute1.Size = new System.Drawing.Size(78, 19);
             checkBoxAttribute1.TabIndex = 117;
             checkBoxAttribute1.Text = "Publisher:";
             checkBoxAttribute1.UseVisualStyleBackColor = true;
@@ -740,10 +742,10 @@
             // checkBoxAttribute2
             // 
             checkBoxAttribute2.AutoSize = true;
-            checkBoxAttribute2.Location = new System.Drawing.Point(6, 102);
+            checkBoxAttribute2.Location = new System.Drawing.Point(5, 82);
             checkBoxAttribute2.Margin = new System.Windows.Forms.Padding(2);
             checkBoxAttribute2.Name = "checkBoxAttribute2";
-            checkBoxAttribute2.Size = new System.Drawing.Size(85, 24);
+            checkBoxAttribute2.Size = new System.Drawing.Size(71, 19);
             checkBoxAttribute2.TabIndex = 116;
             checkBoxAttribute2.Text = "Product:";
             checkBoxAttribute2.UseVisualStyleBackColor = true;
@@ -752,10 +754,10 @@
             // checkBoxAttribute0
             // 
             checkBoxAttribute0.AutoSize = true;
-            checkBoxAttribute0.Location = new System.Drawing.Point(6, 19);
+            checkBoxAttribute0.Location = new System.Drawing.Point(5, 15);
             checkBoxAttribute0.Margin = new System.Windows.Forms.Padding(2);
             checkBoxAttribute0.Name = "checkBoxAttribute0";
-            checkBoxAttribute0.Size = new System.Drawing.Size(102, 24);
+            checkBoxAttribute0.Size = new System.Drawing.Size(85, 19);
             checkBoxAttribute0.TabIndex = 115;
             checkBoxAttribute0.Text = "Issuing CA:";
             checkBoxAttribute0.UseVisualStyleBackColor = true;
@@ -766,21 +768,21 @@
             textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
             textBoxEKU.Enabled = false;
             textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxEKU.Location = new System.Drawing.Point(139, 239);
+            textBoxEKU.Location = new System.Drawing.Point(111, 191);
             textBoxEKU.Margin = new System.Windows.Forms.Padding(2);
             textBoxEKU.Name = "textBoxEKU";
             textBoxEKU.ReadOnly = true;
-            textBoxEKU.Size = new System.Drawing.Size(355, 26);
+            textBoxEKU.Size = new System.Drawing.Size(285, 22);
             textBoxEKU.TabIndex = 114;
             textBoxEKU.TextChanged += TextBoxEKU_TextChanged;
             // 
             // checkBoxEku
             // 
             checkBoxEku.AutoSize = true;
-            checkBoxEku.Location = new System.Drawing.Point(6, 241);
+            checkBoxEku.Location = new System.Drawing.Point(5, 193);
             checkBoxEku.Margin = new System.Windows.Forms.Padding(2);
             checkBoxEku.Name = "checkBoxEku";
-            checkBoxEku.Size = new System.Drawing.Size(126, 24);
+            checkBoxEku.Size = new System.Drawing.Size(101, 19);
             checkBoxEku.TabIndex = 113;
             checkBoxEku.Text = "Add EKU Rule:";
             checkBoxEku.UseVisualStyleBackColor = true;
@@ -789,10 +791,10 @@
             // checkBox_CustomValues
             // 
             checkBox_CustomValues.AutoSize = true;
-            checkBox_CustomValues.Location = new System.Drawing.Point(6, 279);
+            checkBox_CustomValues.Location = new System.Drawing.Point(5, 223);
             checkBox_CustomValues.Margin = new System.Windows.Forms.Padding(2);
             checkBox_CustomValues.Name = "checkBox_CustomValues";
-            checkBox_CustomValues.Size = new System.Drawing.Size(155, 24);
+            checkBox_CustomValues.Size = new System.Drawing.Size(126, 19);
             checkBox_CustomValues.TabIndex = 111;
             checkBox_CustomValues.Text = "Use Custom Values";
             checkBox_CustomValues.UseVisualStyleBackColor = true;
@@ -802,10 +804,10 @@
             // 
             label_To.AutoSize = true;
             label_To.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            label_To.Location = new System.Drawing.Point(305, 185);
+            label_To.Location = new System.Drawing.Point(244, 148);
             label_To.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_To.Name = "label_To";
-            label_To.Size = new System.Drawing.Size(20, 27);
+            label_To.Size = new System.Drawing.Size(17, 22);
             label_To.TabIndex = 112;
             label_To.Text = "-";
             label_To.Visible = false;
@@ -816,11 +818,11 @@
             textBox_MaxVersion.Enabled = false;
             textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
             textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
-            textBox_MaxVersion.Location = new System.Drawing.Point(344, 185);
+            textBox_MaxVersion.Location = new System.Drawing.Point(275, 148);
             textBox_MaxVersion.Margin = new System.Windows.Forms.Padding(2);
             textBox_MaxVersion.Name = "textBox_MaxVersion";
             textBox_MaxVersion.ReadOnly = true;
-            textBox_MaxVersion.Size = new System.Drawing.Size(150, 26);
+            textBox_MaxVersion.Size = new System.Drawing.Size(121, 22);
             textBox_MaxVersion.TabIndex = 105;
             textBox_MaxVersion.Text = "Max version";
             textBox_MaxVersion.Visible = false;
@@ -831,11 +833,11 @@
             textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
             textBoxSlider_3.Enabled = false;
             textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxSlider_3.Location = new System.Drawing.Point(139, 142);
+            textBoxSlider_3.Location = new System.Drawing.Point(111, 114);
             textBoxSlider_3.Margin = new System.Windows.Forms.Padding(2);
             textBoxSlider_3.Name = "textBoxSlider_3";
             textBoxSlider_3.ReadOnly = true;
-            textBoxSlider_3.Size = new System.Drawing.Size(355, 26);
+            textBoxSlider_3.Size = new System.Drawing.Size(285, 22);
             textBoxSlider_3.TabIndex = 5;
             textBoxSlider_3.TextChanged += TextBoxSlider_3_TextChanged;
             // 
@@ -844,11 +846,11 @@
             textBoxSlider_4.BackColor = System.Drawing.SystemColors.Control;
             textBoxSlider_4.Enabled = false;
             textBoxSlider_4.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxSlider_4.Location = new System.Drawing.Point(139, 184);
+            textBoxSlider_4.Location = new System.Drawing.Point(111, 147);
             textBoxSlider_4.Margin = new System.Windows.Forms.Padding(2);
             textBoxSlider_4.Name = "textBoxSlider_4";
             textBoxSlider_4.ReadOnly = true;
-            textBoxSlider_4.Size = new System.Drawing.Size(150, 26);
+            textBoxSlider_4.Size = new System.Drawing.Size(121, 22);
             textBoxSlider_4.TabIndex = 4;
             textBoxSlider_4.TextChanged += TextBoxSlider_4_TextChanged;
             // 
@@ -857,11 +859,11 @@
             textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
             textBoxSlider_1.Enabled = false;
             textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxSlider_1.Location = new System.Drawing.Point(139, 58);
+            textBoxSlider_1.Location = new System.Drawing.Point(111, 46);
             textBoxSlider_1.Margin = new System.Windows.Forms.Padding(2);
             textBoxSlider_1.Name = "textBoxSlider_1";
             textBoxSlider_1.ReadOnly = true;
-            textBoxSlider_1.Size = new System.Drawing.Size(355, 26);
+            textBoxSlider_1.Size = new System.Drawing.Size(285, 22);
             textBoxSlider_1.TabIndex = 3;
             textBoxSlider_1.TextChanged += TextBoxSlider_1_TextChanged;
             // 
@@ -870,11 +872,11 @@
             textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
             textBoxSlider_0.Enabled = false;
             textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
-            textBoxSlider_0.Location = new System.Drawing.Point(139, 16);
+            textBoxSlider_0.Location = new System.Drawing.Point(111, 13);
             textBoxSlider_0.Margin = new System.Windows.Forms.Padding(2);
             textBoxSlider_0.Name = "textBoxSlider_0";
             textBoxSlider_0.ReadOnly = true;
-            textBoxSlider_0.Size = new System.Drawing.Size(355, 26);
+            textBoxSlider_0.Size = new System.Drawing.Size(285, 22);
             textBoxSlider_0.TabIndex = 2;
             textBoxSlider_0.TextChanged += TextBoxSlider_0_TextChanged;
             // 
@@ -883,10 +885,10 @@
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label1.ForeColor = System.Drawing.Color.Black;
-            label1.Location = new System.Drawing.Point(4, 72);
+            label1.Location = new System.Drawing.Point(3, 58);
             label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(523, 36);
+            label1.Size = new System.Drawing.Size(452, 28);
             label1.TabIndex = 110;
             label1.Text = "Select the rule type, browse for the reference file and choose whether to allow \r\nor deny. ";
             // 
@@ -894,10 +896,10 @@
             // 
             panel_FileFolder.Controls.Add(radioButton_Folder);
             panel_FileFolder.Controls.Add(radioButton_File);
-            panel_FileFolder.Location = new System.Drawing.Point(464, 366);
+            panel_FileFolder.Location = new System.Drawing.Point(371, 293);
             panel_FileFolder.Margin = new System.Windows.Forms.Padding(2);
             panel_FileFolder.Name = "panel_FileFolder";
-            panel_FileFolder.Size = new System.Drawing.Size(131, 42);
+            panel_FileFolder.Size = new System.Drawing.Size(105, 34);
             panel_FileFolder.TabIndex = 104;
             panel_FileFolder.Visible = false;
             // 
@@ -906,10 +908,10 @@
             radioButton_Folder.AutoSize = true;
             radioButton_Folder.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton_Folder.ForeColor = System.Drawing.Color.Black;
-            radioButton_Folder.Location = new System.Drawing.Point(62, 8);
+            radioButton_Folder.Location = new System.Drawing.Point(50, 6);
             radioButton_Folder.Margin = new System.Windows.Forms.Padding(2);
             radioButton_Folder.Name = "radioButton_Folder";
-            radioButton_Folder.Size = new System.Drawing.Size(68, 22);
+            radioButton_Folder.Size = new System.Drawing.Size(58, 18);
             radioButton_Folder.TabIndex = 96;
             radioButton_Folder.TabStop = true;
             radioButton_Folder.Text = "Folder";
@@ -921,10 +923,10 @@
             radioButton_File.AutoSize = true;
             radioButton_File.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton_File.ForeColor = System.Drawing.Color.Black;
-            radioButton_File.Location = new System.Drawing.Point(2, 8);
+            radioButton_File.Location = new System.Drawing.Point(2, 6);
             radioButton_File.Margin = new System.Windows.Forms.Padding(2);
             radioButton_File.Name = "radioButton_File";
-            radioButton_File.Size = new System.Drawing.Size(49, 22);
+            radioButton_File.Size = new System.Drawing.Size(42, 18);
             radioButton_File.TabIndex = 95;
             radioButton_File.TabStop = true;
             radioButton_File.Text = "File";
@@ -937,10 +939,10 @@
             label_Info.BackColor = System.Drawing.Color.Transparent;
             label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label_Info.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            label_Info.Location = new System.Drawing.Point(4, 248);
+            label_Info.Location = new System.Drawing.Point(3, 198);
             label_Info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_Info.Name = "label_Info";
-            label_Info.Size = new System.Drawing.Size(76, 18);
+            label_Info.Size = new System.Drawing.Size(64, 14);
             label_Info.TabIndex = 95;
             label_Info.Tag = "IgnoreDarkMode";
             label_Info.Text = "Label_Info";
@@ -951,10 +953,10 @@
             label9.AutoSize = true;
             label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label9.ForeColor = System.Drawing.Color.Black;
-            label9.Location = new System.Drawing.Point(4, 215);
+            label9.Location = new System.Drawing.Point(3, 172);
             label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(79, 18);
+            label9.Size = new System.Drawing.Size(66, 14);
             label9.TabIndex = 89;
             label9.Text = "Rule Type:";
             label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -964,10 +966,10 @@
             comboBox_RuleType.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             comboBox_RuleType.FormattingEnabled = true;
             comboBox_RuleType.Items.AddRange(new object[] { "Publisher", "Path", "File Attributes", "Packaged App", "File Hash", "COM Object", "Folder Scan", "Certificate File", "AppID Tags" });
-            comboBox_RuleType.Location = new System.Drawing.Point(96, 211);
+            comboBox_RuleType.Location = new System.Drawing.Point(77, 169);
             comboBox_RuleType.Margin = new System.Windows.Forms.Padding(2);
             comboBox_RuleType.Name = "comboBox_RuleType";
-            comboBox_RuleType.Size = new System.Drawing.Size(186, 26);
+            comboBox_RuleType.Size = new System.Drawing.Size(150, 22);
             comboBox_RuleType.TabIndex = 3;
             comboBox_RuleType.SelectedIndexChanged += RuleType_ComboboxChanged;
             // 
@@ -976,10 +978,10 @@
             radioButton_Deny.AutoSize = true;
             radioButton_Deny.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton_Deny.ForeColor = System.Drawing.Color.Black;
-            radioButton_Deny.Location = new System.Drawing.Point(168, 173);
+            radioButton_Deny.Location = new System.Drawing.Point(134, 138);
             radioButton_Deny.Margin = new System.Windows.Forms.Padding(2);
             radioButton_Deny.Name = "radioButton_Deny";
-            radioButton_Deny.Size = new System.Drawing.Size(63, 22);
+            radioButton_Deny.Size = new System.Drawing.Size(53, 18);
             radioButton_Deny.TabIndex = 2;
             radioButton_Deny.TabStop = true;
             radioButton_Deny.Text = "Deny";
@@ -992,10 +994,10 @@
             radioButton_Allow.Checked = true;
             radioButton_Allow.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             radioButton_Allow.ForeColor = System.Drawing.Color.Black;
-            radioButton_Allow.Location = new System.Drawing.Point(96, 173);
+            radioButton_Allow.Location = new System.Drawing.Point(77, 138);
             radioButton_Allow.Margin = new System.Windows.Forms.Padding(2);
             radioButton_Allow.Name = "radioButton_Allow";
-            radioButton_Allow.Size = new System.Drawing.Size(60, 22);
+            radioButton_Allow.Size = new System.Drawing.Size(54, 18);
             radioButton_Allow.TabIndex = 1;
             radioButton_Allow.TabStop = true;
             radioButton_Allow.Text = "Allow";
@@ -1006,21 +1008,21 @@
             // 
             textBox_ReferenceFile.Enabled = false;
             textBox_ReferenceFile.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            textBox_ReferenceFile.Location = new System.Drawing.Point(4, 334);
+            textBox_ReferenceFile.Location = new System.Drawing.Point(3, 267);
             textBox_ReferenceFile.Margin = new System.Windows.Forms.Padding(2);
             textBox_ReferenceFile.Name = "textBox_ReferenceFile";
             textBox_ReferenceFile.ReadOnly = true;
-            textBox_ReferenceFile.Size = new System.Drawing.Size(456, 26);
+            textBox_ReferenceFile.Size = new System.Drawing.Size(366, 22);
             textBox_ReferenceFile.TabIndex = 88;
             textBox_ReferenceFile.TextChanged += ReferenceFileTextChanged;
             // 
             // button_Browse
             // 
             button_Browse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_Browse.Location = new System.Drawing.Point(464, 333);
+            button_Browse.Location = new System.Drawing.Point(371, 266);
             button_Browse.Margin = new System.Windows.Forms.Padding(2);
             button_Browse.Name = "button_Browse";
-            button_Browse.Size = new System.Drawing.Size(108, 28);
+            button_Browse.Size = new System.Drawing.Size(86, 22);
             button_Browse.TabIndex = 4;
             button_Browse.Text = "Browse";
             button_Browse.UseVisualStyleBackColor = false;
@@ -1031,10 +1033,10 @@
             label_condition.AutoSize = true;
             label_condition.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label_condition.ForeColor = System.Drawing.Color.Black;
-            label_condition.Location = new System.Drawing.Point(4, 310);
+            label_condition.Location = new System.Drawing.Point(3, 248);
             label_condition.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_condition.Name = "label_condition";
-            label_condition.Size = new System.Drawing.Size(104, 18);
+            label_condition.Size = new System.Drawing.Size(88, 14);
             label_condition.TabIndex = 87;
             label_condition.Text = "Reference File:";
             label_condition.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -1042,10 +1044,10 @@
             // checkBox_CustomPath
             // 
             checkBox_CustomPath.AutoSize = true;
-            checkBox_CustomPath.Location = new System.Drawing.Point(12, 362);
+            checkBox_CustomPath.Location = new System.Drawing.Point(10, 290);
             checkBox_CustomPath.Margin = new System.Windows.Forms.Padding(2);
             checkBox_CustomPath.Name = "checkBox_CustomPath";
-            checkBox_CustomPath.Size = new System.Drawing.Size(141, 24);
+            checkBox_CustomPath.Size = new System.Drawing.Size(117, 19);
             checkBox_CustomPath.TabIndex = 113;
             checkBox_CustomPath.Text = "Use Custom Path";
             checkBox_CustomPath.UseVisualStyleBackColor = true;
@@ -1055,10 +1057,10 @@
             // label_Error
             // 
             label_Error.AutoSize = true;
-            label_Error.Location = new System.Drawing.Point(130, 742);
+            label_Error.Location = new System.Drawing.Point(104, 594);
             label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_Error.Name = "label_Error";
-            label_Error.Size = new System.Drawing.Size(80, 20);
+            label_Error.Size = new System.Drawing.Size(62, 15);
             label_Error.TabIndex = 87;
             label_Error.Text = "label_Error";
             label_Error.Visible = false;
@@ -1066,10 +1068,10 @@
             // button_CreateRule
             // 
             button_CreateRule.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_CreateRule.Location = new System.Drawing.Point(532, 786);
+            button_CreateRule.Location = new System.Drawing.Point(426, 629);
             button_CreateRule.Margin = new System.Windows.Forms.Padding(2);
             button_CreateRule.Name = "button_CreateRule";
-            button_CreateRule.Size = new System.Drawing.Size(110, 30);
+            button_CreateRule.Size = new System.Drawing.Size(88, 24);
             button_CreateRule.TabIndex = 92;
             button_CreateRule.Text = "Create Rule";
             button_CreateRule.UseVisualStyleBackColor = false;
@@ -1078,10 +1080,10 @@
             // button_Next
             // 
             button_Next.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_Next.Location = new System.Drawing.Point(648, 786);
+            button_Next.Location = new System.Drawing.Point(518, 629);
             button_Next.Margin = new System.Windows.Forms.Padding(2);
             button_Next.Name = "button_Next";
-            button_Next.Size = new System.Drawing.Size(99, 30);
+            button_Next.Size = new System.Drawing.Size(79, 24);
             button_Next.TabIndex = 107;
             button_Next.Text = "Next >";
             button_Next.UseVisualStyleBackColor = false;
@@ -1094,10 +1096,10 @@
             control_Panel.Controls.Add(page1_Button);
             control_Panel.Controls.Add(workflow_Label);
             control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
-            control_Panel.Location = new System.Drawing.Point(0, 61);
+            control_Panel.Location = new System.Drawing.Point(0, 49);
             control_Panel.Margin = new System.Windows.Forms.Padding(2);
             control_Panel.Name = "control_Panel";
-            control_Panel.Size = new System.Drawing.Size(122, 778);
+            control_Panel.Size = new System.Drawing.Size(98, 622);
             control_Panel.TabIndex = 108;
             control_Panel.Tag = "IgnoreDarkMode";
             // 
@@ -1112,10 +1114,10 @@
             page2_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             page2_Button.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             page2_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            page2_Button.Location = new System.Drawing.Point(12, 150);
+            page2_Button.Location = new System.Drawing.Point(10, 120);
             page2_Button.Margin = new System.Windows.Forms.Padding(2);
             page2_Button.Name = "page2_Button";
-            page2_Button.Size = new System.Drawing.Size(122, 60);
+            page2_Button.Size = new System.Drawing.Size(98, 48);
             page2_Button.TabIndex = 36;
             page2_Button.Tag = "IgnoreDarkMode";
             page2_Button.Text = "Rule Exceptions";
@@ -1132,10 +1134,10 @@
             page1_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             page1_Button.Font = new System.Drawing.Font("Tahoma", 9.5F);
             page1_Button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            page1_Button.Location = new System.Drawing.Point(12, 69);
+            page1_Button.Location = new System.Drawing.Point(10, 55);
             page1_Button.Margin = new System.Windows.Forms.Padding(2);
             page1_Button.Name = "page1_Button";
-            page1_Button.Size = new System.Drawing.Size(120, 52);
+            page1_Button.Size = new System.Drawing.Size(96, 42);
             page1_Button.TabIndex = 35;
             page1_Button.Tag = "IgnoreDarkMode";
             page1_Button.Text = "Rule Conditions";
@@ -1146,20 +1148,20 @@
             // 
             workflow_Label.AutoSize = true;
             workflow_Label.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            workflow_Label.Location = new System.Drawing.Point(11, 9);
+            workflow_Label.Location = new System.Drawing.Point(9, 7);
             workflow_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             workflow_Label.Name = "workflow_Label";
-            workflow_Label.Size = new System.Drawing.Size(82, 21);
+            workflow_Label.Size = new System.Drawing.Size(62, 17);
             workflow_Label.TabIndex = 40;
             workflow_Label.Text = "File Rules";
             // 
             // controlHighlight_Panel
             // 
             controlHighlight_Panel.BackColor = System.Drawing.Color.CornflowerBlue;
-            controlHighlight_Panel.Location = new System.Drawing.Point(2, 140);
+            controlHighlight_Panel.Location = new System.Drawing.Point(2, 112);
             controlHighlight_Panel.Margin = new System.Windows.Forms.Padding(2);
             controlHighlight_Panel.Name = "controlHighlight_Panel";
-            controlHighlight_Panel.Size = new System.Drawing.Size(8, 35);
+            controlHighlight_Panel.Size = new System.Drawing.Size(6, 28);
             controlHighlight_Panel.TabIndex = 33;
             controlHighlight_Panel.Tag = "IgnoreDarkMode";
             // 
@@ -1168,10 +1170,10 @@
             headerLabel.AutoSize = true;
             headerLabel.Font = new System.Drawing.Font("Tahoma", 11.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             headerLabel.ForeColor = System.Drawing.Color.Black;
-            headerLabel.Location = new System.Drawing.Point(18, 19);
+            headerLabel.Location = new System.Drawing.Point(14, 15);
             headerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             headerLabel.Name = "headerLabel";
-            headerLabel.Size = new System.Drawing.Size(249, 24);
+            headerLabel.Size = new System.Drawing.Size(203, 19);
             headerLabel.TabIndex = 109;
             headerLabel.Text = "Custom Rule Conditions";
             headerLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -1183,17 +1185,17 @@
             headerPanel.Location = new System.Drawing.Point(0, 0);
             headerPanel.Margin = new System.Windows.Forms.Padding(2);
             headerPanel.Name = "headerPanel";
-            headerPanel.Size = new System.Drawing.Size(735, 62);
+            headerPanel.Size = new System.Drawing.Size(588, 50);
             headerPanel.TabIndex = 109;
             // 
             // button_AddException
             // 
             button_AddException.Enabled = false;
             button_AddException.Font = new System.Drawing.Font("Tahoma", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_AddException.Location = new System.Drawing.Point(419, 786);
+            button_AddException.Location = new System.Drawing.Point(335, 629);
             button_AddException.Margin = new System.Windows.Forms.Padding(2);
             button_AddException.Name = "button_AddException";
-            button_AddException.Size = new System.Drawing.Size(110, 30);
+            button_AddException.Size = new System.Drawing.Size(88, 24);
             button_AddException.TabIndex = 111;
             button_AddException.Text = "Add Exception";
             button_AddException.UseVisualStyleBackColor = false;
@@ -1204,10 +1206,10 @@
             // 
             button_Back.Enabled = false;
             button_Back.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_Back.Location = new System.Drawing.Point(316, 786);
+            button_Back.Location = new System.Drawing.Point(253, 629);
             button_Back.Margin = new System.Windows.Forms.Padding(2);
             button_Back.Name = "button_Back";
-            button_Back.Size = new System.Drawing.Size(99, 30);
+            button_Back.Size = new System.Drawing.Size(79, 24);
             button_Back.TabIndex = 110;
             button_Back.Text = "< Back";
             button_Back.UseVisualStyleBackColor = false;
@@ -1221,10 +1223,10 @@
             // 
             // CustomRuleConditionsPanel
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(766, 828);
+            ClientSize = new System.Drawing.Size(613, 662);
             Controls.Add(controlHighlight_Panel);
             Controls.Add(button_AddException);
             Controls.Add(button_Back);
@@ -1234,9 +1236,12 @@
             Controls.Add(panel_CustomRules);
             Controls.Add(button_CreateRule);
             Controls.Add(control_Panel);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(2);
+            MaximizeBox = false;
             Name = "CustomRuleConditionsPanel";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             Text = "Custom Rules ";
             FormClosing += CustomRulesPanel_FormClosing;
             Load += OnLoad;
