@@ -208,12 +208,18 @@
     <Content Include="Resources\imgs\windows-logo.png" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
+    <None Update="priconfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Update="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Update="RulesDict.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\AllowMicrosoft - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
