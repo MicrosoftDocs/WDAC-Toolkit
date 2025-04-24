@@ -61,9 +61,9 @@ namespace WDAC_Wizard
         /// <returns>A converted path like C:\Windows</returns>
         public static string GetDOSPath(string NTPath)
         {
-            string windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            string windowsDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows); // e.g. "C:\\WINDOWS"
             const int WINDOWS_L = 7;
-            string logicalDisk = windowsDir.Substring(0, windowsDir.Length - WINDOWS_L); // Gets the logical disk name string of the harddrive
+            string logicalDisk = windowsDir.Substring(0, windowsDir.Length - WINDOWS_L); // Gets the logical disk name string of the harddrive (e.g. "C:\\")
 
             // Regex replace to take the NT path and convert to DOS Path
             Regex regex = new Regex("\\\\[a-zA-Z]+\\\\[a-zA-Z]+[0-9]+\\\\", RegexOptions.IgnoreCase);
@@ -71,7 +71,16 @@ namespace WDAC_Wizard
             if (match.Success)
             {
                 string dosPath = NTPath.Replace(match.Value, logicalDisk);
-                return dosPath;
+                // If useEnvVars is set, convert C:, C:\Windows and C:\Windows\System32 to 
+                // %OSDIR%, %WINDIR% and %SYSTEM32%
+                if(Properties.Settings.Default.useEnvVars)
+                {
+                    return GetEnvPath(dosPath);
+                }
+                else
+                {
+                    return dosPath;
+                }                    
             }
             else
             {
