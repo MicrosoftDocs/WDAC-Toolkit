@@ -458,6 +458,13 @@ namespace WDAC_Wizard
             try
             {
                 var objects = JObject.Parse(jsonString);
+
+                // Catch cases where EventData is not populated - in cases where ProcessingErrorData is set (ErrorCode: 15005)
+                if (objects["Event"]["EventData"] == null)
+                {
+                    return null; 
+                }
+
                 JToken eventData = objects["Event"]["EventData"]["Data"];
 
                 signerEvent.EventId = Convert.ToInt32(objects["Event"]["System"]["EventID"]);
