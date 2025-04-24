@@ -72,7 +72,7 @@ namespace WDAC_Wizard
             {
                 string dosPath = NTPath.Replace(match.Value, logicalDisk);
                 // If useEnvVars is set, convert C:, C:\Windows and C:\Windows\System32 to 
-                // %OSDIR%, %WINDIR% and %SYSTEM32%
+                // %OSDRIVE%, %WINDIR% and %SYSTEM32%, respectively
                 if(Properties.Settings.Default.useEnvVars)
                 {
                     return GetEnvPath(dosPath);
