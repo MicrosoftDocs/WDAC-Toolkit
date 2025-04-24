@@ -567,6 +567,8 @@ namespace WDAC_Wizard
                         SHA256 = csv.HeaderRecord.Contains("SHA256") ? csv.GetField<string>("SHA256") : null,
                         IssuerName = csv.HeaderRecord.Contains("IssuerName") ? csv.GetField<string>("IssuerName") : null,
                         IssuerTBSHash = csv.HeaderRecord.Contains("IssuerTBSHash") ? csv.GetField<string>("IssuerTBSHash") : null,
+                        PublisherName = csv.HeaderRecord.Contains("PublisherName") ? csv.GetField<string>("PublisherName") : null,
+                        PublisherTBSHash = csv.HeaderRecord.Contains("PublisherTBSHash") ? csv.GetField<string>("PublisherTBSHash") : null,
                         AuthenticodeHash = csv.HeaderRecord.Contains("AuthenticodeHash") ? csv.GetField<string>("AuthenticodeHash") : null,
                         PolicyId = csv.HeaderRecord.Contains("PolicyId") ? csv.GetField<string>("PolicyId") : null,
                         PolicyName = csv.HeaderRecord.Contains("PolicyName") ? csv.GetField<string>("PolicyName") : null,
