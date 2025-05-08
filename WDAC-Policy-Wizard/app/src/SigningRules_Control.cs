@@ -88,20 +88,29 @@ namespace WDAC_Wizard
         /// </summary>
         private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
-            // Open the custom rules conditions panel
-            
-            if (this.customRuleConditionsPanel == null)
+            // Check if the customRuleConditionsPanel is already open
+            if (this.customRuleConditionsPanel == null || this.customRuleConditionsPanel.IsDisposed)
             {
+                // Create and show the custom rules conditions panel
                 this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
-                this.customRuleConditionsPanel.Show();
-                this.customRuleConditionsPanel.BringToFront();
-                this.customRuleConditionsPanel.Focus();
-                this.customRuleConditionsPanel.ForceRepaint();
+                this.customRuleConditionsPanel.StartPosition = FormStartPosition.CenterParent;
+                this.customRuleConditionsPanel.Owner = this._MainWindow; // Set the parent form explicitly
+                this.customRuleConditionsPanel.FormClosed += (s, args) => this.customRuleConditionsPanel = null; // Reset on close
+                this.customRuleConditionsPanel.ShowDialog();
+
 
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
+
+                // Mark the panel as open
                 this.isCustomPanelOpen = true;
             }
-            
+            else
+            {
+                // Bring the existing panel to the front
+                this.customRuleConditionsPanel.BringToFront();
+                this.customRuleConditionsPanel.Focus();
+            }
+
             Logger.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
         }
 
