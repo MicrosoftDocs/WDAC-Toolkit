@@ -89,3 +89,51 @@ Select the export button to extract the MDE AH events to a csv file.
 ## 2. Using the Wizard to extract MDE events 
 
 To extract the MDE events in the Wizard and build policies off the audit and block event data, follow the instructions documented on the [MS Docs page](https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-parsing-event-logs#mde-advanced-hunting-wdac-event-parsing)
+
+## 3. Export the MDE AH Events as CSV from Splunk ##
+
+Below is a version of Kusto query above rewritten as a Splunk search query. In the example below replace Splunk indexes  **windowseventlogInd** and **XmlWindowsEventLog** with ones used for your Splunk deployment. They might vary between various Splunk deployments. Consult with your Splunk admins for the proper index names.
+
+```spl
+(index=windowseventlogInd sourcetype="XmlWindowsEventLog:Microsoft-Windows-CodeIntegrity/Operational" EventID IN(3023,8028,8029,3077,3076)) OR (index=WinEventLog sourcetype="XmlWinEventLog:Microsoft-Windows-CodeIntegrity/Operational" EventID=3089 IssuerTBSHash!="")
+| where NOT (isnull(PolicyName) AND EventID!=3089)
+| eval File_Name=if(EventID==3077 OR EventID==3076,File_Name, FilePath)
+| rex field=File_Name "(?P<FileName2>[^\\\]+)$"
+| rename File_Name as FolderPath
+| rename FileName2 as FileName
+| rename ActivityID as CorrelationId
+| rename SHA1_Hash as SHA1
+| rename SHA256_Hash as SHA256
+| eval CorrelationId=replace(CorrelationId, "{", "")
+| eval CorrelationId=replace(CorrelationId, "}", "")
+| eval DeviceName=lower(Computer)
+| eval DeviceId=DeviceName
+| eval Timestamp= strftime(_time, "%m/%d/%Y %I:%M:%S %p")
+| eval SHA1=lower(SHA1) 
+| eval SHA256=lower(SHA256)
+| eval IssuerTBSHash=lower(IssuerTBSHash) 
+| eval PublisherTBSHash=lower(PublisherTBSHash) 
+| eval ActionType = case(EventID==8029, "AppControlCIScriptBlocked", EventID==8028, "AppControlCIScriptAudited", EventID==3077, "AppControlCodeIntegrityPolicyBlocked", EventID==3076, "AppControlCodeIntegrityPolicyAudited", EventID==3023, "AppControlCodeIntegrityDriverRevoked", EventID==3089, "AppControlCodeIntegritySigningInformation")
+| table
+    Timestamp,
+    DeviceId,
+    DeviceName,
+    ActionType,
+    FileName,
+    FolderPath,
+    SHA1,
+    SHA256,
+    IssuerName,
+    IssuerTBSHash,
+    PublisherName,
+    PublisherTBSHash,
+    AuthenticodeHash,
+    PolicyId,
+    PolicyName,
+    OriginalFileName,
+    ProductName,
+    InternalName,
+    FileDescription,
+    FileVersion,
+    CorrelationId
+```
