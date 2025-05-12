@@ -87,10 +87,10 @@ namespace WDAC_Wizard
             panel2.Controls.Add(microsoftPictureBox);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(label_PolicyFour);
-            panel2.Location = new System.Drawing.Point(492, 84);
-            panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel2.Location = new System.Drawing.Point(394, 67);
+            panel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel2.Name = "panel2";
-            panel2.Size = new System.Drawing.Size(329, 440);
+            panel2.Size = new System.Drawing.Size(264, 352);
             panel2.TabIndex = 1;
             // 
             // allowMsft_Button
@@ -98,10 +98,10 @@ namespace WDAC_Wizard
             allowMsft_Button.BackColor = System.Drawing.Color.Transparent;
             allowMsft_Button.BackgroundImage = Properties.Resources.radio_off;
             allowMsft_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            allowMsft_Button.Location = new System.Drawing.Point(146, 389);
-            allowMsft_Button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            allowMsft_Button.Location = new System.Drawing.Point(117, 311);
+            allowMsft_Button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             allowMsft_Button.Name = "allowMsft_Button";
-            allowMsft_Button.Size = new System.Drawing.Size(30, 30);
+            allowMsft_Button.Size = new System.Drawing.Size(24, 24);
             allowMsft_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             allowMsft_Button.TabIndex = 99;
             allowMsft_Button.TabStop = false;
@@ -114,36 +114,36 @@ namespace WDAC_Wizard
             // 
             panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panel1.Controls.Add(panel4);
-            panel1.Location = new System.Drawing.Point(375, 0);
-            panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel1.Location = new System.Drawing.Point(300, 0);
+            panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(374, 679);
+            panel1.Size = new System.Drawing.Size(300, 544);
             panel1.TabIndex = 3;
             // 
             // panel4
             // 
-            panel4.Location = new System.Drawing.Point(382, 4);
-            panel4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel4.Location = new System.Drawing.Point(306, 3);
+            panel4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel4.Name = "panel4";
-            panel4.Size = new System.Drawing.Size(375, 679);
+            panel4.Size = new System.Drawing.Size(300, 543);
             panel4.TabIndex = 2;
             // 
             // panel3
             // 
-            panel3.Location = new System.Drawing.Point(382, 4);
-            panel3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel3.Location = new System.Drawing.Point(306, 3);
+            panel3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel3.Name = "panel3";
-            panel3.Size = new System.Drawing.Size(375, 679);
+            panel3.Size = new System.Drawing.Size(300, 543);
             panel3.TabIndex = 2;
             // 
             // microsoftPictureBox
             // 
             microsoftPictureBox.BackColor = System.Drawing.Color.Transparent;
             microsoftPictureBox.Image = Properties.Resources.windows_logo;
-            microsoftPictureBox.Location = new System.Drawing.Point(110, 104);
-            microsoftPictureBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            microsoftPictureBox.Location = new System.Drawing.Point(88, 83);
+            microsoftPictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             microsoftPictureBox.Name = "microsoftPictureBox";
-            microsoftPictureBox.Size = new System.Drawing.Size(102, 73);
+            microsoftPictureBox.Size = new System.Drawing.Size(82, 58);
             microsoftPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             microsoftPictureBox.TabIndex = 14;
             microsoftPictureBox.TabStop = false;
@@ -153,9 +153,10 @@ namespace WDAC_Wizard
             label7.AutoSize = true;
             label7.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label7.ForeColor = System.Drawing.Color.Black;
-            label7.Location = new System.Drawing.Point(18, 200);
+            label7.Location = new System.Drawing.Point(14, 160);
+            label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(274, 147);
+            label7.Size = new System.Drawing.Size(217, 119);
             label7.TabIndex = 17;
             label7.Text = resources.GetString("label7.Text");
             // 
@@ -164,9 +165,10 @@ namespace WDAC_Wizard
             label_PolicyFour.AutoSize = true;
             label_PolicyFour.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label_PolicyFour.ForeColor = System.Drawing.Color.Black;
-            label_PolicyFour.Location = new System.Drawing.Point(52, 56);
+            label_PolicyFour.Location = new System.Drawing.Point(42, 45);
+            label_PolicyFour.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_PolicyFour.Name = "label_PolicyFour";
-            label_PolicyFour.Size = new System.Drawing.Size(218, 23);
+            label_PolicyFour.Size = new System.Drawing.Size(169, 18);
             label_PolicyFour.TabIndex = 8;
             label_PolicyFour.Text = "Allow Microsoft Mode";
             // 
@@ -175,10 +177,10 @@ namespace WDAC_Wizard
             windowsWorks_Button.BackColor = System.Drawing.Color.Transparent;
             windowsWorks_Button.BackgroundImage = Properties.Resources.radio_off;
             windowsWorks_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            windowsWorks_Button.Location = new System.Drawing.Point(149, 389);
-            windowsWorks_Button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            windowsWorks_Button.Location = new System.Drawing.Point(119, 311);
+            windowsWorks_Button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             windowsWorks_Button.Name = "windowsWorks_Button";
-            windowsWorks_Button.Size = new System.Drawing.Size(30, 30);
+            windowsWorks_Button.Size = new System.Drawing.Size(24, 24);
             windowsWorks_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             windowsWorks_Button.TabIndex = 98;
             windowsWorks_Button.TabStop = false;
@@ -191,10 +193,10 @@ namespace WDAC_Wizard
             // 
             windowsPictureBox.BackColor = System.Drawing.Color.Transparent;
             windowsPictureBox.Image = Properties.Resources.office;
-            windowsPictureBox.Location = new System.Drawing.Point(113, 104);
-            windowsPictureBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            windowsPictureBox.Location = new System.Drawing.Point(90, 83);
+            windowsPictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             windowsPictureBox.Name = "windowsPictureBox";
-            windowsPictureBox.Size = new System.Drawing.Size(102, 73);
+            windowsPictureBox.Size = new System.Drawing.Size(82, 58);
             windowsPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             windowsPictureBox.TabIndex = 14;
             windowsPictureBox.TabStop = false;
@@ -204,9 +206,10 @@ namespace WDAC_Wizard
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label2.ForeColor = System.Drawing.Color.Black;
-            label2.Location = new System.Drawing.Point(23, 200);
+            label2.Location = new System.Drawing.Point(18, 160);
+            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(269, 126);
+            label2.Size = new System.Drawing.Size(219, 102);
             label2.TabIndex = 8;
             label2.Text = "Default Windows Mode authorizes:\r\n\r\n   - Windows OS components\r\n   - Microsoft Store applications\r\n   - Office 365, OneDrive, Teams\r\n   - WHQL signed kernel drivers\r\n";
             // 
@@ -215,9 +218,10 @@ namespace WDAC_Wizard
             label_PolicyOne.AutoSize = true;
             label_PolicyOne.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label_PolicyOne.ForeColor = System.Drawing.Color.Black;
-            label_PolicyOne.Location = new System.Drawing.Point(48, 56);
+            label_PolicyOne.Location = new System.Drawing.Point(38, 45);
+            label_PolicyOne.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_PolicyOne.Name = "label_PolicyOne";
-            label_PolicyOne.Size = new System.Drawing.Size(232, 23);
+            label_PolicyOne.Size = new System.Drawing.Size(179, 18);
             label_PolicyOne.TabIndex = 5;
             label_PolicyOne.Text = "Default Windows Mode";
             // 
@@ -231,18 +235,18 @@ namespace WDAC_Wizard
             panel5.Controls.Add(label2);
             panel5.Controls.Add(label_PolicyOne);
             panel5.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            panel5.Location = new System.Drawing.Point(165, 84);
-            panel5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel5.Location = new System.Drawing.Point(132, 67);
+            panel5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel5.Name = "panel5";
-            panel5.Size = new System.Drawing.Size(329, 440);
+            panel5.Size = new System.Drawing.Size(264, 352);
             panel5.TabIndex = 4;
             // 
             // panel6
             // 
-            panel6.Location = new System.Drawing.Point(382, 4);
-            panel6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel6.Location = new System.Drawing.Point(306, 3);
+            panel6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel6.Name = "panel6";
-            panel6.Size = new System.Drawing.Size(375, 679);
+            panel6.Size = new System.Drawing.Size(300, 543);
             panel6.TabIndex = 2;
             // 
             // panel9
@@ -256,10 +260,10 @@ namespace WDAC_Wizard
             panel9.Controls.Add(label4);
             panel9.Controls.Add(label_PolicyThree);
             panel9.Controls.Add(panel10);
-            panel9.Location = new System.Drawing.Point(820, 84);
-            panel9.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel9.Location = new System.Drawing.Point(656, 67);
+            panel9.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel9.Name = "panel9";
-            panel9.Size = new System.Drawing.Size(348, 440);
+            panel9.Size = new System.Drawing.Size(279, 352);
             panel9.TabIndex = 5;
             // 
             // signedReputable_Button
@@ -267,10 +271,10 @@ namespace WDAC_Wizard
             signedReputable_Button.BackColor = System.Drawing.Color.Transparent;
             signedReputable_Button.BackgroundImage = Properties.Resources.radio_off;
             signedReputable_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            signedReputable_Button.Location = new System.Drawing.Point(155, 389);
-            signedReputable_Button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            signedReputable_Button.Location = new System.Drawing.Point(124, 311);
+            signedReputable_Button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             signedReputable_Button.Name = "signedReputable_Button";
-            signedReputable_Button.Size = new System.Drawing.Size(30, 30);
+            signedReputable_Button.Size = new System.Drawing.Size(24, 24);
             signedReputable_Button.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             signedReputable_Button.TabIndex = 96;
             signedReputable_Button.TabStop = false;
@@ -286,10 +290,10 @@ namespace WDAC_Wizard
             ISGLabel.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
             ISGLabel.Image = Properties.Resources.external_link_symbol_highlight;
             ISGLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            ISGLabel.Location = new System.Drawing.Point(27, 346);
+            ISGLabel.Location = new System.Drawing.Point(22, 277);
             ISGLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             ISGLabel.Name = "ISGLabel";
-            ISGLabel.Size = new System.Drawing.Size(314, 21);
+            ISGLabel.Size = new System.Drawing.Size(254, 17);
             ISGLabel.TabIndex = 5;
             ISGLabel.Tag = "IgnoreDarkMode";
             ISGLabel.Text = "- Files with good reputation using ISG     ";
@@ -300,9 +304,10 @@ namespace WDAC_Wizard
             label6.AutoSize = true;
             label6.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label6.ForeColor = System.Drawing.Color.Black;
-            label6.Location = new System.Drawing.Point(12, 200);
+            label6.Location = new System.Drawing.Point(10, 160);
+            label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(304, 147);
+            label6.Size = new System.Drawing.Size(249, 119);
             label6.TabIndex = 16;
             label6.Text = resources.GetString("label6.Text");
             // 
@@ -310,10 +315,10 @@ namespace WDAC_Wizard
             // 
             reputablePictureBox.BackColor = System.Drawing.Color.Transparent;
             reputablePictureBox.Image = Properties.Resources.shield;
-            reputablePictureBox.Location = new System.Drawing.Point(115, 104);
-            reputablePictureBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            reputablePictureBox.Location = new System.Drawing.Point(92, 83);
+            reputablePictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             reputablePictureBox.Name = "reputablePictureBox";
-            reputablePictureBox.Size = new System.Drawing.Size(111, 73);
+            reputablePictureBox.Size = new System.Drawing.Size(89, 58);
             reputablePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             reputablePictureBox.TabIndex = 16;
             reputablePictureBox.TabStop = false;
@@ -323,9 +328,10 @@ namespace WDAC_Wizard
             label4.AutoSize = true;
             label4.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label4.ForeColor = System.Drawing.Color.White;
-            label4.Location = new System.Drawing.Point(36, 229);
+            label4.Location = new System.Drawing.Point(29, 183);
+            label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(0, 21);
+            label4.Size = new System.Drawing.Size(0, 17);
             label4.TabIndex = 10;
             // 
             // label_PolicyThree
@@ -333,18 +339,19 @@ namespace WDAC_Wizard
             label_PolicyThree.AutoSize = true;
             label_PolicyThree.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label_PolicyThree.ForeColor = System.Drawing.Color.Black;
-            label_PolicyThree.Location = new System.Drawing.Point(32, 56);
+            label_PolicyThree.Location = new System.Drawing.Point(26, 45);
+            label_PolicyThree.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_PolicyThree.Name = "label_PolicyThree";
-            label_PolicyThree.Size = new System.Drawing.Size(277, 23);
+            label_PolicyThree.Size = new System.Drawing.Size(214, 18);
             label_PolicyThree.TabIndex = 7;
             label_PolicyThree.Text = "Signed and Reputable Mode";
             // 
             // panel10
             // 
-            panel10.Location = new System.Drawing.Point(382, 4);
-            panel10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel10.Location = new System.Drawing.Point(306, 3);
+            panel10.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             panel10.Name = "panel10";
-            panel10.Size = new System.Drawing.Size(375, 679);
+            panel10.Size = new System.Drawing.Size(300, 543);
             panel10.TabIndex = 2;
             // 
             // label_fileLocation
@@ -352,9 +359,10 @@ namespace WDAC_Wizard
             label_fileLocation.AutoSize = true;
             label_fileLocation.Font = new System.Drawing.Font("Tahoma", 9.5F);
             label_fileLocation.ForeColor = System.Drawing.Color.Black;
-            label_fileLocation.Location = new System.Drawing.Point(9, 91);
+            label_fileLocation.Location = new System.Drawing.Point(7, 73);
+            label_fileLocation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_fileLocation.Name = "label_fileLocation";
-            label_fileLocation.Size = new System.Drawing.Size(149, 19);
+            label_fileLocation.Size = new System.Drawing.Size(119, 16);
             label_fileLocation.TabIndex = 6;
             label_fileLocation.Text = "Policy File Location:";
             // 
@@ -363,10 +371,10 @@ namespace WDAC_Wizard
             textBoxPolicyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxPolicyPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             textBoxPolicyPath.ForeColor = System.Drawing.Color.Black;
-            textBoxPolicyPath.Location = new System.Drawing.Point(185, 87);
-            textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            textBoxPolicyPath.Location = new System.Drawing.Point(148, 70);
+            textBoxPolicyPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             textBoxPolicyPath.Name = "textBoxPolicyPath";
-            textBoxPolicyPath.Size = new System.Drawing.Size(402, 26);
+            textBoxPolicyPath.Size = new System.Drawing.Size(322, 22);
             textBoxPolicyPath.TabIndex = 2;
             textBoxPolicyPath.TextChanged += TextBoxPolicyPath_TextChanged;
             textBoxPolicyPath.DoubleClick += TextBoxPolicyPath_SetPath;
@@ -376,9 +384,10 @@ namespace WDAC_Wizard
             label_policyName.AutoSize = true;
             label_policyName.Font = new System.Drawing.Font("Tahoma", 9.5F);
             label_policyName.ForeColor = System.Drawing.Color.Black;
-            label_policyName.Location = new System.Drawing.Point(9, 50);
+            label_policyName.Location = new System.Drawing.Point(7, 40);
+            label_policyName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_policyName.Name = "label_policyName";
-            label_policyName.Size = new System.Drawing.Size(102, 19);
+            label_policyName.Size = new System.Drawing.Size(81, 16);
             label_policyName.TabIndex = 8;
             label_policyName.Text = "Policy Name:";
             // 
@@ -387,20 +396,20 @@ namespace WDAC_Wizard
             textBox_PolicyName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBox_PolicyName.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             textBox_PolicyName.ForeColor = System.Drawing.Color.Black;
-            textBox_PolicyName.Location = new System.Drawing.Point(185, 46);
-            textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            textBox_PolicyName.Location = new System.Drawing.Point(148, 37);
+            textBox_PolicyName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             textBox_PolicyName.Name = "textBox_PolicyName";
-            textBox_PolicyName.Size = new System.Drawing.Size(402, 26);
+            textBox_PolicyName.Size = new System.Drawing.Size(322, 22);
             textBox_PolicyName.TabIndex = 1;
             textBox_PolicyName.TextChanged += TextBoxPolicyName_TextChanged;
             // 
             // button_Browse
             // 
             button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
-            button_Browse.Location = new System.Drawing.Point(602, 86);
-            button_Browse.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            button_Browse.Location = new System.Drawing.Point(482, 70);
+            button_Browse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             button_Browse.Name = "button_Browse";
-            button_Browse.Size = new System.Drawing.Size(107, 28);
+            button_Browse.Size = new System.Drawing.Size(86, 22);
             button_Browse.TabIndex = 3;
             button_Browse.Text = "Browse";
             button_Browse.UseVisualStyleBackColor = true;
@@ -411,9 +420,10 @@ namespace WDAC_Wizard
             label5.AutoSize = true;
             label5.Font = new System.Drawing.Font("Tahoma", 10F);
             label5.ForeColor = System.Drawing.Color.Black;
-            label5.Location = new System.Drawing.Point(3, 12);
+            label5.Location = new System.Drawing.Point(2, 10);
+            label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(495, 21);
+            label5.Size = new System.Drawing.Size(410, 17);
             label5.TabIndex = 11;
             label5.Text = "You can modify the policy name and location, or keep the default.";
             // 
@@ -426,10 +436,10 @@ namespace WDAC_Wizard
             policyInfoPanel.Controls.Add(label_policyName);
             policyInfoPanel.Controls.Add(textBoxPolicyPath);
             policyInfoPanel.Controls.Add(label_fileLocation);
-            policyInfoPanel.Location = new System.Drawing.Point(165, 528);
-            policyInfoPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            policyInfoPanel.Location = new System.Drawing.Point(132, 422);
+            policyInfoPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             policyInfoPanel.Name = "policyInfoPanel";
-            policyInfoPanel.Size = new System.Drawing.Size(915, 134);
+            policyInfoPanel.Size = new System.Drawing.Size(732, 107);
             policyInfoPanel.TabIndex = 95;
             policyInfoPanel.Visible = false;
             // 
@@ -438,9 +448,10 @@ namespace WDAC_Wizard
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Tahoma", 14F);
             label1.ForeColor = System.Drawing.Color.Black;
-            label1.Location = new System.Drawing.Point(160, 33);
+            label1.Location = new System.Drawing.Point(128, 26);
+            label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(410, 29);
+            label1.Size = new System.Drawing.Size(320, 23);
             label1.TabIndex = 95;
             label1.Text = "Select a Base Template for the policy";
             // 
@@ -451,10 +462,10 @@ namespace WDAC_Wizard
             label_LearnMore.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
             label_LearnMore.Image = Properties.Resources.external_link_symbol_highlight;
             label_LearnMore.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            label_LearnMore.Location = new System.Drawing.Point(903, 62);
+            label_LearnMore.Location = new System.Drawing.Point(722, 50);
             label_LearnMore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_LearnMore.Name = "label_LearnMore";
-            label_LearnMore.Size = new System.Drawing.Size(261, 18);
+            label_LearnMore.Size = new System.Drawing.Size(220, 14);
             label_LearnMore.TabIndex = 4;
             label_LearnMore.Tag = "IgnoreDarkMode";
             label_LearnMore.Text = "Learn more about template policies     ";
@@ -462,7 +473,7 @@ namespace WDAC_Wizard
             // 
             // TemplatePage
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
             BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -472,9 +483,9 @@ namespace WDAC_Wizard
             Controls.Add(panel9);
             Controls.Add(panel2);
             Controls.Add(panel5);
-            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             Name = "TemplatePage";
-            Size = new System.Drawing.Size(1172, 782);
+            Size = new System.Drawing.Size(938, 626);
             Validated += TemplatePage_Validated;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
