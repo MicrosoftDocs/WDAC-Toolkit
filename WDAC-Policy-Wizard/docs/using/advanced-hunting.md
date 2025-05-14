@@ -3,11 +3,11 @@
 
 # Creating a policy from MDE Advanced Hunting events 
 
-This document outlines the steps to create a WDAC (CI) policy from the Microsoft Defender for Endpoint (MDE) Advanced Hunting events exported as a CSV file. 
+This document outlines the steps to create a App Control policy from the Microsoft Defender for Endpoint (MDE) Advanced Hunting events exported as a CSV file. 
 
 ## 1. Export the MDE AH Events as CSV ##
 
-The WDAC Wizard requires the CSV file in a very specific format. The MDE AH query must follow exactly this format:
+The App Control Wizard requires the CSV file in a very specific format. The MDE AH query must follow exactly this format:
 
 ```kql
 DeviceEvents
@@ -88,7 +88,7 @@ Select the export button to extract the MDE AH events to a csv file.
 
 ## 2. Using the Wizard to extract MDE events 
 
-To extract the MDE events in the Wizard and build policies off the audit and block event data, follow the instructions documented on the [MS Docs page](https://learn.microsoft.com/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-parsing-event-logs#mde-advanced-hunting-wdac-event-parsing)
+To extract the MDE events in the Wizard and build policies off the audit and block event data, follow the instructions documented on the [MS Docs page](https://learn.microsoft.com/windows/security/application-security/application-control/app-control-for-business/design/appcontrol-wizard-parsing-event-logs#mde-advanced-hunting-wdac-event-parsing)
 
 ## 3. Export the MDE AH Events as CSV from Splunk ##
 
