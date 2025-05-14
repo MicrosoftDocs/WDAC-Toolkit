@@ -24,6 +24,8 @@ base policy.
 * [Creating a Policy from Advanced Hunting Events](using/advanced-hunting.md) - documents how to use the MDE Advanced Hunting csv parsing functionality in the Wizard.
 * [Merging two Exisiting Policies](using/merge-policy.md) - generating a new policy from the union of the two policies. 
 
+* [Microsoft Recommended Driver Block Rules](recommended-driver-block-rules.md) - documents the Microsoft recommended driver block rules which block vulnerable drivers in the ecosystem. 
+
 ## Contributing
 
 The WDAC Policy Wizard team appreciates all feedback provided to make the app better for users. We also appreciate any contributions to the project. 
