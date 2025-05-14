@@ -1,16 +1,16 @@
 | [docs](..)  / [using](.) / edit-policy.md
 |:---|
 
-# Editing an Existing WDAC Policy
+# Editing an Existing App Control Policy
 
-This document outlines the steps to edit an exisiting base or supplemental WDAC code integrity (CI) policy. This tool enables users to edit the policy rules, 
+This document outlines the steps to edit an exisiting base or supplemental App Control policy. This tool enables users to edit the policy rules, 
 its signing rules and its attributes. 
 
-The [official WDAC documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-editing-policy) outlines the edit policy steps. 
+The [official App Control documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/wdac-wizard-editing-policy) outlines the edit policy steps. 
 
 ## 1. Select the Policy Editor from the start menu ##
 
-Using the Browse button, navigate to the WDAC CI policy you would like to edit. The policy Wizard will verify that the policy exists. Once the validation is complete, 
+Using the Browse button, navigate to the App Control policy you would like to edit. The policy Wizard will verify that the policy exists. Once the validation is complete, 
 you can rename the policy and edit the policy ID by editing the values in the textboxes. 
 
 
@@ -20,14 +20,14 @@ The policy rule options will be automatically enabled/disabled based on the poli
 the slider button next to the policy rule titles. A toggled rule option will appear in the CI policy while a toggled-off option will not. 
 
 Hovering the mouse over the policy rule names will display a short description of the ruleat the bottom of the page. More information about each of the policy rules 
-can be located at the [WDAC policy rules](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules)
+can be located at the [App Control policy rules](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules)
 page. 
 
 Selecting the `+ Advanced Options` button will reveal the advanced policy rule options panel. This grouping of rules contains additional policy rule options which are less common 
 to a majority of users. 
 
 We recommend leaving the **Audit Mode** policy rule option enabled until users have sufficiently understood how the policy and signing rules will affect their scenario. 
-Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying WDAC policies see [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
+Disabling Audit Mode will result in the policy running in enforced mode after the policy is deployed. For more information on deploying App Control policies see [Deploying App Control Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 
 ## 3. Creating policy signing rules ## 
 
@@ -49,9 +49,9 @@ Selecting the `+ Custom Rules` button will open the Custom Rules panel. Four typ
   By default, the publisher is set to apply to all files signed by the publisher, with the specific product name and file name with a version at or above the one specified. The restrictiveness of the rule can be modified using the slider. 
   The text below the slider documents outlines the how the rule will be interpreted. 
   
-  The table below shows the relationship between the slider placement, the corresponding WDAC rule level and its description. 
+  The table below shows the relationship between the slider placement, the corresponding App Control rule level and its description. 
   
-  | Rule Condition | WDAC Rule Level | Description |
+  | Rule Condition | App Control Rule Level | Description |
   | - | - | - |
   | **Publisher** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
   | **Product name** | FilePublisher | Combination of the file name, PCA cert with CN of the leaf, and the minimum version number. |
@@ -72,9 +72,9 @@ Template signing rules and custom rules can be deleted from the policy by select
 
 ## 4. Building the policy ##
 
-The policy build page will monitor the progress of the WDAC policy creation process. Depending on the number and complexity of the custom signing rules, the build process
+The policy build page will monitor the progress of the App Control policy creation process. Depending on the number and complexity of the custom signing rules, the build process
 could take several minutes. 
 
 Once the build process is complete, selecting the policy path link will open the policy XML file for review. The binary file is also written to the same path for manual 
-deployment. Steps for manual deployment can be reviewed here [Deploying WDAC Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
+deployment. Steps for manual deployment can be reviewed here [Deploying App Control Policies](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control-deployment-guide). 
 To create another policy, edit an exisiting policy or merge two or more policies, select the home button to continue. 

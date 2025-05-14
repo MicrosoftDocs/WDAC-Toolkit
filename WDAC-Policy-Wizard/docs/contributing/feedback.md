@@ -1,4 +1,4 @@
 | [docs](..)  / [contributing](.) / feedback.md
 |:---|
 
-# WDAC Policy Wizard Feedback
+# App Control Policy Wizard Feedback

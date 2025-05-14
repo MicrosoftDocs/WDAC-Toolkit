@@ -1,4 +1,4 @@
 | [docs](..)  / [contributing](.) / style-guide.md
 |:---|
 
-# WDAC Policy Wizard Style Guide
+# App Control Policy Wizard Style Guide
