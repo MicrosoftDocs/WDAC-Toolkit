@@ -1,13 +1,13 @@
 | [docs](..)  / [getting-started](.) / install-process.md
 |:---|
 
-# Installing the WDAC Policy Wizard
+# Installing the App Control Wizard
 
-The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard App Host Site](https://webapp-wdac-wizard.azurewebsites.net/) hosted on Azure. 
+The App Control Wizard's MSIX installer can be downloaded from the [App Control Wizard App Host Site](https://webapp-wdac-wizard.azurewebsites.net/) hosted on Azure. 
 
 ### Directions
 
-  1. Simply click on the _Install the Windows Defender Application Control (WDAC) Wizard_ link to begin the download. 
+  1. Simply selectthe  _Download the Wizard Installer_ button to begin the download. 
 
 **2. Permit the browser to begin install** by confirming to download the installer. Click _Open_ on Edge browsers. 
 
@@ -20,4 +20,4 @@ The WDAC CI policy wizard MSIX installer can be downloaded from the [WDAC Wizard
 ![](../imgs/download-instructions-2.png)
 
 
-The WDAC Wizard application will be installed and automatically launched after installation. A shortcut will be placed in the Start Menu. The application is sandboxed from the rest of the system. The app and its contents are installed to %PROGRAMFILES%\WindowsApps\.
+The Wizard application will be installed and automatically launched after installation. A shortcut will be placed in the Start Menu. The application is sandboxed from the rest of the system. The app and its contents are installed to %PROGRAMFILES%\WindowsApps\.
