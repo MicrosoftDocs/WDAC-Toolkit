@@ -20,7 +20,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.27770.0</VersionEx>
+  <VersionEx>10.0.27825.0</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <Rules>
     <Rule>
@@ -822,6 +822,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Deny ID="ID_DENY_IREC_52" FriendlyName="IREC.sys\irecARM64--45.sys Hash Sha256" Hash="7883DDEBE413E3D18E93FE73CA293322235A6EF6AEF5AD7030B743A4ECED83A3" />
     <Deny ID="ID_DENY_IREC_53" FriendlyName="IREC.sys\irecARM64--45.sys Hash Page Sha1" Hash="2C8F603F5420AC349DAD3051C6DD820DC1D34C8E" />
     <Deny ID="ID_DENY_IREC_54" FriendlyName="IREC.sys\irecARM64--45.sys Hash Page Sha256" Hash="8154EA793FC5DA34AAA7B14D24F462D1E6838AA7DE44CF3E5F332A8C66191DF2" />
+    <Deny ID="ID_DENY_KERNCORELIB_1" FriendlyName="kerncorelib.sys\7196cc5f4259d53f0badbc56d4d27ec39e13a622ae4dd34d99a0b2248a6d653b Hash Sha1" Hash="032DA987DFFA0A4C07517D3234328998B7125656"/>
+    <Deny ID="ID_DENY_KERNCORELIB_2" FriendlyName="kerncorelib.sys\7196cc5f4259d53f0badbc56d4d27ec39e13a622ae4dd34d99a0b2248a6d653b Hash Sha256" Hash="8F8AEBE3B6C3574AC6E28C5EABFC465A3E3C12059DF981FAC48B989E29E4B01C"/>
     <Deny ID="ID_DENY_KERNELD_0" FriendlyName="Firewire kerneld\02ed48cce245a294623123613053e3722b4af1c058524adfcad829ecb1253c45 Hash Sha1" Hash="CDEE9DA43ADACE5B037446B9C69C3B39CA98E10C"/>
     <Deny ID="ID_DENY_KERNELD_1" FriendlyName="Firewire kerneld\02ed48cce245a294623123613053e3722b4af1c058524adfcad829ecb1253c45 Hash Sha256" Hash="8648F3ED52937B5215F8D0BB090D030DE486DDE7319865C077786000AAFE6762"/>
     <Deny ID="ID_DENY_KERNELD_2" FriendlyName="Firewire kerneld\065a34b786b0ccf6f88c136408943c3d2bd3da14357ee1e55e81e05d67a4c9bc Hash Sha1" Hash="AC56DD7722A47E33BA0924AAA6062F74BFC1C08F"/>
@@ -1205,6 +1207,18 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Deny ID="ID_DENY_PHYMEM_16" FriendlyName="Shenzhen Moyea Phymem.sys\d64478376497107c15d948c2d3c86c48bc45833001c6b5c51de05862de57bb02 Hash Page Sha256" Hash="0414AEF58A86751CE8E53C80F65A8337B27CAE720E1FCFB50E1D8736CDF7530B"/>
     <Deny ID="ID_DENY_PPLKILLER_1" FriendlyName="Niche Technologies pplkiller.sys\0d176493a5be4c94744836da1c365707e49f40c237c29c3481ae5677f5fdbba1 Hash Sha1" Hash="443ECCAC950E16E8BDA33A15CE87F85FC9894193"/>
     <Deny ID="ID_DENY_PPLKILLER_2" FriendlyName="Niche Technologies pplkiller.sys\0d176493a5be4c94744836da1c365707e49f40c237c29c3481ae5677f5fdbba1 Hash Sha256" Hash="215076B5ED8EC2B35A32DEBF78D51CDCB6BF1D58C2E1243CDB8A96572CFA2F6C"/>
+    <Deny ID="ID_DENY_PROBMON_1" FriendlyName="ITM probmon.sys\023d722cbbdd04e3db77de7e6e3cfeabcef21ba5b2f04c3f3a33691801dd45eb Hash Sha1" Hash="C250F8111B95A0CFD72A1B83C0DD08D8727A1038"/>
+    <Deny ID="ID_DENY_PROBMON_2" FriendlyName="ITM probmon.sys\023d722cbbdd04e3db77de7e6e3cfeabcef21ba5b2f04c3f3a33691801dd45eb Hash Sha256" Hash="E8BDFAB9D5B5C37F6F23DDF9DDDBA2FEB74261B61A80DEE0C6AEBFFBF39948FB"/>
+    <Deny ID="ID_DENY_PROBMON_3" FriendlyName="ITM probmon.sys\c2026232d39f5b0a8e9f15da8cb8f74e550b9498ae3b4015fb17fcc5d580d98b Hash Sha1" Hash="47790266E92866D665B76E7E4977A3C0333D9721"/>
+    <Deny ID="ID_DENY_PROBMON_4" FriendlyName="ITM probmon.sys\c2026232d39f5b0a8e9f15da8cb8f74e550b9498ae3b4015fb17fcc5d580d98b Hash Sha256" Hash="1F779D3C0997A1AB854EAE5C5D0143C741868CA0A26B0472DDFF6DCF48152D1B"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_1" FriendlyName="psmounterex\6a04f0fcb89a7d9810e456b8748d962cccc4caab02795c9cdacaab7f827bc398 Hash Sha1" Hash="BBEA949CC2350A5A20D5F73273811071A9F0BAAD"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_2" FriendlyName="psmounterex\6a04f0fcb89a7d9810e456b8748d962cccc4caab02795c9cdacaab7f827bc398 Hash Sha256" Hash="6A04F0FCB89A7D9810E456B8748D962CCCC4CAAB02795C9CDACAAB7F827BC398"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_3" FriendlyName="psmounterex\95ee1707928f81c34fb616ae616691d923a7fce3f906f3fb49db935b5605fe7b Hash Sha1" Hash="496AF2B1FBE95D12E4861A712F56657A6869CC24"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_4" FriendlyName="psmounterex\95ee1707928f81c34fb616ae616691d923a7fce3f906f3fb49db935b5605fe7b Hash Sha256" Hash="CC4A22E6DF8575A576CC588FB27D6477F80E200ED81E5B30A72E2A8F796E1815"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_5" FriendlyName="psmounterex\bf04b9387f78580513821fb90558fb123a20836f2664b93483f31db7f7641bf4 Hash Sha1" Hash="5248B17F7FBBF68E0CFD608912B73DE1DEC976BC"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_6" FriendlyName="psmounterex\bf04b9387f78580513821fb90558fb123a20836f2664b93483f31db7f7641bf4 Hash Sha256" Hash="AAA2AF713F26AE2DA51FA0DBE8AB8F20C319D35B106EDFF6ADC233B2CB510127"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_7" FriendlyName="psmounterex\e891526a0d3b9d8121657c55384e7c1a80ca96c9577cffb62681c700551ce0d6 Hash Sha1" Hash="BD79BB6A0268D8D7A5863932EA4CE1362FE05668"/>
+    <Deny ID="ID_DENY_PSMOUNTEREX_8" FriendlyName="psmounterex\e891526a0d3b9d8121657c55384e7c1a80ca96c9577cffb62681c700551ce0d6 Hash Sha256" Hash="969D7B5D9930911BD80C026A54482F4734C03A8436049C930DA05DD0C1AC083E"/>
     <Deny ID="ID_DENY_QMBSEC_0" FriendlyName="qmbsec.sys\0c801d381292e0476fb435fcc450b7a8970054cc47230c3123f3b6930d8ad799 Hash Sha1" Hash="129ABA97A7EB768AE0ED28D0C9A496F3C60DB314" />
     <Deny ID="ID_DENY_QMBSEC_1" FriendlyName="qmbsec.sys\0c801d381292e0476fb435fcc450b7a8970054cc47230c3123f3b6930d8ad799 Hash Sha256" Hash="AF55DE92D14CF69D19B2FCB6DB4FBE272C2E04E5F62F7519BD368C173A05CE1F" />
     <Deny ID="ID_DENY_QMBSEC_2" FriendlyName="qmbsec.sys\0c801d381292e0476fb435fcc450b7a8970054cc47230c3123f3b6930d8ad799 Hash Page Sha1" Hash="416895E001A9C3721999048941CD9B79BB9BF9BB" />
@@ -1747,6 +1761,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Deny ID="ID_DENY_PCHUNTER_1" FriendlyName="PCHunter Driver" FileName="PCHunter.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_PCHUNTER_2" FriendlyName="PCHunter Driver" FileName="安全专用" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <Deny ID="ID_DENY_PHYMEMX_64" FriendlyName="Phymemx64 Memory Mapping Driver" FileName="phymemx64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
+    <FileAttrib ID="ID_FILEATTRIB_ACCELLID" FriendlyName="AccelLid.sys\08675796b8712e0e4ccbdf7831450b907bb94c2e3e85560d9aba1b24931f0d55 FileAttribute" FileName="AccelLid.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_ACEBASE" FriendlyName="Ace-Base.sys\0184b8314b3ddb11dd929b3ad9e4302f8246e99027077e42d7fc14b25d799428 FileAttribute" InternalName="ACE-BASE64" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.2312.65535" />
     <FileAttrib ID="ID_FILEATTRIB_ALSYSIO" FriendlyName="ALSysIO\01af9b2e49907308312be623a125a4cd71da9e626a54dfa746336e5d69c0a70a FileAttribute" FileName="ALSysIO.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="2.0.10.65535" />
     <FileAttrib ID="ID_FILEATTRIB_AMD_RYZEN" FriendlyName="amdryzenmaster.sys" FileName="AMDRyzenMasterDriver.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.5.0.0" />
@@ -1775,6 +1790,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_ATSZIO" FriendlyName="ATSZIO.sys FileAttribute" FileName="ATSZIO.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <FileAttrib ID="ID_FILEATTRIB_AVALUEIO" FriendlyName="Avalue Avalueio.sys\a5a4a3c3d3d5a79f3ed703fc56d45011c21f9913001fcbcc43a3f7572cff44ec FileAttribute" FileName="AVALUEIO.SYS" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_AVGELAM" FriendlyName="Avast aswElam/avgElam Overpermissive ELAM FileAttribute" FileName="aswElam.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="21.6.400.65535" />
+    <FileAttrib ID="ID_FILEATTRIB_BIONTDRV_1" FriendlyName="biontdrv\174c8d771d31d70fc95448e961a395f5ceb7658f0cc381a718fb3b854cde4efe FileAttribute" FileName="biontdrv.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.65535.65535.65535"/>
+    <FileAttrib ID="ID_FILEATTRIB_BIONTDRV_2" FriendlyName="biontdrv\b80bea4c09dafb0bfd2ca067130a7ead64faba8f78599dad4d4291a4a29f3a23 FileAttribute" FileName="biontdrv.sys" MinimumFileVersion="9.0.0.0" MaximumFileVersion="11.0.0.0"/>
     <FileAttrib ID="ID_FILEATTRIB_BSMI" FriendlyName="" FileName="BSMI.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.3" />
     <FileAttrib ID="ID_FILEATTRIB_BS_HWMIO64" FriendlyName="" FileName="BS_HWMIO64_W10.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="10.0.1806.2200" />
     <FileAttrib ID="ID_FILEATTRIB_BS_I2CIO" FriendlyName="" FileName="BS_I2cIo.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.1.0.0" />
@@ -1789,7 +1806,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_CTIIO" FriendlyName="MicSys CtiIo\2121a2bb8ebbf2e6e82c782b6f3c6b7904f686aa495def25cf1cf52a42e16109 FileAttribute" FileName="CtiIo64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.1.23.0405" />
     <FileAttrib ID="ID_FILEATTRIB_CP2X72C_1" FriendlyName="Interace CP2X72C.sys\05c15a75d183301382a082f6d76bf3ab4c520bf158abca4433d9881134461686 FileAttribute" FileName="CP2X72C.SYS" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_CP2X72C_2" FriendlyName="Interace CP2X72C.sys\11832c345e9898c4f74d3bf8f126cf84b4b1a66ad36135e15d103dbf2ac17359 FileAttribute" FileName="CP2X72C" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
-    <FileAttrib ID="ID_FILEATTRIB_CPUZ_DRIVER" FriendlyName="" FileName="cpuz.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.4.3" />
+    <FileAttrib ID="ID_FILEATTRIB_CPUZ_DRIVER" FriendlyName="" FileName="cpuz.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.4.9" />
     <FileAttrib ID="ID_FILEATTRIB_DRIVER7" FriendlyName="Asus driver7.sys\1beb15c90dcf7a5234ed077833a0a3e900969b60be1d04fcebce0a9f8994bdbb FileAttribute" FileName="Driver7" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_ECSIODRV" FriendlyName="EliteGroup ECSioDriver\270547552060c6f4f5b2ebd57a636d5e71d5f8a9d4305c2b0fe5db0aa2f389cc FileAttribute" FileName="ECSIoDriver.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_EIO64" FriendlyName="ASUS EIO64.sys\1fac3fab8ea2137a7e81a26de121187bf72e7d16ffa3e9aec3886e2376d3c718 FileAttribute" FileName="EIO.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
@@ -1803,7 +1820,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_GPUZ" FriendlyName="GPUZ.sys\7b1529da3469a46d738a20b98e49f78e1b24aed34a62ea5440db78ccda73e972 FileAttribute" ProductName="Low-Level Driver" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>   
     <FileAttrib ID="ID_FILEATTRIB_HAXM" FriendlyName="haXM.sys FileAttribute" FileName="HaXM.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.0" />
     <FileAttrib ID="ID_FILEATTRIB_HPPORTIOX64" FriendlyName="HpPortIox64.sys" FileName="HpPortIox64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.2.0.9" />
-    <FileAttrib ID="ID_FILEATTRIB_HW" FriendlyName="hw_sys\4880f40f2e557cff38100620b9aa1a3a753cb693af16cd3d95841583edcb57a8 FileAttribute" FileName="HW.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="4.65535.65535.65535" />
+    <FileAttrib ID="ID_FILEATTRIB_HW" FriendlyName="hw_sys\4880f40f2e557cff38100620b9aa1a3a753cb693af16cd3d95841583edcb57a8 FileAttribute" FileName="HW.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="5.0.4.65535" />
     <FileAttrib ID="ID_FILEATTRIB_HWDETECTNG" FriendlyName="Hwdetectng\2f8b68de1e541093f2d4525a0d02f36d361cd69ee8b1db18e6dd064af3856f4f FileAttribute" FileName="hwdetectng.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_HWINFO_1" FriendlyName="REALiX_HWiNFO32 FileAttribute" FileName="HWiNFO32.SYS" MinimumFileVersion="0.0.0.0" MaximumFileVersion="8.98.0.0" />
     <FileAttrib ID="ID_FILEATTRIB_HWINFO_2" FriendlyName="REALiX_HWiNFO64A FileAttribute" FileName="HWiNFO64A.SYS" MinimumFileVersion="0.0.0.0" MaximumFileVersion="8.98.0.0" />
@@ -1835,7 +1852,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_NICM_DRIVER" FriendlyName="" FileName="NICM.SYS" MinimumFileVersion="0.0.0.0" MaximumFileVersion="3.1.11.0" />
     <FileAttrib ID="ID_FILEATTRIB_NSCM_DRIVER" FriendlyName="" FileName="nscm.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="3.1.11.0" />
     <FileAttrib ID="ID_FILEATTRIB_NTIOLIB" FriendlyName="" FileName="NTIOLib.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.0" />
-    <FileAttrib ID="ID_FILEATTRIB_NVOCLOCK" FriendlyName="Nvidia nvoclock\29f449fca0a41deccef5b0dccd22af18259222f69ed6389beafe8d5168c59e36 FileAttribute" FileName="nvoclock.sys" MinimumFileVersion="7.0.0.32" />
+    <FileAttrib ID="ID_FILEATTRIB_NVOCLOCK" FriendlyName="Nvidia nvoclock\29f449fca0a41deccef5b0dccd22af18259222f69ed6389beafe8d5168c59e36 FileAttribute" FileName="nvoclock.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <FileAttrib ID="ID_FILEATTRIB_NVFLASH" FriendlyName="Nvidia NVFlash FileAttribute" FileName="nvflash.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.9.65535.65535" />
     <FileAttrib ID="ID_FILEATTRIB_OPENLIBSYS" FriendlyName="OpenLibSys\91314768da140999e682d2a290d48b78bb25a35525ea12c1b1f9634d14602b2c FileAttribute" FileName="OpenLibSys.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <FileAttrib ID="ID_FILEATTRIB_PANIO_1" FriendlyName="PanIOx64\6b830ea0db6546a044c9900d3f335e7820c2a80e147b0751641899d1a5aa8f74 FileAttribute" FileName="PanIOx64.sys" MinimumFileVersion="1.0.0.1" />
@@ -1845,7 +1862,9 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_PCDOC" FriendlyName="PC-Doctor pcdsrvc\06a5d8632ecdd64da4e44ddf3495a62657b513b1139cb8a3a78f641d4e31bf95 FileAttribute" FileName="pcdsrvc" MinimumFileVersion="0.0.0.0" MaximumFileVersion="6.2.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_PHYMEM" FriendlyName="Phymem FileAttribute" FileName="phymem.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
     <FileAttrib ID="ID_FILEATTRIB_PHYSMEM" FriendlyName="Physmem.sys FileAttribute" FileName="physmem.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
+    <FileAttrib ID="ID_FILEATTRIB_PROBMON" FriendlyName="probmon.sys\023d722cbbdd04e3db77de7e6e3cfeabcef21ba5b2f04c3f3a33691801dd45eb FileAttribute" FileName="probmon.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_PROCEXP" FriendlyName="Sysinternals Process Explorer FileAttribute" FileName="procexp.Sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="16.65535.65535.65535" />
+    <FileAttrib ID="ID_FILEATTRIB_PSMOUNTEREX" FriendlyName="psmounterex\02fa3060a8319f0f691547345863679d750bfea0974798ffcd379ee965bce83d FileAttribute" FileName="psmounterex.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="8.0.7760.0"/>
     <FileAttrib ID="ID_FILEATTRIB_RADHWMGR" FriendlyName="NCR RadHwMgr\00c3e86952eebb113d91d118629077b3370ebc41eeacb419762d2de30a43c09c FileAttribute" FileName="RadHwMgr.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_RTIF" FriendlyName="TenAsys rtif.sys\0d133ced666c798ea63b6d8026ec507d429e834daa7c74e4e091e462e5815180 FileAttribute" FileName="rtif.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="6.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_RTKIO_DRIVER" FriendlyName="" FileName="rtkio.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535" />
@@ -1874,13 +1893,14 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <FileAttrib ID="ID_FILEATTRIB_SYSDETECTOR_5" FriendlyName="C:\drivers\SysInfoDetector\770ab79212b08cd13864d6cfd9b97180d7b3f084d1d44aec09c8314d9466039e FileAttribute" FileName="SysInfoDetectorAE.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_SYSDETECTOR_6" FriendlyName="C:\drivers\SysInfoDetector\8ec9a4c4ec2b73440c591bc91543d0f685ffa1c3658926b25b06d929c5b6feed FileAttribute" FileName="SysInfoDetectorPro.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_SYSDRV3S" FriendlyName="SysDrv3s\0dd9daf0852a5b1b436199e9f2bf318f641f43173ab0dc22ad8c7e9cbaee9ad3 FileAttribute" FileName="SysDrv3S.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="3.6.0.0" />
+    <FileAttrib ID="ID_FILEATTRIB_TBOFLHELPER" FriendlyName="tboflhelper.sys\265259015d4fda3e9d14b7740b8153b9097ab054cf6873b46f9fefdc97266d35 FileAttribute" FileName="tboflhelper.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.0"/>
     <FileAttrib ID="ID_FILEATTRIB_TMEL" FriendlyName="TrendMicro TMEL Overpermissive ELAM FileAttribute" FileName="Tmel.sys" MinimumFileVersion="1.6.0.1002" MaximumFileVersion="1.6.0.1004" />
     <FileAttrib ID="ID_FILEATTRIB_TREND_MICRO" FriendlyName="TmComm.sys" FileName="TmComm.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="8.0.0.0" />
     <FileAttrib ID="ID_FILEATTRIB_VBOX" FriendlyName="VBoxDrv.sys FileAttribute" FileName="VBoxDrv.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="3.0.0.0" />
     <FileAttrib ID="ID_FILEATTRIB_TRUESIGHT" FriendlyName="Adlice Truesight.sys\3807e9a1bc159b9e8fc0c7caad10d7213ff8ed8ad1cea9ea552b093c81bf624b FileAttribute" FileName="Truesight" MinimumFileVersion="0.0.0.0" MaximumFileVersion="3.3.0.0"/>
     <FileAttrib ID="ID_FILEATTRIB_VDBSV" FriendlyName="VdBSv64.sys\8dba0ab11ce9f9df5c8fb9fff18bbe9c8c654864053c8b0c4f175ec7203a2e51 FileAttribute" FileName="VdBSv64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_VIRAGT" FriendlyName="viragt.sys 32-bit" FileName="viragt.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.80.0.0" />
-    <FileAttrib ID="ID_FILEATTRIB_VIRAGT64" FriendlyName="viragt64.sys" FileName="viragt64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.11" />
+    <FileAttrib ID="ID_FILEATTRIB_VIRAGT64" FriendlyName="viragt64.sys" FileName="viragt64.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="1.0.0.23" />
     <FileAttrib ID="ID_FILEATTRIB_VMDRV" FriendlyName="vmdrv.sys FileAttribute" FileName="vmdrv.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="10.0.10011.16384" />
     <FileAttrib ID="ID_FILEATTRIB_WCPU" FriendlyName="WCPU\159e7c5a12157af92e0d14a0d3ea116f91c09e21a9831486e6dc592c93c10980 FileAttribute" FileName="CPU Driver" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
     <FileAttrib ID="ID_FILEATTRIB_WINKERNEXP" FriendlyName="WindowsKernelExplorer.sys\455ff5274fbdd19ce1da6fc6725a00752761998759c6bacb9713081f613c1752 FileAttribute" FileName="WindowsKernelExplorer.sys" MinimumFileVersion="0.0.0.0" MaximumFileVersion="65535.65535.65535.65535"/>
@@ -1906,6 +1926,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_ASWSNX" />
       <FileAttribRef RuleID="ID_FILEATTRIB_ATSZIO" />
       <FileAttribRef RuleID="ID_FILEATTRIB_AVALUEIO" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_1" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_1" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CPUZ_DRIVER" />
@@ -1985,6 +2007,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_AODDRIVER_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_ATIDSMXX" />
       <FileAttribRef RuleID="ID_FILEATTRIB_ATSZIO" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_1" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_DRIVER7" />
       <FileAttribRef RuleID="ID_FILEATTRIB_GDRV" />
       <FileAttribRef RuleID="ID_FILEATTRIB_IOMAP" />
@@ -2066,12 +2090,14 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_MTCBSV64" />
       <FileAttribRef RuleID="ID_FILEATTRIB_PCDOC" />
       <FileAttribRef RuleID="ID_FILEATTRIB_PROCEXP" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX" />
       <FileAttribRef RuleID="ID_FILEATTRIB_RTKIO_DRIVER" />
       <FileAttribRef RuleID="ID_FILEATTRIB_RTKIO64_DRIVER" />
       <FileAttribRef RuleID="ID_FILEATTRIB_STDCDRV" />
       <FileAttribRef RuleID="ID_FILEATTRIB_TREND_MICRO" />
       <FileAttribRef RuleID="ID_FILEATTRIB_TRUESIGHT"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_WINRING0" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_WNBIOS" />
     </Signer>
     <Signer ID="ID_SIGNER_WINDOWS_3RD_PARTY_2014" Name="Microsoft Windows Third Party Component CA 2014">
       <CertRoot Type="TBS" Value="D8BE9E4D9074088EF818BC6F6FB64955E90378B2754155126FEEBBBD969CF0AE" />
@@ -2110,6 +2136,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_RZPNK" />
       <FileAttribRef RuleID="ID_FILEATTRIB_STDCDRV" />
       <FileAttribRef RuleID="ID_FILEATTRIB_SYSDRV3S" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_TBOFLHELPER" />
       <FileAttribRef RuleID="ID_FILEATTRIB_VIRAGT" />
       <FileAttribRef RuleID="ID_FILEATTRIB_VIRAGT64" />
       <FileAttribRef RuleID="ID_FILEATTRIB_VMDRV" />
@@ -2128,6 +2155,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_ALSYSIO" />
       <FileAttribRef RuleID="ID_FILEATTRIB_AODDRIVER_1" />
       <FileAttribRef RuleID="ID_FILEATTRIB_AODDRIVER_2" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_1" />
+      <FileAttribRef RuleID="ID_FILEATTRIB_BIONTDRV_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_1" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_2" />
       <FileAttribRef RuleID="ID_FILEATTRIB_CPUZ_DRIVER" />
@@ -2215,6 +2244,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_1"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_CP2X72C_2"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_FPCIE"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_WIRWADRV"/>
     </Signer>
     <Signer ID="ID_SIGNER_VERISIGN_AMD" Name="VeriSign Class 3 Code Signing 2010 CA">
@@ -2715,12 +2745,12 @@ This policy contains Allow All rules. If your version of Windows supports App Co
       <CertPublisher Value="Adlice"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_TRUESIGHT"/>
     </Signer>
-   <Signer ID="ID_SIGNER_TRUESIGHT_4" Name="DigiCert SHA2 High Assurance Code Signing CA">
+    <Signer ID="ID_SIGNER_TRUESIGHT_4" Name="DigiCert SHA2 High Assurance Code Signing CA">
       <CertRoot Type="TBS" Value="0BF095B845B69928B5D7DFD1C42AE4F90FEB8DC97F7830598C93E848877021FB"/>
       <CertPublisher Value="Adlice"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_TRUESIGHT"/>
     </Signer>
-   <Signer ID="ID_SIGNER_HWDETECTNG" Name="GlobalSign Primary Object Publishing CA">
+    <Signer ID="ID_SIGNER_HWDETECTNG" Name="GlobalSign Primary Object Publishing CA">
       <CertRoot Type="TBS" Value="041750993D7C9E063F02DFE74699598640911AAB"/>
       <CertPublisher Value="iNFERRE"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_HWDETECTNG"/>
@@ -2853,18 +2883,17 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Signer ID="ID_SIGNER_ITM_1" Name="GlobalSign Primary Object Publishing CA">
       <CertRoot Type="TBS" Value="79F0A648BD7F1184F86BFF43AE47C9ECC3ED3CEC"/>
       <CertPublisher Value="ITM System Co.,LTD"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PROBMON"/>
     </Signer>
     <Signer ID="ID_SIGNER_ITM_2" Name="GlobalSign CodeSigning CA - G3">
       <CertRoot Type="TBS" Value="F478F0E790D5C8EC6056A3AB2567404A991D2837"/>
       <CertPublisher Value="ITM System Co.,Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PROBMON"/>
     </Signer>
     <Signer ID="ID_SIGNER_ITM_3" Name="GlobalSign CodeSigning CA - G2">
       <CertRoot Type="TBS" Value="589A7D4DF869395601BA7538A65AFAE8C4616385"/>
       <CertPublisher Value="ITM System Co.,Ltd"/>
-    </Signer>
-    <Signer ID="ID_SIGNER_ITM_4" Name="GlobalSign">
-      <CertRoot Type="TBS" Value="BD1765C56594221373893EF26D97F88C144FB0E5A0111215B45D7239C3444DF7"/>
-      <CertPublisher Value="INZENT Co., Ltd."/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PROBMON"/>
     </Signer>
     <Signer ID="ID_SIGNER_KSAPI_1" Name="DigiCert Assured ID Code Signing CA-1">
       <CertRoot Type="TBS" Value="47F4B9898631773231B32844EC0D49990AC4EB1E"/>
@@ -2898,6 +2927,51 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Signer ID="ID_SIGNER_ACEBASE_2" Name="DigiCert SHA2 Assured ID Code Signing CA">
       <CertRoot Type="TBS" Value="E767799478F64A34B3F53FF3BB9057FE1768F4AB178041B0DCC0FF1E210CBA65"/>
       <FileAttribRef RuleID="ID_FILEATTRIB_ACEBASE"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_TBOFLHELPER_1" Name="TeraByte Unlimited SHA1">
+      <CertRoot Type="TBS" Value="DBFC7342EAC035786406BD030C659E155A7664F5"/>
+      <CertPublisher Value="TeraByte Unlimited SHA1"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_TBOFLHELPER"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_TBOFLHELPER_2" Name="DigiCert High Assurance Code Signing CA-1">
+      <CertRoot Type="TBS" Value="1D7E838ACCD498C2E5BA9373AF819EC097BB955C"/>
+      <CertPublisher Value="TeraByte, Inc."/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_TBOFLHELPER"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_PSMOUNTEREX_1" Name="GlobalSign">
+      <CertRoot Type="TBS" Value="BD1765C56594221373893EF26D97F88C144FB0E5A0111215B45D7239C3444DF7"/>
+      <CertPublisher Value="Paramount Software UK Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_PSMOUNTEREX_2" Name="GlobalSign CodeSigning CA - G2">
+      <CertRoot Type="TBS" Value="589A7D4DF869395601BA7538A65AFAE8C4616385"/>
+      <CertPublisher Value="Paramount Software UK Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_PSMOUNTEREX_3" Name="GlobalSign GCC R45 EV CodeSigning CA 2020">
+      <CertRoot Type="TBS" Value="D9C7DB0B704F07089440C56E69A0F31D730EDF77CFBF7514630E8B5390A270FE"/>
+      <CertPublisher Value="PARAMOUNT SOFTWARE UK LIMITED"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_PSMOUNTEREX_4" Name="GlobalSign CodeSigning CA - G3">
+      <CertRoot Type="TBS" Value="F478F0E790D5C8EC6056A3AB2567404A991D2837"/>
+      <CertPublisher Value="Paramount Software UK Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_PSMOUNTEREX_5" Name="GlobalSign Primary Object Publishing CA">
+      <CertRoot Type="TBS" Value="79F0A648BD7F1184F86BFF43AE47C9ECC3ED3CEC"/>
+      <CertPublisher Value="Paramount Software UK Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_PSMOUNTEREX"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_ACCELLID_1" Name="Symantec Class 3 SHA256 Code Signing CA">
+      <CertRoot Type="TBS" Value="A08E79C386083D875014C409C13D144E0A24386132980DF11FF59737C8489EB1"/>
+      <CertPublisher Value="Elitegroup Computer Systems Co Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_ACCELLID"/>
+    </Signer>
+    <Signer ID="ID_SIGNER_ACCELLID_2" Name="Microsoft Windows Third Party Component CA 2012">
+      <CertRoot Type="TBS" Value="CEC1AFD0E310C55C1DCC601AB8E172917706AA32FB5EAF826813547FDF02DD46"/>
+      <CertOemID Value="Elitegroup Computer Systems Co Ltd"/>
+      <FileAttribRef RuleID="ID_FILEATTRIB_ACCELLID"/>
     </Signer>
     <Signer ID="ID_SIGNER_AMON" Name="Microsoft Windows Third Party Component CA 2014">
       <CertRoot Type="TBS" Value="D8BE9E4D9074088EF818BC6F6FB64955E90378B2754155126FEEBBBD969CF0AE"/>
@@ -3046,12 +3120,21 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     <Signer ID="ID_SIGNER_ARTIFICIAL_SOFT" Name="Artificial Software BV">
        <CertRoot Type="TBS" Value="67B8386FFC9811CEAD5D88882EE2BD4DB6B516C1542ECB1FC9B8ADA932BFE8D9"/>
     </Signer>
+    <Signer ID="ID_SIGNER_CLEVERSOAR" Name="GlobalSign">
+       <CertRoot Type="TBS" Value="DE1DA11668F0A8D5E13346ED3AB2755F5D25BEBFFCFD1D0BDE5B9F87BC292C91"/>
+       <CertPublisher Value="CleverSoar Electronic Technology Co., Ltd."/>
+    </Signer>
+    <Signer ID="ID_SIGNER_STOPZILLA" Name="iS3, Inc.">
+      <CertRoot Type="TBS" Value="967C2149FE1B6B5E943E379E3EEBE6348854257F"/>
+    </Signer>
   </Signers>
   <!--Driver Signing Scenarios-->
   <SigningScenarios>
     <SigningScenario Value="131" ID="ID_SIGNINGSCENARIO_DENIED_VULN_MAL_SIGNERS" FriendlyName="Signers of known vulnerable or malicious drivers">
       <ProductSigners>
         <DeniedSigners>
+          <DeniedSigner SignerId="ID_SIGNER_ACCELLID_1" />
+          <DeniedSigner SignerId="ID_SIGNER_ACCELLID_2" />
           <DeniedSigner SignerId="ID_SIGNER_ACEBASE_1" />
           <DeniedSigner SignerId="ID_SIGNER_ACEBASE_2" />
           <DeniedSigner SignerId="ID_SIGNER_AGNITUM_2004" />
@@ -3088,6 +3171,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
           <DeniedSigner SignerId="ID_SIGNER_BEIJING_VSK" />
           <DeniedSigner SignerId="ID_SIGNER_CAPCOM" />
           <DeniedSigner SignerId="ID_SIGNER_CHEAT_ENGINE" />
+          <DeniedSigner SignerId="ID_SIGNER_CLEVERSOAR" />
           <DeniedSigner SignerId="ID_SIGNER_COMPUTERZ_1" />
           <DeniedSigner SignerId="ID_SIGNER_COMPUTERZ_2" />
           <DeniedSigner SignerId="ID_SIGNER_COMODO_IQVW" />
@@ -3209,12 +3293,20 @@ This policy contains Allow All rules. If your version of Windows supports App Co
           <DeniedSigner SignerId="ID_SIGNER_SPEEDFAN" />
           <DeniedSigner SignerId="ID_SIGNER_STDCDRV" />
           <DeniedSigner SignerId="ID_SIGNER_STDCDRVWS" />
+          <DeniedSigner SignerId="ID_SIGNER_STOPZILLA" />
           <DeniedSigner SignerId="ID_SIGNER_SYSDRV3S" />
           <DeniedSigner SignerId="ID_SIGNER_PHYMEM" />
           <DeniedSigner SignerId="ID_SIGNER_PHYMEM_1" />
           <DeniedSigner SignerId="ID_SIGNER_PHYMEM_2" />
+          <DeniedSigner SignerId="ID_SIGNER_PSMOUNTEREX_1" />
+          <DeniedSigner SignerId="ID_SIGNER_PSMOUNTEREX_2" />
+          <DeniedSigner SignerId="ID_SIGNER_PSMOUNTEREX_3" />
+          <DeniedSigner SignerId="ID_SIGNER_PSMOUNTEREX_4" />
+          <DeniedSigner SignerId="ID_SIGNER_PSMOUNTEREX_5" />
           <DeniedSigner SignerId="ID_SIGNER_SYMANTEC_CLASS_3" />
           <DeniedSigner SignerId="ID_SIGNER_SYMANTEC_CLASS_3_EV" />
+          <DeniedSigner SignerId="ID_SIGNER_TBOFLHELPER_1" />
+          <DeniedSigner SignerId="ID_SIGNER_TBOFLHELPER_2" />
           <DeniedSigner SignerId="ID_SIGNER_TRUST_ASIA" />
           <DeniedSigner SignerId="ID_SIGNER_TRUESIGHT_1" />
           <DeniedSigner SignerId="ID_SIGNER_TRUESIGHT_2" />
@@ -4036,6 +4128,8 @@ This policy contains Allow All rules. If your version of Windows supports App Co
           <FileRuleRef RuleID="ID_DENY_IREC_52" />
           <FileRuleRef RuleID="ID_DENY_IREC_53" />
           <FileRuleRef RuleID="ID_DENY_IREC_54" />
+          <FileRuleRef RuleID="ID_DENY_KERNCORELIB_1" />
+          <FileRuleRef RuleID="ID_DENY_KERNCORELIB_2" />
           <FileRuleRef RuleID="ID_DENY_KERNELD_0" />
           <FileRuleRef RuleID="ID_DENY_KERNELD_1" />
           <FileRuleRef RuleID="ID_DENY_KERNELD_2" />
@@ -4420,6 +4514,18 @@ This policy contains Allow All rules. If your version of Windows supports App Co
           <FileRuleRef RuleID="ID_DENY_PHYMEMX64_SHA256_PAGE" />
           <FileRuleRef RuleID="ID_DENY_PPLKILLER_1" />
           <FileRuleRef RuleID="ID_DENY_PPLKILLER_2" />
+          <FileRuleRef RuleID="ID_DENY_PROBMON_1" />
+          <FileRuleRef RuleID="ID_DENY_PROBMON_2" />
+          <FileRuleRef RuleID="ID_DENY_PROBMON_3" />
+          <FileRuleRef RuleID="ID_DENY_PROBMON_4" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_1" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_2" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_3" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_4" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_5" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_6" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_7" />
+          <FileRuleRef RuleID="ID_DENY_PSMOUNTEREX_8" />
           <FileRuleRef RuleID="ID_DENY_QMBSEC_0" />
           <FileRuleRef RuleID="ID_DENY_QMBSEC_1" />
           <FileRuleRef RuleID="ID_DENY_QMBSEC_2" />
@@ -4986,7 +5092,7 @@ This policy contains Allow All rules. If your version of Windows supports App Co
     </Setting>
     <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
       <Value>
-        <String>10.0.27770.0</String>
+        <String>10.0.27825.0</String>
       </Value>
     </Setting>
   </Settings>
