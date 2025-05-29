@@ -218,8 +218,9 @@
     <None Update="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Update="RulesDict.xml">
+    <None Update="Resources\RulesDict.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>RulesDict.xml</TargetPath>
     </None>
     <None Update="Templates\AllowMicrosoft - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
