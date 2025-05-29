@@ -222,8 +222,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>RulesDict.xml</TargetPath>
     </None>
-    <None Update="Templates\AllowMicrosoft - SingleFormat.xml">
+    <None Update="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AllowMicrosoft - SingleFormat.xml</TargetPath>
     </None>
     <None Update="Templates\AllowMicrosoft.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
