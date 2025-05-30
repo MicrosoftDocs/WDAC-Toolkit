@@ -871,7 +871,7 @@ namespace WDAC_Wizard
         internal static string GetExecutablePath(bool exePath)
         {
             string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string folderPath = System.IO.Path.GetDirectoryName(executablePath);
+            string folderPath = Path.GetDirectoryName(executablePath);
             if (exePath)
             {
                 return executablePath;

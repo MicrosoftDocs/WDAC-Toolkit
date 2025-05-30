@@ -38,14 +38,14 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
 
-            this._MainWindow = pMainWindow;
-            this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
-            this._MainWindow.RedoFlowRequired = false;
-            this.Policy = this._MainWindow.Policy; 
+            _MainWindow = pMainWindow;
+            _MainWindow.ErrorOnPage = true;
+            _MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
+            _MainWindow.RedoFlowRequired = false;
+            Policy = _MainWindow.Policy; 
             Logger.Log.AddInfoMsg("==== Edit Workflow Page Initialized ====");
-            this.Workflow = WorkflowType.Edit; // Edit xml is default in the UI
-            this.EventLogPaths = new List<string>();
+            Workflow = WorkflowType.Edit; // Edit xml is default in the UI
+            EventLogPaths = new List<string>();
         }
 
         /// <summary>
@@ -55,13 +55,13 @@ namespace WDAC_Wizard
         private void buttonBrowse_Click(object sender, EventArgs e)
         {
             // If user is changing the policy schema being edited, show message
-            if(this._MainWindow.PageList.Count > 1)
+            if(_MainWindow.PageList.Count > 1)
             {
                 DialogResult res = MessageBox.Show("Modifying the current schema to edit will cause you to lose your progress. " +
                     "Are you sure you want to do this?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res == DialogResult.Yes)
                 {
-                    this._MainWindow.RedoFlowRequired = true;
+                    _MainWindow.RedoFlowRequired = true;
                 }
                 else
                 {
@@ -78,20 +78,20 @@ namespace WDAC_Wizard
                 if (! String.IsNullOrEmpty(policyPath))
                 {
                     textBoxPolicyPath.Text = policyPath;                   
-                    this.EditPath = policyPath;
+                    EditPath = policyPath;
 
                     // Parse the policy for its information and display it
-                    ParsePolicy(this.EditPath);
+                    ParsePolicy(EditPath);
                     DisplayPolicyInfo(); 
 
-                    this._MainWindow.Policy.EditPolicyPath = this.EditPath;
+                    _MainWindow.Policy.EditPolicyPath = EditPath;
 
                     // If user has returned to this page and updated the policy, must proceed to page 2
-                    this._MainWindow.RedoFlowRequired = true;
+                    _MainWindow.RedoFlowRequired = true;
 
                     // Clear error flag to advance to the next page
-                    this._MainWindow.ErrorOnPage = false;
-                    this._MainWindow.DisplayInfoText(0);
+                    _MainWindow.ErrorOnPage = false;
+                    _MainWindow.DisplayInfoText(0);
                 }
             }
 
@@ -109,26 +109,26 @@ namespace WDAC_Wizard
             // Serialize the policy into the policy object
             try
             {
-                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(xmlPath); 
-                this._MainWindow.ErrorOnPage = false;
+                Policy.siPolicy = Helper.DeserializeXMLtoPolicy(xmlPath); 
+                _MainWindow.ErrorOnPage = false;
 
                 // Set the policy format type for the policy creation step in MainForm.cs
-                if(this.Policy.siPolicy.PolicyTypeID == Properties.Resources.LegacyPolicyID_GUID)
+                if(Policy.siPolicy.PolicyTypeID == Properties.Resources.LegacyPolicyID_GUID)
                 {
-                    this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
+                    _MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
                 }
                 else
                 {
-                    this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+                    _MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
                     
                     // Set the policy type (base, supplemental) to know which policy rule-options to set on ConfigTemplate_Control
-                    if (this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                    if (Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                     {
-                        this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy; 
+                        _MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy; 
                     }
                     else
                     {
-                        this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
+                        _MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy; 
                     }
                 }
             }
@@ -141,7 +141,7 @@ namespace WDAC_Wizard
                     "Policy Parsing Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 Logger.Log.AddErrorMsg("ParsePolicy encountered the following error message" + e.ToString()); 
-                this._MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorOnPage = true;
             }
         }
 
@@ -153,9 +153,9 @@ namespace WDAC_Wizard
             // Set the default text fields to N/A. Will overwrite if we find true settings
             textBox_PolicyID.Text =   "N/A"; 
             textBox_PolicyName.Text = "N/A"; 
-            if(this.Policy.siPolicy.Settings != null)
+            if(Policy.siPolicy.Settings != null)
             {
-                foreach (var setting in this.Policy.siPolicy.Settings)
+                foreach (var setting in Policy.siPolicy.Settings)
                 {
                     if (setting.ValueName == "Name")
                     {
@@ -183,7 +183,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void TextBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
-            this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
+            _MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void TextBox_PolicyID_TextChanged(object sender, EventArgs e)
         {
-            this._MainWindow.Policy.PolicyID = textBox_PolicyID.Text;
+            _MainWindow.Policy.PolicyID = textBox_PolicyID.Text;
         }
 
         /// <summary>
@@ -209,24 +209,24 @@ namespace WDAC_Wizard
                 return; 
             }
 
-            this.EventLogPaths = eventLogPaths;
+            EventLogPaths = eventLogPaths;
 
             // Prep UI
-            this.textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
-            this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
-            this.Workflow = WorkflowType.ArbitraryEventLog;
+            textBox_EventLogFilePath.Lines = eventLogPaths.ToArray(); 
+            panel_Progress.Visible = true;
+            panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
+            Workflow = WorkflowType.ArbitraryEventLog;
 
             // Clear error labels if applicable
-            this.label_Error.Visible = false;
-            this.eventLogParsing_Result_Panel.Visible = false;
-            this.ahParsingLearnMore_Label.Visible = false;
-            this._MainWindow.DisplayInfoText(0);
+            label_Error.Visible = false;
+            eventLogParsing_Result_Panel.Visible = false;
+            ahParsingLearnMore_Label.Visible = false;
+            _MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
-            if (!this.backgroundWorker.IsBusy)
+            if (!backgroundWorker.IsBusy)
             {
-                this.backgroundWorker.RunWorkerAsync();
+                backgroundWorker.RunWorkerAsync();
             }  
         }
 
@@ -239,21 +239,21 @@ namespace WDAC_Wizard
         {
             // Serialize the siPolicy to xml and display the name and ID to user. 
             // Afterwards, set the editPath to the temp location of the xml
-            this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
-            this.label_Progress.Text = "Event Viewer Log Parsing in Progress";
-            this.Workflow = WorkflowType.DeviceEventLog;
+            panel_Progress.Visible = true;
+            panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
+            label_Progress.Text = "Event Viewer Log Parsing in Progress";
+            Workflow = WorkflowType.DeviceEventLog;
 
             // Clear error labels if applicable
-            this.label_Error.Visible = false;
-            this.eventLogParsing_Result_Panel.Visible = false;
-            this.ahParsingLearnMore_Label.Visible = false;
-            this._MainWindow.DisplayInfoText(0);
+            label_Error.Visible = false;
+            eventLogParsing_Result_Panel.Visible = false;
+            ahParsingLearnMore_Label.Visible = false;
+            _MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
-            if (!this.backgroundWorker.IsBusy)
+            if (!backgroundWorker.IsBusy)
             {
-                this.backgroundWorker.RunWorkerAsync();
+                backgroundWorker.RunWorkerAsync();
             }
         }
 
@@ -272,24 +272,24 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this.EventLogPaths = eventLogPaths;
+            EventLogPaths = eventLogPaths;
 
             // Prep UI
-            this.textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
-            this.panel_Progress.Visible = true;
-            this.panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
-            this.Workflow = WorkflowType.AdvancedHunting;
+            textBox_AdvancedHuntingPaths.Lines = eventLogPaths.ToArray();
+            panel_Progress.Visible = true;
+            panel_Progress.Location = buttonParseEventLog.Location; // Center the progress gif
+            Workflow = WorkflowType.AdvancedHunting;
 
             // Clear error labels if applicable
-            this.label_Error.Visible = false;
-            this.eventLogParsing_Result_Panel.Visible = false;
-            this.ahParsingLearnMore_Label.Visible = false;
-            this._MainWindow.DisplayInfoText(0);
+            label_Error.Visible = false;
+            eventLogParsing_Result_Panel.Visible = false;
+            ahParsingLearnMore_Label.Visible = false;
+            _MainWindow.DisplayInfoText(0);
 
             // Create background worker to display updates to UI
-            if (!this.backgroundWorker.IsBusy)
+            if (!backgroundWorker.IsBusy)
             {
-                this.backgroundWorker.RunWorkerAsync();
+                backgroundWorker.RunWorkerAsync();
             }
         }
 
@@ -300,47 +300,47 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.backgroundWorker = sender as BackgroundWorker;
-            if(this.Workflow == WorkflowType.ArbitraryEventLog)
+            backgroundWorker = sender as BackgroundWorker;
+            if(Workflow == WorkflowType.ArbitraryEventLog)
             {
-                this._MainWindow.CiEvents = EventLog.ReadArbitraryEventLogs(this.EventLogPaths);
+                _MainWindow.CiEvents = EventLog.ReadArbitraryEventLogs(EventLogPaths);
             }
-            else if(this.Workflow == WorkflowType.AdvancedHunting)
+            else if(Workflow == WorkflowType.AdvancedHunting)
             {
                 // Process CSV file(s) as if they are Advanced Hunting and LogAnalytics
 
-                List<CiEvent> aHuntingEvents = AdvancedHunting.ReadAdvancedHuntingCsvFiles(this.EventLogPaths);
-                List<CiEvent> lAnalyticEvents = LogAnalytics.ReadLogAnalyticCsvFiles(this.EventLogPaths); 
+                List<CiEvent> aHuntingEvents = AdvancedHunting.ReadAdvancedHuntingCsvFiles(EventLogPaths);
+                List<CiEvent> lAnalyticEvents = LogAnalytics.ReadLogAnalyticCsvFiles(EventLogPaths); 
 
                 if(aHuntingEvents != null)
                 {
-                    this._MainWindow.CiEvents = aHuntingEvents; 
+                    _MainWindow.CiEvents = aHuntingEvents; 
                 }
 
                 if(lAnalyticEvents != null)
                 {
-                    if (this._MainWindow.CiEvents == null)
+                    if (_MainWindow.CiEvents == null)
                     {
-                        this._MainWindow.CiEvents = lAnalyticEvents; 
+                        _MainWindow.CiEvents = lAnalyticEvents; 
                     }
                     else
                     {
-                        this._MainWindow.CiEvents.AddRange(lAnalyticEvents);
+                        _MainWindow.CiEvents.AddRange(lAnalyticEvents);
                     }
                 }
 
             }
             else
             {
-                this._MainWindow.CiEvents = EventLog.ReadSystemEventLogs();
+                _MainWindow.CiEvents = EventLog.ReadSystemEventLogs();
             }
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int progressPercent = e.ProgressPercentage;
-            double completedRules = Math.Ceiling((double)progressPercent / (double)100 * (double)this.NumberRules); 
-            string progress = String.Format("{0} / {1} Event Log events parsed", (int) completedRules, this.NumberRules); 
+            double completedRules = Math.Ceiling((double)progressPercent / (double)100 * (double)NumberRules); 
+            string progress = String.Format("{0} / {1} Event Log events parsed", (int) completedRules, NumberRules); 
 
             label_Progress.Text = progress; 
         }
@@ -353,23 +353,23 @@ namespace WDAC_Wizard
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Remove GIF // Update UI 
-            this.panel_Progress.Visible = false;
-            this.eventLogParsing_Result_Panel.Visible = true;
-            this.eventLogParsing_Result_Panel.BringToFront(); 
+            panel_Progress.Visible = false;
+            eventLogParsing_Result_Panel.Visible = true;
+            eventLogParsing_Result_Panel.BringToFront(); 
 
             // Unsuccessful conversion
             if (e.Error != null)
             {
                 Logger.Log.AddErrorMsg("ProcessPolicy() caught the following exception ", e.Error);
-                this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
-                this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
-                this._MainWindow.ErrorOnPage = true;
+                parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversion; 
+                parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                _MainWindow.ErrorOnPage = true;
             }
-            else if(this._MainWindow.CiEvents == null
+            else if(_MainWindow.CiEvents == null
                     || _MainWindow.CiEvents.Count < 1)
             {
                 // Show AH/LogAnalytics error messages
-                if(this.Workflow == WorkflowType.AdvancedHunting)
+                if(Workflow == WorkflowType.AdvancedHunting)
                 {
                     string errString = $"Advanced Hunting parsing returned: {AdvancedHunting.GetLastError()} " +
                                    $"\r\n\r\nLogAnalytics parsing returned {LogAnalytics.GetLastError()}";
@@ -380,31 +380,31 @@ namespace WDAC_Wizard
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
 
-                    this.parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
-                    this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
-                    this._MainWindow.ErrorOnPage = true;
-                    this.ahParsingLearnMore_Label.Visible = true;
+                    parseResults_Label.Text = Properties.Resources.UnsuccessfulAdvancedHuntingLogConversion;
+                    parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                    _MainWindow.ErrorOnPage = true;
+                    ahParsingLearnMore_Label.Visible = true;
                 }
 
                 // Show evtx error messages
                 else
                 {
                     Logger.Log.AddErrorMsg("Zero CiEvents were created.");
-                    this.parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
-                    this.parseresult_PictureBox.Image = Properties.Resources.not_extendable;
-                    this._MainWindow.ErrorOnPage = true;
+                    parseResults_Label.Text = Properties.Resources.UnsuccessfulEventLogConversionZeroEvents;
+                    parseresult_PictureBox.Image = Properties.Resources.not_extendable;
+                    _MainWindow.ErrorOnPage = true;
                 }
             }
             else
             {
-                this.parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
-                this.parseresult_PictureBox.Image = Properties.Resources.verified;
+                parseResults_Label.Text = Properties.Resources.EventLogConversionSuccess;
+                parseresult_PictureBox.Image = Properties.Resources.verified;
                 _ = MessageBox.Show(Properties.Resources.EventLogConversionSuccess, 
                                     "Wizard Event Log Parsing Success", 
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
 
-                this._MainWindow.ErrorOnPage = false;
+                _MainWindow.ErrorOnPage = false;
             }
 
             Logger.Log.AddNewSeparationLine("Event Parsing Workflow -- DONE");
@@ -438,30 +438,30 @@ namespace WDAC_Wizard
         private void EditXML_RadioButton_Click(object sender, EventArgs e)
         {
             // User wants to edit xml file of an existing policy. Prepare the UI accordingly
-            this.panel_Edit_XML.Visible = true;
-            this.panel_EventLog_Conversion.Visible = false;
+            panel_Edit_XML.Visible = true;
+            panel_EventLog_Conversion.Visible = false;
 
-            this._MainWindow.EditWorkflow = MainWindow.EditWorkflowType.Edit;
+            _MainWindow.EditWorkflow = MainWindow.EditWorkflowType.Edit;
 
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
-            this.panel_Edit_XML.Location = urPoint;
+            panel_Edit_XML.Location = urPoint;
 
             // Update error flag and message
-            this._MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
-            if(String.IsNullOrEmpty(this._MainWindow.Policy.EditPolicyPath))
+            _MainWindow.ErrorMsg = Properties.Resources.ChoosePolicyToEdit_Error;
+            if(String.IsNullOrEmpty(_MainWindow.Policy.EditPolicyPath))
             {
-                this._MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorOnPage = true;
             }
             else
             {
-                this._MainWindow.ErrorOnPage = false;
+                _MainWindow.ErrorOnPage = false;
             }
 
             // Update redo required flag
-            if (this._MainWindow.CiEvents != null && this._MainWindow.CiEvents.Count > 0)
+            if (_MainWindow.CiEvents != null && _MainWindow.CiEvents.Count > 0)
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
         }
 
@@ -473,29 +473,29 @@ namespace WDAC_Wizard
         private void EventConversion_RadioButton_Click(object sender, EventArgs e)
         {
             // User wants to convert an event log to a WDAC policy. Prepare the UI accordingly
-            this.panel_Edit_XML.Visible = false;
-            this.panel_EventLog_Conversion.Visible = true;
-            this._MainWindow.EditWorkflow = MainWindow.EditWorkflowType.EventLog;
+            panel_Edit_XML.Visible = false;
+            panel_EventLog_Conversion.Visible = true;
+            _MainWindow.EditWorkflow = MainWindow.EditWorkflowType.EventLog;
 
             // Bring edit xml panel to upper-right corner of page panel
             Point urPoint = new Point(PAD_X, PAD_Y);
-            this.panel_EventLog_Conversion.Location = urPoint;
+            panel_EventLog_Conversion.Location = urPoint;
 
             // Update the error flag and message
-            this._MainWindow.ErrorMsg = Properties.Resources.ChooseEventLog_Error;
-            if(this._MainWindow.CiEvents == null || this._MainWindow.CiEvents.Count < 1)
+            _MainWindow.ErrorMsg = Properties.Resources.ChooseEventLog_Error;
+            if(_MainWindow.CiEvents == null || _MainWindow.CiEvents.Count < 1)
             {
-                this._MainWindow.ErrorOnPage = true; 
+                _MainWindow.ErrorOnPage = true; 
             }
             else
             {
-                this._MainWindow.ErrorOnPage = false;
+                _MainWindow.ErrorOnPage = false;
             }
 
             // Update redo required flag
-            if (!String.IsNullOrEmpty(this._MainWindow.Policy.EditPolicyPath))
+            if (!String.IsNullOrEmpty(_MainWindow.Policy.EditPolicyPath))
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
         }
 
@@ -509,11 +509,11 @@ namespace WDAC_Wizard
             string saveLocation = Helper.SaveSingleFile(Properties.Resources.BrowseForXmlSaveLoc, Helper.BrowseFileType.Policy); 
             if(!String.IsNullOrEmpty(saveLocation))
             {
-                this.textBoxSaveLocation.Text = saveLocation;
-                this.textBoxSaveLocation.SelectionStart = this.textBoxSaveLocation.TextLength - 1;
-                this.textBoxSaveLocation.ScrollToCaret();
+                textBoxSaveLocation.Text = saveLocation;
+                textBoxSaveLocation.SelectionStart = textBoxSaveLocation.TextLength - 1;
+                textBoxSaveLocation.ScrollToCaret();
 
-                this._MainWindow.Policy.SchemaPath = saveLocation; 
+                _MainWindow.Policy.SchemaPath = saveLocation; 
             }
         }
 
@@ -604,7 +604,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
@@ -646,7 +646,7 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
@@ -695,23 +695,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.DodgerBlue;
-                button.BackColor = System.Drawing.Color.Transparent;
+                button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.DodgerBlue;
+                button.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.Black;
-                button.BackColor = System.Drawing.Color.WhiteSmoke;
+                button.FlatAppearance.BorderColor = Color.Black;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.Black;
+                button.BackColor = Color.WhiteSmoke;
             }
         }
 

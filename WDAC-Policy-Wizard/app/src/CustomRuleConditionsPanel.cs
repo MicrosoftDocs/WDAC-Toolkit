@@ -45,21 +45,21 @@ namespace WDAC_Wizard
         public CustomRuleConditionsPanel(SigningRules_Control pControl)
         {
             InitializeComponent();
-            this.Policy = pControl.Policy;
-            this.PolicyCustomRule = new PolicyCustomRules();
-            this.AllFilesinFolder = new List<string>();
+            Policy = pControl.Policy;
+            PolicyCustomRule = new PolicyCustomRules();
+            AllFilesinFolder = new List<string>();
 
-            this._MainWindow = pControl._MainWindow;
-            this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.CustomRuleinProgress = true;
+            _MainWindow = pControl._MainWindow;
+            _MainWindow.RedoFlowRequired = false;
+            _MainWindow.CustomRuleinProgress = true;
             Logger.Log.AddInfoMsg("==== Custom Signing Rules Panel Initialized ====");
-            this.SigningControl = pControl;
-            this.RuleInEdit = true;
-            this.state = UIState.RuleConditions;
-            this.redoRequired = false;
-            this.exceptionsControl = null;
-            this.DefaultValues = new string[5];
-            this.FoundPackages = new List<string>();
+            SigningControl = pControl;
+            RuleInEdit = true;
+            state = UIState.RuleConditions;
+            redoRequired = false;
+            exceptionsControl = null;
+            DefaultValues = new string[5];
+            FoundPackages = new List<string>();
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace WDAC_Wizard
         private void Button_CreateRule_Click(object sender, EventArgs e)
         {
             // Verify first that an exception flow is not in progress
-            if (this.exceptionsControl != null
-                && this.exceptionsControl.IsRuleInProgress())
+            if (exceptionsControl != null
+                && exceptionsControl.IsRuleInProgress())
             {
                 DialogResult res = MessageBox.Show(Properties.Resources.RuleExceptionInProgressText,
                                                    "Confirmation",
@@ -83,30 +83,30 @@ namespace WDAC_Wizard
 
             // Check COM Object rule for valid GUID
             // Skip scenario and reference file states for COM rules
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Com)
             {
                 // Snap GUID at time of rule creation and remove whitespace
-                if (this.comboBoxComKeyType.SelectedItem.ToString() != Properties.Resources.ComObjectAllKeys)
+                if (comboBoxComKeyType.SelectedItem.ToString() != Properties.Resources.ComObjectAllKeys)
                 {
-                    this.PolicyCustomRule.COMObject.Guid = Regex.Replace(this.textBoxObjectKey.Text, @"\s", "");
+                    PolicyCustomRule.COMObject.Guid = Regex.Replace(textBoxObjectKey.Text, @"\s", "");
                 }
 
-                if (!this.PolicyCustomRule.COMObject.IsValidRule())
+                if (!PolicyCustomRule.COMObject.IsValidRule())
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.ComInvalidGuid;
-                    Logger.Log.AddWarningMsg("Invalid COM Object Guid " + this.PolicyCustomRule.COMObject.Guid);
+                    Logger.Log.AddWarningMsg("Invalid COM Object Guid " + PolicyCustomRule.COMObject.Guid);
                     return;
                 }
 
                 // Set COM Object value to state of the rule
-                if (this.PolicyCustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
+                if (PolicyCustomRule.Permission == PolicyCustomRules.RulePermission.Allow)
                 {
-                    this.PolicyCustomRule.COMObject.ValueItem = true;
+                    PolicyCustomRule.COMObject.ValueItem = true;
                 }
                 else
                 {
-                    this.PolicyCustomRule.COMObject.ValueItem = false;
+                    PolicyCustomRule.COMObject.ValueItem = false;
                 }
             }
 
@@ -116,7 +116,7 @@ namespace WDAC_Wizard
                 PolicyCustomRule.AppIDTag.Key= appIDTagKeyTextbox.Text;
                 PolicyCustomRule.AppIDTag.Value = appIDTagValueTextbox.Text;
 
-                if (!this.PolicyCustomRule.AppIDTag.IsValidTag())
+                if (!PolicyCustomRule.AppIDTag.IsValidTag())
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.AppIDInvalidTag;
@@ -139,13 +139,13 @@ namespace WDAC_Wizard
 
             // Publisher and File Attribute checks
             // Check to make sure none of the fields are invalid
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher ||
-                this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher ||
+                PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
             {
                 // Assert one checkbox needs to be selected
-                if (!(this.PolicyCustomRule.CheckboxCheckStates.checkBox0 || this.PolicyCustomRule.CheckboxCheckStates.checkBox1
-                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox2 || this.PolicyCustomRule.CheckboxCheckStates.checkBox3
-                    || this.PolicyCustomRule.CheckboxCheckStates.checkBox4))
+                if (!(PolicyCustomRule.CheckboxCheckStates.checkBox0 || PolicyCustomRule.CheckboxCheckStates.checkBox1
+                    || PolicyCustomRule.CheckboxCheckStates.checkBox2 || PolicyCustomRule.CheckboxCheckStates.checkBox3
+                    || PolicyCustomRule.CheckboxCheckStates.checkBox4))
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.InvalidCheckboxState;
@@ -153,65 +153,65 @@ namespace WDAC_Wizard
                     return;
                 }
 
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
+                    if (PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(textBoxSlider_0.Text))
                     {
                         warnUser = true;
                         Logger.Log.AddWarningMsg("PCACertificate field with null attribute");
                     }
 
-                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(this.textBoxSlider_1.Text))
+                    if (PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(textBoxSlider_1.Text))
                     {
                         warnUser = true;
                         Logger.Log.AddWarningMsg("Publisher field with null attribute");
                     }
 
-                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4 && !Helper.IsValidText(this.textBoxSlider_4.Text))
+                    if (PolicyCustomRule.CheckboxCheckStates.checkBox4 && !Helper.IsValidText(textBoxSlider_4.Text))
                     {
                         ShowInvalidErrorLabel();
                         return;
                     }
 
                     // Check custom EKU value if applicable
-                    if (!String.IsNullOrEmpty(this.PolicyCustomRule.EKUFriendly))
+                    if (!String.IsNullOrEmpty(PolicyCustomRule.EKUFriendly))
                     {
-                        string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(this.PolicyCustomRule.EKUFriendly.Trim());
+                        string ekuTLVEncoded = Helper.EKUValueToTLVEncoding(PolicyCustomRule.EKUFriendly.Trim());
                         if (String.IsNullOrEmpty(ekuTLVEncoded))
                         {
-                            Logger.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " + this.PolicyCustomRule.EKUFriendly);
+                            Logger.Log.AddErrorMsg("EKU Encoding Failed for user-input EKU value " + PolicyCustomRule.EKUFriendly);
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidEKUFormat_Error;
                             return;
                         }
                         else
                         {
-                            this.PolicyCustomRule.EKUEncoded = ekuTLVEncoded;
+                            PolicyCustomRule.EKUEncoded = ekuTLVEncoded;
                         }
                     }
                 }
                 else
                 {
-                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(this.textBoxSlider_0.Text))
+                    if (PolicyCustomRule.CheckboxCheckStates.checkBox0 && !Helper.IsValidText(textBoxSlider_0.Text))
                     {
                         ShowInvalidErrorLabel();
                         return;
                     }
 
-                    if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(this.textBoxSlider_1.Text))
+                    if (PolicyCustomRule.CheckboxCheckStates.checkBox1 && !Helper.IsValidText(textBoxSlider_1.Text))
                     {
                         ShowInvalidErrorLabel();
                         return;
                     }
                 }
 
-                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(this.textBoxSlider_2.Text))
+                if (PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(textBoxSlider_2.Text))
                 {
                     ShowInvalidErrorLabel();
                     return;
                 }
 
-                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(this.textBoxSlider_3.Text))
+                if (PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(textBoxSlider_3.Text))
                 {
                     ShowInvalidErrorLabel();
                     return;
@@ -221,10 +221,10 @@ namespace WDAC_Wizard
             // Packaged family name apps
             // Set the list of apps at button create time
 
-            if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+            if (PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
             {
                 // Assert >=1 packaged apps must be selected
-                if (this.checkedListBoxPackagedApps.CheckedItems.Count < 1)
+                if (checkedListBoxPackagedApps.CheckedItems.Count < 1)
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.PFNEmptyList_Error;
@@ -234,20 +234,20 @@ namespace WDAC_Wizard
                 else
                 {
                     // Using for loop to avoid System.InvalidOperationException despite list not changing
-                    for (int i = 0; i < this.checkedListBoxPackagedApps.CheckedItems.Count; i++)
+                    for (int i = 0; i < checkedListBoxPackagedApps.CheckedItems.Count; i++)
                     {
-                        var item = this.checkedListBoxPackagedApps.CheckedItems[i];
-                        this.PolicyCustomRule.PackagedFamilyNames.Add(item.ToString());
+                        var item = checkedListBoxPackagedApps.CheckedItems[i];
+                        PolicyCustomRule.PackagedFamilyNames.Add(item.ToString());
                     }
                 }
             }
 
             // Folder Scan 
             // Set the list of omitted paths at button create time
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderScan)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderScan)
             {
                 // Assert >=1 rule levels must be selected
-                if (this.checkedListBoxRuleLevels.CheckedItems.Count < 1)
+                if (checkedListBoxRuleLevels.CheckedItems.Count < 1)
                 {
                     label_Error.Visible = true;
                     label_Error.Text = Properties.Resources.RuleLevelEmptyList_Error;
@@ -257,107 +257,107 @@ namespace WDAC_Wizard
                 // Set the rule level ordered list
                 else
                 {
-                    for (int i = 0; i < this.checkedListBoxRuleLevels.CheckedItems.Count; i++)
+                    for (int i = 0; i < checkedListBoxRuleLevels.CheckedItems.Count; i++)
                     {
-                        this.PolicyCustomRule.Scan.Levels.Add(this.checkedListBoxRuleLevels.CheckedItems[i].ToString());
+                        PolicyCustomRule.Scan.Levels.Add(checkedListBoxRuleLevels.CheckedItems[i].ToString());
                     }
                 }
 
                 // Check for Omit Scan Paths
-                if (this.checkedListBoxOmitPaths.CheckedItems.Count > 1)
+                if (checkedListBoxOmitPaths.CheckedItems.Count > 1)
                 {
                     // Using for loop to avoid System.InvalidOperationException despite list not changing
-                    for (int i = 0; i < this.checkedListBoxOmitPaths.CheckedItems.Count; i++)
+                    for (int i = 0; i < checkedListBoxOmitPaths.CheckedItems.Count; i++)
                     {
-                        this.PolicyCustomRule.Scan.OmitPaths.Add(this.checkedListBoxOmitPaths.CheckedItems[i].ToString());
+                        PolicyCustomRule.Scan.OmitPaths.Add(checkedListBoxOmitPaths.CheckedItems[i].ToString());
                     }
                 }
             }
 
             // Check custom rules
-            if (this.PolicyCustomRule.UsingCustomValues)
+            if (PolicyCustomRule.UsingCustomValues)
             {
                 // Check custom publisher field
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher && this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher && PolicyCustomRule.CheckboxCheckStates.checkBox1)
                 {
-                    if (!Helper.IsValidPublisher(this.PolicyCustomRule.CustomValues.Publisher))
+                    if (!Helper.IsValidPublisher(PolicyCustomRule.CustomValues.Publisher))
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidPublisherFormat_Error;
-                        Logger.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", this.PolicyCustomRule.CustomValues.Publisher));
+                        Logger.Log.AddWarningMsg(String.Format("Invalid format for Custom Publisher", PolicyCustomRule.CustomValues.Publisher));
                         return;
                     }
                     else
                     {
                         // Valid publisher, format so WDAC is happy with the input
-                        this.PolicyCustomRule.CustomValues.Publisher = Helper.FormatPublisherCN(this.PolicyCustomRule.CustomValues.Publisher);
+                        PolicyCustomRule.CustomValues.Publisher = Helper.FormatPublisherCN(PolicyCustomRule.CustomValues.Publisher);
                     }
                 }
 
                 // Check custom product field
-                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(this.textBoxSlider_2.Text))
+                if (PolicyCustomRule.CheckboxCheckStates.checkBox2 && !Helper.IsValidText(textBoxSlider_2.Text))
                 {
                     ShowInvalidErrorLabel();
                     return;
                 }
 
                 // Check custom original filename
-                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(this.textBoxSlider_3.Text))
+                if (PolicyCustomRule.CheckboxCheckStates.checkBox3 && !Helper.IsValidText(textBoxSlider_3.Text))
                 {
                     ShowInvalidErrorLabel();
                     return;
                 }
 
                 // Check custom versions
-                if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4)
+                if (PolicyCustomRule.CheckboxCheckStates.checkBox4)
                 {
-                    if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MinVersion))
+                    if (!Helper.IsValidVersion(PolicyCustomRule.CustomValues.MinVersion))
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
-                        Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", this.PolicyCustomRule.CustomValues.MinVersion));
+                        Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMinVersion: {0}", PolicyCustomRule.CustomValues.MinVersion));
                         return;
                     }
 
                     // Check MaxVersion
-                    if (this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                    if (PolicyCustomRule.CustomValues.MaxVersion != null)
                     {
-                        if (!Helper.IsValidVersion(this.PolicyCustomRule.CustomValues.MaxVersion))
+                        if (!Helper.IsValidVersion(PolicyCustomRule.CustomValues.MaxVersion))
                         {
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidVersionFormat_Error;
-                            Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMaxVersion: {0}", this.PolicyCustomRule.CustomValues.MaxVersion));
+                            Logger.Log.AddWarningMsg(String.Format("Invalid version format for CustomMaxVersion: {0}", PolicyCustomRule.CustomValues.MaxVersion));
                             return;
                         }
 
-                        if (Helper.CompareVersions(this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion) < 0)
+                        if (Helper.CompareVersions(PolicyCustomRule.CustomValues.MinVersion, PolicyCustomRule.CustomValues.MaxVersion) < 0)
                         {
                             label_Error.Visible = true;
                             label_Error.Text = Properties.Resources.InvalidVersionRange_Error;
-                            Logger.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", this.PolicyCustomRule.CustomValues.MinVersion, this.PolicyCustomRule.CustomValues.MaxVersion));
+                            Logger.Log.AddWarningMsg(String.Format("CustomMinVersion {0} !< CustomMaxVersion {1}", PolicyCustomRule.CustomValues.MinVersion, PolicyCustomRule.CustomValues.MaxVersion));
                             return;
                         }
                     }
                 }
 
                 // Check custom path
-                if (this.PolicyCustomRule.CustomValues.Path != null)
+                if (PolicyCustomRule.CustomValues.Path != null)
                 {
                     // Check if this is a valid path rules. I.e. supported macros
-                    if (!Helper.IsValidPathRule(this.PolicyCustomRule.CustomValues.Path))
+                    if (!Helper.IsValidPathRule(PolicyCustomRule.CustomValues.Path))
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.InvalidPath_Error;
-                        Logger.Log.AddWarningMsg("Invalid custom path rule for path: " + this.PolicyCustomRule.CustomValues.Path);
+                        Logger.Log.AddWarningMsg("Invalid custom path rule for path: " + PolicyCustomRule.CustomValues.Path);
                         return;
                     }
 
                     // Check number of wildcards.
                     // If the number is greater than 1, warn the user IFF the warn setting (default on) is on
-                    if (Helper.GetNumberofWildcards(this.PolicyCustomRule.CustomValues.Path) > 1
+                    if (Helper.GetNumberofWildcards(PolicyCustomRule.CustomValues.Path) > 1
                        && Properties.Settings.Default.warnWildcardPath)
                     {
-                        Logger.Log.AddWarningMsg("Warning - Path Rule Windows Version Support for path: " + this.PolicyCustomRule.CustomValues.Path);
+                        Logger.Log.AddWarningMsg("Warning - Path Rule Windows Version Support for path: " + PolicyCustomRule.CustomValues.Path);
 
                         var res = MessageBox.Show(Properties.Resources.PathRule_Warning,
                                                   "Warning - Path Rule Windows Version Support",
@@ -386,24 +386,24 @@ namespace WDAC_Wizard
                 }
 
                 // Parse package family names into PolicyCustomRule.CustomValues.PackageFamilyNames
-                if (this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                if (PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
-                    this.PolicyCustomRule.CustomValues.PackageFamilyNames = this.PolicyCustomRule.PackagedFamilyNames;
+                    PolicyCustomRule.CustomValues.PackageFamilyNames = PolicyCustomRule.PackagedFamilyNames;
                 }
 
                 // Parse hashes into PolicyCustomRule.CustomValues.Hash
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
-                    var hashList = this.richTextBox_CustomHashes.Text.Split(',');
+                    var hashList = richTextBox_CustomHashes.Text.Split(',');
                     foreach (var hash in hashList)
                     {
                         if (!String.IsNullOrEmpty(hash) && hash.Trim().Length % 2 == 0) // must be an even number
                         {
-                            this.PolicyCustomRule.CustomValues.Hashes.Add(hash.Trim());
+                            PolicyCustomRule.CustomValues.Hashes.Add(hash.Trim());
                         }
                     }
 
-                    if (this.PolicyCustomRule.CustomValues.Hashes.Count == 0)
+                    if (PolicyCustomRule.CustomValues.Hashes.Count == 0)
                     {
                         label_Error.Visible = true;
                         label_Error.Text = Properties.Resources.HashEmptyList_Error;
@@ -422,21 +422,21 @@ namespace WDAC_Wizard
             }
 
             // Offboard this to signingRules_Condition
-            this.RuleInEdit = false;
-            this.SigningControl.AddRuleToTable(displayString, this.PolicyCustomRule, warnUser);
+            RuleInEdit = false;
+            SigningControl.AddRuleToTable(displayString, PolicyCustomRule, warnUser);
 
             // Renew the custom rule instance
-            this.PolicyCustomRule = new PolicyCustomRules();
+            PolicyCustomRule = new PolicyCustomRules();
 
             // Reset UI view
             ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false;
+            _MainWindow.CustomRuleinProgress = false;
         }
 
         private bool ValidRuleState()
         {
             // Assert one of umci or kmci must be set
-            if (!(this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
+            if (!(PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled || PolicyCustomRule.SigningScenarioCheckStates.umciEnabled))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidSigningScenarioCheckboxState;
@@ -445,10 +445,10 @@ namespace WDAC_Wizard
             }
 
             // Assert KMCI cannot be set for PFN or path rules
-            if (this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled
-                && (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath
-                || this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath))
+            if (PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled
+                && (PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp
+                || PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath
+                || PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.InvalidKMCIRule;
@@ -457,10 +457,10 @@ namespace WDAC_Wizard
             }
 
             // Assert that the reference file cannot be null, unless we are creating a custom value rule or a PFN rule
-            if (this.PolicyCustomRule.ReferenceFile == null)
+            if (PolicyCustomRule.ReferenceFile == null)
             {
-                if (this.PolicyCustomRule.UsingCustomValues
-                    || this.PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
+                if (PolicyCustomRule.UsingCustomValues
+                    || PolicyCustomRule.Level == PolicyCustomRules.RuleLevel.PackagedFamilyName)
                 {
 
                 }
@@ -511,17 +511,17 @@ namespace WDAC_Wizard
             Logger.Log.AddInfoMsg("--- New Custom Rule Added ---");
 
             // Set Action/Permission value to Allow or Deny
-            action = this.PolicyCustomRule.Permission.ToString();
+            action = PolicyCustomRule.Permission.ToString();
 
             // Set Level value to the RuleLevel value//or should this be type for simplicity? 
-            level = this.PolicyCustomRule.Type.ToString();
+            level = PolicyCustomRule.Type.ToString();
 
             // Get the Rule Scope for logging
             string scope = String.Empty;
 
-            if (this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled)
+            if (PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled)
             {
-                if (this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled)
+                if (PolicyCustomRule.SigningScenarioCheckStates.umciEnabled)
                 {
                     scope = "Kernel and Usermode Rule";
                 }
@@ -537,52 +537,52 @@ namespace WDAC_Wizard
             }
 
             // Format rule display string
-            switch (this.PolicyCustomRule.Type)
+            switch (PolicyCustomRule.Type)
             {
                 // Signer rules
                 case PolicyCustomRules.RuleType.Publisher:
                     {
-                        name += "CA: " + this.textBoxSlider_0.Text;
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                        name += "CA: " + textBoxSlider_0.Text;
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox1)
                         {
-                            name += " & CN: " + this.textBoxSlider_1.Text;
+                            name += " & CN: " + textBoxSlider_1.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox2)
                         {
-                            name += " & Product: " + this.textBoxSlider_2.Text;
+                            name += " & Product: " + textBoxSlider_2.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox3)
                         {
-                            name += " & Filename: " + this.textBoxSlider_3.Text;
+                            name += " & Filename: " + textBoxSlider_3.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox4)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox4)
                         {
-                            name += " & Min Version: " + this.textBoxSlider_4.Text;
+                            name += " & Min Version: " + textBoxSlider_4.Text;
                         }
-                        if (this.PolicyCustomRule.UsingCustomValues && this.PolicyCustomRule.CustomValues.MaxVersion != null)
+                        if (PolicyCustomRule.UsingCustomValues && PolicyCustomRule.CustomValues.MaxVersion != null)
                         {
-                            name += " & Max Version: " + this.PolicyCustomRule.CustomValues.MaxVersion;
+                            name += " & Max Version: " + PolicyCustomRule.CustomValues.MaxVersion;
                         }
                         break;
                     }
 
                 case PolicyCustomRules.RuleType.FileAttributes:
                     {
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox0)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox0)
                         {
-                            name += " & Original Filename: " + this.textBoxSlider_0.Text;
+                            name += " & Original Filename: " + textBoxSlider_0.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox1)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox1)
                         {
-                            name += " & File Description: " + this.textBoxSlider_1.Text;
+                            name += " & File Description: " + textBoxSlider_1.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox2)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox2)
                         {
-                            name += " & Product: " + this.textBoxSlider_2.Text;
+                            name += " & Product: " + textBoxSlider_2.Text;
                         }
-                        if (this.PolicyCustomRule.CheckboxCheckStates.checkBox3)
+                        if (PolicyCustomRule.CheckboxCheckStates.checkBox3)
                         {
-                            name += " & Internal Name: " + this.textBoxSlider_3.Text;
+                            name += " & Internal Name: " + textBoxSlider_3.Text;
                         }
                         name = name.Substring(3); // Offset by 3 to remove the first occurence of ' & '
                         break;
@@ -591,52 +591,52 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.PackagedApp:
                     {
                         name = "Packaged apps matching the Package Family Name (PFN) rules in the Files cell";
-                        files = Helper.GetListofPackages(this.PolicyCustomRule);
+                        files = Helper.GetListofPackages(PolicyCustomRule);
                         break;
                     }
 
                 case PolicyCustomRules.RuleType.FolderPath:
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
+                        if (PolicyCustomRule.UsingCustomValues)
                         {
-                            name = "Files under path: " + this.PolicyCustomRule.CustomValues.Path;
+                            name = "Files under path: " + PolicyCustomRule.CustomValues.Path;
                         }
                         else
                         {
-                            name = "Files under path: " + this.PolicyCustomRule.ReferenceFile;
+                            name = "Files under path: " + PolicyCustomRule.ReferenceFile;
                         }
                         break;
                     }
 
                 case PolicyCustomRules.RuleType.FilePath:
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
+                        if (PolicyCustomRule.UsingCustomValues)
                         {
-                            name = "Files matching: " + this.PolicyCustomRule.CustomValues.Path;
+                            name = "Files matching: " + PolicyCustomRule.CustomValues.Path;
                         }
                         else
                         {
-                            name = "Files matching: " + this.PolicyCustomRule.ReferenceFile;
+                            name = "Files matching: " + PolicyCustomRule.ReferenceFile;
                         }
                         break;
                     }
 
                 case PolicyCustomRules.RuleType.Hash:
                     {
-                        if (this.PolicyCustomRule.UsingCustomValues)
+                        if (PolicyCustomRule.UsingCustomValues)
                         {
                             if (PolicyCustomRule.CustomValues.Hashes.Count > 1)
                             {
-                                name = String.Format("Custom Hash List: {0}, ...", this.PolicyCustomRule.CustomValues.Hashes[0]);
+                                name = String.Format("Custom Hash List: {0}, ...", PolicyCustomRule.CustomValues.Hashes[0]);
                             }
                             else
                             {
-                                name = "Custom Hash Value: " + this.PolicyCustomRule.CustomValues.Hashes[0];
+                                name = "Custom Hash Value: " + PolicyCustomRule.CustomValues.Hashes[0];
                             }
                         }
                         else
                         {
-                            name = "File Hash Rule: " + this.PolicyCustomRule.ReferenceFile;
+                            name = "File Hash Rule: " + PolicyCustomRule.ReferenceFile;
                         }
                         break;
                     }
@@ -644,22 +644,22 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Com:
                     {
                         level = "COM Object";
-                        name = "Provider: " + this.PolicyCustomRule.COMObject.Provider;
-                        files = "Key: " + this.PolicyCustomRule.COMObject.Guid;
+                        name = "Provider: " + PolicyCustomRule.COMObject.Provider;
+                        files = "Key: " + PolicyCustomRule.COMObject.Guid;
 
                         break;
                     }
 
                 case PolicyCustomRules.RuleType.FolderScan:
                     {
-                        level = this.PolicyCustomRule.Scan.Levels[0];
-                        name = "Folder Scan - " + this.PolicyCustomRule.ReferenceFile;
-                        if (this.PolicyCustomRule.Scan.Levels.Count > 1)
+                        level = PolicyCustomRule.Scan.Levels[0];
+                        name = "Folder Scan - " + PolicyCustomRule.ReferenceFile;
+                        if (PolicyCustomRule.Scan.Levels.Count > 1)
                         {
                             files = "Level Fallback to ";
-                            for (int i = 1; i < this.PolicyCustomRule.Scan.Levels.Count; i++)
+                            for (int i = 1; i < PolicyCustomRule.Scan.Levels.Count; i++)
                             {
-                                files += this.PolicyCustomRule.Scan.Levels[i] + ", ";
+                                files += PolicyCustomRule.Scan.Levels[i] + ", ";
                             }
                             files = files.Substring(0, files.Length - 2);
                         }
@@ -669,7 +669,7 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Certificate:
                     {
                         level = "Certificate";
-                        name = $"Certificate File Rule: {this.PolicyCustomRule.ReferenceFile}";
+                        name = $"Certificate File Rule: {PolicyCustomRule.ReferenceFile}";
                         break;
                     }
 
@@ -683,15 +683,15 @@ namespace WDAC_Wizard
             }
 
             // Handle custom EKU
-            if (!String.IsNullOrEmpty(this.PolicyCustomRule.EKUFriendly))
+            if (!String.IsNullOrEmpty(PolicyCustomRule.EKUFriendly))
             {
-                files += "EKU: " + this.PolicyCustomRule.EKUFriendly;
+                files += "EKU: " + PolicyCustomRule.EKUFriendly;
             }
 
             // Handle exceptions
-            if (this.PolicyCustomRule.ExceptionList.Count > 0)
+            if (PolicyCustomRule.ExceptionList.Count > 0)
             {
-                foreach (var exception in this.PolicyCustomRule.ExceptionList)
+                foreach (var exception in PolicyCustomRule.ExceptionList)
                 {
                     string exceptionString = String.Format("{0}: {1} {2}; ", exception.Permission, exception.Level,
                         exception.ReferenceFile);
@@ -724,10 +724,10 @@ namespace WDAC_Wizard
             label_Error.Visible = false; // Clear error label
 
             // Reset checkbox to unchecked
-            if (this.checkBox_CustomValues.Checked)
+            if (checkBox_CustomValues.Checked)
             {
-                this.checkBox_CustomValues.Checked = false;
-                this.PolicyCustomRule.UsingCustomValues = false;
+                checkBox_CustomValues.Checked = false;
+                PolicyCustomRule.UsingCustomValues = false;
             }
 
             // Clear panels
@@ -743,51 +743,51 @@ namespace WDAC_Wizard
             {
                 case "Publisher":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Publisher);
+                    PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePublisher); // Match UI by default
                     label_Info.Text = "Creates a rule for a file that is signed by the software publisher. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
 
                 case "Path":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FilePath);
+                    PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FilePath);
                     label_Info.Text = "Creates a rule for a specific file or folder. \r\n" +
                         "Selecting folder will affect all files in the folder.";
                     panel_FileFolder.Visible = true;
                     radioButton_File.Checked = true; // By default, 
 
-                    this.checkBox_CustomPath.Visible = true;
-                    this.checkBox_CustomPath.Text = "Use Custom Path";
+                    checkBox_CustomPath.Visible = true;
+                    checkBox_CustomPath.Text = "Use Custom Path";
                     break;
 
                 case "File Attributes":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FileAttributes);
+                    PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName); // Match UI by default
                     label_Info.Text = "Creates a rule for a file based on one of its attributes. \r\n" +
                         "Select a file to use as reference for your rule.";
                     break;
 
                 case "Packaged App":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.PackagedApp);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
-                    this.panelPackagedApps.Location = this.label_condition.Location;
-                    this.panelPackagedApps.Visible = true;
-                    this.panelPackagedApps.BringToFront();
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.PackagedApp);
+                    PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.PackagedFamilyName);
+                    panelPackagedApps.Location = label_condition.Location;
+                    panelPackagedApps.Visible = true;
+                    panelPackagedApps.BringToFront();
                     label_Info.Text = "Creates a rule for a packaged app based on its package family name.\r\nSearch for the name of the packages to allow/deny.";
                     break;
 
                 case "File Hash":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
-                    this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
+                    PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
                         "Select the file for which you wish to create a hash rule.";
-                    this.checkBox_CustomPath.Visible = true;
-                    this.checkBox_CustomPath.Text = "Use Custom Hash Values";
+                    checkBox_CustomPath.Visible = true;
+                    checkBox_CustomPath.Text = "Use Custom Hash Values";
                     break;
 
                 case "COM Object":
@@ -803,25 +803,25 @@ namespace WDAC_Wizard
                         return;
                     }
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Com);
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Com);
                     label_Info.Text = "Creates a rule for COM object and software provider.";
-                    this.panelComObject.Location = this.label_condition.Location;
-                    this.panelComObject.Visible = true;
-                    this.panelComObject.BringToFront();
+                    panelComObject.Location = label_condition.Location;
+                    panelComObject.Visible = true;
+                    panelComObject.BringToFront();
                     break;
 
                 case "Folder Scan":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
                     label_Info.Text = "Creates a file rule for each file found in the scanned directory and it's subdirectories.";
-                    this.panelFolderScanConditions.Location = this.checkBox_CustomPath.Location;
-                    this.panelFolderScanConditions.Visible = true;
-                    this.label_condition.Text = "Scan Path:";
+                    panelFolderScanConditions.Location = checkBox_CustomPath.Location;
+                    panelFolderScanConditions.Visible = true;
+                    label_condition.Text = "Scan Path:";
                     break;
 
                 case "Certificate File":
 
-                    this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Certificate);
+                    PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Certificate);
                     label_Info.Text = "Creates a signer rule rule based off the selected certificate file.";
                     break;
 
@@ -851,9 +851,9 @@ namespace WDAC_Wizard
             Logger.Log.AddInfoMsg(String.Format("Custom File Rule Level Set to {0}", selectedOpt));
 
             // Returned back from exceptions to change Rule Type - Redo is required
-            if (this.exceptionsControl != null)
+            if (exceptionsControl != null)
             {
-                this.redoRequired = true;
+                redoRequired = true;
             }
 
             // Break if Com Object; nothing else is needed to proceed in rule creation
@@ -864,9 +864,9 @@ namespace WDAC_Wizard
             }
 
             // Show new UI based on the rule type selected if the user has already selected a reference file
-            if (this.PolicyCustomRule.ReferenceFile != null && !this.redoRequired)
+            if (PolicyCustomRule.ReferenceFile != null && !redoRequired)
             {
-                SetDefaultUIState(this.PolicyCustomRule.GetRuleType());
+                SetDefaultUIState(PolicyCustomRule.GetRuleType());
             }
         }
 
@@ -887,8 +887,8 @@ namespace WDAC_Wizard
             // Reset the rule type combobox
             if (clearComboBox)
             {
-                this.comboBox_RuleType.SelectedItem = null;
-                this.comboBox_RuleType.Text = "--Select--";
+                comboBox_RuleType.SelectedItem = null;
+                comboBox_RuleType.Text = "--Select--";
 
                 label_Info.Visible = false; 
             }
@@ -916,8 +916,8 @@ namespace WDAC_Wizard
                 return;
             }
 
-            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderPath
-                && this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderScan)
+            if (PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderPath
+                && PolicyCustomRule.Type != PolicyCustomRules.RuleType.FolderScan)
             {
                 string refPath = GetFileLocation();
                 if (refPath == String.Empty)
@@ -925,7 +925,7 @@ namespace WDAC_Wizard
                     return;
                 }
 
-                this.DefaultValues[4] = refPath;
+                DefaultValues[4] = refPath;
 
                 // Check if certificate file is valid
                 if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Certificate)
@@ -939,14 +939,14 @@ namespace WDAC_Wizard
                 }
 
                 // Custom rule in progress
-                this._MainWindow.CustomRuleinProgress = true;
+                _MainWindow.CustomRuleinProgress = true;
 
                 // Get generic file information to be shown to user
                 SetFileSignerInfo(refPath);
 
                 // Unsupported crypto or antother issue with the file
                 // Start over
-                if (!this.PolicyCustomRule.SupportedCrypto && this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                if (!PolicyCustomRule.SupportedCrypto && PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
                     UnSupportedCryptoCleanUp();
                     return;
@@ -954,12 +954,12 @@ namespace WDAC_Wizard
             }
 
             // Set the landing UI depending on the Rule type
-            SetDefaultUIState(this.PolicyCustomRule.Type);
+            SetDefaultUIState(PolicyCustomRule.Type);
 
             // Returned from exceptions user control to modify the reference path
-            if (this.exceptionsControl != null)
+            if (exceptionsControl != null)
             {
-                this.redoRequired = true;
+                redoRequired = true;
             }
         }
 
@@ -970,18 +970,18 @@ namespace WDAC_Wizard
         /// <returns>True if successful. False otherwise. </returns>
         private void SetFileSignerInfo(string refPath)
         {
-            this.PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
+            PolicyCustomRule.FileInfo = new Dictionary<string, string>(); // Reset dict
             FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(refPath);
 
-            this.PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
+            PolicyCustomRule.ReferenceFile = fileInfo.FileName; // Returns the file path
             string fileVersion = Helper.ConcatFileVersion(fileInfo);
-            this.PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName.Trim());
-            this.PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName.Trim());
-            this.PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
-            this.PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileVersion) ? Properties.Resources.DefaultFileAttributeString : fileVersion);
-            this.PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
-            this.PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription.Trim());
-            this.PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName.Trim());
+            PolicyCustomRule.FileInfo.Add("CompanyName", String.IsNullOrEmpty(fileInfo.CompanyName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.CompanyName.Trim());
+            PolicyCustomRule.FileInfo.Add("ProductName", String.IsNullOrEmpty(fileInfo.ProductName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.ProductName.Trim());
+            PolicyCustomRule.FileInfo.Add("OriginalFilename", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+            PolicyCustomRule.FileInfo.Add("FileVersion", String.IsNullOrEmpty(fileVersion) ? Properties.Resources.DefaultFileAttributeString : fileVersion);
+            PolicyCustomRule.FileInfo.Add("FileName", String.IsNullOrEmpty(fileInfo.OriginalFilename) ? Properties.Resources.DefaultFileAttributeString : fileInfo.OriginalFilename.Trim());
+            PolicyCustomRule.FileInfo.Add("FileDescription", String.IsNullOrEmpty(fileInfo.FileDescription) ? Properties.Resources.DefaultFileAttributeString : fileInfo.FileDescription.Trim());
+            PolicyCustomRule.FileInfo.Add("InternalName", String.IsNullOrEmpty(fileInfo.InternalName) ? Properties.Resources.DefaultFileAttributeString : fileInfo.InternalName.Trim());
 
             // Get cert chain info to be shown to the user irrespective of the initial type.
             // Otherwise, we don't check or try to build the cert chain
@@ -1010,7 +1010,7 @@ namespace WDAC_Wizard
                 if (Helper.IsCryptoInvalid(certChain))
                 {
                     Logger.Log.AddWarningMsg(String.Format("Unsupported Crypto detected for {0} signed by {1}", refPath, leafCertSubjectName));
-                    this.PolicyCustomRule.SupportedCrypto = false;
+                    PolicyCustomRule.SupportedCrypto = false;
                     return;
                 }
             }
@@ -1018,13 +1018,13 @@ namespace WDAC_Wizard
             catch (Exception exp)
             {
                 Logger.Log.AddErrorMsg(String.Format("Caught exception {0} when trying to create cert from the following signed file {1}", exp, refPath));
-                this.label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
-                this.label_Error.Visible = true;
+                label_Error.Text = "Unable to find certificate chain for " + fileInfo.FileName;
+                label_Error.Visible = true;
             }
 
-            this.PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
-            this.PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
-            this.PolicyCustomRule.SupportedCrypto = true;
+            PolicyCustomRule.FileInfo.Add("LeafCertificate", String.IsNullOrEmpty(leafCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : leafCertSubjectName);
+            PolicyCustomRule.FileInfo.Add("PCACertificate", String.IsNullOrEmpty(pcaCertSubjectName) ? Properties.Resources.DefaultFileAttributeString : pcaCertSubjectName);
+            PolicyCustomRule.SupportedCrypto = true;
         }
 
         /// <summary>
@@ -1038,18 +1038,18 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.Publisher:
 
                     // UI
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     // Check if supported crypto first before getting FileInfo
                     // PCACert and LeafCert will be null in the case where user chose non publisher rule type for ECC-signed file,
                     // for example, then scanned file and then set rule type to publisher 
-                    if (!this.PolicyCustomRule.SupportedCrypto)
+                    if (!PolicyCustomRule.SupportedCrypto)
                     {
                         UnSupportedCryptoCleanUp();
                         return;
@@ -1058,62 +1058,62 @@ namespace WDAC_Wizard
                     // Set defaults to restore to if custom values is ever reset
                     if (PolicyCustomRule.FileInfo != null && PolicyCustomRule.FileInfo.Count > 0)
                     {
-                        this.DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
-                        this.DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
-                        this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
-                        this.DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
-                        this.DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
+                        DefaultValues[0] = PolicyCustomRule.FileInfo["PCACertificate"];
+                        DefaultValues[1] = PolicyCustomRule.FileInfo["LeafCertificate"];
+                        DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
+                        DefaultValues[3] = PolicyCustomRule.FileInfo["FileName"];
+                        DefaultValues[4] = PolicyCustomRule.FileInfo["FileVersion"];
                     }
 
                     // Set checkbox struct
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
 
                     // Set all fields checked by default, except for product to match legacy (slider bar) behavior unless null original filename or version
-                    this.checkBoxAttribute0.Checked = true;
-                    this.checkBoxAttribute1.Checked = true;
-                    this.checkBoxAttribute3.Checked = true;
-                    this.checkBoxAttribute4.Checked = true;
+                    checkBoxAttribute0.Checked = true;
+                    checkBoxAttribute1.Checked = true;
+                    checkBoxAttribute3.Checked = true;
+                    checkBoxAttribute4.Checked = true;
 
                     // Do not check for N/As in PCA or publisher fields since the file may be cat
                     // signed which the Wizard cannot handle right now
-                    if (this.DefaultValues[3] == Properties.Resources.DefaultFileAttributeString)
+                    if (DefaultValues[3] == Properties.Resources.DefaultFileAttributeString)
                     {
-                        this.checkBoxAttribute3.Checked = false;
-                        this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
+                        checkBoxAttribute3.Checked = false;
+                        PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
                     }
 
-                    if (this.DefaultValues[4] == Properties.Resources.DefaultFileAttributeString)
+                    if (DefaultValues[4] == Properties.Resources.DefaultFileAttributeString)
                     {
-                        this.checkBoxAttribute4.Checked = false;
-                        this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+                        checkBoxAttribute4.Checked = false;
+                        PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
                     }
 
-                    this.checkBoxAttribute0.Text = "Issuing CA:";
-                    this.checkBoxAttribute1.Text = "Publisher:";
-                    this.checkBoxAttribute2.Text = "Product name:";
-                    this.checkBoxAttribute3.Text = "File name:";
-                    this.checkBoxAttribute4.Text = "Min. Version:";
+                    checkBoxAttribute0.Text = "Issuing CA:";
+                    checkBoxAttribute1.Text = "Publisher:";
+                    checkBoxAttribute2.Text = "Product name:";
+                    checkBoxAttribute3.Text = "File name:";
+                    checkBoxAttribute4.Text = "Min. Version:";
 
                     // Version textbox should be set to normal size
-                    this.textBoxSlider_4.Size = this.textBoxSlider_3.Size;
+                    textBoxSlider_4.Size = textBoxSlider_3.Size;
 
                     // Show version boxes
-                    this.textBoxSlider_4.Visible = true;
-                    this.checkBoxAttribute4.Visible = true;
+                    textBoxSlider_4.Visible = true;
+                    checkBoxAttribute4.Visible = true;
 
-                    this.textBoxSlider_0.Text = this.DefaultValues[0];
-                    this.textBoxSlider_1.Text = this.DefaultValues[1];
-                    this.textBoxSlider_2.Text = this.DefaultValues[2];
-                    this.textBoxSlider_3.Text = this.DefaultValues[3];
-                    this.textBoxSlider_4.Text = this.DefaultValues[4];
+                    textBoxSlider_0.Text = DefaultValues[0];
+                    textBoxSlider_1.Text = DefaultValues[1];
+                    textBoxSlider_2.Text = DefaultValues[2];
+                    textBoxSlider_3.Text = DefaultValues[3];
+                    textBoxSlider_4.Text = DefaultValues[4];
 
                     if (!Properties.Settings.Default.useDarkMode)
                     {
-                        this.textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); // Grayed out; cannot be overwritten by custom values
+                        textBoxSlider_0.BackColor = Color.FromArgb(240, 240, 240); // Grayed out; cannot be overwritten by custom values
                     }
 
                     panel_Publisher_Scroll.Visible = true;
@@ -1122,27 +1122,27 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.FolderPath:
 
                     // User wants to create rule by folder level
-                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
-                    this.DefaultValues[4] = this.PolicyCustomRule.ReferenceFile + "\\*";
-                    this.AllFilesinFolder = new List<string>();
+                    PolicyCustomRule.ReferenceFile = GetFolderLocation();
+                    DefaultValues[4] = PolicyCustomRule.ReferenceFile + "\\*";
+                    AllFilesinFolder = new List<string>();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                     {
                         break;
                     }
 
                     // Add an asterix to the end of the path to allow all 
-                    this.PolicyCustomRule.ReferenceFile += "\\*";
+                    PolicyCustomRule.ReferenceFile += "\\*";
 
                     // Custom rule in progress
-                    this._MainWindow.CustomRuleinProgress = true;
+                    _MainWindow.CustomRuleinProgress = true;
 
-                    this.textBox_ReferenceFile.Text = this.PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     break;
@@ -1151,13 +1151,13 @@ namespace WDAC_Wizard
 
                     // UI updates
                     radioButton_File.Checked = true;
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     panel_Publisher_Scroll.Visible = false;
@@ -1165,48 +1165,48 @@ namespace WDAC_Wizard
 
                 case PolicyCustomRules.RuleType.FileAttributes:
 
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
-                    this.checkBoxAttribute0.Text = "Original filename:";
-                    this.checkBoxAttribute1.Text = "File description:";
-                    this.checkBoxAttribute2.Text = "Product name:";
-                    this.checkBoxAttribute3.Text = "Internal name:";
+                    checkBoxAttribute0.Text = "Original filename:";
+                    checkBoxAttribute1.Text = "File description:";
+                    checkBoxAttribute2.Text = "Product name:";
+                    checkBoxAttribute3.Text = "Internal name:";
 
                     // Set checkbox states to all disabled -- allow user to select the ones desired
-                    this.checkBoxAttribute0.Checked = false;
-                    this.checkBoxAttribute1.Checked = false;
-                    this.checkBoxAttribute2.Checked = false;
-                    this.checkBoxAttribute3.Checked = false;
-                    this.checkBoxAttribute4.Checked = false;
+                    checkBoxAttribute0.Checked = false;
+                    checkBoxAttribute1.Checked = false;
+                    checkBoxAttribute2.Checked = false;
+                    checkBoxAttribute3.Checked = false;
+                    checkBoxAttribute4.Checked = false;
 
                     // Set checkbox struct
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
 
                     // Hide version boxes
-                    this.textBoxSlider_4.Visible = false;
-                    this.checkBoxAttribute4.Visible = false;
+                    textBoxSlider_4.Visible = false;
+                    checkBoxAttribute4.Visible = false;
 
                     // Set defaults to restore to if custom values is ever reset
-                    this.DefaultValues[0] = PolicyCustomRule.FileInfo["OriginalFilename"];
-                    this.DefaultValues[1] = PolicyCustomRule.FileInfo["FileDescription"];
-                    this.DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
-                    this.DefaultValues[3] = PolicyCustomRule.FileInfo["InternalName"];
+                    DefaultValues[0] = PolicyCustomRule.FileInfo["OriginalFilename"];
+                    DefaultValues[1] = PolicyCustomRule.FileInfo["FileDescription"];
+                    DefaultValues[2] = PolicyCustomRule.FileInfo["ProductName"];
+                    DefaultValues[3] = PolicyCustomRule.FileInfo["InternalName"];
 
-                    this.textBoxSlider_0.Text = this.DefaultValues[0];
-                    this.textBoxSlider_1.Text = this.DefaultValues[1];
-                    this.textBoxSlider_2.Text = this.DefaultValues[2];
-                    this.textBoxSlider_3.Text = this.DefaultValues[3];
+                    textBoxSlider_0.Text = DefaultValues[0];
+                    textBoxSlider_1.Text = DefaultValues[1];
+                    textBoxSlider_2.Text = DefaultValues[2];
+                    textBoxSlider_3.Text = DefaultValues[3];
 
                     panel_Publisher_Scroll.Visible = true;
                     break;
@@ -1215,12 +1215,12 @@ namespace WDAC_Wizard
 
                     // UI updates
                     panel_Publisher_Scroll.Visible = false;
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     break;
@@ -1228,29 +1228,29 @@ namespace WDAC_Wizard
                 case PolicyCustomRules.RuleType.FolderScan:
 
                     // User wants to create rules for each file in the selected folder
-                    this.PolicyCustomRule.ReferenceFile = GetFolderLocation();
+                    PolicyCustomRule.ReferenceFile = GetFolderLocation();
                     if (PolicyCustomRule.ReferenceFile == String.Empty)
                     {
                         break;
                     }
 
                     // UI updates
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
 
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     // Populate the Omit Paths CheckedListBox with the sub-directories found
-                    string[] subPaths = Directory.GetDirectories(this.PolicyCustomRule.ReferenceFile);
+                    string[] subPaths = Directory.GetDirectories(PolicyCustomRule.ReferenceFile);
                     if (subPaths.Length != 0)
                     {
                         foreach (string subPath in subPaths)
                         {
-                            this.checkedListBoxOmitPaths.Items.Add(subPath, false); // set to unchecked by default
+                            checkedListBoxOmitPaths.Items.Add(subPath, false); // set to unchecked by default
                         }
                     }
 
@@ -1260,13 +1260,13 @@ namespace WDAC_Wizard
 
                     // UI updates
                     panel_Publisher_Scroll.Visible = false;
-                    this.textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
+                    textBox_ReferenceFile.Text = PolicyCustomRule.ReferenceFile;
                     
                     // Show right side of the text
-                    if (this.textBox_ReferenceFile.TextLength > 0)
+                    if (textBox_ReferenceFile.TextLength > 0)
                     {
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
 
                     break;
@@ -1283,17 +1283,17 @@ namespace WDAC_Wizard
         {
             if (radioButton_File.Checked)
             {
-                this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.FilePath;
-                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.FilePath;
+                PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.FilePath;
+                PolicyCustomRule.Type = PolicyCustomRules.RuleType.FilePath;
             }
             else
             {
-                this.PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.Folder;
-                this.PolicyCustomRule.Type = PolicyCustomRules.RuleType.FolderPath;
+                PolicyCustomRule.Level = PolicyCustomRules.RuleLevel.Folder;
+                PolicyCustomRule.Type = PolicyCustomRules.RuleType.FolderPath;
             }
 
             // Check if user changed Rule Level after already browsing and selecting a reference file
-            if (this.PolicyCustomRule.ReferenceFile != null)
+            if (PolicyCustomRule.ReferenceFile != null)
             {
                 Button_Browse_Click(sender, e);
             }
@@ -1314,11 +1314,11 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetSliderUI()
         {
-            this.textBoxSlider_0.Clear();
-            this.textBoxSlider_1.Clear();
-            this.textBoxSlider_2.Clear();
-            this.textBoxSlider_3.Clear();
-            this.textBoxSlider_4.Clear();
+            textBoxSlider_0.Clear();
+            textBoxSlider_1.Clear();
+            textBoxSlider_2.Clear();
+            textBoxSlider_3.Clear();
+            textBoxSlider_4.Clear();
         }
 
         /// <summary>
@@ -1338,7 +1338,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void CustomRulesPanel_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.RuleInEdit)
+            if (RuleInEdit)
             {
                 DialogResult res = MessageBox.Show("Are you sure you want to abandon rule creation?",
                                                     "Confirmation",
@@ -1347,8 +1347,8 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.Yes)
                 {
-                    this.SigningControl.CustomRulesPanel_Closing();
-                    this._MainWindow.CustomRuleinProgress = false;
+                    SigningControl.CustomRulesPanel_Closing();
+                    _MainWindow.CustomRuleinProgress = false;
                     e.Cancel = false;
                 }
                 else
@@ -1373,11 +1373,11 @@ namespace WDAC_Wizard
                                                         MessageBoxIcon.Error);
 
             // Renew the custom rule instance
-            this.PolicyCustomRule = new PolicyCustomRules();
+            PolicyCustomRule = new PolicyCustomRules();
 
             // Reset UI view
             ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false;
+            _MainWindow.CustomRuleinProgress = false;
         }
 
         /// <summary>
@@ -1391,11 +1391,11 @@ namespace WDAC_Wizard
                                                         MessageBoxIcon.Error);
 
             // Renew the custom rule instance
-            this.PolicyCustomRule = new PolicyCustomRules();
+            PolicyCustomRule = new PolicyCustomRules();
 
             // Reset UI view
             ClearCustomRulesPanel(true);
-            this._MainWindow.CustomRuleinProgress = false;
+            _MainWindow.CustomRuleinProgress = false;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -1412,7 +1412,7 @@ namespace WDAC_Wizard
         private void Button_Next_Click(object sender, EventArgs e)
         {
             // Assert only signer rules can be excepted in WDAC
-            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type != PolicyCustomRules.RuleType.Publisher)
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.RuleTypeNoExceptionAllowed;
@@ -1422,10 +1422,10 @@ namespace WDAC_Wizard
 
             // Check required fields - that a reference file is selected
             // Show the exception UI
-            if (this.PolicyCustomRule.Type != PolicyCustomRules.RuleType.None
-                && this.PolicyCustomRule.ReferenceFile != null)
+            if (PolicyCustomRule.Type != PolicyCustomRules.RuleType.None
+                && PolicyCustomRule.ReferenceFile != null)
             {
-                this.state = UIState.RuleExceptions;
+                state = UIState.RuleExceptions;
                 SetUIState();
 
                 // Enable Back & exception button
@@ -1433,19 +1433,19 @@ namespace WDAC_Wizard
                 // Dark Mode
                 if (Properties.Settings.Default.useDarkMode)
                 {
-                    button_Back.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                    button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                    button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
-                    button_Back.BackColor = System.Drawing.Color.Transparent;
+                    button_Back.FlatAppearance.BorderColor = Color.DodgerBlue;
+                    button_Back.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_Back.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_Back.FlatStyle = FlatStyle.Flat;
+                    button_Back.ForeColor = Color.DodgerBlue;
+                    button_Back.BackColor = Color.Transparent;
                     button_Back.Enabled = true;
-                    button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                    button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                    button_AddException.ForeColor = System.Drawing.Color.DodgerBlue;
-                    button_AddException.BackColor = System.Drawing.Color.Transparent;
+                    button_AddException.FlatAppearance.BorderColor = Color.DodgerBlue;
+                    button_AddException.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_AddException.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_AddException.FlatStyle = FlatStyle.Flat;
+                    button_AddException.ForeColor = Color.DodgerBlue;
+                    button_AddException.BackColor = Color.Transparent;
                     button_AddException.Enabled = true;
                     // Disable next button 
                     button_Next.FlatAppearance.BorderColor = Color.Gray;
@@ -1455,19 +1455,19 @@ namespace WDAC_Wizard
                 // Light Mode
                 else
                 {
-                    button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                    button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                    button_Back.ForeColor = System.Drawing.Color.Black;
-                    button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
+                    button_Back.FlatAppearance.BorderColor = Color.Black;
+                    button_Back.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_Back.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_Back.FlatStyle = FlatStyle.Flat;
+                    button_Back.ForeColor = Color.Black;
+                    button_Back.BackColor = Color.WhiteSmoke;
                     button_Back.Enabled = true;
-                    button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                    button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                    button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                    button_AddException.ForeColor = System.Drawing.Color.Black;
-                    button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
+                    button_AddException.FlatAppearance.BorderColor = Color.Black;
+                    button_AddException.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_AddException.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                    button_AddException.FlatStyle = FlatStyle.Flat;
+                    button_AddException.ForeColor = Color.Black;
+                    button_AddException.BackColor = Color.WhiteSmoke;
                     button_AddException.Enabled = true;
                     // Disable next button 
                     button_Next.FlatAppearance.BorderColor = Color.LightGray;
@@ -1488,7 +1488,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void Button_Back_Click(object sender, EventArgs e)
         {
-            this.state = UIState.RuleConditions;
+            state = UIState.RuleConditions;
             SetUIState();
 
             // Enable next button 
@@ -1496,12 +1496,12 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Next.BackColor = System.Drawing.Color.Transparent;
+                button_Next.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button_Next.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatStyle = FlatStyle.Flat;
+                button_Next.ForeColor = Color.DodgerBlue;
+                button_Next.BackColor = Color.Transparent;
                 button_Next.Enabled = true;
                 // Disable Back button
                 button_Back.FlatAppearance.BorderColor = Color.Gray;
@@ -1511,12 +1511,12 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Next.ForeColor = System.Drawing.Color.Black;
-                button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_Next.FlatAppearance.BorderColor = Color.Black;
+                button_Next.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatStyle = FlatStyle.Flat;
+                button_Next.ForeColor = Color.Black;
+                button_Next.BackColor = Color.WhiteSmoke;
                 button_Next.Enabled = true;
                 // Disable Back button
                 //this.button_Back.ForeColor = Color.Gray;
@@ -1531,42 +1531,42 @@ namespace WDAC_Wizard
         private void SetUIState()
         {
             // bring info label to front
-            this.Controls.Add(this.label_Error);
-            this.label_Error.Focus();
-            this.label_Error.BringToFront();
+            Controls.Add(label_Error);
+            label_Error.Focus();
+            label_Error.BringToFront();
 
-            switch (this.state)
+            switch (state)
             {
                 case UIState.RuleConditions:
 
                     // Hide the Exceptions User Control 
-                    this.exceptionsControl.Hide();
-                    this.exceptionsControl.SendToBack();
-                    this.redoRequired = false; // Reset flag as returning back to rule conditions user control should not auto trigger a redo
+                    exceptionsControl.Hide();
+                    exceptionsControl.SendToBack();
+                    redoRequired = false; // Reset flag as returning back to rule conditions user control should not auto trigger a redo
 
                     // Enable side panel
                     // Show control panel
-                    this.Controls.Add(this.control_Panel);
-                    this.control_Panel.BringToFront();
-                    this.control_Panel.Focus();
+                    Controls.Add(control_Panel);
+                    control_Panel.BringToFront();
+                    control_Panel.Focus();
 
                     // Set the control highlight rectangle pos
-                    this.controlHighlight_Panel.Location = new Point(3, 138);
-                    this.controlHighlight_Panel.BringToFront();
-                    this.controlHighlight_Panel.Focus();
+                    controlHighlight_Panel.Location = new Point(3, 138);
+                    controlHighlight_Panel.BringToFront();
+                    controlHighlight_Panel.Focus();
 
                     // Show header panel                        
-                    this.headerLabel.Text = "Custom Rule Conditions";
+                    headerLabel.Text = "Custom Rule Conditions";
 
                     break;
 
                 case UIState.RuleExceptions:
                     {
                         //TODO: check if create new exceptions_control or show existing one
-                        if (this.exceptionsControl == null || this.redoRequired == true)
+                        if (exceptionsControl == null || redoRequired == true)
                         {
-                            this.exceptionsControl = new Exceptions_Control(this);
-                            this.Controls.Add(this.exceptionsControl);
+                            exceptionsControl = new Exceptions_Control(this);
+                            Controls.Add(exceptionsControl);
                         }
                         else
                         {
@@ -1574,26 +1574,26 @@ namespace WDAC_Wizard
                         }
 
                         // Show the exceptions control
-                        this.exceptionsControl.Show();
-                        this.exceptionsControl.BringToFront();
-                        this.exceptionsControl.Focus();
+                        exceptionsControl.Show();
+                        exceptionsControl.BringToFront();
+                        exceptionsControl.Focus();
 
                         // Enable side panel
                         // Show control panel
-                        this.Controls.Add(this.control_Panel);
-                        this.control_Panel.BringToFront();
-                        this.control_Panel.Focus();
+                        Controls.Add(control_Panel);
+                        control_Panel.BringToFront();
+                        control_Panel.Focus();
 
                         // Set the control highlight rectangle pos
-                        this.controlHighlight_Panel.Location = new Point(3, 226);
-                        this.controlHighlight_Panel.BringToFront();
-                        this.controlHighlight_Panel.Focus();
+                        controlHighlight_Panel.Location = new Point(3, 226);
+                        controlHighlight_Panel.BringToFront();
+                        controlHighlight_Panel.Focus();
 
                         // Show header panel                        
-                        this.headerLabel.Text = "Custom Rule Exceptions";
-                        this.Controls.Add(this.headerLabel);
-                        this.headerLabel.BringToFront();
-                        this.headerLabel.Focus();
+                        headerLabel.Text = "Custom Rule Exceptions";
+                        Controls.Add(headerLabel);
+                        headerLabel.BringToFront();
+                        headerLabel.Focus();
                     }
 
                     break;
@@ -1604,17 +1604,17 @@ namespace WDAC_Wizard
             }
 
             // Show buttons
-            this.button_Next.BringToFront();
-            this.button_Next.Focus();
+            button_Next.BringToFront();
+            button_Next.Focus();
 
-            this.button_CreateRule.BringToFront();
-            this.button_CreateRule.Focus();
+            button_CreateRule.BringToFront();
+            button_CreateRule.Focus();
 
-            this.button_Back.BringToFront();
-            this.button_Back.Focus();
+            button_Back.BringToFront();
+            button_Back.Focus();
 
-            this.button_AddException.BringToFront();
-            this.button_AddException.Focus();
+            button_AddException.BringToFront();
+            button_AddException.Focus();
         }
 
         /// <summary>
@@ -1624,11 +1624,11 @@ namespace WDAC_Wizard
         /// <param name="shouldPersist"></param>
         public void SetLabel_ErrorText(string errorText, bool shouldPersist = false)
         {
-            this.label_Error.Focus();
-            this.label_Error.BringToFront();
+            label_Error.Focus();
+            label_Error.BringToFront();
 
-            this.label_Error.Text = errorText;
-            this.label_Error.Visible = true;
+            label_Error.Text = errorText;
+            label_Error.Visible = true;
 
             if (!shouldPersist)
             {
@@ -1644,8 +1644,8 @@ namespace WDAC_Wizard
         /// </summary>
         public void ClearLabel_ErrorText()
         {
-            this.label_Error.Text = "";
-            this.label_Error.Visible = false;
+            label_Error.Text = "";
+            label_Error.Visible = false;
         }
 
         /// <summary>
@@ -1665,7 +1665,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void Button_AddException_Click(object sender, EventArgs e)
         {
-            this.exceptionsControl.AddException();
+            exceptionsControl.AddException();
         }
 
         /// <summary>
@@ -1676,24 +1676,24 @@ namespace WDAC_Wizard
         private void RadioButton_Deny_Click(object sender, EventArgs e)
         {
             // Assert that supplemental policy edit/new workflow cannot create deny rules
-            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            if (Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
                 var res = MessageBox.Show(Properties.Resources.SupplementalPolicyDenyRuleError,
                                           "Invalid Option",
                                           MessageBoxButtons.OK,
                                           MessageBoxIcon.Exclamation);
-                this.radioButton_Deny.Checked = false;
-                this.radioButton_Allow.Checked = true;
+                radioButton_Deny.Checked = false;
+                radioButton_Allow.Checked = true;
                 return;
             }
 
-            this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
-            Logger.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+            PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Deny;
+            Logger.Log.AddInfoMsg("Rule Permission set to " + PolicyCustomRule.Permission.ToString());
 
             // Returned back from exceptions to change Rule Type - Redo is required
-            if (this.exceptionsControl != null)
+            if (exceptionsControl != null)
             {
-                this.redoRequired = true;
+                redoRequired = true;
             }
         }
 
@@ -1704,13 +1704,13 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void RadioButton_Allow_Click(object sender, EventArgs e)
         {
-            this.PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Allow;
-            Logger.Log.AddInfoMsg("Rule Permission set to " + this.PolicyCustomRule.Permission.ToString());
+            PolicyCustomRule.Permission = PolicyCustomRules.RulePermission.Allow;
+            Logger.Log.AddInfoMsg("Rule Permission set to " + PolicyCustomRule.Permission.ToString());
 
             // Returned back from exceptions to change Rule Type - Redo is required
-            if (this.exceptionsControl != null)
+            if (exceptionsControl != null)
             {
-                this.redoRequired = true;
+                redoRequired = true;
             }
         }
 
@@ -1722,17 +1722,17 @@ namespace WDAC_Wizard
         private void UseRuleCustomValues(object sender, EventArgs e)
         {
             // Set the UI first
-            if (this.checkBox_CustomValues.Checked)
+            if (checkBox_CustomValues.Checked)
             {
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
                     SetTextBoxStates(true, PolicyCustomRules.RuleType.FileAttributes);
 
                     // Set the custom values based on existing
-                    this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
-                    this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
-                    this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
-                    this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
+                    PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
+                    PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+                    PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                    PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
                 }
                 else
                 {
@@ -1740,41 +1740,41 @@ namespace WDAC_Wizard
                     SetTextBoxStates(true);
 
                     // Set the custom values based on existing
-                    this.PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
-                    this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
-                    this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
-                    this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
+                    PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
+                    PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                    PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
+                    PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
                 }
 
-                this.PolicyCustomRule.UsingCustomValues = true;
+                PolicyCustomRule.UsingCustomValues = true;
             }
             else
             {
                 // Clear error if applicable
-                this.ClearLabel_ErrorText();
+                ClearLabel_ErrorText();
 
                 // Set text values back to default
                 SetTextBoxStates(false);
 
                 // Format the version text boxes
-                this.textBoxSlider_4.Size = this.textBoxSlider_0.Size;
-                this.textBox_MaxVersion.Visible = false;
-                this.label_To.Visible = false;
+                textBoxSlider_4.Size = textBoxSlider_0.Size;
+                textBox_MaxVersion.Visible = false;
+                label_To.Visible = false;
 
                 // Flip the label back to Min Version (from Version Range) if Pubisher rule
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
                 {
-                    this.checkBoxAttribute4.Text = "Min version:";
+                    checkBoxAttribute4.Text = "Min version:";
                 }
 
                 // Re-populate the text boxes
-                this.textBoxSlider_0.Text = this.DefaultValues[0];
-                this.textBoxSlider_1.Text = this.DefaultValues[1];
-                this.textBoxSlider_2.Text = this.DefaultValues[2];
-                this.textBoxSlider_3.Text = this.DefaultValues[3];
-                this.textBoxSlider_4.Text = this.DefaultValues[4];
+                textBoxSlider_0.Text = DefaultValues[0];
+                textBoxSlider_1.Text = DefaultValues[1];
+                textBoxSlider_2.Text = DefaultValues[2];
+                textBoxSlider_3.Text = DefaultValues[3];
+                textBoxSlider_4.Text = DefaultValues[4];
 
-                this.PolicyCustomRule.UsingCustomValues = false;
+                PolicyCustomRule.UsingCustomValues = false;
             }
         }
 
@@ -1787,93 +1787,93 @@ namespace WDAC_Wizard
             if (enabled)
             {
                 // If enabled, allow user input
-                this.textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
-                this.textBoxSlider_1.ReadOnly = false; // Publisher | File description
-                this.textBoxSlider_2.ReadOnly = false; // Product   | Product name
-                this.textBoxSlider_3.ReadOnly = false; // Filename  | Internal name
-                this.textBoxSlider_4.ReadOnly = false; // Min version
-                this.textBox_MaxVersion.ReadOnly = false;
+                textBoxSlider_0.ReadOnly = true; // Custom text values for PCA are not supported
+                textBoxSlider_1.ReadOnly = false; // Publisher | File description
+                textBoxSlider_2.ReadOnly = false; // Product   | Product name
+                textBoxSlider_3.ReadOnly = false; // Filename  | Internal name
+                textBoxSlider_4.ReadOnly = false; // Min version
+                textBox_MaxVersion.ReadOnly = false;
 
-                this.textBoxSlider_0.Enabled = false;
-                this.textBoxSlider_1.Enabled = true;
-                this.textBoxSlider_2.Enabled = true;
-                this.textBoxSlider_3.Enabled = true;
-                this.textBoxSlider_4.Enabled = true;
-                this.textBox_MaxVersion.Enabled = true;
+                textBoxSlider_0.Enabled = false;
+                textBoxSlider_1.Enabled = true;
+                textBoxSlider_2.Enabled = true;
+                textBoxSlider_3.Enabled = true;
+                textBoxSlider_4.Enabled = true;
+                textBox_MaxVersion.Enabled = true;
 
                 // Set back color to white to help user determine boxes are userwriteable
                 if (!Properties.Settings.Default.useDarkMode)
                 {
-                    this.textBoxSlider_0.BackColor = Color.White;
-                    this.textBoxSlider_1.BackColor = Color.White;
-                    this.textBoxSlider_2.BackColor = Color.White;
-                    this.textBoxSlider_3.BackColor = Color.White;
-                    this.textBoxSlider_4.BackColor = Color.White;
-                    this.textBox_MaxVersion.BackColor = Color.White;
+                    textBoxSlider_0.BackColor = Color.White;
+                    textBoxSlider_1.BackColor = Color.White;
+                    textBoxSlider_2.BackColor = Color.White;
+                    textBoxSlider_3.BackColor = Color.White;
+                    textBoxSlider_4.BackColor = Color.White;
+                    textBox_MaxVersion.BackColor = Color.White;
 
                     // Text color
-                    this.textBoxSlider_0.ForeColor = Color.Black;
-                    this.textBoxSlider_1.ForeColor = Color.Black;
-                    this.textBoxSlider_2.ForeColor = Color.Black;
-                    this.textBoxSlider_3.ForeColor = Color.Black;
-                    this.textBoxSlider_4.ForeColor = Color.Black;
-                    this.textBox_MaxVersion.ForeColor = Color.Black;
+                    textBoxSlider_0.ForeColor = Color.Black;
+                    textBoxSlider_1.ForeColor = Color.Black;
+                    textBoxSlider_2.ForeColor = Color.Black;
+                    textBoxSlider_3.ForeColor = Color.Black;
+                    textBoxSlider_4.ForeColor = Color.Black;
+                    textBox_MaxVersion.ForeColor = Color.Black;
                 }
                 else
                 {
-                    this.textBoxSlider_0.BackColor = Color.FromArgb(15, 15, 15);
-                    this.textBoxSlider_1.BackColor = Color.FromArgb(15, 15, 15);
-                    this.textBoxSlider_2.BackColor = Color.FromArgb(15, 15, 15);
-                    this.textBoxSlider_3.BackColor = Color.FromArgb(15, 15, 15);
-                    this.textBoxSlider_4.BackColor = Color.FromArgb(15, 15, 15);
-                    this.textBox_MaxVersion.BackColor = Color.FromArgb(15, 15, 15);
+                    textBoxSlider_0.BackColor = Color.FromArgb(15, 15, 15);
+                    textBoxSlider_1.BackColor = Color.FromArgb(15, 15, 15);
+                    textBoxSlider_2.BackColor = Color.FromArgb(15, 15, 15);
+                    textBoxSlider_3.BackColor = Color.FromArgb(15, 15, 15);
+                    textBoxSlider_4.BackColor = Color.FromArgb(15, 15, 15);
+                    textBox_MaxVersion.BackColor = Color.FromArgb(15, 15, 15);
 
                     // Text color
-                    this.textBoxSlider_0.ForeColor = Color.White;
-                    this.textBoxSlider_1.ForeColor = Color.White;
-                    this.textBoxSlider_2.ForeColor = Color.White;
-                    this.textBoxSlider_3.ForeColor = Color.White;
-                    this.textBoxSlider_4.ForeColor = Color.White;
-                    this.textBox_MaxVersion.ForeColor = Color.White;
+                    textBoxSlider_0.ForeColor = Color.White;
+                    textBoxSlider_1.ForeColor = Color.White;
+                    textBoxSlider_2.ForeColor = Color.White;
+                    textBoxSlider_3.ForeColor = Color.White;
+                    textBoxSlider_4.ForeColor = Color.White;
+                    textBox_MaxVersion.ForeColor = Color.White;
                 }
 
 
                 // Format the version text boxes
-                this.textBoxSlider_4.Visible = true;
-                this.textBox_MaxVersion.Visible = true;
-                this.label_To.Visible = true;
+                textBoxSlider_4.Visible = true;
+                textBox_MaxVersion.Visible = true;
+                label_To.Visible = true;
 
-                this.textBoxSlider_4.Size = this.textBox_MaxVersion.Size;
-                this.checkBoxAttribute4.Text = "Version range:";
+                textBoxSlider_4.Size = textBox_MaxVersion.Size;
+                checkBoxAttribute4.Text = "Version range:";
 
                 // If RuleType == FileAttributes, ensure first textbox is user writeable
                 if (ruleType == PolicyCustomRules.RuleType.FileAttributes)
                 {
-                    this.textBoxSlider_0.ReadOnly = false;
-                    this.textBoxSlider_0.Enabled = true;
+                    textBoxSlider_0.ReadOnly = false;
+                    textBoxSlider_0.Enabled = true;
 
                     // Hide version boxes
-                    this.textBoxSlider_4.Visible = false;
-                    this.textBox_MaxVersion.Visible = false;
-                    this.label_To.Visible = false;
+                    textBoxSlider_4.Visible = false;
+                    textBox_MaxVersion.Visible = false;
+                    label_To.Visible = false;
                 }
             }
             else
             {
                 // Set to read only if disabled
-                this.textBoxSlider_0.ReadOnly = true;
-                this.textBoxSlider_1.ReadOnly = true;
-                this.textBoxSlider_4.ReadOnly = true;
-                this.textBoxSlider_3.ReadOnly = true;
-                this.textBox_MaxVersion.ReadOnly = true;
+                textBoxSlider_0.ReadOnly = true;
+                textBoxSlider_1.ReadOnly = true;
+                textBoxSlider_4.ReadOnly = true;
+                textBoxSlider_3.ReadOnly = true;
+                textBox_MaxVersion.ReadOnly = true;
 
                 // Set to not enabled so accepts no user interaction
-                this.textBoxSlider_0.Enabled = false;
-                this.textBoxSlider_1.Enabled = false;
-                this.textBoxSlider_2.Enabled = false;
-                this.textBoxSlider_3.Enabled = false;
-                this.textBoxSlider_4.Enabled = false;
-                this.textBox_MaxVersion.Enabled = false;
+                textBoxSlider_0.Enabled = false;
+                textBoxSlider_1.Enabled = false;
+                textBoxSlider_2.Enabled = false;
+                textBoxSlider_3.Enabled = false;
+                textBoxSlider_4.Enabled = false;
+                textBox_MaxVersion.Enabled = false;
 
                 // Set back to default color
                 List<TextBox> textBoxes = new List<TextBox>();
@@ -1895,14 +1895,14 @@ namespace WDAC_Wizard
             // Min version (publisher) or InternalName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                this.PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
+                PolicyCustomRule.CustomValues.MinVersion = textBoxSlider_4.Text;
             }
         }
 
@@ -1916,19 +1916,19 @@ namespace WDAC_Wizard
             // Filename (publisher) or InternalName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
+                PolicyCustomRule.CustomValues.FileName = textBoxSlider_3.Text;
             }
             else
             {
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
-                this.PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
+                PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.InternalName);
+                PolicyCustomRule.CustomValues.InternalName = textBoxSlider_3.Text;
             }
         }
 
@@ -1942,19 +1942,19 @@ namespace WDAC_Wizard
             // Version (publisher) or ProductName (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
             }
             else
             {
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
-                this.PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
+                PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.ProductName);
+                PolicyCustomRule.CustomValues.ProductName = textBoxSlider_2.Text;
             }
         }
 
@@ -1968,19 +1968,19 @@ namespace WDAC_Wizard
             // Leaf cert publisher (publisher) or Description (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                this.PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
+                PolicyCustomRule.CustomValues.Publisher = textBoxSlider_1.Text;
             }
             else
             {
-                this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
-                this.PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
+                PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.FileDescription);
+                PolicyCustomRule.CustomValues.Description = textBoxSlider_1.Text;
             }
 
         }
@@ -1996,13 +1996,13 @@ namespace WDAC_Wizard
             // Original filename (file attributes)
             // Break if not using custom values. This will be reached during setting values once proto file is chosen
 
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            this.PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
-            this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
+            PolicyCustomRule.CustomValues.FileName = textBoxSlider_0.Text;
+            PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.OriginalFileName);
         }
 
         /// <summary>
@@ -2014,12 +2014,12 @@ namespace WDAC_Wizard
         {
             // Only accessible by publisher
             // Set Custom Values.MaxValue
-            if (!this.PolicyCustomRule.UsingCustomValues)
+            if (!PolicyCustomRule.UsingCustomValues)
             {
                 return;
             }
 
-            this.PolicyCustomRule.CustomValues.MaxVersion = textBox_MaxVersion.Text;
+            PolicyCustomRule.CustomValues.MaxVersion = textBox_MaxVersion.Text;
         }
 
         /// <summary>
@@ -2029,9 +2029,9 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ReferenceFileTextChanged(object sender, EventArgs e)
         {
-            if (this.PolicyCustomRule.UsingCustomValues)
+            if (PolicyCustomRule.UsingCustomValues)
             {
-                this.PolicyCustomRule.CustomValues.Path = textBox_ReferenceFile.Text;
+                PolicyCustomRule.CustomValues.Path = textBox_ReferenceFile.Text;
             }
         }
 
@@ -2042,62 +2042,62 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void UseCustomPath(object sender, EventArgs e)
         {
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash)
             {
-                if (this.checkBox_CustomPath.Checked)
+                if (checkBox_CustomPath.Checked)
                 {
                     // Dark Mode
                     if (Properties.Settings.Default.useDarkMode)
                     {
-                        this.richTextBox_CustomHashes.Visible = true;
-                        this.richTextBox_CustomHashes.Location = this.panel_Publisher_Scroll.Location;
-                        this.richTextBox_CustomHashes.Tag = "Title";
-                        this.richTextBox_CustomHashes.BackColor = Color.FromArgb(15, 15, 15);
-                        this.richTextBox_CustomHashes.ForeColor = Color.White;
+                        richTextBox_CustomHashes.Visible = true;
+                        richTextBox_CustomHashes.Location = panel_Publisher_Scroll.Location;
+                        richTextBox_CustomHashes.Tag = "Title";
+                        richTextBox_CustomHashes.BackColor = Color.FromArgb(15, 15, 15);
+                        richTextBox_CustomHashes.ForeColor = Color.White;
 
-                        this.PolicyCustomRule.UsingCustomValues = true;
-                        this.textBox_ReferenceFile.Text = String.Empty;
+                        PolicyCustomRule.UsingCustomValues = true;
+                        textBox_ReferenceFile.Text = String.Empty;
                     }
 
                     // Light Mode
                     else
                     {
-                        this.richTextBox_CustomHashes.Visible = true;
-                        this.richTextBox_CustomHashes.Location = this.panel_Publisher_Scroll.Location;
-                        this.richTextBox_CustomHashes.Tag = "Title";
-                        this.richTextBox_CustomHashes.BackColor = Color.White;
-                        this.richTextBox_CustomHashes.ForeColor = Color.Black;
+                        richTextBox_CustomHashes.Visible = true;
+                        richTextBox_CustomHashes.Location = panel_Publisher_Scroll.Location;
+                        richTextBox_CustomHashes.Tag = "Title";
+                        richTextBox_CustomHashes.BackColor = Color.White;
+                        richTextBox_CustomHashes.ForeColor = Color.Black;
 
-                        this.PolicyCustomRule.UsingCustomValues = true;
-                        this.textBox_ReferenceFile.Text = String.Empty;
+                        PolicyCustomRule.UsingCustomValues = true;
+                        textBox_ReferenceFile.Text = String.Empty;
                     }
                 }
                 else
                 {
-                    this.richTextBox_CustomHashes.Visible = false;
-                    this.PolicyCustomRule.UsingCustomValues = false;
+                    richTextBox_CustomHashes.Visible = false;
+                    PolicyCustomRule.UsingCustomValues = false;
                 }
             }
             else
             {
-                if (this.checkBox_CustomPath.Checked)
+                if (checkBox_CustomPath.Checked)
                 {
                     // Dark Mode
                     if (Properties.Settings.Default.useDarkMode)
                     {
-                        this.PolicyCustomRule.UsingCustomValues = true;
-                        this.textBox_ReferenceFile.ReadOnly = false;
-                        this.textBox_ReferenceFile.Enabled = true;
-                        this.textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
+                        PolicyCustomRule.UsingCustomValues = true;
+                        textBox_ReferenceFile.ReadOnly = false;
+                        textBox_ReferenceFile.Enabled = true;
+                        textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
                     }
 
                     // Light Mode
                     else
                     {
-                        this.PolicyCustomRule.UsingCustomValues = true;
-                        this.textBox_ReferenceFile.ReadOnly = false;
-                        this.textBox_ReferenceFile.Enabled = true;
-                        this.textBox_ReferenceFile.BackColor = Color.White;
+                        PolicyCustomRule.UsingCustomValues = true;
+                        textBox_ReferenceFile.ReadOnly = false;
+                        textBox_ReferenceFile.Enabled = true;
+                        textBox_ReferenceFile.BackColor = Color.White;
                     }
                 }
                 else
@@ -2105,28 +2105,28 @@ namespace WDAC_Wizard
                     // Dark Mode
                     if (Properties.Settings.Default.useDarkMode)
                     {
-                        this.PolicyCustomRule.UsingCustomValues = false;
-                        this.textBox_ReferenceFile.ReadOnly = true;
-                        this.textBox_ReferenceFile.Enabled = false;
-                        this.textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
+                        PolicyCustomRule.UsingCustomValues = false;
+                        textBox_ReferenceFile.ReadOnly = true;
+                        textBox_ReferenceFile.Enabled = false;
+                        textBox_ReferenceFile.BackColor = Color.FromArgb(15, 15, 15);
                     }
 
                     // Light Mode
                     else
                     {
-                        this.PolicyCustomRule.UsingCustomValues = false;
-                        this.textBox_ReferenceFile.ReadOnly = true;
-                        this.textBox_ReferenceFile.Enabled = false;
-                        this.textBox_ReferenceFile.BackColor = Color.White;
+                        PolicyCustomRule.UsingCustomValues = false;
+                        textBox_ReferenceFile.ReadOnly = true;
+                        textBox_ReferenceFile.Enabled = false;
+                        textBox_ReferenceFile.BackColor = Color.White;
                     }
 
                     // Set back to the reference file path
-                    if (this.DefaultValues[4] != null && this.DefaultValues[4].Length > 0)
+                    if (DefaultValues[4] != null && DefaultValues[4].Length > 0)
                     {
-                        this.textBox_ReferenceFile.Text = this.DefaultValues[4];
+                        textBox_ReferenceFile.Text = DefaultValues[4];
 
-                        this.textBox_ReferenceFile.SelectionStart = this.textBox_ReferenceFile.TextLength - 1;
-                        this.textBox_ReferenceFile.ScrollToCaret();
+                        textBox_ReferenceFile.SelectionStart = textBox_ReferenceFile.TextLength - 1;
+                        textBox_ReferenceFile.ScrollToCaret();
                     }
                 }
             }
@@ -2140,10 +2140,10 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void RichTextBox_CustomHashes_Click(object sender, EventArgs e)
         {
-            if (this.richTextBox_CustomHashes.Tag.ToString() == "Title")
+            if (richTextBox_CustomHashes.Tag.ToString() == "Title")
             {
-                this.richTextBox_CustomHashes.ResetText();
-                this.richTextBox_CustomHashes.Tag = "Values";
+                richTextBox_CustomHashes.ResetText();
+                richTextBox_CustomHashes.Tag = "Values";
             }
         }
 
@@ -2169,7 +2169,7 @@ namespace WDAC_Wizard
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
 
-            if (String.IsNullOrEmpty(this.textBox_Packaged_App.Text))
+            if (String.IsNullOrEmpty(textBox_Packaged_App.Text))
             {
                 label_Error.Visible = true;
                 label_Error.Text = Properties.Resources.PFNSearch_Warn;
@@ -2178,37 +2178,37 @@ namespace WDAC_Wizard
             }
 
             // Check whether we are creating a PFN based on arbitrary package name
-            if (!this.checkBox_CustomPFN.Checked)
+            if (!checkBox_CustomPFN.Checked)
             {
                 // Searching for PFN on device
                 // Prep UI
-                this.panel_Progress.Visible = true;
-                this.panel_Progress.BringToFront();
-                this.label_Error.Visible = false;
+                panel_Progress.Visible = true;
+                panel_Progress.BringToFront();
+                label_Error.Visible = false;
 
                 // Create background worker to display updates to UI
-                if (!this.backgroundWorker.IsBusy)
+                if (!backgroundWorker.IsBusy)
                 {
-                    this.backgroundWorker.RunWorkerAsync();
+                    backgroundWorker.RunWorkerAsync();
                 }
             }
             else
             {
                 // Using arbitrary/custom PFN in rule creation
                 // Add PFN to list with checkbox checked
-                string arbitraryPFN = this.textBox_Packaged_App.Text;
+                string arbitraryPFN = textBox_Packaged_App.Text;
                 if (arbitraryPFN.Length > 3)
                 {
                     arbitraryPFN = String.Concat(arbitraryPFN.Where(c => !Char.IsWhiteSpace(c)));
-                    this.checkedListBoxPackagedApps.Items.Add(arbitraryPFN, true);
+                    checkedListBoxPackagedApps.Items.Add(arbitraryPFN, true);
 
                     // Once added to the table, clear the textbox automatically
-                    this.textBox_Packaged_App.Clear();
+                    textBox_Packaged_App.Clear();
                 }
                 else
                 {
-                    this.label_Error.Visible = true;
-                    this.label_Error.Text = "Package Family name must be at least 3 characters.";
+                    label_Error.Visible = true;
+                    label_Error.Text = "Package Family name must be at least 3 characters.";
                 }
             }
 
@@ -2229,7 +2229,7 @@ namespace WDAC_Wizard
         {
             try
             {
-                this.FoundPackages = Helper.GetAppxPackages(this.textBox_Packaged_App.Text);
+                FoundPackages = Helper.GetAppxPackages(textBox_Packaged_App.Text);
             }
             catch (Exception exp)
             {
@@ -2245,7 +2245,7 @@ namespace WDAC_Wizard
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Remove GIF // Update UI 
-            this.panel_Progress.Visible = false;
+            panel_Progress.Visible = false;
 
             // Unsuccessful conversion
             if (e.Error != null)
@@ -2257,22 +2257,22 @@ namespace WDAC_Wizard
             Logger.Log.AddNewSeparationLine("Packaged App Searching Workflow -- DONE");
 
             // Check for the case where no packages were found and return
-            if (this.FoundPackages.Count == 0)
+            if (FoundPackages.Count == 0)
             {
                 label_Error.Visible = true;
-                label_Error.Text = String.Format("No packages found with name: {0}", this.textBox_Packaged_App.Text);
-                Logger.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", this.textBox_Packaged_App.Text));
+                label_Error.Text = String.Format("No packages found with name: {0}", textBox_Packaged_App.Text);
+                Logger.Log.AddWarningMsg(String.Format("No packaged apps found with name: {0}", textBox_Packaged_App.Text));
                 return;
             }
 
             // Bring checkbox list to front. Sort keys to display alphabetically to user
-            this.checkedListBoxPackagedApps.BringToFront();
-            var sortedPackages = this.FoundPackages;
+            checkedListBoxPackagedApps.BringToFront();
+            var sortedPackages = FoundPackages;
             sortedPackages.Sort();
 
             foreach (var key in sortedPackages)
             {
-                this.checkedListBoxPackagedApps.Items.Add(key, false);
+                checkedListBoxPackagedApps.Items.Add(key, false);
             }
         }
 
@@ -2286,10 +2286,10 @@ namespace WDAC_Wizard
             // If checked, update text on the 'Search' button
             // Hide the PFN search UI
 
-            if (this.checkBox_CustomPFN.Checked)
+            if (checkBox_CustomPFN.Checked)
             {
-                this.buttonSearch.Text = "Create";
-                this.PolicyCustomRule.UsingCustomValues = true;
+                buttonSearch.Text = "Create";
+                PolicyCustomRule.UsingCustomValues = true;
             }
 
             // Else, return text to 'Search' button
@@ -2297,7 +2297,7 @@ namespace WDAC_Wizard
             // If there are any checked boxes, clear the list of arbitrary/custom PFN rules after prompting user
             else
             {
-                if (this.checkedListBoxPackagedApps.Items.Count > 0)
+                if (checkedListBoxPackagedApps.Items.Count > 0)
                 {
                     DialogResult res = MessageBox.Show("You have active custom PFN rules that will be deleted. Are you sure you want to switch to default PFN rule creation?",
                                                         "Confirmation",
@@ -2306,19 +2306,19 @@ namespace WDAC_Wizard
 
                     if (res == DialogResult.Yes)
                     {
-                        this.buttonSearch.Text = "Search";
-                        this.PolicyCustomRule.UsingCustomValues = false;
-                        int n_Rules = this.checkedListBoxPackagedApps.Items.Count;
+                        buttonSearch.Text = "Search";
+                        PolicyCustomRule.UsingCustomValues = false;
+                        int n_Rules = checkedListBoxPackagedApps.Items.Count;
 
                         for (int j = 0; j < n_Rules; j++)
                         {
                             // Remove at the 0th index n_Rules times
-                            this.checkedListBoxPackagedApps.Items.RemoveAt(0);
+                            checkedListBoxPackagedApps.Items.RemoveAt(0);
                         }
                     }
                     else
                     {
-                        this.checkBox_CustomPFN.Checked = true;
+                        checkBox_CustomPFN.Checked = true;
                     }
                 }
             }
@@ -2333,25 +2333,25 @@ namespace WDAC_Wizard
         {
             // If user wants to use checkbox
             // Enable the textbox
-            if (this.checkBoxEku.Checked)
+            if (checkBoxEku.Checked)
             {
-                this.textBoxEKU.Enabled = true;
-                this.textBoxEKU.ReadOnly = false;
-                this.textBoxEKU.BackColor = Color.White;
-                this.PolicyCustomRule.EKUFriendly = String.Empty;
+                textBoxEKU.Enabled = true;
+                textBoxEKU.ReadOnly = false;
+                textBoxEKU.BackColor = Color.White;
+                PolicyCustomRule.EKUFriendly = String.Empty;
             }
             else
             {
-                this.textBoxEKU.Enabled = false;
-                this.textBoxEKU.ReadOnly = true;
-                this.textBoxEKU.BackColor = SystemColors.Control;
-                this.textBoxEKU.Text = String.Empty;
-                this.PolicyCustomRule.EKUFriendly = String.Empty;
+                textBoxEKU.Enabled = false;
+                textBoxEKU.ReadOnly = true;
+                textBoxEKU.BackColor = SystemColors.Control;
+                textBoxEKU.Text = String.Empty;
+                PolicyCustomRule.EKUFriendly = String.Empty;
 
                 // Reset the UsingCustomValues field iff not set custom using the checkbox
-                if (!this.checkBox_CustomValues.Checked)
+                if (!checkBox_CustomValues.Checked)
                 {
-                    this.PolicyCustomRule.UsingCustomValues = false;
+                    PolicyCustomRule.UsingCustomValues = false;
                 }
             }
         }
@@ -2363,7 +2363,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxEKU_TextChanged(object sender, EventArgs e)
         {
-            this.PolicyCustomRule.EKUFriendly = this.textBoxEKU.Text;
+            PolicyCustomRule.EKUFriendly = textBoxEKU.Text;
         }
 
         /// <summary>
@@ -2374,14 +2374,14 @@ namespace WDAC_Wizard
         private void CheckBoxAttrib4CheckChanged(object sender, EventArgs e)
         {
             // Version
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
-                if (this.checkBoxAttribute4.Checked)
+                if (checkBoxAttribute4.Checked)
                 {
-                    if (this.textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString
-                        || String.IsNullOrEmpty(this.textBoxSlider_4.Text))
+                    if (textBoxSlider_4.Text != Properties.Resources.DefaultFileAttributeString
+                        || String.IsNullOrEmpty(textBoxSlider_4.Text))
                     {
-                        this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
+                        PolicyCustomRule.CheckboxCheckStates.checkBox4 = true;
                         ClearLabel_ErrorText();
                         return;
                     }
@@ -2392,8 +2392,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.checkBoxAttribute4.Checked = false;
-            this.PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
+            checkBoxAttribute4.Checked = false;
+            PolicyCustomRule.CheckboxCheckStates.checkBox4 = false;
         }
 
         /// <summary>
@@ -2405,12 +2405,12 @@ namespace WDAC_Wizard
         {
             // File name || Internal name
 
-            if (this.checkBoxAttribute3.Checked)
+            if (checkBoxAttribute3.Checked)
             {
-                if (this.textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString
-                    || String.IsNullOrEmpty(this.textBoxSlider_3.Text))
+                if (textBoxSlider_3.Text != Properties.Resources.DefaultFileAttributeString
+                    || String.IsNullOrEmpty(textBoxSlider_3.Text))
                 {
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox3 = true;
                     ClearLabel_ErrorText();
                     return;
                 }
@@ -2420,8 +2420,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.checkBoxAttribute3.Checked = false;
-            this.PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
+            checkBoxAttribute3.Checked = false;
+            PolicyCustomRule.CheckboxCheckStates.checkBox3 = false;
         }
 
         /// <summary>
@@ -2433,13 +2433,13 @@ namespace WDAC_Wizard
         {
             // Product name (Pub rule) || Product name
 
-            if (this.checkBoxAttribute2.Checked)
+            if (checkBoxAttribute2.Checked)
             {
-                if (this.textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString
-                    || String.IsNullOrEmpty(this.textBoxSlider_2.Text))
+                if (textBoxSlider_2.Text != Properties.Resources.DefaultFileAttributeString
+                    || String.IsNullOrEmpty(textBoxSlider_2.Text))
                 {
                     ClearLabel_ErrorText();
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox2 = true;
                     return;
                 }
                 else
@@ -2448,8 +2448,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.checkBoxAttribute2.Checked = false;
-            this.PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
+            checkBoxAttribute2.Checked = false;
+            PolicyCustomRule.CheckboxCheckStates.checkBox2 = false;
         }
 
         /// <summary>
@@ -2461,13 +2461,13 @@ namespace WDAC_Wizard
         {
             // Publisher || File description
 
-            if (this.checkBoxAttribute1.Checked)
+            if (checkBoxAttribute1.Checked)
             {
-                if (this.textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString
-                    || String.IsNullOrEmpty(this.textBoxSlider_1.Text))
+                if (textBoxSlider_1.Text != Properties.Resources.DefaultFileAttributeString
+                    || String.IsNullOrEmpty(textBoxSlider_1.Text))
                 {
                     ClearLabel_ErrorText();
-                    this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
+                    PolicyCustomRule.CheckboxCheckStates.checkBox1 = true;
                     return;
                 }
                 else
@@ -2476,8 +2476,8 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.checkBoxAttribute1.Checked = false;
-            this.PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
+            checkBoxAttribute1.Checked = false;
+            PolicyCustomRule.CheckboxCheckStates.checkBox1 = false;
         }
 
         /// <summary>
@@ -2489,21 +2489,21 @@ namespace WDAC_Wizard
         {
             // PCA Certificate || Original filename
 
-            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 // Cannot uncheck Issuing CA checkbox. Rule must include a root
-                this.checkBoxAttribute0.Checked = true;
-                this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+                checkBoxAttribute0.Checked = true;
+                PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
             }
             else // Original Filename
             {
-                if (this.checkBoxAttribute0.Checked)
+                if (checkBoxAttribute0.Checked)
                 {
-                    if (this.textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString
-                        || String.IsNullOrEmpty(this.textBoxSlider_0.Text))
+                    if (textBoxSlider_0.Text != Properties.Resources.DefaultFileAttributeString
+                        || String.IsNullOrEmpty(textBoxSlider_0.Text))
                     {
                         ClearLabel_ErrorText();
-                        this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
+                        PolicyCustomRule.CheckboxCheckStates.checkBox0 = true;
                         return;
                     }
                     else
@@ -2512,8 +2512,8 @@ namespace WDAC_Wizard
                     }
                 }
 
-                this.checkBoxAttribute0.Checked = false;
-                this.PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
+                checkBoxAttribute0.Checked = false;
+                PolicyCustomRule.CheckboxCheckStates.checkBox0 = false;
             }
         }
 
@@ -2526,9 +2526,9 @@ namespace WDAC_Wizard
         {
             // Set the state for the custom rule
             // If the policy doesn't support UMCI, prompt the user and set it
-            if (this.checkBox_userMode.Checked)
+            if (checkBox_userMode.Checked)
             {
-                if (!PolicyHelper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+                if (!PolicyHelper.PolicyHasRule(Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
                 {
                     DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
                                                         "Proceed with UMCI Rule Creation?",
@@ -2540,15 +2540,15 @@ namespace WDAC_Wizard
                     {
                         RuleType umciRule = new RuleType();
                         umciRule.Item = OptionType.EnabledUMCI;
-                        this._MainWindow.Policy.PolicyRuleOptions.Add(umciRule);
+                        _MainWindow.Policy.PolicyRuleOptions.Add(umciRule);
                     }
                 }
 
-                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = true;
+                PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = true;
             }
             else
             {
-                this.PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = false;
+                PolicyCustomRule.SigningScenarioCheckStates.umciEnabled = false;
             }
         }
 
@@ -2561,28 +2561,28 @@ namespace WDAC_Wizard
         {
             // Set the state for the custom rule
             // Assert path rules and packaged app rules cannot be used for kernel mode
-            if (this.checkBox_kernelMode.Checked)
+            if (checkBox_kernelMode.Checked)
             {
-                if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
-                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
-                    this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath)
+                if (PolicyCustomRule.Type == PolicyCustomRules.RuleType.PackagedApp ||
+                    PolicyCustomRule.Type == PolicyCustomRules.RuleType.FilePath ||
+                    PolicyCustomRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     DialogResult res = MessageBox.Show(Properties.Resources.InvalidKMCIRule,
                                                         "Unsupported Kernel Rule Type",
                                                         MessageBoxButtons.OK,
                                                         MessageBoxIcon.Exclamation);
 
-                    this.checkBox_kernelMode.Checked = false;
-                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
+                    checkBox_kernelMode.Checked = false;
+                    PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
                 }
                 else
                 {
-                    this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = true;
+                    PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = true;
                 }
             }
             else
             {
-                this.PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
+                PolicyCustomRule.SigningScenarioCheckStates.kmciEnabled = false;
             }
         }
 
@@ -2607,15 +2607,15 @@ namespace WDAC_Wizard
             }
 
             // If the policy does not support UMCI, uncheck umci and check kmci
-            if (!PolicyHelper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+            if (!PolicyHelper.PolicyHasRule(Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
             {
-                this.checkBox_kernelMode.Checked = true;
-                this.checkBox_userMode.Checked = false;
+                checkBox_kernelMode.Checked = true;
+                checkBox_userMode.Checked = false;
             }
             else
             {
-                this.checkBox_kernelMode.Checked = false;
-                this.checkBox_userMode.Checked = true;
+                checkBox_kernelMode.Checked = false;
+                checkBox_userMode.Checked = true;
             }
         }
 
@@ -2644,30 +2644,30 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void ComboBoxComProviderChanged(object sender, EventArgs e)
         {
-            switch (this.comboBoxComProvider.SelectedIndex)
+            switch (comboBoxComProvider.SelectedIndex)
             {
                 case 0:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.PowerShell;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.PowerShell;
                     break;
 
                 case 1:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.WSH;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.WSH;
                     break;
 
                 case 2:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.IE;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.IE;
                     break;
 
                 case 3:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.VBA;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.VBA;
                     break;
 
                 case 4:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.MSI;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.MSI;
                     break;
 
                 case 5:
-                    this.PolicyCustomRule.COMObject.Provider = COM.ProviderType.AllHostIds;
+                    PolicyCustomRule.COMObject.Provider = COM.ProviderType.AllHostIds;
                     break;
             }
         }
@@ -2680,15 +2680,15 @@ namespace WDAC_Wizard
         private void ComboBoxComKeyTypeChanged(object sender, EventArgs e)
         {
             // All Keys
-            if (this.comboBoxComKeyType.SelectedItem == comboBoxComKeyType.Items[0])
+            if (comboBoxComKeyType.SelectedItem == comboBoxComKeyType.Items[0])
             {
-                this.PolicyCustomRule.COMObject.Guid = Properties.Resources.ComObjectAllKeys;
-                this.panelComKey.Visible = false;
+                PolicyCustomRule.COMObject.Guid = Properties.Resources.ComObjectAllKeys;
+                panelComKey.Visible = false;
             }
             // Custom Key
             else
             {
-                this.panelComKey.Visible = true;
+                panelComKey.Visible = true;
             }
         }
 
@@ -2701,9 +2701,9 @@ namespace WDAC_Wizard
         private void ComKeyMouseClick(object sender, MouseEventArgs e)
         {
             // Clear the textbox when the user selects it
-            if (String.Equals(this.textBoxObjectKey.Text, Properties.Resources.ComInitialGuid))
+            if (String.Equals(textBoxObjectKey.Text, Properties.Resources.ComInitialGuid))
             {
-                this.textBoxObjectKey.Clear();
+                textBoxObjectKey.Clear();
             }
         }
 
@@ -2733,21 +2733,21 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void RuleLevelsList_MouseDown(object sender, MouseEventArgs e)
         {
-            if (this.checkedListBoxRuleLevels.SelectedItem == null || e.X < 15 || (e.X > 150 && e.X < 165)) return; // e.X < 15 - left most column checkboxes. 150 < e.X < 165 - right most checkboxes
-            this.checkedListBoxRuleLevels.DoDragDrop(this.checkedListBoxRuleLevels.SelectedItem, DragDropEffects.Move);
+            if (checkedListBoxRuleLevels.SelectedItem == null || e.X < 15 || (e.X > 150 && e.X < 165)) return; // e.X < 15 - left most column checkboxes. 150 < e.X < 165 - right most checkboxes
+            checkedListBoxRuleLevels.DoDragDrop(checkedListBoxRuleLevels.SelectedItem, DragDropEffects.Move);
         }
 
         private void RuleLevelsList_DragDropDone(object sender, DragEventArgs e)
         {
             Point point = checkedListBoxRuleLevels.PointToClient(new Point(e.X, e.Y));
-            int index = this.checkedListBoxRuleLevels.IndexFromPoint(point);
-            if (index < 0) index = this.checkedListBoxRuleLevels.Items.Count - 1;
+            int index = checkedListBoxRuleLevels.IndexFromPoint(point);
+            if (index < 0) index = checkedListBoxRuleLevels.Items.Count - 1;
             bool isChecked = checkedListBoxRuleLevels.GetItemChecked(index);
 
             object data = checkedListBoxRuleLevels.SelectedItem;
-            this.checkedListBoxRuleLevels.Items.Remove(data);
-            this.checkedListBoxRuleLevels.Items.Insert(index, data);
-            this.checkedListBoxRuleLevels.SetItemChecked(index, isChecked);
+            checkedListBoxRuleLevels.Items.Remove(data);
+            checkedListBoxRuleLevels.Items.Insert(index, data);
+            checkedListBoxRuleLevels.SetItemChecked(index, isChecked);
         }
 
         private void RuleLevelsList_DragInProgress(object sender, DragEventArgs e)
@@ -2862,7 +2862,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
@@ -2893,7 +2893,7 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
@@ -2931,23 +2931,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.DodgerBlue;
-                button.BackColor = System.Drawing.Color.Transparent;
+                button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.DodgerBlue;
+                button.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.Black;
-                button.BackColor = System.Drawing.Color.WhiteSmoke;
+                button.FlatAppearance.BorderColor = Color.Black;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.Black;
+                button.BackColor = Color.WhiteSmoke;
             }
         }
 
@@ -2966,7 +2966,7 @@ namespace WDAC_Wizard
                     {
                         textBox.ForeColor = Color.White;
                         textBox.BackColor = Color.FromArgb(15, 15, 15);
-                        textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                        textBox.BorderStyle = BorderStyle.FixedSingle;
                     }
                 }
             }
@@ -2980,7 +2980,7 @@ namespace WDAC_Wizard
                     {
                         textBox.ForeColor = Color.Black;
                         textBox.BackColor = Color.White;
-                        textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                        textBox.BorderStyle = BorderStyle.FixedSingle;
                     }
                 }
             }
@@ -3034,7 +3034,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.White;
                         comboBox.BackColor = Color.FromArgb(15, 15, 15);
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.FlatStyle = FlatStyle.Flat;
                         comboBox.Text = "--Select--";
                     }
                 }
@@ -3049,7 +3049,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.Black;
                         comboBox.BackColor = Color.White;
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+                        comboBox.FlatStyle = FlatStyle.Standard;
                         comboBox.Text = "--Select--";
                     }
                 }
@@ -3295,23 +3295,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_AddException.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_AddException.BackColor = System.Drawing.Color.Transparent;
+                button_AddException.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button_AddException.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_AddException.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_AddException.FlatStyle = FlatStyle.Flat;
+                button_AddException.ForeColor = Color.DodgerBlue;
+                button_AddException.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_AddException.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_AddException.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_AddException.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_AddException.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_AddException.ForeColor = System.Drawing.Color.Black;
-                button_AddException.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_AddException.FlatAppearance.BorderColor = Color.Black;
+                button_AddException.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_AddException.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_AddException.FlatStyle = FlatStyle.Flat;
+                button_AddException.ForeColor = Color.Black;
+                button_AddException.BackColor = Color.WhiteSmoke;
             }
         }
     }

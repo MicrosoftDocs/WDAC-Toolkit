@@ -20,20 +20,20 @@ namespace WDAC_Wizard
         private Logger(string folderPath)
         {
             string fileName = GetLoggerDst();
-            this.FileName = folderPath + fileName;
+            FileName = folderPath + fileName;
 
-            if (!File.Exists(this.FileName))
+            if (!File.Exists(FileName))
             {
-                this._Log = new StreamWriter(this.FileName);
+                _Log = new StreamWriter(FileName);
             }
 
-            this._Log.AutoFlush = true;
-            this.AddBoilerPlate();
+            _Log.AutoFlush = true;
+            AddBoilerPlate();
         }
 
         public static void NewLogger(string folderPath)
         {
-            Logger.Log = new Logger(folderPath); 
+            Log = new Logger(folderPath); 
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace WDAC_Wizard
         public void AddInfoMsg(string info)
         {
             string msg = String.Format("{0} [INFO]: {1}", Helper.GetFormattedDateTime(), info);
-            this._Log.WriteLine(msg);
+            _Log.WriteLine(msg);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace WDAC_Wizard
         public void AddErrorMsg(string error)
         {
             string msg = String.Format("{0} [ERROR]: {1}", Helper.GetFormattedDateTime(), error);
-            this._Log.WriteLine(msg);
+            _Log.WriteLine(msg);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace WDAC_Wizard
         public void AddErrorMsg(string error, Exception e)
         {
             string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e);
-            this._Log.WriteLine(msg);
+            _Log.WriteLine(msg);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace WDAC_Wizard
         public void AddWarningMsg(string warning)
         {
             string msg = String.Format("{0} [WARNING]: {1}", Helper.GetFormattedDateTime(), warning);
-            this._Log.WriteLine(msg);
+            _Log.WriteLine(msg);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace WDAC_Wizard
 
             foreach (var line in msg)
             {
-                this._Log.WriteLine(line);
+                _Log.WriteLine(line);
             }
         }
 
@@ -109,7 +109,7 @@ namespace WDAC_Wizard
         public void CloseLogger()
         {
             //this._Log.Flush();
-            this._Log.Close();
+            _Log.Close();
         }
 
         /// <summary>
@@ -120,10 +120,10 @@ namespace WDAC_Wizard
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            this.AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
+            AddInfoMsg(String.Format("WDAC Policy Wizard Version # {0}", versionInfo.FileVersion));
             string[] winInfo = GetInstallTime(); 
-            this.AddInfoMsg(String.Format("Session ID: {0}", winInfo[0]));
-            this.AddInfoMsg(String.Format("Windows Version: {0}", winInfo[1]));
+            AddInfoMsg(String.Format("Session ID: {0}", winInfo[0]));
+            AddInfoMsg(String.Format("Windows Version: {0}", winInfo[1]));
         }
 
         /// <summary>
