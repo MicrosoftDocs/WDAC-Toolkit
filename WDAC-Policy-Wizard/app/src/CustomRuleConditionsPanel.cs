@@ -2593,6 +2593,9 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void OnLoad(object sender, EventArgs e)
         {
+            // Fix to load CustomRuleConditionsPanel UI in light or dark mode
+            CustomRuleConditionsPanel_Validated(sender, e);
+
             // AppId Tagging Policies do not support kmci rules
             // Uncheck kmci and disable the checkbox
             if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
