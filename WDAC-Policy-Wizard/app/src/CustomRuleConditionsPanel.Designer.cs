@@ -971,6 +971,7 @@
             comboBox_RuleType.Name = "comboBox_RuleType";
             comboBox_RuleType.Size = new System.Drawing.Size(150, 22);
             comboBox_RuleType.TabIndex = 3;
+            comboBox_RuleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             comboBox_RuleType.SelectedIndexChanged += RuleType_ComboboxChanged;
             // 
             // radioButton_Deny
