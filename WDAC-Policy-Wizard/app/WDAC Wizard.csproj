@@ -215,51 +215,51 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\AllowMicrosoft - SingleFormat.xml</TargetPath>
     </None>
-    <None Update="Templates\AllowMicrosoft.xml">
+    <None Update="Resources\policyTemplates\AllowMicrosoft.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\AllowMicrosoft.xml</TargetPath>
     </None>
-    <None Update="Templates\AppIdTagging.xml">
+    <None Update="Resources\policyTemplates\AppIdTagging.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\AppIdTagging.xml</TargetPath>
     </None>
-    <None Update="Templates\DefaultWindows_Audit - SingleFormat.xml">
+    <None Update="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\DefaultWindows_Audit - SingleFormat.xml</TargetPath>
     </None>
-    <None Update="Templates\DefaultWindows_Audit.xml">
+    <None Update="Resources\policyTemplates\DefaultWindows_Audit.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\DefaultWindows_Audit.xml</TargetPath>
     </None>
-    <None Update="Templates\EmptyWDAC.xml">
+    <None Update="Resources\policyTemplates\EmptyWDAC.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\EmptyWDAC.xml</TargetPath>  
     </None>
-    <None Update="Templates\Empty_Supplemental.xml">
+    <None Update="Resources\policyTemplates\Empty_Supplemental.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\Empty_Supplemental.xml</TargetPath> 
     </None>
-    <None Update="Templates\Recommended_Driver_Blocklist.xml">
+    <None Update="Resources\policyTemplates\Recommended_Driver_Blocklist.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\Recommended_Driver_Blocklist.xml</TargetPath>
     </None>
-    <None Update="Templates\Recommended_UserMode_Blocklist.xml">
+    <None Update="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\Recommended_UserMode_Blocklist.xml</TargetPath>
     </None>
-    <None Update="Templates\SignedReputable - SingleFormat.xml">
+    <None Update="Resources\policyTemplates\SignedReputable - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\SignedReputable - SingleFormat.xml</TargetPath>
     </None>
-    <None Update="Templates\SignedReputable.xml">
+    <None Update="Resources\policyTemplates\SignedReputable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\SignedReputable.xml</TargetPath>
     </None>
-    <None Update="Templates\WinSEPolicy.xml">
+    <None Update="Resources\policyTemplates\WinSEPolicy.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\WinSEPolicy.xml</TargetPath>
     </None>
-    <None Update="Templates\WinSiPolicy.xml">
+    <None Update="Resources\policyTemplates\WinSiPolicy.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\WinSiPolicy.xml</TargetPath>
     </None>
