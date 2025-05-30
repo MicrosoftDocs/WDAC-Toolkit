@@ -217,39 +217,51 @@
     </None>
     <None Update="Templates\AllowMicrosoft.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AllowMicrosoft.xml</TargetPath>
     </None>
     <None Update="Templates\AppIdTagging.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AppIdTagging.xml</TargetPath>
     </None>
     <None Update="Templates\DefaultWindows_Audit - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\DefaultWindows_Audit - SingleFormat.xml</TargetPath>
     </None>
     <None Update="Templates\DefaultWindows_Audit.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\DefaultWindows_Audit.xml</TargetPath>
     </None>
     <None Update="Templates\EmptyWDAC.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\EmptyWDAC.xml</TargetPath>  
     </None>
     <None Update="Templates\Empty_Supplemental.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Empty_Supplemental.xml</TargetPath> 
     </None>
     <None Update="Templates\Recommended_Driver_Blocklist.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Recommended_Driver_Blocklist.xml</TargetPath>
     </None>
     <None Update="Templates\Recommended_UserMode_Blocklist.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Recommended_UserMode_Blocklist.xml</TargetPath>
     </None>
     <None Update="Templates\SignedReputable - SingleFormat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\SignedReputable - SingleFormat.xml</TargetPath>
     </None>
     <None Update="Templates\SignedReputable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\SignedReputable.xml</TargetPath>
     </None>
     <None Update="Templates\WinSEPolicy.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\WinSEPolicy.xml</TargetPath>
     </None>
     <None Update="Templates\WinSiPolicy.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\WinSiPolicy.xml</TargetPath>
     </None>
     <Content Include="obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
     <Content Include="obj\Debug\WDAC Wizard.csproj.FileListAbsolute.txt" />
