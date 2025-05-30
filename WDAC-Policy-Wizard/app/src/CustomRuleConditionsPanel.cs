@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,9 +8,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
-using System.Management.Automation.Runspaces;
-using System.Management.Automation;
-using System.Collections.ObjectModel; 
 
 
 namespace WDAC_Wizard
