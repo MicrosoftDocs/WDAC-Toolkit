@@ -31,8 +31,6 @@ namespace WDAC_Wizard
             this.AddBoilerPlate();
         }
 
-        
-
         public static void NewLogger(string folderPath)
         {
             Logger.Log = new Logger(folderPath); 
@@ -65,7 +63,7 @@ namespace WDAC_Wizard
         /// <param name="e">Exception string to append to log file</param>
         public void AddErrorMsg(string error, Exception e)
         {
-            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e.ToString());
+            string msg = String.Format("{0} [ERROR]: {1}: {2}", Helper.GetFormattedDateTime(), error, e);
             this._Log.WriteLine(msg);
         }
 
@@ -140,7 +138,11 @@ namespace WDAC_Wizard
             RegistryKey root = RegistryKey.OpenBaseKey(rootNode, registryView);
             RegistryKey registryKey = root.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
 
-            RegistryValueKind subKeyValueKind = registryKey.GetValueKind("InstallTime");
+            if (registryKey != null)
+            {
+                registryKey.GetValueKind("InstallTime");
+            }
+
             object installTimeValue = registryKey.GetValue("InstallTime");
             object buildLabEx = registryKey.GetValue("BuildLabEx"); 
 
