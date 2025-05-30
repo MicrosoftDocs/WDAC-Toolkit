@@ -19,11 +19,11 @@ namespace WDAC_Wizard
         public TemplatePage(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this._MainWindow = pMainWindow;
-            this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.ErrorMsg = "Please select a policy template before continuing.";
-            this._Policy = new WDAC_Policy();
+            _MainWindow = pMainWindow;
+            _MainWindow.ErrorOnPage = true;
+            _MainWindow.RedoFlowRequired = false;
+            _MainWindow.ErrorMsg = "Please select a policy template before continuing.";
+            _Policy = new WDAC_Policy();
             Logger.Log.AddInfoMsg("==== Template Page Initialized ====");
         }
 
@@ -35,13 +35,13 @@ namespace WDAC_Wizard
         {
             // Allow Microsoft Template chosen --> DefaultWindows_Enforced
             // User coming back to this page and changing template -- redo flow
-            if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
-                 && this._MainWindow.Policy.TemplatePath != null)
+            if (_MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
+                 && _MainWindow.Policy.TemplatePath != null)
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
 
-            this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
+            _Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.AllowMicrosoft;
 
             // Update UI
             Uncheck_all();
@@ -58,13 +58,13 @@ namespace WDAC_Wizard
         private void WindowsWorks_Button_Click(object sender, EventArgs e)
         {
             // User coming back to this page and changing template -- redo flow
-            if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
-                 && this._MainWindow.Policy.TemplatePath != null)
+            if (_MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
+                 && _MainWindow.Policy.TemplatePath != null)
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
 
-            this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.WindowsWorks;
+            _Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.WindowsWorks;
             // Update UI
             Uncheck_all();
             SetDefaultTextValues("WindowsWorks");
@@ -81,13 +81,13 @@ namespace WDAC_Wizard
         {
             //Policy Signed and Reputable (certificate & reputation signing)
             // User coming back to this page and changing template -- redo flow
-            if (this._MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
-                 && this._MainWindow.Policy.TemplatePath != null)
+            if (_MainWindow.Policy._PolicyTemplate != WDAC_Policy.NewPolicyTemplate.None
+                 && _MainWindow.Policy.TemplatePath != null)
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
 
-            this._Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.SignedReputable;
+            _Policy._PolicyTemplate = WDAC_Policy.NewPolicyTemplate.SignedReputable;
 
             // Update UI
             Uncheck_all();
@@ -104,17 +104,17 @@ namespace WDAC_Wizard
         private void Uncheck_all()
         {
             // Show the text fields now that user has selected base policy template:
-            this.policyInfoPanel.Visible = true;
-            this._MainWindow.DisplayInfoText(0);
+            policyInfoPanel.Visible = true;
+            _MainWindow.DisplayInfoText(0);
 
             // Force other switch buttons off
-            this.allowMsft_Button.Tag = "untoggle";
-            this.windowsWorks_Button.Tag = "untoggle";
-            this.signedReputable_Button.Tag = "untoggle";
+            allowMsft_Button.Tag = "untoggle";
+            windowsWorks_Button.Tag = "untoggle";
+            signedReputable_Button.Tag = "untoggle";
 
-            this.allowMsft_Button.Image = Properties.Resources.radio_off;
-            this.windowsWorks_Button.Image = Properties.Resources.radio_off;
-            this.signedReputable_Button.Image = Properties.Resources.radio_off;
+            allowMsft_Button.Image = Properties.Resources.radio_off;
+            windowsWorks_Button.Image = Properties.Resources.radio_off;
+            signedReputable_Button.Image = Properties.Resources.radio_off;
         }
 
         /// <summary>
@@ -131,24 +131,24 @@ namespace WDAC_Wizard
             // If cancel button is selected by user, or path does not exist prevent unhandled error
             if (String.IsNullOrEmpty(policyPath))
             {
-                if (String.IsNullOrEmpty(this._MainWindow.Policy.SchemaPath))
+                if (String.IsNullOrEmpty(_MainWindow.Policy.SchemaPath))
                 {
-                    this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
-                    this._MainWindow.ErrorOnPage = true;
+                    _MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                    _MainWindow.ErrorOnPage = true;
                 }
                 return;
             }
 
             textBoxPolicyPath.Text = policyPath;
-            this._Policy.SchemaPath = policyPath;
-            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
-            this._MainWindow.ErrorOnPage = false;
+            _Policy.SchemaPath = policyPath;
+            _MainWindow.Policy.SchemaPath = _Policy.SchemaPath;
+            _MainWindow.ErrorOnPage = false;
 
             // Scroll to the right-most side of the textbox
-            if (this.textBoxPolicyPath.TextLength > 0)
+            if (textBoxPolicyPath.TextLength > 0)
             {
-                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
-                this.textBoxPolicyPath.ScrollToCaret();
+                textBoxPolicyPath.SelectionStart = textBoxPolicyPath.TextLength - 1;
+                textBoxPolicyPath.ScrollToCaret();
             }
         }
 
@@ -161,18 +161,18 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void TextBoxPolicyPath_TextChanged(object sender, EventArgs e)
         {
-            this._Policy.SchemaPath = textBoxPolicyPath.Text;
-            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+            _Policy.SchemaPath = textBoxPolicyPath.Text;
+            _MainWindow.Policy.SchemaPath = _Policy.SchemaPath;
 
             // Validate the Path
-            if (String.IsNullOrWhiteSpace(this._MainWindow.Policy.SchemaPath))
+            if (String.IsNullOrWhiteSpace(_MainWindow.Policy.SchemaPath))
             {
-                this._MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
-                this._MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorMsg = Properties.Resources.NullXmlPath;
+                _MainWindow.ErrorOnPage = true;
             }
             else
             {
-                this._MainWindow.ErrorOnPage = false;
+                _MainWindow.ErrorOnPage = false;
             }
         }
 
@@ -184,8 +184,8 @@ namespace WDAC_Wizard
         private void TextBoxPolicyName_TextChanged(object sender, EventArgs e)
         {
             // Policy Friendly Name
-            this._Policy.PolicyName = textBox_PolicyName.Text;
-            this._MainWindow.Policy.PolicyName = this._Policy.PolicyName;
+            _Policy.PolicyName = textBox_PolicyName.Text;
+            _MainWindow.Policy.PolicyName = _Policy.PolicyName;
         }
 
         /// <summary>
@@ -197,24 +197,24 @@ namespace WDAC_Wizard
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                this._Policy.SchemaPath = GetDefaultPath(policyTemplate, 0);
-                this._Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, Helper.GetFormattedDate());
+                _Policy.SchemaPath = GetDefaultPath(policyTemplate, 0);
+                _Policy.PolicyName = String.Format("{0}_{1}", policyTemplate, Helper.GetFormattedDate());
 
                 // These will trigger the textChange events
-                this.textBoxPolicyPath.Text = this._Policy.SchemaPath;
-                this.textBox_PolicyName.Text = this._Policy.PolicyName;
-                this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+                textBoxPolicyPath.Text = _Policy.SchemaPath;
+                textBox_PolicyName.Text = _Policy.PolicyName;
+                _MainWindow.Policy.SchemaPath = _Policy.SchemaPath;
 
-                this._MainWindow.ErrorOnPage = false;
+                _MainWindow.ErrorOnPage = false;
             }
 
-            this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
+            _MainWindow.Policy._PolicyTemplate = _Policy._PolicyTemplate;
 
             // Show right side of the text
-            if (this.textBoxPolicyPath.TextLength > 0)
+            if (textBoxPolicyPath.TextLength > 0)
             {
-                this.textBoxPolicyPath.SelectionStart = this.textBoxPolicyPath.TextLength - 1;
-                this.textBoxPolicyPath.ScrollToCaret();
+                textBoxPolicyPath.SelectionStart = textBoxPolicyPath.TextLength - 1;
+                textBoxPolicyPath.ScrollToCaret();
             }
 
         }
@@ -406,7 +406,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
@@ -420,7 +420,7 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
@@ -441,23 +441,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse.ForeColor = System.Drawing.Color.DodgerBlue;
-                button_Browse.BackColor = System.Drawing.Color.Transparent;
+                button_Browse.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button_Browse.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Browse.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Browse.FlatStyle = FlatStyle.Flat;
+                button_Browse.ForeColor = Color.DodgerBlue;
+                button_Browse.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Browse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Browse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button_Browse.ForeColor = System.Drawing.Color.Black;
-                button_Browse.BackColor = System.Drawing.Color.WhiteSmoke;
+                button_Browse.FlatAppearance.BorderColor = Color.Black;
+                button_Browse.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Browse.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button_Browse.FlatStyle = FlatStyle.Flat;
+                button_Browse.ForeColor = Color.Black;
+                button_Browse.BackColor = Color.WhiteSmoke;
             }
         }
 

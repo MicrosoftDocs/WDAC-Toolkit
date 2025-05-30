@@ -21,11 +21,11 @@ namespace WDAC_Wizard
         public PolicyType(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this._MainWindow = pMainWindow;
-            this._Policy = pMainWindow.Policy;
+            _MainWindow = pMainWindow;
+            _Policy = pMainWindow.Policy;
 
-            this._MainWindow.ErrorOnPage = false;
-            this._MainWindow.RedoFlowRequired = false;
+            _MainWindow.ErrorOnPage = false;
+            _MainWindow.RedoFlowRequired = false;
 
             Logger.Log.AddInfoMsg("==== Policy Type Page Initialized ====");
         }
@@ -35,21 +35,21 @@ namespace WDAC_Wizard
         /// </summary>
         private void BasePolicy_Selected(object sender, EventArgs e)
         {
-            this.suppPolicy_PictureBox.Tag = "Unselected";
-            this.basePolicy_PictureBox.Tag = "Selected";
+            suppPolicy_PictureBox.Tag = "Unselected";
+            basePolicy_PictureBox.Tag = "Selected";
 
             // New base policy selected
-            if (this._Policy._PolicyType != WDAC_Policy.PolicyType.BasePolicy)
-                this._MainWindow.RedoFlowRequired = true;
+            if (_Policy._PolicyType != WDAC_Policy.PolicyType.BasePolicy)
+                _MainWindow.RedoFlowRequired = true;
 
-            this._Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
-            this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
+            _Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
+            _MainWindow.Policy._PolicyType = _Policy._PolicyType;
 
             // Update UI to reflect change
             basePolicy_PictureBox.Image = Properties.Resources.radio_on;
             suppPolicy_PictureBox.Image = Properties.Resources.radio_off;
             panelSupplName.Visible = false;
-            this._MainWindow.ErrorOnPage = false;
+            _MainWindow.ErrorOnPage = false;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace WDAC_Wizard
         /// </summary>
         private void SupplementalPolicy_Selected(object sender, EventArgs e)
         {
-            this.suppPolicy_PictureBox.Tag = "Selected";
-            this.basePolicy_PictureBox.Tag = "Unselected";
+            suppPolicy_PictureBox.Tag = "Selected";
+            basePolicy_PictureBox.Tag = "Unselected";
 
             // Require >= 1903 for multiple policy formats - show UI notification 
             if (Helper.GetWinVersion() < 1903)
@@ -71,13 +71,13 @@ namespace WDAC_Wizard
             }
                 
             // Supplemental policy selected
-            if (this._Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
+            if (_Policy._PolicyType != WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                this._MainWindow.RedoFlowRequired = true;   
+                _MainWindow.RedoFlowRequired = true;   
             }
 
-            this._Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy;
-            this._MainWindow.Policy._PolicyType = this._Policy._PolicyType;
+            _Policy._PolicyType = WDAC_Policy.PolicyType.SupplementalPolicy;
+            _MainWindow.Policy._PolicyType = _Policy._PolicyType;
 
             // Update UI to reflect change
             suppPolicy_PictureBox.Image = Properties.Resources.radio_on;
@@ -87,8 +87,8 @@ namespace WDAC_Wizard
             Reset_panel();
             panelSupplName.Visible = true;
 
-            this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.ErrorMsg = "Select base policy to extend before continuing.";
+            _MainWindow.ErrorOnPage = true;
+            _MainWindow.ErrorMsg = "Select base policy to extend before continuing.";
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace WDAC_Wizard
         {
             // Verify that a Base Policy ID/GUID is not in progress or finished
             // and confirm the user would rather continue with adding a path instead
-            if (this._Policy.BasePolicyId != Guid.Empty
+            if (_Policy.BasePolicyId != Guid.Empty
                 || !textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
             {
                 DialogResult res = MessageBox.Show(
@@ -113,7 +113,7 @@ namespace WDAC_Wizard
                     return;
                 }
 
-                this._Policy.BasePolicyId = Guid.Empty;
+                _Policy.BasePolicyId = Guid.Empty;
                 TextBoxBasePolicyID_Reformat();
 
                 // Log state
@@ -131,23 +131,23 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this.BaseToSupplementPath = policyPath;
-            this.textBoxBasePolicyPath.Text = policyPath;
+            BaseToSupplementPath = policyPath;
+            textBoxBasePolicyPath.Text = policyPath;
 
             // Show right side of the text
-            if (this.textBoxBasePolicyPath.TextLength > 0)
+            if (textBoxBasePolicyPath.TextLength > 0)
             {
-                this.textBoxBasePolicyPath.SelectionStart = this.textBoxBasePolicyPath.TextLength - 1;
-                this.textBoxBasePolicyPath.ScrollToCaret();
+                textBoxBasePolicyPath.SelectionStart = textBoxBasePolicyPath.TextLength - 1;
+                textBoxBasePolicyPath.ScrollToCaret();
             }
 
             // User has modified the supplemental policy from original, force restart flow
-            if (this._MainWindow.Policy.BaseToSupplementPath != this.BaseToSupplementPath)
+            if (_MainWindow.Policy.BaseToSupplementPath != BaseToSupplementPath)
             {
-                this._MainWindow.RedoFlowRequired = true;
+                _MainWindow.RedoFlowRequired = true;
             }
 
-            this._MainWindow.Policy.BaseToSupplementPath = this.BaseToSupplementPath;
+            _MainWindow.Policy.BaseToSupplementPath = BaseToSupplementPath;
             CheckPolicy_Recur(0);
         }
 
@@ -158,48 +158,48 @@ namespace WDAC_Wizard
         private void CheckPolicy_Recur(int count)
         {
             // Verification: does the chosen base policy allow supplemental policies
-            this.Verified_Label.Visible = true;
-            this.Verified_PictureBox.Visible = true;
+            Verified_Label.Visible = true;
+            Verified_PictureBox.Visible = true;
 
-            int IsPolicyExtendableCode = IsPolicyExtendable(this.BaseToSupplementPath);
+            int IsPolicyExtendableCode = IsPolicyExtendable(BaseToSupplementPath);
 
             if (IsPolicyExtendableCode == 0 && count < 2)
             {
-                this.Verified_Label.Text = "This base policy allows supplemental policies.";
-                this.Verified_PictureBox.Image = Properties.Resources.verified;
-                this._MainWindow.ErrorOnPage = false;
+                Verified_Label.Text = "This base policy allows supplemental policies.";
+                Verified_PictureBox.Image = Properties.Resources.verified;
+                _MainWindow.ErrorOnPage = false;
 
                 if (count == 1)
                 {
-                    DialogResult res = MessageBox.Show(String.Format("The Wizard has successfully added the Allow Supplemental Policy rule to {0}.", Path.GetFileName(this.BaseToSupplementPath)),
+                    DialogResult res = MessageBox.Show(String.Format("The Wizard has successfully added the Allow Supplemental Policy rule to {0}.", Path.GetFileName(BaseToSupplementPath)),
                     "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }
             else if (IsPolicyExtendableCode == 1 && count < 1)
             {
-                this.Verified_Label.Text = "This base policy does not allow supplemental policies.";
-                this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
-                this._MainWindow.ErrorOnPage = true;
-                this._MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies.";
+                Verified_Label.Text = "This base policy does not allow supplemental policies.";
+                Verified_PictureBox.Image = Properties.Resources.not_extendable;
+                _MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorMsg = "Selected base policy does not allow supplemental policies.";
 
                 // Prompt user if the Wizard should add the supplemental policy rule option to base policy
                 DialogResult res = MessageBox.Show(String.Format("The base policy you have selected does not allow supplemental policies.\n\n" +
-                    "Would you like the Wizard to add the Allow Supplemental Policy rule to {0}?", Path.GetFileName(this.BaseToSupplementPath)),
+                    "Would you like the Wizard to add the Allow Supplemental Policy rule to {0}?", Path.GetFileName(BaseToSupplementPath)),
                     "Base Policy Issue", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (res == DialogResult.Yes)
                 {
                     // Run command Set-RuleOption -Option 17, check IsPolicyExtendable again
                     Logger.Log.AddInfoMsg("Attempting to convert the base policy to one that is extendable");
-                    bool success = AddSupplementalOption(this.BaseToSupplementPath);
+                    bool success = AddSupplementalOption(BaseToSupplementPath);
 
                     // If adding supplemental option was unsuccessful for any reason
                     if (!success)
                     {
-                        DialogResult _res = MessageBox.Show(String.Format("The Wizard was unable to add the 'Allow Supplemental Policy Option' to {0}.", Path.GetFileName(this.BaseToSupplementPath)),
+                        DialogResult _res = MessageBox.Show(String.Format("The Wizard was unable to add the 'Allow Supplemental Policy Option' to {0}.", Path.GetFileName(BaseToSupplementPath)),
                             "Something went wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this._MainWindow.ErrorOnPage = true;
-                        this._MainWindow.ErrorMsg = "The Wizard was unable to add the 'Allow Supplemental Policy Option'.";
+                        _MainWindow.ErrorOnPage = true;
+                        _MainWindow.ErrorMsg = "The Wizard was unable to add the 'Allow Supplemental Policy Option'.";
 
                         return;
                     }
@@ -209,10 +209,10 @@ namespace WDAC_Wizard
             }
             else
             {
-                this.Verified_Label.Text = "This policy does not support supplemental policies. Please select a multi-policy format base policy to supplement.";
-                this.Verified_PictureBox.Image = Properties.Resources.not_extendable;
-                this._MainWindow.ErrorOnPage = true;
-                this._MainWindow.ErrorMsg = "Selected base policy is not a base policy.";
+                Verified_Label.Text = "This policy does not support supplemental policies. Please select a multi-policy format base policy to supplement.";
+                Verified_PictureBox.Image = Properties.Resources.not_extendable;
+                _MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorMsg = "Selected base policy is not a base policy.";
             }
 
             basePolicyValidation_Panel.Visible = true;
@@ -296,34 +296,34 @@ namespace WDAC_Wizard
         /// </summary>
         private void Reset_panel()
         {
-            this.BaseToSupplementPath = null;
-            this.textBoxBasePolicyPath.Text = "";
-            this.Verified_Label.Visible = false;
-            this.Verified_PictureBox.Visible = false;
+            BaseToSupplementPath = null;
+            textBoxBasePolicyPath.Text = "";
+            Verified_Label.Visible = false;
+            Verified_PictureBox.Visible = false;
 
             // Set default paths once, unless explicitly turned off in settings
             if (Properties.Settings.Default.useDefaultStrings)
             {
-                this._Policy.SchemaPath = GetDefaultPath("Supplemental_Policy", 0);
-                this._Policy.PolicyName = String.Format("{0}_{1}", "My Supplemental Policy", Helper.GetFormattedDate());
+                _Policy.SchemaPath = GetDefaultPath("Supplemental_Policy", 0);
+                _Policy.PolicyName = String.Format("{0}_{1}", "My Supplemental Policy", Helper.GetFormattedDate());
 
                 // These will trigger the textChange events
-                this.textBoxSuppPath.Text = this._Policy.SchemaPath;
+                textBoxSuppPath.Text = _Policy.SchemaPath;
                 // Show right side of the text
-                if (this.textBoxSuppPath.TextLength > 0)
+                if (textBoxSuppPath.TextLength > 0)
                 {
-                    this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
-                    this.textBoxSuppPath.ScrollToCaret();
+                    textBoxSuppPath.SelectionStart = textBoxSuppPath.TextLength - 1;
+                    textBoxSuppPath.ScrollToCaret();
                 }
 
-                this.textBox_PolicyName.Text = this._Policy.PolicyName;
-                this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
+                textBox_PolicyName.Text = _Policy.PolicyName;
+                _MainWindow.Policy.SchemaPath = _Policy.SchemaPath;
 
                 // Once the supp schema path is set, show panel to select base to supplement
-                this.panelSuppl_Base.Visible = true;
+                panelSuppl_Base.Visible = true;
             }
 
-            this._MainWindow.Policy._PolicyTemplate = this._Policy._PolicyTemplate;
+            _MainWindow.Policy._PolicyTemplate = _Policy._PolicyTemplate;
         }
 
         /// <summary>
@@ -369,18 +369,18 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this._MainWindow.Policy.SchemaPath = policyPath;
-            this.textBoxSuppPath.Text = policyPath;
+            _MainWindow.Policy.SchemaPath = policyPath;
+            textBoxSuppPath.Text = policyPath;
 
             // Show right side of the text
-            if (this.textBoxSuppPath.TextLength > 0)
+            if (textBoxSuppPath.TextLength > 0)
             {
-                this.textBoxSuppPath.SelectionStart = this.textBoxSuppPath.TextLength - 1;
-                this.textBoxSuppPath.ScrollToCaret();
+                textBoxSuppPath.SelectionStart = textBoxSuppPath.TextLength - 1;
+                textBoxSuppPath.ScrollToCaret();
             }
 
             // Show panel if path is set
-            this.panelSuppl_Base.Visible = true;
+            panelSuppl_Base.Visible = true;
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace WDAC_Wizard
                 if (!Helper.IsUserWriteable(Path.GetDirectoryName(basePath)))
                 {
                     basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(basePath));
-                    this.BaseToSupplementPath = basePath;
+                    BaseToSupplementPath = basePath;
                 }
 
                 // Serialize the policy back to xml policy format
@@ -429,7 +429,7 @@ namespace WDAC_Wizard
         private void TextBox_PolicyName_TextChanged(object sender, EventArgs e)
         {
             // Policy Friend Name
-            this._MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
+            _MainWindow.Policy.PolicyName = textBox_PolicyName.Text;
         }
 
         // <summary>
@@ -438,7 +438,7 @@ namespace WDAC_Wizard
         private void MultipleFormat_ButtonClick(object sender, EventArgs e)
         {
             // Show the multi-policy UI panel
-            this.panel_MultiPolicy.Visible = true;
+            panel_MultiPolicy.Visible = true;
 
             // UI - hide the AppId Tagging policy panel
             appIdPolicy_Panel.Visible = false;
@@ -447,7 +447,7 @@ namespace WDAC_Wizard
             Properties.Settings.Default.showMultiplePolicyDefault = true;
 
             // Just call into the events to reset the UI
-            if (this.basePolicy_PictureBox.Tag.ToString().Contains("Unselected"))
+            if (basePolicy_PictureBox.Tag.ToString().Contains("Unselected"))
             {
                 SupplementalPolicy_Selected(sender, e);
             }
@@ -457,8 +457,8 @@ namespace WDAC_Wizard
             }
 
             // Set policy format in Policy object
-            this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
-            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+            _MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + _MainWindow.Policy._Format.ToString());
 
             // Set checkbox UI states for Single Policy and AppIdTagging
             multiPolicyCheckbox.Image = Properties.Resources.radio_on;
@@ -472,8 +472,8 @@ namespace WDAC_Wizard
         private void SingleFormat_ButtonClick(object sender, EventArgs e)
         {
             // UI changes - Hide the panel
-            this.panel_MultiPolicy.Visible = false;
-            this._MainWindow.ErrorOnPage = false;
+            panel_MultiPolicy.Visible = false;
+            _MainWindow.ErrorOnPage = false;
 
             // UI - hide the AppId Tagging policy panel
             appIdPolicy_Panel.Visible = false;
@@ -482,11 +482,11 @@ namespace WDAC_Wizard
             Properties.Settings.Default.showMultiplePolicyDefault = false;
 
             // Set policy format in Policy object
-            this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
-            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + this._MainWindow.Policy._Format.ToString());
+            _MainWindow.Policy._Format = WDAC_Policy.Format.Legacy;
+            Logger.Log.AddInfoMsg("Setting WDAC Policy Format to " + _MainWindow.Policy._Format.ToString());
 
             // Set policy type 
-            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
+            _MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
 
             // Set checkbox UI states for Multi Policy and AppIdTagging
             multiPolicyCheckbox.Image = Properties.Resources.radio_off;
@@ -502,8 +502,8 @@ namespace WDAC_Wizard
         private void AppIdPolicy_Click(object sender, EventArgs e)
         {
             // UI changes - Hide the multiple policy panel
-            this.panel_MultiPolicy.Visible = false;
-            this._MainWindow.ErrorOnPage = false;
+            panel_MultiPolicy.Visible = false;
+            _MainWindow.ErrorOnPage = false;
 
             // UI - show the AppId Tagging policy panel
             appIdPolicy_Panel.Visible = true;
@@ -513,11 +513,11 @@ namespace WDAC_Wizard
             Properties.Settings.Default.showMultiplePolicyDefault = true;
 
             // Set policy format in Policy object
-            this._MainWindow.Policy._Format = WDAC_Policy.Format.None;
+            _MainWindow.Policy._Format = WDAC_Policy.Format.None;
             Logger.Log.AddInfoMsg("Setting WDAC Policy Format to AppIdTagging");
 
             // Set policy type to AppId Tagging
-            this._MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.AppIdTaggingPolicy;
+            _MainWindow.Policy._PolicyType = WDAC_Policy.PolicyType.AppIdTaggingPolicy;
 
             // Set checkbox UI states for Multi Policy and AppIdTagging
             multiPolicyCheckbox.Image = Properties.Resources.radio_off;
@@ -544,7 +544,7 @@ namespace WDAC_Wizard
                 appIdPolicyCheckbox.Image = Properties.Resources.radio_off;
 
                 // Set multiple policy format
-                this._MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
+                _MainWindow.Policy._Format = WDAC_Policy.Format.MultiPolicy;
             }
             else
             {
@@ -553,10 +553,10 @@ namespace WDAC_Wizard
                 appIdPolicyCheckbox.Image = Properties.Resources.radio_off;
 
                 // Set legacy/singly policy format
-                this._MainWindow.Policy._Format = WDAC_Policy.Format.Legacy; 
+                _MainWindow.Policy._Format = WDAC_Policy.Format.Legacy; 
             }
 
-            Logger.Log.AddInfoMsg("PolicyType Page Load. Setting Policy Format to " + this._MainWindow.Policy._Format.ToString());
+            Logger.Log.AddInfoMsg("PolicyType Page Load. Setting Policy Format to " + _MainWindow.Policy._Format.ToString());
 
         }
 
@@ -605,16 +605,16 @@ namespace WDAC_Wizard
             // Validate the text entered
             if (Guid.TryParse(textBoxBasePolicyID.Text, out Guid result))
             {
-                this._Policy.BasePolicyId = result;
-                this._MainWindow.ErrorOnPage = false;
+                _Policy.BasePolicyId = result;
+                _MainWindow.ErrorOnPage = false;
 
                 // Log state
                 Logger.Log.AddInfoMsg(String.Format("New supplemental policy flow. Valid policy ID entered: {0}", result.ToString()));
             }
             else
             {
-                this._MainWindow.ErrorOnPage = true;
-                this._MainWindow.ErrorMsg = Properties.Resources.InvalidBasePolicyId;
+                _MainWindow.ErrorOnPage = true;
+                _MainWindow.ErrorMsg = Properties.Resources.InvalidBasePolicyId;
             }
         }
 
@@ -627,11 +627,11 @@ namespace WDAC_Wizard
         {
             // Check if we already have a base policy path and confirm the user would rather
             // continue with adding a GUID instead
-            if (!String.IsNullOrEmpty(this._Policy.BaseToSupplementPath))
+            if (!String.IsNullOrEmpty(_Policy.BaseToSupplementPath))
             {
                 DialogResult res = MessageBox.Show(
                     String.Format("Adding a Base Policy ID will remove the following XML path: {0}. " +
-                    "\r\nAre you sure you want to continue?", this._Policy.BaseToSupplementPath),
+                    "\r\nAre you sure you want to continue?", _Policy.BaseToSupplementPath),
                     "App Control Wizard",
                     MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
@@ -642,8 +642,8 @@ namespace WDAC_Wizard
                 }
 
                 // Otherwise, clear the base policy path text and objects
-                this.BaseToSupplementPath = String.Empty;
-                this._Policy.BaseToSupplementPath = String.Empty;
+                BaseToSupplementPath = String.Empty;
+                _Policy.BaseToSupplementPath = String.Empty;
                 textBoxBasePolicyPath.Clear();
 
                 // Hide the validation panel
@@ -658,7 +658,7 @@ namespace WDAC_Wizard
             if (textBoxBasePolicyID.Text.Contains(Properties.Resources.ExampleBasePolicyId))
             {
                 textBoxBasePolicyID.Clear();
-                textBoxBasePolicyID.ForeColor = System.Drawing.Color.Black;
+                textBoxBasePolicyID.ForeColor = Color.Black;
             }
         }
 
@@ -669,7 +669,7 @@ namespace WDAC_Wizard
         {
             // Reset the text and font to original
             textBoxBasePolicyID.Text = Properties.Resources.ExampleBasePolicyId;
-            textBoxBasePolicyID.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            textBoxBasePolicyID.ForeColor = SystemColors.WindowFrame;
         }
 
         /// <summary>
@@ -729,7 +729,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is RadioButton radioButton
                         && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
@@ -743,7 +743,7 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is RadioButton radioButton
                         && (radioButton.Tag == null || radioButton.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
@@ -764,23 +764,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.DodgerBlue;
-                button.BackColor = System.Drawing.Color.Transparent;
+                button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.DodgerBlue;
+                button.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-                button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                button.ForeColor = System.Drawing.Color.Black;
-                button.BackColor = System.Drawing.Color.WhiteSmoke;
+                button.FlatAppearance.BorderColor = Color.Black;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 30, 144, 255);
+                button.FlatStyle = FlatStyle.Flat;
+                button.ForeColor = Color.Black;
+                button.BackColor = Color.WhiteSmoke;
             }
         }
 
@@ -916,8 +916,8 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void AppIdPolicyNameTextbox_TextChanged(object sender, EventArgs e)
         {
-            this._Policy.PolicyName = appIdPolicyName_Textbox.Text;
-            this._MainWindow.Policy.PolicyName = this._Policy.PolicyName;
+            _Policy.PolicyName = appIdPolicyName_Textbox.Text;
+            _MainWindow.Policy.PolicyName = _Policy.PolicyName;
         }
 
         /// <summary>
@@ -936,14 +936,14 @@ namespace WDAC_Wizard
                 return;
             }
 
-            this._MainWindow.Policy.SchemaPath = policyPath;
-            this.appIdPolicyLocation_Textbox.Text = policyPath;
+            _MainWindow.Policy.SchemaPath = policyPath;
+            appIdPolicyLocation_Textbox.Text = policyPath;
 
             // Show right side of the text
-            if (this.appIdPolicyLocation_Textbox.TextLength > 55)
+            if (appIdPolicyLocation_Textbox.TextLength > 55)
             {
-                this.appIdPolicyLocation_Textbox.SelectionStart = this.appIdPolicyLocation_Textbox.TextLength - 1;
-                this.appIdPolicyLocation_Textbox.ScrollToCaret();
+                appIdPolicyLocation_Textbox.SelectionStart = appIdPolicyLocation_Textbox.TextLength - 1;
+                appIdPolicyLocation_Textbox.ScrollToCaret();
             }
         }
 
@@ -953,22 +953,22 @@ namespace WDAC_Wizard
         private void SetAppIdPolicyDefaultValues()
         {
             // Set default paths once, unless explicitly turned off in settings
-            this._Policy.SchemaPath = GetDefaultPath("AppIDTagging_Policy", 0);
-            this._Policy.PolicyName = String.Format("{0}_{1}", "My AppID Tagging Policy", Helper.GetFormattedDate());
+            _Policy.SchemaPath = GetDefaultPath("AppIDTagging_Policy", 0);
+            _Policy.PolicyName = String.Format("{0}_{1}", "My AppID Tagging Policy", Helper.GetFormattedDate());
 
             // These will trigger the textChange events
-            this.appIdPolicyName_Textbox.Text = this._Policy.PolicyName;
-            this.appIdPolicyLocation_Textbox.Text = this._Policy.SchemaPath;
+            appIdPolicyName_Textbox.Text = _Policy.PolicyName;
+            appIdPolicyLocation_Textbox.Text = _Policy.SchemaPath;
 
             // Show right side of the text
-            if (this.appIdPolicyLocation_Textbox.TextLength > 0)
+            if (appIdPolicyLocation_Textbox.TextLength > 0)
             {
-                this.appIdPolicyLocation_Textbox.SelectionStart = this.appIdPolicyLocation_Textbox.TextLength - 1;
-                this.appIdPolicyLocation_Textbox.ScrollToCaret();
+                appIdPolicyLocation_Textbox.SelectionStart = appIdPolicyLocation_Textbox.TextLength - 1;
+                appIdPolicyLocation_Textbox.ScrollToCaret();
             }
 
-            this._MainWindow.Policy.SchemaPath = this._Policy.SchemaPath;
-            this._MainWindow.Policy.PolicyName = this._Policy.PolicyName; 
+            _MainWindow.Policy.SchemaPath = _Policy.SchemaPath;
+            _MainWindow.Policy.PolicyName = _Policy.PolicyName; 
         }
         
     }

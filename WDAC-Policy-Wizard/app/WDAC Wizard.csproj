@@ -34,7 +34,18 @@
     <Description>WDAC Wizard</Description>
     <PackageProjectUrl>aka.ms/wdacwizard</PackageProjectUrl>
     <FileVersion>2.4.3.0</FileVersion>
+    <PackageOutputPath>$(OutputPath)</PackageOutputPath>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Assets\**" />
+	  <EmbeddedResource Remove="Assets\**" />
+	  <None Remove="Assets\**" />
+	</ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -109,22 +120,6 @@
     <None Include="product.pbxproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Square150x150Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.scale-125.png" />
-    <Content Include="Assets\Square44x44Logo.scale-150.png" />
-    <Content Include="Assets\Square44x44Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
     <Content Include="bin\Debug\policies\DefaultWindows_Enforced.xml" />
     <Content Include="bin\Debug\policies\WinSiPolicy.xml" />
     <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.dll" />
@@ -202,12 +197,71 @@
     <Content Include="Resources\imgs\windows-logo.png" />
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\policyTemplates\AllowMicrosoft.xml" />
+    <None Update="priconfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Update="Resources\policyTemplates\cipolicy.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Update="Resources\RulesDict.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>RulesDict.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\AllowMicrosoft - SingleFormat.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AllowMicrosoft - SingleFormat.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\AllowMicrosoft.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AllowMicrosoft.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\AppIdTagging.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\AppIdTagging.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\DefaultWindows_Audit - SingleFormat.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\DefaultWindows_Audit - SingleFormat.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\DefaultWindows_Audit.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\DefaultWindows_Audit.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\EmptyWDAC.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\EmptyWDAC.xml</TargetPath>  
+    </None>
+    <None Update="Resources\policyTemplates\Empty_Supplemental.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Empty_Supplemental.xml</TargetPath> 
+    </None>
+    <None Update="Resources\policyTemplates\Recommended_Driver_Blocklist.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Recommended_Driver_Blocklist.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\Recommended_UserMode_Blocklist.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\SignedReputable - SingleFormat.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\SignedReputable - SingleFormat.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\SignedReputable.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\SignedReputable.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\WinSEPolicy.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\WinSEPolicy.xml</TargetPath>
+    </None>
+    <None Update="Resources\policyTemplates\WinSiPolicy.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\WinSiPolicy.xml</TargetPath>
     </None>
     <Content Include="obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
     <Content Include="obj\Debug\WDAC Wizard.csproj.FileListAbsolute.txt" />
