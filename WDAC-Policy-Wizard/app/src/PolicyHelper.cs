@@ -1732,16 +1732,16 @@ namespace WDAC_Wizard
         {
             // Break out if null siPolicy provided or FileRules and Signers are empty
             if (customRulesPolicy == null
-                || customRulesPolicy.FileRules == null
-                || customRulesPolicy.FileRules.Length == 0)
+                || customRulesPolicy.Signers == null
+                || customRulesPolicy.Signers.Length == 0)
             {
                 return customRulesPolicy;
             }
 
             // Break early if existingPolicy does not have FileRules
             if (existingPolicy == null
-                || existingPolicy.FileRules == null
-                || existingPolicy.FileRules.Length == 0)
+                || existingPolicy.Signers == null
+                || existingPolicy.Signers.Length == 0)
             {
                 return customRulesPolicy;
             }
@@ -1840,7 +1840,7 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             signingScn.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId = idMapping[id];
-                            Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                            Logger.Log.AddInfoMsg($"AllowedSignerID already exists. Replacing SignerID: {id} with {idMapping[id]}");
                         }
                     }
                 }
@@ -1856,7 +1856,7 @@ namespace WDAC_Wizard
                         if (idMapping.ContainsKey(id))
                         {
                             signingScn.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId = idMapping[id];
-                            Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                            Logger.Log.AddInfoMsg($"DeniedSignerID already exists. Replacing SignerID: {id} with {idMapping[id]}");
                         }
                     }
                 }
@@ -1875,7 +1875,7 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempCiSigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                        Logger.Log.AddInfoMsg($"CiSignerID already exists. Replacing SignerID: {id} with {idMapping[id]}");
                     }
                 }
                 siPolicy.CiSigners = tempCiSigners;
@@ -1893,7 +1893,7 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempPolicySigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                        Logger.Log.AddInfoMsg($"UpdatePolicySignerID already exists. Replacing SignerID: {id} with {idMapping[id]}");
                     }
                 }
                 siPolicy.UpdatePolicySigners = tempPolicySigners;
@@ -1911,7 +1911,7 @@ namespace WDAC_Wizard
                     if (idMapping.ContainsKey(id))
                     {
                         tempSupplementalSigners[i].SignerId = idMapping[id];
-                        Logger.Log.AddInfoMsg($"SignerID alread exists. Replacing SignerID: {id} with {idMapping[id]}");
+                        Logger.Log.AddInfoMsg($"SupplementalPolicySignerID already exists. Replacing SignerID: {id} with {idMapping[id]}");
                     }
                 }
                 siPolicy.SupplementalPolicySigners = tempSupplementalSigners;
