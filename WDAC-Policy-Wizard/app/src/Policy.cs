@@ -103,28 +103,28 @@ namespace WDAC_Wizard
 
         public WDAC_Policy()
         {
-            this.siPolicy = null; 
-            this.PolicyRuleOptions = new List<RuleType>();
+            siPolicy = null; 
+            PolicyRuleOptions = new List<RuleType>();
 
-            this.EnableHVCI = false;
-            this.EnableAudit = true;
+            EnableHVCI = false;
+            EnableAudit = true;
 
-            this.EKUs = new List<PolicyEKUs>();
-            this.FileRules = new Dictionary<string, PolicyFileRules>();
-            this.Signers = new Dictionary<string, PolicySigners>();//<PolicySigners>();
-            this.SigningScenarios = new List<PolicySigningScenarios>();
-            this.UpdateSigners = new List<PolicyUpdateSigners>();
-            this.SupplementalSigners = new List<PolicySupplementalSigners>();
-            this.CISigners = new List<PolicyCISigners>();
-            this.PolicySettings = new List<PolicySettings>();
-            this.CustomRules = new List<PolicyCustomRules>();
-            this.PoliciesToMerge = new List<string>(); 
+            EKUs = new List<PolicyEKUs>();
+            FileRules = new Dictionary<string, PolicyFileRules>();
+            Signers = new Dictionary<string, PolicySigners>();//<PolicySigners>();
+            SigningScenarios = new List<PolicySigningScenarios>();
+            UpdateSigners = new List<PolicyUpdateSigners>();
+            SupplementalSigners = new List<PolicySupplementalSigners>();
+            CISigners = new List<PolicyCISigners>();
+            PolicySettings = new List<PolicySettings>();
+            CustomRules = new List<PolicyCustomRules>();
+            PoliciesToMerge = new List<string>(); 
 
-            this.VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
-            this.PolicyID = Helper.GetFormattedDate();
+            VersionNumber = "10.0.0.0"; // Default policy version when calling the New-CIPolicy cmdlet
+            PolicyID = Helper.GetFormattedDate();
 
-            this.UseKernelModeBlocks = false;
-            this.UseUserModeBlocks = false; 
+            UseKernelModeBlocks = false;
+            UseUserModeBlocks = false; 
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace WDAC_Wizard
         /// </summary>
         public string UpdateVersion()
         {
-            int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
+            int[] versionIdx = siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
             for (int i = versionIdx.Length-1; i > 0; i--)
             {
                 if (versionIdx[i] >= UInt16.MaxValue)
@@ -154,14 +154,14 @@ namespace WDAC_Wizard
             }
 
             // Convert int[] --> this.VersionNumber string
-            this.VersionNumber = ""; // reset string 
+            VersionNumber = ""; // reset string 
             foreach(var vIdx in versionIdx)
             {
-                this.VersionNumber += String.Format("{0}.", vIdx.ToString());
+                VersionNumber += String.Format("{0}.", vIdx.ToString());
             } 
-            this.VersionNumber = this.VersionNumber.Substring(0, this.VersionNumber.Length - 1); //remove trailing period
+            VersionNumber = VersionNumber.Substring(0, VersionNumber.Length - 1); //remove trailing period
 
-            return this.VersionNumber; 
+            return VersionNumber; 
         }
 
         /// <summary>
@@ -172,13 +172,13 @@ namespace WDAC_Wizard
         {
             // Min length based on min version (0.0.0.0)
             int minFileNameLen = 7; 
-            if (this.EditPolicyPath == null || this.EditPolicyPath.Length < minFileNameLen)
+            if (EditPolicyPath == null || EditPolicyPath.Length < minFileNameLen)
             {
                 return 0;
             }
 
             // Find last instance of "_v" substring 
-            string fileName = Path.GetFileNameWithoutExtension(this.EditPolicyPath);
+            string fileName = Path.GetFileNameWithoutExtension(EditPolicyPath);
             int index = fileName.LastIndexOf("_v"); 
             if (index < 0)
             {
@@ -194,7 +194,7 @@ namespace WDAC_Wizard
             }
 
             // Return the index pos + length of dir
-            return index + Path.GetDirectoryName(this.EditPolicyPath).Length + 1; 
+            return index + Path.GetDirectoryName(EditPolicyPath).Length + 1; 
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public bool HasRuleOption(OptionType targetRuleOption)
         {
-            foreach(var ruleOption in this.PolicyRuleOptions)
+            foreach(var ruleOption in PolicyRuleOptions)
             {
                 if(ruleOption.Item == targetRuleOption)
                 {
@@ -221,7 +221,7 @@ namespace WDAC_Wizard
         /// <param name="targetRuleOption"></param>
         public void RemoveRuleOption(OptionType targetRuleOption)
         {
-            List<RuleType> tempRuleOptions = this.PolicyRuleOptions; 
+            List<RuleType> tempRuleOptions = PolicyRuleOptions; 
             for (int i = 0; i < tempRuleOptions.Count; i++)
             {
                 if (tempRuleOptions[i].Item == OptionType.EnabledAllowSupplementalPolicies)
@@ -231,7 +231,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            this.PolicyRuleOptions = tempRuleOptions; 
+            PolicyRuleOptions = tempRuleOptions; 
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public bool HasRuleType(OptionType targetRuleOption)
         {
-            foreach (var ruleOption in this.siPolicy.Rules)
+            foreach (var ruleOption in siPolicy.Rules)
             {
                 if (ruleOption.Item == targetRuleOption)
                 {
@@ -284,8 +284,8 @@ namespace WDAC_Wizard
 
         public COM()
         {
-            this.Provider = ProviderType.None;
-            this.ValueName = COMVALUENAME;
+            Provider = ProviderType.None;
+            ValueName = COMVALUENAME;
         }
 
         /// <summary>
@@ -295,14 +295,14 @@ namespace WDAC_Wizard
         public bool IsValidRule()
         {
             // Possible solution 1: All Keys
-            if(this.Guid.Equals(Properties.Resources.ComObjectAllKeys))
+            if(Guid.Equals(Properties.Resources.ComObjectAllKeys))
             {
                 return true; 
             }
 
             // Possible solution 2: Valid GUID Format
-            System.Guid _guid = System.Guid.NewGuid(); 
-            return System.Guid.TryParse(this.Guid, out _guid); 
+            Guid _guid = System.Guid.NewGuid(); 
+            return System.Guid.TryParse(Guid, out _guid); 
         }
     }
 
@@ -316,8 +316,8 @@ namespace WDAC_Wizard
 
         public bool IsValidTag()
         {
-            return !String.IsNullOrEmpty(this.Value)
-                    && !String.IsNullOrEmpty(this.Key); 
+            return !String.IsNullOrEmpty(Value)
+                    && !String.IsNullOrEmpty(Key); 
         }
     }
 
@@ -332,8 +332,8 @@ namespace WDAC_Wizard
 
         public FolderScan()
         {
-            this.Levels = new List<string>();
-            this.OmitPaths = new List<string>(); 
+            Levels = new List<string>();
+            OmitPaths = new List<string>(); 
         }
     }
 
@@ -347,7 +347,7 @@ namespace WDAC_Wizard
 
         public WDACSigner()
         {
-            this.FileAttribRefs = new List<string>();
+            FileAttribRefs = new List<string>();
         }
     }
 
@@ -359,9 +359,9 @@ namespace WDAC_Wizard
 
         public DriverFile(string _path, bool _isKernel, bool _isPE)
         {
-            this.Path = _path;
-            this.isKernel = _isKernel;
-            this.isPE = _isPE;
+            Path = _path;
+            isKernel = _isKernel;
+            isPE = _isPE;
         }
     }
 
@@ -410,8 +410,8 @@ namespace WDAC_Wizard
 
         public PolicySigningScenarios()
         {
-            this.Signers = new List<string>();
-            this.FileRules = new List<string>();
+            Signers = new List<string>();
+            FileRules = new List<string>();
         }
 
 
@@ -443,18 +443,18 @@ namespace WDAC_Wizard
 
         public void AddException(List<string> exceptionList)
         {
-            this.Exceptions = exceptionList;
+            Exceptions = exceptionList;
         }
 
         public void AddFileAttribute(string ruleID)
         {
-            this.FileAttributes.Add(ruleID); // Add ruleID to File Attributes list
+            FileAttributes.Add(ruleID); // Add ruleID to File Attributes list
         }
 
         public PolicySigners()
         {
-            this.Exceptions = new List<string>();
-            this.FileAttributes = new List<string>();
+            Exceptions = new List<string>();
+            FileAttributes = new List<string>();
         }
     }
 
@@ -496,23 +496,23 @@ namespace WDAC_Wizard
 
         public void SetRuleType()
         {
-            if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FilePath))
+            if (String.IsNullOrEmpty(Hash) && String.IsNullOrEmpty(FilePath))
             {
-                this._RuleType = RuleType.FileName;
+                _RuleType = RuleType.FileName;
             }
-            else if (String.IsNullOrEmpty(this.Hash) && String.IsNullOrEmpty(this.FileName))
+            else if (String.IsNullOrEmpty(Hash) && String.IsNullOrEmpty(FileName))
             {
-                this._RuleType = RuleType.FilePath;
+                _RuleType = RuleType.FilePath;
             }
             else
             {
-                this._RuleType = RuleType.Hash;
+                _RuleType = RuleType.Hash;
             }
         }
 
         public RuleType GetRuleType()
         {
-            return this._RuleType;
+            return _RuleType;
         }
 
     }
@@ -533,8 +533,8 @@ namespace WDAC_Wizard
 
         public CustomValue()
         {
-            this.Hashes = new List<string>();
-            this.PackageFamilyNames = new List<string>();
+            Hashes = new List<string>();
+            PackageFamilyNames = new List<string>();
         }
     }
 
@@ -636,35 +636,35 @@ namespace WDAC_Wizard
         // Constructors
         public PolicyCustomRules()
         {
-            this.Type = RuleType.None;
-            this.Level = RuleLevel.None;
-            this.Permission = RulePermission.Allow; // Allow by default to match the default state of the UI
+            Type = RuleType.None;
+            Level = RuleLevel.None;
+            Permission = RulePermission.Allow; // Allow by default to match the default state of the UI
 
-            this.FileInfo = new Dictionary<string, string>();
-            this.SupportedCrypto = true;
-            this.ExceptionList = new List<PolicyCustomRules>();
-            this.FolderContents = new List<string>();
+            FileInfo = new Dictionary<string, string>();
+            SupportedCrypto = true;
+            ExceptionList = new List<PolicyCustomRules>();
+            FolderContents = new List<string>();
 
-            this.UsingCustomValues = false;
-            this.CustomValues = new CustomValue();
-            this.PackagedFamilyNames = new List<string>();
+            UsingCustomValues = false;
+            CustomValues = new CustomValue();
+            PackagedFamilyNames = new List<string>();
 
             // Set checkbox states
-            this.CheckboxCheckStates = new CheckboxStates();
-            this.CheckboxCheckStates.checkBox0 = false;
-            this.CheckboxCheckStates.checkBox1 = false;
-            this.CheckboxCheckStates.checkBox2 = false;
-            this.CheckboxCheckStates.checkBox3 = false;
-            this.CheckboxCheckStates.checkBox4 = false;
+            CheckboxCheckStates = new CheckboxStates();
+            CheckboxCheckStates.checkBox0 = false;
+            CheckboxCheckStates.checkBox1 = false;
+            CheckboxCheckStates.checkBox2 = false;
+            CheckboxCheckStates.checkBox3 = false;
+            CheckboxCheckStates.checkBox4 = false;
 
             // Set signing scenario states
-            this.SigningScenarioCheckStates = new SigningScenarioStates();
-            this.SigningScenarioCheckStates.umciEnabled = true;
-            this.SigningScenarioCheckStates.kmciEnabled = false;
+            SigningScenarioCheckStates = new SigningScenarioStates();
+            SigningScenarioCheckStates.umciEnabled = true;
+            SigningScenarioCheckStates.kmciEnabled = false;
 
-            this.COMObject = new COM();
-            this.Scan = new FolderScan();
-            this.AppIDTag = new AppID(); 
+            COMObject = new COM();
+            Scan = new FolderScan();
+            AppIDTag = new AppID(); 
         }
 
         /// <summary>
@@ -677,30 +677,30 @@ namespace WDAC_Wizard
         /// 
         public PolicyCustomRules(string psVar, string ruleIndex, string refFile, RulePermission _Permission)
         {
-            this.Permission = RulePermission.Allow;  // Allow by default to match the default state of the UI
-            this.Level = RuleLevel.FilePath;
-            this.ReferenceFile = refFile;
-            this.PSVariable = psVar;
-            this.RuleIndex = ruleIndex;
-            this.ExceptionList = new List<PolicyCustomRules>();
-            this.FileInfo = new Dictionary<string, string>();
+            Permission = RulePermission.Allow;  // Allow by default to match the default state of the UI
+            Level = RuleLevel.FilePath;
+            ReferenceFile = refFile;
+            PSVariable = psVar;
+            RuleIndex = ruleIndex;
+            ExceptionList = new List<PolicyCustomRules>();
+            FileInfo = new Dictionary<string, string>();
 
-            this.UsingCustomValues = false;
+            UsingCustomValues = false;
         }
 
         public void SetRuleLevel(RuleLevel ruleLevel)
         {
-            this.Level = ruleLevel;
+            Level = ruleLevel;
         }
 
         public void SetRuleType(RuleType ruleType)
         {
-            this.Type = ruleType;
+            Type = ruleType;
         }
 
         public void SetRulePermission(RulePermission rulePermission)
         {
-            this.Permission = rulePermission;
+            Permission = rulePermission;
         }
 
         /// <summary>
@@ -708,7 +708,7 @@ namespace WDAC_Wizard
         /// </summary>
         public RuleLevel GetRuleLevel()
         {
-            return this.Level;
+            return Level;
         }
 
         /// <summary>
@@ -716,7 +716,7 @@ namespace WDAC_Wizard
         /// </summary>
         public RuleType GetRuleType()
         {
-            return this.Type;
+            return Type;
         }
 
         /// <summary>
@@ -724,11 +724,11 @@ namespace WDAC_Wizard
         /// </summary>
         public RulePermission GetRulePermission()
         {
-            return this.Permission;
+            return Permission;
         }
 
         // Methods
-        public void AddException(PolicyCustomRules.RuleType type, PolicyCustomRules.RuleLevel level, Dictionary<string, string> fileInfo, string refFile)
+        public void AddException(RuleType type, RuleLevel level, Dictionary<string, string> fileInfo, string refFile)
         {
             PolicyCustomRules ruleException = new PolicyCustomRules();
             ruleException.Type = type;
@@ -736,7 +736,7 @@ namespace WDAC_Wizard
             ruleException.FileInfo = fileInfo;
             ruleException.ReferenceFile = refFile;
 
-            this.ExceptionList.Add(ruleException);
+            ExceptionList.Add(ruleException);
         }
 
         /// <summary>
@@ -745,7 +745,7 @@ namespace WDAC_Wizard
         /// <param name="ruleException"></param>
         public void AddException(PolicyCustomRules ruleException)
         {
-            this.ExceptionList.Add(ruleException);
+            ExceptionList.Add(ruleException);
         }
 
         /// <summary>
@@ -754,9 +754,9 @@ namespace WDAC_Wizard
         /// <returns></returns>
         public bool IsAnyBoxChecked()
         {
-            return this.CheckboxCheckStates.checkBox0 || this.CheckboxCheckStates.checkBox1
-                || this.CheckboxCheckStates.checkBox2 || this.CheckboxCheckStates.checkBox3
-                || this.CheckboxCheckStates.checkBox4;
+            return CheckboxCheckStates.checkBox0 || CheckboxCheckStates.checkBox1
+                || CheckboxCheckStates.checkBox2 || CheckboxCheckStates.checkBox3
+                || CheckboxCheckStates.checkBox4;
         }
     }
 }

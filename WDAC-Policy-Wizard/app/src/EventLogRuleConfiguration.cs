@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WDAC_Wizard
 {
@@ -39,23 +33,23 @@ namespace WDAC_Wizard
         {
             InitializeComponent();
 
-            this.CiEvents = pMainWindow.CiEvents; 
-            this._MainWindow = pMainWindow; 
-            this.siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty_Supplemental);
+            CiEvents = pMainWindow.CiEvents; 
+            _MainWindow = pMainWindow; 
+            siPolicy = Helper.DeserializeXMLStringtoPolicy(Properties.Resources.Empty_Supplemental);
 
             // Set the Base Policy ID of the supplemental policy
-            this.siPolicy.BasePolicyID = PolicyEventHelper.GetPolicyBaseId(this.siPolicy, this.CiEvents);
+            siPolicy.BasePolicyID = PolicyEventHelper.GetPolicyBaseId(siPolicy, CiEvents);
 
-            this.DisplayObjects = new List<EventDisplayObject>();
+            DisplayObjects = new List<EventDisplayObject>();
 
-            this.SelectedRow = 0;
-            this.RuleIdsToAdd = new List<int>();
+            SelectedRow = 0;
+            RuleIdsToAdd = new List<int>();
 
             // Set error flag - Bug #234
-            this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.ErrorMsg = Properties.Resources.InvalidEventRulesCreated;
+            _MainWindow.ErrorOnPage = true;
+            _MainWindow.ErrorMsg = Properties.Resources.InvalidEventRulesCreated;
 
-            this.CheckBoxes = new List<CheckBox>(); 
+            CheckBoxes = new List<CheckBox>(); 
         }
 
         /// <summary>
@@ -67,8 +61,8 @@ namespace WDAC_Wizard
         {
             // UI Elements
             // Set publisher rule by default
-            this.ruleTypeComboBox.SelectedIndex = 0;
-            this.publisherRulePanel.Visible = true;
+            ruleTypeComboBox.SelectedIndex = 0;
+            publisherRulePanel.Visible = true;
 
             // Set the table, let's eat
             DisplayEvents();
@@ -79,7 +73,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void DisplayEvents()
         {
-            foreach(CiEvent ciEvent in this.CiEvents)
+            foreach(CiEvent ciEvent in CiEvents)
             {
                 // Create one row per ciEvent per signer Event
                 // File signed by 3 signers will create 3 rows/rules
@@ -90,8 +84,8 @@ namespace WDAC_Wizard
                         ciEvent.PolicyName,
                         ciEvent.SignerInfo.PublisherName);
 
-                this.DisplayObjects.Add(dpObject);
-                this.eventsDataGridView.RowCount += 1;
+                DisplayObjects.Add(dpObject);
+                eventsDataGridView.RowCount += 1;
             }
         }
 
@@ -103,8 +97,8 @@ namespace WDAC_Wizard
         private void AddButton_Click(object sender, EventArgs e)
         {
             // Update UI and SiPolicy object
-            EventDisplayObject dp = this.DisplayObjects[this.SelectedRow];
-            CiEvent ciEvent = this.CiEvents[this.SelectedRow];
+            EventDisplayObject dp = DisplayObjects[SelectedRow];
+            CiEvent ciEvent = CiEvents[SelectedRow];
 
             // Check if rule was already added
             if(dp.Action != null &&
@@ -120,14 +114,14 @@ namespace WDAC_Wizard
                 }
             }
 
-            switch(this.ruleTypeComboBox.SelectedIndex)
+            switch(ruleTypeComboBox.SelectedIndex)
             {
                 case 0: // Publisher
                     if(IsValidPublisherUiState())
                     {
                         dp.Action = "Added to policy";
-                        this.siPolicy = PolicyEventHelper.AddSiPolicyPublisherRule(ciEvent, this.siPolicy, PublisherUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                        siPolicy = PolicyEventHelper.AddSiPolicyPublisherRule(ciEvent, siPolicy, PublisherUIState);
+                        _MainWindow.EventLogPolicy = siPolicy;
                         ClearErrorMsg();
                     }
                     break;
@@ -136,8 +130,8 @@ namespace WDAC_Wizard
                     if(IsValidFilePathUiState())
                     {
                         dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyEventHelper.AddSiPolicyFilePathRule(ciEvent, this.siPolicy, this.FilePathUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                        siPolicy = PolicyEventHelper.AddSiPolicyFilePathRule(ciEvent, siPolicy, FilePathUIState);
+                        _MainWindow.EventLogPolicy = siPolicy;
                         ClearErrorMsg();
                     }
                     break; 
@@ -147,8 +141,8 @@ namespace WDAC_Wizard
                     if(IsValidFileAttributesUiState())
                     {
                         dp.Action = "Added to policy"; 
-                        this.siPolicy = PolicyEventHelper.AddSiPolicyFileAttributeRule(ciEvent, this.siPolicy, this.FileAttributesUIState);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                        siPolicy = PolicyEventHelper.AddSiPolicyFileAttributeRule(ciEvent, siPolicy, FileAttributesUIState);
+                        _MainWindow.EventLogPolicy = siPolicy;
                         ClearErrorMsg();
                     }
                     break;
@@ -157,14 +151,14 @@ namespace WDAC_Wizard
                     if(IsValidHashRuleUiState())
                     {
                         dp.Action = "Added to policy";
-                        this.siPolicy = PolicyEventHelper.AddSiPolicyHashRules(ciEvent, this.siPolicy);
-                        this._MainWindow.EventLogPolicy = this.siPolicy;
+                        siPolicy = PolicyEventHelper.AddSiPolicyHashRules(ciEvent, siPolicy);
+                        _MainWindow.EventLogPolicy = siPolicy;
                         ClearErrorMsg();
                     }
                     break; 
             }
 
-            this.eventsDataGridView.Refresh();
+            eventsDataGridView.Refresh();
         }
 
         /// <summary>
@@ -182,20 +176,20 @@ namespace WDAC_Wizard
             }
 
             int selectedRow = grid.CurrentRow.Index;
-            if (selectedRow >= this.CiEvents.Count)
+            if (selectedRow >= CiEvents.Count)
             {
                 return;
             }
 
             // Set the UI
             ResetCustomRulesPanel();
-            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                              this.CiEvents[selectedRow].OriginalFilename,
-                              this.CiEvents[selectedRow].FileVersion,
-                              this.CiEvents[selectedRow].ProductName);
+            SetPublisherPanel(CiEvents[selectedRow].SignerInfo.IssuerName,
+                              CiEvents[selectedRow].SignerInfo.PublisherName,
+                              CiEvents[selectedRow].OriginalFilename,
+                              CiEvents[selectedRow].FileVersion,
+                              CiEvents[selectedRow].ProductName);
 
-            this.SelectedRow = selectedRow;
+            SelectedRow = selectedRow;
         }
 
         /// <summary>
@@ -209,7 +203,7 @@ namespace WDAC_Wizard
             ResetCustomRulesPanel();
 
             int selectedRow = e.RowIndex;
-            if(selectedRow >= this.CiEvents.Count)
+            if(selectedRow >= CiEvents.Count)
             {
                 return;
             }
@@ -221,13 +215,13 @@ namespace WDAC_Wizard
                 return;
             }
             
-            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                              this.CiEvents[selectedRow].OriginalFilename,
-                              this.CiEvents[selectedRow].FileVersion,
-                              this.CiEvents[selectedRow].ProductName);
+            SetPublisherPanel(CiEvents[selectedRow].SignerInfo.IssuerName,
+                              CiEvents[selectedRow].SignerInfo.PublisherName,
+                              CiEvents[selectedRow].OriginalFilename,
+                              CiEvents[selectedRow].FileVersion,
+                              CiEvents[selectedRow].ProductName);
 
-            this.SelectedRow = selectedRow;
+            SelectedRow = selectedRow;
         }
 
         /// <summary>
@@ -239,17 +233,17 @@ namespace WDAC_Wizard
         {
             // If the list is not sorted by the desired column, sort the list
             // Otherwise, simply reverse the list of objects to change from ascending --> descending --> ascending
-            if (this.eventsDataGridView.Columns[e.ColumnIndex].Tag != (object)"Sorted")
+            if (eventsDataGridView.Columns[e.ColumnIndex].Tag != (object)"Sorted")
             {
                 SortDisplayObjects(e.ColumnIndex, false);
                 ResetColTags();
-                this.eventsDataGridView.Columns[e.ColumnIndex].Tag = "Sorted";
+                eventsDataGridView.Columns[e.ColumnIndex].Tag = "Sorted";
             }
             else
             {
                 SortDisplayObjects(e.ColumnIndex, true);
             }
-            this.eventsDataGridView.Refresh();
+            eventsDataGridView.Refresh();
         }
 
 
@@ -271,45 +265,45 @@ namespace WDAC_Wizard
                 switch(columnToSort)
                 {
                     case 1:
-                        this.DisplayObjects.Sort((x, y) => x.EventId.CompareTo(y.EventId));
-                        this.CiEvents.Sort((x, y) => x.EventId.CompareTo(y.EventId));
+                        DisplayObjects.Sort((x, y) => x.EventId.CompareTo(y.EventId));
+                        CiEvents.Sort((x, y) => x.EventId.CompareTo(y.EventId));
                         break;
 
                     case 2:
-                        this.DisplayObjects.Sort((x, y) => x.Filename.CompareTo(y.Filename));
-                        this.CiEvents.Sort((x, y) => x.FileName.CompareTo(y.FileName));
+                        DisplayObjects.Sort((x, y) => x.Filename.CompareTo(y.Filename));
+                        CiEvents.Sort((x, y) => x.FileName.CompareTo(y.FileName));
                         break;
 
                     case 3:
-                        this.DisplayObjects.Sort((x, y) => x.Product.CompareTo(y.Product));
-                        this.CiEvents.Sort((x, y) => x.ProductName.CompareTo(y.ProductName));
+                        DisplayObjects.Sort((x, y) => x.Product.CompareTo(y.Product));
+                        CiEvents.Sort((x, y) => x.ProductName.CompareTo(y.ProductName));
                         break;
 
                     case 4:
-                        this.DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
-                        this.CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
+                        CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
                         break;
 
                     case 5:
-                        this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
-                        this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
+                        DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
+                        CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
                         break;
                 }
             }
             else
             {
-                this.DisplayObjects.Reverse();
-                this.CiEvents.Reverse();
+                DisplayObjects.Reverse();
+                CiEvents.Reverse();
             }
 
-            this._MainWindow.CiEvents = this.CiEvents;
+            _MainWindow.CiEvents = CiEvents;
         }
 
         private void ResetColTags()
         {
-            for(int i = 0; i< this.eventsDataGridView.Columns.Count; i++)
+            for(int i = 0; i< eventsDataGridView.Columns.Count; i++)
             {
-                this.eventsDataGridView.Columns[i].Tag = ""; 
+                eventsDataGridView.Columns[i].Tag = ""; 
             }
         }
 
@@ -319,25 +313,25 @@ namespace WDAC_Wizard
         private void ResetCustomRulesPanel()
         {
             // Uncheck boxes
-            this.publisherCheckBox.Checked = false;
-            this.filenameCheckBox.Checked = false;
-            this.versionCheckBox.Checked = false;
-            this.productCheckBox.Checked = false;
+            publisherCheckBox.Checked = false;
+            filenameCheckBox.Checked = false;
+            versionCheckBox.Checked = false;
+            productCheckBox.Checked = false;
 
-            this.publisherCheckBox.AutoCheck = false;
-            this.filenameCheckBox.AutoCheck = false;
-            this.versionCheckBox.AutoCheck = false;
-            this.productCheckBox.AutoCheck = false;
+            publisherCheckBox.AutoCheck = false;
+            filenameCheckBox.AutoCheck = false;
+            versionCheckBox.AutoCheck = false;
+            productCheckBox.AutoCheck = false;
 
             // Clear all textboxes
-            this.issuerTextBox.Clear();
-            this.publisherTextBox.Clear();
-            this.filenameTextBox.Clear();
-            this.versionTextBox.Clear();
-            this.productTextBox.Clear();
+            issuerTextBox.Clear();
+            publisherTextBox.Clear();
+            filenameTextBox.Clear();
+            versionTextBox.Clear();
+            productTextBox.Clear();
 
             // Dropdown
-            this.ruleTypeComboBox.SelectedIndex = 0; 
+            ruleTypeComboBox.SelectedIndex = 0; 
         }
 
 
@@ -349,13 +343,13 @@ namespace WDAC_Wizard
         {
             // UI States:
             // this.PublisherUIState[0] == 1 always; it cannot be modified
-            this.PublisherUIState[1] = this.publisherCheckBox.Checked == true ? 1 : 0;
-            this.PublisherUIState[2] = this.filenameCheckBox.Checked == true ? 1 : 0;
-            this.PublisherUIState[3] = this.versionCheckBox.Checked == true ? 1 : 0;
-            this.PublisherUIState[4] = this.productCheckBox.Checked == true ? 1 : 0;
+            PublisherUIState[1] = publisherCheckBox.Checked == true ? 1 : 0;
+            PublisherUIState[2] = filenameCheckBox.Checked == true ? 1 : 0;
+            PublisherUIState[3] = versionCheckBox.Checked == true ? 1 : 0;
+            PublisherUIState[4] = productCheckBox.Checked == true ? 1 : 0;
 
-            if(String.IsNullOrEmpty(this.issuerTextBox.Text) 
-                || this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
+            if(String.IsNullOrEmpty(issuerTextBox.Text) 
+                || issuerTextBox.Text == Properties.Resources.BadEventPubValue)
             {
                 // Log exception error and throw error to user
                 MessageBox.Show(this,String.Format("The Issuer is invalid for rule creation. The issuer cannot be empty or '{0}'", Properties.Resources.BadEventPubValue), 
@@ -363,14 +357,14 @@ namespace WDAC_Wizard
                                                    MessageBoxButtons.OK, 
                                                    MessageBoxIcon.Error);
 
-                this.Invalidate();
+                Invalidate();
 
                 Logger.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
                 return false; 
             }
 
-            if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) 
-                || this.publisherTextBox.Text == Properties.Resources.BadEventPubValue))
+            if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(publisherTextBox.Text) 
+                || publisherTextBox.Text == Properties.Resources.BadEventPubValue))
             {
                 DialogResult res = MessageBox.Show(String.Format("The Publisher is invalid for rule creation. The Publisher cannot be empty '{0}'", Properties.Resources.BadEventPubValue),
                                                    "New Rule Creation Error",
@@ -380,7 +374,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (PublisherUIState[2] == 1 && String.IsNullOrEmpty(this.filenameTextBox.Text))
+            if (PublisherUIState[2] == 1 && String.IsNullOrEmpty(filenameTextBox.Text))
             {
                 DialogResult res = MessageBox.Show(String.Format("The Filename is invalid for rule creation. The Filename cannot be empty if its checkbox is selected."),
                                                    "New Rule Creation Error",
@@ -390,7 +384,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (PublisherUIState[3] == 1 && String.IsNullOrEmpty(this.versionCheckBox.Text))
+            if (PublisherUIState[3] == 1 && String.IsNullOrEmpty(versionCheckBox.Text))
             {
                 DialogResult res = MessageBox.Show(String.Format("The Version field is invalid for rule creation. The Version field cannot be empty if its checkbox is selected."),
                                                    "New Rule Creation Error",
@@ -400,7 +394,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (PublisherUIState[4] == 1 && String.IsNullOrEmpty(this.productTextBox.Text))
+            if (PublisherUIState[4] == 1 && String.IsNullOrEmpty(productTextBox.Text))
             {
                 DialogResult res = MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name cannot be empty if its checkbox is selected."),
                                                    "New Rule Creation Error",
@@ -421,11 +415,11 @@ namespace WDAC_Wizard
         public bool IsValidFileAttributesUiState()
         {
             // UI States:
-            this.FileAttributesUIState[0] = this.origFileNameCheckBox.Checked == true ? 1 : 0;
-            this.FileAttributesUIState[1] = this.fileDescCheckBox.Checked == true ? 1 : 0;
-            this.FileAttributesUIState[2] = this.prodNameCheckBox.Checked == true ? 1 : 0;
-            this.FileAttributesUIState[3] = this.intFileNameCheckBox.Checked == true ? 1 : 0;
-            this.FileAttributesUIState[4] = this.pfnCheckBox.Checked == true ? 1 : 0;
+            FileAttributesUIState[0] = origFileNameCheckBox.Checked == true ? 1 : 0;
+            FileAttributesUIState[1] = fileDescCheckBox.Checked == true ? 1 : 0;
+            FileAttributesUIState[2] = prodNameCheckBox.Checked == true ? 1 : 0;
+            FileAttributesUIState[3] = intFileNameCheckBox.Checked == true ? 1 : 0;
+            FileAttributesUIState[4] = pfnCheckBox.Checked == true ? 1 : 0;
 
             // Nothing selected
             if(FileAttributesUIState[0] == 0 &&
@@ -442,7 +436,7 @@ namespace WDAC_Wizard
                 return false; 
             }
 
-            if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(this.origFileNameTextBox.Text))
+            if (FileAttributesUIState[0] == 1 && String.IsNullOrEmpty(origFileNameTextBox.Text))
             {
                 MessageBox.Show(String.Format("The Original filename is invalid for rule creation. The original filename cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -452,7 +446,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (FileAttributesUIState[1] == 1 && String.IsNullOrEmpty(this.fileDescTextBox.Text))
+            if (FileAttributesUIState[1] == 1 && String.IsNullOrEmpty(fileDescTextBox.Text))
             {
                 MessageBox.Show(String.Format("The File description is invalid for rule creation. The File description field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -462,7 +456,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (FileAttributesUIState[2] == 1 && String.IsNullOrEmpty(this.prodNameTextBox.Text))
+            if (FileAttributesUIState[2] == 1 && String.IsNullOrEmpty(prodNameTextBox.Text))
             {
                 MessageBox.Show(String.Format("The Product name is invalid for rule creation. The Product name field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -472,7 +466,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (FileAttributesUIState[3] == 1 && String.IsNullOrEmpty(this.intFileNameTextBox.Text))
+            if (FileAttributesUIState[3] == 1 && String.IsNullOrEmpty(intFileNameTextBox.Text))
             {
                 MessageBox.Show(String.Format("The Internal filename is invalid for rule creation. The Internal filename field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -482,7 +476,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (FileAttributesUIState[4] == 1 && String.IsNullOrEmpty(this.pfnTextBox.Text))
+            if (FileAttributesUIState[4] == 1 && String.IsNullOrEmpty(pfnTextBox.Text))
             {
                 MessageBox.Show(String.Format("The Package Family Name is invalid for rule creation. The Package Family Name field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -502,8 +496,8 @@ namespace WDAC_Wizard
         public bool IsValidFilePathUiState()
         {
             // UI States:
-            this.FilePathUIState[0] = this.filePathCheckBox.Checked == true ? 1 : 0;
-            this.FilePathUIState[1] = this.folderPathCheckBox.Checked == true ? 1 : 0;
+            FilePathUIState[0] = filePathCheckBox.Checked == true ? 1 : 0;
+            FilePathUIState[1] = folderPathCheckBox.Checked == true ? 1 : 0;
 
             // Nothing selected
             if (FilePathUIState[0] == 0 &&
@@ -517,7 +511,7 @@ namespace WDAC_Wizard
                 return false;
             }
 
-            if (FilePathUIState[0] == 1 && String.IsNullOrEmpty(this.filePathTextBox.Text))
+            if (FilePathUIState[0] == 1 && String.IsNullOrEmpty(filePathTextBox.Text))
             {
                 MessageBox.Show(String.Format("The file path field is invalid for rule creation. The file path field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -527,7 +521,7 @@ namespace WDAC_Wizard
                 return false;
             }
             
-            if(FilePathUIState[1] == 1 && String.IsNullOrEmpty(this.folderPathTextBox.Text))
+            if(FilePathUIState[1] == 1 && String.IsNullOrEmpty(folderPathTextBox.Text))
             {
                 MessageBox.Show(String.Format("The folder path field is invalid for rule creation. The folder path field cannot be empty if its checkbox is selected."),
                     "New Rule Creation Error",
@@ -547,8 +541,8 @@ namespace WDAC_Wizard
         public bool IsValidHashRuleUiState()
         {
             // Need at least 1 non-null hash value
-            if (String.IsNullOrEmpty(this.sha1TextBox.Text)
-                && String.IsNullOrEmpty(this.sha2TextBox.Text))
+            if (String.IsNullOrEmpty(sha1TextBox.Text)
+                && String.IsNullOrEmpty(sha2TextBox.Text))
             {
                 MessageBox.Show(String.Format("Hash values cannot be empty in order to create a hash-based rule"),
                     "New Rule Creation Error",
@@ -564,22 +558,22 @@ namespace WDAC_Wizard
         private void EventsDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
-            if (e.RowIndex == this.eventsDataGridView.RowCount - 1) return;
+            if (e.RowIndex == eventsDataGridView.RowCount - 1) return;
 
             EventDisplayObject displayObject = null;
 
             // Store a reference to the Customer object for the row being painted.
             if (e.RowIndex == rowInEdit)
             {
-                displayObject = this.displayObjectInEdit;
+                displayObject = displayObjectInEdit;
             }
             else
             {
-                displayObject = (EventDisplayObject)this.DisplayObjects[e.RowIndex];
+                displayObject = (EventDisplayObject)DisplayObjects[e.RowIndex];
             }
 
             // Set the cell value to paint using the Customer object retrieved.
-            switch (this.eventsDataGridView.Columns[e.ColumnIndex].Name)
+            switch (eventsDataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "addedColumn":
                     e.Value = displayObject.Action;
@@ -612,10 +606,10 @@ namespace WDAC_Wizard
         /// </summary>
         private void HideAllPanels()
         {
-            this.publisherRulePanel.Visible = false;
-            this.fileAttributeRulePanel.Visible = false;
-            this.filePathRulePanel.Visible = false; 
-            this.hashRulePanel.Visible = false; 
+            publisherRulePanel.Visible = false;
+            fileAttributeRulePanel.Visible = false;
+            filePathRulePanel.Visible = false; 
+            hashRulePanel.Visible = false; 
         }
 
         /// <summary>
@@ -632,32 +626,32 @@ namespace WDAC_Wizard
 
             HideAllPanels();
 
-            switch (this.ruleTypeComboBox.SelectedIndex)
+            switch (ruleTypeComboBox.SelectedIndex)
             {
                 case 0: // Publisher
-                    SetPublisherPanel(this.CiEvents[this.SelectedRow].SignerInfo.IssuerName,
-                                      this.CiEvents[this.SelectedRow].SignerInfo.PublisherName,
-                                      this.CiEvents[this.SelectedRow].OriginalFilename,
-                                      this.CiEvents[this.SelectedRow].FileVersion,
-                                      this.CiEvents[this.SelectedRow].ProductName);
+                    SetPublisherPanel(CiEvents[SelectedRow].SignerInfo.IssuerName,
+                                      CiEvents[SelectedRow].SignerInfo.PublisherName,
+                                      CiEvents[SelectedRow].OriginalFilename,
+                                      CiEvents[SelectedRow].FileVersion,
+                                      CiEvents[SelectedRow].ProductName);
                     break;
 
                 case 1: // Path
-                    SetFilePathPanel(this.CiEvents[this.SelectedRow].FilePath);
+                    SetFilePathPanel(CiEvents[SelectedRow].FilePath);
                     break;
 
                 case 2: // File Attributes
                 case 3: // Package Family Name
-                    SetFileAttributesPanel(this.CiEvents[this.SelectedRow].OriginalFilename,
-                                           this.CiEvents[this.SelectedRow].FileDescription,
-                                           this.CiEvents[this.SelectedRow].ProductName,
-                                           this.CiEvents[this.SelectedRow].InternalFilename,
-                                           this.CiEvents[this.SelectedRow].PackageFamilyName);
+                    SetFileAttributesPanel(CiEvents[SelectedRow].OriginalFilename,
+                                           CiEvents[SelectedRow].FileDescription,
+                                           CiEvents[SelectedRow].ProductName,
+                                           CiEvents[SelectedRow].InternalFilename,
+                                           CiEvents[SelectedRow].PackageFamilyName);
                     break;
 
                 case 4: //FileHash
-                    SetFileHashPanel(this.CiEvents[this.SelectedRow].SHA1,
-                                     this.CiEvents[this.SelectedRow].SHA2);
+                    SetFileHashPanel(CiEvents[SelectedRow].SHA1,
+                                     CiEvents[SelectedRow].SHA2);
                     break; 
             }
         }
@@ -672,39 +666,39 @@ namespace WDAC_Wizard
         /// <param name="product"></param>
         private void SetPublisherPanel(string issuer, string publisher, string filename, string version, string product)
         {
-            this.issuerTextBox.Text = issuer;
-            this.publisherTextBox.Text = publisher;
-            this.filenameTextBox.Text = filename;
-            this.versionTextBox.Text = version;
-            this.productTextBox.Text = product;
+            issuerTextBox.Text = issuer;
+            publisherTextBox.Text = publisher;
+            filenameTextBox.Text = filename;
+            versionTextBox.Text = version;
+            productTextBox.Text = product;
 
             // Default checkbox checked and enabled states
             if (!String.IsNullOrEmpty(publisher))
             {
-                this.publisherCheckBox.Checked = true;
-                this.publisherCheckBox.AutoCheck = true;
+                publisherCheckBox.Checked = true;
+                publisherCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(filename))
             {
-                this.filenameCheckBox.Checked = true;
-                this.filenameCheckBox.AutoCheck = true;
+                filenameCheckBox.Checked = true;
+                filenameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(version))
             {
-                this.versionCheckBox.Checked = true;
-                this.versionCheckBox.AutoCheck = true;
+                versionCheckBox.Checked = true;
+                versionCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(product))
             {
-                this.productCheckBox.Checked = true;
-                this.productCheckBox.AutoCheck = true;
+                productCheckBox.Checked = true;
+                productCheckBox.AutoCheck = true;
             }
 
             // Unhide the panel
-            this.publisherRulePanel.Visible = true;
+            publisherRulePanel.Visible = true;
 
             // Set color of disabled checkboxes
             SetDisabledCheckBoxesColor(); 
@@ -721,46 +715,46 @@ namespace WDAC_Wizard
         private void SetFileAttributesPanel(string originalFilename, string fileDescription, string productName,
             string internalFilename, string packagedAppName)
         {
-            this.origFileNameTextBox.Text = originalFilename;
-            this.fileDescTextBox.Text = fileDescription;
-            this.prodNameTextBox.Text = productName;
-            this.intFileNameTextBox.Text = internalFilename;
-            this.pfnTextBox.Text = packagedAppName;
+            origFileNameTextBox.Text = originalFilename;
+            fileDescTextBox.Text = fileDescription;
+            prodNameTextBox.Text = productName;
+            intFileNameTextBox.Text = internalFilename;
+            pfnTextBox.Text = packagedAppName;
 
             // Default checkbox checked and enabled states
             if (!String.IsNullOrEmpty(originalFilename))
             {
-                this.origFileNameCheckBox.Checked = true;
-                this.origFileNameCheckBox.AutoCheck = true;
+                origFileNameCheckBox.Checked = true;
+                origFileNameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(fileDescription))
             {
-                this.fileDescCheckBox.Checked = true;
-                this.fileDescCheckBox.AutoCheck = true;
+                fileDescCheckBox.Checked = true;
+                fileDescCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(productName))
             {
-                this.prodNameCheckBox.Checked = true;
-                this.prodNameCheckBox.AutoCheck = true;
+                prodNameCheckBox.Checked = true;
+                prodNameCheckBox.AutoCheck = true;
             }
 
             if (!String.IsNullOrEmpty(internalFilename))
             {
-                this.intFileNameCheckBox.Checked = true;
-                this.intFileNameCheckBox.AutoCheck = true;
+                intFileNameCheckBox.Checked = true;
+                intFileNameCheckBox.AutoCheck = true;
             }
 
             if(!String.IsNullOrEmpty(packagedAppName))
             {
-                this.pfnCheckBox.Checked = true;
-                this.pfnCheckBox.AutoCheck = true;
+                pfnCheckBox.Checked = true;
+                pfnCheckBox.AutoCheck = true;
             }
 
             // Unhide the panel
-            this.fileAttributeRulePanel.Visible = true;
-            this.fileAttributeRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+            fileAttributeRulePanel.Visible = true;
+            fileAttributeRulePanel.Location = publisherRulePanel.Location; // snap to the loc of pub panel
 
             // Set color of disabled checkboxes
             SetDisabledCheckBoxesColor();
@@ -776,12 +770,12 @@ namespace WDAC_Wizard
         /// <param name="packagedAppName"></param>
         private void SetFileHashPanel(byte[] sha1, byte[] sha2)
         {
-            this.sha1TextBox.Text = Helper.ConvertHash(sha1);
-            this.sha2TextBox.Text = Helper.ConvertHash(sha2);
+            sha1TextBox.Text = Helper.ConvertHash(sha1);
+            sha2TextBox.Text = Helper.ConvertHash(sha2);
 
             // Unhide the panel
-            this.hashRulePanel.Visible = true;
-            this.hashRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+            hashRulePanel.Visible = true;
+            hashRulePanel.Location = publisherRulePanel.Location; // snap to the loc of pub panel
         }
 
         /// <summary>
@@ -790,25 +784,25 @@ namespace WDAC_Wizard
         /// <param name="filepath"></param>
         private void SetFilePathPanel(string filepath)
         {
-            this.filePathTextBox.Text = filepath;
-            this.folderPathTextBox.Text = Path.GetDirectoryName(filepath) + "\\*";
+            filePathTextBox.Text = filepath;
+            folderPathTextBox.Text = Path.GetDirectoryName(filepath) + "\\*";
 
-            this.filePathCheckBox.Checked = true;
-            this.folderPathCheckBox.Checked = true; 
+            filePathCheckBox.Checked = true;
+            folderPathCheckBox.Checked = true; 
 
             // Unhide the panel
-            this.filePathRulePanel.Visible = true;
-            this.filePathRulePanel.Location = this.publisherRulePanel.Location; // snap to the loc of pub panel
+            filePathRulePanel.Visible = true;
+            filePathRulePanel.Location = publisherRulePanel.Location; // snap to the loc of pub panel
 
             // Right align text
-            if (this.filePathTextBox.TextLength > 0)
+            if (filePathTextBox.TextLength > 0)
             {
                 filePathTextBox.SelectionStart = filePathTextBox.TextLength - 1;
                 filePathTextBox.ScrollToCaret();
             }
 
             // Right align text
-            if (this.folderPathTextBox.TextLength > 0)
+            if (folderPathTextBox.TextLength > 0)
             {
                 folderPathTextBox.SelectionStart = folderPathTextBox.TextLength - 1;
                 folderPathTextBox.ScrollToCaret();
@@ -823,8 +817,8 @@ namespace WDAC_Wizard
         /// </summary>
         private void ClearErrorMsg()
         {
-            this._MainWindow.ErrorOnPage = false; 
-            this._MainWindow.DisplayInfoText(0);
+            _MainWindow.ErrorOnPage = false; 
+            _MainWindow.DisplayInfoText(0);
         }
 
         /// <summary>
@@ -858,7 +852,7 @@ namespace WDAC_Wizard
             GetCheckBoxesRecursive(this, checkBoxes);
             SetCheckBoxesColor(checkBoxes);
 
-            this.CheckBoxes = checkBoxes;
+            CheckBoxes = checkBoxes;
             SetDisabledCheckBoxesColor();
 
             // Set PolicyType Form back color
@@ -898,18 +892,18 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.DodgerBlue;
-                        button.BackColor = System.Drawing.Color.Transparent;
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.DodgerBlue;
+                        button.BackColor = Color.Transparent;
                     }
 
                     // Panels
@@ -941,18 +935,18 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.Black;
-                        button.BackColor = System.Drawing.Color.WhiteSmoke;
+                        button.FlatAppearance.BorderColor = Color.Black;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.WhiteSmoke;
                     }
 
                     // Panels
@@ -997,7 +991,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.White;
                         comboBox.BackColor = Color.FromArgb(15, 15, 15);
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                        comboBox.FlatStyle = FlatStyle.Flat;
                     }
                 }
             }
@@ -1011,7 +1005,7 @@ namespace WDAC_Wizard
                     {
                         comboBox.ForeColor = Color.Black;
                         comboBox.BackColor = Color.White;
-                        comboBox.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+                        comboBox.FlatStyle = FlatStyle.Standard;
                     }
                 }
             }
@@ -1212,20 +1206,20 @@ namespace WDAC_Wizard
                 eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.White;
                 eventsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
                 eventsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Borders
-                eventsDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                eventsDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                eventsDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.BorderStyle = BorderStyle.Fixed3D;
+                eventsDataGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 eventsDataGridView.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
                 eventsDataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 eventsDataGridView.DefaultCellStyle.ForeColor = Color.White;
-                eventsDataGridView.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                eventsDataGridView.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                eventsDataGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                eventsDataGridView.DefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Grid lines
                 eventsDataGridView.GridColor = Color.LightSlateGray;
@@ -1241,20 +1235,20 @@ namespace WDAC_Wizard
                 eventsDataGridView.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
                 eventsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 eventsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                eventsDataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Borders
-                eventsDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                eventsDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                eventsDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                eventsDataGridView.BorderStyle = BorderStyle.Fixed3D;
+                eventsDataGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 eventsDataGridView.DefaultCellStyle.BackColor = Color.White;
                 eventsDataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 eventsDataGridView.DefaultCellStyle.ForeColor = Color.Black;
-                eventsDataGridView.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                eventsDataGridView.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                eventsDataGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                eventsDataGridView.DefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Grid lines
                 eventsDataGridView.GridColor = Color.Black;
@@ -1278,7 +1272,7 @@ namespace WDAC_Wizard
                 return; 
             }
 
-            foreach(CheckBox checkBox in this.CheckBoxes)
+            foreach(CheckBox checkBox in CheckBoxes)
             {
                 // Set checkbox text to a lighter color for better Dark Mode contrast
                 if (!checkBox.AutoCheck)
@@ -1726,22 +1720,22 @@ namespace WDAC_Wizard
 
         public EventDisplayObject()
         {
-            this.Action = string.Empty;
-            this.EventId = string.Empty;
-            this.Filename = string.Empty;
-            this.Product = string.Empty;
-            this.PolicyName = string.Empty;
-            this.Publisher = string.Empty;
+            Action = string.Empty;
+            EventId = string.Empty;
+            Filename = string.Empty;
+            Product = string.Empty;
+            PolicyName = string.Empty;
+            Publisher = string.Empty;
         }
 
         public EventDisplayObject(string eventId, string filename, string product, string policyName, string publisher)
         {
-            this.Action = "   ---   ";
-            this.EventId = eventId;
-            this.Filename = String.IsNullOrEmpty(filename) ? String.Empty : filename;
-            this.Product = String.IsNullOrEmpty(product) ? String.Empty : product;
-            this.PolicyName = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
-            this.Publisher = String.IsNullOrEmpty(publisher) ? String.Empty : publisher;
+            Action = "   ---   ";
+            EventId = eventId;
+            Filename = String.IsNullOrEmpty(filename) ? String.Empty : filename;
+            Product = String.IsNullOrEmpty(product) ? String.Empty : product;
+            PolicyName = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
+            Publisher = String.IsNullOrEmpty(publisher) ? String.Empty : publisher;
         }
     }
 }

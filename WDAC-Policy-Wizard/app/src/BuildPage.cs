@@ -25,7 +25,7 @@ namespace WDAC_Wizard
             progressBar.Maximum = 100;
             progressBar.Step = 1;
             progressBar.Value = 0;
-            this._MainWindow = pMainWindow; 
+            _MainWindow = pMainWindow; 
         }
 
         /// <summary>
@@ -48,38 +48,38 @@ namespace WDAC_Wizard
         /// <param name="policyFilePath">File location for the XML policy file</param>
         public void ShowFinishMsg(string policyFilePath)
         {
-            this.XmlFilePath = policyFilePath;
+            XmlFilePath = policyFilePath;
 
             // Format the path in cases of long strings
-            this.xmlFilePathLabel.Text = FormatText(policyFilePath);
+            xmlFilePathLabel.Text = FormatText(policyFilePath);
 
             // Update the UI
-            this.xmlFilePathLabel.Enabled = true;
-            this.finishPanel.Visible = true;
-            this.label_WaitMsg.Visible = false;
+            xmlFilePathLabel.Enabled = true;
+            finishPanel.Visible = true;
+            label_WaitMsg.Visible = false;
 
             // Hide the binFilePathLabel - XML file output only
-            this.binFilePathLabel.Visible = false; 
+            binFilePathLabel.Visible = false; 
         }
 
         public void ShowFinishMsg(string policyFilePath, string binFilePath)
         {
             // Set the path objects to unformatted text
-            this.XmlFilePath = policyFilePath;
-            this.BinFilePath = binFilePath;
+            XmlFilePath = policyFilePath;
+            BinFilePath = binFilePath;
 
             // Format the paths in cases of long strings
-            this.xmlFilePathLabel.Text = FormatText(policyFilePath);
-            this.binFilePathLabel.Text = FormatText(binFilePath);
+            xmlFilePathLabel.Text = FormatText(policyFilePath);
+            binFilePathLabel.Text = FormatText(binFilePath);
 
             // Update the UI - show xmlFilePath label
-            this.xmlFilePathLabel.Enabled = true;
-            this.finishPanel.Visible = true;
-            this.label_WaitMsg.Visible = false;
+            xmlFilePathLabel.Enabled = true;
+            finishPanel.Visible = true;
+            label_WaitMsg.Visible = false;
 
             // Update the UI - show binFilePath label
-            this.binFilePathLabel.Visible = true;
-            this.binFilePathLabel.Enabled = true;
+            binFilePathLabel.Visible = true;
+            binFilePathLabel.Enabled = true;
         }
 
         /// <summary>
@@ -119,12 +119,12 @@ namespace WDAC_Wizard
         public void ShowError()
         {
             finishPanel.Visible = true;
-            this.finishLabel.Text = Properties.Resources.PolicyBuild_Error + this._MainWindow.TempFolderPath;
+            finishLabel.Text = Properties.Resources.PolicyBuild_Error + _MainWindow.TempFolderPath;
             UpdateProgressBar(0, "Error");
 
-            this.xmlFilePathLabel.Enabled = false;
-            this.binFilePathLabel.Enabled = false;
-            this.label_WaitMsg.Visible = false;
+            xmlFilePathLabel.Enabled = false;
+            binFilePathLabel.Enabled = false;
+            label_WaitMsg.Visible = false;
         }
 
         /// <summary>
@@ -133,11 +133,11 @@ namespace WDAC_Wizard
         private void XmlFilePathLabel_Click(object sender, EventArgs e)
         {
             // Open XML file in the default application set for XML files
-            if (File.Exists(this.XmlFilePath))
+            if (File.Exists(XmlFilePath))
             {
                 try
                 {
-                    Process.Start(new ProcessStartInfo(this.XmlFilePath) { UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo(XmlFilePath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {
@@ -151,7 +151,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                string displayMsg = Properties.Resources.XMLFileOpen_Error + this._MainWindow.TempFolderPath; 
+                string displayMsg = Properties.Resources.XMLFileOpen_Error + _MainWindow.TempFolderPath; 
                 DialogResult res = MessageBox.Show(displayMsg,
                                                    "Wizard Error",
                                                    MessageBoxButtons.OK,
@@ -167,7 +167,7 @@ namespace WDAC_Wizard
         private void BinFilePathLabel_Click(object sender, EventArgs e)
         {
             // Open Binary's directory to browse for file in Explorer
-            if (File.Exists(this.BinFilePath))
+            if (File.Exists(BinFilePath))
             {
                 try
                 {
@@ -187,7 +187,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                string displayMsg = Properties.Resources.BINFileOpen_Error + this._MainWindow.TempFolderPath;
+                string displayMsg = Properties.Resources.BINFileOpen_Error + _MainWindow.TempFolderPath;
                 DialogResult res = MessageBox.Show(displayMsg,
                                                    "Wizard Error",
                                                    MessageBoxButtons.OK,
@@ -276,7 +276,7 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
@@ -290,7 +290,7 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))

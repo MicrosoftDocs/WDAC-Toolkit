@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Imaging;
 using System.IO;
 
 namespace WDAC_Wizard.src
@@ -30,15 +24,15 @@ namespace WDAC_Wizard.src
         {
             InitializeComponent();
 
-            this.nPolicies = 0;
-            this.mergePolicyPath = String.Empty;
-            this.policiesToMerge = new List<string>();
-            this.rowInEdit = -1;
+            nPolicies = 0;
+            mergePolicyPath = String.Empty;
+            policiesToMerge = new List<string>();
+            rowInEdit = -1;
 
-            this._MainWindow = pMainWindow;
-            this._MainWindow.ErrorOnPage = true;
-            this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
+            _MainWindow = pMainWindow;
+            _MainWindow.ErrorOnPage = true;
+            _MainWindow.RedoFlowRequired = false;
+            _MainWindow.ErrorMsg = "Please choose at least 2 policies to merge and a final output location.";
         }
 
         /// <summary>
@@ -53,21 +47,21 @@ namespace WDAC_Wizard.src
 
             if (!String.IsNullOrEmpty(policyPath))
             {
-                this.mergePolicyPath = policyPath;
-                this.finalPolicyTextBox.Text = policyPath;
+                mergePolicyPath = policyPath;
+                finalPolicyTextBox.Text = policyPath;
                 // Show right side of the text
-                if(this.finalPolicyTextBox.TextLength > 0)
+                if(finalPolicyTextBox.TextLength > 0)
                 {
-                    this.finalPolicyTextBox.SelectionStart = this.finalPolicyTextBox.TextLength - 1;
-                    this.finalPolicyTextBox.ScrollToCaret();
+                    finalPolicyTextBox.SelectionStart = finalPolicyTextBox.TextLength - 1;
+                    finalPolicyTextBox.ScrollToCaret();
                 }
 
-                this._MainWindow.Policy.SchemaPath = this.mergePolicyPath;
+                _MainWindow.Policy.SchemaPath = mergePolicyPath;
                 Logger.Log.AddInfoMsg(String.Format("Final Merge Policy set to: {0}", policyPath));
 
-                if(this.nPolicies >= 2)
+                if(nPolicies >= 2)
                 {
-                    this._MainWindow.ErrorOnPage = false; 
+                    _MainWindow.ErrorOnPage = false; 
                 }
             }
         }
@@ -93,7 +87,7 @@ namespace WDAC_Wizard.src
                 if (!String.IsNullOrEmpty(policyPath))
                 {
                     // Check that policy to merge is not already in table
-                    foreach (string existingPath in this.policiesToMerge)
+                    foreach (string existingPath in policiesToMerge)
                     {
                         if (existingPath.Equals(policyPath))
                         {
@@ -105,16 +99,16 @@ namespace WDAC_Wizard.src
 
                     if(isNewPolicy)
                     {
-                        this.policiesToMerge.Add(policyPath);
-                        this.nPolicies += 1;
-                        this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
-                        this.policiesDataGrid.RowCount += 1;
+                        policiesToMerge.Add(policyPath);
+                        nPolicies += 1;
+                        displayObjects.Add(new DisplayObject(nPolicies.ToString(), policyPath));
+                        policiesDataGrid.RowCount += 1;
 
-                        this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
+                        _MainWindow.Policy.PoliciesToMerge = policiesToMerge;
 
-                        if (this.nPolicies >= 2 && !String.IsNullOrEmpty(this.mergePolicyPath))
+                        if (nPolicies >= 2 && !String.IsNullOrEmpty(mergePolicyPath))
                         {
-                            this._MainWindow.ErrorOnPage = false;
+                            _MainWindow.ErrorOnPage = false;
                         }
 
                         Logger.Log.AddInfoMsg(String.Format("Adding to list of policies to merge: {0}", policyPath));
@@ -137,19 +131,19 @@ namespace WDAC_Wizard.src
             Logger.Log.AddInfoMsg("-- Delete Rule button clicked -- ");
 
             // Get info about the rule user wants to delete: row index and path
-            DataGridViewSelectedCellCollection cellCollection = this.policiesDataGrid.SelectedCells; 
+            DataGridViewSelectedCellCollection cellCollection = policiesDataGrid.SelectedCells; 
 
             for(int i=0; i<cellCollection.Count; i++)
             {
                 int rowIdx = cellCollection[i].RowIndex;
 
                 // Row index cannot equal nPolicies -- this would be the empty row at bottom of view grid
-                if (this.nPolicies == 0 || rowIdx == this.nPolicies || rowIdx == -1)
+                if (nPolicies == 0 || rowIdx == nPolicies || rowIdx == -1)
                 {
                     continue;
                 }
-                string policyN = (String)this.policiesDataGrid["Column_Number", rowIdx].Value;
-                string policyPath = (String)this.policiesDataGrid["Column_Path", rowIdx].Value;
+                string policyN = (String)policiesDataGrid["Column_Number", rowIdx].Value;
+                string policyPath = (String)policiesDataGrid["Column_Path", rowIdx].Value;
 
                 DialogResult res = MessageBox.Show(String.Format("Are you sure you want to remove {0} from the merge list?",Path.GetFileName(policyPath)),
                     "Remove Policy Confirmation", 
@@ -163,21 +157,21 @@ namespace WDAC_Wizard.src
 
                 Logger.Log.AddInfoMsg(String.Format("Removing from list of policies to merge: {0} @RULE# {1}", policyPath, policyN));
 
-                this.displayObjects.RemoveAt(rowIdx);
-                this.policiesDataGrid.Rows.RemoveAt(rowIdx);
+                displayObjects.RemoveAt(rowIdx);
+                policiesDataGrid.Rows.RemoveAt(rowIdx);
 
-                this.policiesToMerge.RemoveAt(rowIdx);
-                this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
+                policiesToMerge.RemoveAt(rowIdx);
+                _MainWindow.Policy.PoliciesToMerge = policiesToMerge;
 
-                this.nPolicies -= 1;
+                nPolicies -= 1;
 
-                if (this.nPolicies < 2)
+                if (nPolicies < 2)
                 {
-                    this._MainWindow.ErrorOnPage = true;
+                    _MainWindow.ErrorOnPage = true;
                 }
 
                 // If deleting the last row in the table, trivial deletion operation
-                if (rowIdx == this.nPolicies)
+                if (rowIdx == nPolicies)
                 {
 
                 }
@@ -188,13 +182,13 @@ namespace WDAC_Wizard.src
                     int num;
                     DisplayObject displayObject = null;
 
-                    for (int j = rowIdx; j < this.displayObjects.Count; j++)
+                    for (int j = rowIdx; j < displayObjects.Count; j++)
                     {
-                        displayObject = (DisplayObject)this.displayObjects[j];
+                        displayObject = (DisplayObject)displayObjects[j];
                         num = int.Parse(displayObject.Number) - 1;
                         displayObject.Number = num.ToString();
 
-                        this.displayObjects[j] = displayObject;
+                        displayObjects[j] = displayObject;
                     }
                 }
             }
@@ -217,8 +211,8 @@ namespace WDAC_Wizard.src
         /// <param name="dspStr"></param>
         private void ShowError(string dspStr)
         {
-            this.label_Error.Text = dspStr; 
-            this.label_Error.Visible = true;
+            label_Error.Text = dspStr; 
+            label_Error.Visible = true;
 
             Timer settingsUpdateNotificationTimer = new Timer();
             settingsUpdateNotificationTimer.Interval = (5000); // 5 secs
@@ -234,21 +228,21 @@ namespace WDAC_Wizard.src
         private void PoliciesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
-            if (e.RowIndex == this.policiesDataGrid.RowCount - 1) return;
+            if (e.RowIndex == policiesDataGrid.RowCount - 1) return;
 
             DisplayObject displayObject = null;
 
             if (e.RowIndex == rowInEdit)
             {
-                displayObject = this.displayObjectInEdit;
+                displayObject = displayObjectInEdit;
             }
             else
             {
-                displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
+                displayObject = (DisplayObject)displayObjects[e.RowIndex];
             }
 
             // Set the cell value to paint using the Customer object retrieved.
-            switch (this.policiesDataGrid.Columns[e.ColumnIndex].Name)
+            switch (policiesDataGrid.Columns[e.ColumnIndex].Name)
             {
                 case "Column_Number":
                     e.Value = displayObject.Number;
@@ -267,7 +261,7 @@ namespace WDAC_Wizard.src
         /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
-            this.label_Error.Visible = false;
+            label_Error.Visible = false;
         }
 
         /// <summary>
@@ -317,18 +311,18 @@ namespace WDAC_Wizard.src
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.DodgerBlue;
-                        button.BackColor = System.Drawing.Color.Transparent;
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.DodgerBlue;
+                        button.BackColor = Color.Transparent;
                     }
 
                     // Panels
@@ -360,18 +354,18 @@ namespace WDAC_Wizard.src
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.Black;
-                        button.BackColor = System.Drawing.Color.WhiteSmoke;
+                        button.FlatAppearance.BorderColor = Color.Black;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.Black;
+                        button.BackColor = Color.WhiteSmoke;
                     }
 
                     // Panels
@@ -576,20 +570,20 @@ namespace WDAC_Wizard.src
                 policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White;
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Borders
-                policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.BorderStyle = BorderStyle.Fixed3D;
+                policiesDataGrid.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 policiesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
                 policiesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 policiesDataGrid.DefaultCellStyle.ForeColor = Color.White;
-                policiesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                policiesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                policiesDataGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                policiesDataGrid.DefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Grid lines
                 policiesDataGrid.GridColor = Color.LightSlateGray;
@@ -605,20 +599,20 @@ namespace WDAC_Wizard.src
                 policiesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 policiesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                policiesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Borders
-                policiesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                policiesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                policiesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                policiesDataGrid.BorderStyle = BorderStyle.Fixed3D;
+                policiesDataGrid.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 policiesDataGrid.DefaultCellStyle.BackColor = Color.White;
                 policiesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 policiesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
-                policiesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                policiesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                policiesDataGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                policiesDataGrid.DefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Grid lines
                 policiesDataGrid.GridColor = Color.Black;
@@ -634,14 +628,14 @@ namespace WDAC_Wizard.src
        
         public DisplayObject()
         {
-            this.Number = String.Empty;
-            this.Path = String.Empty;
+            Number = String.Empty;
+            Path = String.Empty;
         }
 
         public DisplayObject(string number, string path)
         {
-            this.Number = number;
-            this.Path = path;
+            Number = number;
+            Path = path;
         }
     }
 

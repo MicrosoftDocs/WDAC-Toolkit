@@ -22,10 +22,10 @@ namespace WDAC_Wizard
         public ConfigTemplate_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this.Policy = pMainWindow.Policy; 
-            this._MainWindow = pMainWindow;
-            this._MainWindow.ErrorOnPage = false;
-            this._MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
+            Policy = pMainWindow.Policy; 
+            _MainWindow = pMainWindow;
+            _MainWindow.ErrorOnPage = false;
+            _MainWindow.RedoFlowRequired = false; // Nothing on this page will change the state of this
             Logger.Log.AddInfoMsg("==== Configuration Template Page Initialized ====");
         }
 
@@ -37,89 +37,89 @@ namespace WDAC_Wizard
         {
             // **** This function is run on UI load  *** //
 
-            this.Policy._PolicyType = this._MainWindow.Policy._PolicyType; 
-            this.Policy._PolicyTemplate = this._MainWindow.Policy._PolicyTemplate; 
-            this.Policy.EditPolicyPath = this._MainWindow.Policy.EditPolicyPath;
+            Policy._PolicyType = _MainWindow.Policy._PolicyType; 
+            Policy._PolicyTemplate = _MainWindow.Policy._PolicyTemplate; 
+            Policy.EditPolicyPath = _MainWindow.Policy.EditPolicyPath;
 
-            this.Policy.ConfigRules = InitRulesDict(); // If supplemental, need to disable the button
+            Policy.ConfigRules = InitRulesDict(); // If supplemental, need to disable the button
 
             // If unable to read the CI policy, fail gracefully and return to the home page
-            if (!this.ReadSetRules(sender, e))
+            if (!ReadSetRules(sender, e))
                 return; 
 
             // Set HVCI option value
-            if (this.Policy.EnableHVCI)
+            if (Policy.EnableHVCI)
             {
-                this.Policy.ConfigRules["HVCI"]["CurrentValue"] = this.Policy.ConfigRules["HVCI"]["AllowedValue"];
+                Policy.ConfigRules["HVCI"]["CurrentValue"] = Policy.ConfigRules["HVCI"]["AllowedValue"];
             }
 
-            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
+            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
                 // If unsupported, skip
-                if (!Convert.ToBoolean(this.Policy.ConfigRules[key]["Supported"]))
+                if (!Convert.ToBoolean(Policy.ConfigRules[key]["Supported"]))
                 {
                     continue;
                 }
 
                 // Get the button (UI element) name to modify the state of the button
-                string buttonName = this.Policy.ConfigRules[key]["ButtonMapping"];
+                string buttonName = Policy.ConfigRules[key]["ButtonMapping"];
                 string labelName = "label_" + buttonName.Substring(buttonName.IndexOf('_') + 1); 
 
                 // If the policy rule current value matches the allowed value, rule has been set
-                if (this.Policy.ConfigRules[key]["CurrentValue"] == this.Policy.ConfigRules[key]["AllowedValue"]) 
+                if (Policy.ConfigRules[key]["CurrentValue"] == Policy.ConfigRules[key]["AllowedValue"]) 
                 {
                     // Set button to toggled mode
-                    this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
-                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
+                    Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
+                    Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Resources.toggle;
                 }
                 else
                 {
                     // Set button to untoggled mode
-                    this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                    this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
+                    Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
+                    Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Resources.untoggle_old;
                 }
 
                 // Depending on the policy, e.g. supplementals, do not allow user to modify the state of some rule-options
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
-                    || this.Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
+                if (Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                    || Policy.siPolicy.PolicyType == global::PolicyType.SupplementalPolicy)
                 { 
-                    switch(this.Policy.ConfigRules[key]["ValidSupplemental"]){
+                    switch(Policy.ConfigRules[key]["ValidSupplemental"]){
                     case "True":
-                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
-                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
-                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                        Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                        Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
+                        Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
                         break;
 
                     case "False":
-                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
-                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                        Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                        Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed";
+                        Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
                         break;
 
                     case "False-NoInherit":
-                        this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                        this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed-NoInherit";
-                        this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                        Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                        Controls.Find(labelName, true).FirstOrDefault().Tag = "Grayed-NoInherit";
+                        Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
                         break; 
                     }
                 }
 
                 else if(Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                 {
-                    switch (this.Policy.ConfigRules[key]["ValidAppId"])
+                    switch (Policy.ConfigRules[key]["ValidAppId"])
                     {
                         case "True":
-                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
-                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
+                            Controls.Find(buttonName, true).FirstOrDefault().Enabled = true;
+                            Controls.Find(labelName, true).FirstOrDefault().Tag = "Enabled";
+                            Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Black;
                             break;
 
                         case "False":
                         case "False-Inherit":
-                            this.Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
-                            this.Controls.Find(labelName, true).FirstOrDefault().Tag = "Invalid-AppId";
-                            this.Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
+                            Controls.Find(buttonName, true).FirstOrDefault().Enabled = false;
+                            Controls.Find(labelName, true).FirstOrDefault().Tag = "Invalid-AppId";
+                            Controls.Find(labelName, true).FirstOrDefault().ForeColor = Color.Gray;
                             break;
                     }
                 }
@@ -134,43 +134,43 @@ namespace WDAC_Wizard
         private void SetButtonVal(string buttonName)
         {
             // Have to cycle through all of the keys to find the button name value
-            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = this.Policy.ConfigRules.Keys;
+            Dictionary<string, Dictionary<string, string>>.KeyCollection keys = Policy.ConfigRules.Keys;
             foreach (string key in keys)
             {
                 // Found button name and rule-option mapping
-                if (this.Policy.ConfigRules[key]["ButtonMapping"] == buttonName) // button name match
+                if (Policy.ConfigRules[key]["ButtonMapping"] == buttonName) // button name match
                 {
-                    if (this.Controls.Find(buttonName, true).FirstOrDefault().Tag.ToString() == "untoggle")
+                    if (Controls.Find(buttonName, true).FirstOrDefault().Tag.ToString() == "untoggle")
                     {
                         // Set button to toggled mode
-                        this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
+                        Controls.Find(buttonName, true).FirstOrDefault().Tag = "toggle";
 
                         // Dark Mode
                         if(Properties.Settings.Default.useDarkMode)
                         {
-                            this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.darkmode_toggle;
+                            Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Resources.darkmode_toggle;
                         }
 
                         // Light Mode
                         else
                         {
-                            this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.toggle;
+                            Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Resources.toggle;
                         }
                         
-                        this.Policy.ConfigRules[key]["CurrentValue"] = this.Policy.ConfigRules[key]["AllowedValue"];
+                        Policy.ConfigRules[key]["CurrentValue"] = Policy.ConfigRules[key]["AllowedValue"];
                         SetRuleOptionState(key); 
                     }
                     else
                     {
                         // Set button to untoggled mode
-                        this.Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
-                        this.Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Properties.Resources.untoggle_old;
+                        Controls.Find(buttonName, true).FirstOrDefault().Tag = "untoggle";
+                        Controls.Find(buttonName, true).FirstOrDefault().BackgroundImage = Resources.untoggle_old;
 
-                        this.Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(this.Policy.ConfigRules[key]["AllowedValue"]);
+                        Policy.ConfigRules[key]["CurrentValue"] = GetOppositeOption(Policy.ConfigRules[key]["AllowedValue"]);
                         SetRuleOptionState(key, true);
                     }
 
-                    Logger.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, this.Policy.ConfigRules[key]["CurrentValue"]));
+                    Logger.Log.AddInfoMsg(String.Format("Rule-Option Setting Changed --- {0}: {1}", key, Policy.ConfigRules[key]["CurrentValue"]));
                     break; // break out of foreach, we found the button
                 }
             } 
@@ -326,12 +326,12 @@ namespace WDAC_Wizard
             if (!panel_AdvancedOptions.Visible)
             {
                 panel_AdvancedOptions.Visible = true;
-                this.label_AdvancedOptions.Text = "- Advanced Options"; 
+                label_AdvancedOptions.Text = "- Advanced Options"; 
             }
             else
             {
                 panel_AdvancedOptions.Visible = false;
-                this.label_AdvancedOptions.Text = "+ Advanced Options"; 
+                label_AdvancedOptions.Text = "+ Advanced Options"; 
             }
             Logger.Log.AddInfoMsg("Advanced options clicked.");
         }
@@ -345,7 +345,7 @@ namespace WDAC_Wizard
         {
             // Wiring the button IDs to the corresponding rules
             // Default values and order can be found @: https://docs.microsoft.com/windows/security/threat-protection/windows-defender-application-control/select-types-of-rules-to-create#windows-defender-application-control-policy-rules
-            string dictPath = Path.Combine(this._MainWindow.ExeFolderPath,"RulesDict.xml");
+            string dictPath = Path.Combine(_MainWindow.ExeFolderPath,"RulesDict.xml");
             Dictionary<string, Dictionary<string, string>> rulesDict = new Dictionary<string, Dictionary<string, string>>();
 
             try
@@ -392,9 +392,9 @@ namespace WDAC_Wizard
             SetButtonVal(buttonName);
 
             // Update the policy Rule-Options object
-            this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
-            this.Policy.EnableHVCI = this.Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
-            this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI; 
+            _MainWindow.Policy.ConfigRules = Policy.ConfigRules;
+            Policy.EnableHVCI = Policy.ConfigRules["HVCI"]["CurrentValue"] == "Enabled";
+            _MainWindow.Policy.EnableHVCI = Policy.EnableHVCI; 
         }
 
         /// <summary>
@@ -496,18 +496,18 @@ namespace WDAC_Wizard
 
             if(removeOption)
             {
-                for(int i=0; i < this._MainWindow.Policy.PolicyRuleOptions.Count; i++)
+                for(int i=0; i < _MainWindow.Policy.PolicyRuleOptions.Count; i++)
                 {
-                    if(this._MainWindow.Policy.PolicyRuleOptions[i].Item == ruleOption.Item)
+                    if(_MainWindow.Policy.PolicyRuleOptions[i].Item == ruleOption.Item)
                     {
-                        this._MainWindow.Policy.PolicyRuleOptions.RemoveAt(i);
+                        _MainWindow.Policy.PolicyRuleOptions.RemoveAt(i);
                         return;
                     }
                 }
             }
             else
             {
-                this._MainWindow.Policy.PolicyRuleOptions.Add(ruleOption);
+                _MainWindow.Policy.PolicyRuleOptions.Add(ruleOption);
             }
         }
 
@@ -538,39 +538,39 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.OK)
                 {
-                    this._MainWindow.ResetWorkflow(sender, e);
+                    _MainWindow.ResetWorkflow(sender, e);
                 }
                    
                 return false;
             }
 
-            this.Policy.siPolicy = sipolicy;
+            Policy.siPolicy = sipolicy;
 
             // Set the UI state for the rule-options
             DisplayRulesUI();
 
-            this.Policy.EnableHVCI = this.Policy.siPolicy.HvciOptions > 0;
-            this._MainWindow.Policy.ConfigRules = this.Policy.ConfigRules;
-            this._MainWindow.Policy.EnableHVCI = this.Policy.EnableHVCI;
-            this._MainWindow.Policy.siPolicy = this.Policy.siPolicy;
+            Policy.EnableHVCI = Policy.siPolicy.HvciOptions > 0;
+            _MainWindow.Policy.ConfigRules = Policy.ConfigRules;
+            _MainWindow.Policy.EnableHVCI = Policy.EnableHVCI;
+            _MainWindow.Policy.siPolicy = Policy.siPolicy;
 
             // Copy template to temp folder for reading and writing unless template already in temp folder (event log conversion)
-            if (!xmlPathToRead.Contains(this._MainWindow.TempFolderPath))
+            if (!xmlPathToRead.Contains(_MainWindow.TempFolderPath))
             {
-                string xmlTemplateToWrite = Path.Combine(this._MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
+                string xmlTemplateToWrite = Path.Combine(_MainWindow.TempFolderPath, Path.GetFileName(xmlPathToRead));
                 File.Copy(xmlPathToRead, xmlTemplateToWrite, true);
-                this._MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
+                _MainWindow.Policy.TemplatePath = xmlTemplateToWrite;
             }
             else
             {
-                this._MainWindow.Policy.TemplatePath = xmlPathToRead;
+                _MainWindow.Policy.TemplatePath = xmlPathToRead;
             }
 
             // Set TemplatePath to none for NEW Supplemental policy flow
-            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
-                && this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            if (Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
+                && Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
-                this._MainWindow.Policy.TemplatePath = null;
+                _MainWindow.Policy.TemplatePath = null;
             }
 
 
@@ -583,30 +583,30 @@ namespace WDAC_Wizard
         private void DisplayRulesUI()
         {
             // Merge with configRules:
-            foreach (var rule in this.Policy.siPolicy.Rules)
+            foreach (var rule in Policy.siPolicy.Rules)
             {
                 string value = ParseRule(rule.Item.ToString())[0];
                 string name = ParseRule(rule.Item.ToString())[1];
 
-                if (this.Policy.ConfigRules.ContainsKey(name))
+                if (Policy.ConfigRules.ContainsKey(name))
                 {
-                    if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                    if (Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                     {
                         // If valid supplemental, add to PolicyRuleOptions struct to be set during policy build
-                        if (this.Policy.ConfigRules[name]["ValidSupplemental"] == "True")
+                        if (Policy.ConfigRules[name]["ValidSupplemental"] == "True")
                         {
-                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                            _MainWindow.Policy.PolicyRuleOptions.Add(rule);
                         }
 
                         // If the policy rule is not a valid supplemental option AND should not be inherited from base, e.g. AllowSupplementals
                         // Set the value to not enabled (Get Opposite Value)
-                        if (this.Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
+                        if (Policy.ConfigRules[name]["ValidSupplemental"] == "False-NoInherit")
                         {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
+                            Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
                         }
                         else
                         {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
+                            Policy.ConfigRules[name]["CurrentValue"] = value;
                         }
 
                         // Mirror the value for signed policy based on the value in the base policy
@@ -620,20 +620,20 @@ namespace WDAC_Wizard
                     else if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                     {
                         // If valid AppIdTagging Policy, add to PolicyRuleOptions struct to be set during policy build
-                        if (this.Policy.ConfigRules[name]["ValidAppId"] != "False")
+                        if (Policy.ConfigRules[name]["ValidAppId"] != "False")
                         {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = value;
-                            this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                            Policy.ConfigRules[name]["CurrentValue"] = value;
+                            _MainWindow.Policy.PolicyRuleOptions.Add(rule);
                         }
                         else
                         {
-                            this.Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
+                            Policy.ConfigRules[name]["CurrentValue"] = GetOppositeOption(value);
                         }
                     }
                     else
                     {
-                        this.Policy.ConfigRules[name]["CurrentValue"] = value;
-                        this._MainWindow.Policy.PolicyRuleOptions.Add(rule);
+                        Policy.ConfigRules[name]["CurrentValue"] = value;
+                        _MainWindow.Policy.PolicyRuleOptions.Add(rule);
                     }
                 }
             }
@@ -649,78 +649,78 @@ namespace WDAC_Wizard
 
             // If we are editing a policy, read the EditPolicyPath
             // We need to know whether we are editing a base or supplemental policy
-            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+            if (Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                xmlPathToRead = this._MainWindow.Policy.EditPolicyPath;
+                xmlPathToRead = _MainWindow.Policy.EditPolicyPath;
             }
 
             // If we are supplementing a policy, we need to mirror the rule options of the base so they do not conflict
-            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+            else if (Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
             {
                 // User only provided a base policy ID to expand
-                if (this._MainWindow.Policy.BasePolicyId != Guid.Empty)
+                if (_MainWindow.Policy.BasePolicyId != Guid.Empty)
                 {
-                    xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath,
-                                                            "Templates", Properties.Resources.EmptyWdacSupplementalXml);
+                    xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath,
+                                                            "Templates", Resources.EmptyWdacSupplementalXml);
                 }
                 // User provided a path to the base policy
                 else
                 {
-                    xmlPathToRead = this._MainWindow.Policy.BaseToSupplementPath;
+                    xmlPathToRead = _MainWindow.Policy.BaseToSupplementPath;
                 }
             }
 
             // Base Policy - Check for policy format and template
-            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+            else if (Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
             {
-                if (this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
+                if (Policy._Format == WDAC_Policy.Format.MultiPolicy)
                 {
                     // Multi-policy Format Policy Templates
-                    switch (this.Policy._PolicyTemplate)
+                    switch (Policy._PolicyTemplate)
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.WindowsTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.WindowsTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.SACTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.SACTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.MicrosoftTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.MicrosoftTemplate);
                             break;
                     }
                 }
                 else
                 {
                     // Legacy/single-policy Format Policy Templates
-                    switch (this.Policy._PolicyTemplate)
+                    switch (Policy._PolicyTemplate)
                     {
                         case WDAC_Policy.NewPolicyTemplate.WindowsWorks:
                             // Windows Works Mode 
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.WindowsSingleTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.WindowsSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.SignedReputable:
                             // Signed and Reputable Mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.SACSingleTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.SACSingleTemplate);
                             break;
 
                         case WDAC_Policy.NewPolicyTemplate.AllowMicrosoft:
                             // Allow Microsoft mode
-                            xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.MicrosoftSingleTemplate);
+                            xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.MicrosoftSingleTemplate);
                             break;
                     }
                 }
             }
 
             // AppIdTagging Policy
-            else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+            else if (Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
             {
-                xmlPathToRead = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Resources.AppIdTaggingTemplate);
+                xmlPathToRead = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Resources.AppIdTaggingTemplate);
             }
 
             return xmlPathToRead;
@@ -911,10 +911,10 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
-                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                        && (panel.Tag == null || panel.Tag.ToString() != Resources.IgnoreDarkModeTag))
                     {
                         panel.ForeColor = Color.White;
                         panel.BackColor = Color.FromArgb(15,15,15);
@@ -925,10 +925,10 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     if (control is Panel panel
-                        && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
+                        && (panel.Tag == null || panel.Tag.ToString() != Resources.IgnoreDarkModeTag))
                     {
                         panel.ForeColor = Color.Black;
                         panel.BackColor = Color.White;
@@ -948,7 +948,7 @@ namespace WDAC_Wizard
             {
                 foreach (Label label in labels)
                 {
-                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    if (label.Tag == null || label.Tag.ToString() != Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
                         label.BackColor = Color.FromArgb(15,15,15);
@@ -961,7 +961,7 @@ namespace WDAC_Wizard
             {
                 foreach (Label label in labels)
                 {
-                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    if (label.Tag == null || label.Tag.ToString() != Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.Black;
                         label.BackColor = Color.White;
@@ -971,7 +971,7 @@ namespace WDAC_Wizard
 
             // Explicitly set color for HVCI label since tag cannot be set to Ignore.. 
             // on this page as it's used for enabled/disabled state
-            this.label_HVCI.ForeColor = System.Drawing.Color.FromArgb(16,110,190);
+            label_HVCI.ForeColor = Color.FromArgb(16,110,190);
         }
 
         /// <summary>
@@ -1031,7 +1031,7 @@ namespace WDAC_Wizard
                     {
                         if (toggle.Tag.ToString() == "toggle")
                         {
-                            toggle.BackgroundImage = Properties.Resources.darkmode_toggle;
+                            toggle.BackgroundImage = Resources.darkmode_toggle;
                         }
                     }
                     toggle.BackColor = Color.FromArgb(15, 15, 15); 
@@ -1047,7 +1047,7 @@ namespace WDAC_Wizard
                     {
                         if (toggle.Tag.ToString() == "toggle")
                         {
-                            toggle.BackgroundImage = Properties.Resources.toggle;
+                            toggle.BackgroundImage = Resources.toggle;
                         }
                     }
                     toggle.BackColor = Color.White; 

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-using System.Security.Policy;
-using Markdig.Helpers;
 using System.Linq;
 
 namespace WDAC_Wizard
