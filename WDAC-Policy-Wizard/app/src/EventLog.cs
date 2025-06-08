@@ -602,18 +602,18 @@ namespace WDAC_Wizard
         public CiEvent()
         {
             // Init as empty for the properties going into the DataViewGrid for sorting
-            this.EventId = 0;
-            this.FileName = String.Empty;
-            this.ProductName = String.Empty;
-            this.PolicyName = String.Empty;
+            EventId = 0;
+            FileName = String.Empty;
+            ProductName = String.Empty;
+            PolicyName = String.Empty;
 
-            this.SignerInfo = new SignerEvent();
+            SignerInfo = new SignerEvent();
         }
 
         // Memberwise clone the CiEvent for case of multiple unique signatures
         public CiEvent Clone()
         {
-            return (CiEvent)this.MemberwiseClone();
+            return (CiEvent)MemberwiseClone();
         }
     }
 
@@ -637,7 +637,7 @@ namespace WDAC_Wizard
 
         public SignerEvent()
         {
-            this.PublisherName = String.Empty;
+            PublisherName = String.Empty;
         }
     }
 }

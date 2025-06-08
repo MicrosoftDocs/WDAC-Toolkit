@@ -4,12 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Xml; 
@@ -27,8 +23,8 @@ namespace WDAC_Wizard
             InitializeComponent();
             ShowVersionNumber();
 
-            this._MainWindow = pMainWindow;
-            this.SettingsDict = new Dictionary<string, bool>(); 
+            _MainWindow = pMainWindow;
+            SettingsDict = new Dictionary<string, bool>(); 
         }
 
         //
@@ -42,7 +38,7 @@ namespace WDAC_Wizard
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-            this.appVersion_Label.Text = "App Version: " + versionInfo.FileVersion;
+            appVersion_Label.Text = "App Version: " + versionInfo.FileVersion;
         }
 
         //
@@ -232,7 +228,7 @@ namespace WDAC_Wizard
         {
             // Save settings and show settings update to user
             Properties.Settings.Default.Save();
-            this.Update_Label.Visible = true;
+            Update_Label.Visible = true;
 
             Timer settingsUpdateNotificationTimer = new Timer();
             settingsUpdateNotificationTimer.Interval = (1500); // 1.5 secs
@@ -295,7 +291,7 @@ namespace WDAC_Wizard
             {
                 // Read the exe config file
                 XmlDocument doc = new XmlDocument();
-                string configPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "WDAC Wizard.exe.config");
+                string configPath = System.IO.Path.Combine(_MainWindow.ExeFolderPath, "WDAC Wizard.exe.config");
                 doc.Load(configPath); // Reading from the xml config file
                 XmlNodeList settingsNodes = doc.GetElementsByTagName("setting");
                 const int START = 15; 
@@ -304,13 +300,13 @@ namespace WDAC_Wizard
                     int stop = settingNode.OuterXml.IndexOf("serialize") - 2;
                     string settingName = settingNode.OuterXml.Substring(START, stop - START);
                     string settingVal = settingNode.InnerText;
-                    this.SettingsDict[settingName] = settingVal=="True";
+                    SettingsDict[settingName] = settingVal=="True";
 
                     Logger.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
                 }
 
                 // Set the UI state for all the checkboxes
-                SetSettingsValues(this.SettingsDict);
+                SetSettingsValues(SettingsDict);
                 Properties.Settings.Default.Reset();
 
                 // Re-load page to set Light Mode UI Elements
@@ -331,21 +327,21 @@ namespace WDAC_Wizard
             // On load, configure UI to match the app settings
             Logger.Log.AddNewSeparationLine("Settings Page Load"); 
 
-            this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
-            this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
-            this.SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
-            this.SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
-            this.SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
-            this.SettingsDict.Add("useDarkMode", (bool)Properties.Settings.Default.useDarkMode);
+            SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
+            SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
+            SettingsDict.Add("convertPolicyToBinary", (bool)Properties.Settings.Default.convertPolicyToBinary);
+            SettingsDict.Add("useUsermodeBlockRules", (bool)Properties.Settings.Default.useUsermodeBlockRules);
+            SettingsDict.Add("useDriverBlockRules", (bool)Properties.Settings.Default.useDriverBlockRules);
+            SettingsDict.Add("useDarkMode", (bool)Properties.Settings.Default.useDarkMode);
 
             Logger.Log.AddInfoMsg("Successfully read in the following Default Settings: ");
-            foreach (var key in this.SettingsDict.Keys)
+            foreach (var key in SettingsDict.Keys)
             {
-                Logger.Log.AddInfoMsg(String.Format("{0}: {1}", key, this.SettingsDict[key].ToString()));
+                Logger.Log.AddInfoMsg(String.Format("{0}: {1}", key, SettingsDict[key].ToString()));
             }
 
             // Set the UI state for all the checkboxes
-            SetSettingsValues(this.SettingsDict);
+            SetSettingsValues(SettingsDict);
 
             // Set the Light or Dark Mode UI Elements
             SetPageUI();
@@ -363,31 +359,31 @@ namespace WDAC_Wizard
                 string checkBoxName = settingName + "_CheckBox";
 
                 // Skip this setting, there is no checkbox to update
-                if (this.Controls.Find(checkBoxName, true).Length < 1)
+                if (Controls.Find(checkBoxName, true).Length < 1)
                 {
                     continue; 
                 }
 
                 if (!settingDict[settingName]) //False (unchecked) case
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
+                    Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
+                    Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
                 }
                 else // Checked case
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Checked";
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
+                    Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Checked";
+                    Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_checked;
                 }
 
                 // Set BackColor of the checkbox
                 // Dark Mode
                 if(Properties.Settings.Default.useDarkMode)
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15); 
+                    Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15); 
                 }
                 else
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
+                    Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
                 }
 
                 Logger.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
@@ -401,7 +397,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
-            this.Update_Label.Visible = false; 
+            Update_Label.Visible = false; 
         }
 
         /// <summary>
@@ -647,23 +643,23 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                resetButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                resetButton.ForeColor = System.Drawing.Color.DodgerBlue;
-                resetButton.BackColor = System.Drawing.Color.Transparent;
+                resetButton.FlatAppearance.BorderColor = Color.DodgerBlue;
+                resetButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                resetButton.FlatStyle = FlatStyle.Flat;
+                resetButton.ForeColor = Color.DodgerBlue;
+                resetButton.BackColor = Color.Transparent;
             }
 
             // Light Mode
             else
             {
-                resetButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                resetButton.ForeColor = System.Drawing.Color.Black;
-                resetButton.BackColor = System.Drawing.Color.WhiteSmoke;
+                resetButton.FlatAppearance.BorderColor = Color.Black;
+                resetButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                resetButton.FlatStyle = FlatStyle.Flat;
+                resetButton.ForeColor = Color.Black;
+                resetButton.BackColor = Color.WhiteSmoke;
             }
         }
 
@@ -672,7 +668,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetMainWindowColors()
         {
-            this._MainWindow.SetMainWindowColors(); 
+            _MainWindow.SetMainWindowColors(); 
         }
 
         /// <summary>
@@ -681,7 +677,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetControlPanelUI()
         {
-            this._MainWindow.SetControlPanelUI(); 
+            _MainWindow.SetControlPanelUI(); 
         }
 
         /// <summary>
@@ -690,7 +686,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetNextButtonUI()
         {
-            this._MainWindow.SetNextButtonUI(); 
+            _MainWindow.SetNextButtonUI(); 
         }
 
         /// <summary>
@@ -699,7 +695,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void RepaintAllExistingPages()
         {
-            this._MainWindow.ReloadPreviousPages(); 
+            _MainWindow.ReloadPreviousPages(); 
         }
     }
 }

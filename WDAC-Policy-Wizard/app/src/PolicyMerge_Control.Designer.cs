@@ -47,10 +47,10 @@
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label1.ForeColor = System.Drawing.Color.Black;
-            label1.Location = new System.Drawing.Point(165, 42);
+            label1.Location = new System.Drawing.Point(132, 34);
             label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(384, 29);
+            label1.Size = new System.Drawing.Size(303, 23);
             label1.TabIndex = 1;
             label1.Text = "Merge Multiple App Control Policies";
             // 
@@ -59,10 +59,10 @@
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Tahoma", 10F);
             label2.ForeColor = System.Drawing.Color.Black;
-            label2.Location = new System.Drawing.Point(165, 87);
+            label2.Location = new System.Drawing.Point(132, 70);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(262, 21);
+            label2.Size = new System.Drawing.Size(209, 17);
             label2.TabIndex = 2;
             label2.Text = "Select at least 2 policies to merge";
             // 
@@ -71,10 +71,10 @@
             label3.AutoSize = true;
             label3.Font = new System.Drawing.Font("Tahoma", 10F);
             label3.ForeColor = System.Drawing.Color.Black;
-            label3.Location = new System.Drawing.Point(165, 374);
+            label3.Location = new System.Drawing.Point(132, 299);
             label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(161, 21);
+            label3.Size = new System.Drawing.Size(129, 17);
             label3.TabIndex = 3;
             label3.Text = "Final policy location:";
             // 
@@ -82,19 +82,20 @@
             // 
             finalPolicyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             finalPolicyTextBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            finalPolicyTextBox.Location = new System.Drawing.Point(165, 409);
+            finalPolicyTextBox.Location = new System.Drawing.Point(132, 327);
+            finalPolicyTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             finalPolicyTextBox.Name = "finalPolicyTextBox";
-            finalPolicyTextBox.Size = new System.Drawing.Size(448, 26);
+            finalPolicyTextBox.Size = new System.Drawing.Size(359, 22);
             finalPolicyTextBox.TabIndex = 4;
             finalPolicyTextBox.Click += Button_Browse_Click;
             // 
             // button_Browse
             // 
             button_Browse.Font = new System.Drawing.Font("Tahoma", 9F);
-            button_Browse.Location = new System.Drawing.Point(632, 408);
+            button_Browse.Location = new System.Drawing.Point(506, 326);
             button_Browse.Margin = new System.Windows.Forms.Padding(2);
             button_Browse.Name = "button_Browse";
-            button_Browse.Size = new System.Drawing.Size(107, 28);
+            button_Browse.Size = new System.Drawing.Size(86, 22);
             button_Browse.TabIndex = 94;
             button_Browse.Text = "Browse";
             button_Browse.UseVisualStyleBackColor = true;
@@ -106,11 +107,12 @@
             policiesDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             policiesDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Column_Number, Column_Path });
             policiesDataGrid.EnableHeadersVisualStyles = false;
-            policiesDataGrid.Location = new System.Drawing.Point(165, 139);
+            policiesDataGrid.Location = new System.Drawing.Point(132, 111);
+            policiesDataGrid.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             policiesDataGrid.Name = "policiesDataGrid";
             policiesDataGrid.RowHeadersWidth = 51;
             policiesDataGrid.RowTemplate.Height = 24;
-            policiesDataGrid.Size = new System.Drawing.Size(678, 150);
+            policiesDataGrid.Size = new System.Drawing.Size(542, 120);
             policiesDataGrid.TabIndex = 95;
             policiesDataGrid.VirtualMode = true;
             policiesDataGrid.CellValueNeeded += PoliciesDataGrid_CellValueNeeded;
@@ -132,9 +134,10 @@
             // button_AddPolicy
             // 
             button_AddPolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_AddPolicy.Location = new System.Drawing.Point(165, 307);
+            button_AddPolicy.Location = new System.Drawing.Point(132, 246);
+            button_AddPolicy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             button_AddPolicy.Name = "button_AddPolicy";
-            button_AddPolicy.Size = new System.Drawing.Size(130, 30);
+            button_AddPolicy.Size = new System.Drawing.Size(104, 24);
             button_AddPolicy.TabIndex = 96;
             button_AddPolicy.Text = "+ Add Policy";
             button_AddPolicy.UseVisualStyleBackColor = true;
@@ -143,9 +146,10 @@
             // button_RemovePolicy
             // 
             button_RemovePolicy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_RemovePolicy.Location = new System.Drawing.Point(317, 307);
+            button_RemovePolicy.Location = new System.Drawing.Point(254, 246);
+            button_RemovePolicy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             button_RemovePolicy.Name = "button_RemovePolicy";
-            button_RemovePolicy.Size = new System.Drawing.Size(130, 30);
+            button_RemovePolicy.Size = new System.Drawing.Size(104, 24);
             button_RemovePolicy.TabIndex = 97;
             button_RemovePolicy.Text = "- Remove Policy";
             button_RemovePolicy.UseVisualStyleBackColor = true;
@@ -157,10 +161,10 @@
             label_Error.BackColor = System.Drawing.Color.Transparent;
             label_Error.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label_Error.ForeColor = System.Drawing.Color.Red;
-            label_Error.Location = new System.Drawing.Point(166, 600);
+            label_Error.Location = new System.Drawing.Point(133, 480);
             label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label_Error.Name = "label_Error";
-            label_Error.Size = new System.Drawing.Size(648, 18);
+            label_Error.Size = new System.Drawing.Size(550, 14);
             label_Error.TabIndex = 98;
             label_Error.Tag = "IgnoreDarkMode";
             label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text text text text text";
@@ -168,8 +172,9 @@
             // 
             // PolicyMerge_Control
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            BackColor = System.Drawing.Color.White;
             Controls.Add(label_Error);
             Controls.Add(button_RemovePolicy);
             Controls.Add(button_AddPolicy);
@@ -179,8 +184,9 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             Name = "PolicyMerge_Control";
-            Size = new System.Drawing.Size(1172, 782);
+            Size = new System.Drawing.Size(938, 626);
             Validated += PolicyMerge_Control_Validated;
             ((System.ComponentModel.ISupportInitialize)policiesDataGrid).EndInit();
             ResumeLayout(false);

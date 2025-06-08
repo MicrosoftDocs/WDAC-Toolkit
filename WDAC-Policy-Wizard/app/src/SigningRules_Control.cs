@@ -5,14 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization; 
-using System.Security.Cryptography.X509Certificates;
 
 namespace WDAC_Wizard
 {
@@ -40,14 +35,14 @@ namespace WDAC_Wizard
         public SigningRules_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this.Policy = pMainWindow.Policy; 
-            this.AllFilesinFolder = new List<string>(); 
+            Policy = pMainWindow.Policy; 
+            AllFilesinFolder = new List<string>(); 
 
-            this._MainWindow = pMainWindow;
-            this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.CustomRuleinProgress = false; 
-            this.RowSelected = -1;
-            this.isCustomPanelOpen = false; 
+            _MainWindow = pMainWindow;
+            _MainWindow.RedoFlowRequired = false;
+            _MainWindow.CustomRuleinProgress = false; 
+            RowSelected = -1;
+            isCustomPanelOpen = false; 
 
             Logger.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
         }
@@ -88,20 +83,29 @@ namespace WDAC_Wizard
         /// </summary>
         private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
-            // Open the custom rules conditions panel
-            
-            if (this.customRuleConditionsPanel == null)
+            // Check if the customRuleConditionsPanel is already open
+            if (customRuleConditionsPanel == null || customRuleConditionsPanel.IsDisposed)
             {
-                this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
-                this.customRuleConditionsPanel.Show();
-                this.customRuleConditionsPanel.BringToFront();
-                this.customRuleConditionsPanel.Focus();
-                this.customRuleConditionsPanel.ForceRepaint();
+                // Create and show the custom rules conditions panel
+                customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
+                customRuleConditionsPanel.StartPosition = FormStartPosition.CenterParent;
+                customRuleConditionsPanel.Owner = _MainWindow; // Set the parent form explicitly
+                customRuleConditionsPanel.FormClosed += (s, args) => customRuleConditionsPanel = null; // Reset on close
+                customRuleConditionsPanel.ShowDialog();
+
 
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
-                this.isCustomPanelOpen = true;
+
+                // Mark the panel as open
+                isCustomPanelOpen = true;
             }
-            
+            else
+            {
+                // Bring the existing panel to the front
+                customRuleConditionsPanel.BringToFront();
+                customRuleConditionsPanel.Focus();
+            }
+
             Logger.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
         }
 
@@ -124,7 +128,7 @@ namespace WDAC_Wizard
             Dictionary<string, string> fileExceptionsDict = new Dictionary<string, string>();
 
             // Parse the siPolicy Signers to Diction<ID, Signer objs>
-            foreach (var siPolicySigner in this.Policy.siPolicy.Signers)
+            foreach (var siPolicySigner in Policy.siPolicy.Signers)
             {
                 WDACSigner signer = new WDACSigner();
                 
@@ -155,7 +159,7 @@ namespace WDAC_Wizard
             }
 
             // Process publisher rules first:
-            foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
+            foreach (SigningScenario scenario in Policy.siPolicy.SigningScenarios)
             {
                 // Write all Allow Signers rules
                 if(scenario.ProductSigners.AllowedSigners != null)
@@ -219,8 +223,8 @@ namespace WDAC_Wizard
                             exceptionList = exceptionList.Remove(exceptionList.Length - 2);
                         }
 
-                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
-                        this.rulesDataGrid.RowCount += 1;
+                        displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
+                        rulesDataGrid.RowCount += 1;
                     }
                 }
 
@@ -286,16 +290,16 @@ namespace WDAC_Wizard
                             exceptionList = exceptionList.Remove(exceptionList.Length - 2);
                         }
 
-                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
-                        this.rulesDataGrid.RowCount += 1;
+                        displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, signerID));
+                        rulesDataGrid.RowCount += 1;
                     }
                 }
             } // end of scenarios
 
              // Write all "File Rules" rules
-            if (this.Policy.siPolicy.FileRules != null)
+            if (Policy.siPolicy.FileRules != null)
             {
-                var fileRulesList = this.Policy.siPolicy.FileRules;
+                var fileRulesList = Policy.siPolicy.FileRules;
                 string fileRuleID = String.Empty;
                 string filePath = String.Empty;
                 byte[] hash = new byte[0];
@@ -428,28 +432,28 @@ namespace WDAC_Wizard
                     // Only display if ID not found in the fileExceptionsDict -- in otherwords, this is a file rule NOT an exception
                     if (!fileExceptionsDict.ContainsKey(fileRuleID))
                     {
-                        this.displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, fileRuleID));
-                        this.rulesDataGrid.RowCount += 1;
+                        displayObjects.Add(new DisplayObject(action, level, friendlyName, fileAttrList, exceptionList, fileRuleID));
+                        rulesDataGrid.RowCount += 1;
                     }
                 }
             }
 
             // Show any AppId Tags
-            if(this.Policy.siPolicy.PolicyType == global::PolicyType.AppIDTaggingPolicy)
+            if(Policy.siPolicy.PolicyType == global::PolicyType.AppIDTaggingPolicy)
             {
-                foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
+                foreach (SigningScenario scenario in Policy.siPolicy.SigningScenarios)
                 {
                     if (scenario.AppIDTags != null)
                     {
                         foreach (var tag in scenario.AppIDTags.AppIDTag)
                         {
 
-                            this.displayObjects.Add(new DisplayObject("",
+                            displayObjects.Add(new DisplayObject("",
                                                                       "AppID Tag",
                                                                       "Key: " + tag.Key,
                                                                       "Value: " + tag.Value,
                                                                       ""));
-                            this.rulesDataGrid.RowCount += 1;
+                            rulesDataGrid.RowCount += 1;
 
                         }
                     }
@@ -457,20 +461,20 @@ namespace WDAC_Wizard
             }
 
            // Finally, show any COM Object rules
-           if (this.Policy.siPolicy.Settings != null)
+           if (Policy.siPolicy.Settings != null)
             {
-                foreach(var setting in this.Policy.siPolicy.Settings)
+                foreach(var setting in Policy.siPolicy.Settings)
                 {
                     // Don't show Policy.Id or Policy.Name settings
                     if (!(setting.Provider == "PolicyInfo"
                         && (setting.ValueName == "Name" || setting.ValueName == "Id")))
                     {
-                        this.displayObjects.Add(new DisplayObject(setting.Value.Item.ToString() == "True" ? "Allow" : "Deny",
+                        displayObjects.Add(new DisplayObject(setting.Value.Item.ToString() == "True" ? "Allow" : "Deny",
                                                                   "COM Object",
                                                                   "Provider: " + setting.Provider,
                                                                   "Key: " + setting.Key,
                                                                   ""));
-                        this.rulesDataGrid.RowCount += 1;
+                        rulesDataGrid.RowCount += 1;
                     }
                 }
             }
@@ -489,33 +493,33 @@ namespace WDAC_Wizard
             //     - Read from Template path if AppId Tagging Policy
             //     - Read from Empty Supplemental if Supplemental Policy i.e. no rules to show
 
-            if (this._MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+            if (_MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                this.XmlPath = this._MainWindow.Policy.TemplatePath; // existing policy - read from temp dir path
+                XmlPath = _MainWindow.Policy.TemplatePath; // existing policy - read from temp dir path
             }
             else // New Policy
             {
                 // Base Policy - Read from Template Path
-                if(this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
+                if(_MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
                     || _MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                 {
-                    this.XmlPath = this._MainWindow.Policy.TemplatePath; 
+                    XmlPath = _MainWindow.Policy.TemplatePath; 
                 }
                 
                 // Supplemental Policy - Read from Empty_Supplemental.xml
                 else
                 {
-                    this.XmlPath = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.EmptyWdacSupplementalXml);
+                    XmlPath = Path.Combine(_MainWindow.ExeFolderPath, "Templates", Properties.Resources.EmptyWdacSupplementalXml);
                 }
             }
                 
             Logger.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
-            Logger.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath); 
+            Logger.Log.AddInfoMsg("Reading file rules from path: " + XmlPath); 
 
             try
             {
                 // Read File
-                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(this.XmlPath); 
+                Policy.siPolicy = Helper.DeserializeXMLtoPolicy(XmlPath); 
             } 
             catch (Exception exp)
             {
@@ -528,7 +532,7 @@ namespace WDAC_Wizard
 
                 if (res == DialogResult.OK)
                 {
-                    this._MainWindow.ResetWorkflow(sender, e);
+                    _MainWindow.ResetWorkflow(sender, e);
                 }
                 return false; 
             }
@@ -544,37 +548,37 @@ namespace WDAC_Wizard
         private void SetBlocklistStates()
         {
             // Determine whether to show the checkboxes - hide if new/editing a supplemental policy
-            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+            if(Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
                 || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
             {
-                this.checkBox_KernelList.Visible = false;
-                this.checkBox_UserModeList.Visible = false;
+                checkBox_KernelList.Visible = false;
+                checkBox_UserModeList.Visible = false;
                 return; 
             }
             else
             {
-                this.checkBox_KernelList.Visible = true;
-                this.checkBox_UserModeList.Visible = true;
+                checkBox_KernelList.Visible = true;
+                checkBox_UserModeList.Visible = true;
             }
 
             // Recommended Kernel Driver Blocklist
             if(Properties.Settings.Default.useDriverBlockRules)
             {
-                this.checkBox_KernelList.Checked = true; 
+                checkBox_KernelList.Checked = true; 
             }
             else
             {
-                this.checkBox_KernelList.Checked = false; 
+                checkBox_KernelList.Checked = false; 
             }
 
             // Recommended User Mode Blocklist
             if (Properties.Settings.Default.useUsermodeBlockRules)
             {
-                this.checkBox_UserModeList.Checked = true;
+                checkBox_UserModeList.Checked = true;
             }
             else
             {
-                this.checkBox_UserModeList.Checked = false;
+                checkBox_UserModeList.Checked = false;
             }
         }
 
@@ -584,16 +588,16 @@ namespace WDAC_Wizard
         private void BubbleUp()
         {
             // Passing rule, signing scenarios, etc datastructs to MainWindow class
-           this._MainWindow.Policy.CISigners = this.Policy.CISigners;
-           this._MainWindow.Policy.EKUs = this.Policy.EKUs;
-           this._MainWindow.Policy.FileRules = this.Policy.FileRules;
-           this._MainWindow.Policy.Signers = this.Policy.Signers;
-           this._MainWindow.Policy.SigningScenarios = this.Policy.SigningScenarios;
-           this._MainWindow.Policy.UpdateSigners = this.Policy.UpdateSigners;
-           this._MainWindow.Policy.SupplementalSigners = this.Policy.SupplementalSigners;
-           this._MainWindow.Policy.CISigners = this.Policy.CISigners;
-           this._MainWindow.Policy.PolicySettings = this.Policy.PolicySettings;
-           this._MainWindow.Policy.CustomRules = this.Policy.CustomRules;
+           _MainWindow.Policy.CISigners = Policy.CISigners;
+           _MainWindow.Policy.EKUs = Policy.EKUs;
+           _MainWindow.Policy.FileRules = Policy.FileRules;
+           _MainWindow.Policy.Signers = Policy.Signers;
+           _MainWindow.Policy.SigningScenarios = Policy.SigningScenarios;
+           _MainWindow.Policy.UpdateSigners = Policy.UpdateSigners;
+           _MainWindow.Policy.SupplementalSigners = Policy.SupplementalSigners;
+           _MainWindow.Policy.CISigners = Policy.CISigners;
+           _MainWindow.Policy.PolicySettings = Policy.PolicySettings;
+           _MainWindow.Policy.CustomRules = Policy.CustomRules;
 
         }
 
@@ -606,7 +610,7 @@ namespace WDAC_Wizard
             Logger.Log.AddNewSeparationLine("Delete Rule Button Clicked");
 
             // Determine whether the user is deleting one row or multiple rows
-            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+            int numRowsSelected = rulesDataGrid.SelectedRows.Count;
             string userPromptMsg; 
 
             if(numRowsSelected < 1)
@@ -616,9 +620,9 @@ namespace WDAC_Wizard
             else if(numRowsSelected == 1)
             {
                 // Exactly one row/rule to delete
-                int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
-                string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
-                string level = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
+                int rowIdx = rulesDataGrid.SelectedRows[0].Index;
+                string type = (String)rulesDataGrid["Column_Action", rowIdx].Value;
+                string level = (String)rulesDataGrid["Column_Level", rowIdx].Value;
 
                 // Assert cannot delete the 'empty' bottom row
                 if (String.IsNullOrEmpty(type)
@@ -627,7 +631,7 @@ namespace WDAC_Wizard
                     return; 
                 }
 
-                userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)this.rulesDataGrid["Column_Name", rowIdx].Value);
+                userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)rulesDataGrid["Column_Name", rowIdx].Value);
             }
             else
             {
@@ -648,12 +652,12 @@ namespace WDAC_Wizard
             }
 
             // Creates background worker to display updates to UI
-            this.panel_Progress.Visible = true;
-            this.panel_Progress.BringToFront(); 
+            panel_Progress.Visible = true;
+            panel_Progress.BringToFront(); 
 
-            if (!this.backgroundWorkerRulesDeleter.IsBusy)
+            if (!backgroundWorkerRulesDeleter.IsBusy)
             {
-                this.backgroundWorkerRulesDeleter.RunWorkerAsync();
+                backgroundWorkerRulesDeleter.RunWorkerAsync();
             }
         }
 
@@ -679,10 +683,10 @@ namespace WDAC_Wizard
             int customRuleIdx = -1;
             List<string> ruleIDsToRemove = new List<string>();
 
-            if (rowIdx >= this.rulesDataGrid.RowCount) return; 
+            if (rowIdx >= rulesDataGrid.RowCount) return; 
 
-            string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
-            string level = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
+            string type = (String)rulesDataGrid["Column_Action", rowIdx].Value;
+            string level = (String)rulesDataGrid["Column_Level", rowIdx].Value;
 
             // Assert cannot delete the 'empty' bottom row
             if (String.IsNullOrEmpty(type)
@@ -691,38 +695,38 @@ namespace WDAC_Wizard
                 return;
             }
 
-            string ruleName = (String)this.rulesDataGrid["Column_Name", rowIdx].Value;
-            string ruleType = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
-            string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
-            string ruleKey = (String)this.rulesDataGrid["Column_Files", rowIdx].Value;
+            string ruleName = (String)rulesDataGrid["Column_Name", rowIdx].Value;
+            string ruleType = (String)rulesDataGrid["Column_Level", rowIdx].Value;
+            string ruleId = (String)rulesDataGrid["column_ID", rowIdx].Value;
+            string ruleKey = (String)rulesDataGrid["Column_Files", rowIdx].Value;
 
             Logger.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
 
             // Remove from table iff sucessful re-serialization
             // Remove from DisplayObject
-            if (rowIdx < this.displayObjects.Count)
+            if (rowIdx < displayObjects.Count)
             {
                 if (InvokeRequired)
                 {
-                    this.Invoke(new MethodInvoker(delegate
+                    Invoke(new MethodInvoker(delegate
                     {
-                        this.displayObjects.RemoveAt(rowIdx);
-                        this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                        displayObjects.RemoveAt(rowIdx);
+                        rulesDataGrid.Rows.RemoveAt(rowIdx);
                     }));
                 }
                 else
                 {
-                    this.displayObjects.RemoveAt(rowIdx);
-                    this.rulesDataGrid.Rows.RemoveAt(rowIdx);
+                    displayObjects.RemoveAt(rowIdx);
+                    rulesDataGrid.Rows.RemoveAt(rowIdx);
                 }
             }
 
             // Check if this is a custom rule that we can delete from memory without modifying the policy
             if (String.IsNullOrEmpty(ruleId))
             {
-                if (this.Policy.CustomRules.Count > 0)
+                if (Policy.CustomRules.Count > 0)
                 {
-                    foreach (var customRule in this.Policy.CustomRules)
+                    foreach (var customRule in Policy.CustomRules)
                     {
                         if (customRule.RowNumber == rowIdx)
                         {
@@ -739,7 +743,7 @@ namespace WDAC_Wizard
                     // Check if we assigned a value to custom rule indx to remove
                     if (customRuleIdx != -1)
                     {
-                        this.Policy.CustomRules.RemoveAt(customRuleIdx);
+                        Policy.CustomRules.RemoveAt(customRuleIdx);
                         return;
                     }
                 }
@@ -753,7 +757,7 @@ namespace WDAC_Wizard
                     int numIdx = 0;
 
                     // Find matching COM object rule
-                    foreach (var comRule in this.Policy.siPolicy.Settings)
+                    foreach (var comRule in Policy.siPolicy.Settings)
                     {
                         if (comRule.Provider == provider && comRule.Key == key)
                         {
@@ -770,14 +774,14 @@ namespace WDAC_Wizard
                     // Check if we assigned a value to settingIdx, remove that COM rule from the Settings[] array
                     if (settingIdx != -1)
                     {
-                        Setting[] tempSettings = this.Policy.siPolicy.Settings;
+                        Setting[] tempSettings = Policy.siPolicy.Settings;
                         // Move all indices to the left 1 starting at settingIdx. Finish by resizing the Settings array
                         for (int i = settingIdx; i < tempSettings.Length - 1; i++)
                         {
                             tempSettings[i] = tempSettings[i + 1];
                         }
                         Array.Resize(ref tempSettings, tempSettings.Length - 1);
-                        this.Policy.siPolicy.Settings = tempSettings;
+                        Policy.siPolicy.Settings = tempSettings;
                     }
                 }
 
@@ -810,11 +814,11 @@ namespace WDAC_Wizard
                             // Check if we assigned a value to settingIdx, remove that AppID Tag from the AppIDTags[] array
                             if (tagIdx != -1)
                             {
-                                AppIDTag[] tempTags = this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag; 
+                                AppIDTag[] tempTags = Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag; 
 
                                 if(tempTags.Length == 1)
                                 {
-                                    this.Policy.siPolicy.SigningScenarios[0].AppIDTags = null;
+                                    Policy.siPolicy.SigningScenarios[0].AppIDTags = null;
                                 }
 
                                 else
@@ -825,7 +829,7 @@ namespace WDAC_Wizard
                                         tempTags[i] = tempTags[i + 1];
                                     }
                                     Array.Resize(ref tempTags, tempTags.Length - 1);
-                                    this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag = tempTags;
+                                    Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag = tempTags;
                                 }
                             }
                         }
@@ -840,11 +844,11 @@ namespace WDAC_Wizard
             {
                 numIdex = 0;
 
-                foreach (var signer in this.Policy.siPolicy.Signers)
+                foreach (var signer in Policy.siPolicy.Signers)
                 {
                     if (signer.ID.Equals(ruleId))
                     {
-                        this.Policy.siPolicy.Signers = this.Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
+                        Policy.siPolicy.Signers = Policy.siPolicy.Signers.Where((val, idx) => idx != numIdex).ToArray();
                         Logger.Log.AddInfoMsg(String.Format("Removing {0} from siPolicy.signers", signer.ID));
 
                         // Remove the signer from Signing Scenarios
@@ -881,7 +885,7 @@ namespace WDAC_Wizard
                 byte[] hash = new byte[0];
 
                 // Delete all 4 hash rules (sha1, sha256, page, np) from FileRules area
-                foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                foreach (var fileRule in Policy.siPolicy.FileRules)
                 {
                     if (fileRule.GetType() == typeof(Deny))
                     {
@@ -903,7 +907,7 @@ namespace WDAC_Wizard
 
                     if (fileRuleID.Equals(ruleId)) // then delete from policy
                     {
-                        this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                        Policy.siPolicy.FileRules = Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
                         ruleIDsToRemove.Add(fileRuleID);
                         break;
                     }
@@ -925,7 +929,7 @@ namespace WDAC_Wizard
             {
                 // Remove from FileRules
                 numIdex = 0;
-                foreach (var fileRule in this.Policy.siPolicy.FileRules)
+                foreach (var fileRule in Policy.siPolicy.FileRules)
                 {
                     string fileRuleID = string.Empty;
 
@@ -945,7 +949,7 @@ namespace WDAC_Wizard
 
                     if (fileRuleID.Equals(ruleId))
                     {
-                        this.Policy.siPolicy.FileRules = this.Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
+                        Policy.siPolicy.FileRules = Policy.siPolicy.FileRules.Where((val, idx) => idx != numIdex).ToArray();
                         Logger.Log.AddInfoMsg("Removing from siPolicy.signers");
                         break;
                     }
@@ -962,7 +966,7 @@ namespace WDAC_Wizard
             // Serialize to new policy
             try
             {
-                Helper.SerializePolicytoXML(this.Policy.siPolicy, this.XmlPath);
+                Helper.SerializePolicytoXML(Policy.siPolicy, XmlPath);
             }
             catch (Exception exp)
             {
@@ -977,7 +981,7 @@ namespace WDAC_Wizard
         /// <param name="ruleId"></param>
         private void RemoveSignerIdFromSigningScenario(string signerId)
         {
-            foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
+            foreach (var scenario in Policy.siPolicy.SigningScenarios)
             {
                 // Check Allowed Signers
                 int numIdex = 0;
@@ -1037,7 +1041,7 @@ namespace WDAC_Wizard
         private void RemoveSignerIdFromCiSigners(string signerId)
         {
             // Verify that CiSigners is not null. Few policies have a CiSigners section
-            if(this.Policy.siPolicy.CiSigners == null)
+            if(Policy.siPolicy.CiSigners == null)
             {
                 return; 
             }
@@ -1045,17 +1049,17 @@ namespace WDAC_Wizard
             int numIdex = 0;
 
             // Remove the SignerId reference from the CiSigners section
-            foreach (CiSigner ciSigner in this.Policy.siPolicy.CiSigners)
+            foreach (CiSigner ciSigner in Policy.siPolicy.CiSigners)
             {
                 if (ciSigner.SignerId == signerId)
                 {
-                    this.Policy.siPolicy.CiSigners = this.Policy.siPolicy.CiSigners
+                    Policy.siPolicy.CiSigners = Policy.siPolicy.CiSigners
                         .Where((val, idx) => idx != numIdex).ToArray();
                     
                     // If removed the last CiSigners ref, set the CiSigners to null to serialize
-                    if (this.Policy.siPolicy.CiSigners.Length == 0)
+                    if (Policy.siPolicy.CiSigners.Length == 0)
                     {
-                        this.Policy.siPolicy.CiSigners = null;
+                        Policy.siPolicy.CiSigners = null;
                     }
 
                     Logger.Log.AddInfoMsg(String.Format("Removing {0} from CiSigners", signerId));
@@ -1076,10 +1080,10 @@ namespace WDAC_Wizard
         {
             int numIdex = 0; 
 
-            if (this.Policy.siPolicy.SigningScenarios == null)
+            if (Policy.siPolicy.SigningScenarios == null)
                 return;
 
-            foreach (var scenario in this.Policy.siPolicy.SigningScenarios)
+            foreach (var scenario in Policy.siPolicy.SigningScenarios)
             {
                 numIdex = 0;
 
@@ -1113,20 +1117,20 @@ namespace WDAC_Wizard
         private void RulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             // If this is the row for new records, no values are needed.
-            if (e.RowIndex == this.rulesDataGrid.RowCount - 1) return;
+            if (e.RowIndex == rulesDataGrid.RowCount - 1) return;
 
             DisplayObject displayObject = null;
 
             // Store a reference to the Customer object for the row being painted.
             if (e.RowIndex == rowInEdit)
             {
-                displayObject = this.displayObjectInEdit;
+                displayObject = displayObjectInEdit;
             }
             else
             {
-                if(e.RowIndex  < this.displayObjects.Count)
+                if(e.RowIndex  < displayObjects.Count)
                 {
-                    displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
+                    displayObject = (DisplayObject)displayObjects[e.RowIndex];
                 }
                 else
                 {
@@ -1135,7 +1139,7 @@ namespace WDAC_Wizard
             }
 
             // Set the cell value to paint using the Customer object retrieved.
-            switch (this.rulesDataGrid.Columns[e.ColumnIndex].Name)
+            switch (rulesDataGrid.Columns[e.ColumnIndex].Name)
             {
                 case "column_Action":
                     e.Value = displayObject.Action;
@@ -1172,7 +1176,7 @@ namespace WDAC_Wizard
         public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
-            customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+            customRule.RowNumber = rulesDataGrid.RowCount - 1;
             string action = displayObjectArray[0]; 
             string level = displayObjectArray[1];
             string name = warnUser ? "*Hash Fallback Possible* " + displayObjectArray[2] : displayObjectArray[2];
@@ -1180,20 +1184,20 @@ namespace WDAC_Wizard
             string exceptions = displayObjectArray[4];
 
             // Add to the DisplayObject
-            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
-            this.rulesDataGrid.RowCount += 1;
+            displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
+            rulesDataGrid.RowCount += 1;
 
             // Add custom list to RulesList
-            this.Policy.CustomRules.Add(customRule);
+            Policy.CustomRules.Add(customRule);
 
             // Scroll to bottom to see new rule added to list
-            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
+            rulesDataGrid.FirstDisplayedScrollingRowIndex = rulesDataGrid.RowCount - 1;
 
             BubbleUp();
 
             // close the custom Rule Conditions Panel
-            this.customRuleConditionsPanel.Close();
-            this.customRuleConditionsPanel = null;
+            customRuleConditionsPanel.Close();
+            customRuleConditionsPanel = null;
         }
 
         /// <summary>
@@ -1202,7 +1206,7 @@ namespace WDAC_Wizard
         public void CustomRulesPanel_Closing()
         {
             // User has closed custom rules panel. Reset panel and text
-            this.customRuleConditionsPanel = null;
+            customRuleConditionsPanel = null;
             // this.label_AddCustomRules.Text = "+ Custom Rules"; 
         }
 
@@ -1211,17 +1215,17 @@ namespace WDAC_Wizard
         /// </summary>
         public void CloseCustomRulesPanel()
         {
-            if (this.customRuleConditionsPanel == null)
+            if (customRuleConditionsPanel == null)
             {
                 return;
             }
 
             // Close the custom Rule Conditions Panel
             // Set RuleInEdit to false to not trigger another confirmation from user on FormClosing()
-            this.customRuleConditionsPanel.RuleInEdit = false; 
-            this.customRuleConditionsPanel.Close();
-            this.customRuleConditionsPanel = null;
-            this._MainWindow.CustomRuleinProgress = false; 
+            customRuleConditionsPanel.RuleInEdit = false; 
+            customRuleConditionsPanel.Close();
+            customRuleConditionsPanel = null;
+            _MainWindow.CustomRuleinProgress = false; 
         }
 
         /// <summary>
@@ -1242,13 +1246,13 @@ namespace WDAC_Wizard
         private void CheckBox_KernelList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended driver block rules
-            if(this.checkBox_KernelList.Checked)
+            if(checkBox_KernelList.Checked)
             {
-                this.Policy.UseKernelModeBlocks = true;
+                Policy.UseKernelModeBlocks = true;
             }
             else
             {
-                this.Policy.UseKernelModeBlocks = false;
+                Policy.UseKernelModeBlocks = false;
             }
         }
 
@@ -1260,13 +1264,13 @@ namespace WDAC_Wizard
         private void CheckBox_UserModeList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended user mode block rules
-            if (this.checkBox_UserModeList.Checked)
+            if (checkBox_UserModeList.Checked)
             {
-                this.Policy.UseUserModeBlocks = true;
+                Policy.UseUserModeBlocks = true;
             }
             else
             {
-                this.Policy.UseUserModeBlocks = false;
+                Policy.UseUserModeBlocks = false;
             }
         }
 
@@ -1279,11 +1283,11 @@ namespace WDAC_Wizard
         {
             //
             List<int> rowIdxs = new List<int>();
-            int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
+            int numRowsSelected = rulesDataGrid.SelectedRows.Count;
 
             for (int i = 0; i < numRowsSelected; i++)
             {
-                rowIdxs.Add(this.rulesDataGrid.SelectedRows[i].Index);
+                rowIdxs.Add(rulesDataGrid.SelectedRows[i].Index);
             }
 
             // Call helper function to delete all the rows defined in rowIdxs
@@ -1299,8 +1303,8 @@ namespace WDAC_Wizard
         private void FinishedBackgroundWorker(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             // Hide progress panel
-            this.panel_Progress.Visible = false;
-            this.panel_Progress.SendToBack(); 
+            panel_Progress.Visible = false;
+            panel_Progress.SendToBack(); 
         }
 
         /// <summary>
@@ -1361,19 +1365,19 @@ namespace WDAC_Wizard
             // Dark Mode
             if (Properties.Settings.Default.useDarkMode)
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                        button.FlatAppearance.BorderColor = Color.DodgerBlue;
                         button.FlatAppearance.BorderSize = 0;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.DodgerBlue;
-                        button.BackColor = System.Drawing.Color.Transparent;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.DodgerBlue;
+                        button.BackColor = Color.Transparent;
                     }
 
                     // Panels
@@ -1397,19 +1401,19 @@ namespace WDAC_Wizard
             // Light Mode
             else
             {
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
                     // Buttons
                     if (control is Button button
                         && (button.Tag == null || button.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
-                        button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                        button.FlatAppearance.BorderColor = Color.Black;
                         button.FlatAppearance.BorderSize = 0;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                        button.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
-                        button.BackColor = System.Drawing.Color.Transparent;
+                        button.FlatAppearance.MouseDownBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(50,30,144,255);
+                        button.FlatStyle = FlatStyle.Flat;
+                        button.ForeColor = Color.FromArgb(16, 110, 190);
+                        button.BackColor = Color.Transparent;
                     }
 
                     // Panels
@@ -1520,20 +1524,20 @@ namespace WDAC_Wizard
                 rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.White;
                 rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
                 rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Borders
-                rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.BorderStyle = BorderStyle.Fixed3D;
+                rulesDataGrid.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 rulesDataGrid.DefaultCellStyle.BackColor = Color.FromArgb(32, 32, 32);
                 rulesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.White;
-                rulesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(26, 82, 118);
-                rulesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+                rulesDataGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 82, 118);
+                rulesDataGrid.DefaultCellStyle.SelectionForeColor = Color.White;
 
                 // Grid lines
                 rulesDataGrid.GridColor = Color.LightSlateGray;
@@ -1549,20 +1553,20 @@ namespace WDAC_Wizard
                 rulesDataGrid.RowHeadersDefaultCellStyle.ForeColor = Color.Black;
                 rulesDataGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230);
                 rulesDataGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                rulesDataGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Borders
-                rulesDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-                rulesDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-                rulesDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                rulesDataGrid.BorderStyle = BorderStyle.Fixed3D;
+                rulesDataGrid.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
 
                 // Cells
                 rulesDataGrid.DefaultCellStyle.BackColor = Color.White;
                 rulesDataGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
                 rulesDataGrid.DefaultCellStyle.ForeColor = Color.Black;
-                rulesDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(174, 214, 241);
-                rulesDataGrid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                rulesDataGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(174, 214, 241);
+                rulesDataGrid.DefaultCellStyle.SelectionForeColor = Color.Black;
 
                 // Grid lines
                 rulesDataGrid.GridColor = Color.Black;
@@ -1582,31 +1586,31 @@ namespace WDAC_Wizard
 
         public DisplayObject()
         {
-            this.Action = String.Empty;
-            this.Level = String.Empty;
-            this.Name = String.Empty;
-            this.Files = String.Empty;
-            this.Exceptions = String.Empty;
-            this.Id = String.Empty; 
+            Action = String.Empty;
+            Level = String.Empty;
+            Name = String.Empty;
+            Files = String.Empty;
+            Exceptions = String.Empty;
+            Id = String.Empty; 
         }
 
         public DisplayObject(string action, string level, string name, string files, string exceptions)
         {
-            this.Action = action;
-            this.Level = level;
-            this.Name = name;
-            this.Files = files;
-            this.Exceptions = exceptions;
+            Action = action;
+            Level = level;
+            Name = name;
+            Files = files;
+            Exceptions = exceptions;
         }
 
         public DisplayObject(string action, string level, string name, string files, string exceptions, string id)
         {
-            this.Action = action;
-            this.Level = level;
-            this.Name = name;
-            this.Files = files;
-            this.Exceptions = exceptions;
-            this.Id = id; 
+            Action = action;
+            Level = level;
+            Name = name;
+            Files = files;
+            Exceptions = exceptions;
+            Id = id; 
         }
     }
 }
