@@ -88,7 +88,8 @@ namespace WDAC_Wizard
                         ciEvent.FileName,
                         ciEvent.ProductName,
                         ciEvent.PolicyName,
-                        ciEvent.SignerInfo.PublisherName);
+                        ciEvent.SignerInfo.PublisherName, 
+                        ciEvent.SignerInfo.IssuerTBSHash);
 
                 this.DisplayObjects.Add(dpObject);
                 this.eventsDataGridView.RowCount += 1;
@@ -293,6 +294,11 @@ namespace WDAC_Wizard
                     case 5:
                         this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
                         this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
+                        break;
+
+                    case 6:
+                        this.DisplayObjects.Sort((x, y) => x.IssuerTBSHash.CompareTo(y.IssuerTBSHash));
+                        this.CiEvents.Sort((x, y) => Helper.ConvertHash(x.SignerInfo.IssuerTBSHash).CompareTo(Helper.ConvertHash(y.SignerInfo.IssuerTBSHash)));
                         break;
                 }
             }
@@ -603,6 +609,10 @@ namespace WDAC_Wizard
 
                 case "publisherColumn":
                     e.Value = displayObject.Publisher;
+                    break;
+
+                case "issuerTbsHashColumn":
+                    e.Value = displayObject.IssuerTBSHash;
                     break;
             }
         }
@@ -1723,6 +1733,7 @@ namespace WDAC_Wizard
         public string Product;
         public string PolicyName;
         public string Publisher;
+        public string IssuerTBSHash;
 
         public EventDisplayObject()
         {
@@ -1732,9 +1743,10 @@ namespace WDAC_Wizard
             this.Product = string.Empty;
             this.PolicyName = string.Empty;
             this.Publisher = string.Empty;
+            this.IssuerTBSHash = string.Empty;
         }
 
-        public EventDisplayObject(string eventId, string filename, string product, string policyName, string publisher)
+        public EventDisplayObject(string eventId, string filename, string product, string policyName, string publisher, byte[] issuerTbsHash)
         {
             this.Action = "   ---   ";
             this.EventId = eventId;
@@ -1742,6 +1754,7 @@ namespace WDAC_Wizard
             this.Product = String.IsNullOrEmpty(product) ? String.Empty : product;
             this.PolicyName = String.IsNullOrEmpty(policyName) ? String.Empty : policyName;
             this.Publisher = String.IsNullOrEmpty(publisher) ? String.Empty : publisher;
+            this.IssuerTBSHash = Helper.ConvertHash(issuerTbsHash);
         }
     }
 }

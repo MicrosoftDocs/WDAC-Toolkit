@@ -73,6 +73,7 @@ namespace WDAC_Wizard
             folderPathTextBox = new System.Windows.Forms.TextBox();
             folderPathCheckBox = new System.Windows.Forms.CheckBox();
             filePathCheckBox = new System.Windows.Forms.CheckBox();
+            issuerTbsHashColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             publisherRulePanel.SuspendLayout();
             fileAttributeRulePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)eventsDataGridView).BeginInit();
@@ -374,7 +375,7 @@ namespace WDAC_Wizard
             eventsDataGridView.AllowUserToResizeRows = false;
             eventsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             eventsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { addedColumn, eventIdColumn, filenameColumn, productColumn, policyColumn, publisherColumn });
+            eventsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { addedColumn, eventIdColumn, filenameColumn, productColumn, policyColumn, publisherColumn, issuerTbsHashColumn });
             eventsDataGridView.EnableHeadersVisualStyles = false;
             eventsDataGridView.Location = new System.Drawing.Point(167, 101);
             eventsDataGridView.Margin = new System.Windows.Forms.Padding(2);
@@ -582,6 +583,14 @@ namespace WDAC_Wizard
             filePathCheckBox.Text = "File Path:";
             filePathCheckBox.UseVisualStyleBackColor = true;
             // 
+            // issuerTbsHashColumn
+            // 
+            issuerTbsHashColumn.HeaderText = "Issuer TBS Hash";
+            issuerTbsHashColumn.MinimumWidth = 6;
+            issuerTbsHashColumn.Name = "issuerTbsHashColumn";
+            issuerTbsHashColumn.ReadOnly = true;
+            issuerTbsHashColumn.Width = 141;
+            // 
             // EventLogRuleConfiguration
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -661,5 +670,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.DataGridViewTextBoxColumn productColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn policyColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn publisherColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn issuerTbsHashColumn;
     }
 }
