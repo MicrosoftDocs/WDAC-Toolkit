@@ -272,33 +272,101 @@ namespace WDAC_Wizard
                 switch(columnToSort)
                 {
                     case 1:
+                        // Event IDs
                         this.DisplayObjects.Sort((x, y) => x.EventId.CompareTo(y.EventId));
                         this.CiEvents.Sort((x, y) => x.EventId.CompareTo(y.EventId));
                         break;
 
                     case 2:
+                        // Filenames
                         this.DisplayObjects.Sort((x, y) => x.Filename.CompareTo(y.Filename));
                         this.CiEvents.Sort((x, y) => x.FileName.CompareTo(y.FileName));
                         break;
 
                     case 3:
-                        this.DisplayObjects.Sort((x, y) => x.Product.CompareTo(y.Product));
-                        this.CiEvents.Sort((x, y) => x.ProductName.CompareTo(y.ProductName));
+                        // Product can have empty/null values - sort empty to bottom
+                        this.DisplayObjects.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.Product);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.Product);
+
+                            // Sort empty/null strings to the bottom
+                            if (xEmpty && !yEmpty) return 1;   // x after y
+                            if (!xEmpty && yEmpty) return -1;  // x before y
+
+                            // Both empty or both non-empty → compare normally
+                            return string.Compare(x.Product, y.Product, StringComparison.CurrentCultureIgnoreCase);
+                        });
+                        this.CiEvents.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.ProductName);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.ProductName);
+
+                            if (xEmpty && !yEmpty) return 1; 
+                            if (!xEmpty && yEmpty) return -1;
+
+                            return string.Compare(x.ProductName, y.ProductName, StringComparison.CurrentCultureIgnoreCase);
+                        });
+
                         break;
 
                     case 4:
+                        // Policy Names - cannot be empty
                         this.DisplayObjects.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
                         this.CiEvents.Sort((x, y) => x.PolicyName.CompareTo(y.PolicyName));
                         break;
 
                     case 5:
-                        this.DisplayObjects.Sort((x, y) => x.Publisher.CompareTo(y.Publisher));
-                        this.CiEvents.Sort((x, y) => x.SignerInfo.PublisherName.CompareTo(y.SignerInfo.PublisherName));
+                        // Publisher values 
+                        this.DisplayObjects.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.Publisher);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.Publisher);
+
+                            // Sort empty/null strings to the bottom
+                            if (xEmpty && !yEmpty) return 1;   // x after y
+                            if (!xEmpty && yEmpty) return -1;  // x before y
+
+                            // Both empty or both non-empty → compare normally
+                            return string.Compare(x.Publisher, y.Publisher, StringComparison.CurrentCultureIgnoreCase);
+                        });
+                        this.CiEvents.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.SignerInfo.PublisherName);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.SignerInfo.PublisherName);
+
+                            if (xEmpty && !yEmpty) return 1;
+                            if (!xEmpty && yEmpty) return -1;
+
+                            return string.Compare(x.SignerInfo.PublisherName, y.SignerInfo.PublisherName, StringComparison.CurrentCultureIgnoreCase);
+                        });
+
                         break;
 
                     case 6:
-                        this.DisplayObjects.Sort((x, y) => x.IssuerTBSHash.CompareTo(y.IssuerTBSHash));
-                        this.CiEvents.Sort((x, y) => Helper.ConvertHash(x.SignerInfo.IssuerTBSHash).CompareTo(Helper.ConvertHash(y.SignerInfo.IssuerTBSHash)));
+                        // Issuer TBS Hash strings
+                        this.DisplayObjects.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.IssuerTBSHash);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.IssuerTBSHash);
+
+                            // Sort empty/null strings to the bottom
+                            if (xEmpty && !yEmpty) return 1;   // x after y
+                            if (!xEmpty && yEmpty) return -1;  // x before y
+
+                            // Both empty or both non-empty → compare normally
+                            return string.Compare(x.IssuerTBSHash, y.IssuerTBSHash, StringComparison.CurrentCultureIgnoreCase);
+                        });
+                        this.CiEvents.Sort((x, y) =>
+                        {
+                            bool xEmpty = string.IsNullOrWhiteSpace(x.SignerInfo.IssuerTBSHashString);
+                            bool yEmpty = string.IsNullOrWhiteSpace(y.SignerInfo.IssuerTBSHashString);
+
+                            if (xEmpty && !yEmpty) return 1;
+                            if (!xEmpty && yEmpty) return -1;
+
+                            return string.Compare(x.SignerInfo.IssuerTBSHashString, y.SignerInfo.IssuerTBSHashString, StringComparison.CurrentCultureIgnoreCase);
+                        });
                         break;
                 }
             }

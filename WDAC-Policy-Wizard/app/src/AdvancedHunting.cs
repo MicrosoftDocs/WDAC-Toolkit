@@ -363,6 +363,7 @@ namespace WDAC_Wizard
             SignerEvent signerEvent = new SignerEvent();
             signerEvent.EventId = SIGNING_EVENT_ID; 
             signerEvent.IssuerName = record.IssuerName;
+            signerEvent.IssuerTBSHashString = record.IssuerTBSHash;
             signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash);
             signerEvent.PublisherName = record.PublisherName;
             signerEvent.DeviceId = record.DeviceId;
