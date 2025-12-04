@@ -33,7 +33,7 @@ DeviceEvents
 | extend FileDescription = parsejson(AdditionalFields).FileDescription
 | extend FileVersion = parsejson(AdditionalFields).FileVersion
 // Correlation Fields
-| extend CorrelationId = parsejson(AdditionalFields).EtwActivityId
+| extend EtwCorrelationId = parsejson(AdditionalFields).EtwActivityId
 // Keep only actionable info for the Wizard
 | project
     Timestamp,
@@ -56,7 +56,7 @@ DeviceEvents
     InternalName,
     FileDescription,
     FileVersion,
-    CorrelationId
+    EtwCorrelationId
 ```
 
 The Wizard is expecting **exactly the following data fields**:
@@ -80,7 +80,7 @@ The Wizard is expecting **exactly the following data fields**:
 - InternalName     (Optional)
 - FileDescription  (Optional)
 - FileVersion      (Optional)
-- CorrelationId    (Optional)
+- EtwCorrelationId (Optional)
 
 CSV files without the required fields, or with additional fields, may fail to properly parse. 
 
@@ -101,11 +101,11 @@ Below is a version of Kusto query above rewritten as a Splunk search query. In t
 | rex field=File_Name "(?P<FileName2>[^\\\]+)$"
 | rename File_Name as FolderPath
 | rename FileName2 as FileName
-| rename ActivityID as CorrelationId
+| rename ActivityID as EtwCorrelationId
 | rename SHA1_Hash as SHA1
 | rename SHA256_Hash as SHA256
-| eval CorrelationId=replace(CorrelationId, "{", "")
-| eval CorrelationId=replace(CorrelationId, "}", "")
+| eval EtwCorrelationId=replace(EtwCorrelationId, "{", "")
+| eval EtwCorrelationId=replace(EtwCorrelationId, "}", "")
 | eval DeviceName=lower(Computer)
 | eval DeviceId=DeviceName
 | eval Timestamp= strftime(_time, "%m/%d/%Y %I:%M:%S %p")
@@ -135,5 +135,5 @@ Below is a version of Kusto query above rewritten as a Splunk search query. In t
     InternalName,
     FileDescription,
     FileVersion,
-    CorrelationId
+    EtwCorrelationId
 ```

@@ -577,7 +577,8 @@ namespace WDAC_Wizard
                         FileDescription = csv.HeaderRecord.Contains("FileDescription") ? csv.GetField<string>("FileDescription") : null,
                         ProductName = csv.HeaderRecord.Contains("ProductName") ? csv.GetField<string>("ProductName") : null,
                         FileVersion = csv.HeaderRecord.Contains("FileVersion") ? csv.GetField<string>("FileVersion") : null,
-                        EtwCorrelationId = csv.HeaderRecord.Contains("EtwCorrelationId") ? csv.GetField<string>("EtwCorrelationId") : null
+                        EtwCorrelationId = csv.HeaderRecord.Contains("EtwCorrelationId") ? csv.GetField<string>("EtwCorrelationId") :
+                                           csv.HeaderRecord.Contains("CorrelationId") ? csv.GetField<string>("CorrelationId") : null
                     };
                     records.Add(record);
                 }
