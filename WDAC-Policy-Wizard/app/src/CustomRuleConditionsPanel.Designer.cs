@@ -660,7 +660,8 @@
             richTextBox_CustomHashes.Name = "richTextBox_CustomHashes";
             richTextBox_CustomHashes.Size = new System.Drawing.Size(559, 96);
             richTextBox_CustomHashes.TabIndex = 114;
-            richTextBox_CustomHashes.Text = "Insert a comma separated list of SHA1 and SHA2 Authenticode/PE Hashes";
+            richTextBox_CustomHashes.Text = "Insert a comma-separated list of SHA1 and SHA256 Authenticode/PE Hashes.\r\n" +
+                "Sigcheck from Sysinternals (aka.ms/sigcheck) supports creation of the hashes.";
             richTextBox_CustomHashes.Visible = false;
             richTextBox_CustomHashes.Click += RichTextBox_CustomHashes_Click;
             // 
