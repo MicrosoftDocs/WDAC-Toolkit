@@ -354,7 +354,8 @@ namespace WDAC_Wizard
             this.PublisherUIState[3] = this.versionCheckBox.Checked == true ? 1 : 0;
             this.PublisherUIState[4] = this.productCheckBox.Checked == true ? 1 : 0;
 
-            if(String.IsNullOrEmpty(this.issuerTextBox.Text) 
+            // Check the issuing CA is not empty 
+            if (String.IsNullOrEmpty(this.issuerTextBox.Text) 
                 || this.issuerTextBox.Text == Properties.Resources.BadEventPubValue)
             {
                 // Log exception error and throw error to user
@@ -367,6 +368,23 @@ namespace WDAC_Wizard
 
                 Logger.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with Issuer = Unknown");
                 return false; 
+            }
+
+            // Check the Issuer TBS hash is not empty as well
+            // Instances where the issuing CA is in the data but not the TBS hash. GitHub Issue #478
+            if (this.CiEvents[this.SelectedRow].SignerInfo.IssuerTBSHash == null 
+                || this.CiEvents[this.SelectedRow].SignerInfo.IssuerTBSHash.Length == 0)
+            {
+                // Log exception error and throw error to user
+                MessageBox.Show(this, "The Issuer is invalid for rule creation. The Issuer TBS hash value is empty. This is likely an issue in the Advanced Hunting data.",
+                                 "New Rule Creation Error",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
+
+                this.Invalidate();
+
+                Logger.Log.AddWarningMsg("Event Log Config - Invalid publisher rule with a null Issuer TBS Hash");
+                return false;
             }
 
             if (PublisherUIState[1] == 1 && (String.IsNullOrEmpty(this.publisherTextBox.Text) 
