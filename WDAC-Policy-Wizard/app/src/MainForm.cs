@@ -800,7 +800,9 @@ namespace WDAC_Wizard
                 // Add trust for Signed Scripts
                 bool success = PSCmdlets.AddPSSigner();
                 if (!success) {
-                    ShowPSTrustFailureUI();
+                    // Commenting out this feature - leaving here to potentially re-enable 
+                    // GitHub Issue #480
+                    //ShowPSTrustFailureUI();
                 }
                 
                 // Handle custom value rules: 

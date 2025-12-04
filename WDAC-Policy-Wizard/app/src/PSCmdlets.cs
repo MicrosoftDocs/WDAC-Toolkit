@@ -480,9 +480,9 @@ namespace WDAC_Wizard
             // Create runspace, pipeline and runscript
             Pipeline pipeline = CreatePipeline();
 
-            pipeline.Commands.AddScript($"$certificate = Get-AuthenticodeSignature -FilePath {ps1File} | Select-Object -ExpandProperty SignerCertificate");
-            pipeline.Commands.AddScript($"Export-Certificate -Cert $certificate -FilePath {tempPath}");
-            pipeline.Commands.AddScript($"Import-Certificate -FilePath {tempPath} -CertStoreLocation Cert:\\CurrentUser\\TrustedPublisher");
+            pipeline.Commands.AddScript($"$certificate = Get-AuthenticodeSignature -FilePath \"{ps1File}\" | Select-Object -ExpandProperty SignerCertificate");
+            pipeline.Commands.AddScript($"Export-Certificate -Cert $certificate -FilePath \"{tempPath}\"");
+            pipeline.Commands.AddScript($"Import-Certificate -FilePath \"{tempPath}\" -CertStoreLocation Cert:\\CurrentUser\\TrustedPublisher");
 
             foreach (var cmd in pipeline.Commands)
             {
