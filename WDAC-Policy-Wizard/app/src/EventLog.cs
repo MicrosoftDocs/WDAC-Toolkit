@@ -425,6 +425,7 @@ namespace WDAC_Wizard
                 // Signer related info
                 signerEvent.PublisherName = GetValueString(eventData, "PublisherName");
                 signerEvent.IssuerName = GetValueString(eventData, "IssuerName");
+                signerEvent.IssuerTBSHashString = GetValueString(eventData, "IssuerTBSHash");
                 signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "IssuerTBSHash"));
 
                 // Skip events with "Unknown" publisher and empty TBS hash values
@@ -473,6 +474,7 @@ namespace WDAC_Wizard
                 // Signer related info
                 signerEvent.PublisherName = GetValueString(eventData, "PublisherName");
                 signerEvent.IssuerName = GetValueString(eventData, "IssuerName");
+                signerEvent.IssuerTBSHashString = GetValueString(eventData, "IssuerTBSHash");
                 signerEvent.IssuerTBSHash = Helper.ConvertHashStringToByte(GetValueString(eventData, "IssuerTBSHash"));
 
             }
@@ -628,6 +630,7 @@ namespace WDAC_Wizard
         // Signers related info
         public string IssuerName { get; set; }
         public byte[] IssuerTBSHash { get; set; }
+        public string IssuerTBSHashString { get; set; }
         public string PublisherName { get; set; }
         public byte[] PublisherTBSHash { get; set; }
 
@@ -637,6 +640,7 @@ namespace WDAC_Wizard
 
         public SignerEvent()
         {
+            this.IssuerTBSHashString = String.Empty; 
             this.PublisherName = String.Empty;
         }
     }
