@@ -344,6 +344,214 @@ namespace WDAC_Wizard.Tests
             Assert.Equal(5, (int)COM.ProviderType.MSI);
             Assert.Equal(6, (int)COM.ProviderType.AllHostIds);
         }
+
+        [Fact]
+        public void COM_IsValidRule_AllKeys_ReturnsTrue()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "AllKeys";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_ValidGuidWithBraces_ReturnsTrue()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "{12345678-1234-1234-1234-123456789012}";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_ValidGuidWithoutBraces_ReturnsTrue()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "12345678-1234-1234-1234-123456789012";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_ValidGuidUpperCase_ReturnsTrue()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "ABCDEF12-ABCD-ABCD-ABCD-ABCDEF123456";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_ValidGuidMixedCase_ReturnsTrue()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "{AbCdEf12-3456-7890-AbCd-EfAbCdEf1234}";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_InvalidGuidFormat_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "not-a-valid-guid";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_EmptyString_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_NullGuid_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = null;
+
+            // Act & Assert
+            Assert.False(com.IsValidRule());
+        }
+
+        [Fact]
+        public void COM_IsValidRule_PartialGuid_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "12345678-1234-1234";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_GuidWithExtraCharacters_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "{12345678-1234-1234-1234-123456789012}extra";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_GuidWithInvalidCharacters_ReturnsFalse()
+        {
+            // Arrange
+            var com = new COM();
+            com.Guid = "GGGGGGGG-1234-1234-1234-123456789012";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_GuidWithoutHyphens_ReturnsTrue()
+        {
+            // Arrange - Guid.TryParse accepts GUID strings without hyphens
+            var com = new COM();
+            com.Guid = "12345678123412341234123456789012";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            // GUID format without hyphens (N format) is valid
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_AllKeysCaseSensitive_ReturnsFalse()
+        {
+            // Arrange - "AllKeys" is case-sensitive
+            var com = new COM();
+            com.Guid = "allkeys";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_AllKeysUpperCase_ReturnsFalse()
+        {
+            // Arrange - "AllKeys" is case-sensitive
+            var com = new COM();
+            com.Guid = "ALLKEYS";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void COM_IsValidRule_RealWorldGuid_ReturnsTrue()
+        {
+            // Arrange - Using a real COM CLSID for Windows Script Host
+            var com = new COM();
+            com.Guid = "{72C24DD5-D70A-438B-8A42-98424B88AFB8}";
+
+            // Act
+            bool result = com.IsValidRule();
+
+            // Assert
+            Assert.True(result);
+        }
     }
 
     #endregion

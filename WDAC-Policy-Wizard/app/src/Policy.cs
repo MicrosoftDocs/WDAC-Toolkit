@@ -296,8 +296,13 @@ namespace WDAC_Wizard
         /// <returns>True/False</returns>
         public bool IsValidRule()
         {
+            if (this.Guid == null)
+            {
+                return false;
+            }
+
             // Possible solution 1: All Keys
-            if(this.Guid.Equals(Properties.Resources.ComObjectAllKeys))
+            if (this.Guid.Equals(Properties.Resources.ComObjectAllKeys))
             {
                 return true; 
             }

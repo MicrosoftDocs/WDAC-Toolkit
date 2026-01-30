@@ -525,5 +525,81 @@ namespace WDAC_Wizard.Tests
         }
 
         #endregion
+
+        #region EKUValueToTLVEncoding Tests
+
+        [Fact]
+        public void EKUValueToTLVEncoding_ValidOID_ReturnsEncodedString()
+        {
+            // Arrange - Standard Code Signing EKU OID
+            string eku = "1.3.6.1.4.1.311.76.3.1";
+
+            // Act
+            string result = Helper.EKUValueToTLVEncoding(eku);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            // Result should be a hex string (even length, all hex chars)
+            Assert.True(result.Length % 2 == 0);
+            Assert.Matches("010A2B0601040182374C0301", result);
+        }
+
+        [Fact]
+        public void EKUValueToTLVEncoding_NullInput_ReturnsNull()
+        {
+            // Arrange
+            string eku = null;
+
+            // Act
+            string result = Helper.EKUValueToTLVEncoding(eku);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void EKUValueToTLVEncoding_EmptyString_ReturnsNull()
+        {
+            // Arrange
+            string eku = string.Empty;
+
+            // Act
+            string result = Helper.EKUValueToTLVEncoding(eku);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void EKUValueToTLVEncoding_CommonEKUs_ReturnsValidEncodings()
+        {
+            // Arrange - Test multiple common EKU OIDs
+            var ekus = new Dictionary<string, string>
+            {
+                { "1.3.6.1.4.1.311.10.3.6", "010A2B0601040182370A0306" }, // WSCV
+                { "1.3.6.1.4.1.311.10.3.5", "010A2B0601040182370A0305" }, // WHQL
+                { "1.3.6.1.4.1.311.10.3.6", "010A2B0601040182373D0401" }, // ELAM
+                { , "010A2B0601040182373D0501" }, // HAL EXT
+                {, "010A2B0601040182370A0315" }, // RT EXT
+                {"1.3.6.1.4.1.311.76.3.1" ,"010A2B0601040182374C0301"}, // Store
+                {"1.3.6.1.4.1.311.76.5.1", "010A2B0601040182374C0501"}, // Dynamic Code Gen
+                {"1.3.6.1.4.1.311.76.11.1" , "010A2B0601040182374C0B01"}, // Anti-malware
+            };
+
+            foreach (var eku in ekus)
+            {
+                // Act
+                string result = Helper.EKUValueToTLVEncoding(eku.Key);
+
+                // Assert
+                Assert.NotNull(result);
+                Assert.NotEmpty(result);
+                // First byte should be modified to 01 (hex)
+                Assert.StartsWith(eku.Value, result);
+            }
+        }
+
+        #endregion
     }
 }
