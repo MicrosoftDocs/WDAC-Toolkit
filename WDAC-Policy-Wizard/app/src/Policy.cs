@@ -132,18 +132,20 @@ namespace WDAC_Wizard
         /// </summary>
         public string UpdateVersion()
         {
-            int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray(); 
-            for (int i = versionIdx.Length-1; i > 0; i--)
+            int[] versionIdx = this.siPolicy.VersionEx.Split('.').Select(n => Convert.ToInt32(n)).ToArray();
+            int i = versionIdx.Length - 1;
+            
+            while( i >= 0 )
             {
+                versionIdx[i]++;
                 if (versionIdx[i] >= UInt16.MaxValue)
                 {
                     versionIdx[i] = 0;
-                    versionIdx[i - 1]++;
+                    i--; 
                 }
                 else
-                { 
-                    versionIdx[i]++;
-                    break;  
+                {
+                    break; 
                 }
             }
 

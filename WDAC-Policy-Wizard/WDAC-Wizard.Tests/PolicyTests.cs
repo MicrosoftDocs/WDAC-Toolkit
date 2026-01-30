@@ -53,7 +53,7 @@ namespace WDAC_Wizard.Tests
             string result = policy.UpdateVersion();
 
             // Assert
-            Assert.Equal("10.0.2.0", result);
+            Assert.Equal("10.0.1.0", result);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace WDAC_Wizard.Tests
             string result = policy.UpdateVersion();
 
             // Assert
-            Assert.Equal("10.2.0.0", result);
+            Assert.Equal("10.1.0.0", result);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace WDAC_Wizard.Tests
 
             // Assert
             // The cascading logic increments position 1 twice due to loop continuation
-            Assert.Equal("1.4.0.0", result);
+            Assert.Equal("1.3.0.0", result);
         }
 
         #endregion
