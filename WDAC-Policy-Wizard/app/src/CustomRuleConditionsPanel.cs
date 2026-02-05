@@ -2528,7 +2528,11 @@ namespace WDAC_Wizard
             // If the policy doesn't support UMCI, prompt the user and set it
             if (this.checkBox_userMode.Checked)
             {
-                if (!PolicyHelper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
+                // Skip this check on supplemental policies (and AppIdTagging policies) as UMCI will always be off
+                // since UMCI state is inherited from the base policy. Issue #501
+
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
+                    && !PolicyHelper.PolicyHasRule(this.Policy.PolicyRuleOptions, OptionType.EnabledUMCI))
                 {
                     DialogResult res = MessageBox.Show("Your policy does not have User mode code integrity (UMCI) enabled so this UMCI rule will not be enforced. Would you like the Wizard to enable UMCI?",
                                                         "Proceed with UMCI Rule Creation?",
