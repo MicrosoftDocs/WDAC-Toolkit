@@ -542,7 +542,7 @@ namespace WDAC_Wizard.Tests
             Assert.NotEmpty(result);
             // Result should be a hex string (even length, all hex chars)
             Assert.True(result.Length % 2 == 0);
-            Assert.Matches("010A2B0601040182374C0301", result);
+            Assert.Equal("010A2B0601040182374C0301", result);
         }
 
         [Fact]
