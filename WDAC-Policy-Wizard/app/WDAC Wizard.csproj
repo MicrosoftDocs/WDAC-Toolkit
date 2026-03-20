@@ -69,7 +69,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="src\TemplatePage.cs" />
-    <EmbeddedResource Include="obj\Debug\WDAC_Wizard.ConfigTemplate_Control.resources" />
+    <!--<EmbeddedResource Include="obj\Debug\WDAC_Wizard.ConfigTemplate_Control.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.PolicyType.resources" />
     <EmbeddedResource Include="obj\Debug\WDAC_Wizard.Properties.Resources.resources" />
@@ -78,7 +78,7 @@
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.MainWindow.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.PolicyType.resources" />
     <EmbeddedResource Include="obj\Release\WDAC_Wizard.Properties.Resources.resources" />
-    <EmbeddedResource Include="obj\Release\WDAC_Wizard.SigningRules_Control.resources" />
+    <EmbeddedResource Include="obj\Release\WDAC_Wizard.SigningRules_Control.resources" />-->
     <None Include="bin\Debug\WDAC Wizard.exe.config" />
     <None Include="bin\Release\WDAC Wizard.exe.config" />
     <None Include="MSIX\resources.language-de.pri" />
@@ -229,5 +229,8 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>  
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo Copying necessary files...&#xD;&#xA;copy &quot;$(ProjectDir)\Resources\RulesDict.xml&quot; &quot;$(ProjectDir)$(OutDir)\&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\Resources\policyTemplates&quot; &quot;$(ProjectDir)$(OutDir)\Templates&quot; /Y /S /I /C&#xD;&#xA;echo Done!" />
+  </Target>  
 </Project>
