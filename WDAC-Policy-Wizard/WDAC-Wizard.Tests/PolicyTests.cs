@@ -44,9 +44,8 @@ namespace WDAC_Wizard.Tests
         public void UpdateVersion_MaxLastPart_RollsOverCascades()
         {
             // Arrange - when last part is at max (65535):
-            // Loop at i=3: 65535 >= MaxValue, so set to 0 and increment position 2 to 1
-            // Loop at i=2: position 2 is 1 (not at max), so increment again to 2 and break
-            // Result: position gets incremented TWICE (once in rollover, once in loop)
+            // i=3: versionIdx[3]++ -> 65536 >= MaxValue, reset to 0, move to i=2
+            // i=2: versionIdx[2]++ -> 1, below max, break
             var policy = CreateTestPolicy("10.0.0.65535");
 
             // Act
@@ -59,10 +58,10 @@ namespace WDAC_Wizard.Tests
         [Fact]
         public void UpdateVersion_MaxThirdPart_RollsOverCascades()
         {
-            // Arrange - cascading increments happen:
-            // i=3: 65535 at position 3, roll to 0, increment position 2 to 65536
-            // i=2: 65536 at position 2 (> MaxValue), roll to 0, increment position 1 to 1
-            // i=1: position 1 is 1, increment to 2 and break
+            // Arrange - cascading rollover:
+            // i=3: versionIdx[3]++ -> 65536 >= MaxValue, reset to 0, move to i=2
+            // i=2: versionIdx[2]++ -> 65536 >= MaxValue, reset to 0, move to i=1
+            // i=1: versionIdx[1]++ -> 1, below max, break
             var policy = CreateTestPolicy("10.0.65535.65535");
 
             // Act
@@ -114,17 +113,16 @@ namespace WDAC_Wizard.Tests
         [Fact]
         public void UpdateVersion_MultipleRollovers_HandlesCorrectly()
         {
-            // Arrange - cascading rollover behavior
-            // Last part at max rolls to 0, increments third to 65536
-            // Third part now > max, rolls to 0, increments second to 3
-            // But loop continues and third gets incremented again after rollover
+            // Arrange - cascading rollover behavior:
+            // i=3: versionIdx[3]++ -> 65536 >= MaxValue, reset to 0, move to i=2
+            // i=2: versionIdx[2]++ -> 65536 >= MaxValue, reset to 0, move to i=1
+            // i=1: versionIdx[1]++ -> 3, below max, break
             var policy = CreateTestPolicy("1.2.65535.65535");
 
             // Act
             string result = policy.UpdateVersion();
 
             // Assert
-            // The cascading logic increments position 1 twice due to loop continuation
             Assert.Equal("1.3.0.0", result);
         }
 
