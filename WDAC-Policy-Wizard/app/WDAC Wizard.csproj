@@ -237,6 +237,7 @@
     </Content>
     <Content Include="Resources\policyTemplates\**" Link="Templates\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\%(Filename)%(Extension)</TargetPath>
     </Content>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
