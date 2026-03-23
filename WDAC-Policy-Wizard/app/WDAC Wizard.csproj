@@ -234,10 +234,10 @@
     <PackageReference Include="System.Management.Automation" Version="7.4.6" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\**" Link="%(Filename)%(Extension)">
+    <Content Include="Scripts\**" Link="%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\policyTemplates\**" Link="Templates\%(Filename)%(Extension)">
+    <Content Include="Resources\policyTemplates\**" Link="Templates\%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Templates\%(Filename)%(Extension)</TargetPath>
     </Content>
