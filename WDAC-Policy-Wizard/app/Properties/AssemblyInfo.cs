@@ -25,9 +25,12 @@ using System.Runtime.InteropServices;
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version 
+//      Minor Version
 //      Build Number
 //      Revision
 //
 [assembly: AssemblyVersion("2.6.0.1")]
 [assembly: AssemblyFileVersion("2.6.0.1")]
+
+// Expose internal types to test assembly
+[assembly: InternalsVisibleTo("WDAC-Wizard.Tests")]
