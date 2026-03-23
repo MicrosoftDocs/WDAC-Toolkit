@@ -180,7 +180,9 @@
     <Content Include="Resources\policyTemplates\Recommended_Driver_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\SignedReputable - SingleFormat.xml" />
-    <Content Include="Resources\RulesDict.xml" Link="RulesDict.xml">
+    <Content Include="Resources\RulesDict.xml">
+      <Link>RulesDict.xml</Link>
+      <TargetPath>RulesDict.xml</TargetPath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\imgs\wizard-ico.ico" />
@@ -232,10 +234,14 @@
     <PackageReference Include="System.Management.Automation" Version="7.4.6" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\**" Link="%(Filename)%(Extension)">
+    <Content Include="Scripts\**">
+      <Link>%(Filename)%(Extension)</Link>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\policyTemplates\**" Link="Templates\%(Filename)%(Extension)">
+    <Content Include="Resources\policyTemplates\**">
+      <Link>Templates\%(Filename)%(Extension)</Link>
+      <TargetPath>Templates\%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <WCFMetadata Include="Connected Services\" />
