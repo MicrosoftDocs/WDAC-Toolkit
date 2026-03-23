@@ -351,3 +351,4 @@ AppLocker-Policy-Converter/app/test-policies/*
 *.dll
 
 .claude/
+*.local.json
