@@ -1,17 +1,18 @@
 {
   "runtimeOptions": {
     "tfm": "net8.0",
-    "frameworks": [
+    "includedFrameworks": [
       {
         "name": "Microsoft.NETCore.App",
-        "version": "8.0.0"
+        "version": "8.0.25"
       },
       {
         "name": "Microsoft.WindowsDesktop.App",
-        "version": "8.0.0"
+        "version": "8.0.25"
       }
     ],
     "configProperties": {
+      "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true,
       "CSWINRT_USE_WINDOWS_UI_XAML_PROJECTIONS": false
     }
