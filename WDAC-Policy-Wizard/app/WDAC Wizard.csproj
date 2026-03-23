@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
@@ -23,6 +23,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -178,7 +182,11 @@
     <Content Include="Resources\policyTemplates\Recommended_Driver_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\Recommended_UserMode_Blocklist.xml" />
     <Content Include="Resources\policyTemplates\SignedReputable - SingleFormat.xml" />
-    <Content Include="Resources\RulesDict.xml" />
+    <Content Include="Resources\RulesDict.xml">
+      <Link>RulesDict.xml</Link>
+      <TargetPath>RulesDict.xml</TargetPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\imgs\wizard-ico.ico" />
     <Content Include="Resources\imgs\cancel.png" />
     <Content Include="Resources\imgs\cctv.png" />
@@ -228,9 +236,17 @@
     <PackageReference Include="System.Management.Automation" Version="7.4.6" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\**">
+      <Link>%(Filename)%(Extension)</Link>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\policyTemplates\**">
+      <Link>Templates\%(Filename)%(Extension)</Link>
+      <TargetPath>Templates\%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Templates\%(Filename)%(Extension)</TargetPath>
+    </Content>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo Copying necessary files...&#xD;&#xA;copy &quot;$(ProjectDir)\Resources\RulesDict.xml&quot; &quot;$(ProjectDir)$(OutDir)\&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\Resources\policyTemplates&quot; &quot;$(ProjectDir)$(OutDir)\Templates&quot; /Y /S /I /C&#xD;&#xA;echo Done!" />
-  </Target>  
 </Project>
