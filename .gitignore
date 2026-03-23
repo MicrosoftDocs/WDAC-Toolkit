@@ -350,4 +350,4 @@ AppLocker-Policy-Converter/app/test-policies/*
 /WDAC-Policy-Wizard/app/MSIX/runtimes
 *.dll
 
-.claude/
+*.local.json
