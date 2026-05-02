@@ -1955,6 +1955,10 @@ public partial class SiPolicy {
     private string basePolicyIDField;
     
     private RuleType[] rulesField;
+
+    private Allow[] allowField;
+
+    private Deny[] denyField; 
     
     private EKU[] eKUsField;
     
