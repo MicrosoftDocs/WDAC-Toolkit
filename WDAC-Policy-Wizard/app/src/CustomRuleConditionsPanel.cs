@@ -36,6 +36,21 @@ namespace WDAC_Wizard
         private string PrevComText = String.Empty;
         private bool IgnoreInput = false;
 
+        // Hash mode UI controls
+        private Panel panelHashMode;
+        private RadioButton radioButton_HashSingleFile;
+        private RadioButton radioButton_HashMultipleFiles;
+        private Button button_HashFolderScan;
+
+        private enum HashMode
+        {
+            SingleFile,
+            MultipleFiles,
+            FolderScan
+        }
+
+        private HashMode hashMode = HashMode.SingleFile;
+
         private enum UIState
         {
             RuleConditions = 0,
@@ -60,6 +75,117 @@ namespace WDAC_Wizard
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
             this.FoundPackages = new List<string>();
+
+            // Create hash mode panel programmatically
+            CreateHashModePanel();
+        }
+
+        /// <summary>
+        /// Creates the hash mode selection panel (Single File / Multiple Files / Folder Scan)
+        /// </summary>
+        private void CreateHashModePanel()
+        {
+            panelHashMode = new Panel();
+            // Position below the checkBox_CustomPath row, left-aligned with the reference file textbox
+            panelHashMode.Location = new Point(
+                this.checkBox_CustomPath.Location.X,
+                this.checkBox_CustomPath.Location.Y + this.checkBox_CustomPath.Height + 4);
+            panelHashMode.Size = new Size(560, 30);
+            panelHashMode.Visible = false;
+
+            Label labelHashMode = new Label
+            {
+                Text = "Mode:",
+                Location = new Point(0, 5),
+                AutoSize = true,
+                Font = new Font("Tahoma", 9F, FontStyle.Bold)
+            };
+            panelHashMode.Controls.Add(labelHashMode);
+
+            radioButton_HashSingleFile = new RadioButton
+            {
+                Text = "Single File",
+                Location = new Point(55, 3),
+                AutoSize = true,
+                Font = new Font("Tahoma", 9F),
+                Checked = true
+            };
+            radioButton_HashSingleFile.CheckedChanged += HashModeButton_CheckedChanged;
+
+            radioButton_HashMultipleFiles = new RadioButton
+            {
+                Text = "Multiple Files",
+                Location = new Point(170, 3),
+                AutoSize = true,
+                Font = new Font("Tahoma", 9F)
+            };
+            radioButton_HashMultipleFiles.CheckedChanged += HashModeButton_CheckedChanged;
+
+            button_HashFolderScan = new Button
+            {
+                Text = "Folder Scan...",
+                Location = new Point(310, 1),
+                Size = new Size(110, 26),
+                Font = new Font("Tahoma", 9F, FontStyle.Bold),
+                FlatStyle = FlatStyle.Standard
+            };
+            button_HashFolderScan.Click += Button_HashFolderScan_Click;
+
+            panelHashMode.Controls.Add(radioButton_HashSingleFile);
+            panelHashMode.Controls.Add(radioButton_HashMultipleFiles);
+            panelHashMode.Controls.Add(button_HashFolderScan);
+
+            // Add to the same parent container as panel_FileFolder
+            this.panel_FileFolder.Parent.Controls.Add(panelHashMode);
+            panelHashMode.BringToFront();
+
+            // Apply styling based on mode
+            if (Properties.Settings.Default.useDarkMode)
+            {
+                panelHashMode.BackColor = Color.FromArgb(15, 15, 15);
+                panelHashMode.ForeColor = Color.White;
+                foreach (Control ctrl in panelHashMode.Controls)
+                {
+                    ctrl.ForeColor = Color.White;
+                    ctrl.BackColor = Color.FromArgb(15, 15, 15);
+                }
+                button_HashFolderScan.FlatStyle = FlatStyle.Flat;
+                button_HashFolderScan.BackColor = Color.FromArgb(50, 50, 50);
+            }
+            else
+            {
+                panelHashMode.BackColor = Color.White;
+                panelHashMode.ForeColor = Color.Black;
+                foreach (Control ctrl in panelHashMode.Controls)
+                {
+                    ctrl.ForeColor = Color.Black;
+                    ctrl.BackColor = Color.White;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles hash mode radio button changes
+        /// </summary>
+        private void HashModeButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton_HashSingleFile.Checked)
+            {
+                hashMode = HashMode.SingleFile;
+            }
+            else if (radioButton_HashMultipleFiles.Checked)
+            {
+                hashMode = HashMode.MultipleFiles;
+            }
+        }
+
+        /// <summary>
+        /// Folder Scan button click - opens FolderHashScanForm directly
+        /// </summary>
+        private void Button_HashFolderScan_Click(object sender, EventArgs e)
+        {
+            hashMode = HashMode.FolderScan;
+            HandleHashMultiFileOrFolderBrowse();
         }
 
         /// <summary>
@@ -785,9 +911,16 @@ namespace WDAC_Wizard
                     this.PolicyCustomRule.SetRuleType(PolicyCustomRules.RuleType.Hash);
                     this.PolicyCustomRule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
                     label_Info.Text = "Creates a rule for a file that is not signed. \r\n" +
-                        "Select the file for which you wish to create a hash rule.";
+                        "Select single file, multiple files, or scan a folder.";
                     this.checkBox_CustomPath.Visible = true;
                     this.checkBox_CustomPath.Text = "Use Custom Hash Values";
+                    this.panelHashMode.Location = new Point(
+                        this.checkBox_CustomPath.Location.X,
+                        this.checkBox_CustomPath.Location.Y + this.checkBox_CustomPath.Height + 4);
+                    this.panelHashMode.Visible = true;
+                    this.panelHashMode.BringToFront();
+                    this.radioButton_HashSingleFile.Checked = true;
+                    this.hashMode = HashMode.SingleFile;
                     break;
 
                 case "COM Object":
@@ -882,6 +1015,7 @@ namespace WDAC_Wizard
 
             //File Path:
             panel_FileFolder.Visible = false;
+            panelHashMode.Visible = false;
             textBox_ReferenceFile.Clear();
 
             // Reset the rule type combobox
@@ -913,6 +1047,15 @@ namespace WDAC_Wizard
                 label_Error.Visible = true;
                 label_Error.Text = "Please select a rule type first.";
                 Logger.Log.AddWarningMsg("Browse button selected before rule type selected. Set rule type first.");
+                return;
+            }
+
+            // Handle Hash rule multi-file and folder scan modes
+            if (this.PolicyCustomRule.Type == PolicyCustomRules.RuleType.Hash
+                && this.hashMode != HashMode.SingleFile
+                && !this.PolicyCustomRule.UsingCustomValues)
+            {
+                HandleHashMultiFileOrFolderBrowse();
                 return;
             }
 
@@ -961,6 +1104,180 @@ namespace WDAC_Wizard
             {
                 this.redoRequired = true;
             }
+        }
+
+        /// <summary>
+        /// Handles the browse action for Hash rules in Multiple Files or Folder Scan mode.
+        /// Creates a single FolderScan rule with Hash level for efficient batch processing
+        /// instead of one PS process per file.
+        /// </summary>
+        private void HandleHashMultiFileOrFolderBrowse()
+        {
+            string scanFolderPath = null;
+            HashSet<string> hashTypesFilter = null;
+            string sourceFolderPath = null;
+            List<string> omitPaths = new List<string>();
+
+            if (this.hashMode == HashMode.MultipleFiles)
+            {
+                // Open multi-select file dialog
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Select files to create hash rules for";
+                openFileDialog.CheckPathExists = true;
+                openFileDialog.Filter = "Portable Executable Files (*.exe; *.dll; *.rll; *.bin)|*.EXE;*.DLL;*.RLL;*.BIN|" +
+                    "Script Files (*.ps1, *.bat, *.vbs, *.js)|*.PS1;*.BAT;*.VBS;*.JS|" +
+                    "System Files (*.sys, *.hxs, *.mui, *.lex, *.mof)|*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                    "All Binary and Script Files (*.exe, ...) |*.EXE;*.DLL;*.RLL;*.BIN;*.PS1;*.BAT;*.VBS;*.JS;*.SYS;*.HXS;*.MUI;*.LEX;*.MOF|" +
+                    "All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 4;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var selectedFiles = openFileDialog.FileNames;
+                    openFileDialog.Dispose();
+
+                    if (selectedFiles.Length == 0)
+                    {
+                        return;
+                    }
+
+                    // Copy selected files to a temp folder for batch scanning
+                    scanFolderPath = Path.Combine(Helper.GetTempFolderPathRoot(), "HashScan_" + DateTime.Now.ToString("HHmmss"));
+                    Directory.CreateDirectory(scanFolderPath);
+
+                    foreach (string file in selectedFiles)
+                    {
+                        try
+                        {
+                            string destFile = Path.Combine(scanFolderPath, Path.GetFileName(file));
+                            // Handle duplicate filenames by appending a guid
+                            if (File.Exists(destFile))
+                            {
+                                string nameNoExt = Path.GetFileNameWithoutExtension(file);
+                                string ext = Path.GetExtension(file);
+                                destFile = Path.Combine(scanFolderPath, nameNoExt + "_" + Guid.NewGuid().ToString("N").Substring(0, 6) + ext);
+                            }
+                            File.Copy(file, destFile);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log.AddErrorMsg($"Failed to copy file {file} for hash scan: {ex.Message}");
+                        }
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else if (this.hashMode == HashMode.FolderScan)
+            {
+                // Open the folder hash scan form
+                HashSet<string> hashTypesToKeep = null;
+                using (var folderScanForm = new FolderHashScanForm())
+                {
+                    if (folderScanForm.ShowDialog() == DialogResult.OK)
+                    {
+                        var selectedFiles = folderScanForm.SelectedFiles;
+                        hashTypesToKeep = folderScanForm.SelectedHashTypes;
+                        if (selectedFiles.Count == 0)
+                        {
+                            label_Error.Visible = true;
+                            label_Error.Text = "No files selected.";
+                            return;
+                        }
+
+                        // Copy selected files to temp preserving subfolder structure
+                        scanFolderPath = Path.Combine(Helper.GetTempFolderPathRoot(), "HashScan_" + DateTime.Now.ToString("HHmmss"));
+                        Directory.CreateDirectory(scanFolderPath);
+
+                        sourceFolderPath = folderScanForm.SourceFolderPath;
+
+                        foreach (string file in selectedFiles)
+                        {
+                            try
+                            {
+                                // Preserve relative path from source folder
+                                string relativePath = string.IsNullOrEmpty(sourceFolderPath) || !file.StartsWith(sourceFolderPath, StringComparison.OrdinalIgnoreCase)
+                                    ? Path.GetFileName(file)
+                                    : file.Substring(sourceFolderPath.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                                string destFile = Path.Combine(scanFolderPath, relativePath);
+                                string destDir = Path.GetDirectoryName(destFile);
+                                if (!Directory.Exists(destDir))
+                                    Directory.CreateDirectory(destDir);
+
+                                if (File.Exists(destFile))
+                                {
+                                    string nameNoExt = Path.GetFileNameWithoutExtension(destFile);
+                                    string ext = Path.GetExtension(destFile);
+                                    destFile = Path.Combine(destDir, nameNoExt + "_" + Guid.NewGuid().ToString("N").Substring(0, 6) + ext);
+                                }
+                                File.Copy(file, destFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Log.AddErrorMsg($"Failed to copy file {file} for hash scan: {ex.Message}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                // Store hash types for filtering after scan
+                if (hashTypesToKeep != null)
+                {
+                    hashTypesFilter = hashTypesToKeep;
+                }
+            }
+
+            if (scanFolderPath == null || !Directory.Exists(scanFolderPath))
+            {
+                label_Error.Visible = true;
+                label_Error.Text = "Failed to prepare files for scanning.";
+                return;
+            }
+
+            // Create a single FolderScan rule with Hash level - this uses New-CIPolicy -ScanPath
+            // which processes ALL files in one PowerShell call (much faster than one call per file)
+            PolicyCustomRules rule = new PolicyCustomRules();
+            rule.SetRuleType(PolicyCustomRules.RuleType.FolderScan);
+            rule.SetRuleLevel(PolicyCustomRules.RuleLevel.Hash);
+            rule.Permission = this.PolicyCustomRule.Permission;
+            rule.SigningScenarioCheckStates = this.PolicyCustomRule.SigningScenarioCheckStates;
+            rule.ReferenceFile = scanFolderPath;
+            rule.Scan.Levels.Add("Hash");
+            rule.HashTypesToKeep = hashTypesFilter;
+            rule.SourceFolderPath = sourceFolderPath;
+
+            int fileCount = Directory.GetFiles(scanFolderPath, "*", SearchOption.TopDirectoryOnly).Length;
+            string displayPath = sourceFolderPath ?? scanFolderPath;
+            string[] displayString = new string[5]
+            {
+                rule.Permission.ToString(),
+                "Hash",
+                $"Hash Folder Scan ({fileCount} files): " + displayPath,
+                String.Empty,
+                String.Empty
+            };
+
+            this.SigningControl.AddRuleToTableWithoutClosing(displayString, rule, false);
+
+            Logger.Log.AddInfoMsg($"Added folder scan hash rule for {fileCount} files at {scanFolderPath}");
+
+            // Reset UI
+            this.PolicyCustomRule = new PolicyCustomRules();
+            ClearCustomRulesPanel(true);
+            this._MainWindow.CustomRuleinProgress = false;
+
+            // Close the panel
+            this.RuleInEdit = false;
+            this.SigningControl.CloseCustomRulesPanel();
         }
 
         /// <summary>

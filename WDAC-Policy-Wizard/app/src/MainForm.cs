@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using WDAC_Wizard.src;
@@ -851,7 +852,13 @@ namespace WDAC_Wizard
         {
             string process = "";
             int progressPercent = e.ProgressPercentage;
-            if (progressPercent <= 10)
+
+            // Use custom status message if provided via UserState
+            if (e.UserState is string customMsg && !string.IsNullOrEmpty(customMsg))
+            {
+                process = customMsg;
+            }
+            else if (progressPercent <= 10)
                 process = "Building policy rules ...";
             else if (progressPercent <= 70)
                 process = "Configuring policy signer and file rules ...";
@@ -1249,29 +1256,39 @@ namespace WDAC_Wizard
             int nCustomRules = this.Policy.CustomRules.Count;
             int progressVal = 0;
 
+            // Count how many rules will actually be processed (Publisher, Hash, FolderScan, Certificate)
+            int rulesToProcess = this.Policy.CustomRules.Count(r =>
+                !r.UsingCustomValues &&
+                (r.Type == PolicyCustomRules.RuleType.Publisher
+                 || r.Type == PolicyCustomRules.RuleType.Hash
+                 || r.Type == PolicyCustomRules.RuleType.FolderScan
+                 || r.Type == PolicyCustomRules.RuleType.Certificate));
+            int rulesProcessed = 0;
+
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
-                progressVal = 25 + i * 60 / nCustomRules;
-                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
-
                 var customRule = this.Policy.CustomRules[i];
 
                 // Skip; already handled ALL custom value rules
-                if(customRule.UsingCustomValues)
+                if (customRule.UsingCustomValues)
                 {
                     continue;
                 }
 
-                // Skip the following rules that are handled by custom rules method -
-                // File Attributes, PFN rules, file/folder path rules
-                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
+                // Skip the following rules that are handled by custom rules method
+                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher
                       || customRule.Type == PolicyCustomRules.RuleType.Hash
                       || customRule.Type == PolicyCustomRules.RuleType.FolderScan
                       || customRule.Type == PolicyCustomRules.RuleType.Certificate))
                 {
                     continue;
                 }
+
+                rulesProcessed++;
+                progressVal = 25 + rulesProcessed * 60 / Math.Max(rulesToProcess, 1);
+                string statusMsg = $"Processing rule {rulesProcessed} of {rulesToProcess} ...";
+                worker.ReportProgress(progressVal, statusMsg);
 
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
 
@@ -1303,6 +1320,9 @@ namespace WDAC_Wizard
                 // Folder Scan -- Invoke the New-CiPolicy PS cmd to generate a CI policy
                 if(customRule.Type == PolicyCustomRules.RuleType.FolderScan)
                 {
+                    string scanPath = customRule.ReferenceFile ?? "folder";
+                    worker.ReportProgress(30, $"Scanning folder: {scanPath} ...");
+
                     SiPolicy signerSiPolicy; 
                     if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                     {
@@ -1312,10 +1332,65 @@ namespace WDAC_Wizard
                     {
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
-                    
+
+                    worker.ReportProgress(70, "Scan complete. Applying hash type filters ...");
+
                     // Successful Scan completed
                     if (signerSiPolicy != null)
                     {
+                        // Fix FriendlyName: replace temp scan path with original source folder path
+                        if (!string.IsNullOrEmpty(customRule.SourceFolderPath)
+                            && signerSiPolicy.FileRules != null)
+                        {
+                            string tempPath = customRule.ReferenceFile;
+                            foreach (var item in signerSiPolicy.FileRules)
+                            {
+                                if (item is Allow allow && !string.IsNullOrEmpty(allow.FriendlyName)
+                                    && allow.FriendlyName.Contains(tempPath, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    allow.FriendlyName = allow.FriendlyName.Replace(tempPath, customRule.SourceFolderPath, StringComparison.OrdinalIgnoreCase);
+                                }
+                                else if (item is Deny deny && !string.IsNullOrEmpty(deny.FriendlyName)
+                                    && deny.FriendlyName.Contains(tempPath, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    deny.FriendlyName = deny.FriendlyName.Replace(tempPath, customRule.SourceFolderPath, StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
+                        }
+
+                        // Filter hash types if the user selected specific types to keep
+                        if (customRule.HashTypesToKeep != null && customRule.HashTypesToKeep.Count > 0
+                            && signerSiPolicy.FileRules != null)
+                        {
+                            int beforeCount = signerSiPolicy.FileRules.Length;
+                            signerSiPolicy.FileRules = signerSiPolicy.FileRules.Where(item =>
+                            {
+                                string friendlyName = null;
+                                if (item is Allow allow)
+                                    friendlyName = allow.FriendlyName;
+                                else if (item is Deny deny)
+                                    friendlyName = deny.FriendlyName;
+
+                                // If it's not a hash rule (no FriendlyName with hash pattern), keep it
+                                if (string.IsNullOrEmpty(friendlyName))
+                                    return true;
+
+                                // Check if FriendlyName ends with one of the selected hash type patterns
+                                foreach (string hashType in customRule.HashTypesToKeep)
+                                {
+                                    if (friendlyName.EndsWith(hashType, StringComparison.OrdinalIgnoreCase))
+                                        return true;
+                                }
+
+                                // If it doesn't match any selected hash type pattern, remove it
+                                return false;
+                            }).ToArray();
+
+                            int afterCount = signerSiPolicy.FileRules.Length;
+                            worker.ReportProgress(75, $"Filtered: kept {afterCount} of {beforeCount} hash rules.");
+                        }
+
+                        worker.ReportProgress(80, "Merging scanned policy rules ...");
                         siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
                     }
                 }
@@ -1345,9 +1420,17 @@ namespace WDAC_Wizard
         /// <param name="worker"></param>
         public SiPolicy ProcessCustomValueRules(BackgroundWorker worker, SiPolicy siPolicyCustomValueRules)
         {
+            int totalRules = this.Policy.CustomRules.Count;
+            int processed = 0;
+
             // Iterate through all of the custom rules and PFN rules and update the progress bar    
             foreach (var customRule in this.Policy.CustomRules)
             {
+                processed++;
+                int progressVal = processed * 25 / Math.Max(totalRules, 1);
+                string statusMsg = $"Processing custom value rule {processed} of {totalRules} ...";
+                worker.ReportProgress(progressVal, statusMsg);
+
                 if(customRule.UsingCustomValues)
                 {
                     siPolicyCustomValueRules = HandleCustomValues(customRule, siPolicyCustomValueRules);

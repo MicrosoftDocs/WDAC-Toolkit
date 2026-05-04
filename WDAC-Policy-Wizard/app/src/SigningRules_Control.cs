@@ -1197,6 +1197,36 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Adds a new rule to the DataGrid Table without closing the custom rules panel.
+        /// Used when adding multiple rules at once (e.g., multi-file hash scan).
+        /// </summary>
+        /// <param name="displayObjectArray"></param>
+        /// <param name="customRule"></param>
+        /// <param name="warnUser"></param>
+        public void AddRuleToTableWithoutClosing(string[] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
+        {
+            // Attach the int row number we added it to
+            customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
+            string action = displayObjectArray[0];
+            string level = displayObjectArray[1];
+            string name = warnUser ? "*Hash Fallback Possible* " + displayObjectArray[2] : displayObjectArray[2];
+            string files = displayObjectArray[3];
+            string exceptions = displayObjectArray[4];
+
+            // Add to the DisplayObject
+            this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
+            this.rulesDataGrid.RowCount += 1;
+
+            // Add custom list to RulesList
+            this.Policy.CustomRules.Add(customRule);
+
+            // Scroll to bottom to see new rule added to list
+            this.rulesDataGrid.FirstDisplayedScrollingRowIndex = this.rulesDataGrid.RowCount - 1;
+
+            BubbleUp();
+        }
+
+        /// <summary>
         /// Nullifies the custom rule conditions panel on form closing
         /// </summary>
         public void CustomRulesPanel_Closing()
