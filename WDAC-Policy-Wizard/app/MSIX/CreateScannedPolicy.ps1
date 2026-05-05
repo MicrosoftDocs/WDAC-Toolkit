@@ -16,31 +16,28 @@ param (
 )
 
 # Run New-CIPolicy -Scan to generate a policy from a directory
-# The command needs to be run twice to generate the full policy. Otherwise, the "An item with the same key has already been added." WARNING prevents the full policy from being generated.
+# Use -WarningAction SilentlyContinue to suppress the "An item with the same key has already been added." warning
+# which previously required running the command twice as a workaround.
 if($Deny -eq "False")
 {
     if($UserPEs -eq "True")
     {
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs
+        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs -WarningAction SilentlyContinue
     }
     else
     {
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit
+        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -WarningAction SilentlyContinue
     }
 }
 else
 {
     if($UserPEs -eq "True")
     {
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs -Deny
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs -Deny
+        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -UserPEs -Deny -WarningAction SilentlyContinue
     }
     else
     {
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -Deny
-        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -Deny
+        New-CIPolicy -ScanPath $ScanPath -Level $Level -FilePath $PolicyPath -Fallback $Fallback -OmitPaths $PathsToOmit -Deny -WarningAction SilentlyContinue
     }
 }
 # SIG # Begin signature block
