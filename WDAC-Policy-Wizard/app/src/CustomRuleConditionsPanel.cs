@@ -60,6 +60,44 @@ namespace WDAC_Wizard
             this.exceptionsControl = null;
             this.DefaultValues = new string[5];
             this.FoundPackages = new List<string>();
+            CreateOmitPathsButtons();
+        }
+
+        /// <summary>
+        /// Creates Select All / Deselect All buttons above the omit paths list.
+        /// </summary>
+        private void CreateOmitPathsButtons()
+        {
+            var btnSelectAll = new Button
+            {
+                Text = "Select All",
+                Size = new System.Drawing.Size(80, 25),
+                Font = new System.Drawing.Font("Tahoma", 7.5F),
+                Location = new System.Drawing.Point(checkedListBoxOmitPaths.Right - 165, checkedListBoxOmitPaths.Top - 28),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            btnSelectAll.Click += (s, ev) =>
+            {
+                for (int i = 0; i < checkedListBoxOmitPaths.Items.Count; i++)
+                    checkedListBoxOmitPaths.SetItemChecked(i, true);
+            };
+
+            var btnDeselectAll = new Button
+            {
+                Text = "Deselect All",
+                Size = new System.Drawing.Size(80, 25),
+                Font = new System.Drawing.Font("Tahoma", 7.5F),
+                Location = new System.Drawing.Point(checkedListBoxOmitPaths.Right - 80, checkedListBoxOmitPaths.Top - 28),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            btnDeselectAll.Click += (s, ev) =>
+            {
+                for (int i = 0; i < checkedListBoxOmitPaths.Items.Count; i++)
+                    checkedListBoxOmitPaths.SetItemChecked(i, false);
+            };
+
+            panelFolderScanConditions.Controls.Add(btnSelectAll);
+            panelFolderScanConditions.Controls.Add(btnDeselectAll);
         }
 
         /// <summary>
@@ -817,6 +855,7 @@ namespace WDAC_Wizard
                     this.panelFolderScanConditions.Location = this.checkBox_CustomPath.Location;
                     this.panelFolderScanConditions.Visible = true;
                     this.label_condition.Text = "Scan Path:";
+                    this.button_Next.Visible = false;
                     break;
 
                 case "Certificate File":
@@ -2734,7 +2773,17 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void RuleLevelsList_MouseDown(object sender, MouseEventArgs e)
         {
-            if (this.checkedListBoxRuleLevels.SelectedItem == null || e.X < 15 || (e.X > 150 && e.X < 165)) return; // e.X < 15 - left most column checkboxes. 150 < e.X < 165 - right most checkboxes
+            if (this.checkedListBoxRuleLevels.SelectedItem == null) return;
+
+            // Determine checkbox width relative to each column
+            int columnWidth = this.checkedListBoxRuleLevels.ColumnWidth > 0
+                ? this.checkedListBoxRuleLevels.ColumnWidth
+                : this.checkedListBoxRuleLevels.Width;
+            int xInColumn = e.X % columnWidth;
+
+            // If click is in the checkbox area (first ~18px of each column), let CheckOnClick handle it
+            if (xInColumn < 18) return;
+
             this.checkedListBoxRuleLevels.DoDragDrop(this.checkedListBoxRuleLevels.SelectedItem, DragDropEffects.Move);
         }
 

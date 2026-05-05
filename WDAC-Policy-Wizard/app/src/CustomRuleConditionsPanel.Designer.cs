@@ -154,6 +154,7 @@
             panel_CustomRules.Margin = new System.Windows.Forms.Padding(2);
             panel_CustomRules.Name = "panel_CustomRules";
             panel_CustomRules.Size = new System.Drawing.Size(615, 719);
+            panel_CustomRules.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             panel_CustomRules.TabIndex = 86;
             // 
             // appIdPanel
@@ -371,17 +372,22 @@
             panelFolderScanConditions.Location = new System.Drawing.Point(552, 630);
             panelFolderScanConditions.Margin = new System.Windows.Forms.Padding(2);
             panelFolderScanConditions.Name = "panelFolderScanConditions";
-            panelFolderScanConditions.Size = new System.Drawing.Size(537, 359);
+            panelFolderScanConditions.Size = new System.Drawing.Size(560, 340);
+            panelFolderScanConditions.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             panelFolderScanConditions.TabIndex = 126;
             panelFolderScanConditions.Visible = false;
             // 
             // checkedListBoxOmitPaths
             // 
-            checkedListBoxOmitPaths.Font = new System.Drawing.Font("Tahoma", 8F);
+            checkedListBoxOmitPaths.Font = new System.Drawing.Font("Tahoma", 8.5F);
             checkedListBoxOmitPaths.FormattingEnabled = true;
-            checkedListBoxOmitPaths.Location = new System.Drawing.Point(8, 260);
+            checkedListBoxOmitPaths.CheckOnClick = true;
+            checkedListBoxOmitPaths.HorizontalScrollbar = true;
+            checkedListBoxOmitPaths.IntegralHeight = false;
+            checkedListBoxOmitPaths.Location = new System.Drawing.Point(8, 250);
             checkedListBoxOmitPaths.Name = "checkedListBoxOmitPaths";
-            checkedListBoxOmitPaths.Size = new System.Drawing.Size(341, 80);
+            checkedListBoxOmitPaths.Size = new System.Drawing.Size(500, 80);
+            checkedListBoxOmitPaths.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             checkedListBoxOmitPaths.TabIndex = 116;
             // 
             // label12
@@ -401,7 +407,7 @@
             label11.AutoSize = true;
             label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             label11.ForeColor = System.Drawing.Color.Black;
-            label11.Location = new System.Drawing.Point(5, 232);
+            label11.Location = new System.Drawing.Point(5, 228);
             label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label11.Name = "label11";
             label11.Size = new System.Drawing.Size(231, 18);
@@ -429,13 +435,15 @@
             // checkedListBoxRuleLevels
             // 
             checkedListBoxRuleLevels.AllowDrop = true;
+            checkedListBoxRuleLevels.CheckOnClick = true;
             checkedListBoxRuleLevels.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkedListBoxRuleLevels.FormattingEnabled = true;
             checkedListBoxRuleLevels.Items.AddRange(new object[] { "PcaCertificate", "Publisher", "SignedVersion", "FilePublisher", "FileName", "FilePath", "Hash" });
             checkedListBoxRuleLevels.Location = new System.Drawing.Point(8, 121);
             checkedListBoxRuleLevels.MultiColumn = true;
+            checkedListBoxRuleLevels.ColumnWidth = 160;
             checkedListBoxRuleLevels.Name = "checkedListBoxRuleLevels";
-            checkedListBoxRuleLevels.Size = new System.Drawing.Size(341, 88);
+            checkedListBoxRuleLevels.Size = new System.Drawing.Size(500, 100);
             checkedListBoxRuleLevels.TabIndex = 111;
             checkedListBoxRuleLevels.DragDrop += RuleLevelsList_DragDropDone;
             checkedListBoxRuleLevels.DragOver += RuleLevelsList_DragInProgress;
@@ -1071,6 +1079,7 @@
             button_CreateRule.Margin = new System.Windows.Forms.Padding(2);
             button_CreateRule.Name = "button_CreateRule";
             button_CreateRule.Size = new System.Drawing.Size(110, 30);
+            button_CreateRule.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             button_CreateRule.TabIndex = 92;
             button_CreateRule.Text = "Create Rule";
             button_CreateRule.UseVisualStyleBackColor = false;
@@ -1083,6 +1092,7 @@
             button_Next.Margin = new System.Windows.Forms.Padding(2);
             button_Next.Name = "button_Next";
             button_Next.Size = new System.Drawing.Size(99, 30);
+            button_Next.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             button_Next.TabIndex = 107;
             button_Next.Text = "Next >";
             button_Next.UseVisualStyleBackColor = false;
@@ -1195,6 +1205,7 @@
             button_AddException.Margin = new System.Windows.Forms.Padding(2);
             button_AddException.Name = "button_AddException";
             button_AddException.Size = new System.Drawing.Size(110, 30);
+            button_AddException.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             button_AddException.TabIndex = 111;
             button_AddException.Text = "Add Exception";
             button_AddException.UseVisualStyleBackColor = false;
@@ -1209,6 +1220,7 @@
             button_Back.Margin = new System.Windows.Forms.Padding(2);
             button_Back.Name = "button_Back";
             button_Back.Size = new System.Drawing.Size(99, 30);
+            button_Back.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             button_Back.TabIndex = 110;
             button_Back.Text = "< Back";
             button_Back.UseVisualStyleBackColor = false;
