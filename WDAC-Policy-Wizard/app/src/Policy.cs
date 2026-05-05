@@ -640,12 +640,6 @@ namespace WDAC_Wizard
         // Folder Scan
         public FolderScan Scan { get; set; }
 
-        // Hash types to keep when filtering generated policy XML (e.g., "Hash Sha1", "Hash Sha256", "Hash Page Sha1", "Hash Page Sha256")
-        public HashSet<string> HashTypesToKeep { get; set; }
-
-        // Original source folder path (used to fix FriendlyName in generated policy when scanning from temp)
-        public string SourceFolderPath { get; set; }
-
         // Constructors
         public PolicyCustomRules()
         {
