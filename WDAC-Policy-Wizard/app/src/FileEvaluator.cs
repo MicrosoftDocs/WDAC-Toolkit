@@ -96,8 +96,8 @@ namespace WDAC_Wizard
     /// </summary>
     public class FileEvaluator : IFileEvaluator
     {
-        // WLDP_HOST_GUID_OTHER: {626C4100-1F76-4FFB-8DD4-84B24E0B1C11}
-        private static readonly Guid WLDP_HOST_GUID_OTHER = new Guid("626C4100-1F76-4FFB-8DD4-84B24E0B1C11");
+        // WLDP_HOST_GUID_OTHER: {626CBEC3-E1FA-4227-9800-ED210274CF7C}
+        private static readonly Guid WLDP_HOST_GUID_OTHER = new Guid("626CBEC3-E1FA-4227-9800-ED210274CF7C");
 
         [DllImport("wldp.dll", EntryPoint = "WldpCanExecuteFile", CharSet = CharSet.Unicode, SetLastError = false)]
         private static extern int NativeWldpCanExecuteFile(
