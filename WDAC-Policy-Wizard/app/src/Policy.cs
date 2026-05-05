@@ -36,14 +36,15 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Tracks the workflow the user has selected. New policy, editing policy or merging policies
+        /// Tracks the workflow the user has selected. New policy, editing policy, merging policies, or evaluating files
         /// </summary>
         public enum Workflow
         {
             None,
             New,
             Edit,
-            Merge
+            Merge,
+            Evaluate
         }
 
         /// <summary>

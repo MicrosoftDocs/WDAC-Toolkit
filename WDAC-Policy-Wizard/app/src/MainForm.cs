@@ -172,6 +172,54 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Evaluate button selected: User can select files to evaluate whether they would be 
+        /// allowed or blocked by the active system WDAC policy.
+        /// </summary>
+        private void Button_Evaluate_Click(object sender, EventArgs e)
+        {
+            if (!this.ConfigInProcess)
+            {
+                Logger.Log.AddNewSeparationLine("Workflow -- Evaluate Files Selected");
+                this.view = 4;
+                this.CurrentPage = 1;
+                this.ConfigInProcess = true;
+                this.Policy.PolicyWorkflow = WDAC_Policy.Workflow.Evaluate;
+
+                // Single-page workflow - show the evaluation control directly
+                string pageKey = "FileEvaluationPage";
+                if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired)
+                {
+                    Control[] _Pages = this.Controls.Find(pageKey, true);
+                    _Pages[0].Show();
+                    _Pages[0].BringToFront();
+                    _Pages[0].Focus();
+                }
+                else
+                {
+                    var _FileEvaluationControl = new FileEvaluation_Control(this);
+                    _FileEvaluationControl.Name = pageKey;
+                    this.PageList.Add(_FileEvaluationControl.Name);
+                    this.Controls.Add(_FileEvaluationControl);
+                    _FileEvaluationControl.BringToFront();
+                    _FileEvaluationControl.Focus();
+                }
+
+                ShowControlPanel(sender, e);
+                button_Next.Visible = false;
+            }
+            else
+            {
+                // Working on other workflow - do you want to leave?
+                if (WantToAbandonWork())
+                {
+                    DisplayInfoText(0);
+                    this.ConfigInProcess = false;
+                    Button_Evaluate_Click(sender, e);
+                }
+            }
+        }
+
         // #####################
         // CONTROL PANEL CONTROLS
         // #####################
@@ -1731,6 +1779,20 @@ namespace WDAC_Wizard
                 this.workflow_Label.Text = "Policy Merger";
                 this.page1_Button.Text = "Select Policies";
                 this.page2_Button.Text = "Creating Policy";
+            }
+            // Policy Evaluator
+            else if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Evaluate)
+            {
+                this.workflow_Label.Visible = true;
+                this.page1_Button.Visible = true;
+                this.page2_Button.Visible = false;
+                this.page3_Button.Visible = false;
+                this.page4_Button.Visible = false;
+                this.page5_Button.Visible = false;
+
+                this.workflow_Label.Text = "Policy Evaluator";
+                this.page1_Button.Text = "Evaluate Files";
+                this.page1_Button.Enabled = true;
             }
             else
             {

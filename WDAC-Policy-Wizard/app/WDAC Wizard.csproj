@@ -60,6 +60,9 @@
     <Compile Update="src\EditWorkflow.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="src\FileEvaluation_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="src\PolicyMerge_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
