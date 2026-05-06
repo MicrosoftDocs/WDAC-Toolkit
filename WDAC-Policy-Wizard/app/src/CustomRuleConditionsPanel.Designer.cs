@@ -392,15 +392,16 @@
             // 
             // label12
             // 
-            label12.AutoSize = true;
+            label12.AutoSize = false;
             label12.Font = new System.Drawing.Font("Tahoma", 7F);
             label12.ForeColor = System.Drawing.Color.Black;
-            label12.Location = new System.Drawing.Point(6, 92);
+            label12.Location = new System.Drawing.Point(6, 88);
             label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new System.Drawing.Size(469, 14);
+            label12.Size = new System.Drawing.Size(530, 32);
+            label12.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             label12.TabIndex = 115;
-            label12.Text = "Multiple levels can be selected. You can drag the levels to specify the fallback order.";
+            label12.Text = "First checked item = Level. Remaining checked items = Fallback.\r\nHash is always included as the final fallback for unsigned files.";
             // 
             // label11
             // 
@@ -439,15 +440,17 @@
             checkedListBoxRuleLevels.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             checkedListBoxRuleLevels.FormattingEnabled = true;
             checkedListBoxRuleLevels.Items.AddRange(new object[] { "PcaCertificate", "Publisher", "SignedVersion", "FilePublisher", "FileName", "FilePath", "Hash" });
-            checkedListBoxRuleLevels.Location = new System.Drawing.Point(8, 121);
+            checkedListBoxRuleLevels.Location = new System.Drawing.Point(8, 125);
             checkedListBoxRuleLevels.MultiColumn = true;
-            checkedListBoxRuleLevels.ColumnWidth = 160;
+            checkedListBoxRuleLevels.ColumnWidth = 200;
             checkedListBoxRuleLevels.Name = "checkedListBoxRuleLevels";
-            checkedListBoxRuleLevels.Size = new System.Drawing.Size(500, 100);
+            checkedListBoxRuleLevels.Size = new System.Drawing.Size(530, 100);
+            checkedListBoxRuleLevels.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             checkedListBoxRuleLevels.TabIndex = 111;
             checkedListBoxRuleLevels.DragDrop += RuleLevelsList_DragDropDone;
             checkedListBoxRuleLevels.DragOver += RuleLevelsList_DragInProgress;
             checkedListBoxRuleLevels.MouseDown += RuleLevelsList_MouseDown;
+            checkedListBoxRuleLevels.ItemCheck += RuleLevelsList_ItemCheck;
             // 
             // label13
             // 
@@ -1237,7 +1240,7 @@
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(766, 828);
+            ClientSize = new System.Drawing.Size(900, 828);
             Controls.Add(controlHighlight_Panel);
             Controls.Add(button_AddException);
             Controls.Add(button_Back);

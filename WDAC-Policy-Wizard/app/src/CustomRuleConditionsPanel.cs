@@ -297,7 +297,8 @@ namespace WDAC_Wizard
                 {
                     for (int i = 0; i < this.checkedListBoxRuleLevels.CheckedItems.Count; i++)
                     {
-                        this.PolicyCustomRule.Scan.Levels.Add(this.checkedListBoxRuleLevels.CheckedItems[i].ToString());
+                        string rawLevel = GetRawLevelName(this.checkedListBoxRuleLevels.CheckedItems[i].ToString());
+                        this.PolicyCustomRule.Scan.Levels.Add(rawLevel);
                     }
                 }
 
@@ -2792,17 +2793,108 @@ namespace WDAC_Wizard
             Point point = checkedListBoxRuleLevels.PointToClient(new Point(e.X, e.Y));
             int index = this.checkedListBoxRuleLevels.IndexFromPoint(point);
             if (index < 0) index = this.checkedListBoxRuleLevels.Items.Count - 1;
-            bool isChecked = checkedListBoxRuleLevels.GetItemChecked(index);
 
             object data = checkedListBoxRuleLevels.SelectedItem;
+            int oldIndex = checkedListBoxRuleLevels.Items.IndexOf(data);
+            bool wasChecked = checkedListBoxRuleLevels.GetItemChecked(oldIndex);
+
             this.checkedListBoxRuleLevels.Items.Remove(data);
             this.checkedListBoxRuleLevels.Items.Insert(index, data);
-            this.checkedListBoxRuleLevels.SetItemChecked(index, isChecked);
+            this.checkedListBoxRuleLevels.SetItemChecked(index, wasChecked);
+
+            UpdateRuleLevelLabels();
         }
 
         private void RuleLevelsList_DragInProgress(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
+        }
+
+        /// <summary>
+        /// Updates the rule level items with (Level) and (Fallback) annotations,
+        /// ensures Hash is always checked as a fallback, and moves unchecked items to the back.
+        /// </summary>
+        private void UpdateRuleLevelLabels()
+        {
+            // Temporarily suppress events to avoid re-entrancy
+            this.checkedListBoxRuleLevels.ItemCheck -= RuleLevelsList_ItemCheck;
+
+            // Collect items with their checked state
+            var checkedItems = new List<string>();
+            var uncheckedItems = new List<string>();
+
+            for (int i = 0; i < checkedListBoxRuleLevels.Items.Count; i++)
+            {
+                string rawName = GetRawLevelName(checkedListBoxRuleLevels.Items[i].ToString());
+                if (checkedListBoxRuleLevels.GetItemChecked(i))
+                    checkedItems.Add(rawName);
+                else
+                    uncheckedItems.Add(rawName);
+            }
+
+            // Ensure Hash is in checked list (unless it would be the only/first item making it Level)
+            if (!checkedItems.Contains("Hash"))
+            {
+                uncheckedItems.Remove("Hash");
+                checkedItems.Add("Hash");
+            }
+
+            // Rebuild the list: checked items first, then unchecked
+            checkedListBoxRuleLevels.Items.Clear();
+
+            for (int i = 0; i < checkedItems.Count; i++)
+            {
+                string label = i == 0
+                    ? checkedItems[i] + "  (Level)"
+                    : checkedItems[i] + "  (Fallback)";
+                checkedListBoxRuleLevels.Items.Add(label);
+                checkedListBoxRuleLevels.SetItemChecked(checkedListBoxRuleLevels.Items.Count - 1, true);
+            }
+
+            for (int i = 0; i < uncheckedItems.Count; i++)
+            {
+                checkedListBoxRuleLevels.Items.Add(uncheckedItems[i]);
+            }
+
+            this.checkedListBoxRuleLevels.ItemCheck += RuleLevelsList_ItemCheck;
+        }
+
+        /// <summary>
+        /// Strips the (Level) / (Fallback) annotation from item text to get the raw level name.
+        /// </summary>
+        private static string GetRawLevelName(string itemText)
+        {
+            return itemText.Replace("  (Level)", "").Replace("  (Fallback)", "").Trim();
+        }
+
+        /// <summary>
+        /// Handles item check state changes to update labels.
+        /// </summary>
+        private void RuleLevelsList_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Prevent unchecking Hash when it's the forced fallback
+            string rawName = GetRawLevelName(checkedListBoxRuleLevels.Items[e.Index].ToString());
+            if (rawName == "Hash" && e.NewValue == CheckState.Unchecked)
+            {
+                // Only allow unchecking if Hash is the Level (first checked item)
+                bool isLevel = true;
+                for (int i = 0; i < e.Index; i++)
+                {
+                    if (checkedListBoxRuleLevels.GetItemChecked(i))
+                    {
+                        isLevel = false;
+                        break;
+                    }
+                }
+                if (!isLevel)
+                {
+                    e.NewValue = CheckState.Checked;
+                    return;
+                }
+            }
+
+            // Use BeginInvoke to update labels after the check state has actually changed
+            this.BeginInvoke(new Action(() => UpdateRuleLevelLabels()));
         }
 
 

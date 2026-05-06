@@ -155,7 +155,12 @@ namespace WDAC_Wizard
             // Add fallback levels, if applicable
             if (customRule.Scan.Levels.Count > 1)
             {
-                fallbacks = string.Join(",",customRule.Scan.Levels.Skip(1));
+                fallbacks = string.Join(",", customRule.Scan.Levels.Skip(1));
+                // Always ensure Hash is the final fallback for unsigned files
+                if (!fallbacks.Contains("Hash", StringComparison.OrdinalIgnoreCase))
+                {
+                    fallbacks += ",Hash";
+                }
             }
 
             // Add paths to omit, if applicable
