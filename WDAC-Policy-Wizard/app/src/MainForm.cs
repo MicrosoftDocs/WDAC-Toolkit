@@ -853,10 +853,10 @@ namespace WDAC_Wizard
             int progressPercent = e.ProgressPercentage;
             if (progressPercent <= 10)
                 process = "Building policy rules ...";
-            else if (progressPercent <= 70)
+            else if (progressPercent <= 25)
                 process = "Configuring policy signer and file rules ...";
             else if (progressPercent <= 80)
-                process = "Building custom policy file rules ...";
+                process = "Scanning and processing rules (this may take a few minutes) ...";
             else if (progressPercent <= 85)
                 process = "Merging custom rules policies ...";
             else if (progressPercent <= 95)
@@ -1252,9 +1252,6 @@ namespace WDAC_Wizard
             // Iterate through all of the custom rules and update the progress bar    
             for (int i = 0; i < nCustomRules; i++)
             {
-                progressVal = 25 + i * 60 / nCustomRules;
-                worker.ReportProgress(progressVal); //Assumes the operations involved with this step take about 70% -- probably should be a little higher
-
                 var customRule = this.Policy.CustomRules[i];
 
                 // Skip; already handled ALL custom value rules
@@ -1273,6 +1270,9 @@ namespace WDAC_Wizard
                     continue;
                 }
 
+                progressVal = 25 + i * 60 / nCustomRules;
+                worker.ReportProgress(progressVal);
+
                 string tmpPolicyPath = Helper.GetUniquePolicyPath(this.TempFolderPath);
 
                 // Create a single policy per rule using the Powershell cmdlets with Level=PCACertificate or Publisher
@@ -1288,7 +1288,7 @@ namespace WDAC_Wizard
                         siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);    
                     }
                 }
-                
+
                 // Hash Rules -- Invoke Powershell cmd to generate 
                 if(customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
@@ -1303,6 +1303,9 @@ namespace WDAC_Wizard
                 // Folder Scan -- Invoke the New-CiPolicy PS cmd to generate a CI policy
                 if(customRule.Type == PolicyCustomRules.RuleType.FolderScan)
                 {
+                    // Report a mid-range progress so the UI shows scanning activity
+                    worker.ReportProgress(Math.Min(progressVal + 30, 80));
+
                     SiPolicy signerSiPolicy; 
                     if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                     {
@@ -1312,7 +1315,7 @@ namespace WDAC_Wizard
                     {
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
-                    
+
                     // Successful Scan completed
                     if (signerSiPolicy != null)
                     {

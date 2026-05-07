@@ -176,7 +176,7 @@ namespace WDAC_Wizard
                 deny = "True";
             }
 
-            string newPolicyScriptCmd = $"-NoProfile -ExecutionPolicy Bypass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
+            string newPolicyScriptCmd = $"-NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -File \"{ps1File}\" -ScanPath \"{scanPath}\" " +
                 $"-PolicyPath \"{policyPath}\" -Level {level} -Fallback {fallbacks} -PathsToOmit \"{pathsToOmit}\"" +
                 $" -Deny {deny} -UserPEs {userPEs}";
 
@@ -201,10 +201,10 @@ namespace WDAC_Wizard
             try
             {
                 process.Start();
-                process.WaitForExit();
-
+                // Read streams asynchronously to avoid deadlocks and allow PS to flush output
                 string output = process.StandardOutput.ReadToEnd();
                 string error = process.StandardError.ReadToEnd();
+                process.WaitForExit();
 
                 if (!string.IsNullOrEmpty(error))
                 {
