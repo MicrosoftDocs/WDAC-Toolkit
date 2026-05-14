@@ -54,6 +54,8 @@ namespace WDAC_Wizard
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
+            button_Evaluate = new System.Windows.Forms.Button();
             control_Panel.SuspendLayout();
             SuspendLayout();
             // 
@@ -78,7 +80,7 @@ namespace WDAC_Wizard
             button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_New.Image = Properties.Resources.newPolicy;
-            button_New.Location = new System.Drawing.Point(328, 225);
+            button_New.Location = new System.Drawing.Point(217, 225);
             button_New.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_New.Name = "button_New";
             button_New.Size = new System.Drawing.Size(195, 217);
@@ -118,7 +120,7 @@ namespace WDAC_Wizard
             button_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Edit.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Edit.Image = Properties.Resources.tools;
-            button_Edit.Location = new System.Drawing.Point(567, 225);
+            button_Edit.Location = new System.Drawing.Point(454, 225);
             button_Edit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Edit.Name = "button_Edit";
             button_Edit.Size = new System.Drawing.Size(195, 217);
@@ -137,7 +139,7 @@ namespace WDAC_Wizard
             button_Merge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Merge.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Merge.Image = Properties.Resources.merge;
-            button_Merge.Location = new System.Drawing.Point(813, 225);
+            button_Merge.Location = new System.Drawing.Point(704, 225);
             button_Merge.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Merge.Name = "button_Merge";
             button_Merge.Size = new System.Drawing.Size(195, 217);
@@ -147,26 +149,6 @@ namespace WDAC_Wizard
             button_Merge.UseVisualStyleBackColor = false;
             button_Merge.Click += Button_Merge_Click;
             // 
-            // button_Evaluate
-            // 
-            button_Evaluate = new System.Windows.Forms.Button();
-            button_Evaluate.BackColor = System.Drawing.Color.Transparent;
-            button_Evaluate.FlatAppearance.BorderSize = 0;
-            button_Evaluate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-            button_Evaluate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
-            button_Evaluate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button_Evaluate.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            button_Evaluate.Image = Properties.Resources.shield;
-            button_Evaluate.Location = new System.Drawing.Point(1059, 225);
-            button_Evaluate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            button_Evaluate.Name = "button_Evaluate";
-            button_Evaluate.Size = new System.Drawing.Size(195, 217);
-            button_Evaluate.TabIndex = 36;
-            button_Evaluate.Text = "Policy Evaluator";
-            button_Evaluate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            button_Evaluate.UseVisualStyleBackColor = false;
-            button_Evaluate.Click += Button_Evaluate_Click;
-            //
             // control_Panel
             // 
             control_Panel.BackColor = System.Drawing.Color.FromArgb(230, 230, 230);
@@ -388,7 +370,7 @@ namespace WDAC_Wizard
             label2.AutoSize = true;
             label2.BackColor = System.Drawing.Color.Transparent;
             label2.Font = new System.Drawing.Font("Tahoma", 9F);
-            label2.Location = new System.Drawing.Point(296, 453);
+            label2.Location = new System.Drawing.Point(185, 453);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(244, 36);
@@ -400,7 +382,7 @@ namespace WDAC_Wizard
             label3.AutoSize = true;
             label3.BackColor = System.Drawing.Color.Transparent;
             label3.Font = new System.Drawing.Font("Tahoma", 9F);
-            label3.Location = new System.Drawing.Point(563, 453);
+            label3.Location = new System.Drawing.Point(450, 453);
             label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(218, 36);
@@ -412,7 +394,7 @@ namespace WDAC_Wizard
             label4.AutoSize = true;
             label4.BackColor = System.Drawing.Color.Transparent;
             label4.Font = new System.Drawing.Font("Tahoma", 9F);
-            label4.Location = new System.Drawing.Point(802, 453);
+            label4.Location = new System.Drawing.Point(693, 453);
             label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(236, 18);
@@ -421,23 +403,42 @@ namespace WDAC_Wizard
             // 
             // label5
             // 
-            label5 = new System.Windows.Forms.Label();
             label5.AutoSize = true;
             label5.BackColor = System.Drawing.Color.Transparent;
             label5.Font = new System.Drawing.Font("Tahoma", 9F);
-            label5.Location = new System.Drawing.Point(1040, 453);
+            label5.Location = new System.Drawing.Point(957, 453);
             label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(236, 36);
+            label5.Size = new System.Drawing.Size(212, 36);
             label5.TabIndex = 37;
             label5.Text = "Evaluate files against the active\r\nsystem WDAC policy";
-            //
+            // 
+            // button_Evaluate
+            // 
+            button_Evaluate.BackColor = System.Drawing.Color.Transparent;
+            button_Evaluate.FlatAppearance.BorderSize = 0;
+            button_Evaluate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+            button_Evaluate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+            button_Evaluate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button_Evaluate.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button_Evaluate.Image = (System.Drawing.Image)resources.GetObject("button_Evaluate.Image");
+            button_Evaluate.Location = new System.Drawing.Point(957, 228);
+            button_Evaluate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            button_Evaluate.Name = "button_Evaluate";
+            button_Evaluate.Size = new System.Drawing.Size(195, 217);
+            button_Evaluate.TabIndex = 38;
+            button_Evaluate.Text = "Policy Evaluator";
+            button_Evaluate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            button_Evaluate.UseVisualStyleBackColor = false;
+            button_Evaluate.Click += Button_Evaluate_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
             ClientSize = new System.Drawing.Size(1232, 703);
+            Controls.Add(button_Evaluate);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -446,7 +447,6 @@ namespace WDAC_Wizard
             Controls.Add(button_Next);
             Controls.Add(control_Panel);
             Controls.Add(label_Welcome);
-            Controls.Add(button_Evaluate);
             Controls.Add(button_Merge);
             Controls.Add(button_Edit);
             Controls.Add(label_Info);
@@ -474,7 +474,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Button button_New;
         private System.Windows.Forms.Button button_Edit;
         private System.Windows.Forms.Button button_Merge;
-        private System.Windows.Forms.Button button_Evaluate;
         private System.Windows.Forms.Panel control_Panel;
         private System.Windows.Forms.Button settings_Button;
         private System.Windows.Forms.Button home_Button;
@@ -491,6 +490,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label workflow_Label;
+        private System.Windows.Forms.Button button_Evaluate;
     }
 }
 
