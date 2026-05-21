@@ -67,9 +67,6 @@ namespace WDAC_Wizard
 
             // Check for configci cmdlet availability
             Helper.LicenseCheck();
-
-            // Pre-load the CodeIntegrity NuGet package in the background for binary policy conversion
-            BinaryPolicyConverter.InitializeAsync();
         }
 
         // ###############
@@ -2059,7 +2056,6 @@ namespace WDAC_Wizard
         /// /// </summary>
         private void FormClosing_Event(object sender, FormClosingEventArgs e)
         {
-            BinaryPolicyConverter.Cleanup();
             Logger.Log.CloseLogger();
         }
 

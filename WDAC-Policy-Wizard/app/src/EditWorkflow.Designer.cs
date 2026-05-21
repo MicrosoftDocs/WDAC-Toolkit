@@ -99,7 +99,7 @@ namespace WDAC_Wizard
             label2.ForeColor = System.Drawing.Color.Black;
             label2.Location = new System.Drawing.Point(165, 76);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(552, 21);
+            label2.Size = new System.Drawing.Size(672, 21);
             label2.TabIndex = 108;
             label2.Text = "Browse for your policy on disk (XML or binary) or create one from App Control event logs.";
             // 
@@ -332,7 +332,7 @@ namespace WDAC_Wizard
             radioButton_EditXML.Font = new System.Drawing.Font("Tahoma", 10F);
             radioButton_EditXML.Location = new System.Drawing.Point(169, 121);
             radioButton_EditXML.Name = "radioButton_EditXML";
-            radioButton_EditXML.Size = new System.Drawing.Size(174, 25);
+            radioButton_EditXML.Size = new System.Drawing.Size(138, 25);
             radioButton_EditXML.TabIndex = 110;
             radioButton_EditXML.TabStop = true;
             radioButton_EditXML.Text = "Edit Policy File";
@@ -535,9 +535,9 @@ namespace WDAC_Wizard
             label3.ForeColor = System.Drawing.Color.Black;
             label3.Location = new System.Drawing.Point(20, 2);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(143, 19);
+            label3.Size = new System.Drawing.Size(337, 19);
             label3.TabIndex = 12;
-            label3.Text = "Policy Path to Edit (XML or Binary):";
+            label3.Text = "Policy Path to Edit - XML or Binary (.cip/.p7b):";
             // 
             // label_Error
             // 
