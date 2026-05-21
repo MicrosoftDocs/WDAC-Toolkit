@@ -74,10 +74,37 @@ namespace WDAC_Wizard
 
             try
             {
-                policyPath = Helper.BrowseForSingleFile(Properties.Resources.OpenXMLFileDialogTitle, Helper.BrowseFileType.Policy); 
+                policyPath = Helper.BrowseForSingleFile(Properties.Resources.OpenPolicyFileDialogTitle, Helper.BrowseFileType.PolicyOrBinary); 
                 if (! String.IsNullOrEmpty(policyPath))
                 {
-                    textBoxPolicyPath.Text = policyPath;                   
+                    textBoxPolicyPath.Text = policyPath;
+
+                    // If the selected file is a binary policy, convert it to XML first
+                    if (Helper.IsBinaryPolicyFile(policyPath))
+                    {
+                        Logger.Log.AddInfoMsg("Binary policy file detected. Attempting conversion to XML...");
+                        this.panel_Progress.Visible = true;
+                        this.label_Progress.Text = Properties.Resources.BinaryConversion_InProgress;
+                        this.panel_Progress.BringToFront();
+                        Application.DoEvents();
+
+                        string xmlPath = BinaryPolicyConverter.ConvertToXml(policyPath);
+
+                        this.panel_Progress.Visible = false;
+
+                        if (string.IsNullOrEmpty(xmlPath))
+                        {
+                            Logger.Log.AddErrorMsg("Binary policy conversion failed for: " + policyPath);
+                            MessageBox.Show(Properties.Resources.BinaryConversion_Error,
+                                "Binary Policy Conversion Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this._MainWindow.ErrorOnPage = true;
+                            return;
+                        }
+
+                        Logger.Log.AddInfoMsg("Binary policy successfully converted to: " + xmlPath);
+                        policyPath = xmlPath;
+                    }
+
                     this.EditPath = policyPath;
 
                     // Parse the policy for its information and display it

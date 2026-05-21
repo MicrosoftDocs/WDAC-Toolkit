@@ -101,7 +101,7 @@ namespace WDAC_Wizard
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(552, 21);
             label2.TabIndex = 108;
-            label2.Text = "Browse for your policy on disk or create one from App Control event logs.";
+            label2.Text = "Browse for your policy on disk (XML or binary) or create one from App Control event logs.";
             // 
             // buttonBrowse
             // 
@@ -335,7 +335,7 @@ namespace WDAC_Wizard
             radioButton_EditXML.Size = new System.Drawing.Size(174, 25);
             radioButton_EditXML.TabIndex = 110;
             radioButton_EditXML.TabStop = true;
-            radioButton_EditXML.Text = "Edit Policy XML File";
+            radioButton_EditXML.Text = "Edit Policy File";
             radioButton_EditXML.UseVisualStyleBackColor = true;
             radioButton_EditXML.Click += EditXML_RadioButton_Click;
             // 
@@ -537,7 +537,7 @@ namespace WDAC_Wizard
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(143, 19);
             label3.TabIndex = 12;
-            label3.Text = "Policy Path to Edit:";
+            label3.Text = "Policy Path to Edit (XML or Binary):";
             // 
             // label_Error
             // 

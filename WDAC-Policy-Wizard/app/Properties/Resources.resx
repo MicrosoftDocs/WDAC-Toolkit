@@ -504,7 +504,7 @@ Are you sure you want to abandon the exception rule creation workflow?</value>
     <value>Please select a App Control for Business event log source to parse before continuing</value>
   </data>
   <data name="ChoosePolicyToEdit_Error" xml:space="preserve">
-    <value>Please select a policy XML file to edit before continuing</value>
+    <value>Please select a policy file (XML or binary) to edit before continuing</value>
   </data>
   <data name="UnsupportedCrypto_Error" xml:space="preserve">
     <value>A cryptographic algorithm that isn't supported was detected. Unfortunately, a publisher rule cannot be used to allow or deny this file. </value>
@@ -604,5 +604,17 @@ Do you want the Wizard to warn you about these types of path rules in the future
   </data>
   <data name="AppIDInvalidTag" xml:space="preserve">
     <value>Invalid AppID Tag. Both the key and value must be set. </value>
+  </data>
+  <data name="BinaryConversion_InProgress" xml:space="preserve">
+    <value>Converting binary policy to XML...</value>
+  </data>
+  <data name="BinaryConversion_Error" xml:space="preserve">
+    <value>The binary policy file could not be converted to XML. The Microsoft.Security.CodeIntegrity package could not be obtained online or locally, and the PowerShell ConvertTo-CIPolicy cmdlet also failed.</value>
+  </data>
+  <data name="BinaryConversion_Success" xml:space="preserve">
+    <value>Binary policy was successfully converted to XML.</value>
+  </data>
+  <data name="OpenPolicyFileDialogTitle" xml:space="preserve">
+    <value>Browse for existing App Control for Business policy file (XML or binary).</value>
   </data>
 </root>

@@ -367,6 +367,48 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Method to convert a binary CI policy file (.cip/.p7b) back to XML using ConvertTo-CIPolicy
+        /// </summary>
+        /// <param name="binaryPath">Path to the binary policy file</param>
+        /// <returns>Path to the converted XML file, or empty string on failure</returns>
+        internal static string ConvertBinaryToXml(string binaryPath)
+        {
+            Logger.Log.AddInfoMsg("-- Converting Binary Policy to XML --");
+
+            Pipeline pipeline = CreatePipeline();
+
+            string xmlFileName = Path.GetFileNameWithoutExtension(binaryPath) + "_converted.xml";
+            string xmlPath = Path.Combine(Path.GetDirectoryName(binaryPath), xmlFileName);
+
+            string convertCmd = String.Format("ConvertTo-CIPolicy -BinaryFilePath \"{0}\" -XmlFilePath \"{1}\"",
+                                               binaryPath, xmlPath);
+
+            pipeline.Commands.AddScript(convertCmd);
+            Logger.Log.AddInfoMsg("Running the following commands: " + convertCmd);
+
+            try
+            {
+                Collection<PSObject> results = pipeline.Invoke();
+            }
+            catch (Exception exp)
+            {
+                Logger.Log.AddErrorMsg(String.Format("Exception encountered in ConvertBinaryToXml(): {0}", exp));
+                _Runspace.Dispose();
+                return string.Empty;
+            }
+
+            _Runspace.Dispose();
+
+            if (File.Exists(xmlPath))
+            {
+                return xmlPath;
+            }
+
+            Logger.Log.AddErrorMsg("ConvertBinaryToXml: Output XML file was not created");
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Runs the Merge-CIPolicy command given a list of input file paths and output file path
         /// </summary>
         /// <param name="policyPaths">List of input policy paths to merge into destPath</param>

@@ -45,11 +45,12 @@ namespace WDAC_Wizard
         };
         public enum BrowseFileType
         {
-            Policy = 0,     // -Show .xml files
-            EventLog = 1,   // -Show .evtx files
-            PEFile = 2,     // -Show PE (.exe, .dll, .sys) files
-            CsvFile = 3,    // -Show Csv file
-            All = 4         // -Show . all files
+            Policy = 0,         // -Show .xml files
+            EventLog = 1,       // -Show .evtx files
+            PEFile = 2,         // -Show PE (.exe, .dll, .sys) files
+            CsvFile = 3,        // -Show Csv file
+            All = 4,            // -Show . all files
+            PolicyOrBinary = 5  // -Show .xml, .cip, .p7b files
         }
 
         static int UniquePolicyId = 0; 
@@ -162,6 +163,12 @@ namespace WDAC_Wizard
             {
                 openFileDialog.Filter = "App Control Policy Files (*.xml)|*.xml";
             }
+            else if (browseFileType.Equals(BrowseFileType.PolicyOrBinary))
+            {
+                openFileDialog.Filter = "App Control Policy Files (*.xml; *.cip; *.p7b)|*.xml;*.cip;*.p7b|" +
+                    "XML Policy Files (*.xml)|*.xml|" +
+                    "Binary Policy Files (*.cip; *.p7b)|*.cip;*.p7b";
+            }
             else if (browseFileType.Equals(BrowseFileType.CsvFile))
             {
                 openFileDialog.Filter = "MDE AH CSV Files (*.csv)|*.csv";
@@ -249,6 +256,22 @@ namespace WDAC_Wizard
             }
             
             return newUniquePath;
+        }
+
+        /// <summary>
+        /// Checks if the file extension indicates a binary App Control policy file (.cip or .p7b)
+        /// </summary>
+        /// <param name="filePath">Path to the file</param>
+        /// <returns>True if the file is a binary policy file</returns>
+        public static bool IsBinaryPolicyFile(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+
+            string ext = Path.GetExtension(filePath).ToLowerInvariant();
+            return ext == ".cip" || ext == ".p7b";
         }
 
         /// <summary>

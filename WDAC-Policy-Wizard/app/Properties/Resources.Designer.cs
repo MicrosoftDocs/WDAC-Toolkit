@@ -101,6 +101,50 @@ namespace WDAC_Wizard.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Converting binary policy to XML....
+        /// </summary>
+        internal static string BinaryConversion_InProgress
+        {
+            get
+            {
+                return ResourceManager.GetString("BinaryConversion_InProgress", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The binary policy file could not be converted to XML....
+        /// </summary>
+        internal static string BinaryConversion_Error
+        {
+            get
+            {
+                return ResourceManager.GetString("BinaryConversion_Error", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Binary policy was successfully converted to XML..
+        /// </summary>
+        internal static string BinaryConversion_Success
+        {
+            get
+            {
+                return ResourceManager.GetString("BinaryConversion_Success", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Browse for existing App Control for Business policy file (XML or binary)..
+        /// </summary>
+        internal static string OpenPolicyFileDialogTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenPolicyFileDialogTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to https://learn.microsoft.com/windows/security/application-security/application-control/app-control-for-business/appidtagging/appcontrol-appid-tagging-guide
         /// </summary>
         internal static string AppIdTaggingDocsLink
