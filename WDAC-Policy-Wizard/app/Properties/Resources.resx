@@ -609,7 +609,7 @@ Do you want the Wizard to warn you about these types of path rules in the future
     <value>Converting binary policy to XML...</value>
   </data>
   <data name="BinaryConversion_Error" xml:space="preserve">
-    <value>The binary policy file could not be converted to XML. The Microsoft.Security.CodeIntegrity package could not be obtained online or locally, and the PowerShell ConvertTo-CIPolicy cmdlet also failed.</value>
+    <value>The binary policy file could not be converted to XML. The file may be in an invalid or unsupported binary format, the policy could not be parsed or serialized, or the output XML could not be written.</value>
   </data>
   <data name="BinaryConversion_Success" xml:space="preserve">
     <value>Binary policy was successfully converted to XML.</value>

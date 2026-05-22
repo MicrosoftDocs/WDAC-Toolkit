@@ -70,22 +70,25 @@ namespace WDAC_Wizard
 
         /// <summary>
         /// Generates the output XML path for a binary policy file.
-        /// Falls back to the user's Documents folder if the source directory
-        /// is under System32 (which is typically not writable by standard users).
+        /// Uses a known-writable per-user LocalAppData folder instead of the
+        /// source file directory, which may be read-only or protected.
+        /// A unique filename is used to avoid overwriting previous conversions.
         /// </summary>
         private static string GetOutputXmlPath(string binaryPolicyPath)
         {
-            string dir = Path.GetDirectoryName(binaryPolicyPath);
             string baseName = Path.GetFileNameWithoutExtension(binaryPolicyPath);
+            string outputDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "WDAC Policy Wizard",
+                "ConvertedPolicies");
 
-            string system32Dir = Environment.GetFolderPath(Environment.SpecialFolder.System);
-            if (!string.IsNullOrEmpty(dir) && dir.StartsWith(system32Dir, StringComparison.OrdinalIgnoreCase))
-            {
-                Logger.Log.AddInfoMsg("BinaryPolicyConverter: Source is under System32. Falling back to Documents folder.");
-                dir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            }
+            Directory.CreateDirectory(outputDir);
 
-            return Path.Combine(dir, baseName + "_converted.xml");
+            string uniqueFileName = baseName + "_converted_" + Guid.NewGuid().ToString("N") + ".xml";
+            string outputPath = Path.Combine(outputDir, uniqueFileName);
+
+            Logger.Log.AddInfoMsg("BinaryPolicyConverter: Writing converted XML to writable location: " + outputPath);
+            return outputPath;
         }
     }
 }
