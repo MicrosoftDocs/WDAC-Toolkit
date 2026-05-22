@@ -22,8 +22,8 @@ namespace WDAC_Wizard.Tests
         public BinaryPolicyConverterTests()
         {
             _resDir = Path.Combine(AppContext.BaseDirectory, "res");
-            _binaryPolicyPath = Path.Combine(_resDir, "{6DD0E35B-6F04-433A-A8F5-F3CA973EEE40}.cip");
-            _expectedXmlPath = Path.Combine(_resDir, "WindowsWorks2026-05-21.xml");
+            _binaryPolicyPath = Path.Combine(_resDir, "{BB80778A-1F72-49B6-ABBB-B75D1A3D1C58}.cip");
+            _expectedXmlPath = Path.Combine(_resDir, "WindowsWorks2026-05-22.xml");
 
             // Initialize Logger
             string tempLogDir = Path.Combine(Path.GetTempPath(), "WDACWizardTests_" + Guid.NewGuid().ToString("N"));
@@ -166,15 +166,26 @@ namespace WDAC_Wizard.Tests
         }
 
         [Fact]
-        public void FileRules_FileAttrib_MinVersionsMatch()
+        public void FileRules_FileAttrib_VersionRangesMatch()
         {
-            // Match FileAttribs by FileName and verify MinimumFileVersion
+            // For each expected FileAttrib, find a matching actual FileAttrib with the same
+            // FileName, MinimumFileVersion, and MaximumFileVersion. Multiple FileAttribs can
+            // share the same FileName but differ in version ranges (e.g. per-OS-version rules).
+            var actualAttribs = _actualPolicy.FileRules.OfType<FileAttrib>().ToList();
+
             foreach (var expected in _expectedPolicy.FileRules.OfType<FileAttrib>())
             {
-                var actual = _actualPolicy.FileRules.OfType<FileAttrib>()
-                    .FirstOrDefault(f => f.FileName == expected.FileName);
-                Assert.NotNull(actual);
-                Assert.Equal(expected.MinimumFileVersion, actual.MinimumFileVersion);
+                var match = actualAttribs.FirstOrDefault(f =>
+                    f.FileName == expected.FileName
+                    && VersionsEquivalent(f.MinimumFileVersion, expected.MinimumFileVersion)
+                    && VersionsEquivalent(f.MaximumFileVersion, expected.MaximumFileVersion));
+
+                Assert.True(match != null,
+                    $"No matching FileAttrib found for FileName={expected.FileName}, " +
+                    $"MinVer={expected.MinimumFileVersion}, MaxVer={expected.MaximumFileVersion}");
+
+                // Remove matched entry to handle duplicates correctly
+                actualAttribs.Remove(match);
             }
         }
 
@@ -301,23 +312,25 @@ namespace WDAC_Wizard.Tests
         }
 
         [Fact]
-        public void SigningScenarios_KMCI_NoDeniedSigners()
+        public void SigningScenarios_KMCI_DeniedSignerCountMatches()
         {
             var expectedKmci = _expectedPolicy.SigningScenarios.First(s => s.Value == 131);
             var actualKmci = _actualPolicy.SigningScenarios.First(s => s.Value == 131);
 
-            Assert.Null(expectedKmci.ProductSigners?.DeniedSigners);
-            Assert.Null(actualKmci.ProductSigners?.DeniedSigners);
+            int expectedCount = expectedKmci.ProductSigners?.DeniedSigners?.DeniedSigner?.Length ?? 0;
+            int actualCount = actualKmci.ProductSigners?.DeniedSigners?.DeniedSigner?.Length ?? 0;
+            Assert.Equal(expectedCount, actualCount);
         }
 
         [Fact]
-        public void SigningScenarios_UMCI_NoDeniedSigners()
+        public void SigningScenarios_UMCI_DeniedSignerCountMatches()
         {
             var expectedUmci = _expectedPolicy.SigningScenarios.First(s => s.Value == 12);
             var actualUmci = _actualPolicy.SigningScenarios.First(s => s.Value == 12);
 
-            Assert.Null(expectedUmci.ProductSigners?.DeniedSigners);
-            Assert.Null(actualUmci.ProductSigners?.DeniedSigners);
+            int expectedCount = expectedUmci.ProductSigners?.DeniedSigners?.DeniedSigner?.Length ?? 0;
+            int actualCount = actualUmci.ProductSigners?.DeniedSigners?.DeniedSigner?.Length ?? 0;
+            Assert.Equal(expectedCount, actualCount);
         }
 
         // =============================================
@@ -435,6 +448,25 @@ namespace WDAC_Wizard.Tests
             string ekuCount = signer.CertEKU?.Length.ToString() ?? "0";
             string publisher = signer.CertPublisher?.Value ?? "";
             return $"{certRootType}|{certRootValue}|{ekuCount}|{publisher}";
+        }
+
+        /// <summary>
+        /// Compares two version strings for equivalence. Binary decompilation may encode
+        /// version components differently (e.g. 1.1.23.0405 may become 1.1.23.405 after
+        /// round-tripping through binary format where components are stored as uint16).
+        /// Falls back to parsing as Version objects for numeric equivalence.
+        /// </summary>
+        private static bool VersionsEquivalent(string v1, string v2)
+        {
+            if (v1 == v2) return true;
+            if (v1 == null || v2 == null) return v1 == v2;
+
+            if (Version.TryParse(v1, out var ver1) && Version.TryParse(v2, out var ver2))
+            {
+                return ver1.Equals(ver2);
+            }
+
+            return string.Equals(v1, v2, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
