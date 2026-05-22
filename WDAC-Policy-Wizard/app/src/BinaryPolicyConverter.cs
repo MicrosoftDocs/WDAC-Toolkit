@@ -70,24 +70,39 @@ namespace WDAC_Wizard
 
         /// <summary>
         /// Generates the output XML path for a binary policy file.
-        /// Uses a known-writable per-user LocalAppData folder instead of the
-        /// source file directory, which may be read-only or protected.
-        /// A unique filename is used to avoid overwriting previous conversions.
+        /// Attempts to write to the same directory as the binary file.
+        /// Falls back to the user's Documents folder if write access is denied.
         /// </summary>
         private static string GetOutputXmlPath(string binaryPolicyPath)
         {
             string baseName = Path.GetFileNameWithoutExtension(binaryPolicyPath);
-            string outputDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "WDAC Policy Wizard",
-                "ConvertedPolicies");
+            string sourceDir = Path.GetDirectoryName(binaryPolicyPath);
+            string xmlFileName = baseName + "_converted.xml";
 
-            Directory.CreateDirectory(outputDir);
+            // Try writing to the source directory
+            string outputPath = Path.Combine(sourceDir, xmlFileName);
+            try
+            {
+                // Test write access by creating and immediately deleting a temp file
+                string testFile = Path.Combine(sourceDir, Path.GetRandomFileName());
+                using (File.Create(testFile)) { }
+                File.Delete(testFile);
 
-            string uniqueFileName = baseName + "_converted_" + Guid.NewGuid().ToString("N") + ".xml";
-            string outputPath = Path.Combine(outputDir, uniqueFileName);
+                return outputPath;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Logger.Log.AddInfoMsg("BinaryPolicyConverter: Write access denied to " + sourceDir + ". Falling back to Documents folder.");
+            }
+            catch (IOException)
+            {
+                Logger.Log.AddInfoMsg("BinaryPolicyConverter: Cannot write to " + sourceDir + ". Falling back to Documents folder.");
+            }
 
-            Logger.Log.AddInfoMsg("BinaryPolicyConverter: Writing converted XML to writable location: " + outputPath);
+            // Fall back to Documents folder
+            string docsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            outputPath = Path.Combine(docsDir, xmlFileName);
+            Logger.Log.AddInfoMsg("BinaryPolicyConverter: Writing converted XML to: " + outputPath);
             return outputPath;
         }
     }
