@@ -8,6 +8,7 @@ using WDAC_Wizard;
 
 namespace WDAC_Wizard.Tests
 {
+    [Collection("BinaryPolicyConverter")]
     public class LoggerTests
     {
         private readonly string _testLogPath;

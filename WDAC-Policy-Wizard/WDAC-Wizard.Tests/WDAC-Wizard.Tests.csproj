@@ -24,4 +24,10 @@
     <ProjectReference Include="..\app\WDAC Wizard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="res\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
