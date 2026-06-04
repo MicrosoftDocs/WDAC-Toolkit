@@ -50,7 +50,6 @@ namespace WDAC_Wizard
             home_Button = new System.Windows.Forms.Button();
             settings_Button = new System.Windows.Forms.Button();
             button_Next = new System.Windows.Forms.Button();
-            button_Back = new System.Windows.Forms.Button();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -356,18 +355,6 @@ namespace WDAC_Wizard
             button_Next.Visible = false;
             button_Next.Click += Button_Next_Click;
             // 
-            // button_Back
-            // 
-            button_Back.Location = new System.Drawing.Point(1035, 663);
-            button_Back.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            button_Back.Name = "button_Back";
-            button_Back.Size = new System.Drawing.Size(93, 33);
-            button_Back.TabIndex = 36;
-            button_Back.Text = "Back";
-            button_Back.UseVisualStyleBackColor = true;
-            button_Back.Visible = false;
-            button_Back.Click += Button_Back_Click;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -427,7 +414,6 @@ namespace WDAC_Wizard
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(button_Next);
-            Controls.Add(button_Back);
             Controls.Add(control_Panel);
             Controls.Add(label_Welcome);
             Controls.Add(button_Merge);
@@ -463,7 +449,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Button settings_Button;
         private System.Windows.Forms.Button home_Button;
         private System.Windows.Forms.Button button_Next;
-        private System.Windows.Forms.Button button_Back;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel controlHighlight_Panel;
         private System.Windows.Forms.Button page3_Button;
