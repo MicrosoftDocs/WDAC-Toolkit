@@ -136,17 +136,8 @@ namespace WDAC_Wizard
                     }
                 }
 
-                signer.ID = siPolicySigner.ID;
-
-                // For custom-defined certificate rules, display the signer ID and CertRoot hash instead of the generic name
-                if (siPolicySigner.Name == "Custom-Defined Certificate" && siPolicySigner.CertRoot != null)
-                {
-                    signer.Name = $"{siPolicySigner.ID}: {siPolicySigner.CertRoot.ToString()}_{BitConverter.ToString(siPolicySigner.CertRoot.Value).Replace("-", "")}";
-                }
-                else
-                {
-                    signer.Name = siPolicySigner.Name;
-                }
+                signer.Name = siPolicySigner.Name;
+                signer.ID = siPolicySigner.ID; 
 
                 // CN
                 if(siPolicySigner.CertPublisher != null)
@@ -332,10 +323,10 @@ namespace WDAC_Wizard
                         productName = ((Deny)fileRule).ProductName;
                         fileDescription = ((Deny)fileRule).FileDescription;
                         internalName = ((Deny)fileRule).InternalName;
-                        packageFamilyName = ((Deny)fileRule).PackageFamilyName;
+                        packageFamilyName = ((Deny)fileRule).PackageFamilyName; 
 
                     }
-                    else if (fileRule.GetType() == typeof(Allow))
+                    else if(fileRule.GetType() == typeof(Allow))
                     {
                         action = "Allow";
                         fileRuleID = ((Allow)fileRule).ID;
@@ -364,12 +355,10 @@ namespace WDAC_Wizard
                     {
                         // If this is a hash rule, only show the one SHA256 Hash to the user. Easier to remove from table if they are to delete the rule
                         level = "Hash";
-
-                        // For file rules with no friendly name (converted from CIP), display the rule ID and hash instead
-                        if (String.IsNullOrEmpty(friendlyName) && hash != null)
-                        {
-                            friendlyName = $"{fileRuleID}: {BitConverter.ToString(hash).Replace("-", "")}";
-                        }
+                        //if (!friendlyName.Contains("Hash Page Sha256"))
+                        //{
+                        //    continue; 
+                        //}
                     }
 
                     // Filepath Rule
@@ -386,13 +375,6 @@ namespace WDAC_Wizard
                         {
                             friendlyName += filePath; 
                         }
-
-                        // For file rules with no friendly name (converted from CIP), display the rule ID and filePath instead
-                        if (String.IsNullOrEmpty(friendlyName) && filePath != null)
-                        {
-                            friendlyName = $"{fileRuleID}: {filePath}";
-                        }
-
                     }
 
                     // Packaged App Rule
@@ -400,12 +382,6 @@ namespace WDAC_Wizard
                     {
                         level = "Package Name";
                         fileAttrList = "Packaged Family Name (PFN): " + packageFamilyName;
-
-                        // For packaged app rules with no friendly name (converted from CIP), display the rule ID and PFN instead
-                        if (String.IsNullOrEmpty(friendlyName) && packageFamilyName != null)
-                        {
-                            friendlyName = $"{fileRuleID}: {packageFamilyName}";
-                        }
                     }
 
                     // Allow/Deny with File attributes rules
@@ -417,22 +393,22 @@ namespace WDAC_Wizard
                         // Precede the friendlyName with the Original FileName sub-level 
                         if (fileName != null) 
                         { 
-                            fileAttrList += String.Format("Original FileName: {0}, ", fileName);
+                            fileAttrList += String.Format("FileName: {0}, ", fileName);
                         }
 
                         if (productName != null)
                         {
-                            fileAttrList += String.Format("ProductName: {0}, ", productName);
+                            fileAttrList = String.Format("ProductName: {0}, ", productName);
                         }
 
                         if (fileDescription != null)
                         {
-                            fileAttrList += String.Format("FileDescription: {0}, ", fileDescription);
+                            fileAttrList = String.Format("FileDescription: {0}, ", fileDescription);
                         }
 
                         if (internalName != null)
                         {
-                            fileAttrList += String.Format("InternalName: {0}, ", internalName);
+                            fileAttrList = String.Format("InternalName: {0}, ", friendlyName);
                         }
 
                         // Remove trailing comma and whitespace on list of FileAttributes
@@ -446,12 +422,6 @@ namespace WDAC_Wizard
                         if (!String.IsNullOrEmpty(exceptionList))
                         {
                             exceptionList = exceptionList.Remove(exceptionList.Length - 2);
-                        }
-
-                        // For file attribute rules with no friendly name (converted from CIP), display the rule ID and fileAttrList instead
-                        if (String.IsNullOrEmpty(friendlyName) && fileAttrList != null)
-                        {
-                            friendlyName = $"{fileRuleID}: {fileAttrList}";
                         }
                     }
 

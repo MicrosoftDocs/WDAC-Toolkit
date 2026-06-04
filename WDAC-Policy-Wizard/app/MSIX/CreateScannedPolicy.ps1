@@ -22,6 +22,7 @@ $OmitArray = if ($PathsToOmit -ne '') { $PathsToOmit -split ',' } else { @() }
 # Run New-CIPolicy -Scan to generate a policy from a directory
 # Use -WarningAction SilentlyContinue to suppress the "An item with the same key has already been added." warning
 # which previously required running the command twice as a workaround.
+
 # Build optional splat for OmitPaths
 $omitSplat = @{}
 if ($OmitArray.Count -gt 0) { $omitSplat['OmitPaths'] = $OmitArray }
