@@ -225,6 +225,7 @@ namespace WDAC_Wizard
         private void Home_Button_Click(object sender, EventArgs e)
         {
             this.button_Next.Visible = false;
+            this.button_Back.Visible = false;
 
             // If the CustomRules Panel is open, close it
             if (this.CustomRuleinProgress && this._SigningRulesControl != null)
@@ -266,6 +267,7 @@ namespace WDAC_Wizard
         {
             Logger.Log.AddInfoMsg("Workflow -- Settings Button Selected");
             this.button_Next.Visible = false;
+            this.button_Back.Visible = false;
             this.CurrentPage = 99; 
 
             var _SettingsPage = new SettingsPage(this);
@@ -301,11 +303,67 @@ namespace WDAC_Wizard
                 this.CurrentPage++;
                 PageController(sender, e);
             }
-                
+
             else
                 DisplayInfoText(99); 
         }
-        
+
+        /// <summary>
+        /// Controls the PageController method when the user presses the Back button.
+        /// Navigates to the previous page in the workflow without rebuilding it.
+        /// </summary>
+        private void Button_Back_Click(object sender, EventArgs e)
+        {
+            // Cannot go back from home page or first workflow page
+            if (this.CurrentPage <= 1)
+            {
+                return;
+            }
+
+            // If a custom rule is in progress, confirm abandoning it
+            if (this.CustomRuleinProgress)
+            {
+                DialogResult res = MessageBox.Show("Do you want to abandon this custom rule and go back?",
+                    "Confirmation",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (res == DialogResult.No)
+                {
+                    return;
+                }
+
+                this.CustomRuleinProgress = false;
+                if (this._SigningRulesControl != null)
+                {
+                    this._SigningRulesControl.CloseCustomRulesPanel();
+                }
+            }
+
+            // Clear any error state from the page we are leaving
+            this.ErrorOnPage = false;
+            this.ErrorMsg = string.Empty;
+
+            // Reuse existing pages instead of recreating them
+            this.RedoFlowRequired = false;
+
+            this.CurrentPage--;
+
+            // Re-show the Next button in case the previous page hid it (e.g. build page)
+            this.button_Next.Visible = true;
+
+            PageController(sender, e);
+            UpdateBackButtonVisibility();
+        }
+
+        /// <summary>
+        /// Updates the visibility of the Back button based on the current page in the workflow.
+        /// </summary>
+        private void UpdateBackButtonVisibility()
+        {
+            this.button_Back.Visible = this.button_Next.Visible && this.CurrentPage > 1;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -1816,6 +1874,8 @@ namespace WDAC_Wizard
             button_Next.BringToFront();
             button_Next.Focus(); 
 
+            this.Controls.Add(button_Back);
+            button_Back.BringToFront();
             // Set highlight panel location
             int X_OFFSET = 15;
             int Y_OFFSET = 5;
@@ -2037,6 +2097,8 @@ namespace WDAC_Wizard
                 controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
                 break;
             }
+
+            UpdateBackButtonVisibility();
         }
 
         /// <summary>
@@ -2171,6 +2233,13 @@ namespace WDAC_Wizard
                 button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
                 button_Next.BackColor = System.Drawing.Color.Transparent;
+
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.DodgerBlue;
+                button_Back.BackColor = System.Drawing.Color.Transparent;
             }
 
             // Light Mode
@@ -2182,6 +2251,13 @@ namespace WDAC_Wizard
                 button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_Next.ForeColor = System.Drawing.Color.Black;
                 button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
+
+                button_Back.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+                button_Back.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Back.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Back.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                button_Back.ForeColor = System.Drawing.Color.Black;
+                button_Back.BackColor = System.Drawing.Color.WhiteSmoke;
             }
         }
 
