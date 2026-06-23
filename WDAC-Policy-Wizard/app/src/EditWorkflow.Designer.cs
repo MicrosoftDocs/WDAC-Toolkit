@@ -237,7 +237,7 @@ namespace WDAC_Wizard
             // 
             buttonParseEventLog.Location = new System.Drawing.Point(343, 72);
             buttonParseEventLog.Name = "buttonParseEventLog";
-            buttonParseEventLog.Size = new System.Drawing.Size(133, 27);
+            buttonParseEventLog.Size = new System.Drawing.Size(165, 32);
             buttonParseEventLog.TabIndex = 112;
             buttonParseEventLog.Text = "Parse Event Logs";
             buttonParseEventLog.UseVisualStyleBackColor = true;
@@ -248,7 +248,7 @@ namespace WDAC_Wizard
             buttonParseLogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             buttonParseLogFile.Location = new System.Drawing.Point(343, 174);
             buttonParseLogFile.Name = "buttonParseLogFile";
-            buttonParseLogFile.Size = new System.Drawing.Size(133, 27);
+            buttonParseLogFile.Size = new System.Drawing.Size(165, 32);
             buttonParseLogFile.TabIndex = 113;
             buttonParseLogFile.Text = "Parse Log File(s)";
             buttonParseLogFile.UseVisualStyleBackColor = true;
@@ -384,7 +384,7 @@ namespace WDAC_Wizard
             buttonParseMDELog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             buttonParseMDELog.Location = new System.Drawing.Point(342, 273);
             buttonParseMDELog.Name = "buttonParseMDELog";
-            buttonParseMDELog.Size = new System.Drawing.Size(133, 27);
+            buttonParseMDELog.Size = new System.Drawing.Size(165, 32);
             buttonParseMDELog.TabIndex = 124;
             buttonParseMDELog.Text = "Parse Log File(s)";
             buttonParseMDELog.UseVisualStyleBackColor = true;

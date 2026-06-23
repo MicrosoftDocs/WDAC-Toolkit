@@ -101,6 +101,7 @@ namespace WDAC_Wizard
             label_Info.Tag = "IgnoreDarkMode";
             label_Info.Text = "Info Text";
             label_Info.Visible = false;
+            label_Info.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             // 
             // backgroundWorker1
             // 
@@ -164,6 +165,7 @@ namespace WDAC_Wizard
             control_Panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             control_Panel.Name = "control_Panel";
             control_Panel.Size = new System.Drawing.Size(150, 700);
+            control_Panel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             control_Panel.TabIndex = 30;
             // 
             // workflow_Label
@@ -334,6 +336,7 @@ namespace WDAC_Wizard
             settings_Button.Name = "settings_Button";
             settings_Button.Size = new System.Drawing.Size(129, 45);
             settings_Button.TabIndex = 31;
+            settings_Button.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             settings_Button.Text = "     Settings";
             settings_Button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             settings_Button.UseVisualStyleBackColor = false;
@@ -346,6 +349,7 @@ namespace WDAC_Wizard
             button_Next.Name = "button_Next";
             button_Next.Size = new System.Drawing.Size(93, 33);
             button_Next.TabIndex = 31;
+            button_Next.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             button_Next.Text = "Next";
             button_Next.UseVisualStyleBackColor = true;
             button_Next.Visible = false;
@@ -416,10 +420,12 @@ namespace WDAC_Wizard
             Controls.Add(button_Edit);
             Controls.Add(label_Info);
             Controls.Add(button_New);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             HelpButton = true;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            MaximizeBox = true;
+            MinimumSize = new System.Drawing.Size(900, 600);
             Name = "MainWindow";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "App Control Policy Wizard";

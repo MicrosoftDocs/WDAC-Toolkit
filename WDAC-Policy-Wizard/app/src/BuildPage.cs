@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace WDAC_Wizard
 {
-    public partial class BuildPage : UserControl
+    public partial class BuildPage : UserControl, IWizardPage
     {
         public string XmlFilePath { get; set; } // File path for the WDAC policy XML file
         public string BinFilePath { get; set; } // File path for the WDAC policy binary file

@@ -82,7 +82,7 @@ namespace WDAC_Wizard
             // rulesDataGrid
             // 
             this.rulesDataGrid.AllowUserToDeleteRows = false;
-            this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.rulesDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -106,62 +106,70 @@ namespace WDAC_Wizard
             this.rulesDataGrid.RowTemplate.Height = 24;
             this.rulesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.rulesDataGrid.Size = new System.Drawing.Size(879, 440);
+            this.rulesDataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.rulesDataGrid.TabIndex = 92;
             this.rulesDataGrid.VirtualMode = true;
             this.rulesDataGrid.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.RulesDataGrid_CellValueNeeded);
+            this.rulesDataGrid.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RulesDataGrid_ColumnHeaderMouseClick);
             // 
             // column_Action
             // 
-            this.column_Action.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.column_Action.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.column_Action.HeaderText = "Action";
             this.column_Action.MinimumWidth = 6;
             this.column_Action.Name = "column_Action";
             this.column_Action.ReadOnly = true;
+            this.column_Action.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.column_Action.Width = 76;
             // 
             // column_Level
             // 
-            this.column_Level.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.column_Level.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.column_Level.HeaderText = "Level";
             this.column_Level.MinimumWidth = 6;
             this.column_Level.Name = "column_Level";
             this.column_Level.ReadOnly = true;
+            this.column_Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.column_Level.Width = 71;
             // 
             // Column_Name
             // 
-            this.Column_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Column_Name.HeaderText = "Name";
             this.Column_Name.MinimumWidth = 6;
             this.Column_Name.Name = "Column_Name";
             this.Column_Name.ReadOnly = true;
+            this.Column_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.Column_Name.Width = 74;
             // 
             // Column_Files
             // 
-            this.Column_Files.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column_Files.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Column_Files.HeaderText = "Associated Files";
             this.Column_Files.MinimumWidth = 6;
             this.Column_Files.Name = "Column_Files";
             this.Column_Files.ReadOnly = true;
+            this.Column_Files.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.Column_Files.Width = 127;
             // 
             // Column_Exceptions
             // 
-            this.Column_Exceptions.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column_Exceptions.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Column_Exceptions.HeaderText = "Exceptions";
             this.Column_Exceptions.MinimumWidth = 6;
             this.Column_Exceptions.Name = "Column_Exceptions";
             this.Column_Exceptions.ReadOnly = true;
+            this.Column_Exceptions.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.Column_Exceptions.Width = 105;
             // 
             // column_ID
             // 
-            this.column_ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.column_ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.column_ID.HeaderText = "Rule ID";
             this.column_ID.MinimumWidth = 8;
             this.column_ID.Name = "column_ID";
             this.column_ID.ReadOnly = true;
+            this.column_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.column_ID.Width = 77;
             // 
             // label8
@@ -195,6 +203,7 @@ namespace WDAC_Wizard
             this.deleteButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(114, 26);
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteButton.TabIndex = 93;
             this.deleteButton.Text = "- Remove Rule";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -211,6 +220,7 @@ namespace WDAC_Wizard
             this.label_Error.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_Error.Name = "label_Error";
             this.label_Error.Size = new System.Drawing.Size(648, 18);
+            this.label_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label_Error.TabIndex = 96;
             this.label_Error.Tag = "IgnoreDarkMode";
             this.label_Error.Text = "Label_Error: Lorem Ipsum text text text text. Lorum Ipsum text text text text tex" +
@@ -224,6 +234,7 @@ namespace WDAC_Wizard
             this.addButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(146, 26);
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addButton.TabIndex = 97;
             this.addButton.Text = "+ Add Custom Rule";
             this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -236,6 +247,7 @@ namespace WDAC_Wizard
             this.checkBox_KernelList.Location = new System.Drawing.Point(163, 634);
             this.checkBox_KernelList.Name = "checkBox_KernelList";
             this.checkBox_KernelList.Size = new System.Drawing.Size(320, 21);
+            this.checkBox_KernelList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_KernelList.TabIndex = 98;
             this.checkBox_KernelList.Text = "Merge with Recommended Kernel Block Rules";
             this.checkBox_KernelList.UseVisualStyleBackColor = true;
@@ -248,6 +260,7 @@ namespace WDAC_Wizard
             this.checkBox_UserModeList.Location = new System.Drawing.Point(163, 607);
             this.checkBox_UserModeList.Name = "checkBox_UserModeList";
             this.checkBox_UserModeList.Size = new System.Drawing.Size(348, 21);
+            this.checkBox_UserModeList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_UserModeList.TabIndex = 99;
             this.checkBox_UserModeList.Text = "Merge with Recommended User Mode Block Rules";
             this.checkBox_UserModeList.UseVisualStyleBackColor = false;
@@ -295,6 +308,7 @@ namespace WDAC_Wizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.Controls.Add(this.panel_Progress);

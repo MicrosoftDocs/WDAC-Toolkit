@@ -12,7 +12,7 @@ using System.IO;
 
 namespace WDAC_Wizard.src
 {
-    public partial class PolicyMerge_Control : UserControl
+    public partial class PolicyMerge_Control : UserControl, IWizardPage
     {
         private int nPolicies;
         private string mergePolicyPath;
@@ -109,6 +109,10 @@ namespace WDAC_Wizard.src
                         this.nPolicies += 1;
                         this.displayObjects.Add(new DisplayObject(this.nPolicies.ToString(), policyPath));
                         this.policiesDataGrid.RowCount += 1;
+
+                        // Size each column to fit its text. Columns remain user-resizable
+                        // afterwards since AutoSizeColumnsMode stays None.
+                        GridLayoutHelper.AutoFitColumns(this.policiesDataGrid);
 
                         this._MainWindow.Policy.PoliciesToMerge = this.policiesToMerge;
 

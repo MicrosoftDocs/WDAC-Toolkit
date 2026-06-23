@@ -469,6 +469,10 @@ namespace WDAC_Wizard
             this.displayObjects.Add(displayObject);
             this.dataGridView_Exceptions.RowCount += 1;
 
+            // Size each column to fit its text. Columns remain user-resizable afterwards
+            // since AutoSizeColumnsMode stays None.
+            GridLayoutHelper.AutoFitColumns(this.dataGridView_Exceptions);
+
             // Scroll to bottom to see new rule added to list
             this.dataGridView_Exceptions.FirstDisplayedScrollingRowIndex = this.dataGridView_Exceptions.RowCount - 1;
             this.ExceptionRule = new PolicyCustomRules();

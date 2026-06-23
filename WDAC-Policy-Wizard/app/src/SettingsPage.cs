@@ -17,7 +17,7 @@ using System.Xml;
 
 namespace WDAC_Wizard
 {
-    public partial class SettingsPage : UserControl
+    public partial class SettingsPage : UserControl, IWizardPage
     {
         private Dictionary<string, bool> SettingsDict;
         private MainWindow _MainWindow;

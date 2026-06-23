@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WDAC_Wizard
 {
-    public partial class EventLogRuleConfiguration : UserControl
+    public partial class EventLogRuleConfiguration : UserControl, IWizardPage
     {
         private List<CiEvent> CiEvents;
         // Declare an ArrayList to serve as the data store. 
@@ -94,6 +94,10 @@ namespace WDAC_Wizard
                 this.DisplayObjects.Add(dpObject);
                 this.eventsDataGridView.RowCount += 1;
             }
+
+            // Size each column to fit its text. Columns remain user-resizable afterwards
+            // since AutoSizeColumnsMode stays None.
+            GridLayoutHelper.AutoFitColumns(this.eventsDataGridView);
         }
 
         /// <summary>
@@ -188,15 +192,14 @@ namespace WDAC_Wizard
                 return;
             }
 
-            // Set the UI
-            ResetCustomRulesPanel();
-            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                              this.CiEvents[selectedRow].OriginalFilename,
-                              this.CiEvents[selectedRow].FileVersion,
-                              this.CiEvents[selectedRow].ProductName);
-
+            // Update the selected row before refreshing the UI so that the
+            // rule type panel reflects the newly selected event.
             this.SelectedRow = selectedRow;
+
+            // Set the UI. Keep the user's current rule type selection and
+            // repopulate the matching panel for the newly selected row.
+            ResetCustomRulesPanel();
+            RefreshRulePanelForSelectedRow();
         }
 
         /// <summary>
@@ -206,14 +209,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void EventRowClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Set the UI
-            ResetCustomRulesPanel();
-
             int selectedRow = e.RowIndex;
-            if(selectedRow >= this.CiEvents.Count)
-            {
-                return;
-            }
 
             // Header selected, sort table
             if(selectedRow == -1)
@@ -221,14 +217,19 @@ namespace WDAC_Wizard
                 SortDataGrid(sender, e);
                 return;
             }
-            
-            SetPublisherPanel(this.CiEvents[selectedRow].SignerInfo.IssuerName,
-                              this.CiEvents[selectedRow].SignerInfo.PublisherName,
-                              this.CiEvents[selectedRow].OriginalFilename,
-                              this.CiEvents[selectedRow].FileVersion,
-                              this.CiEvents[selectedRow].ProductName);
 
+            if(selectedRow >= this.CiEvents.Count)
+            {
+                return;
+            }
+
+            // Update the selected row before refreshing the UI
             this.SelectedRow = selectedRow;
+
+            // Set the UI. Keep the user's current rule type selection and
+            // repopulate the matching panel for the newly selected row.
+            ResetCustomRulesPanel();
+            RefreshRulePanelForSelectedRow();
         }
 
         /// <summary>
@@ -410,8 +411,8 @@ namespace WDAC_Wizard
             this.versionTextBox.Clear();
             this.productTextBox.Clear();
 
-            // Dropdown
-            this.ruleTypeComboBox.SelectedIndex = 0; 
+            // NOTE: The rule type dropdown is intentionally left unchanged so the
+            // user's selection persists as they navigate between rows.
         }
 
 
@@ -725,6 +726,20 @@ namespace WDAC_Wizard
             // Path
             // File Attributes
             // File Hash
+            RefreshRulePanelForSelectedRow();
+        }
+
+        /// <summary>
+        /// Populates the rule details panel for the currently selected row based
+        /// on the rule type currently chosen in the dropdown. The dropdown
+        /// selection is intentionally preserved as the user navigates rows.
+        /// </summary>
+        private void RefreshRulePanelForSelectedRow()
+        {
+            if (this.SelectedRow < 0 || this.SelectedRow >= this.CiEvents.Count)
+            {
+                return;
+            }
 
             HideAllPanels();
 

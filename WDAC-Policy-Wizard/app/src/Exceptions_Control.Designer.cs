@@ -290,7 +290,7 @@
             // dataGridView_Exceptions
             // 
             this.dataGridView_Exceptions.AllowUserToDeleteRows = false;
-            this.dataGridView_Exceptions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView_Exceptions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             this.dataGridView_Exceptions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Exceptions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Action,
@@ -420,6 +420,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panel_ExceptionRule);
             this.Name = "Exceptions_Control";

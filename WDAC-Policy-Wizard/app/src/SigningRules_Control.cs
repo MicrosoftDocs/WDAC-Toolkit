@@ -16,7 +16,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace WDAC_Wizard
 {
-    public partial class SigningRules_Control : UserControl
+    public partial class SigningRules_Control : UserControl, IWizardPage
     {
         // CI Policy objects
         public WDAC_Policy Policy;
@@ -504,6 +504,10 @@ namespace WDAC_Wizard
                     }
                 }
             }
+
+            // Size each column to fit its text once all rules are loaded. Columns remain
+            // user-resizable afterwards since AutoSizeColumnsMode stays None.
+            GridLayoutHelper.AutoFitColumns(this.rulesDataGrid);
         }
 
 
@@ -1138,6 +1142,139 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Sorts the rules grid by the clicked column header. Mirrors the event grid behavior:
+        /// the first click on a column sorts ascending and subsequent clicks toggle the direction.
+        /// The underlying displayObjects data store and the custom rule RowNumber references are
+        /// kept in sync so deletion and editing continue to map to the correct rows.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RulesDataGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex < 0 || this.displayObjects.Count == 0)
+            {
+                return;
+            }
+
+            string columnName = this.rulesDataGrid.Columns[e.ColumnIndex].Name;
+
+            // Determine sort direction. If the column is already the sorted column, toggle the
+            // direction. Otherwise sort ascending and clear the sorted tag on the other columns.
+            bool ascending = true;
+            if (this.rulesDataGrid.Columns[e.ColumnIndex].Tag as string == "SortedAsc")
+            {
+                ascending = false;
+            }
+
+            // Project the display objects onto a sortable list paired with their original row index
+            // so the custom rule RowNumber references can be remapped after sorting.
+            var indexedObjects = new List<KeyValuePair<int, DisplayObject>>();
+            for (int i = 0; i < this.displayObjects.Count; i++)
+            {
+                indexedObjects.Add(new KeyValuePair<int, DisplayObject>(i, (DisplayObject)this.displayObjects[i]));
+            }
+
+            Comparison<DisplayObject> comparison = GetDisplayObjectComparison(columnName);
+            indexedObjects.Sort((x, y) =>
+            {
+                int result = comparison(x.Value, y.Value);
+                return ascending ? result : -result;
+            });
+
+            // Map each original row index to its new sorted position.
+            var oldToNewIndex = new Dictionary<int, int>();
+            for (int newIndex = 0; newIndex < indexedObjects.Count; newIndex++)
+            {
+                oldToNewIndex[indexedObjects[newIndex].Key] = newIndex;
+            }
+
+            // Rebuild the display objects data store in the sorted order.
+            this.displayObjects.Clear();
+            foreach (var pair in indexedObjects)
+            {
+                this.displayObjects.Add(pair.Value);
+            }
+
+            // Remap the in-session custom rule row references so deletion still targets the right row.
+            if (this.Policy != null && this.Policy.CustomRules != null)
+            {
+                foreach (var customRule in this.Policy.CustomRules)
+                {
+                    if (oldToNewIndex.TryGetValue(customRule.RowNumber, out int newRowNumber))
+                    {
+                        customRule.RowNumber = newRowNumber;
+                    }
+                }
+            }
+
+            // Update the sorted tags so the next click toggles the direction.
+            foreach (DataGridViewColumn column in this.rulesDataGrid.Columns)
+            {
+                column.Tag = null;
+                column.HeaderCell.SortGlyphDirection = SortOrder.None;
+            }
+
+            this.rulesDataGrid.Columns[e.ColumnIndex].Tag = ascending ? "SortedAsc" : "SortedDesc";
+            this.rulesDataGrid.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                ascending ? SortOrder.Ascending : SortOrder.Descending;
+
+            // Repaint the virtual-mode grid with the newly ordered data store.
+            this.rulesDataGrid.Refresh();
+        }
+
+        /// <summary>
+        /// Returns the comparison delegate used to sort the display objects for the given column.
+        /// Empty/null values are sorted to the bottom for ascending sorts.
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        private Comparison<DisplayObject> GetDisplayObjectComparison(string columnName)
+        {
+            switch (columnName)
+            {
+                case "column_Action":
+                    return (x, y) => CompareDisplayStrings(x.Action, y.Action);
+
+                case "column_Level":
+                    return (x, y) => CompareDisplayStrings(x.Level, y.Level);
+
+                case "Column_Name":
+                    return (x, y) => CompareDisplayStrings(x.Name, y.Name);
+
+                case "Column_Files":
+                    return (x, y) => CompareDisplayStrings(x.Files, y.Files);
+
+                case "Column_Exceptions":
+                    return (x, y) => CompareDisplayStrings(x.Exceptions, y.Exceptions);
+
+                case "column_ID":
+                    return (x, y) => CompareDisplayStrings(x.Id, y.Id);
+
+                default:
+                    return (x, y) => 0;
+            }
+        }
+
+        /// <summary>
+        /// Case-insensitive string comparison that sorts empty/null values to the bottom.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private static int CompareDisplayStrings(string x, string y)
+        {
+            bool xEmpty = string.IsNullOrWhiteSpace(x);
+            bool yEmpty = string.IsNullOrWhiteSpace(y);
+
+            // Sort empty/null strings to the bottom
+            if (xEmpty && yEmpty) return 0;
+            if (xEmpty) return 1;
+            if (yEmpty) return -1;
+
+            return string.Compare(x, y, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        /// <summary>
         /// Sets the display object when the DataGridView needed to paint data
         /// </summary>
         private void RulesDataGrid_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
@@ -1212,6 +1349,10 @@ namespace WDAC_Wizard
             // Add to the DisplayObject
             this.displayObjects.Add(new DisplayObject(action, level, name, files, exceptions));
             this.rulesDataGrid.RowCount += 1;
+
+            // Size each column to fit its text. Columns remain user-resizable afterwards
+            // since AutoSizeColumnsMode stays None.
+            GridLayoutHelper.AutoFitColumns(this.rulesDataGrid);
 
             // Add custom list to RulesList
             this.Policy.CustomRules.Add(customRule);

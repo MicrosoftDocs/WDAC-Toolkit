@@ -14,7 +14,7 @@ using WDAC_Wizard.Properties;
 
 namespace WDAC_Wizard
 {
-    public partial class ConfigTemplate_Control : UserControl
+    public partial class ConfigTemplate_Control : UserControl, IWizardPage
     {        
         public MainWindow _MainWindow;
         private WDAC_Policy Policy;

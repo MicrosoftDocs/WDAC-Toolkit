@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace WDAC_Wizard
 {
-    public partial class PolicyType : UserControl
+    public partial class PolicyType : UserControl, IWizardPage
     {
         public string BaseToSupplementPath { get; set; } // Path to the supplemental policy on disk
 
