@@ -36,6 +36,24 @@ namespace WDAC_Wizard
         private string PrevComText = String.Empty;
         private bool IgnoreInput = false;
 
+        // X-coordinate of the slider value boxes (textBoxSlider_*) for the different rule types.
+        // File Attribute labels (e.g. "Original filename:") are wider than the Publisher labels,
+        // so the value boxes need to be shifted right to avoid overlapping the labels.
+        private const int DefaultSliderBoxX = 139;
+        private const int FileAttributeSliderBoxX = 165;
+
+        // Padding kept between the right edge of the value boxes and the panel edge so the
+        // boxes never run off the right side of the window.
+        private const int SliderBoxRightPadding = 14;
+
+        // Upper bound on the value box width so the boxes don't become unreasonably long on
+        // very wide windows.
+        private const int SliderBoxMaxWidth = 700;
+
+        // Tracks the current left edge of the value boxes so the layout can be recomputed when
+        // the panel (and therefore the window) is resized.
+        private int currentSliderBoxX = DefaultSliderBoxX;
+
         private enum UIState
         {
             RuleConditions = 0,
@@ -1067,6 +1085,50 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
+        /// Moves the slider value boxes (textBoxSlider_*) to the supplied X-coordinate so that wider
+        /// labels (e.g. File Attribute "Original filename:") do not overlap the value boxes. The right
+        /// edge is kept fixed so the boxes remain within the panel.
+        /// </summary>
+        /// <param name="xLocation">The new X-coordinate for the left edge of the value boxes.</param>
+        private void OffsetSliderValueBoxes(int xLocation)
+        {
+            this.currentSliderBoxX = xLocation;
+
+            TextBox[] fullWidthBoxes = { this.textBoxSlider_0, this.textBoxSlider_1, this.textBoxSlider_2, this.textBoxSlider_3 };
+
+            // Expand the boxes to fill the panel, leaving padding on the right so they never run
+            // off the edge of the window. Cap the width so the boxes don't get too long.
+            int availableWidth = this.panel_Publisher_Scroll.ClientSize.Width - xLocation - SliderBoxRightPadding;
+            int newWidth = Math.Min(availableWidth, SliderBoxMaxWidth);
+            if (newWidth < 100)
+            {
+                newWidth = 100; // sanity floor
+            }
+
+            foreach (TextBox box in fullWidthBoxes)
+            {
+                box.Location = new Point(xLocation, box.Location.Y);
+                box.Size = new Size(newWidth, box.Size.Height);
+            }
+
+            // textBoxEKU spans the full width like the attribute boxes
+            this.textBoxEKU.Location = new Point(xLocation, this.textBoxEKU.Location.Y);
+            this.textBoxEKU.Size = new Size(newWidth, this.textBoxEKU.Size.Height);
+
+            // textBoxSlider_4 (version box) keeps its own width but follows the same left edge
+            this.textBoxSlider_4.Location = new Point(xLocation, this.textBoxSlider_4.Location.Y);
+        }
+
+        /// <summary>
+        /// Recomputes the slider value box layout when the panel is resized so the boxes grow
+        /// and shrink with the window width.
+        /// </summary>
+        private void Panel_Publisher_Scroll_Resize(object sender, EventArgs e)
+        {
+            OffsetSliderValueBoxes(this.currentSliderBoxX);
+        }
+
+        /// <summary>
         /// Sets the default state of the textboxes and checkboxes based on the rule type
         /// </summary>
         /// <param name="ruleType"></param>
@@ -1136,6 +1198,9 @@ namespace WDAC_Wizard
                     this.checkBoxAttribute2.Text = "Product name:";
                     this.checkBoxAttribute3.Text = "File name:";
                     this.checkBoxAttribute4.Text = "Min. Version:";
+
+                    // Publisher labels are narrow; restore the value boxes to their default position
+                    OffsetSliderValueBoxes(DefaultSliderBoxX);
 
                     // Version textbox should be set to normal size
                     this.textBoxSlider_4.Size = this.textBoxSlider_3.Size;
@@ -1217,6 +1282,10 @@ namespace WDAC_Wizard
                     this.checkBoxAttribute1.Text = "File description:";
                     this.checkBoxAttribute2.Text = "Product name:";
                     this.checkBoxAttribute3.Text = "Internal name:";
+
+                    // The File Attribute labels (e.g. "Original filename:") are wider than the
+                    // Publisher labels, so shift the value boxes right to avoid overlapping the labels
+                    OffsetSliderValueBoxes(FileAttributeSliderBoxX);
 
                     // Set checkbox states to all disabled -- allow user to select the ones desired
                     this.checkBoxAttribute0.Checked = false;

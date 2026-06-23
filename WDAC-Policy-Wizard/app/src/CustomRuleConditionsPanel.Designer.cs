@@ -693,16 +693,19 @@
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_4);
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_1);
             panel_Publisher_Scroll.Controls.Add(textBoxSlider_0);
+            panel_Publisher_Scroll.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             panel_Publisher_Scroll.Location = new System.Drawing.Point(4, 389);
             panel_Publisher_Scroll.Margin = new System.Windows.Forms.Padding(2);
             panel_Publisher_Scroll.Name = "panel_Publisher_Scroll";
             panel_Publisher_Scroll.Size = new System.Drawing.Size(510, 309);
             panel_Publisher_Scroll.TabIndex = 103;
             panel_Publisher_Scroll.Visible = false;
+            panel_Publisher_Scroll.Resize += Panel_Publisher_Scroll_Resize;
             // 
             // textBoxSlider_2
             // 
             textBoxSlider_2.BackColor = System.Drawing.SystemColors.Control;
+            textBoxSlider_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxSlider_2.Enabled = false;
             textBoxSlider_2.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxSlider_2.Location = new System.Drawing.Point(139, 100);
@@ -776,6 +779,7 @@
             // textBoxEKU
             // 
             textBoxEKU.BackColor = System.Drawing.SystemColors.Control;
+            textBoxEKU.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxEKU.Enabled = false;
             textBoxEKU.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxEKU.Location = new System.Drawing.Point(139, 239);
@@ -825,6 +829,7 @@
             // textBox_MaxVersion
             // 
             textBox_MaxVersion.BackColor = System.Drawing.SystemColors.Control;
+            textBox_MaxVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBox_MaxVersion.Enabled = false;
             textBox_MaxVersion.Font = new System.Drawing.Font("Tahoma", 9F);
             textBox_MaxVersion.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -841,6 +846,7 @@
             // textBoxSlider_3
             // 
             textBoxSlider_3.BackColor = System.Drawing.SystemColors.Control;
+            textBoxSlider_3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxSlider_3.Enabled = false;
             textBoxSlider_3.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxSlider_3.Location = new System.Drawing.Point(139, 142);
@@ -854,6 +860,7 @@
             // textBoxSlider_4
             // 
             textBoxSlider_4.BackColor = System.Drawing.SystemColors.Control;
+            textBoxSlider_4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxSlider_4.Enabled = false;
             textBoxSlider_4.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxSlider_4.Location = new System.Drawing.Point(139, 184);
@@ -867,6 +874,7 @@
             // textBoxSlider_1
             // 
             textBoxSlider_1.BackColor = System.Drawing.SystemColors.Control;
+            textBoxSlider_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxSlider_1.Enabled = false;
             textBoxSlider_1.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxSlider_1.Location = new System.Drawing.Point(139, 58);
@@ -880,6 +888,7 @@
             // textBoxSlider_0
             // 
             textBoxSlider_0.BackColor = System.Drawing.SystemColors.Control;
+            textBoxSlider_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             textBoxSlider_0.Enabled = false;
             textBoxSlider_0.Font = new System.Drawing.Font("Tahoma", 9F);
             textBoxSlider_0.Location = new System.Drawing.Point(139, 16);
