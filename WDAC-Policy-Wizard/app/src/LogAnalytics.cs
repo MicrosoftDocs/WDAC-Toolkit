@@ -153,7 +153,7 @@ namespace WDAC_Wizard
         }
 
         /// <summary>
-        /// Creates a 3076/3077 CiEvent from the fields in the AH Record
+        /// Creates a 8028/8029 script CiEvent from the fields in the AH Record
         /// </summary>
         /// <param name="record">Single LogAnalytic CSV record to parse into a policy log event</param>
         /// <param name="eventId">String containing the event ID</param>
