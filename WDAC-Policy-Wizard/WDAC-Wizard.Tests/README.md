@@ -4,7 +4,7 @@ This project contains comprehensive unit tests for the WDAC Policy Wizard applic
 
 ## Test Coverage
 
-The test suite includes **136 tests** covering the following areas:
+The test suite includes **145 tests** covering the following areas:
 
 ### 1. Helper Utility Tests (HelperTests.cs)
 - **IsValidPublisher** - Publisher CN validation (5 tests)
@@ -49,9 +49,12 @@ The test suite includes **136 tests** covering the following areas:
 ### 5. Log Parsing Tests (LogParsingTests.cs)
 - Log Analytics CSV parsing for 3076, 3077, 8028, and 8029 events
 - EVTX parsing and signer correlation for 3033, 3076, 3077, 8028, and 8029 events
+- Full `CiEvent` field validation for CSV and EVTX audit events
+- Hash, path, publisher, publisher/file-attribute, and file-attribute policy generation
+- Negative coverage for empty or malformed CSV, malformed EVTX JSON, and duplicate records
 - End-to-end policy generation compared with checked-in expected XML policies
 
-**Total: 4 tests**
+**Total: 13 tests**
 
 ## Running the Tests
 
@@ -130,10 +133,10 @@ This allows testing of internal utility classes like `Helper` without making the
 
 ## Test Results
 
-Current status: **All 136 tests passing ✅**
+Current status: **All 145 tests passing ✅**
 
 ```
-Passed!  - Failed:     0, Passed:   136, Skipped:     0, Total:   136
+Passed!  - Failed:     0, Passed:   145, Skipped:     0, Total:   145
 ```
 
 ## Future Test Enhancements

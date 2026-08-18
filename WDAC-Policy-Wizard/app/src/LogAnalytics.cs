@@ -123,6 +123,8 @@ namespace WDAC_Wizard
         {
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = Convert.ToInt32(eventId);
+            ciEvent.Timestamp = record.TimeGenerated;
+            ciEvent.DeviceId = record.Computer;
             ciEvent.FileName = Path.GetFileName(record.AffectedFile);
             ciEvent.FilePath = Helper.GetDOSPath(record.AffectedFile); // + "\\" + ciEvent.FileName;
             ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1_Hash);
@@ -138,10 +140,14 @@ namespace WDAC_Wizard
             ciEvent.SignerInfo.PublisherTBSHash = Helper.ConvertHashStringToByte(record.PublisherTBSHash); 
             ciEvent.SignerInfo.IssuerName = record.IssuerName;
             ciEvent.SignerInfo.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash); 
+            ciEvent.SignerInfo.Timestamp = record.TimeGenerated;
+            ciEvent.SignerInfo.DeviceId = record.Computer;
 
             // Policy
-            ciEvent.PolicyId = record.PolicyGUID; 
+            ciEvent.PolicyId = record.PolicyID;
+            ciEvent.PolicyGUID = record.PolicyGUID;
             ciEvent.PolicyName = record.PolicyName;
+            ciEvent.PolicyHash = Helper.ConvertHashStringToByte(record.PolicyHash);
 
             return ciEvent;
         }
@@ -156,6 +162,8 @@ namespace WDAC_Wizard
         {
             CiEvent ciEvent = new CiEvent();
             ciEvent.EventId = Convert.ToInt32(eventId);
+            ciEvent.Timestamp = record.TimeGenerated;
+            ciEvent.DeviceId = record.Computer;
             ciEvent.FileName = Path.GetFileName(record.AffectedFile);
             ciEvent.FilePath = Helper.GetDOSPath(record.AffectedFile); // + "\\" + ciEvent.FileName;
             ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1_Hash);
@@ -171,10 +179,14 @@ namespace WDAC_Wizard
             ciEvent.SignerInfo.PublisherTBSHash = Helper.ConvertHashStringToByte(record.PublisherTBSHash);
             ciEvent.SignerInfo.IssuerName = record.IssuerName;
             ciEvent.SignerInfo.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash);
+            ciEvent.SignerInfo.Timestamp = record.TimeGenerated;
+            ciEvent.SignerInfo.DeviceId = record.Computer;
 
             // Policy
-            ciEvent.PolicyId = record.PolicyGUID;
+            ciEvent.PolicyId = record.PolicyID;
+            ciEvent.PolicyGUID = record.PolicyGUID;
             ciEvent.PolicyName = record.PolicyName;
+            ciEvent.PolicyHash = Helper.ConvertHashStringToByte(record.PolicyHash);
 
             return ciEvent;
         }

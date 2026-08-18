@@ -25,12 +25,6 @@
   <FileRules>
     <Allow ID="ID_ALLOW_E_0_SHA1" FriendlyName="contoso-tool.exe SHA1 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:14.0000000Z" Hash="64863B7B0E22BF3D8B5791CEBAECCD9E5CD2DC1E" />
     <Allow ID="ID_ALLOW_E_1_SHA256" FriendlyName="contoso-tool.exe SHA256 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:14.0000000Z" Hash="579A240282175C8D78CE9CCFA29ACD0212BB43A5AEE769DE74D6CB313345791C" />
-    <Allow ID="ID_ALLOW_E_2_SHA1" FriendlyName="unknown-installer.exe SHA1 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:21.0000000Z" Hash="455A3A0D753672C0F04BFEA937C77D32015DA1F2" />
-    <Allow ID="ID_ALLOW_E_3_SHA256" FriendlyName="unknown-installer.exe SHA256 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:21.0000000Z" Hash="C23FD62482FF409C937467AEA9E2D8EB6D9C420E3505048D58B6E3C268086EC5" />
-    <Allow ID="ID_ALLOW_E_4_SHA1" FriendlyName="deploy.ps1 SHA1 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:49.0000000Z" Hash="9E7232A849BD3DD0195BEF88F3FB0CF8D77326F7" />
-    <Allow ID="ID_ALLOW_E_5_SHA256" FriendlyName="deploy.ps1 SHA256 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:49.0000000Z" Hash="461BCDDEF994C15CEB7CC7940B8019F056324CBDDF2D3DE8203E94552FA98D5F" />
-    <Allow ID="ID_ALLOW_E_6_SHA1" FriendlyName="setup.vbs SHA1 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:56.0000000Z" Hash="C55138B807F2375D502432E767677D2AE79348B9" />
-    <Allow ID="ID_ALLOW_E_7_SHA256" FriendlyName="setup.vbs SHA256 hash allow rule; Reference Device Id: AZL-SEC-LAB01; Timestamp: 2026-07-06T15:00:56.0000000Z" Hash="B4DD9F612A348A1FBEF28CB61B957EF9DEC7A2BA65F3C3BDDE58A2AF750291B5" />
   </FileRules>
   <Signers />
   <SigningScenarios>
@@ -42,12 +36,6 @@
         <FileRulesRef>
           <FileRuleRef RuleID="ID_ALLOW_E_0_SHA1" />
           <FileRuleRef RuleID="ID_ALLOW_E_1_SHA256" />
-          <FileRuleRef RuleID="ID_ALLOW_E_2_SHA1" />
-          <FileRuleRef RuleID="ID_ALLOW_E_3_SHA256" />
-          <FileRuleRef RuleID="ID_ALLOW_E_4_SHA1" />
-          <FileRuleRef RuleID="ID_ALLOW_E_5_SHA256" />
-          <FileRuleRef RuleID="ID_ALLOW_E_6_SHA1" />
-          <FileRuleRef RuleID="ID_ALLOW_E_7_SHA256" />
         </FileRulesRef>
       </ProductSigners>
     </SigningScenario>
