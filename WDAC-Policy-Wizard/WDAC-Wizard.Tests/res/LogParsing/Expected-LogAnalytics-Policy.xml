@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Base Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
+  <VersionEx>10.0.0.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <PolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</PolicyID>
+  <BasePolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</BasePolicyID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:Enforce Store Applications</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Inherit Default Policy</Option>
+    </Rule>
+  </Rules>
+  <EKUs />
+  <FileRules>
+    <Allow ID="ID_ALLOW_E_0_SHA1" FriendlyName="contoso-tool.exe SHA1 hash allow rule; Reference Device Id: ; Timestamp: " Hash="64863B7B0E22BF3D8B5791CEBAECCD9E5CD2DC1E" />
+    <Allow ID="ID_ALLOW_E_1_SHA256" FriendlyName="contoso-tool.exe SHA256 hash allow rule; Reference Device Id: ; Timestamp: " Hash="579A240282175C8D78CE9CCFA29ACD0212BB43A5AEE769DE74D6CB313345791C" />
+    <Allow ID="ID_ALLOW_E_2_SHA1" FriendlyName="unknown-installer.exe SHA1 hash allow rule; Reference Device Id: ; Timestamp: " Hash="455A3A0D753672C0F04BFEA937C77D32015DA1F2" />
+    <Allow ID="ID_ALLOW_E_3_SHA256" FriendlyName="unknown-installer.exe SHA256 hash allow rule; Reference Device Id: ; Timestamp: " Hash="C23FD62482FF409C937467AEA9E2D8EB6D9C420E3505048D58B6E3C268086EC5" />
+    <Allow ID="ID_ALLOW_E_4_SHA1" FriendlyName="deploy.ps1 SHA1 hash allow rule; Reference Device Id: ; Timestamp: " Hash="9E7232A849BD3DD0195BEF88F3FB0CF8D77326F7" />
+    <Allow ID="ID_ALLOW_E_5_SHA256" FriendlyName="deploy.ps1 SHA256 hash allow rule; Reference Device Id: ; Timestamp: " Hash="461BCDDEF994C15CEB7CC7940B8019F056324CBDDF2D3DE8203E94552FA98D5F" />
+    <Allow ID="ID_ALLOW_E_6_SHA1" FriendlyName="setup.vbs SHA1 hash allow rule; Reference Device Id: ; Timestamp: " Hash="C55138B807F2375D502432E767677D2AE79348B9" />
+    <Allow ID="ID_ALLOW_E_7_SHA256" FriendlyName="setup.vbs SHA256 hash allow rule; Reference Device Id: ; Timestamp: " Hash="B4DD9F612A348A1FBEF28CB61B957EF9DEC7A2BA65F3C3BDDE58A2AF750291B5" />
+  </FileRules>
+  <Signers />
+  <SigningScenarios>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 05-12-2022" Value="131">
+      <ProductSigners />
+    </SigningScenario>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 05-12-2022" Value="12">
+      <ProductSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_E_0_SHA1" />
+          <FileRuleRef RuleID="ID_ALLOW_E_1_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_E_2_SHA1" />
+          <FileRuleRef RuleID="ID_ALLOW_E_3_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_E_4_SHA1" />
+          <FileRuleRef RuleID="ID_ALLOW_E_5_SHA256" />
+          <FileRuleRef RuleID="ID_ALLOW_E_6_SHA1" />
+          <FileRuleRef RuleID="ID_ALLOW_E_7_SHA256" />
+        </FileRulesRef>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners />
+  <CiSigners />
+  <HvciOptions>0</HvciOptions>
+</SiPolicy>

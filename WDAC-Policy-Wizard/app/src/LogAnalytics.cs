@@ -14,6 +14,10 @@ namespace WDAC_Wizard
         const string AUDIT_EVENT_ID = "3076";
         const string BLOCK_EVENT_ID = "3077";
 
+        const string AUDIT_SCRIPT_EVENT_ID = "8028";
+        const string BLOCK_SCRIPT_EVENT_ID = "8029";
+
+
         // Delimitted value ',' will be replaced with #C#
         const string DEL_VALUE = "#C#";
 
@@ -82,13 +86,17 @@ namespace WDAC_Wizard
             {
                 switch (record.Action)
                 {
+                    // 3076 and 3077 events
                     case AUDIT_EVENT_ID:
-                         ciEvent = Create3076_3077Event(record, AUDIT_EVENT_ID);
+                    case BLOCK_EVENT_ID:                  
+                         ciEvent = Create3076_3077Event(record, record.Action);
                          break;
-                    
-                     case BLOCK_EVENT_ID:
-                         ciEvent = Create3076_3077Event(record, BLOCK_EVENT_ID);
-                         break;
+
+                    // 8028 and 8029 script events
+                    case AUDIT_SCRIPT_EVENT_ID:
+                    case BLOCK_SCRIPT_EVENT_ID:
+                        ciEvent = Create8028_8029Event(record, record.Action);
+                        break;
 
                     default:
                         continue;
@@ -133,6 +141,39 @@ namespace WDAC_Wizard
 
             // Policy
             ciEvent.PolicyId = record.PolicyGUID; 
+            ciEvent.PolicyName = record.PolicyName;
+
+            return ciEvent;
+        }
+
+        /// <summary>
+        /// Creates a 3076/3077 CiEvent from the fields in the AH Record
+        /// </summary>
+        /// <param name="record">Single LogAnalytic CSV record to parse into a policy log event</param>
+        /// <param name="eventId">String containing the event ID</param>
+        /// <returns>Single CiEvent object containing policy event info</returns>
+        private static CiEvent Create8028_8029Event(LogAnalyticsRecord record, string eventId)
+        {
+            CiEvent ciEvent = new CiEvent();
+            ciEvent.EventId = Convert.ToInt32(eventId);
+            ciEvent.FileName = Path.GetFileName(record.AffectedFile);
+            ciEvent.FilePath = Helper.GetDOSPath(record.AffectedFile); // + "\\" + ciEvent.FileName;
+            ciEvent.SHA1 = Helper.ConvertHashStringToByte(record.SHA1_Hash);
+            ciEvent.SHA2 = Helper.ConvertHashStringToByte(record.SHA256_Hash);
+            ciEvent.OriginalFilename = record.OriginalFileName;
+            ciEvent.InternalFilename = record.InternalName;
+            ciEvent.FileDescription = record.FileDescription;
+            ciEvent.ProductName = record.ProductName;
+            ciEvent.FileVersion = record.FileVersion;
+
+            // Signing Attributes
+            ciEvent.SignerInfo.PublisherName = record.PublisherName;
+            ciEvent.SignerInfo.PublisherTBSHash = Helper.ConvertHashStringToByte(record.PublisherTBSHash);
+            ciEvent.SignerInfo.IssuerName = record.IssuerName;
+            ciEvent.SignerInfo.IssuerTBSHash = Helper.ConvertHashStringToByte(record.IssuerTBSHash);
+
+            // Policy
+            ciEvent.PolicyId = record.PolicyGUID;
             ciEvent.PolicyName = record.PolicyName;
 
             return ciEvent;
