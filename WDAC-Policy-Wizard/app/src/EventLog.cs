@@ -556,11 +556,15 @@ namespace WDAC_Wizard
                 return null;
             }
 
-            foreach(JToken value in eventData)
+            IEnumerable<JToken> values = eventData.Type == JTokenType.Array
+                ? eventData.Children()
+                : new[] { eventData };
+
+            foreach(JToken value in values)
             {
-                if (value["@Name"].ToString() == key)
+                if (value["@Name"]?.ToString() == key)
                 {
-                    return value["#text"] != null ? value["#text"].ToString() : null ;
+                    return value["#text"]?.ToString();
                 }
             }
 

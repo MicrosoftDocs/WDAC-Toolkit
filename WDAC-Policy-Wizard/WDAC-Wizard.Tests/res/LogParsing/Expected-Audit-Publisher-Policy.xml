@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Base Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
+  <VersionEx>10.0.0.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <PolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</PolicyID>
+  <BasePolicyID>{32002E5A-B0DA-4401-9AC3-C24F25849804}</BasePolicyID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Audit Mode</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Advanced Boot Options Menu</Option>
+    </Rule>
+    <Rule>
+      <Option>Required:Enforce Store Applications</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Inherit Default Policy</Option>
+    </Rule>
+  </Rules>
+  <EKUs />
+  <FileRules />
+  <Signers>
+    <Signer Name="Allow CN = CN=Contoso Corporation, O=Contoso Corporation, L=Redmond, S=Washington, C=US issued by CN=Contoso Code Signing CA, O=Contoso Corporation, C=US" ID="ID_SIGNER_A_0">
+      <CertRoot Type="TBS" Value="0F9680DBEA31C65F6025EDCA4383CCFE0EA017FDB61D8DED46AE87AA39571FFF" />
+      <CertPublisher Value="CN=Contoso Corporation, O=Contoso Corporation, L=Redmond, S=Washington, C=US" />
+    </Signer>
+  </Signers>
+  <SigningScenarios>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 05-12-2022" Value="131">
+      <ProductSigners />
+    </SigningScenario>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 05-12-2022" Value="12">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_A_0" />
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners />
+  <CiSigners>
+    <CiSigner SignerId="ID_SIGNER_A_0" />
+  </CiSigners>
+  <HvciOptions>0</HvciOptions>
+</SiPolicy>
