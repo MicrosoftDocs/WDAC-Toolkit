@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.IO;
 using WDAC_Wizard.src;
@@ -51,6 +53,224 @@ namespace WDAC_Wizard
             public int UniqueHashes;
             public int DuplicateHashes;
             public TimeSpan Elapsed;
+        }
+
+        // Matches the trailing hash-flavor descriptor that New-CIPolicy -Level Hash appends to a
+        // rule's FriendlyName. Designed to be forward-compatible with new SHA bit lengths and
+        // any future "Hash <qualifier> Sha<N>" combinations the cmdlet may emit.
+        //
+        // Observed today (Windows 10/11):
+        //   "Hash Sha1", "Hash Sha256",
+        //   "Hash Page Sha1", "Hash Page Sha256",
+        //   "Hash Authenticode SIP Sha256"
+        //
+        // Pattern breakdown:
+        //   \s+                                literal whitespace before "Hash"
+        //   (?<flavor>                         capture the descriptor for downstream classification
+        //     Hash                             literal "Hash"
+        //     (?:\s+(?:Page|Authenticode\s+SIP))?  optional qualifier
+        //     \s+Sha\d+                        "Sha" followed by 1+ digits (Sha1, Sha256, Sha384, ...)
+        //   )
+        //   \s*$                               optional trailing whitespace
+        private static readonly Regex HashRuleFriendlyNameSuffixRegex = new Regex(
+            @"\s+(?<flavor>Hash(?:\s+(?:Page|Authenticode\s+SIP))?\s+Sha\d+)\s*$",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Extracts the source binary path and hash-flavor descriptor from the FriendlyName of a
+        /// hash rule produced by New-CIPolicy. New-CIPolicy emits 1, 2, or 4 hash rules per
+        /// scanned file depending on file type, all sharing a FriendlyName of
+        /// "&lt;path&gt; &lt;flavor&gt;" where the flavor matches
+        /// <see cref="HashRuleFriendlyNameSuffixRegex"/>.
+        /// </summary>
+        /// <param name="friendlyName">The Allow/Deny rule's FriendlyName attribute.</param>
+        /// <param name="flavor">
+        /// The matched flavor descriptor (e.g. "Hash Sha256", "Hash Page Sha1",
+        /// "Hash Authenticode SIP Sha256"), or null when the regex didn't match.
+        /// </param>
+        /// <returns>The trimmed source path, or the trimmed full FriendlyName when no match.</returns>
+        private static string ExtractScannedBinaryPath(string friendlyName, out string flavor)
+        {
+            flavor = null;
+            if (string.IsNullOrEmpty(friendlyName))
+            {
+                return null;
+            }
+
+            Match match = HashRuleFriendlyNameSuffixRegex.Match(friendlyName);
+            if (match.Success)
+            {
+                flavor = NormalizeFlavor(match.Groups["flavor"].Value);
+                return friendlyName.Substring(0, match.Index).Trim();
+            }
+
+            // FriendlyName didn't match the expected New-CIPolicy pattern; fall back to using
+            // the whole string so the caller still gets a stable per-binary key.
+            return friendlyName.Trim();
+        }
+
+        /// <summary>
+        /// Collapses any internal whitespace runs in a captured flavor descriptor to a single
+        /// space and normalizes casing so flavors group identically regardless of how the
+        /// upstream cmdlet formatted them.
+        /// </summary>
+        private static string NormalizeFlavor(string flavor)
+        {
+            if (string.IsNullOrEmpty(flavor))
+            {
+                return flavor;
+            }
+
+            return Regex.Replace(flavor.Trim(), @"\s+", " ");
+        }
+
+        /// <summary>
+        /// Writes a detailed per-class breakdown of the folder scan results to the log file. Each
+        /// scanned binary is bucketed by the unique set of hash flavors emitted for it (e.g.
+        /// "Sha1+Sha256+Page Sha1+Page Sha256") and binaries the cmdlet emitted multiple rules
+        /// for the same flavor are split into a separate "(emitted multiple times)" bucket. The
+        /// classification is data-driven, so any new flavor combination produced by future
+        /// New-CIPolicy versions appears automatically.
+        /// </summary>
+        private static void LogFolderScanBreakdown(
+            string scanPath,
+            FolderScanStats stats,
+            Dictionary<string, Dictionary<string, int>> binaryFlavors)
+        {
+            if (binaryFlavors == null || stats == null)
+            {
+                return;
+            }
+
+            // Bucket each binary by its (flavor-set, has-multiples) signature.
+            // Key = pipe-joined sorted flavors; "*" appended when any flavor count > 1.
+            var classes = new Dictionary<string, ClassBucket>(StringComparer.Ordinal);
+            foreach (var kvp in binaryFlavors)
+            {
+                Dictionary<string, int> flavorCounts = kvp.Value;
+                bool hasMultiples = false;
+                int totalRules = 0;
+                foreach (int n in flavorCounts.Values)
+                {
+                    totalRules += n;
+                    if (n > 1) hasMultiples = true;
+                }
+
+                var sortedFlavors = new List<string>(flavorCounts.Keys);
+                sortedFlavors.Sort(StringComparer.OrdinalIgnoreCase);
+                string flavorSetKey = string.Join("|", sortedFlavors) + (hasMultiples ? "|*" : "");
+
+                if (!classes.TryGetValue(flavorSetKey, out var bucket))
+                {
+                    bucket = new ClassBucket
+                    {
+                        Label = BuildClassLabel(sortedFlavors, hasMultiples),
+                        RulesPerBinaryDisplay = BuildRulesPerBinaryDisplay(flavorCounts, hasMultiples),
+                    };
+                    classes[flavorSetKey] = bucket;
+                }
+
+                bucket.Binaries++;
+                bucket.TotalRules += totalRules;
+            }
+
+            // Emit the breakdown as a fixed-width table in the log.
+            try
+            {
+                Logger.Log.AddNewSeparationLine("Folder Scan Breakdown");
+                Logger.Log.AddInfoMsg($"Scan path: {scanPath}");
+                Logger.Log.AddInfoMsg($"Elapsed:   {stats.Elapsed}");
+                Logger.Log.AddInfoMsg("");
+                Logger.Log.AddInfoMsg(
+                    string.Format("{0,-60} {1,10} {2,-40} {3,12}",
+                                  "File class", "Binaries", "Rules each", "Total rules"));
+                Logger.Log.AddInfoMsg(new string('-', 124));
+
+                // Most common classes first for readability.
+                foreach (var c in classes.Values
+                                         .OrderByDescending(b => b.Binaries)
+                                         .ThenBy(b => b.Label, StringComparer.OrdinalIgnoreCase))
+                {
+                    Logger.Log.AddInfoMsg(
+                        string.Format("{0,-60} {1,10:N0} {2,-40} {3,12:N0}",
+                                      Truncate(c.Label, 60),
+                                      c.Binaries,
+                                      Truncate(c.RulesPerBinaryDisplay, 40),
+                                      c.TotalRules));
+                }
+
+                Logger.Log.AddInfoMsg(new string('-', 124));
+                Logger.Log.AddInfoMsg(
+                    string.Format("{0,-60} {1,10:N0} {2,-40} {3,12:N0}",
+                                  "TOTAL",
+                                  stats.PolicyRelevantFiles,
+                                  "-",
+                                  stats.HashRules));
+                Logger.Log.AddInfoMsg("");
+                Logger.Log.AddInfoMsg($"Total files on disk:        {stats.TotalFilesOnDisk:N0}");
+                Logger.Log.AddInfoMsg($"Policy-relevant binaries:   {stats.PolicyRelevantFiles:N0}");
+                Logger.Log.AddInfoMsg($"Signer rules (PCA/Pub):     {stats.SignerRules:N0}");
+                Logger.Log.AddInfoMsg($"Hash rules in XML:          {stats.HashRules:N0}");
+                Logger.Log.AddInfoMsg($"Unique hashes:              {stats.UniqueHashes:N0}");
+                Logger.Log.AddInfoMsg($"Duplicate hashes (collisions): {stats.DuplicateHashes:N0}");
+            }
+            catch (Exception ex)
+            {
+                // Logging is best-effort; never let a logging failure break the build flow.
+                Logger.Log.AddWarningMsg($"LogFolderScanBreakdown failed: {ex.Message}");
+            }
+        }
+
+        private sealed class ClassBucket
+        {
+            public string Label;
+            public string RulesPerBinaryDisplay;
+            public int Binaries;
+            public int TotalRules;
+        }
+
+        /// <summary>
+        /// Builds a human-friendly class label from a sorted list of flavor descriptors
+        /// (e.g. "Hash Sha1, Hash Sha256, Hash Page Sha1, Hash Page Sha256"). Marks the bucket
+        /// as "(emitted multiple times)" when one or more flavors were emitted more than once
+        /// for the same binary.
+        /// </summary>
+        private static string BuildClassLabel(List<string> sortedFlavors, bool hasMultiples)
+        {
+            string joined = sortedFlavors.Count > 0
+                ? string.Join(", ", sortedFlavors)
+                : "Unknown";
+            return hasMultiples
+                ? joined + " (emitted multiple times)"
+                : joined;
+        }
+
+        /// <summary>
+        /// Builds the "Rules each" cell, e.g. "4" or "8 (2x of 4 flavors)".
+        /// </summary>
+        private static string BuildRulesPerBinaryDisplay(Dictionary<string, int> flavorCounts, bool hasMultiples)
+        {
+            int total = 0;
+            foreach (int n in flavorCounts.Values) total += n;
+
+            if (!hasMultiples)
+            {
+                return total.ToString();
+            }
+
+            // Find the most common multiplier (typically 2) for an informative label.
+            int maxMultiplier = 1;
+            foreach (int n in flavorCounts.Values)
+            {
+                if (n > maxMultiplier) maxMultiplier = n;
+            }
+            return $"{total} ({maxMultiplier}x of {flavorCounts.Count} flavor{(flavorCounts.Count == 1 ? "" : "s")})";
+        }
+
+        private static string Truncate(string s, int maxLen)
+        {
+            if (string.IsNullOrEmpty(s) || s.Length <= maxLen) return s ?? string.Empty;
+            return s.Substring(0, maxLen - 1) + "…";
         }
 
         public enum EditWorkflowType
@@ -212,6 +432,33 @@ namespace WDAC_Wizard
                     this.ConfigInProcess = false;
                     Button_Merge_Click(sender, e);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Compare policy button selected: opens a separate window where the user can load 2 or
+        /// more policies (XML or binary) and view their differences side-by-side. The comparison
+        /// flow is non-destructive and does not affect the active wizard workflow state.
+        /// </summary>
+        private void Button_Compare_Click(object sender, EventArgs e)
+        {
+            Logger.Log.AddNewSeparationLine("Workflow -- Compare Policies Selected");
+
+            try
+            {
+                using (var compareForm = new PolicyCompare_Form())
+                {
+                    compareForm.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.AddErrorMsg("Button_Compare_Click caught the following exception", ex);
+                MessageBox.Show(this,
+                                "Unable to open the Policy Compare window: " + ex.Message,
+                                "Policy Compare Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
 
@@ -1521,13 +1768,27 @@ namespace WDAC_Wizard
                     scanTask.Wait();
                     sw.Stop();
 
-                    // Compute scan summary stats from the generated policy
+                    // Compute scan summary stats from the generated policy.
+                    //
+                    // New-CIPolicy -Level Hash emits 1, 2, or 4 hash rules per scanned file:
+                    //   - PE binaries with page hashes: 4 rules (flat Sha1/Sha256, page Sha1/Sha256)
+                    //   - PE binaries without page hashes: 2 rules (flat Sha1, Sha256)
+                    //   - Non-PE scripts/data (.js, .ENU, etc.): 1 rule (Authenticode SIP Sha256)
+                    // It can also emit the *same* rule twice for some files (a known cmdlet bug
+                    // we suppress the warning for in CreateScannedPolicy.ps1), which is what
+                    // produces the "duplicate hashes" we report.
+                    //
+                    // FileRules.Length is therefore the rule count, NOT the binary count. We
+                    // derive the binary count by parsing each rule's FriendlyName.
                     if (signerSiPolicy != null)
                     {
                         int hashRuleCount = 0;
                         int signerRuleCount = signerSiPolicy.Signers?.Length ?? 0;
-                        int totalFileRules = signerSiPolicy.FileRules?.Length ?? 0;
                         var uniqueHashes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                        // Per-binary flavor frequencies, e.g. { "Hash Sha1" -> 2, "Hash Sha256" -> 2 }.
+                        // Used to classify each binary into a flavor-set bucket for the breakdown log.
+                        var binaryFlavors = new Dictionary<string, Dictionary<string, int>>(StringComparer.OrdinalIgnoreCase);
                         int duplicateHashCount = 0;
 
                         if (signerSiPolicy.FileRules != null)
@@ -1535,8 +1796,17 @@ namespace WDAC_Wizard
                             foreach (var rule in signerSiPolicy.FileRules)
                             {
                                 byte[] hash = null;
-                                if (rule is Allow allow) hash = allow.Hash;
-                                else if (rule is Deny deny) hash = deny.Hash;
+                                string friendlyName = null;
+                                if (rule is Allow allow)
+                                {
+                                    hash = allow.Hash;
+                                    friendlyName = allow.FriendlyName;
+                                }
+                                else if (rule is Deny deny)
+                                {
+                                    hash = deny.Hash;
+                                    friendlyName = deny.FriendlyName;
+                                }
 
                                 if (hash != null && hash.Length > 0)
                                 {
@@ -1544,6 +1814,20 @@ namespace WDAC_Wizard
                                     string hex = BitConverter.ToString(hash);
                                     if (!uniqueHashes.Add(hex))
                                         duplicateHashCount++;
+
+                                    string sourcePath = ExtractScannedBinaryPath(friendlyName, out string flavor);
+                                    if (!string.IsNullOrEmpty(sourcePath))
+                                    {
+                                        if (!binaryFlavors.TryGetValue(sourcePath, out var flavorCounts))
+                                        {
+                                            flavorCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                                            binaryFlavors[sourcePath] = flavorCounts;
+                                        }
+
+                                        string flavorKey = string.IsNullOrEmpty(flavor) ? "Unknown" : flavor;
+                                        flavorCounts.TryGetValue(flavorKey, out int n);
+                                        flavorCounts[flavorKey] = n + 1;
+                                    }
                                 }
                             }
                         }
@@ -1552,13 +1836,17 @@ namespace WDAC_Wizard
                         _folderScanStats = new FolderScanStats
                         {
                             TotalFilesOnDisk = totalFiles >= 0 ? totalFiles : 0,
-                            PolicyRelevantFiles = totalFileRules,
+                            PolicyRelevantFiles = binaryFlavors.Count,
                             HashRules = hashRuleCount,
                             SignerRules = signerRuleCount,
                             UniqueHashes = uniqueHashes.Count,
                             DuplicateHashes = duplicateHashCount,
                             Elapsed = sw.Elapsed
                         };
+
+                        // Write a detailed per-class breakdown to the log only - keeps the UI
+                        // summary compact while preserving the diagnostic data for support cases.
+                        LogFolderScanBreakdown(scanPathDisplay, _folderScanStats, binaryFlavors);
 
                         siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
                     }
@@ -1786,6 +2074,29 @@ namespace WDAC_Wizard
             }
 
             PSCmdlets.MergePolicies(this.Policy.PoliciesToMerge, this.Policy.SchemaPath);
+
+            // Post-merge processing:
+            // 1. Generate a new Policy GUID (best practice when policy contents change)
+            // 2. Remove duplicate rules that exist across the input policies
+            try
+            {
+                if (File.Exists(this.Policy.SchemaPath))
+                {
+                    SiPolicy mergedPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
+                    if (mergedPolicy != null)
+                    {
+                        mergedPolicy = PolicyHelper.DeduplicateRules(mergedPolicy);
+                        PolicyHelper.ResetPolicyGuid(mergedPolicy);
+                        Helper.SerializePolicytoXML(mergedPolicy, this.Policy.SchemaPath);
+                        Logger.Log.AddInfoMsg("Merged policy post-processed: deduplicated rules and reset Policy GUID.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.AddErrorMsg("Exception during merged policy post-processing", ex);
+            }
+
             worker.ReportProgress(90);
         }
 

@@ -591,18 +591,40 @@ namespace WDAC_Wizard
                 this.checkBox_UserModeList.Visible = true;
             }
 
+            // When editing an existing policy, auto-check a "Merge with Recommended" box only when
+            // every rule from the bundled blocklist template is already present in the policy (1:1 match).
+            // The policy may include additional custom rules - we only verify the recommended set is intact.
+            bool isEdit = this._MainWindow.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit;
+
             // Recommended Kernel Driver Blocklist
-            if(Properties.Settings.Default.useDriverBlockRules)
+            bool kmFullyPresent = isEdit && IsRecommendedBlocklistFullyPresent("Recommended_Driver_Blocklist.xml");
+            if (kmFullyPresent)
             {
-                this.checkBox_KernelList.Checked = true; 
+                // Already in policy - reflect that and prevent the merge from running again on save
+                this.checkBox_KernelList.CheckedChanged -= CheckBox_KernelList_CheckedChanged;
+                this.checkBox_KernelList.Checked = true;
+                this.Policy.UseKernelModeBlocks = false;
+                this.checkBox_KernelList.CheckedChanged += CheckBox_KernelList_CheckedChanged;
+            }
+            else if (Properties.Settings.Default.useDriverBlockRules)
+            {
+                this.checkBox_KernelList.Checked = true;
             }
             else
             {
-                this.checkBox_KernelList.Checked = false; 
+                this.checkBox_KernelList.Checked = false;
             }
 
             // Recommended User Mode Blocklist
-            if (Properties.Settings.Default.useUsermodeBlockRules)
+            bool umFullyPresent = isEdit && IsRecommendedBlocklistFullyPresent("Recommended_UserMode_Blocklist.xml");
+            if (umFullyPresent)
+            {
+                this.checkBox_UserModeList.CheckedChanged -= CheckBox_UserModeList_CheckedChanged;
+                this.checkBox_UserModeList.Checked = true;
+                this.Policy.UseUserModeBlocks = false;
+                this.checkBox_UserModeList.CheckedChanged += CheckBox_UserModeList_CheckedChanged;
+            }
+            else if (Properties.Settings.Default.useUsermodeBlockRules)
             {
                 this.checkBox_UserModeList.Checked = true;
             }
@@ -610,6 +632,118 @@ namespace WDAC_Wizard
             {
                 this.checkBox_UserModeList.Checked = false;
             }
+        }
+
+        /// <summary>
+        /// Returns true only when every FileRule from the bundled recommended blocklist template is also
+        /// present in the policy currently loaded, compared by content fingerprint (Hash or FileName +
+        /// version range) rather than by ID. This is required because the merge pipeline remaps IDs
+        /// (e.g. ID_DENY_AGENT64_SHA1 -> ID_DENY_D_0) when collisions exist, so an ID-based comparison
+        /// would incorrectly report the recommended set as missing on re-edit. Additional non-template
+        /// rules in the policy are ignored.
+        /// </summary>
+        private bool IsRecommendedBlocklistFullyPresent(string templateFileName)
+        {
+            try
+            {
+                string templatePath = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", templateFileName);
+                if (!File.Exists(templatePath))
+                {
+                    return false;
+                }
+
+                SiPolicy templatePolicy = Helper.DeserializeXMLtoPolicy(templatePath);
+                if (templatePolicy?.FileRules == null || templatePolicy.FileRules.Length == 0)
+                {
+                    return false;
+                }
+
+                // Build set of FileRule content fingerprints currently in the policy
+                var policyFingerprints = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                if (this.Policy.siPolicy?.FileRules != null)
+                {
+                    foreach (var rule in this.Policy.siPolicy.FileRules)
+                    {
+                        string fp = GetFileRuleFingerprint(rule);
+                        if (!string.IsNullOrEmpty(fp))
+                        {
+                            policyFingerprints.Add(fp);
+                        }
+                    }
+                }
+
+                // Every template rule must have a content match in the policy for a 1:1 match
+                foreach (var rule in templatePolicy.FileRules)
+                {
+                    string fp = GetFileRuleFingerprint(rule);
+                    if (string.IsNullOrEmpty(fp))
+                    {
+                        continue;
+                    }
+
+                    if (!policyFingerprints.Contains(fp))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                Logger.Log.AddErrorMsg("IsRecommendedBlocklistFullyPresent() encountered an exception for " + templateFileName, exp);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Builds an ID-independent fingerprint for a FileRule entry so rules can be matched after merge-time
+        /// ID remapping. Prefers Hash (most specific); otherwise falls back to a composite of the rule type
+        /// and identifying attributes (FileName, version range, InternalName, FileDescription, ProductName,
+        /// FilePath, PackageFamilyName).
+        /// </summary>
+        private static string GetFileRuleFingerprint(object rule)
+        {
+            switch (rule)
+            {
+                case Allow a:
+                    return BuildFingerprint("A", a.Hash, a.FileName, a.MinimumFileVersion, a.MaximumFileVersion,
+                                            a.InternalName, a.FileDescription, a.ProductName, a.FilePath,
+                                            a.PackageFamilyName);
+                case Deny d:
+                    return BuildFingerprint("D", d.Hash, d.FileName, d.MinimumFileVersion, d.MaximumFileVersion,
+                                            d.InternalName, d.FileDescription, d.ProductName, d.FilePath,
+                                            d.PackageFamilyName);
+                case FileRule f:
+                    return BuildFingerprint("F", f.Hash, f.FileName, f.MinimumFileVersion, f.MaximumFileVersion,
+                                            f.InternalName, f.FileDescription, f.ProductName, f.FilePath,
+                                            f.PackageFamilyName);
+                default:
+                    return null;
+            }
+        }
+
+        private static string BuildFingerprint(string kind, byte[] hash, string fileName, string minVer,
+                                               string maxVer, string internalName, string fileDescription,
+                                               string productName, string filePath, string packageFamilyName)
+        {
+            if (hash != null && hash.Length > 0)
+            {
+                return kind + "|H|" + BitConverter.ToString(hash);
+            }
+
+            return string.Join("|", new[]
+            {
+                kind, "M",
+                fileName ?? string.Empty,
+                minVer ?? string.Empty,
+                maxVer ?? string.Empty,
+                internalName ?? string.Empty,
+                fileDescription ?? string.Empty,
+                productName ?? string.Empty,
+                filePath ?? string.Empty,
+                packageFamilyName ?? string.Empty
+            });
         }
 
         /// <summary>

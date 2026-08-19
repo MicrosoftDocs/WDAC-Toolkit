@@ -39,6 +39,7 @@ namespace WDAC_Wizard
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             button_Edit = new System.Windows.Forms.Button();
             button_Merge = new System.Windows.Forms.Button();
+            button_Compare = new System.Windows.Forms.Button();
             control_Panel = new System.Windows.Forms.Panel();
             workflow_Label = new System.Windows.Forms.Label();
             page5_Button = new System.Windows.Forms.Button();
@@ -55,6 +56,7 @@ namespace WDAC_Wizard
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
             control_Panel.SuspendLayout();
             SuspendLayout();
             // 
@@ -79,10 +81,10 @@ namespace WDAC_Wizard
             button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_New.Image = Properties.Resources.newPolicy;
-            button_New.Location = new System.Drawing.Point(328, 225);
+            button_New.Location = new System.Drawing.Point(215, 225);
             button_New.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_New.Name = "button_New";
-            button_New.Size = new System.Drawing.Size(195, 217);
+            button_New.Size = new System.Drawing.Size(165, 217);
             button_New.TabIndex = 10;
             button_New.Text = "Policy Creator";
             button_New.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -120,10 +122,10 @@ namespace WDAC_Wizard
             button_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Edit.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Edit.Image = Properties.Resources.tools;
-            button_Edit.Location = new System.Drawing.Point(567, 225);
+            button_Edit.Location = new System.Drawing.Point(425, 225);
             button_Edit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Edit.Name = "button_Edit";
-            button_Edit.Size = new System.Drawing.Size(195, 217);
+            button_Edit.Size = new System.Drawing.Size(165, 217);
             button_Edit.TabIndex = 25;
             button_Edit.Text = "Policy Editor";
             button_Edit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -139,15 +141,34 @@ namespace WDAC_Wizard
             button_Merge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Merge.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Merge.Image = Properties.Resources.merge;
-            button_Merge.Location = new System.Drawing.Point(813, 225);
+            button_Merge.Location = new System.Drawing.Point(635, 225);
             button_Merge.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Merge.Name = "button_Merge";
-            button_Merge.Size = new System.Drawing.Size(195, 217);
+            button_Merge.Size = new System.Drawing.Size(165, 217);
             button_Merge.TabIndex = 26;
             button_Merge.Text = "Policy Merger";
             button_Merge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             button_Merge.UseVisualStyleBackColor = false;
             button_Merge.Click += Button_Merge_Click;
+            // 
+            // button_Compare
+            // 
+            button_Compare.BackColor = System.Drawing.Color.Transparent;
+            button_Compare.FlatAppearance.BorderSize = 0;
+            button_Compare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+            button_Compare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+            button_Compare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button_Compare.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            button_Compare.Image = Properties.Resources.compare;
+            button_Compare.Location = new System.Drawing.Point(845, 225);
+            button_Compare.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            button_Compare.Name = "button_Compare";
+            button_Compare.Size = new System.Drawing.Size(165, 217);
+            button_Compare.TabIndex = 27;
+            button_Compare.Text = "Policy Comparer";
+            button_Compare.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            button_Compare.UseVisualStyleBackColor = false;
+            button_Compare.Click += Button_Compare_Click;
             // 
             // control_Panel
             // 
@@ -383,39 +404,51 @@ namespace WDAC_Wizard
             // 
             // label2
             // 
-            label2.AutoSize = true;
             label2.BackColor = System.Drawing.Color.Transparent;
             label2.Font = new System.Drawing.Font("Tahoma", 9F);
-            label2.Location = new System.Drawing.Point(296, 453);
+            label2.Location = new System.Drawing.Point(198, 453);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(244, 36);
+            label2.Size = new System.Drawing.Size(200, 50);
             label2.TabIndex = 33;
-            label2.Text = "Create a new base or supplemental \r\npolicy";
+            label2.Text = "Create a new base or\r\nsupplemental policy";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
-            label3.AutoSize = true;
             label3.BackColor = System.Drawing.Color.Transparent;
             label3.Font = new System.Drawing.Font("Tahoma", 9F);
-            label3.Location = new System.Drawing.Point(563, 453);
+            label3.Location = new System.Drawing.Point(408, 453);
             label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(218, 36);
+            label3.Size = new System.Drawing.Size(200, 50);
             label3.TabIndex = 34;
-            label3.Text = "Edit an existing policy on disk or \r\nconvert event logs to a policy";
+            label3.Text = "Edit an existing policy or\r\nconvert event logs to a policy";
+            label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4
             // 
-            label4.AutoSize = true;
             label4.BackColor = System.Drawing.Color.Transparent;
             label4.Font = new System.Drawing.Font("Tahoma", 9F);
-            label4.Location = new System.Drawing.Point(802, 453);
+            label4.Location = new System.Drawing.Point(618, 453);
             label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(236, 18);
+            label4.Size = new System.Drawing.Size(200, 50);
             label4.TabIndex = 35;
-            label4.Text = "Merge two existing policies into one\r\n";
+            label4.Text = "Merge two existing\r\npolicies into one";
+            label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            label5.BackColor = System.Drawing.Color.Transparent;
+            label5.Font = new System.Drawing.Font("Tahoma", 9F);
+            label5.Location = new System.Drawing.Point(828, 453);
+            label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(200, 50);
+            label5.TabIndex = 36;
+            label5.Text = "Compare two or more policies\r\nand view their differences";
+            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainWindow
             // 
@@ -423,6 +456,7 @@ namespace WDAC_Wizard
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             BackColor = System.Drawing.Color.White;
             ClientSize = new System.Drawing.Size(1232, 703);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -431,6 +465,7 @@ namespace WDAC_Wizard
             Controls.Add(button_Back);
             Controls.Add(control_Panel);
             Controls.Add(label_Welcome);
+            Controls.Add(button_Compare);
             Controls.Add(button_Merge);
             Controls.Add(button_Edit);
             Controls.Add(label_Info);
@@ -460,6 +495,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Button button_New;
         private System.Windows.Forms.Button button_Edit;
         private System.Windows.Forms.Button button_Merge;
+        private System.Windows.Forms.Button button_Compare;
         private System.Windows.Forms.Panel control_Panel;
         private System.Windows.Forms.Button settings_Button;
         private System.Windows.Forms.Button home_Button;
@@ -475,6 +511,7 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label workflow_Label;
     }
 }
