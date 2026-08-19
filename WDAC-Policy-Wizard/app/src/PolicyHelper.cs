@@ -2045,6 +2045,18 @@ namespace WDAC_Wizard
                 return resultantPolicy;
             }
 
+            // Dedupe template FileRules against the existing policy by content fingerprint (Hash, or
+            // FileName + version range, etc.) and capture a map of duplicate-template-IDs -> existing-IDs.
+            // This handles policies that were merged before the dedup fix existed: their recommended rules
+            // live under remapped IDs (e.g. ID_DENY_D_0) so an ID-only dedup would otherwise re-insert
+            // every template rule. Remap the template's FileRuleRefs to the existing IDs so the signing
+            // scenario merge can also dedup correctly.
+            var duplicateIdMap = BuildFileRuleDuplicateIdMap(tempPolicy.FileRules, resultantPolicy.FileRules);
+            if (duplicateIdMap.Count > 0)
+            {
+                RemapFileRuleRefIds(tempPolicy.SigningScenarios, duplicateIdMap);
+            }
+
             // Handle Signing Scenario (AllowedSigners, DeniedSigners and FileRuleRefs)
             resultantPolicy.SigningScenarios = MergeSigningScenario(tempPolicy.SigningScenarios, resultantPolicy.SigningScenarios);
 
@@ -2052,7 +2064,7 @@ namespace WDAC_Wizard
             resultantPolicy.Signers = MergeSigners(tempPolicy.Signers, resultantPolicy.Signers);   
 
             // Handle File Rules
-            resultantPolicy.FileRules = MergeFileRules(tempPolicy.FileRules, resultantPolicy.FileRules);
+            resultantPolicy.FileRules = MergeFileRules(tempPolicy.FileRules, resultantPolicy.FileRules, duplicateIdMap);
 
             // Handle CiSigners
             if (tempPolicy.CiSigners != null && tempPolicy.CiSigners.Length > 0)
@@ -2196,27 +2208,45 @@ namespace WDAC_Wizard
                 }
                 else // new and existing DeniedSigners
                 {
-                    int copySize = newProductSigners.FileRulesRef.FileRuleRef.Length
-                                                    + resultProductSigners.FileRulesRef.FileRuleRef.Length;
-                    FileRuleRef[] fileRuleRefCopy = new FileRuleRef[copySize];
-
-                    int newFileRuleRefLen = newProductSigners.FileRulesRef.FileRuleRef.Length;
-
-                    // New DeniedSigners
-                    for (int i = 0; i < newFileRuleRefLen; i++)
+                    // Build a set of existing rule ref IDs to avoid duplicates when the same
+                    // template policy is merged multiple times.
+                    var existingRefIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var refEntry in resultProductSigners.FileRulesRef.FileRuleRef)
                     {
-                        fileRuleRefCopy[i] = newProductSigners.FileRulesRef.FileRuleRef[i];
+                        if (refEntry != null && !string.IsNullOrEmpty(refEntry.RuleID))
+                        {
+                            existingRefIds.Add(refEntry.RuleID);
+                        }
                     }
 
-                    // Existing AllowedSigners
+                    var mergedRefs = new List<FileRuleRef>(
+                        newProductSigners.FileRulesRef.FileRuleRef.Length
+                        + resultProductSigners.FileRulesRef.FileRuleRef.Length);
+
+                    // New FileRuleRefs first - skip any already present
+                    for (int i = 0; i < newProductSigners.FileRulesRef.FileRuleRef.Length; i++)
+                    {
+                        var refEntry = newProductSigners.FileRulesRef.FileRuleRef[i];
+                        if (refEntry != null && !string.IsNullOrEmpty(refEntry.RuleID)
+                            && existingRefIds.Contains(refEntry.RuleID))
+                        {
+                            continue;
+                        }
+
+                        mergedRefs.Add(refEntry);
+                        if (refEntry != null && !string.IsNullOrEmpty(refEntry.RuleID))
+                        {
+                            existingRefIds.Add(refEntry.RuleID);
+                        }
+                    }
+
+                    // Existing FileRuleRefs
                     for (int i = 0; i < resultProductSigners.FileRulesRef.FileRuleRef.Length; i++)
                     {
-                        // Offset the index to length of new Prod signers to not overwrite entries
-                        fileRuleRefCopy[i + newFileRuleRefLen] = resultProductSigners.FileRulesRef.FileRuleRef[i];
+                        mergedRefs.Add(resultProductSigners.FileRulesRef.FileRuleRef[i]);
                     }
 
-
-                    resultProductSigners.FileRulesRef.FileRuleRef = fileRuleRefCopy;
+                    resultProductSigners.FileRulesRef.FileRuleRef = mergedRefs.ToArray();
                 }
             }
 
@@ -2270,7 +2300,8 @@ namespace WDAC_Wizard
         /// <param name="newProductSigners"></param>
         /// <param name="resultProductSigners"></param>
         /// <returns></returns>
-        static Object[] MergeFileRules(Object[] newFileRules, Object[] resultFileRules)
+        static Object[] MergeFileRules(Object[] newFileRules, Object[] resultFileRules,
+                                       Dictionary<string, string> duplicateIdMap = null)
         {
             // Short circuit if nothing from the new sipolicy
             if (newFileRules == null || newFileRules.Length == 0)
@@ -2284,23 +2315,193 @@ namespace WDAC_Wizard
                 return newFileRules;
             }
 
-            int copySize = newFileRules.Length + resultFileRules.Length;
-            Object[] fileRulesCopy = new Object[copySize];
+            // Build a set of existing rule IDs to prevent duplicate entries when the same
+            // template (e.g. Recommended Driver/User Mode Blocklist) is merged multiple times.
+            var existingIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var rule in resultFileRules)
+            {
+                string id = GetFileRuleId(rule);
+                if (!string.IsNullOrEmpty(id))
+                {
+                    existingIds.Add(id);
+                }
+            }
 
-            // New DeniedSigners
+            var merged = new List<Object>(newFileRules.Length + resultFileRules.Length);
+
+            // New rules first - skip any whose ID is already present or that was matched to an
+            // existing rule by content fingerprint (legacy/remapped-ID case).
             for (int i = 0; i < newFileRules.Length; i++)
             {
-                fileRulesCopy[i] = newFileRules[i];
+                string id = GetFileRuleId(newFileRules[i]);
+                if (!string.IsNullOrEmpty(id) && existingIds.Contains(id))
+                {
+                    continue;
+                }
+
+                if (duplicateIdMap != null && !string.IsNullOrEmpty(id) && duplicateIdMap.ContainsKey(id))
+                {
+                    continue;
+                }
+
+                merged.Add(newFileRules[i]);
+                if (!string.IsNullOrEmpty(id))
+                {
+                    existingIds.Add(id);
+                }
             }
 
-            // Existing AllowedSigners
+            // Existing rules
             for (int i = 0; i < resultFileRules.Length; i++)
             {
-                // Offset the index to length of new Prod signers to not overwrite entries
-                fileRulesCopy[i + newFileRules.Length] = resultFileRules[i];
+                merged.Add(resultFileRules[i]);
             }
 
-            return fileRulesCopy;
+            return merged.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a map of template-rule IDs to existing-policy-rule IDs for any template FileRules whose
+        /// content matches a rule already in the resultant policy. Used to dedup recommended-blocklist
+        /// merges against policies whose rule IDs were remapped on a previous merge (legacy data).
+        /// </summary>
+        private static Dictionary<string, string> BuildFileRuleDuplicateIdMap(Object[] newFileRules, Object[] resultFileRules)
+        {
+            var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (newFileRules == null || newFileRules.Length == 0
+                || resultFileRules == null || resultFileRules.Length == 0)
+            {
+                return map;
+            }
+
+            // Index existing rules by content fingerprint -> ID
+            var existingByFingerprint = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var rule in resultFileRules)
+            {
+                string fp = GetFileRuleFingerprint(rule);
+                string id = GetFileRuleId(rule);
+                if (!string.IsNullOrEmpty(fp) && !string.IsNullOrEmpty(id) && !existingByFingerprint.ContainsKey(fp))
+                {
+                    existingByFingerprint[fp] = id;
+                }
+            }
+
+            if (existingByFingerprint.Count == 0)
+            {
+                return map;
+            }
+
+            foreach (var rule in newFileRules)
+            {
+                string fp = GetFileRuleFingerprint(rule);
+                string id = GetFileRuleId(rule);
+                if (string.IsNullOrEmpty(fp) || string.IsNullOrEmpty(id))
+                {
+                    continue;
+                }
+
+                if (existingByFingerprint.TryGetValue(fp, out string existingId)
+                    && !string.Equals(id, existingId, StringComparison.OrdinalIgnoreCase)
+                    && !map.ContainsKey(id))
+                {
+                    map[id] = existingId;
+                }
+            }
+
+            return map;
+        }
+
+        /// <summary>
+        /// Rewrites FileRuleRef RuleIDs inside the supplied SigningScenarios using the provided template->existing
+        /// ID map so that the signing-scenario merge dedupes references that point at the same logical rule.
+        /// </summary>
+        private static void RemapFileRuleRefIds(SigningScenario[] scenarios, Dictionary<string, string> idMap)
+        {
+            if (scenarios == null || idMap == null || idMap.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var scenario in scenarios)
+            {
+                var ps = scenario?.ProductSigners;
+                if (ps?.FileRulesRef?.FileRuleRef == null)
+                {
+                    continue;
+                }
+
+                foreach (var refEntry in ps.FileRulesRef.FileRuleRef)
+                {
+                    if (refEntry != null && !string.IsNullOrEmpty(refEntry.RuleID)
+                        && idMap.TryGetValue(refEntry.RuleID, out string remapped))
+                    {
+                        refEntry.RuleID = remapped;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds an ID-independent fingerprint for a FileRule entry. Prefers Hash (most specific); otherwise
+        /// falls back to a composite of identifying attributes. Mirrors SigningRules_Control's fingerprint logic.
+        /// </summary>
+        private static string GetFileRuleFingerprint(Object rule)
+        {
+            switch (rule)
+            {
+                case Allow a:
+                    return BuildFileRuleFingerprint("A", a.Hash, a.FileName, a.MinimumFileVersion, a.MaximumFileVersion,
+                                                   a.InternalName, a.FileDescription, a.ProductName, a.FilePath,
+                                                   a.PackageFamilyName);
+                case Deny d:
+                    return BuildFileRuleFingerprint("D", d.Hash, d.FileName, d.MinimumFileVersion, d.MaximumFileVersion,
+                                                   d.InternalName, d.FileDescription, d.ProductName, d.FilePath,
+                                                   d.PackageFamilyName);
+                case FileRule f:
+                    return BuildFileRuleFingerprint("F", f.Hash, f.FileName, f.MinimumFileVersion, f.MaximumFileVersion,
+                                                   f.InternalName, f.FileDescription, f.ProductName, f.FilePath,
+                                                   f.PackageFamilyName);
+                default:
+                    return null;
+            }
+        }
+
+        private static string BuildFileRuleFingerprint(string kind, byte[] hash, string fileName, string minVer,
+                                                      string maxVer, string internalName, string fileDescription,
+                                                      string productName, string filePath, string packageFamilyName)
+        {
+            if (hash != null && hash.Length > 0)
+            {
+                return kind + "|H|" + BitConverter.ToString(hash);
+            }
+
+            return string.Join("|", new[]
+            {
+                kind, "M",
+                fileName ?? string.Empty,
+                minVer ?? string.Empty,
+                maxVer ?? string.Empty,
+                internalName ?? string.Empty,
+                fileDescription ?? string.Empty,
+                productName ?? string.Empty,
+                filePath ?? string.Empty,
+                packageFamilyName ?? string.Empty
+            });
+        }
+
+        /// <summary>
+        /// Returns the ID attribute of a FileRules entry regardless of its concrete type
+        /// (Allow, Deny, FileRule).
+        /// </summary>
+        private static string GetFileRuleId(Object rule)
+        {
+            switch (rule)
+            {
+                case Allow a: return a.ID;
+                case Deny d: return d.ID;
+                case FileRule f: return f.ID;
+                default: return null;
+            }
         }
 
         /// <summary>
