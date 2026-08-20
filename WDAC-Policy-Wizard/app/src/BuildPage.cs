@@ -100,7 +100,7 @@ namespace WDAC_Wizard
                 $"  Signer rules (PCA/Pub)     {signerRules,8:N0}\r\n" +
                 $"  Hash rules in XML          {hashRules,8:N0}\r\n" +
                 $"  Unique hashes              {uniqueHashes,8:N0}\r\n" +
-                $"  Duplicate hashes removed   {duplicateHashes,8:N0}\r\n" +
+                $"  Duplicate hashes (collisions) {duplicateHashes,5:N0}\r\n" +
                 $"\r\n" +
                 $"  Elapsed time               {elapsedText,8}";
 
