@@ -1786,6 +1786,29 @@ namespace WDAC_Wizard
             }
 
             PSCmdlets.MergePolicies(this.Policy.PoliciesToMerge, this.Policy.SchemaPath);
+
+            // Post-merge processing:
+            // 1. Generate a new Policy GUID (best practice when policy contents change)
+            // 2. Remove duplicate rules that exist across the input policies
+            try
+            {
+                if (File.Exists(this.Policy.SchemaPath))
+                {
+                    SiPolicy mergedPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
+                    if (mergedPolicy != null)
+                    {
+                        mergedPolicy = PolicyHelper.DeduplicateRules(mergedPolicy);
+                        PolicyHelper.ResetPolicyGuid(mergedPolicy);
+                        Helper.SerializePolicytoXML(mergedPolicy, this.Policy.SchemaPath);
+                        Logger.Log.AddInfoMsg("Merged policy post-processed: deduplicated rules and reset Policy GUID.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.AddErrorMsg("Exception during merged policy post-processing", ex);
+            }
+
             worker.ReportProgress(90);
         }
 
