@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Language;
 using System.Runtime.InteropServices.Marshalling;
@@ -2380,6 +2381,319 @@ namespace WDAC_Wizard
             }
 
             return ekuCopy;
+        }
+
+        /// <summary>
+        /// Removes duplicate Signers, FileRules (Allow/Deny/FileAttrib) and EKUs from a merged policy.
+        /// Two rules are considered duplicates if their content (excluding ID) is identical.
+        /// References (FileRuleRef, AllowedSigner, DeniedSigner, CiSigner, FileAttribRef, etc.) are
+        /// remapped to point to the surviving rule, and duplicate references are themselves dropped.
+        /// </summary>
+        /// <param name="siPolicy"></param>
+        /// <returns></returns>
+        public static SiPolicy DeduplicateRules(SiPolicy siPolicy)
+        {
+            if (siPolicy == null)
+            {
+                return siPolicy;
+            }
+
+            // 1) Dedupe FileRules and build idMapping (oldId -> survivingId)
+            Dictionary<string, string> fileRuleIdMap = new Dictionary<string, string>();
+            if (siPolicy.FileRules != null && siPolicy.FileRules.Length > 0)
+            {
+                Dictionary<string, string> seen = new Dictionary<string, string>();
+                List<object> deduped = new List<object>();
+
+                foreach (var rule in siPolicy.FileRules)
+                {
+                    string key = GetFileRuleKey(rule);
+                    string id = GetFileRuleId(rule);
+                    if (id == null)
+                    {
+                        deduped.Add(rule);
+                        continue;
+                    }
+
+                    if (key != null && seen.TryGetValue(key, out string survivorId))
+                    {
+                        // Duplicate; map to survivor
+                        fileRuleIdMap[id] = survivorId;
+                        Logger.Log.AddInfoMsg($"Dedupe: dropping duplicate FileRule {id}, mapping to {survivorId}");
+                    }
+                    else
+                    {
+                        if (key != null)
+                        {
+                            seen[key] = id;
+                        }
+                        deduped.Add(rule);
+                    }
+                }
+
+                siPolicy.FileRules = deduped.ToArray();
+                siPolicy = UpdateSiPolicyFileRuleIDs(siPolicy, fileRuleIdMap);
+            }
+
+            // 2) Dedupe Signers and build idMapping
+            Dictionary<string, string> signerIdMap = new Dictionary<string, string>();
+            if (siPolicy.Signers != null && siPolicy.Signers.Length > 0)
+            {
+                Dictionary<string, string> seen = new Dictionary<string, string>();
+                List<Signer> deduped = new List<Signer>();
+
+                foreach (var signer in siPolicy.Signers)
+                {
+                    string key = GetSignerKey(signer);
+                    if (signer.ID == null)
+                    {
+                        deduped.Add(signer);
+                        continue;
+                    }
+
+                    if (key != null && seen.TryGetValue(key, out string survivorId))
+                    {
+                        signerIdMap[signer.ID] = survivorId;
+                        Logger.Log.AddInfoMsg($"Dedupe: dropping duplicate Signer {signer.ID}, mapping to {survivorId}");
+                    }
+                    else
+                    {
+                        if (key != null)
+                        {
+                            seen[key] = signer.ID;
+                        }
+                        deduped.Add(signer);
+                    }
+                }
+
+                siPolicy.Signers = deduped.ToArray();
+                siPolicy = UpdateSiPolicySignerIDs(siPolicy, signerIdMap);
+            }
+
+            // 3) Dedupe references (now-redundant) inside SigningScenarios and CiSigners/UpdatePolicySigners/SupplementalPolicySigners
+            DedupeReferences(siPolicy);
+
+            // 4) Dedupe EKUs by Value+FriendlyName
+            if (siPolicy.EKUs != null && siPolicy.EKUs.Length > 0)
+            {
+                Dictionary<string, EKU> seen = new Dictionary<string, EKU>();
+                List<EKU> deduped = new List<EKU>();
+                Dictionary<string, string> ekuMap = new Dictionary<string, string>();
+
+                foreach (var eku in siPolicy.EKUs)
+                {
+                    string key = GetEkuKey(eku);
+                    if (eku.ID == null)
+                    {
+                        deduped.Add(eku);
+                        continue;
+                    }
+
+                    if (key != null && seen.TryGetValue(key, out EKU survivor))
+                    {
+                        ekuMap[eku.ID] = survivor.ID;
+                    }
+                    else
+                    {
+                        if (key != null)
+                        {
+                            seen[key] = eku;
+                        }
+                        deduped.Add(eku);
+                    }
+                }
+
+                siPolicy.EKUs = deduped.ToArray();
+
+                // Update Signer.CertEKU references (CertEKU.ID points to EKU.ID)
+                if (ekuMap.Count > 0 && siPolicy.Signers != null)
+                {
+                    foreach (var signer in siPolicy.Signers)
+                    {
+                        if (signer.CertEKU == null) continue;
+                        foreach (var certEku in signer.CertEKU)
+                        {
+                            if (certEku != null && certEku.ID != null && ekuMap.TryGetValue(certEku.ID, out string newId))
+                            {
+                                certEku.ID = newId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return siPolicy;
+        }
+
+        /// <summary>
+        /// Removes duplicate FileRuleRef, AllowedSigner, DeniedSigner, CiSigner, SupplementalPolicySigner,
+        /// UpdatePolicySigner, FileAttribRef entries that may exist after merging two policies.
+        /// </summary>
+        private static void DedupeReferences(SiPolicy siPolicy)
+        {
+            // Signing Scenarios
+            if (siPolicy.SigningScenarios != null)
+            {
+                foreach (var scn in siPolicy.SigningScenarios)
+                {
+                    if (scn.ProductSigners == null) continue;
+
+                    if (scn.ProductSigners.FileRulesRef?.FileRuleRef != null)
+                    {
+                        scn.ProductSigners.FileRulesRef.FileRuleRef = scn.ProductSigners.FileRulesRef.FileRuleRef
+                            .GroupBy(r => r.RuleID ?? string.Empty)
+                            .Select(g => g.First())
+                            .ToArray();
+                    }
+
+                    if (scn.ProductSigners.AllowedSigners?.AllowedSigner != null)
+                    {
+                        scn.ProductSigners.AllowedSigners.AllowedSigner = scn.ProductSigners.AllowedSigners.AllowedSigner
+                            .GroupBy(s => s.SignerId ?? string.Empty)
+                            .Select(g => g.First())
+                            .ToArray();
+                    }
+
+                    if (scn.ProductSigners.DeniedSigners?.DeniedSigner != null)
+                    {
+                        scn.ProductSigners.DeniedSigners.DeniedSigner = scn.ProductSigners.DeniedSigners.DeniedSigner
+                            .GroupBy(s => s.SignerId ?? string.Empty)
+                            .Select(g => g.First())
+                            .ToArray();
+                    }
+                }
+            }
+
+            // CiSigners
+            if (siPolicy.CiSigners != null)
+            {
+                siPolicy.CiSigners = siPolicy.CiSigners
+                    .GroupBy(s => s.SignerId ?? string.Empty)
+                    .Select(g => g.First())
+                    .ToArray();
+            }
+
+            // UpdatePolicySigners
+            if (siPolicy.UpdatePolicySigners != null)
+            {
+                siPolicy.UpdatePolicySigners = siPolicy.UpdatePolicySigners
+                    .GroupBy(s => s.SignerId ?? string.Empty)
+                    .Select(g => g.First())
+                    .ToArray();
+            }
+
+            // SupplementalPolicySigners
+            if (siPolicy.SupplementalPolicySigners != null)
+            {
+                siPolicy.SupplementalPolicySigners = siPolicy.SupplementalPolicySigners
+                    .GroupBy(s => s.SignerId ?? string.Empty)
+                    .Select(g => g.First())
+                    .ToArray();
+            }
+
+            // Signer.FileAttribRef
+            if (siPolicy.Signers != null)
+            {
+                foreach (var signer in siPolicy.Signers)
+                {
+                    if (signer.FileAttribRef != null)
+                    {
+                        signer.FileAttribRef = signer.FileAttribRef
+                            .GroupBy(r => r.RuleID ?? string.Empty)
+                            .Select(g => g.First())
+                            .ToArray();
+                    }
+                }
+            }
+        }
+
+        private static string GetFileRuleId(object rule)
+        {
+            if (rule is Allow a) return a.ID;
+            if (rule is Deny d) return d.ID;
+            if (rule is FileAttrib f) return f.ID;
+            if (rule is FileRule fr) return fr.ID;
+            return null;
+        }
+
+        /// <summary>
+        /// Builds a content-based key for a FileRule (Allow/Deny/FileAttrib/FileRule) excluding ID
+        /// so duplicates with different IDs collapse into one entry.
+        /// </summary>
+        private static string GetFileRuleKey(object rule)
+        {
+            if (rule is Allow a)
+            {
+                return string.Join("|",
+                    "Allow",
+                    a.FileName, a.InternalName, a.FileDescription, a.ProductName,
+                    a.PackageFamilyName, a.PackageVersion,
+                    a.MinimumFileVersion, a.MaximumFileVersion,
+                    HashToString(a.Hash), a.AppIDs, a.FilePath);
+            }
+            if (rule is Deny d)
+            {
+                return string.Join("|",
+                    "Deny",
+                    d.FileName, d.InternalName, d.FileDescription, d.ProductName,
+                    d.PackageFamilyName, d.PackageVersion,
+                    d.MinimumFileVersion, d.MaximumFileVersion,
+                    HashToString(d.Hash), d.AppIDs, d.FilePath);
+            }
+            if (rule is FileAttrib f)
+            {
+                return string.Join("|",
+                    "FileAttrib",
+                    f.FileName, f.InternalName, f.FileDescription, f.ProductName,
+                    f.PackageFamilyName, f.PackageVersion,
+                    f.MinimumFileVersion, f.MaximumFileVersion,
+                    HashToString(f.Hash), f.AppIDs, f.FilePath);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Builds a content-based key for a Signer excluding ID.
+        /// </summary>
+        private static string GetSignerKey(Signer signer)
+        {
+            if (signer == null) return null;
+
+            string certRoot = signer.CertRoot != null
+                ? $"{signer.CertRoot.Type}:{HashToString(signer.CertRoot.Value)}"
+                : string.Empty;
+            string certPub = signer.CertPublisher?.Value ?? string.Empty;
+            string certIss = signer.CertIssuer?.Value ?? string.Empty;
+            string certOem = signer.CertOemID?.Value ?? string.Empty;
+
+            string certEkus = string.Empty;
+            if (signer.CertEKU != null)
+            {
+                certEkus = string.Join(",", signer.CertEKU.Select(e => e?.ID ?? string.Empty).OrderBy(s => s));
+            }
+
+            string fileAttribs = string.Empty;
+            if (signer.FileAttribRef != null)
+            {
+                fileAttribs = string.Join(",", signer.FileAttribRef.Select(r => r?.RuleID ?? string.Empty).OrderBy(s => s));
+            }
+
+            string signTime = signer.SignTimeAfterSpecified ? signer.SignTimeAfter.ToString("o") : string.Empty;
+
+            return string.Join("|", "Signer", signer.Name ?? string.Empty,
+                certRoot, certPub, certIss, certOem, certEkus, fileAttribs, signTime);
+        }
+
+        private static string GetEkuKey(EKU eku)
+        {
+            if (eku == null) return null;
+            return $"EKU|{HashToString(eku.Value)}|{eku.FriendlyName ?? string.Empty}";
+        }
+
+        private static string HashToString(byte[] data)
+        {
+            if (data == null || data.Length == 0) return string.Empty;
+            return BitConverter.ToString(data);
         }
 
         /// <summary>
