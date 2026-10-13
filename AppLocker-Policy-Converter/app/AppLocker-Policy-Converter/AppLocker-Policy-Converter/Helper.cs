@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 // jogeurte 11/19
 
@@ -28,8 +28,18 @@ namespace AppLocker_Policy_Converter
         static public int cFilePathRules = 0; 
         static public int cFileHashRules = 0;
 
-        static public Dictionary<string, string> supportedMacros = new Dictionary<string, string> {
-                    { "OSDRIVE", "" }, { "WINDIR", "" }, { "SYSTEM32", "" } };
+        static public Dictionary<string, string> supportedMacros = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+            { "OSDRIVE", "" }, { "WINDIR", "" }, { "SYSTEM32", "" } };
+
+        static public Dictionary<string, string> convertibleMacros = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+            { "PROGRAMFILES",     @"%OSDRIVE%\Program Files" },
+            { "PROGRAMFILES(X86)", @"%OSDRIVE%\Program Files (x86)" },
+            { "PROGRAMDATA",      @"%OSDRIVE%\ProgramData" },
+        };
+
+        static public HashSet<string> userScopedMacros = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            "APPDATA", "LOCALAPPDATA", "USERPROFILE", "TEMP", "HOMEPATH", "HOMEDRIVE"
+        };
 
         // Warning and error msgs structs
         static private List<string> WarningMessages = new List<string>();
@@ -45,17 +55,17 @@ namespace AppLocker_Policy_Converter
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(AppLockerPolicy));
-                StreamReader reader = new StreamReader(xmlPath);
-                appLockerPolicy = (AppLockerPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                using (StreamReader reader = new StreamReader(xmlPath))
+                {
+                    appLockerPolicy = (AppLockerPolicy)serializer.Deserialize(reader);
+                }
             }
             catch (Exception exp)
             {
-                throw new NullReferenceException("There is an error in " + xmlPath, exp);
+                throw new InvalidOperationException("There is an error in " + xmlPath, exp);
             }
 
             return appLockerPolicy;
-
         }
 
         /// <summary>
@@ -73,13 +83,14 @@ namespace AppLocker_Policy_Converter
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(xmlPath);
-                siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                using (StreamReader reader = new StreamReader(xmlPath))
+                {
+                    siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                }
             }
             catch (Exception exp)
             {
-                return null;
+                throw new InvalidOperationException("There is an error in " + xmlPath, exp);
             }
 
             return siPolicy;
@@ -96,20 +107,15 @@ namespace AppLocker_Policy_Converter
             
             try
             {
-                var stream = new MemoryStream();
-                var writer = new StreamWriter(stream);
-                writer.Write(xmlContents);
-                writer.Flush();
-                stream.Position = 0;
-
                 XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
-                StreamReader reader = new StreamReader(stream);
-                siPolicy = (SiPolicy)serializer.Deserialize(reader);
-                reader.Close();
+                using (StringReader reader = new StringReader(xmlContents))
+                {
+                    siPolicy = (SiPolicy)serializer.Deserialize(reader);
+                }
             }
             catch (Exception exp)
             {
-                return null;
+                throw new InvalidOperationException("There is an error in the provided XML contents", exp);
             }
 
             return siPolicy;
@@ -162,7 +168,7 @@ namespace AppLocker_Policy_Converter
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.FileName = fileName;
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
-            fileAttrib.FriendlyName = filePubRule.Description;
+            fileAttrib.FriendlyName = filePubRule.Name;
 
             // Do not blindly set versions == "*"
             // This is okay to do for Original Filenames
@@ -264,7 +270,7 @@ namespace AppLocker_Policy_Converter
             FileAttrib fileAttrib = new FileAttrib();
             fileAttrib.FileName = fileName;
             fileAttrib.ID = "ID_FILEATTRIB_A_" + cFileAttribRules;
-            fileAttrib.FriendlyName = filePubRule.Description;
+            fileAttrib.FriendlyName = filePubRule.Name;
 
             // Do not blindly set versions == "*"
             // This is okay to do for Original Filenames
@@ -342,8 +348,11 @@ namespace AppLocker_Policy_Converter
                 {
                     Allow allowRule = new Allow();
                     allowRule.Hash = ConvertHashStringToByte(fileHash.Data);
-                    allowRule.FriendlyName = fileHashRule.Name;
-                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //e.g. Type = SHA256
+                    // Use per-hash SourceFileName for FriendlyName if available, fall back to rule Name
+                    allowRule.FriendlyName = !string.IsNullOrEmpty(fileHash.SourceFileName)
+                        ? String.Format("{0} ({1})", fileHash.SourceFileName, fileHashRule.Name)
+                        : fileHashRule.Name;
+                    string algo = fileHash.Type.ToString(); //e.g. Type = SHA256
                     allowRule.ID = String.Format("ID_ALLOW_B_{0}_{1}", cFileHashRules, algo);
 
                     // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
@@ -353,8 +362,11 @@ namespace AppLocker_Policy_Converter
                 {
                     Deny denyRule = new Deny();
                     denyRule.Hash = ConvertHashStringToByte(fileHash.Data);
-                    denyRule.FriendlyName = fileHashRule.Name;
-                    string algo = fileHashRule.Conditions.FileHashCondition[0].Type.ToString(); //Type = SHA256
+                    // Use per-hash SourceFileName for FriendlyName if available, fall back to rule Name
+                    denyRule.FriendlyName = !string.IsNullOrEmpty(fileHash.SourceFileName)
+                        ? String.Format("{0} ({1})", fileHash.SourceFileName, fileHashRule.Name)
+                        : fileHashRule.Name;
+                    string algo = fileHash.Type.ToString(); //Type = SHA256
                     denyRule.ID = String.Format("ID_DENY_B_{0}_{1}", cFileHashRules, algo);
 
                     // Add the deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
@@ -402,11 +414,13 @@ namespace AppLocker_Policy_Converter
                 return siPolicy; 
             }
 
+            string friendlyName = filePathRule.Name;
+
             if (action == "Allow")
             {
                 Allow allowRule = new Allow();
                 allowRule.FilePath = wdacPathRule; 
-                allowRule.FriendlyName = filePathRule.Description;
+                allowRule.FriendlyName = friendlyName;
                 allowRule.ID = "ID_ALLOW_C_" + cFilePathRules.ToString();
 
                 // Add the Allow rule to FileRules and FileRuleRef section with Windows Signing Scenario
@@ -416,24 +430,125 @@ namespace AppLocker_Policy_Converter
             {
                 Deny denyRule = new Deny();
                 denyRule.FilePath = wdacPathRule; 
-                denyRule.FriendlyName = filePathRule.Description;
+                denyRule.FriendlyName = friendlyName;
                 denyRule.ID = "ID_DENY_C_" + cFilePathRules.ToString();
 
                 // Add the Deny rule to FileRules and FileRuleRef section with Windows Signing Scenario
                 siPolicy = AddSiPolicyDenyRule(denyRule, siPolicy);
             }
 
-            // Path rule exceptions are not currently supported in WDAC
+            // Increment counter before processing exceptions to avoid ID collisions
+            // between the parent rule and its exception rules
+            cFilePathRules++;
+
+            // Convert exceptions for Allow rules and explicitly skips exceptions on Deny rules with a warning.
             if(filePathRule.Exceptions != null)
             {
-                WarningMessages.Add(String.Format("WARNING: Skipping exceptions for {0} rule.Path rule exceptions " +
-                    "are not supported in WDAC.", wdacPathRule));
+                siPolicy = CreateFilePathExceptions(filePathRule, siPolicy);
             }
 
-            cFilePathRules++;
             return siPolicy;
         }
 
+
+        // Converts exceptions for Allow rules and skips Deny-rule exceptions.
+        public static SiPolicy CreateFilePathExceptions(FilePathRuleType filePathRule, SiPolicy siPolicy)
+        {
+            string action = filePathRule.Action.ToString();
+
+            if (filePathRule.Exceptions == null || filePathRule.Exceptions.Items == null || filePathRule.Exceptions.Items.Length == 0)
+            {
+                return siPolicy;
+            }
+
+            foreach (var exceptionItem in filePathRule.Exceptions.Items)
+            {
+                if (exceptionItem.GetType() == typeof(FilePathConditionType))
+                {
+                    FilePathConditionType exception = (FilePathConditionType)exceptionItem;
+                    if (exception.Path == "*")
+                    {
+                        WarningMessages.Add(String.Format(
+                            "WARNING: Skipping wildcard exception '*' from path rule '{0}' - " +
+                            "a '*' exception cannot be safely converted to WDAC as it would generate a Deny-all rule. " +
+                            "Handle this manually.", filePathRule.Name));
+                        continue;
+                    }
+                    
+                    string wdacPath = MakeValidPathRule(exception.Path);
+                    if (String.IsNullOrEmpty(wdacPath))
+                    {
+                        WarningMessages.Add(String.Format("WARNING: Skipping path exception '{0}' - cannot be converted to a valid WDAC path rule.", exception.Path));
+                        continue;
+                    }
+
+                    if (action == "Allow")
+                    {
+                        // Allow parent -> exception becomes Deny
+                        WarningMessages.Add(String.Format(
+                            "WARNING: Exception '{0}' from Allow path rule '{1}' has been converted to a WDAC Deny rule. " +
+                            "In WDAC, Deny overrides any Allow rule - verify this matches the intended policy behavior.",
+                            wdacPath, filePathRule.Name));
+                        Deny deny = new Deny();
+                        deny.FilePath = wdacPath;
+                        deny.ID = "ID_DENY_C_" + cFilePathRules.ToString();
+                        deny.FriendlyName = "Deny path - " + wdacPath;
+                        siPolicy = AddSiPolicyDenyRule(deny, siPolicy);
+                        cFilePathRules++;
+                    }
+                    else
+                    {
+                        // Deny parent path exceptions cannot be represented safely in WDAC:
+                        // a matching Deny path rule still blocks even if a separate Allow path rule exists.
+                        WarningMessages.Add(String.Format(
+                            "WARNING: Skipping path exception '{0}' from deny path rule '{1}' - WDAC cannot safely represent exceptions on deny path rules. Handle this case manually.",
+                            exception.Path, filePathRule.Name));
+                    }
+                }
+                else if (exceptionItem.GetType() == typeof(FileHashConditionType))
+                {
+                    FileHashConditionType exception = (FileHashConditionType)exceptionItem;
+                    if (exception.FileHash == null || exception.FileHash.Length == 0)
+                    {
+                        WarningMessages.Add(String.Format("WARNING: Skipping hash exception from path rule '{0}' - file hash condition is empty or malformed.",
+                            filePathRule.Name));
+                        continue;
+                    }
+
+                    foreach (var hashVal in exception.FileHash)
+                    {
+                        string hashDisplayName = !string.IsNullOrEmpty(hashVal.SourceFileName) ? hashVal.SourceFileName : hashVal.Data;
+                        if (action == "Allow")
+                        {
+                            WarningMessages.Add(String.Format(
+                                "WARNING: Skipping hash exception '{0}' from Allow path rule '{1}' - " +
+                                "hash-based exceptions cannot be safely converted to WDAC. A Deny-by-hash rule in WDAC " +
+                                "blocks the file globally regardless of path, which is broader than the original AppLocker " +
+                                "exception scoped to the parent rule. Handle this manually.",
+                                hashDisplayName,
+                                filePathRule.Name));
+                        }
+                        else
+                        {
+                            WarningMessages.Add(String.Format(
+                                "WARNING: Skipping hash exception '{0}' from deny path rule '{1}' - " +
+                                "hash-based exceptions cannot be safely converted to WDAC because WDAC Deny rules override " +
+                                "Allow rules, so an allow-by-hash exception would not take effect. Handle this manually.",
+                                hashDisplayName,
+                                filePathRule.Name));
+                        }
+                    }
+                }
+                else if (exceptionItem.GetType() == typeof(FilePublisherConditionType))
+                {
+                    FilePublisherConditionType exception = (FilePublisherConditionType)exceptionItem;
+                    WarningMessages.Add(String.Format("WARNING: Skipping publisher exception '{0}' from path rule '{1}' - publisher conditions cannot be converted to WDAC path rule exceptions.",
+                        exception.PublisherName, filePathRule.Name));
+                }
+            }
+
+            return siPolicy;
+        }
 
         public static (List<ExceptAllowRule>, List<ExceptDenyRule>, SiPolicy) CreateExceptions(FilePublisherRuleType filePubRule, SiPolicy siPolicy)
         {
@@ -536,6 +651,73 @@ namespace AppLocker_Policy_Converter
             return (exceptAllowRules, exceptDenyRules, siPolicy);
         }
 
+        public static SiPolicy DeduplicateFileRules(SiPolicy siPolicy)
+        {
+            if (siPolicy?.FileRules == null)
+                return siPolicy;
+        
+            // Only deduplicate rules referenced in FileRulesRef - never touch exception rules
+            // referenced via AllowedSigner.ExceptDenyRule or DeniedSigner.ExceptAllowRule
+            var referencedIDs = new HashSet<string>();
+            if (siPolicy.SigningScenarios != null && 
+                siPolicy.SigningScenarios.Length > 1 &&
+                siPolicy.SigningScenarios[1]?.ProductSigners?.FileRulesRef?.FileRuleRef != null)
+            {
+                foreach (var ruleRef in siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef)
+                    referencedIDs.Add(ruleRef.RuleID);
+            }
+        
+            var seenAllowPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var seenDenyPaths  = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var keepRules      = new List<object>();
+            var removedIDs     = new HashSet<string>();
+        
+            foreach (var rule in siPolicy.FileRules)
+            {
+                if (rule is Allow allow && !string.IsNullOrEmpty(allow.FilePath) && referencedIDs.Contains(allow.ID))
+                {
+                    if (!seenAllowPaths.Add(allow.FilePath))
+                    {
+                        WarningMessages.Add(String.Format(
+                            "WARNING: Duplicate Allow path rule '{0}' (ID={1}) removed - " +
+                            "this path was already added from another AppLocker rule collection.",
+                            allow.FilePath, allow.ID));
+                        removedIDs.Add(allow.ID);
+                        continue;
+                    }
+                }
+                else if (rule is Deny deny && !string.IsNullOrEmpty(deny.FilePath) && referencedIDs.Contains(deny.ID))
+                {
+                    if (!seenDenyPaths.Add(deny.FilePath))
+                    {
+                        WarningMessages.Add(String.Format(
+                            "WARNING: Duplicate Deny path rule '{0}' (ID={1}) removed - " +
+                            "this path was already added from another AppLocker rule collection.",
+                            deny.FilePath, deny.ID));
+                        removedIDs.Add(deny.ID);
+                        continue;
+                    }
+                }
+                keepRules.Add(rule);
+            }
+        
+            siPolicy.FileRules = keepRules.ToArray();
+        
+            // Remove corresponding FileRuleRef entries for deduplicated rules
+            if (removedIDs.Count > 0 &&
+                siPolicy.SigningScenarios != null &&
+                siPolicy.SigningScenarios.Length > 1 &&
+                siPolicy.SigningScenarios[1]?.ProductSigners?.FileRulesRef?.FileRuleRef != null)
+            {
+                siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef =
+                    siPolicy.SigningScenarios[1].ProductSigners.FileRulesRef.FileRuleRef
+                    .Where(r => !removedIDs.Contains(r.RuleID))
+                    .ToArray();
+            }
+        
+            return siPolicy;
+        }
+
         /// <summary>
         /// Serialize the SiPolicy object to XML file
         /// </summary>
@@ -547,6 +729,8 @@ namespace AppLocker_Policy_Converter
             {
                 return;
             }
+
+            siPolicy = DeduplicateFileRules(siPolicy);
 
             // Serialize policy to XML file
             XmlSerializer serializer = new XmlSerializer(typeof(SiPolicy));
@@ -599,12 +783,50 @@ namespace AppLocker_Policy_Converter
                 // Need to still check valid rules for wildcarding - goto wildcard check
                 if (!supportedMacros.ContainsKey(macroParts[1]))
                 {
-                    // Else, unsupported path rule 
+                    string macroName = macroParts[1];
+
+                    // Check if this is a per-user macro that cannot be safely auto-converted
+                    if (userScopedMacros.Contains(macroName))
+                    {
+                        WarningMessages.Add(String.Format(
+                            "WARNING: AppLocker Path Rule \"{0}\" uses per-user macro '%{1}%' which cannot be " +
+                            "automatically converted. Please manually replace with an appropriate WDAC path rule "
+                            + "(e.g. using %OSDRIVE%\\Users\\*\\... pattern).",
+                            appLockerPathRule, macroName));
+                        return null;
+                    }
+
+                    // Check if this macro can be deterministically mapped to a WDAC %OSDRIVE%-based path
+                    if (convertibleMacros.TryGetValue(macroName, out string wdacMacroReplacement))
+                    {
+                        wdacPathRule = wdacMacroReplacement + macroParts[2];
+                        WarningMessages.Add(String.Format(
+                            "WARNING: AppLocker macro '%{0}%' is not supported in WDAC. " +
+                            "Automatically converted \"{1}\" to \"{2}\".",
+                            macroName, appLockerPathRule, wdacPathRule));
+                    
+                        // Run wildcard validation on the converted path before returning
+                        int cConverted = wdacPathRule.Count(f => f == '*');
+                        if (cConverted == 1)
+                        {
+                            int idx = wdacPathRule.IndexOf('*');
+                            if (idx != 0 && idx != wdacPathRule.Length - 1)
+                                WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is a valid WDAC Path Rule on Windows 11 systems only.", wdacPathRule));
+                        }
+                        else if (cConverted > 1)
+                        {
+                            WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is valid in WDAC on Windows 11 systems only.", wdacPathRule));
+                        }
+                    
+                        return wdacPathRule;
+                    }
+
+                    // Unknown macro - fall back to wildcard stripping as before
                     if (String.IsNullOrEmpty(macroParts[0]))
                     {
                         if(macroParts[2] == @"\*")
                         {
-                            // E.g.  %PROGRAMFILES%\* would result in Path=*\* or just Path="*" which we do not want to create
+                            // E.g. %UNKNOWNMACRO%\* would result in Path=*\* or just Path="*" which we do not want to create
                             ErrorMessages.Add(String.Format("ERROR: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule.", appLockerPathRule));
                             return null;
                         }
@@ -614,7 +836,7 @@ namespace AppLocker_Policy_Converter
                     else
                     {
                         // Keep only the outside edges
-                        wdacPathRule = macroParts[0] + macroParts[2]; 
+                        wdacPathRule = macroParts[0] + macroParts[2];
                     }
 
                     WarningMessages.Add(String.Format("WARNING: AppLocker Path Rule \"{0}\" is not a valid WDAC Path Rule. Replacing with the " +
