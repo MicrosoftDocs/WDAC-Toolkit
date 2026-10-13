@@ -195,6 +195,7 @@
     <Content Include="Resources\imgs\locked-padlock.png" />
     <Content Include="Resources\imgs\question-sign.png" />
     <Content Include="Resources\imgs\shield.png" />
+    <Content Include="Resources\imgs\compare.png" />
     <Content Include="Resources\imgs\toggle.png" />
     <Content Include="Resources\imgs\toggle_lg.png" />
     <Content Include="Resources\imgs\untoggle.png" />
