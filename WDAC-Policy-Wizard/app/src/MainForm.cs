@@ -215,6 +215,33 @@ namespace WDAC_Wizard
             }
         }
 
+        /// <summary>
+        /// Compare policy button selected: opens a separate window where the user can load 2 or
+        /// more policies (XML or binary) and view their differences side-by-side. The comparison
+        /// flow is non-destructive and does not affect the active wizard workflow state.
+        /// </summary>
+        private void Button_Compare_Click(object sender, EventArgs e)
+        {
+            Logger.Log.AddNewSeparationLine("Workflow -- Compare Policies Selected");
+
+            try
+            {
+                using (var compareForm = new PolicyCompare_Form())
+                {
+                    compareForm.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.AddErrorMsg("Button_Compare_Click caught the following exception", ex);
+                MessageBox.Show(this,
+                                "Unable to open the Policy Compare window: " + ex.Message,
+                                "Policy Compare Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
         // #####################
         // CONTROL PANEL CONTROLS
         // #####################
