@@ -352,3 +352,4 @@ AppLocker-Policy-Converter/app/test-policies/*
 
 .claude/
 *.local.json
+/Pub-Wizard
