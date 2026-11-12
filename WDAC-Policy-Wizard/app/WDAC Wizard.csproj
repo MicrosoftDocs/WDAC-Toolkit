@@ -227,7 +227,7 @@
     <Content Include="obj\Release\WDAC Wizard.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="CsvHelper" Version="34.0.0" />
     <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="7.4.6" />
     <PackageReference Include="Microsoft.PowerShell.Commands.Management" Version="7.4.6" />
     <PackageReference Include="Microsoft.PowerShell.Commands.Utility" Version="7.4.6" />
